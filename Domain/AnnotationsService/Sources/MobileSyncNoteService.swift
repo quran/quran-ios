@@ -9,37 +9,7 @@ import Foundation
 @preconcurrency import MobileSync
 import QuranAnnotations
 import QuranKit
-
-public struct SyncedNotesSequence: AsyncSequence {
-    public typealias Element = [QuranAnnotations.Note]
-
-    public struct AsyncIterator: AsyncIteratorProtocol {
-        init<S: AsyncSequence>(_ sequence: S) where S.Element == Element {
-            var iterator = sequence.makeAsyncIterator()
-            nextValue = {
-                try await iterator.next()
-            }
-        }
-
-        public mutating func next() async throws -> Element? {
-            try await nextValue()
-        }
-
-        private let nextValue: () async throws -> Element?
-    }
-
-    init<S: AsyncSequence>(_ sequence: S) where S.Element == Element {
-        makeIterator = {
-            AsyncIterator(sequence)
-        }
-    }
-
-    public func makeAsyncIterator() -> AsyncIterator {
-        makeIterator()
-    }
-
-    private let makeIterator: () -> AsyncIterator
-}
+import Utilities
 
 public struct MobileSyncNoteService {
     // MARK: Lifecycle
@@ -50,12 +20,12 @@ public struct MobileSyncNoteService {
 
     // MARK: Public
 
-    public func notesSequence(quran: Quran) -> SyncedNotesSequence {
+    public func notesSequence(quran: Quran) -> AnyAsyncSequence<[QuranAnnotations.Note]> {
         let sequence = quranDataService.notesSequence()
             .map { notes in
                 Self.notes(from: notes, quran: quran)
             }
-        return SyncedNotesSequence(sequence)
+        return .init(sequence)
     }
 
     public func createNote(body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {

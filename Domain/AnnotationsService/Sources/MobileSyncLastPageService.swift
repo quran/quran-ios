@@ -10,6 +10,7 @@
 @preconcurrency import MobileSync
 import QuranAnnotations
 import QuranKit
+import Utilities
 
 public struct MobileSyncLastPageService: LastPageService {
     // MARK: Lifecycle
@@ -20,7 +21,7 @@ public struct MobileSyncLastPageService: LastPageService {
 
     // MARK: Public
 
-    public func lastPages(quran: Quran) -> LastPagesSequence {
+    public func lastPages(quran: Quran) -> AnyAsyncSequence<[LastPage]> {
         let sequence = quranDataService.readingSessionsSequence()
             .map { sessions in
                 let mapped = sessions.compactMap { session in
@@ -34,7 +35,7 @@ public struct MobileSyncLastPageService: LastPageService {
                 }
                 return Array(sorted.prefix(3))
             }
-        return LastPagesSequence(sequence)
+        return .init(sequence)
     }
 
     public func add(page: Page) async throws -> LastPage {

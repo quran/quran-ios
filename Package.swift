@@ -505,6 +505,7 @@ private func domainTargets() -> [[Target]] {
             "QuranTextKit",
             "Localization",
             "Analytics",
+            "Utilities",
         ], testDependencies: [
             "LastPagePersistence",
             "MobileSyncTestSupport",
@@ -631,6 +632,7 @@ private func featuresTargets() -> [[Target]] {
             "Preferences",
             "QuranTextKit",
             "ReadingService",
+            "Utilities",
         ], testDependencies: [
             "Analytics",
             "AnnotationsService",

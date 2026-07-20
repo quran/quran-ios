@@ -11,6 +11,7 @@ import MobileSync
 import QuranAnnotations
 import QuranKit
 import ReadingService
+import Utilities
 import VLogging
 
 public struct AyahBookmarkCollection {
@@ -83,37 +84,6 @@ extension AyahBookmarkCollection {
     public var kind: AyahBookmarkCollectionKind {
         AyahBookmarkCollectionKind(collection: collection)
     }
-}
-
-public struct AyahBookmarkCollectionsSequence: AsyncSequence {
-    public typealias Element = [AyahBookmarkCollection]
-
-    public struct AsyncIterator: AsyncIteratorProtocol {
-        init<S: AsyncSequence>(_ sequence: S) where S.Element == Element {
-            var iterator = sequence.makeAsyncIterator()
-            nextValue = {
-                try await iterator.next()
-            }
-        }
-
-        public mutating func next() async throws -> Element? {
-            try await nextValue()
-        }
-
-        private let nextValue: () async throws -> Element?
-    }
-
-    init<S: AsyncSequence>(_ sequence: S) where S.Element == Element {
-        makeIterator = {
-            AsyncIterator(sequence)
-        }
-    }
-
-    public func makeAsyncIterator() -> AsyncIterator {
-        makeIterator()
-    }
-
-    private let makeIterator: () -> AsyncIterator
 }
 
 public struct AyahBookmarkCollectionService {
@@ -191,7 +161,7 @@ public struct AyahBookmarkCollectionService {
         try await removeAyahs(ayahs, from: [collection])
     }
 
-    public func collectionsSequence() -> AyahBookmarkCollectionsSequence {
+    public func collectionsSequence() -> AnyAsyncSequence<[AyahBookmarkCollection]> {
         let quranDataService = quranDataService
         let readingPreferences = readingPreferences
         let sequence = quranDataService.collectionsWithBookmarksSequence()
@@ -203,7 +173,7 @@ public struct AyahBookmarkCollectionService {
                 await quranDataService.createHighlightCollectionsIfNeeded(collections)
                 return collections
             }
-        return AyahBookmarkCollectionsSequence(sequence)
+        return .init(sequence)
     }
 
     // MARK: Internal

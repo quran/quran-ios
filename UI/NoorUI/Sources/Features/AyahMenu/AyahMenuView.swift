@@ -323,6 +323,8 @@ private struct Row<Symbol: View, Accessory: View>: View {
                     Text(" ")
                     subtitle.view(ofSize: .footnote)
                         .foregroundColor(secondaryColor)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
                 }
             }
         case .below:
@@ -332,6 +334,8 @@ private struct Row<Symbol: View, Accessory: View>: View {
                 if let subtitle {
                     subtitle.view(ofSize: .footnote)
                         .foregroundColor(secondaryColor)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
                 }
             }
         }

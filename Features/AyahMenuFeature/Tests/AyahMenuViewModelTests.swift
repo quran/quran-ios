@@ -64,7 +64,7 @@ final class AyahMenuViewModelTests: XCTestCase {
 
     func test_readingBookmarkCopy_describesEachLocationState() {
         XCTAssertEqual(l("ayah.menu.reading-bookmark.save-here"), "Save your place here")
-        XCTAssertEqual(l("ayah.menu.reading-bookmark.saved-here"), "Your place is saved here")
+        XCTAssertEqual(l("ayah.menu.reading-bookmark.saved-here"), "Saved here • Tap to delete")
         XCTAssertEqual(
             lFormat("ayah.menu.reading-bookmark.move-here", "Al-Baqarah 2:255"),
             "At Al-Baqarah 2:255 • Move here"

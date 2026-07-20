@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import AnnotationsService
 import Localization
 import QuranAnnotations
 import QuranKit
@@ -61,6 +62,104 @@ final class AyahMenuViewModelTests: XCTestCase {
         XCTAssertEqual(lFormat("bookmarks.editor.title", language: .english, 2), "Save Ayahs...")
     }
 
+    func test_readingBookmarkCopy_describesEachLocationState() {
+        XCTAssertEqual(l("ayah.menu.reading-bookmark.save-here"), "Save your place here")
+        XCTAssertEqual(l("ayah.menu.reading-bookmark.saved-here"), "Saved here • Tap to delete")
+        XCTAssertEqual(
+            lFormat("ayah.menu.reading-bookmark.move-here", "Al-Baqarah 2:255"),
+            "At Al-Baqarah 2:255 • Move here"
+        )
+    }
+
+    func test_readingBookmarkState_isDisabledForMultipleSelectedAyahs() {
+        let sut = makeSUT()
+
+        guard case .disabled(let message) = sut.readingBookmarkState else {
+            return XCTFail("Expected disabled reading bookmark state")
+        }
+        XCTAssertEqual(message, l("ayah.menu.reading-bookmark.single-ayah-only"))
+    }
+
+    func test_readingBookmarkState_isUnsetWhenNoReadingBookmarkExists() {
+        let sut = makeSUT(verses: [verses[0]])
+
+        guard case .unset = sut.readingBookmarkState else {
+            return XCTFail("Expected unset reading bookmark state")
+        }
+    }
+
+    func test_readingBookmarkState_isCurrentForSelectedAyah() {
+        let selected = verses[0]
+        let sut = makeSUT(
+            verses: [selected],
+            readingBookmark: readingBookmark(at: .ayah(selected))
+        )
+
+        guard case .current = sut.readingBookmarkState else {
+            return XCTFail("Expected current reading bookmark state")
+        }
+    }
+
+    func test_readingBookmarkState_isCurrentForPageContainingSelectedAyah() {
+        let selected = verses[0]
+        let sut = makeSUT(
+            verses: [selected],
+            readingBookmark: readingBookmark(at: .page(selected.page))
+        )
+
+        guard case .current = sut.readingBookmarkState else {
+            return XCTFail("Expected current reading bookmark state")
+        }
+    }
+
+    func test_readingBookmarkState_isElsewhereForDifferentAyah() {
+        let sut = makeSUT(
+            verses: [verses[0]],
+            readingBookmark: readingBookmark(at: .ayah(verses[1]))
+        )
+
+        guard case .elsewhere = sut.readingBookmarkState else {
+            return XCTFail("Expected elsewhere reading bookmark state")
+        }
+    }
+
+    func test_moveReadingBookmark_requestsMoveWithoutPreviousBookmark() async {
+        let selected = verses[0]
+        let sut = makeSUT(verses: [selected])
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        await sut.moveReadingBookmark()
+
+        XCTAssertEqual(listener.readingBookmarkMove?.to, selected)
+        XCTAssertNil(listener.readingBookmarkMove?.from)
+    }
+
+    func test_moveReadingBookmark_requestsMoveFromPreviousBookmark() async {
+        let selected = verses[0]
+        let previousBookmark = readingBookmark(at: .ayah(verses[1]))
+        let sut = makeSUT(verses: [selected], readingBookmark: previousBookmark)
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        await sut.moveReadingBookmark()
+
+        XCTAssertEqual(listener.readingBookmarkMove?.to, selected)
+        XCTAssertEqual(listener.readingBookmarkMove?.from, previousBookmark)
+    }
+
+    func test_deleteReadingBookmark_requestsDeletionOfCurrentBookmark() async {
+        let selected = verses[0]
+        let bookmark = readingBookmark(at: .ayah(selected))
+        let sut = makeSUT(verses: [selected], readingBookmark: bookmark)
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        await sut.deleteReadingBookmark()
+
+        XCTAssertEqual(listener.deletedReadingBookmark, bookmark)
+    }
+
     private var verses: [AyahNumber] {
         [
             AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 7)!,
@@ -69,28 +168,37 @@ final class AyahMenuViewModelTests: XCTestCase {
     }
 
     private func makeSUT(
+        verses: [AyahNumber]? = nil,
         highlightVerses: [AyahNumber: HighlightColor] = [:],
-        bookmarkedVerses: Set<AyahNumber> = []
+        bookmarkedVerses: Set<AyahNumber> = [],
+        readingBookmark: ReadingPositionBookmark? = nil
     ) -> AyahMenuViewModel {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         return AyahMenuViewModel(deps: .init(
             sourceView: UIView(),
             pointInView: .zero,
-            verses: verses,
+            verses: verses ?? self.verses,
             textRetriever: ShareableVerseTextRetriever(
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
             ),
             notes: [],
             highlightVerses: highlightVerses,
-            bookmarkedVerses: bookmarkedVerses
+            bookmarkedVerses: bookmarkedVerses,
+            readingBookmark: readingBookmark
         ))
+    }
+
+    private func readingBookmark(at location: ReadingPositionBookmark.Location) -> ReadingPositionBookmark {
+        ReadingPositionBookmark(id: "reading-bookmark", location: location, modifiedOn: .distantPast)
     }
 }
 
 @MainActor
 private final class BookmarkListenerSpy: AyahMenuListener {
     private(set) var bookmarkedVerses: [AyahNumber]?
+    private(set) var readingBookmarkMove: (to: AyahNumber, from: ReadingPositionBookmark?)?
+    private(set) var deletedReadingBookmark: ReadingPositionBookmark?
 
     func dismissAyahMenu() {}
     func playAudio(_ from: AyahNumber, to: AyahNumber?, repeatVerses: Bool) {}
@@ -98,6 +206,14 @@ private final class BookmarkListenerSpy: AyahMenuListener {
     func showTranslation(_ verses: [AyahNumber]) {}
     func showNoteEditor(for verses: [AyahNumber]) async {}
     func deleteNotes(in verses: [AyahNumber]) async {}
+
+    func moveReadingBookmark(to ayah: AyahNumber, from bookmark: ReadingPositionBookmark?) async {
+        readingBookmarkMove = (ayah, bookmark)
+    }
+
+    func deleteReadingBookmark(_ bookmark: ReadingPositionBookmark) async {
+        deletedReadingBookmark = bookmark
+    }
 
     func showBookmarkEditor(for verses: [AyahNumber]) {
         bookmarkedVerses = verses

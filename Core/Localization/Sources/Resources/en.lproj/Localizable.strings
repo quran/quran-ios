@@ -195,6 +195,14 @@
 "ayah.menu.edit-note" = "Edit Note";
 "ayah.menu.delete-note" = "Delete Note";
 "ayah.menu.delete-highlight" = "Delete Highlight";
+"ayah.menu.reading-bookmark.title" = "Reading Bookmark";
+"ayah.menu.reading-bookmark.single-ayah-only" = "Select a single Ayah";
+"ayah.menu.reading-bookmark.move-here" = "At %@ • Move here";
+"ayah.menu.reading-bookmark.save-here" = "Save your place here";
+"ayah.menu.reading-bookmark.saved-here" = "Saved here • Tap to delete";
+"ayah.menu.reading-bookmark.saved" = "Reading bookmark saved at %@";
+"ayah.menu.reading-bookmark.moved" = "Reading bookmark moved from %@ to %@";
+"ayah.menu.reading-bookmark.removed" = "Reading bookmark removed from %@";
 
 // MARK: - Highlights
 

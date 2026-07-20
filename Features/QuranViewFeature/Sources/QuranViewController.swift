@@ -243,6 +243,14 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         dismiss(animated: true, completion: completion)
     }
 
+    func showToast(_ toast: Toast) {
+        guard let windowScene = view.window?.windowScene else {
+            logger.error("Unable to show toast without a window scene")
+            return
+        }
+        ToastPresenter.shared.showToast(toast, in: windowScene)
+    }
+
     func didDismissPopover() {
         interactor.didDismissPopover()
     }

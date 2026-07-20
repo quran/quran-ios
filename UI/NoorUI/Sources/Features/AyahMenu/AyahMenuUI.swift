@@ -12,6 +12,31 @@ public enum AyahMenuUI {
     public struct Actions {
         // MARK: Lifecycle
 
+        #if QURAN_SYNC
+        public init(
+            play: @escaping AsyncAction,
+            repeatVerses: @escaping AsyncAction,
+            bookmark: @escaping AsyncAction,
+            addNote: @escaping AsyncAction,
+            deleteNote: @escaping AsyncAction,
+            showTranslation: @escaping AsyncAction,
+            copy: @escaping AsyncAction,
+            share: @escaping AsyncAction,
+            moveReadingBookmark: @escaping AsyncAction,
+            deleteReadingBookmark: @escaping AsyncAction
+        ) {
+            self.play = play
+            self.repeatVerses = repeatVerses
+            self.bookmark = bookmark
+            self.addNote = addNote
+            self.deleteNote = deleteNote
+            self.showTranslation = showTranslation
+            self.copy = copy
+            self.share = share
+            self.moveReadingBookmark = moveReadingBookmark
+            self.deleteReadingBookmark = deleteReadingBookmark
+        }
+        #else
         public init(
             play: @escaping AsyncAction,
             repeatVerses: @escaping AsyncAction,
@@ -31,6 +56,7 @@ public enum AyahMenuUI {
             self.copy = copy
             self.share = share
         }
+        #endif
 
         // MARK: Internal
 
@@ -42,11 +68,40 @@ public enum AyahMenuUI {
         let showTranslation: AsyncAction
         let copy: AsyncAction
         let share: AsyncAction
+        #if QURAN_SYNC
+        let moveReadingBookmark: AsyncAction
+        let deleteReadingBookmark: AsyncAction
+        #endif
     }
 
     public struct DataObject {
         // MARK: Lifecycle
 
+        #if QURAN_SYNC
+        public init(
+            highlightingColor: HighlightColor,
+            state: NoteState,
+            bookmarkTitle: String,
+            bookmarkState: BookmarkState = .unhighlighted,
+            playSubtitle: String,
+            repeatSubtitle: String,
+            actions: Actions,
+            isTranslationView: Bool,
+            usesSyncedNotesIcon: Bool = false,
+            readingBookmarkState: ReadingBookmarkState
+        ) {
+            self.highlightingColor = highlightingColor
+            self.state = state
+            self.bookmarkTitle = bookmarkTitle
+            self.bookmarkState = bookmarkState
+            self.playSubtitle = playSubtitle
+            self.repeatSubtitle = repeatSubtitle
+            self.actions = actions
+            self.isTranslationView = isTranslationView
+            self.usesSyncedNotesIcon = usesSyncedNotesIcon
+            self.readingBookmarkState = readingBookmarkState
+        }
+        #else
         public init(
             highlightingColor: HighlightColor,
             state: NoteState,
@@ -68,6 +123,7 @@ public enum AyahMenuUI {
             self.isTranslationView = isTranslationView
             self.usesSyncedNotesIcon = usesSyncedNotesIcon
         }
+        #endif
 
         // MARK: Internal
 
@@ -80,6 +136,9 @@ public enum AyahMenuUI {
         let repeatSubtitle: String
         let isTranslationView: Bool
         let usesSyncedNotesIcon: Bool
+        #if QURAN_SYNC
+        let readingBookmarkState: ReadingBookmarkState
+        #endif
     }
 
     // MARK: Public
@@ -96,4 +155,13 @@ public enum AyahMenuUI {
         case partiallyHighlighted
         case highlighted(HighlightColor)
     }
+
+    #if QURAN_SYNC
+    public enum ReadingBookmarkState {
+        case disabled(message: String)
+        case unset
+        case elsewhere(location: MultipartText)
+        case current
+    }
+    #endif
 }

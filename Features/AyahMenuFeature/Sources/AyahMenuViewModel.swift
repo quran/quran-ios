@@ -29,6 +29,10 @@ public protocol AyahMenuListener: AnyObject {
     func showBookmarkEditor(for verses: [AyahNumber])
     func showNoteEditor(for verses: [AyahNumber]) async
     func deleteNotes(in verses: [AyahNumber]) async
+    #if QURAN_SYNC
+    func moveReadingBookmark(to ayah: AyahNumber, from bookmark: ReadingPositionBookmark?) async
+    func deleteReadingBookmark(_ bookmark: ReadingPositionBookmark) async
+    #endif
 }
 
 // MARK: - ViewModel
@@ -43,7 +47,9 @@ final class AyahMenuViewModel {
         let notes: [QuranAnnotations.Note]
         let highlightVerses: [AyahNumber: HighlightColor]
         let bookmarkedVerses: Set<AyahNumber>
-        #if !QURAN_SYNC
+        #if QURAN_SYNC
+        let readingBookmark: ReadingPositionBookmark?
+        #else
         let noteService: NoteService
         #endif
         let quranContentStatePreferences = QuranContentStatePreferences.shared
@@ -106,6 +112,21 @@ final class AyahMenuViewModel {
         return l("ayah.menu.selected-verses")
     }
 
+    #if QURAN_SYNC
+    var readingBookmarkState: AyahMenuUI.ReadingBookmarkState {
+        guard deps.verses.count == 1, let ayah = deps.verses.first else {
+            return .disabled(message: l("ayah.menu.reading-bookmark.single-ayah-only"))
+        }
+        guard let readingBookmark = deps.readingBookmark else {
+            return .unset
+        }
+        if readingBookmark.isAt(ayah) {
+            return .current
+        }
+        return .elsewhere(location: readingBookmarkLocation(readingBookmark))
+    }
+    #endif
+
     var usesSyncedNotesIcon: Bool {
         #if QURAN_SYNC
         return true
@@ -150,6 +171,28 @@ final class AyahMenuViewModel {
         logger.info("AyahMenu: bookmark tapped. Verses: \(deps.verses)")
         listener?.showBookmarkEditor(for: deps.verses)
     }
+
+    #if QURAN_SYNC
+    func moveReadingBookmark() async {
+        guard deps.verses.count == 1, let ayah = deps.verses.first else {
+            return
+        }
+        logger.info("AyahMenu: move reading bookmark. Ayah: \(ayah)")
+        await listener?.moveReadingBookmark(to: ayah, from: deps.readingBookmark)
+    }
+
+    func deleteReadingBookmark() async {
+        guard deps.verses.count == 1,
+              let ayah = deps.verses.first,
+              let readingBookmark = deps.readingBookmark,
+              readingBookmark.isAt(ayah)
+        else {
+            return
+        }
+        logger.info("AyahMenu: delete reading bookmark. Bookmark: \(readingBookmark)")
+        await listener?.deleteReadingBookmark(readingBookmark)
+    }
+    #endif
 
     func deleteNotes() async {
         logger.info("AyahMenu: delete notes. Verses: \(deps.verses)")
@@ -209,4 +252,19 @@ final class AyahMenuViewModel {
             try await deps.textRetriever.textForVerses(deps.verses)
         }
     }
+
+    #if QURAN_SYNC
+    private func readingBookmarkLocation(_ bookmark: ReadingPositionBookmark) -> MultipartText {
+        let location: MultipartText
+        switch bookmark.location {
+        case .ayah(let ayah):
+            let localizedLocation = "\(ayah.sura.localizedName()) \(ayah.sura.localizedSuraNumber):\(NumberFormatter.shared.format(ayah.ayah))"
+            location = "\(localizedLocation) \(sura: ayah.sura.arabicSuraName)"
+        case .page(let page):
+            location = "\(page.localizedName)"
+        }
+
+        return .localizedFormat("ayah.menu.reading-bookmark.move-here", location)
+    }
+    #endif
 }

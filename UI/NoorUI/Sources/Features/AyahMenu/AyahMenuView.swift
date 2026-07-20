@@ -7,6 +7,7 @@
 //
 
 import Localization
+import QuranAnnotations
 import SwiftUI
 import UIx
 
@@ -74,7 +75,7 @@ private struct AyahMenuViewList: View {
             MenuGroup {
                 Row(
                     title: lAndroid("play"),
-                    subtitle: dataObject.playSubtitle,
+                    subtitle: .text(dataObject.playSubtitle),
                     action: dataObject.actions.play
                 ) {
                     NoorSystemImage.play.image
@@ -82,7 +83,7 @@ private struct AyahMenuViewList: View {
                 Divider()
                 Row(
                     title: l("ayah.menu.repeat"),
-                    subtitle: dataObject.repeatSubtitle,
+                    subtitle: .text(dataObject.repeatSubtitle),
                     action: dataObject.actions.repeatVerses
                 ) {
                     Image(systemName: "repeat")
@@ -92,6 +93,13 @@ private struct AyahMenuViewList: View {
 
             MenuGroup {
                 Divider()
+
+                #if QURAN_SYNC
+                readingBookmarkRow(dataObject.readingBookmarkState)
+                Divider()
+                    .padding(.leading)
+                #endif
+
                 Row(title: dataObject.bookmarkTitle, action: dataObject.actions.bookmark) {
                     bookmarkIcon
                 }
@@ -152,6 +160,56 @@ private struct AyahMenuViewList: View {
         }
     }
 
+    #if QURAN_SYNC
+    @ViewBuilder
+    private func readingBookmarkRow(_ state: AyahMenuUI.ReadingBookmarkState) -> some View {
+        switch state {
+        case .disabled(let message):
+            Row(
+                title: l("ayah.menu.reading-bookmark.title"),
+                subtitle: .text(message),
+                subtitlePlacement: .below,
+                isEnabled: false,
+                action: dataObject.actions.moveReadingBookmark
+            ) {
+                ReadingBookmarkPin(style: .outline)
+            }
+        case .unset:
+            Row(
+                title: l("ayah.menu.reading-bookmark.title"),
+                subtitle: .text(l("ayah.menu.reading-bookmark.save-here")),
+                subtitlePlacement: .below,
+                action: dataObject.actions.moveReadingBookmark
+            ) {
+                ReadingBookmarkPin(style: .outline)
+            }
+        case .elsewhere(let location):
+            Row(
+                title: l("ayah.menu.reading-bookmark.title"),
+                subtitle: location,
+                subtitlePlacement: .below,
+                action: dataObject.actions.moveReadingBookmark
+            ) {
+                ReadingBookmarkPin(style: .outline)
+            }
+        case .current:
+            Row(
+                title: l("ayah.menu.reading-bookmark.title"),
+                subtitle: .text(l("ayah.menu.reading-bookmark.saved-here")),
+                subtitlePlacement: .below,
+                action: dataObject.actions.deleteReadingBookmark
+            ) {
+                ReadingBookmarkPin(style: .filled)
+                    .foregroundColor(.label)
+            } accessory: {
+                NoorSystemImage.checkmark.image
+                    .foregroundColor(.appIdentity)
+            }
+        }
+    }
+
+    #endif
+
     private func noteIcon(legacySystemName: String) -> some View {
         Group {
             if dataObject.usesSyncedNotesIcon {
@@ -165,11 +223,18 @@ private struct AyahMenuViewList: View {
 }
 
 private struct Row<Symbol: View, Accessory: View>: View {
+    enum SubtitlePlacement {
+        case inline
+        case below
+    }
+
     // MARK: Lifecycle
 
     init(
         title: String,
-        subtitle: String? = nil,
+        subtitle: MultipartText? = nil,
+        subtitlePlacement: SubtitlePlacement = .inline,
+        isEnabled: Bool = true,
         action: @Sendable @escaping () async -> Void,
         @ViewBuilder symbol: () -> Symbol
     ) where Accessory == EmptyView {
@@ -177,13 +242,17 @@ private struct Row<Symbol: View, Accessory: View>: View {
         accessory = EmptyView()
         self.title = title
         self.subtitle = subtitle
+        self.subtitlePlacement = subtitlePlacement
+        self.isEnabled = isEnabled
         self.action = action
         hasAccessory = false
     }
 
     init(
         title: String,
-        subtitle: String? = nil,
+        subtitle: MultipartText? = nil,
+        subtitlePlacement: SubtitlePlacement = .inline,
+        isEnabled: Bool = true,
         action: @Sendable @escaping () async -> Void,
         @ViewBuilder symbol: () -> Symbol,
         @ViewBuilder accessory: () -> Accessory
@@ -192,6 +261,8 @@ private struct Row<Symbol: View, Accessory: View>: View {
         self.accessory = accessory()
         self.title = title
         self.subtitle = subtitle
+        self.subtitlePlacement = subtitlePlacement
+        self.isEnabled = isEnabled
         self.action = action
         hasAccessory = true
     }
@@ -201,7 +272,9 @@ private struct Row<Symbol: View, Accessory: View>: View {
     let symbol: Symbol
     let accessory: Accessory
     let title: String
-    let subtitle: String?
+    let subtitle: MultipartText?
+    let subtitlePlacement: SubtitlePlacement
+    let isEnabled: Bool
     let action: @Sendable () async -> Void
     let hasAccessory: Bool
     @ScaledMetric var verticalPadding = 12
@@ -213,20 +286,9 @@ private struct Row<Symbol: View, Accessory: View>: View {
                     HighlightPaletteIcon()
                         .hidden()
                     symbol
-                        .foregroundColor(Color.label)
+                        .foregroundColor(primaryColor)
                 }
-                HStack(spacing: 0) {
-                    Text(title)
-                        .foregroundColor(Color.label)
-                    if let subtitle {
-                        Group {
-                            Text(" ")
-                            Text(subtitle)
-                        }
-                        .font(.footnote)
-                        .foregroundColor(.secondaryLabel)
-                    }
-                }
+                label
                 if hasAccessory {
                     Spacer(minLength: 12)
                     accessory
@@ -238,6 +300,45 @@ private struct Row<Symbol: View, Accessory: View>: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(BackgroundHighlightingStyle())
+        .disabled(!isEnabled)
+    }
+
+    // MARK: Private
+
+    private var primaryColor: Color {
+        isEnabled ? .label : .tertiaryLabel
+    }
+
+    private var secondaryColor: Color {
+        isEnabled ? .secondaryLabel : .tertiaryLabel
+    }
+
+    @ViewBuilder private var label: some View {
+        switch subtitlePlacement {
+        case .inline:
+            HStack(spacing: 0) {
+                Text(title)
+                    .foregroundColor(primaryColor)
+                if let subtitle {
+                    Text(" ")
+                    subtitle.view(ofSize: .footnote, allowsWrapping: false)
+                        .foregroundColor(secondaryColor)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
+            }
+        case .below:
+            VStack(alignment: .leading, spacing: 1) {
+                Text(title)
+                    .foregroundColor(primaryColor)
+                if let subtitle {
+                    subtitle.view(ofSize: .footnote, allowsWrapping: false)
+                        .foregroundColor(secondaryColor)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
+            }
+        }
     }
 }
 
@@ -255,6 +356,20 @@ private struct MenuGroup<Content: View>: View {
 }
 
 struct AyahMenuView_Previews: PreviewProvider {
+    #if QURAN_SYNC
+    static let actions = AyahMenuUI.Actions(
+        play: {},
+        repeatVerses: {},
+        bookmark: {},
+        addNote: {},
+        deleteNote: {},
+        showTranslation: {},
+        copy: {},
+        share: {},
+        moveReadingBookmark: {},
+        deleteReadingBookmark: {}
+    )
+    #else
     static let actions = AyahMenuUI.Actions(
         play: {},
         repeatVerses: {},
@@ -265,19 +380,17 @@ struct AyahMenuView_Previews: PreviewProvider {
         copy: {},
         share: {}
     )
+    #endif
 
     static var previews: some View {
         Group {
             VStack {
                 Spacer()
-                AyahMenuView(dataObject: AyahMenuUI.DataObject(
+                AyahMenuView(dataObject: dataObject(
                     highlightingColor: .green,
                     state: .noted,
                     bookmarkTitle: "Save Ayah...",
                     bookmarkState: .highlighted(.green),
-                    playSubtitle: "To the end of Juz'",
-                    repeatSubtitle: "selected verses",
-                    actions: actions,
                     isTranslationView: true
                 ))
                 Spacer()
@@ -286,14 +399,11 @@ struct AyahMenuView_Previews: PreviewProvider {
 
             VStack {
                 Spacer()
-                AyahMenuView(dataObject: AyahMenuUI.DataObject(
+                AyahMenuView(dataObject: dataObject(
                     highlightingColor: .red,
                     state: .highlighted,
                     bookmarkTitle: "Save Ayahs...",
                     bookmarkState: .partiallyHighlighted,
-                    playSubtitle: "To the end of Juz'",
-                    repeatSubtitle: "selected verses",
-                    actions: actions,
                     isTranslationView: true
                 ))
                 Spacer()
@@ -303,14 +413,11 @@ struct AyahMenuView_Previews: PreviewProvider {
 
             VStack {
                 Spacer()
-                AyahMenuView(dataObject: AyahMenuUI.DataObject(
+                AyahMenuView(dataObject: dataObject(
                     highlightingColor: .green,
                     state: .noHighlight,
                     bookmarkTitle: "Save Ayah...",
                     bookmarkState: .unhighlighted,
-                    playSubtitle: "To the end of Juz'",
-                    repeatSubtitle: "selected verses",
-                    actions: actions,
                     isTranslationView: true
                 ))
                 Spacer()
@@ -319,5 +426,38 @@ struct AyahMenuView_Previews: PreviewProvider {
             .environment(\.sizeCategory, .extraExtraExtraLarge)
         }
         .previewLayout(.fixed(width: 320, height: 470))
+    }
+
+    private static func dataObject(
+        highlightingColor: HighlightColor,
+        state: AyahMenuUI.NoteState,
+        bookmarkTitle: String,
+        bookmarkState: AyahMenuUI.BookmarkState,
+        isTranslationView: Bool
+    ) -> AyahMenuUI.DataObject {
+        #if QURAN_SYNC
+        AyahMenuUI.DataObject(
+            highlightingColor: highlightingColor,
+            state: state,
+            bookmarkTitle: bookmarkTitle,
+            bookmarkState: bookmarkState,
+            playSubtitle: "To the end of Juz'",
+            repeatSubtitle: "selected verses",
+            actions: actions,
+            isTranslationView: isTranslationView,
+            readingBookmarkState: .unset
+        )
+        #else
+        AyahMenuUI.DataObject(
+            highlightingColor: highlightingColor,
+            state: state,
+            bookmarkTitle: bookmarkTitle,
+            bookmarkState: bookmarkState,
+            playSubtitle: "To the end of Juz'",
+            repeatSubtitle: "selected verses",
+            actions: actions,
+            isTranslationView: isTranslationView
+        )
+        #endif
     }
 }

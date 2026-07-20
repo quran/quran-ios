@@ -6,6 +6,7 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import AnnotationsService
 import AppDependencies
 import QuranAnnotations
 import QuranKit
@@ -15,6 +16,25 @@ import UIKit
 public struct AyahMenuInput {
     // MARK: Lifecycle
 
+    #if QURAN_SYNC
+    public init(
+        sourceView: UIView,
+        pointInView: CGPoint,
+        verses: [AyahNumber],
+        notes: [QuranAnnotations.Note],
+        highlightVerses: [AyahNumber: HighlightColor] = [:],
+        bookmarkedVerses: Set<AyahNumber> = [],
+        readingBookmark: ReadingPositionBookmark? = nil
+    ) {
+        self.sourceView = sourceView
+        self.pointInView = pointInView
+        self.verses = verses
+        self.notes = notes
+        self.highlightVerses = highlightVerses
+        self.bookmarkedVerses = bookmarkedVerses
+        self.readingBookmark = readingBookmark
+    }
+    #else
     public init(
         sourceView: UIView,
         pointInView: CGPoint,
@@ -30,6 +50,7 @@ public struct AyahMenuInput {
         self.highlightVerses = highlightVerses
         self.bookmarkedVerses = bookmarkedVerses
     }
+    #endif
 
     // MARK: Internal
 
@@ -39,6 +60,9 @@ public struct AyahMenuInput {
     let notes: [QuranAnnotations.Note]
     let highlightVerses: [AyahNumber: HighlightColor]
     let bookmarkedVerses: Set<AyahNumber>
+    #if QURAN_SYNC
+    let readingBookmark: ReadingPositionBookmark?
+    #endif
 }
 
 @MainActor
@@ -64,7 +88,8 @@ public struct AyahMenuBuilder {
             textRetriever: textRetriever,
             notes: input.notes,
             highlightVerses: input.highlightVerses,
-            bookmarkedVerses: input.bookmarkedVerses
+            bookmarkedVerses: input.bookmarkedVerses,
+            readingBookmark: input.readingBookmark
         )
         #else
         let deps = AyahMenuViewModel.Deps(

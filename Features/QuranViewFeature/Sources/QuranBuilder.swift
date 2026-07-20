@@ -42,6 +42,10 @@ public struct QuranBuilder {
             ayahBookmarkCollectionService: AyahBookmarkCollectionService(quranDataService: container.quranDataService),
             highlightsService: highlightsService
         )
+        let readingBookmarkObserver = QuranReadingBookmarkObserver(
+            service: MobileSyncReadingBookmarkService(quranDataService: container.quranDataService),
+            quran: quran
+        )
         let interactorDeps = QuranInteractor.Deps(
             quran: quran,
             analytics: container.analytics,
@@ -58,7 +62,8 @@ public struct QuranBuilder {
             resources: container.readingResources,
             notesObserver: notesObserver,
             noteEditorBuilder: NoteEditorBuilder(container: container),
-            syncedHighlightsObserver: syncedHighlightsObserver
+            syncedHighlightsObserver: syncedHighlightsObserver,
+            readingBookmarkObserver: readingBookmarkObserver
         )
         #else
         let noteService = container.noteService()

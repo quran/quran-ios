@@ -35,6 +35,20 @@ final class AyahMenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        #if QURAN_SYNC
+        let actions = AyahMenuUI.Actions(
+            play: { [weak self] in self?.viewModel.play() },
+            repeatVerses: { [weak self] in self?.viewModel.repeatVerses() },
+            bookmark: { [weak self] in self?.viewModel.bookmark() },
+            addNote: { [weak self] in await self?.viewModel.editNote() },
+            deleteNote: { [weak self] in await self?.viewModel.deleteNotes() },
+            showTranslation: { [weak self] in self?.viewModel.showTranslation() },
+            copy: { [weak self] in self?.viewModel.copy() },
+            share: { [weak self] in self?.viewModel.share() },
+            moveReadingBookmark: { [weak self] in await self?.viewModel.moveReadingBookmark() },
+            deleteReadingBookmark: { [weak self] in await self?.viewModel.deleteReadingBookmark() }
+        )
+        #else
         let actions = AyahMenuUI.Actions(
             play: { [weak self] in self?.viewModel.play() },
             repeatVerses: { [weak self] in self?.viewModel.repeatVerses() },
@@ -45,7 +59,22 @@ final class AyahMenuViewController: UIViewController {
             copy: { [weak self] in self?.viewModel.copy() },
             share: { [weak self] in self?.viewModel.share() }
         )
+        #endif
         let highlightingColor = viewModel.highlightingColor
+        #if QURAN_SYNC
+        let dataObject = AyahMenuUI.DataObject(
+            highlightingColor: highlightingColor,
+            state: viewModel.noteState,
+            bookmarkTitle: viewModel.bookmarkTitle,
+            bookmarkState: viewModel.bookmarkState,
+            playSubtitle: viewModel.playSubtitle,
+            repeatSubtitle: viewModel.repeatSubtitle,
+            actions: actions,
+            isTranslationView: viewModel.isTranslationView,
+            usesSyncedNotesIcon: viewModel.usesSyncedNotesIcon,
+            readingBookmarkState: viewModel.readingBookmarkState
+        )
+        #else
         let dataObject = AyahMenuUI.DataObject(
             highlightingColor: highlightingColor,
             state: viewModel.noteState,
@@ -57,6 +86,7 @@ final class AyahMenuViewController: UIViewController {
             isTranslationView: viewModel.isTranslationView,
             usesSyncedNotesIcon: viewModel.usesSyncedNotesIcon
         )
+        #endif
         showAyahMenu(dataObject)
     }
 

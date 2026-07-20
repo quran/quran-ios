@@ -1,30 +1,27 @@
-import Foundation
 import XCTest
-@testable import AnnotationsService
-@testable import QuranAnnotations
-@testable import QuranKit
+@testable import Utilities
 
-final class LastPagesSequenceTests: XCTestCase {
+final class AnyAsyncSequenceTests: XCTestCase {
     func test_forwardsValuesAndCompletion() async throws {
-        let source = AsyncStream<[LastPage]> { continuation in
-            continuation.yield([])
+        let source = AsyncStream<Int> { continuation in
+            continuation.yield(1)
             continuation.finish()
         }
-        let sequence = LastPagesSequence(source)
+        let sequence = AnyAsyncSequence(source)
         var iterator = sequence.makeAsyncIterator()
 
         let value = try await iterator.next()
         let completion = try await iterator.next()
 
-        XCTAssertEqual(value, [])
+        XCTAssertEqual(value, 1)
         XCTAssertNil(completion)
     }
 
     func test_forwardsErrors() async {
-        let source = AsyncThrowingStream<[LastPage], Error> { continuation in
+        let source = AsyncThrowingStream<Int, Error> { continuation in
             continuation.finish(throwing: TestError.expected)
         }
-        let sequence = LastPagesSequence(source)
+        let sequence = AnyAsyncSequence(source)
         var iterator = sequence.makeAsyncIterator()
 
         do {
@@ -37,13 +34,13 @@ final class LastPagesSequenceTests: XCTestCase {
 
     func test_forwardsCancellation() async {
         let cancelled = expectation(description: "Source receives cancellation")
-        let source = AsyncThrowingStream<[LastPage], Error> { continuation in
+        let source = AsyncThrowingStream<Int, Error> { continuation in
             continuation.onTermination = { termination in
                 guard case .cancelled = termination else { return }
                 cancelled.fulfill()
             }
         }
-        let sequence = LastPagesSequence(source)
+        let sequence = AnyAsyncSequence(source)
         let observation = Task {
             var iterator = sequence.makeAsyncIterator()
             _ = try await iterator.next()
@@ -57,7 +54,7 @@ final class LastPagesSequenceTests: XCTestCase {
     }
 
     func test_iteratorsOwnIndependentSourceIterators() async throws {
-        let sequence = LastPagesSequence(SingleValueSequence())
+        let sequence = AnyAsyncSequence(SingleValueSequence())
         var first = sequence.makeAsyncIterator()
         var second = sequence.makeAsyncIterator()
 
@@ -66,38 +63,10 @@ final class LastPagesSequenceTests: XCTestCase {
         let firstCompletion = try await first.next()
         let secondCompletion = try await second.next()
 
-        XCTAssertEqual(firstValue, [])
-        XCTAssertEqual(secondValue, [])
+        XCTAssertEqual(firstValue, 1)
+        XCTAssertEqual(secondValue, 1)
         XCTAssertNil(firstCompletion)
         XCTAssertNil(secondCompletion)
-    }
-
-    func test_lastPageCanCrossTaskBoundaries() async {
-        let lastPage = makeLastPage()
-        requireSendable(lastPage)
-
-        let received = await Task.detached { lastPage }.value
-
-        XCTAssertEqual(received, lastPage)
-    }
-
-    private func requireSendable(_: some Sendable) {}
-
-    private func makeLastPage() -> LastPage {
-        let page = Quran.hafsMadani1405.pages[10]
-        #if QURAN_SYNC
-        return LastPage(
-            id: "last-page",
-            page: page,
-            modifiedOn: Date(timeIntervalSince1970: 2)
-        )
-        #else
-        return LastPage(
-            page: page,
-            createdOn: Date(timeIntervalSince1970: 1),
-            modifiedOn: Date(timeIntervalSince1970: 2)
-        )
-        #endif
     }
 }
 
@@ -109,10 +78,10 @@ private struct SingleValueSequence: AsyncSequence {
     struct AsyncIterator: AsyncIteratorProtocol {
         var hasValue = true
 
-        mutating func next() async -> [LastPage]? {
+        mutating func next() async -> Int? {
             guard hasValue else { return nil }
             hasValue = false
-            return []
+            return 1
         }
     }
 

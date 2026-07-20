@@ -8,41 +8,11 @@
 
 import QuranAnnotations
 import QuranKit
-
-public struct LastPagesSequence: AsyncSequence {
-    public typealias Element = [LastPage]
-
-    public struct AsyncIterator: AsyncIteratorProtocol {
-        init<S: AsyncSequence>(_ sequence: S) where S.Element == Element {
-            var iterator = sequence.makeAsyncIterator()
-            nextValue = {
-                try await iterator.next()
-            }
-        }
-
-        public mutating func next() async throws -> Element? {
-            try await nextValue()
-        }
-
-        private let nextValue: () async throws -> Element?
-    }
-
-    public init<S: AsyncSequence>(_ sequence: S) where S.Element == Element {
-        makeIterator = {
-            AsyncIterator(sequence)
-        }
-    }
-
-    public func makeAsyncIterator() -> AsyncIterator {
-        makeIterator()
-    }
-
-    private let makeIterator: () -> AsyncIterator
-}
+import Utilities
 
 @MainActor
 public protocol LastPageService {
-    func lastPages(quran: Quran) -> LastPagesSequence
+    func lastPages(quran: Quran) -> AnyAsyncSequence<[LastPage]>
 
     func add(page: Page) async throws -> LastPage
 

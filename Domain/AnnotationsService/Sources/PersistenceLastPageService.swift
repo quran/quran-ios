@@ -11,6 +11,7 @@ import Combine
 import LastPagePersistence
 import QuranAnnotations
 import QuranKit
+import Utilities
 
 public struct PersistenceLastPageService: LastPageService {
     // MARK: Lifecycle
@@ -22,7 +23,7 @@ public struct PersistenceLastPageService: LastPageService {
 
     // MARK: Public
 
-    public func lastPages(quran: Quran) -> LastPagesSequence {
+    public func lastPages(quran: Quran) -> AnyAsyncSequence<[LastPage]> {
         let mapper = QuranPageMapper(destination: quran)
         let sequence = persistence.lastPages()
             .map { lastPages in
@@ -35,7 +36,7 @@ public struct PersistenceLastPageService: LastPageService {
                 }
             }
             .values()
-        return LastPagesSequence(sequence)
+        return .init(sequence)
     }
 
     public func add(page: Page) async throws -> LastPage {

@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import Utilities
 import XCTest
 @testable import AnnotationsService
 @testable import QuranAnnotations
@@ -194,8 +195,8 @@ private final class ControllableLastPageService: LastPageService {
     private(set) var updateCalls: [UpdateCall] = []
     private(set) var cancellationCount = 0
 
-    func lastPages(quran _: Quran) -> LastPagesSequence {
-        LastPagesSequence(Just<[LastPage]>([]).values)
+    func lastPages(quran _: Quran) -> AnyAsyncSequence<[LastPage]> {
+        .init(Just<[LastPage]>([]).values)
     }
 
     func add(page: Page) async throws -> LastPage {
@@ -269,8 +270,8 @@ private final class LastPageServiceSpy: LastPageService {
     private(set) var addPages: [Page] = []
     private(set) var updateCalls: [UpdateCall] = []
 
-    func lastPages(quran _: Quran) -> LastPagesSequence {
-        LastPagesSequence(Just<[LastPage]>([]).values)
+    func lastPages(quran _: Quran) -> AnyAsyncSequence<[LastPage]> {
+        .init(Just<[LastPage]>([]).values)
     }
 
     func add(page: Page) async throws -> LastPage {

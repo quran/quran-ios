@@ -3,6 +3,7 @@ import MobileSync
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
+import Utilities
 import XCTest
 @testable import BookmarksFeature
 
@@ -151,7 +152,7 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
     }
 
     private func nextCollections(
-        from iterator: inout AyahBookmarkCollectionsSequence.AsyncIterator,
+        from iterator: inout AnyAsyncSequence<[AyahBookmarkCollection]>.AsyncIterator,
         where predicate: ([AyahBookmarkCollection]) -> Bool
     ) async throws -> [AyahBookmarkCollection] {
         while let collections = try await iterator.next() {

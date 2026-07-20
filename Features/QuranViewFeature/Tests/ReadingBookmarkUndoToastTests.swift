@@ -6,6 +6,15 @@ import XCTest
 @testable import QuranViewFeature
 
 final class ReadingBookmarkUndoToastTests: XCTestCase {
+    func test_saved_describesLocationWithoutAction() {
+        let bookmark = bookmark(at: .ayah(ayah(255)))
+
+        let toast = ReadingBookmarkUndoToast.saved(bookmark)
+
+        XCTAssertEqual(toast.message, "Reading bookmark saved at Al-Baqarah 2:255")
+        XCTAssertNil(toast.action)
+    }
+
     func test_moved_describesBothLocationsAndProvidesUndo() {
         let previousBookmark = bookmark(at: .page(ayah(255).page))
         let currentBookmark = bookmark(at: .ayah(ayah(255)))

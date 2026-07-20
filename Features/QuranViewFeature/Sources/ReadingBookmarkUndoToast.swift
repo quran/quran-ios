@@ -10,6 +10,10 @@ import QuranTextKit
 import UIx
 
 enum ReadingBookmarkUndoToast {
+    static func saved(_ bookmark: ReadingPositionBookmark) -> Toast {
+        Toast(lFormat("ayah.menu.reading-bookmark.saved", location(of: bookmark)))
+    }
+
     static func moved(
         from previousBookmark: ReadingPositionBookmark,
         to currentBookmark: ReadingPositionBookmark,

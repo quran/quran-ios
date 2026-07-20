@@ -290,6 +290,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                         self?.undoReadingBookmarkMove(movedBookmark, to: previousBookmark)
                     }
                 )
+            } else {
+                presenter?.showToast(ReadingBookmarkUndoToast.saved(movedBookmark))
             }
         } catch {
             crasher.recordError(error, reason: "Failed to move reading bookmark")

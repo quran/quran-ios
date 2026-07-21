@@ -100,15 +100,15 @@ final class AyahMenuViewModelTests: XCTestCase {
         }
     }
 
-    func test_readingBookmarkState_isCurrentForPageContainingSelectedAyah() {
+    func test_readingBookmarkState_isElsewhereForPageContainingSelectedAyah() {
         let selected = verses[0]
         let sut = makeSUT(
             verses: [selected],
             readingBookmark: readingBookmark(at: .page(selected.page))
         )
 
-        guard case .current = sut.readingBookmarkState else {
-            return XCTFail("Expected current reading bookmark state")
+        guard case .elsewhere = sut.readingBookmarkState else {
+            return XCTFail("Expected elsewhere reading bookmark state")
         }
     }
 
@@ -158,6 +158,18 @@ final class AyahMenuViewModelTests: XCTestCase {
         await sut.removeReadingBookmark()
 
         XCTAssertEqual(listener.removedReadingBookmark, bookmark)
+    }
+
+    func test_removeReadingBookmark_doesNotRemovePageBookmarkContainingSelectedAyah() async {
+        let selected = verses[0]
+        let bookmark = readingBookmark(at: .page(selected.page))
+        let sut = makeSUT(verses: [selected], readingBookmark: bookmark)
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        await sut.removeReadingBookmark()
+
+        XCTAssertNil(listener.removedReadingBookmark)
     }
 
     private var verses: [AyahNumber] {

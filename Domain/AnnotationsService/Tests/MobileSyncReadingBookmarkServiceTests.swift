@@ -61,7 +61,6 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
         let bookmark = try await storedBookmark(quran: quran)
 
         XCTAssertEqual(bookmark?.location, .page(expectedPage))
-        XCTAssertTrue(bookmark?.isAt(expectedPage.firstVerse) == true)
     }
 
     func test_addReadingBookmark_persistsPageLocation() async throws {

@@ -543,7 +543,9 @@ private func featuresTargets() -> [[Target]] {
             "Localization",
             "Analytics",
             "QuranAnnotations",
+            "QuranTextKit",
             "NoorUI",
+            "UIx",
         ]),
 
         target(type, name: "ReciterListFeature", hasTests: false, dependencies: [

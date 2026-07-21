@@ -19,6 +19,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Add new modules through the `Package.swift` target helpers and keep dependencies explicit.
 - Prefer extending existing services/builders over creating parallel abstractions.
 - Keep feature entry points in `*Builder` types; dependency wiring belongs in builders/container, not views.
+- Pass dependencies directly to view-model initializers; do not introduce nested `Deps` or dependency-bag types.
 
 ## UI and features
 

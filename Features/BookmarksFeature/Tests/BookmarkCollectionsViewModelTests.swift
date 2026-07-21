@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import AnnotationsService
 import AuthenticationClient
 import AuthenticationClientFake
 import Combine
@@ -9,6 +10,7 @@ import QuranAnnotations
 import QuranKit
 import QuranResources
 import QuranTextKit
+import ReadingService
 import UIKit
 import XCTest
 @testable import BookmarksFeature
@@ -344,6 +346,59 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         task.cancel()
     }
 
+    func test_start_observesReadingBookmarkFromMobileSync() async throws {
+        let service = makeReadingBookmarkService()
+        let page = ReadingPreferences.shared.reading.quran.pages[269]
+        let sut = makeSUT(readingBookmarkService: service)
+        let task = Task { await sut.start() }
+
+        try await service.addReadingBookmark(at: .page(page))
+        await waitUntil { sut.readingBookmark?.location == .page(page) }
+
+        XCTAssertEqual(sut.readingBookmark?.sura, page.firstVerse.sura)
+        task.cancel()
+    }
+
+    func test_navigateToPageReadingBookmark_navigatesToPageWithoutAyah() {
+        let page = Quran.hafsMadani1405.pages[269]
+        let bookmark = ReadingPositionBookmark(
+            id: "reading-bookmark",
+            location: .page(page),
+            modifiedOn: .distantPast
+        )
+        var navigatedPage: Page?
+        var navigatedAyah: AyahNumber?
+        let sut = makeSUT(navigateToPage: {
+            navigatedPage = $0
+            navigatedAyah = $1
+        })
+
+        sut.navigateTo(bookmark)
+
+        XCTAssertEqual(navigatedPage, page)
+        XCTAssertNil(navigatedAyah)
+    }
+
+    func test_navigateToAyahReadingBookmark_navigatesToPageAndAyah() {
+        let ayah = Quran.hafsMadani1405.pages[269].firstVerse
+        let bookmark = ReadingPositionBookmark(
+            id: "reading-bookmark",
+            location: .ayah(ayah),
+            modifiedOn: .distantPast
+        )
+        var navigatedPage: Page?
+        var navigatedAyah: AyahNumber?
+        let sut = makeSUT(navigateToPage: {
+            navigatedPage = $0
+            navigatedAyah = $1
+        })
+
+        sut.navigateTo(bookmark)
+
+        XCTAssertEqual(navigatedPage, ayah.page)
+        XCTAssertEqual(navigatedAyah, ayah)
+    }
+
     func test_showCollection_pushesCollectionViewController() async throws {
         let service = makeService()
         try await service.createCollection(named: "Favorites")
@@ -367,9 +422,12 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     private func makeSUT(
         authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient(),
         collectionService: AyahBookmarkCollectionService? = nil,
-        navigationController: UINavigationController? = nil
+        readingBookmarkService: MobileSyncReadingBookmarkService? = nil,
+        navigationController: UINavigationController? = nil,
+        navigateToPage: @escaping (Page, AyahNumber?) -> Void = { _, _ in }
     ) -> BookmarkCollectionsViewModel {
         let collectionService = collectionService ?? makeService()
+        let readingBookmarkService = readingBookmarkService ?? makeReadingBookmarkService()
         let navigationController = navigationController ?? UINavigationController()
         let collectionsBuilder = AyahBookmarkCollectionsBuilder(
             ayahBookmarkCollectionService: collectionService,
@@ -379,13 +437,19 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         return BookmarkCollectionsViewModel(
             authenticationClient: authenticationClient,
             ayahBookmarkCollectionService: collectionService,
+            readingBookmarkService: readingBookmarkService,
             collectionsBuilder: collectionsBuilder,
-            navigationController: navigationController
+            navigationController: navigationController,
+            navigateToPage: navigateToPage
         )
     }
 
     private func makeService() -> AyahBookmarkCollectionService {
         AyahBookmarkCollectionService(quranDataService: database.quranDataService)
+    }
+
+    private func makeReadingBookmarkService() -> MobileSyncReadingBookmarkService {
+        MobileSyncReadingBookmarkService(quranDataService: database.quranDataService)
     }
 
     private func makeCollectionDetailsViewModel(

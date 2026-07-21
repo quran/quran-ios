@@ -30,13 +30,18 @@ public struct NoorListItem: View {
         // MARK: Lifecycle
 
         public init(_ image: NoorSystemImage, color: Color? = nil) {
+            self.image = image.image
+            self.color = color
+        }
+
+        public init(_ image: Image, color: Color? = nil) {
             self.image = image
             self.color = color
         }
 
         // MARK: Internal
 
-        let image: NoorSystemImage
+        let image: Image
         let color: Color?
     }
 
@@ -168,10 +173,10 @@ public struct NoorListItem: View {
 
             if let image {
                 if let color = image.color {
-                    image.image.image
+                    image.image
                         .foregroundColor(color)
                 } else {
-                    image.image.image
+                    image.image
                 }
             }
 

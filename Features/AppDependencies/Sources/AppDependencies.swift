@@ -74,6 +74,10 @@ extension AppDependencies {
     }
 
     #if QURAN_SYNC
+    public func readingBookmarkService() -> MobileSyncReadingBookmarkService {
+        MobileSyncReadingBookmarkService(quranDataService: quranDataService)
+    }
+
     public func mobileSyncNoteService() -> MobileSyncNoteService {
         MobileSyncNoteService(quranDataService: quranDataService)
     }

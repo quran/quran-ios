@@ -31,10 +31,30 @@ enum HomeViewType: Int {
 final class HomeViewModel: ObservableObject {
     // MARK: Lifecycle
 
+    #if QURAN_SYNC
     init(
         lastPageService: any LastPageService,
         textRetriever: QuranTextDataService,
-        navigateToPage: @escaping (LastPage) -> Void,
+        readingBookmarkService: MobileSyncReadingBookmarkService,
+        navigateToPage: @escaping (Page, LastPage?, AyahNumber?) -> Void,
+        navigateToSura: @escaping (Sura) -> Void,
+        navigateToQuarter: @escaping (Quarter) -> Void
+    ) {
+        self.lastPageService = lastPageService
+        self.textRetriever = textRetriever
+        self.readingBookmarkService = readingBookmarkService
+        self.navigateToPage = navigateToPage
+        self.navigateToSura = navigateToSura
+        self.navigateToQuarter = navigateToQuarter
+
+        HomePreferences.shared.$surahSortOrder
+            .assign(to: &$surahSortOrder)
+    }
+    #else
+    init(
+        lastPageService: any LastPageService,
+        textRetriever: QuranTextDataService,
+        navigateToPage: @escaping (Page, LastPage?, AyahNumber?) -> Void,
         navigateToSura: @escaping (Sura) -> Void,
         navigateToQuarter: @escaping (Quarter) -> Void
     ) {
@@ -47,12 +67,16 @@ final class HomeViewModel: ObservableObject {
         HomePreferences.shared.$surahSortOrder
             .assign(to: &$surahSortOrder)
     }
+    #endif
 
     // MARK: Internal
 
     @Published var suras: [Sura] = []
     @Published var quarters: [QuarterItem] = []
     @Published var lastPages: [LastPage] = []
+    #if QURAN_SYNC
+    @Published var readingBookmark: ReadingPositionBookmark?
+    #endif
 
     @Published var surahSortOrder: SurahSortOrder = HomePreferences.shared.surahSortOrder
 
@@ -80,12 +104,28 @@ final class HomeViewModel: ObservableObject {
         async let lastPages: () = loadLastPages()
         async let suras: () = loadSuras()
         async let quarters: () = loadQuarters()
+        #if QURAN_SYNC
+        async let readingBookmark: () = loadReadingBookmark()
+        _ = await [lastPages, suras, quarters, readingBookmark]
+        #else
         _ = await [lastPages, suras, quarters]
+        #endif
     }
 
     func navigateTo(_ lastPage: LastPage) {
-        navigateToPage(lastPage)
+        navigateToPage(lastPage.page, lastPage, nil)
     }
+
+    #if QURAN_SYNC
+    func navigateTo(_ readingBookmark: ReadingPositionBookmark) {
+        switch readingBookmark.location {
+        case .ayah(let ayahNumber):
+            navigateToPage(ayahNumber.page, nil, ayahNumber)
+        case .page(let page):
+            navigateToPage(page, nil, nil)
+        }
+    }
+    #endif
 
     func navigateTo(_ sura: Sura) {
         navigateToSura(sura)
@@ -103,7 +143,10 @@ final class HomeViewModel: ObservableObject {
 
     private let lastPageService: any LastPageService
     private let textRetriever: QuranTextDataService
-    private let navigateToPage: (LastPage) -> Void
+    #if QURAN_SYNC
+    private let readingBookmarkService: MobileSyncReadingBookmarkService
+    #endif
+    private let navigateToPage: (Page, LastPage?, AyahNumber?) -> Void
     private let navigateToSura: (Sura) -> Void
     private let navigateToQuarter: (Quarter) -> Void
     private let readingPreferences = ReadingPreferences.shared
@@ -133,6 +176,34 @@ final class HomeViewModel: ObservableObject {
             }
         }
     }
+
+    #if QURAN_SYNC
+    private func loadReadingBookmark() async {
+        let readings = readingPreferences.$reading
+            .prepend(readingPreferences.reading)
+            .values()
+        var observationTask: Task<Void, Never>?
+        defer { observationTask?.cancel() }
+
+        for await reading in readings {
+            observationTask?.cancel()
+            let sequence = readingBookmarkService.readingBookmarkSequence(quran: reading.quran)
+            observationTask = Task { [weak self] in
+                do {
+                    for try await bookmark in sequence {
+                        guard !Task.isCancelled else { return }
+                        self?.readingBookmark = bookmark
+                    }
+                } catch is CancellationError {
+                    return
+                } catch {
+                    guard !Task.isCancelled else { return }
+                    crasher.recordError(error, reason: "Failed to load reading bookmark")
+                }
+            }
+        }
+    }
+    #endif
 
     private func loadSuras() async {
         let readings = readingPreferences.$reading

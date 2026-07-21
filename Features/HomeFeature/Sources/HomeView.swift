@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-07-16.
 //
 
+import FeaturesSupport
 import Localization
 import NoorUI
 import QuranAnnotations
@@ -16,6 +17,23 @@ struct HomeView: View {
     @StateObject var viewModel: HomeViewModel
 
     var body: some View {
+        #if QURAN_SYNC
+        HomeViewUI(
+            type: viewModel.type,
+            readingBookmark: viewModel.readingBookmark,
+            lastPages: viewModel.lastPages,
+            suras: viewModel.suras,
+            quarters: viewModel.quarters,
+            start: { await viewModel.start() },
+            selectReadingBookmark: { viewModel.navigateTo($0) },
+            selectLastPage: { viewModel.navigateTo($0) },
+            selectSura: { viewModel.navigateTo($0) },
+            selectQuarter: { viewModel.navigateTo($0) },
+            surahSortOrder: viewModel.surahSortOrder,
+            isJuzExpanded: { viewModel.isJuzExpanded($0) },
+            setJuzExpanded: { viewModel.setJuz($0, expanded: $1) }
+        )
+        #else
         HomeViewUI(
             type: viewModel.type,
             lastPages: viewModel.lastPages,
@@ -29,17 +47,24 @@ struct HomeView: View {
             isJuzExpanded: { viewModel.isJuzExpanded($0) },
             setJuzExpanded: { viewModel.setJuz($0, expanded: $1) }
         )
+        #endif
     }
 }
 
 private struct HomeViewUI: View {
     let type: HomeViewType
+    #if QURAN_SYNC
+    let readingBookmark: ReadingPositionBookmark?
+    #endif
     let lastPages: [LastPage]
     let suras: [Sura]
     let quarters: [QuarterItem]
 
     let start: AsyncAction
 
+    #if QURAN_SYNC
+    let selectReadingBookmark: ItemAction<ReadingPositionBookmark>
+    #endif
     let selectLastPage: ItemAction<LastPage>
     let selectSura: ItemAction<Sura>
     let selectQuarter: ItemAction<QuarterItem>
@@ -49,6 +74,14 @@ private struct HomeViewUI: View {
 
     var body: some View {
         NoorList {
+            #if QURAN_SYNC
+            if let readingBookmark {
+                NoorBasicSection(title: l("ayah.menu.reading-bookmark.title")) {
+                    readingBookmarkView(readingBookmark)
+                }
+            }
+            #endif
+
             NoorSection(title: lAndroid("recent_pages"), lastPages) { lastPage in
                 lastPageView(lastPage)
             }
@@ -66,6 +99,15 @@ private struct HomeViewUI: View {
         }
         .task { await start() }
     }
+
+    #if QURAN_SYNC
+    func readingBookmarkView(_ bookmark: ReadingPositionBookmark) -> some View {
+        ReadingBookmarkListItem(
+            bookmark: bookmark,
+            action: { selectReadingBookmark(bookmark) }
+        )
+    }
+    #endif
 
     func lastPageView(_ lastPage: LastPage) -> some View {
         let ayah = lastPage.page.firstVerse
@@ -169,26 +211,55 @@ struct HomeView_Previews: PreviewProvider {
         let quran = Quran.hafsMadani1405
 
         @State var lastPages: [LastPage] = staticLastPages
+        #if QURAN_SYNC
+        @State var readingBookmark = ReadingPositionBookmark(
+            id: "preview-reading-bookmark",
+            location: .page(Quran.hafsMadani1405.pages[269]),
+            modifiedOn: Date(timeIntervalSinceNow: -180)
+        )
+        #endif
         @State var type: HomeViewType = .juzs
         @State var collapsedJuzs: Set<Juz> = []
 
         var body: some View {
             NavigationView {
-                HomeViewUI(
-                    type: type,
-                    lastPages: lastPages,
-                    suras: quran.suras,
-                    quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
-                    start: {},
-                    selectLastPage: { _ in },
-                    selectSura: { _ in },
-                    selectQuarter: { _ in },
-                    surahSortOrder: .ascending,
-                    isJuzExpanded: { !collapsedJuzs.contains($0) },
-                    setJuzExpanded: { juz, expanded in
-                        if expanded { collapsedJuzs.remove(juz) } else { collapsedJuzs.insert(juz) }
-                    }
-                )
+                Group {
+                    #if QURAN_SYNC
+                    HomeViewUI(
+                        type: type,
+                        readingBookmark: readingBookmark,
+                        lastPages: lastPages,
+                        suras: quran.suras,
+                        quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
+                        start: {},
+                        selectReadingBookmark: { _ in },
+                        selectLastPage: { _ in },
+                        selectSura: { _ in },
+                        selectQuarter: { _ in },
+                        surahSortOrder: .ascending,
+                        isJuzExpanded: { !collapsedJuzs.contains($0) },
+                        setJuzExpanded: { juz, expanded in
+                            if expanded { collapsedJuzs.remove(juz) } else { collapsedJuzs.insert(juz) }
+                        }
+                    )
+                    #else
+                    HomeViewUI(
+                        type: type,
+                        lastPages: lastPages,
+                        suras: quran.suras,
+                        quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
+                        start: {},
+                        selectLastPage: { _ in },
+                        selectSura: { _ in },
+                        selectQuarter: { _ in },
+                        surahSortOrder: .ascending,
+                        isJuzExpanded: { !collapsedJuzs.contains($0) },
+                        setJuzExpanded: { juz, expanded in
+                            if expanded { collapsedJuzs.remove(juz) } else { collapsedJuzs.insert(juz) }
+                        }
+                    )
+                    #endif
+                }
                 .navigationTitle("Home")
                 .toolbar {
                     if type == .suras {

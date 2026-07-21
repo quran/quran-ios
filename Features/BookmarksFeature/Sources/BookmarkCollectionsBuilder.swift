@@ -27,8 +27,12 @@ struct BookmarkCollectionsBuilder {
         let viewModel = BookmarkCollectionsViewModel(
             authenticationClient: container.authenticationClient,
             ayahBookmarkCollectionService: collectionService,
+            readingBookmarkService: container.readingBookmarkService(),
             collectionsBuilder: collectionsBuilder,
-            navigationController: navigationController
+            navigationController: navigationController,
+            navigateToPage: { [weak listener] page, ayah in
+                listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: ayah)
+            }
         )
         return BookmarkCollectionsViewController(viewModel: viewModel)
     }

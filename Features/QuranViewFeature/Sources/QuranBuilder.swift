@@ -42,7 +42,7 @@ public struct QuranBuilder {
             highlightsService: highlightsService
         )
         let readingBookmarkObserver = QuranReadingBookmarkObserver(
-            service: MobileSyncReadingBookmarkService(quranDataService: container.quranDataService),
+            service: container.readingBookmarkService(),
             quran: quran
         )
         let interactorDeps = QuranInteractor.Deps(

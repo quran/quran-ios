@@ -3,10 +3,13 @@
 //  BookmarkCollectionsViewModel.swift
 //
 
+import AnnotationsService
 import AuthenticationClient
 import Combine
 import Foundation
 import QuranAnnotations
+import QuranKit
+import ReadingService
 import SwiftUI
 import UIKit
 import VLogging
@@ -18,13 +21,17 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     init(
         authenticationClient: any AuthenticationClient,
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
+        readingBookmarkService: MobileSyncReadingBookmarkService,
         collectionsBuilder: AyahBookmarkCollectionsBuilder,
-        navigationController: UINavigationController
+        navigationController: UINavigationController,
+        navigateToPage: @escaping (Page, AyahNumber?) -> Void
     ) {
         self.authenticationClient = authenticationClient
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
+        self.readingBookmarkService = readingBookmarkService
         self.collectionsBuilder = collectionsBuilder
         self.navigationController = navigationController
+        self.navigateToPage = navigateToPage
         isSyncBannerDismissed = preferences.isSyncBannerDismissed
     }
 
@@ -37,6 +44,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     @Published var isPresentingAddCollection = false
     @Published var isSyncBannerDismissed: Bool
     @Published var newCollectionName = ""
+    @Published var readingBookmark: ReadingPositionBookmark?
 
     var shouldShowSyncBanner: Bool {
         !isAuthenticated && !isSyncBannerDismissed
@@ -97,8 +105,9 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     func start() async {
         async let observeCollections: Void = observeCollections()
+        async let observeReadingBookmark: Void = observeReadingBookmark()
         isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
-        await observeCollections
+        _ = await (observeCollections, observeReadingBookmark)
     }
 
     func loginToQuranCom() async {
@@ -161,12 +170,24 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         )
     }
 
+    func navigateTo(_ readingBookmark: ReadingPositionBookmark) {
+        switch readingBookmark.location {
+        case .ayah(let ayahNumber):
+            navigateToPage(ayahNumber.page, ayahNumber)
+        case .page(let page):
+            navigateToPage(page, nil)
+        }
+    }
+
     // MARK: Private
 
     private let authenticationClient: any AuthenticationClient
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
+    private let readingBookmarkService: MobileSyncReadingBookmarkService
     private let collectionsBuilder: AyahBookmarkCollectionsBuilder
+    private let navigateToPage: (Page, AyahNumber?) -> Void
     private let preferences = BookmarkCollectionsPreferences.shared
+    private let readingPreferences = ReadingPreferences.shared
     private weak var navigationController: UINavigationController?
 
     private static func highlightSortIndex(_ collection: AyahBookmarkCollection) -> Int? {
@@ -200,6 +221,32 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             }
         } catch {
             self.error = error
+        }
+    }
+
+    private func observeReadingBookmark() async {
+        let readings = readingPreferences.$reading
+            .prepend(readingPreferences.reading)
+            .values()
+        var observationTask: Task<Void, Never>?
+        defer { observationTask?.cancel() }
+
+        for await reading in readings {
+            observationTask?.cancel()
+            let sequence = readingBookmarkService.readingBookmarkSequence(quran: reading.quran)
+            observationTask = Task { [weak self] in
+                do {
+                    for try await bookmark in sequence {
+                        guard !Task.isCancelled else { return }
+                        self?.readingBookmark = bookmark
+                    }
+                } catch is CancellationError {
+                    return
+                } catch {
+                    guard !Task.isCancelled else { return }
+                    self?.error = error
+                }
+            }
         }
     }
 }

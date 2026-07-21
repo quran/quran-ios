@@ -26,6 +26,15 @@ public struct ReadingPositionBookmark: Equatable {
     public let location: Location
     public let modifiedOn: Date
 
+    public var sura: Sura {
+        switch location {
+        case .ayah(let ayah):
+            ayah.sura
+        case .page(let page):
+            page.firstVerse.sura
+        }
+    }
+
     public func isAt(_ ayah: AyahNumber) -> Bool {
         switch location {
         case .ayah(let bookmarkedAyah):

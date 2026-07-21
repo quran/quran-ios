@@ -28,11 +28,13 @@ public struct HomeBuilder {
             databasesURL: container.databasesURL,
             quranFileURL: container.quranUthmaniV2Database
         )
+        #if QURAN_SYNC
         let viewModel = HomeViewModel(
             lastPageService: container.lastPageService(),
             textRetriever: textRetriever,
-            navigateToPage: { [weak listener] lastPage in
-                listener?.navigateTo(page: lastPage.page, lastPage: lastPage, highlightingSearchAyah: nil)
+            readingBookmarkService: container.readingBookmarkService(),
+            navigateToPage: { [weak listener] page, lastPage, ayah in
+                listener?.navigateTo(page: page, lastPage: lastPage, highlightingSearchAyah: ayah)
             },
             navigateToSura: { [weak listener] sura in
                 listener?.navigateTo(page: sura.page, lastPage: nil, highlightingSearchAyah: nil)
@@ -41,6 +43,21 @@ public struct HomeBuilder {
                 listener?.navigateTo(page: quarter.page, lastPage: nil, highlightingSearchAyah: nil)
             }
         )
+        #else
+        let viewModel = HomeViewModel(
+            lastPageService: container.lastPageService(),
+            textRetriever: textRetriever,
+            navigateToPage: { [weak listener] page, lastPage, ayah in
+                listener?.navigateTo(page: page, lastPage: lastPage, highlightingSearchAyah: ayah)
+            },
+            navigateToSura: { [weak listener] sura in
+                listener?.navigateTo(page: sura.page, lastPage: nil, highlightingSearchAyah: nil)
+            },
+            navigateToQuarter: { [weak listener] quarter in
+                listener?.navigateTo(page: quarter.page, lastPage: nil, highlightingSearchAyah: nil)
+            }
+        )
+        #endif
         let viewController = HomeViewController(
             viewModel: viewModel,
             readingSelectorBuilder: ReadingSelectorBuilder(container: container)

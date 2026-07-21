@@ -3,6 +3,7 @@
 //  BookmarkCollectionsView.swift
 //
 
+import FeaturesSupport
 import Localization
 import NoorUI
 import QuranAnnotations
@@ -33,6 +34,15 @@ private struct BookmarkCollectionsContent: View {
                     BookmarkCollectionsSyncBanner(
                         dismiss: { viewModel.dismissSyncBanner() },
                         signInAction: { await viewModel.loginToQuranCom() }
+                    )
+                }
+            }
+
+            if let readingBookmark = viewModel.readingBookmark {
+                NoorBasicSection(title: l("ayah.menu.reading-bookmark.title")) {
+                    ReadingBookmarkListItem(
+                        bookmark: readingBookmark,
+                        action: { viewModel.navigateTo(readingBookmark) }
                     )
                 }
             }

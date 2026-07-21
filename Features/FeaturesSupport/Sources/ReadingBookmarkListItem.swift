@@ -28,7 +28,7 @@ public struct ReadingBookmarkListItem: View {
         NoorListItem(
             image: .init(
                 Image(uiImage: ReadingBookmarkPin.image(style: .filled)),
-                color: .appIdentity
+                color: .red
             ),
             title: "\(bookmark.sura.localizedName()) \(sura: bookmark.sura.arabicSuraName)",
             subtitle: .init(

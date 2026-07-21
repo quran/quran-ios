@@ -123,41 +123,41 @@ final class AyahMenuViewModelTests: XCTestCase {
         }
     }
 
-    func test_moveReadingBookmark_requestsMoveWithoutPreviousBookmark() async {
+    func test_setReadingBookmark_requestsSetWithoutPreviousBookmark() async {
         let selected = verses[0]
         let sut = makeSUT(verses: [selected])
         let listener = BookmarkListenerSpy()
         sut.listener = listener
 
-        await sut.moveReadingBookmark()
+        await sut.setReadingBookmark()
 
-        XCTAssertEqual(listener.readingBookmarkMove?.to, selected)
-        XCTAssertNil(listener.readingBookmarkMove?.from)
+        XCTAssertEqual(listener.readingBookmarkSet?.ayah, selected)
+        XCTAssertNil(listener.readingBookmarkSet?.replacedBookmark)
     }
 
-    func test_moveReadingBookmark_requestsMoveFromPreviousBookmark() async {
+    func test_setReadingBookmark_requestsReplacementOfPreviousBookmark() async {
         let selected = verses[0]
         let previousBookmark = readingBookmark(at: .ayah(verses[1]))
         let sut = makeSUT(verses: [selected], readingBookmark: previousBookmark)
         let listener = BookmarkListenerSpy()
         sut.listener = listener
 
-        await sut.moveReadingBookmark()
+        await sut.setReadingBookmark()
 
-        XCTAssertEqual(listener.readingBookmarkMove?.to, selected)
-        XCTAssertEqual(listener.readingBookmarkMove?.from, previousBookmark)
+        XCTAssertEqual(listener.readingBookmarkSet?.ayah, selected)
+        XCTAssertEqual(listener.readingBookmarkSet?.replacedBookmark, previousBookmark)
     }
 
-    func test_deleteReadingBookmark_requestsDeletionOfCurrentBookmark() async {
+    func test_removeReadingBookmark_requestsRemovalOfCurrentBookmark() async {
         let selected = verses[0]
         let bookmark = readingBookmark(at: .ayah(selected))
         let sut = makeSUT(verses: [selected], readingBookmark: bookmark)
         let listener = BookmarkListenerSpy()
         sut.listener = listener
 
-        await sut.deleteReadingBookmark()
+        await sut.removeReadingBookmark()
 
-        XCTAssertEqual(listener.deletedReadingBookmark, bookmark)
+        XCTAssertEqual(listener.removedReadingBookmark, bookmark)
     }
 
     private var verses: [AyahNumber] {
@@ -197,8 +197,8 @@ final class AyahMenuViewModelTests: XCTestCase {
 @MainActor
 private final class BookmarkListenerSpy: AyahMenuListener {
     private(set) var bookmarkedVerses: [AyahNumber]?
-    private(set) var readingBookmarkMove: (to: AyahNumber, from: ReadingPositionBookmark?)?
-    private(set) var deletedReadingBookmark: ReadingPositionBookmark?
+    private(set) var readingBookmarkSet: (ayah: AyahNumber, replacedBookmark: ReadingPositionBookmark?)?
+    private(set) var removedReadingBookmark: ReadingPositionBookmark?
 
     func dismissAyahMenu() {}
     func playAudio(_ from: AyahNumber, to: AyahNumber?, repeatVerses: Bool) {}
@@ -207,12 +207,12 @@ private final class BookmarkListenerSpy: AyahMenuListener {
     func showNoteEditor(for verses: [AyahNumber]) async {}
     func deleteNotes(in verses: [AyahNumber]) async {}
 
-    func moveReadingBookmark(to ayah: AyahNumber, from bookmark: ReadingPositionBookmark?) async {
-        readingBookmarkMove = (ayah, bookmark)
+    func setReadingBookmark(at ayah: AyahNumber, replacing bookmark: ReadingPositionBookmark?) async {
+        readingBookmarkSet = (ayah, bookmark)
     }
 
-    func deleteReadingBookmark(_ bookmark: ReadingPositionBookmark) async {
-        deletedReadingBookmark = bookmark
+    func removeReadingBookmark(_ bookmark: ReadingPositionBookmark) async {
+        removedReadingBookmark = bookmark
     }
 
     func showBookmarkEditor(for verses: [AyahNumber]) {

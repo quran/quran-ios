@@ -45,8 +45,8 @@ final class AyahMenuViewController: UIViewController {
             showTranslation: { [weak self] in self?.viewModel.showTranslation() },
             copy: { [weak self] in self?.viewModel.copy() },
             share: { [weak self] in self?.viewModel.share() },
-            moveReadingBookmark: { [weak self] in await self?.viewModel.moveReadingBookmark() },
-            deleteReadingBookmark: { [weak self] in await self?.viewModel.deleteReadingBookmark() }
+            setReadingBookmark: { [weak self] in await self?.viewModel.setReadingBookmark() },
+            removeReadingBookmark: { [weak self] in await self?.viewModel.removeReadingBookmark() }
         )
         #else
         let actions = AyahMenuUI.Actions(

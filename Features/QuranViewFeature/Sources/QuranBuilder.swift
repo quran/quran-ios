@@ -35,7 +35,6 @@ public struct QuranBuilder {
         let highlightsService = QuranHighlightsService()
 
         let quran = ReadingPreferences.shared.reading.quran
-        let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
         #if QURAN_SYNC
         let notesObserver = QuranNotesObserver(noteService: container.mobileSyncNoteService(), quran: quran)
         let syncedHighlightsObserver = QuranSyncedHighlightsObserver(
@@ -48,8 +47,6 @@ public struct QuranBuilder {
         )
         let interactorDeps = QuranInteractor.Deps(
             quran: quran,
-            analytics: container.analytics,
-            pageBookmarkService: pageBookmarkService,
             highlightsService: highlightsService,
             ayahMenuBuilder: AyahMenuBuilder(container: container),
             bookmarkAyahsBuilder: BookmarkAyahsBuilder(container: container),
@@ -66,12 +63,11 @@ public struct QuranBuilder {
             readingBookmarkObserver: readingBookmarkObserver
         )
         #else
+        let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
         let noteService = container.noteService()
         let notesObserver = QuranNotesObserver(noteService: noteService, quran: quran)
         let interactorDeps = QuranInteractor.Deps(
             quran: quran,
-            analytics: container.analytics,
-            pageBookmarkService: pageBookmarkService,
             highlightsService: highlightsService,
             ayahMenuBuilder: AyahMenuBuilder(container: container),
             bookmarkAyahsBuilder: BookmarkAyahsBuilder(container: container),
@@ -84,6 +80,8 @@ public struct QuranBuilder {
             resources: container.readingResources,
             notesObserver: notesObserver,
             noteEditorBuilder: NoteEditorBuilder(container: container),
+            analytics: container.analytics,
+            pageBookmarkService: pageBookmarkService,
             noteService: noteService
         )
         #endif

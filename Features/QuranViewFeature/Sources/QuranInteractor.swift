@@ -63,8 +63,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 {
     struct Deps {
         let quran: Quran
-        let analytics: AnalyticsLibrary
-        let pageBookmarkService: PageBookmarkService
         let highlightsService: QuranHighlightsService
         let ayahMenuBuilder: AyahMenuBuilder
         let bookmarkAyahsBuilder: BookmarkAyahsBuilder
@@ -81,6 +79,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let syncedHighlightsObserver: QuranSyncedHighlightsObserver
         let readingBookmarkObserver: QuranReadingBookmarkObserver
         #else
+        let analytics: AnalyticsLibrary
+        let pageBookmarkService: PageBookmarkService
         let noteService: NoteService
         #endif
     }
@@ -113,13 +113,16 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         deps.notesObserver.start()
         #if QURAN_SYNC
         deps.syncedHighlightsObserver.start()
+        deps.readingBookmarkObserver.$bookmark
+            .sink { [weak self] _ in self?.reloadPageBookmark() }
+            .store(in: &cancellables)
         deps.readingBookmarkObserver.start()
-        #endif
-
+        #else
         deps.pageBookmarkService.pageBookmarks(quran: deps.quran)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.pageBookmarks = $0 }
             .store(in: &cancellables)
+        #endif
 
         contentStatePreferences.$quranMode
             .sink { [weak self] _ in self?.onQuranModeUpdated() }
@@ -280,40 +283,17 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     #if QURAN_SYNC
-    func moveReadingBookmark(to ayah: AyahNumber, from previousBookmark: ReadingPositionBookmark?) async {
-        do {
-            let movedBookmark = try await deps.readingBookmarkObserver.add(at: .ayah(ayah))
+    func setReadingBookmark(at ayah: AyahNumber, replacing previousBookmark: ReadingPositionBookmark?) async {
+        if await performReadingBookmarkAction(
+            .set(location: .ayah(ayah), replacing: previousBookmark)
+        ) {
             dismissAyahMenu()
-            if let previousBookmark {
-                presenter?.showToast(
-                    ReadingBookmarkUndoToast.moved(from: previousBookmark, to: movedBookmark) { [weak self] in
-                        self?.undoReadingBookmarkMove(movedBookmark, to: previousBookmark)
-                    }
-                )
-            } else {
-                presenter?.showToast(ReadingBookmarkUndoToast.saved(movedBookmark))
-            }
-        } catch {
-            crasher.recordError(error, reason: "Failed to move reading bookmark")
         }
     }
 
-    func deleteReadingBookmark(_ bookmark: ReadingPositionBookmark) async {
-        do {
-            let observer = deps.readingBookmarkObserver
-            guard observer.bookmark == bookmark,
-                  let deletedBookmark = try await observer.remove()
-            else {
-                return
-            }
+    func removeReadingBookmark(_ bookmark: ReadingPositionBookmark) async {
+        if await performReadingBookmarkAction(.remove(bookmark)) {
             dismissAyahMenu()
-            presenter?.showToast(
-                ReadingBookmarkUndoToast.removed(deletedBookmark) { [weak self] in
-                    self?.addReadingBookmark(at: deletedBookmark.location)
-                }
-            )
-        } catch {
-            crasher.recordError(error, reason: "Failed to delete reading bookmark")
         }
     }
     #endif
@@ -383,12 +363,49 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     #if QURAN_SYNC
-    private func addReadingBookmark(at location: ReadingPositionBookmark.Location) {
+    private func performReadingBookmarkAction(_ action: ReadingBookmarkAction) async -> Bool {
+        do {
+            switch action {
+            case .set(let location, let previousBookmark):
+                let bookmark = try await deps.readingBookmarkObserver.add(at: location)
+                if let previousBookmark {
+                    presenter?.showToast(
+                        ReadingBookmarkUndoToast.moved(from: previousBookmark, to: bookmark) { [weak self] in
+                            self?.undoReadingBookmarkMove(bookmark, to: previousBookmark)
+                        }
+                    )
+                } else {
+                    presenter?.showToast(ReadingBookmarkUndoToast.saved(bookmark))
+                }
+            case .remove(let bookmark):
+                let observer = deps.readingBookmarkObserver
+                guard observer.bookmark == bookmark,
+                      let removedBookmark = try await observer.remove()
+                else {
+                    return false
+                }
+                presenter?.showToast(
+                    ReadingBookmarkUndoToast.removed(removedBookmark) { [weak self] in
+                        self?.undoReadingBookmarkRemoval(removedBookmark)
+                    }
+                )
+            }
+            return true
+        } catch {
+            crasher.recordError(error, reason: "Failed to update reading bookmark")
+            return false
+        }
+    }
+
+    private func undoReadingBookmarkRemoval(_ deletedBookmark: ReadingPositionBookmark) {
         Task {
+            guard deps.readingBookmarkObserver.bookmark == nil else {
+                return
+            }
             do {
-                try await deps.readingBookmarkObserver.add(at: location)
+                try await deps.readingBookmarkObserver.add(at: deletedBookmark.location)
             } catch {
-                crasher.recordError(error, reason: "Failed to undo reading bookmark change")
+                crasher.recordError(error, reason: "Failed to undo reading bookmark removal")
             }
         }
     }
@@ -442,6 +459,15 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func toogleBookmark() async {
         logger.info("Quran: onBookmarkBarButtonTapped")
+        #if QURAN_SYNC
+        guard let action = ReadingBookmarkAction.page(
+            visiblePages: visiblePages,
+            bookmark: deps.readingBookmarkObserver.bookmark
+        ) else {
+            return
+        }
+        _ = await performReadingBookmarkAction(action)
+        #else
         let pages = visiblePages
         let wasBookmarked = bookmarked(pages)
 
@@ -465,6 +491,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         } catch {
             crasher.recordError(error, reason: "Failed to toggle page bookmark")
         }
+        #endif
     }
 
     // MARK: Private
@@ -491,11 +518,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
+    #if !QURAN_SYNC
     private var pageBookmarks: [PageBookmark] = [] {
         didSet {
             reloadPageBookmark()
         }
     }
+    #endif
 
     private func setVisiblePages(_ pages: [Page]) {
         logger.info("Quran: set visible pages \(pages)")
@@ -597,8 +626,18 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     private func bookmarked(_ pages: [Page]) -> Bool {
+        #if QURAN_SYNC
+        guard case .remove = ReadingBookmarkAction.page(
+            visiblePages: pages,
+            bookmark: deps.readingBookmarkObserver.bookmark
+        ) else {
+            return false
+        }
+        return true
+        #else
         let visibleBookmarks = pageBookmarks.filter { pages.contains($0.page) }
         return !visibleBookmarks.isEmpty
+        #endif
     }
 
     private func showPageBookmarkIfNeeded(for pages: [Page]) {

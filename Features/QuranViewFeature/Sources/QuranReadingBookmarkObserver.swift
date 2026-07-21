@@ -4,6 +4,7 @@
 //
 
 import AnnotationsService
+import Combine
 import QuranAnnotations
 import QuranKit
 import VLogging
@@ -23,7 +24,7 @@ final class QuranReadingBookmarkObserver {
 
     // MARK: Internal
 
-    private(set) var bookmark: ReadingPositionBookmark?
+    @Published private(set) var bookmark: ReadingPositionBookmark?
 
     func start() {
         guard task == nil else {

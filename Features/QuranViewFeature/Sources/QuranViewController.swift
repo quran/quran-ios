@@ -383,11 +383,21 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
 
     private func updateRightBarItems(animated: Bool, isBookmarked: Bool) {
+        #if QURAN_SYNC
+        let style: ReadingBookmarkPin.Style = isBookmarked ? .filled : .outline
+        let bookmarkImage = ReadingBookmarkPin.image(style: style)
+        let bookmark = UIBarButtonItem(image: bookmarkImage, style: .plain, target: self, action: #selector(onBookmarkButtonTapped))
+        bookmark.accessibilityLabel = l("ayah.menu.reading-bookmark.title")
+        bookmark.accessibilityValue = l(isBookmarked
+            ? "ayah.menu.reading-bookmark.saved-here"
+            : "ayah.menu.reading-bookmark.save-here")
+        #else
         let bookmarkImage = UIImage.symbol(isBookmarked ? "bookmark.fill" : "bookmark")
         let bookmark = UIBarButtonItem(image: bookmarkImage, style: .plain, target: self, action: #selector(onBookmarkButtonTapped))
         if isBookmarked {
             bookmark.tintColor = .systemRed
         }
+        #endif
 
         quranView?.navigationItem.setRightBarButtonItems([moreNavigationButton, bookmark], animated: animated)
     }

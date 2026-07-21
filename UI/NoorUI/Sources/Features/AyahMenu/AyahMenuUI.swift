@@ -22,8 +22,8 @@ public enum AyahMenuUI {
             showTranslation: @escaping AsyncAction,
             copy: @escaping AsyncAction,
             share: @escaping AsyncAction,
-            moveReadingBookmark: @escaping AsyncAction,
-            deleteReadingBookmark: @escaping AsyncAction
+            setReadingBookmark: @escaping AsyncAction,
+            removeReadingBookmark: @escaping AsyncAction
         ) {
             self.play = play
             self.repeatVerses = repeatVerses
@@ -33,8 +33,8 @@ public enum AyahMenuUI {
             self.showTranslation = showTranslation
             self.copy = copy
             self.share = share
-            self.moveReadingBookmark = moveReadingBookmark
-            self.deleteReadingBookmark = deleteReadingBookmark
+            self.setReadingBookmark = setReadingBookmark
+            self.removeReadingBookmark = removeReadingBookmark
         }
         #else
         public init(
@@ -69,8 +69,8 @@ public enum AyahMenuUI {
         let copy: AsyncAction
         let share: AsyncAction
         #if QURAN_SYNC
-        let moveReadingBookmark: AsyncAction
-        let deleteReadingBookmark: AsyncAction
+        let setReadingBookmark: AsyncAction
+        let removeReadingBookmark: AsyncAction
         #endif
     }
 

@@ -170,7 +170,7 @@ private struct AyahMenuViewList: View {
                 subtitle: .text(message),
                 subtitlePlacement: .below,
                 isEnabled: false,
-                action: dataObject.actions.moveReadingBookmark
+                action: dataObject.actions.setReadingBookmark
             ) {
                 ReadingBookmarkPin(style: .outline)
             }
@@ -179,7 +179,7 @@ private struct AyahMenuViewList: View {
                 title: l("ayah.menu.reading-bookmark.title"),
                 subtitle: .text(l("ayah.menu.reading-bookmark.save-here")),
                 subtitlePlacement: .below,
-                action: dataObject.actions.moveReadingBookmark
+                action: dataObject.actions.setReadingBookmark
             ) {
                 ReadingBookmarkPin(style: .outline)
             }
@@ -188,7 +188,7 @@ private struct AyahMenuViewList: View {
                 title: l("ayah.menu.reading-bookmark.title"),
                 subtitle: location,
                 subtitlePlacement: .below,
-                action: dataObject.actions.moveReadingBookmark
+                action: dataObject.actions.setReadingBookmark
             ) {
                 ReadingBookmarkPin(style: .outline)
             }
@@ -197,7 +197,7 @@ private struct AyahMenuViewList: View {
                 title: l("ayah.menu.reading-bookmark.title"),
                 subtitle: .text(l("ayah.menu.reading-bookmark.saved-here")),
                 subtitlePlacement: .below,
-                action: dataObject.actions.deleteReadingBookmark
+                action: dataObject.actions.removeReadingBookmark
             ) {
                 ReadingBookmarkPin(style: .filled)
                     .foregroundColor(.label)
@@ -366,8 +366,8 @@ struct AyahMenuView_Previews: PreviewProvider {
         showTranslation: {},
         copy: {},
         share: {},
-        moveReadingBookmark: {},
-        deleteReadingBookmark: {}
+        setReadingBookmark: {},
+        removeReadingBookmark: {}
     )
     #else
     static let actions = AyahMenuUI.Actions(

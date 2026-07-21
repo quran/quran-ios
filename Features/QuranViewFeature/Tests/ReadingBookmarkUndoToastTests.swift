@@ -15,6 +15,15 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
         XCTAssertNil(toast.action)
     }
 
+    func test_savedPage_describesPageWithoutAction() {
+        let bookmark = bookmark(at: .page(ayah(255).page))
+
+        let toast = ReadingBookmarkUndoToast.saved(bookmark)
+
+        XCTAssertEqual(toast.message, "Reading bookmark saved at Page 42")
+        XCTAssertNil(toast.action)
+    }
+
     func test_moved_describesBothLocationsAndProvidesUndo() {
         let previousBookmark = bookmark(at: .page(ayah(255).page))
         let currentBookmark = bookmark(at: .ayah(ayah(255)))
@@ -39,6 +48,20 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
         }
 
         XCTAssertEqual(toast.message, "Reading bookmark removed from Al-Baqarah 2:255")
+        XCTAssertEqual(toast.action?.title, "Undo")
+        toast.action?.handler()
+        XCTAssertTrue(didUndo)
+    }
+
+    func test_removedPage_describesPageAndProvidesUndo() {
+        let bookmark = bookmark(at: .page(ayah(255).page))
+        var didUndo = false
+
+        let toast = ReadingBookmarkUndoToast.removed(bookmark) {
+            didUndo = true
+        }
+
+        XCTAssertEqual(toast.message, "Reading bookmark removed from Page 42")
         XCTAssertEqual(toast.action?.title, "Undo")
         toast.action?.handler()
         XCTAssertTrue(didUndo)

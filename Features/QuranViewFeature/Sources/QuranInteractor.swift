@@ -114,6 +114,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         #if QURAN_SYNC
         deps.syncedHighlightsObserver.start()
         deps.readingBookmarkObserver.$bookmark
+            .receive(on: DispatchQueue.main) // sink after the bookmark property is updated
             .sink { [weak self] _ in self?.reloadPageBookmark() }
             .store(in: &cancellables)
         deps.readingBookmarkObserver.start()

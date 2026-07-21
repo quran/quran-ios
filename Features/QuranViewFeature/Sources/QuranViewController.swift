@@ -387,6 +387,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         let style: ReadingBookmarkPin.Style = isBookmarked ? .filled : .outline
         let bookmarkImage = ReadingBookmarkPin.image(style: style)
         let bookmark = UIBarButtonItem(image: bookmarkImage, style: .plain, target: self, action: #selector(onBookmarkButtonTapped))
+        bookmark.tintColor = isBookmarked ? .systemRed : nil
         bookmark.accessibilityLabel = l("ayah.menu.reading-bookmark.title")
         bookmark.accessibilityValue = l(isBookmarked
             ? "ayah.menu.reading-bookmark.saved-here"

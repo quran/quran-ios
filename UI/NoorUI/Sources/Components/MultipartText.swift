@@ -168,7 +168,7 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         var verseFont: Font {
             switch self {
             case .body: return .custom(.quran, size: 20, relativeTo: .body)
-            case .footnote: return .custom(.suraNames, size: 16, relativeTo: .footnote)
+            case .footnote: return .custom(.quran, size: 16, relativeTo: .footnote)
             case .caption: return .custom(.quran, size: 15, relativeTo: .caption)
             }
         }

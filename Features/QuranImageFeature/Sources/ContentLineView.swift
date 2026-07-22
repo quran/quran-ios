@@ -9,6 +9,7 @@ import ImageService
 import NoorUI
 import QuranGeometry
 import QuranKit
+import QuranLocalization
 import QuranPagesFeature
 import SwiftUI
 import UIKit

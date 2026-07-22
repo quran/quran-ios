@@ -22,6 +22,7 @@ import Combine
 import Localization
 import NoorUI
 import QuranKit
+import QuranLocalization
 import QuranTextKit
 import SwiftUI
 import Timing

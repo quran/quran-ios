@@ -21,6 +21,7 @@
 import Foundation
 import Localization
 import QuranKit
+import QuranLocalization
 import QuranText
 import TranslationService
 import VerseTextPersistence

@@ -17,6 +17,7 @@ import QueuePlayer
 import QuranAudio
 import QuranAudioKit
 import QuranKit
+import QuranLocalization
 import ReciterListFeature
 import ReciterService
 import SwiftUI

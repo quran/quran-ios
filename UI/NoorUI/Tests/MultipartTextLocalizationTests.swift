@@ -6,12 +6,15 @@
 //
 
 import Localization
+import QuranKit
+import QuranLocalization
 import XCTest
 @testable import NoorUI
 
 final class MultipartTextLocalizationTests: XCTestCase {
     func test_localizedFormat_insertsMultipartTextArguments() {
-        let start: MultipartText = "Al-Baqarah 2:255 \(sura: "البقرة")"
+        let sura = Quran.hafsMadani1405.suras[1]
+        let start: MultipartText = "Al-Baqarah 2:255 \(sura: sura)"
         let end: MultipartText = "Al-Baqarah 2:256"
 
         let result = MultipartText.localizedFormat(
@@ -23,7 +26,7 @@ final class MultipartTextLocalizationTests: XCTestCase {
 
         XCTAssertEqual(
             result.rawValue,
-            "Playing audio from Al-Baqarah 2:255 البقرة to Al-Baqarah 2:256"
+            "Playing audio from Al-Baqarah 2:255 \(sura.localizedName()) \u{E905} to Al-Baqarah 2:256"
         )
     }
 

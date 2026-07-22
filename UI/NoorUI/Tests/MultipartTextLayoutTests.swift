@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2026-07-20.
 //
 
+import QuranKit
 import SwiftUI
 import UIKit
 import XCTest
@@ -15,7 +16,8 @@ final class MultipartTextLayoutTests: XCTestCase {
         guard #available(iOS 16.0, *) else { return }
 
         let heights = await MainActor.run {
-            let text: MultipartText = "At An-Nahl 16:30 \(sura: "النحل") • Move here"
+            let sura = Quran.hafsMadani1405.suras[15]
+            let text: MultipartText = "At An-Nahl 16:30 \(sura: sura) • Move here"
 
             let wrappingHeight = fittingHeight(
                 text.view(ofSize: .footnote)

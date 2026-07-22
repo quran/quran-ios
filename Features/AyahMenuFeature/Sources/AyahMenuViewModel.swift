@@ -13,6 +13,7 @@ import NoorUI
 import QuranAnnotations
 import QuranAudioKit
 import QuranKit
+import QuranLocalization
 import QuranTextKit
 import ReadingService
 import UIKit
@@ -255,13 +256,11 @@ final class AyahMenuViewModel {
 
     #if QURAN_SYNC
     private func readingBookmarkLocation(_ bookmark: ReadingPositionBookmark) -> MultipartText {
-        let location: MultipartText
-        switch bookmark.location {
+        let location: MultipartText = switch bookmark.location {
         case .ayah(let ayah):
-            let localizedLocation = "\(ayah.sura.localizedName()) \(ayah.sura.localizedSuraNumber):\(NumberFormatter.shared.format(ayah.ayah))"
-            location = "\(localizedLocation) \(sura: ayah.sura.arabicSuraName)"
+            "\(ayah: ayah, format: .compact)"
         case .page(let page):
-            location = "\(page.localizedName)"
+            "\(page.localizedName)"
         }
 
         return .localizedFormat("ayah.menu.reading-bookmark.move-here", location)

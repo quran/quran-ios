@@ -6,6 +6,7 @@
 //
 
 import QuranKit
+import QuranLocalization
 import UIKit
 
 class AdvancedAudioVersesViewController: UITableViewController {

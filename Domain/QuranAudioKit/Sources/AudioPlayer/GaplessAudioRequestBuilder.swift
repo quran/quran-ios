@@ -11,6 +11,7 @@ import Foundation
 import QueuePlayer
 import QuranAudio
 import QuranKit
+import QuranLocalization
 import QuranTextKit
 import Utilities
 

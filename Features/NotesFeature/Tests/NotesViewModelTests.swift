@@ -31,7 +31,7 @@ final class NotesViewModelTests: XCTestCase {
         try await noteService.createNote(body: "Delete me", startAyah: ayah, endAyah: ayah)
         let stored = try await storedNotes()
         let note = try XCTUnwrap(stored.first)
-        let item = NoteItem(note: note, verseText: "Verse")
+        let item = NoteItem(note: note, quranText: "Verse")
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         let sut = NotesViewModel(
             noteService: noteService,
@@ -81,6 +81,7 @@ final class NotesViewModelTests: XCTestCase {
         let task = Task { await sut.start() }
         await fulfillment(of: [observed], timeout: 2)
 
+        XCTAssertNil(sut.notes.first?.quranText)
         XCTAssertNil(sut.error)
         task.cancel()
         observation.cancel()
@@ -109,7 +110,7 @@ final class NotesViewModelTests: XCTestCase {
             navigateTo: { _ in },
             editNote: { _ in }
         )
-        sut.notes = [NoteItem(note: note, verseText: "Verse")]
+        sut.notes = [NoteItem(note: note, quranText: "Verse")]
         QuranContentStatePreferences.shared.quranMode = .arabic
 
         let text = try await sut.prepareNotesForSharing()

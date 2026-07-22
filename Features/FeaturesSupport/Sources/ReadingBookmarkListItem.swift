@@ -30,7 +30,7 @@ public struct ReadingBookmarkListItem: View {
                 Image(uiImage: ReadingBookmarkPin.image(style: .filled)),
                 color: .red
             ),
-            title: "\(bookmark.sura.localizedName()) \(sura: bookmark.sura.arabicSuraName)",
+            title: "\(sura: bookmark.sura)",
             subtitle: .init(
                 text: "\(locationTitle) · \(bookmark.modifiedOn.timeAgo())",
                 location: .bottom

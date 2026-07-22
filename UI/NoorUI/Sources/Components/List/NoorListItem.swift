@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-06-25.
 //
 
+import QuranKit
 import SwiftUI
 import UIx
 import VLogging
@@ -301,6 +302,7 @@ public struct NoorListItem: View {
 }
 
 struct NoorListItem_Previews: PreviewProvider {
+    static let quran = Quran.hafsMadani1405
     static let ayahText = "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ"
 
     static var previews: some View {
@@ -323,8 +325,8 @@ struct NoorListItem_Previews: PreviewProvider {
 
                     NoorListItem(
                         leadingEdgeLineColor: .purple,
-                        subheading: "Sura 1, verse 2 \(sura: String(UnicodeScalar(0xE907)!))",
-                        rightPretitle: "\(verse: ayahText, color: .purple, lineLimit: 2)",
+                        subheading: "\(ayah: quran.suras[0].verses[1])",
+                        rightPretitle: "\(quran: ayahText, color: .purple, lineLimit: 2)",
                         title: "An English title",
                         subtitle: .init(text: "6 days ago", location: .bottom)
                     ) {
@@ -347,7 +349,7 @@ struct NoorListItem_Previews: PreviewProvider {
 
                     NoorListItem(
                         image: .init(.bookmark, color: .red),
-                        title: "Sura 1 \(sura: String(UnicodeScalar(0xE907)!))",
+                        title: "\(sura: quran.suras[0], format: .numbered)",
                         subtitle: .init(text: "Just now", location: .bottom),
                         accessory: .text("44")
                     ) {

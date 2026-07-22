@@ -42,7 +42,7 @@ final class NoteItemTests: XCTestCase {
     #endif
 
     private func item(note: Note) -> NoteItem {
-        NoteItem(note: note, verseText: "Verse text")
+        NoteItem(note: note, quranText: "Verse text")
     }
 
     #if QURAN_SYNC

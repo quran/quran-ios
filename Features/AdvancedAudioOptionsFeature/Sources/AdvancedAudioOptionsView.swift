@@ -11,6 +11,7 @@ import NoorUI
 import QueuePlayer
 import QuranAudio
 import QuranKit
+import QuranLocalization
 import SwiftUI
 import UIx
 

@@ -123,10 +123,8 @@ private struct SearchViewUI: View {
                     let plainTitle = title(of: result)
                     let title = lFormat("search.result.count", plainTitle, result.items.count)
                     NoorSection(title: title, result.items) { item in
-                        let localizedVerse = item.ayah.localizedName
-                        let arabicSuraName = item.ayah.sura.arabicSuraName
                         NoorListItem(
-                            subheading: "(\(String(item.ayah.sura.suraNumber))) \(localizedVerse) \(sura: arabicSuraName)",
+                            subheading: "(\(String(item.ayah.sura.suraNumber))) \(ayah: item.ayah)",
                             title: searchResultText(of: item),
                             accessory: .text(NumberFormatter.shared.format(item.ayah.page.pageNumber))
                         ) {

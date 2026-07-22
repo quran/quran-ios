@@ -36,6 +36,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Inject concrete data services through builders and view models; do not wrap them in closure-based adapters.
 - Use `@ScaledMetric` for explicit UI dimensions that should scale with Dynamic Type; avoid fixed numeric layout metrics.
 - Prefer default `.padding()` spacing; specify edges or values only when the design requires custom spacing.
+- Always use `#Preview` for SwiftUI previews; do not use `PreviewProvider`.
 - Preserve localized strings; do not hardcode user-facing text unless existing nearby code does.
 
 ## Concurrency

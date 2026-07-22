@@ -27,7 +27,7 @@ public enum NoorSystemImage: String {
     case folder = "folder.fill"
     case folderOutline = "folder"
     case plusCircle = "plus.circle"
-    case note = "text.badge.star"
+    case note = "text.justify.leading"
     case lastPage = "clock"
     case profile = "person.crop.circle"
     case settings = "gearshape"

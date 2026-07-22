@@ -39,8 +39,8 @@ public struct ReadingPositionBookmark: Equatable {
         switch location {
         case .ayah(let bookmarkedAyah):
             return bookmarkedAyah == ayah
-        case .page(let bookmarkedPage):
-            return bookmarkedPage == ayah.page
+        case .page:
+            return false
         }
     }
 }

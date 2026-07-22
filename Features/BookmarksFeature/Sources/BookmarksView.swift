@@ -79,7 +79,7 @@ private struct BookmarksViewUI: View {
         let ayah = bookmark.page.firstVerse
         return NoorListItem(
             image: .init(.bookmark, color: .red),
-            title: "\(ayah.sura.localizedName()) \(sura: ayah.sura.arabicSuraName)",
+            title: "\(sura: ayah.sura)",
             subtitle: .init(text: bookmark.creationDate.timeAgo(), location: .bottom),
             accessory: .text(NumberFormatter.shared.format(bookmark.page.pageNumber))
         ) {

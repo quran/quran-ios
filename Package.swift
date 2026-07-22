@@ -142,6 +142,12 @@ private func modelTargets() -> [[Target]] {
     let type = TargetType.model
     return [
         target(type, name: "QuranKit"),
+        target(type, name: "QuranLocalization", dependencies: [
+            "Localization",
+            "QuranKit",
+        ], testDependencies: [
+            "QuranKit",
+        ]),
         target(type, name: "QuranGeometry", hasTests: false, dependencies: [
             "QuranKit",
         ]),
@@ -176,6 +182,8 @@ private func uiTargets() -> [[Target]] {
             "Crashing",
             "Localization",
             "Preferences",
+            "QuranKit",
+            "QuranLocalization",
             "QuranText",
             "QuranAnnotations",
             "QuranGeometry",
@@ -187,6 +195,8 @@ private func uiTargets() -> [[Target]] {
             .process("Images/Images.xcassets"),
         ], testDependencies: [
             "Localization",
+            "QuranKit",
+            "QuranLocalization",
         ]),
     ]
 }
@@ -405,6 +415,7 @@ private func domainTargets() -> [[Target]] {
             "BatchDownloader",
             "AudioTimingService",
             "ReciterService",
+            "QuranLocalization",
             "QuranTextKit",
             "QueuePlayer",
             "SystemDependencies",
@@ -423,10 +434,12 @@ private func domainTargets() -> [[Target]] {
             "TranslationService",
             "WordFrameService",
             "QuranKit",
+            "QuranLocalization",
             "VerseTextPersistence",
         ], testDependencies: [
             .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
             "ReadingService",
+            "QuranLocalization",
             "TranslationServiceFake",
             "SystemDependenciesFake",
             "TestResources",
@@ -559,6 +572,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranAudioKit",
             "AnnotationsService",
             "NoorUI",
+            "QuranLocalization",
         ]),
 
         target(type, name: "WhatsNewFeature", hasTests: false, dependencies: [
@@ -586,12 +600,14 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "AdvancedAudioOptionsFeature", dependencies: [
             "ReciterListFeature",
             "QuranAudioKit",
+            "QuranLocalization",
         ]),
 
         target(type, name: "AudioBannerFeature", hasTests: false, dependencies: [
             "Caching",
             "AppDependencies",
             "NoorUI",
+            "QuranLocalization",
             "ReciterListFeature",
             "AdvancedAudioOptionsFeature",
         ]),
@@ -633,6 +649,7 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "Preferences",
             "QuranTextKit",
+            "QuranLocalization",
             "ReadingService",
             "Utilities",
         ], testDependencies: [
@@ -660,6 +677,7 @@ private func featuresTargets() -> [[Target]] {
             "LinePagePersistence",
             "ReadingService",
             "QuranPagesFeature",
+            "QuranLocalization",
             "QuranTextKit",
             "Caching",
         ]),
@@ -676,6 +694,7 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "ReadingService",
             "QuranPagesFeature",
+            "QuranLocalization",
             "QuranTextKit",
         ]),
 
@@ -697,6 +716,7 @@ private func featuresTargets() -> [[Target]] {
             "FeaturesSupport",
             "ReadingService",
             "NoorUI",
+            "QuranLocalization",
             "NoteEditorFeature",
         ], testDependencies: [
             "MobileSyncTestSupport",
@@ -708,6 +728,7 @@ private func featuresTargets() -> [[Target]] {
             "MoreMenuFeature",
             "TranslationsFeature",
             "QuranTranslationFeature",
+            "QuranLocalization",
             "QuranTextKit",
             "Caching",
         ]),
@@ -725,7 +746,9 @@ private func featuresTargets() -> [[Target]] {
             "ReadingSelectorFeature",
             "AnnotationsService",
             "FeaturesSupport",
+            "NoorUI",
             "Preferences",
+            "QuranLocalization",
         ]),
 
         target(type, name: "QuranViewFeature", dependencies: [
@@ -739,6 +762,7 @@ private func featuresTargets() -> [[Target]] {
             "TranslationVerseFeature",
             "FeaturesSupport",
             "BookmarksFeature",
+            "QuranLocalization",
         ], testDependencies: [
             "MobileSyncTestSupport",
             .product(name: "MobileSync", package: "mobile-sync-spm"),

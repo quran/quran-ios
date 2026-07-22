@@ -11,7 +11,7 @@ import QuranAnnotations
 
 struct NoteItem: Equatable, Identifiable {
     let note: Note
-    let verseText: String
+    let quranText: String?
 
     var id: String {
         #if QURAN_SYNC

@@ -7,6 +7,7 @@
 
 import Localization
 import QuranKit
+import QuranLocalization
 import QuranText
 import SnapshotTesting
 import TranslationServiceFake

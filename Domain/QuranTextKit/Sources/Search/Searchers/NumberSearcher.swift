@@ -7,6 +7,7 @@
 
 import Foundation
 import QuranKit
+import QuranLocalization
 import QuranText
 import VerseTextPersistence
 

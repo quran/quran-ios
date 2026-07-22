@@ -10,6 +10,7 @@ import Localization
 import NoorUI
 import QuranAnnotations
 import QuranKit
+import QuranLocalization
 import SwiftUI
 import UIx
 
@@ -113,7 +114,7 @@ private struct HomeViewUI: View {
         let ayah = lastPage.page.firstVerse
         return NoorListItem(
             image: .init(.lastPage, color: .secondaryLabel),
-            title: "\(ayah.sura.localizedName()) \(sura: ayah.sura.arabicSuraName)",
+            title: "\(sura: ayah.sura)",
             subtitle: .init(text: lastPage.modifiedOn.timeAgo(), location: .bottom),
             accessory: .text(NumberFormatter.shared.format(lastPage.page.pageNumber))
         ) {
@@ -128,7 +129,7 @@ private struct HomeViewUI: View {
         let numberFormatter = NumberFormatter.shared
 
         return NoorListItem(
-            title: "\(sura.localizedName(withNumber: true)) \(sura: sura.arabicSuraName)",
+            title: "\(sura: sura, format: .numbered)",
             subtitle: .init(text: "\(suraType) - \(ayahsString)", location: .bottom),
             accessory: .text(numberFormatter.format(sura.page.pageNumber))
         ) {
@@ -140,12 +141,10 @@ private struct HomeViewUI: View {
         let quarter = item.quarter
         let ayah = quarter.firstVerse
         let page = ayah.page
-        let localizedVerse = ayah.localizedName
-        let arabicSuraName = ayah.sura.arabicSuraName
 
         return NoorListItem(
-            title: "\(quarter.localizedName) - \(localizedVerse) \(sura: arabicSuraName)",
-            rightSubtitle: "\(verse: item.ayahText, color: .clear, lineLimit: 1)",
+            title: "\(quarter.localizedName) - \(ayah: ayah)",
+            rightSubtitle: "\(quran: item.ayahText, lineLimit: 1)",
             accessory: .text(NumberFormatter.shared.format(page.pageNumber))
         ) {
             selectQuarter(item)

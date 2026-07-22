@@ -19,7 +19,7 @@ extension Page {
             if fullString.length > 0 {
                 fullString.append(NSAttributedString(string: " - "))
             }
-            let suraString = attributedString(of: sura.localizedName(), arabicSuraName: sura.arabicSuraName, fontSize: 14)
+            let suraString = attributedString(of: sura, fontSize: 14)
             fullString.append(suraString)
             return fullString
         }
@@ -27,7 +27,7 @@ extension Page {
 
     public func suraNames() -> MultipartText {
         let suras = verses.map(\.sura).orderedUnique()
-        let textArray = suras.map { $0.multipartSuraName() }
+        let textArray: [MultipartText] = suras.map { "\(sura: $0)" }
 
         var result: MultipartText = ""
         for (index, text) in textArray.enumerated() {
@@ -38,12 +38,6 @@ extension Page {
             }
         }
         return result
-    }
-}
-
-private extension Sura {
-    func multipartSuraName() -> MultipartText {
-        "\(localizedName()) \(sura: arabicSuraName)"
     }
 }
 

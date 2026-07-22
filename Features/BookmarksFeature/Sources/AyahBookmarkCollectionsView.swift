@@ -8,6 +8,7 @@
 import Localization
 import NoorUI
 import QuranAnnotations
+import QuranLocalization
 import SwiftUI
 import UIx
 
@@ -103,7 +104,7 @@ private struct AyahBookmarkCollectionDetails: View {
 
     private func bookmarkRow(_ bookmark: AyahCollectionBookmark) -> some View {
         NoorListItem(
-            rightPretitle: "\(verse: viewModel.ayahTexts[bookmark.ayah] ?? " ", color: .clear, lineLimit: 2)",
+            rightPretitle: quranText(bookmark),
             title: bookmarkLocation(bookmark),
             titleColor: .secondaryLabel,
             action: { viewModel.navigateTo(bookmark) }
@@ -113,7 +114,14 @@ private struct AyahBookmarkCollectionDetails: View {
 
     private func bookmarkLocation(_ bookmark: AyahCollectionBookmark) -> MultipartText {
         let ayah = bookmark.ayah
-        return "\(ayah.localizedNameWithSuraNumber) \(sura: ayah.sura.arabicSuraName) · \(ayah.page.localizedName)"
+        return "\(ayah: ayah, format: .numberedSura) · \(ayah.page.localizedName)"
+    }
+
+    private func quranText(_ bookmark: AyahCollectionBookmark) -> MultipartText? {
+        guard let text = viewModel.ayahTexts[bookmark.ayah] else {
+            return nil
+        }
+        return "\(quran: text, lineLimit: 2)"
     }
 }
 

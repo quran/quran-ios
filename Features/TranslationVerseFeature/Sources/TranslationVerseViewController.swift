@@ -9,6 +9,7 @@
 import Combine
 import MoreMenuFeature
 import NoorUI
+import QuranLocalization
 import SwiftUI
 import TranslationService
 import TranslationsFeature

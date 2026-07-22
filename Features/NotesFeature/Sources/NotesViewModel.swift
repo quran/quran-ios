@@ -15,6 +15,7 @@ import Foundation
 import Localization
 import QuranAnnotations
 import QuranKit
+import QuranLocalization
 import QuranTextKit
 import ReadingService
 import SwiftUI
@@ -206,10 +207,10 @@ final class NotesViewModel: ObservableObject {
     private nonisolated func noteItem(with note: Note) async -> NoteItem {
         do {
             let verseText = try await textService.numberedArabicText(for: note.verses)
-            return NoteItem(note: note, verseText: verseText)
+            return NoteItem(note: note, quranText: verseText)
         } catch {
             crasher.recordError(error, reason: "NotesViewModel.textForVerses")
-            return NoteItem(note: note, verseText: note.startAyah.localizedName)
+            return NoteItem(note: note, quranText: nil)
         }
     }
 }

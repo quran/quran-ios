@@ -3,9 +3,9 @@
 //  ReadingBookmarkUndoToast.swift
 //
 
-import Foundation
 import Localization
 import QuranAnnotations
+import QuranLocalization
 import QuranTextKit
 import UIx
 
@@ -49,7 +49,7 @@ enum ReadingBookmarkUndoToast {
     private static func location(of bookmark: ReadingPositionBookmark) -> String {
         switch bookmark.location {
         case .ayah(let ayah):
-            return "\(ayah.sura.localizedName()) \(ayah.sura.localizedSuraNumber):\(NumberFormatter.shared.format(ayah.ayah))"
+            return ayah.localizedCompactName
         case .page(let page):
             return page.localizedName
         }

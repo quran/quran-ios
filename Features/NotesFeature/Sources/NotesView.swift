@@ -9,6 +9,7 @@ import Localization
 import NoorUI
 import QuranAnnotations
 import QuranKit
+import QuranLocalization
 import SwiftUI
 import UIx
 
@@ -91,10 +92,6 @@ private struct NotesViewUI: View {
         let note = item.note
         let ayah = note.startAyah
         let page = ayah.page
-        let localizedVerse = note.startAyah.localizedName
-        let arabicSuraName = note.startAyah.sura.arabicSuraName
-        let ayahCount = note.verses.count
-        let numberOfAyahs = ayahCount > 1 ? lFormat("notes.verses-count", ayahCount - 1) : ""
         #if QURAN_SYNC
         let color = Color.clear
         #else
@@ -102,13 +99,13 @@ private struct NotesViewUI: View {
         #endif
         let noteText = item.noteText.trimmingCharacters(in: .whitespacesAndNewlines)
         return NoorListItem(
-            subheading: subheadingText(localizedVerse: localizedVerse, arabicSuraName: arabicSuraName, numberOfAyahs: numberOfAyahs),
+            subheading: subheadingText(ayah: ayah, ayahCount: note.verses.count),
             headerAccessory: .button(
                 image: .edit,
                 accessibilityLabel: l("ayah.menu.edit-note"),
                 action: { editAction(item) }
             ),
-            rightPretitle: "\(verse: item.verseText, color: color, lineLimit: 2)",
+            rightPretitle: quranText(item, color: color),
             title: titleText(for: noteText),
             subtitle: .init(text: note.modifiedDate.timeAgo(), location: .bottom),
             accessory: .text(NumberFormatter.shared.format(page.pageNumber))
@@ -135,19 +132,28 @@ private struct NotesViewUI: View {
         return "\(noteText, highlighting: ranges)"
     }
 
-    private func subheadingText(localizedVerse: String, arabicSuraName: String, numberOfAyahs: String) -> MultipartText {
-        let ranges = highlightRanges(in: localizedVerse)
-        if ranges.isEmpty {
-            return "\(localizedVerse) \(sura: arabicSuraName) \(numberOfAyahs)"
+    private func subheadingText(ayah: AyahNumber, ayahCount: Int) -> MultipartText {
+        let ranges = highlightRanges(in: ayah.localizedName)
+        let ayahText: MultipartText = "\(ayah: ayah, highlighting: ranges)"
+        if ayahCount > 1 {
+            return "\(ayahText) \(lFormat("notes.verses-count", ayahCount - 1))"
+        } else {
+            return ayahText
         }
-        return "\(localizedVerse, highlighting: ranges) \(sura: arabicSuraName) \(numberOfAyahs)"
+    }
+
+    private func quranText(_ item: NoteItem, color: Color) -> MultipartText? {
+        guard let text = item.quranText else {
+            return nil
+        }
+        return "\(quran: text, color: color, lineLimit: 2)"
     }
 }
 
 #if !QURAN_SYNC
 struct NotesView_Previews: PreviewProvider {
     struct Preview: View {
-        static let ayahText = "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ"
+        static let quranText = "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ"
         static let quran = Quran.hafsMadani1405
 
         static var staticItems: [NoteItem] {
@@ -159,7 +165,7 @@ struct NotesView_Previews: PreviewProvider {
                         text: nil,
                         color: .purple
                     ),
-                    verseText: ayahText
+                    quranText: quranText
                 ),
                 NoteItem(
                     note: Note(
@@ -168,7 +174,7 @@ struct NotesView_Previews: PreviewProvider {
                         text: "Remind myself to memorize it",
                         color: .green
                     ),
-                    verseText: ayahText
+                    quranText: quranText
                 ),
             ]
         }

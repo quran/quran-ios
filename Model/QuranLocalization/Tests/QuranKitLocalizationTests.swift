@@ -1,5 +1,5 @@
 //
-//  QuartersDataRetrieverTests.swift
+//  QuranKitLocalizationTests.swift
 //
 //
 //  Created by Mohamed Afifi on 2021-12-06.
@@ -7,10 +7,14 @@
 
 import QuranKit
 import XCTest
-@testable import QuranTextKit
+@testable import QuranLocalization
 
-final class QuartersDataRetrieverTests: XCTestCase {
+final class QuranKitLocalizationTests: XCTestCase {
     // MARK: Internal
+
+    func testAyahCompactLocalization() {
+        XCTAssertEqual("Al-Baqarah 2:255", quran.suras[1].verses[254].localizedCompactName)
+    }
 
     func testQuarterLocalization() {
         XCTAssertEqual("Hizb 1", quran.quarters[0].localizedName)

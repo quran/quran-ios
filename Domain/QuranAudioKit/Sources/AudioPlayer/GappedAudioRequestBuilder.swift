@@ -10,6 +10,7 @@ import Foundation
 import QueuePlayer
 import QuranAudio
 import QuranKit
+import QuranLocalization
 import Utilities
 
 struct GappedAudioRequest: QuranAudioRequest {

@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2024-09-23.
 //
 
+import Combine
 import NoorUI
 import SwiftUI
 import UIx
@@ -32,11 +33,9 @@ struct AudioBannerView: View {
             state: viewModel.audioBannerState,
             actions: actions
         )
-        .onChange(of: viewModel.toast?.message) { _ in
-            if let toast = viewModel.toast {
-                viewModel.toast = nil
-                showToast?(Toast(toast.message, action: toast.action, bottomOffset: toastOffset))
-            }
+        .onReceive(viewModel.$toast.compactMap { $0 }) { toast in
+            viewModel.toast = nil
+            showToast?(Toast(toast.message, action: toast.action, bottomOffset: toastOffset))
         }
         .onChange(of: viewModel.viewControllerToPresent) { _ in
             if let presentingVC = viewModel.viewControllerToPresent {

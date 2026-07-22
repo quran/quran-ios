@@ -4,14 +4,13 @@
 //
 
 import Localization
+import NoorUI
 import QuranAnnotations
 import QuranLocalization
-import QuranTextKit
-import UIx
 
 enum ReadingBookmarkUndoToast {
     static func saved(_ bookmark: ReadingPositionBookmark) -> Toast {
-        Toast(lFormat("ayah.menu.reading-bookmark.saved", location(of: bookmark)))
+        Toast(MultipartText.localizedFormat("ayah.menu.reading-bookmark.saved", location(of: bookmark)))
     }
 
     static func moved(
@@ -20,7 +19,7 @@ enum ReadingBookmarkUndoToast {
         undo: @escaping () -> Void
     ) -> Toast {
         makeToast(
-            lFormat(
+            MultipartText.localizedFormat(
                 "ayah.menu.reading-bookmark.moved",
                 location(of: previousBookmark),
                 location(of: currentBookmark)
@@ -34,24 +33,24 @@ enum ReadingBookmarkUndoToast {
         undo: @escaping () -> Void
     ) -> Toast {
         makeToast(
-            lFormat("ayah.menu.reading-bookmark.removed", location(of: bookmark)),
+            MultipartText.localizedFormat("ayah.menu.reading-bookmark.removed", location(of: bookmark)),
             undo: undo
         )
     }
 
-    private static func makeToast(_ message: String, undo: @escaping () -> Void) -> Toast {
+    private static func makeToast(_ message: MultipartText, undo: @escaping () -> Void) -> Toast {
         Toast(
             message,
             action: ToastAction(title: lAndroid("undo"), handler: undo)
         )
     }
 
-    private static func location(of bookmark: ReadingPositionBookmark) -> String {
+    private static func location(of bookmark: ReadingPositionBookmark) -> MultipartText {
         switch bookmark.location {
         case .ayah(let ayah):
-            return ayah.localizedCompactName
+            return "\(ayah: ayah, format: .compact)"
         case .page(let page):
-            return page.localizedName
+            return .text(page.localizedName)
         }
     }
 }

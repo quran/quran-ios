@@ -607,7 +607,6 @@ private func featuresTargets() -> [[Target]] {
             "Caching",
             "AppDependencies",
             "NoorUI",
-            "QuranLocalization",
             "ReciterListFeature",
             "AdvancedAudioOptionsFeature",
         ]),

@@ -10,6 +10,7 @@
 import Foundation
 import SwiftUI
 import UIKit
+import UIx
 
 public struct ToastAction {
     public let title: String
@@ -22,13 +23,13 @@ public struct ToastAction {
 }
 
 public struct Toast {
-    public let message: String
+    public let message: MultipartText
     public let action: ToastAction?
     public let duration: TimeInterval
     public let bottomOffset: CGFloat
 
     public init(
-        _ message: String,
+        _ message: MultipartText,
         action: ToastAction? = nil,
         duration: TimeInterval = 4.0,
         bottomOffset: CGFloat = 40
@@ -41,14 +42,14 @@ public struct Toast {
 }
 
 private struct ToastView: View {
-    let message: String
+    let message: MultipartText
     let action: ToastAction?
     let dismiss: () -> Void
     @ScaledMetric var shadowRadius = 5
 
     var body: some View {
         HStack {
-            Text(message)
+            message.view(ofSize: .body)
                 .foregroundColor(.systemBackground)
             Spacer()
             if let action {

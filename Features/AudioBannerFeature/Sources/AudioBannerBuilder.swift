@@ -8,6 +8,7 @@
 
 import AdvancedAudioOptionsFeature
 import AppDependencies
+import NoorUI
 import QuranAudioKit
 import ReciterListFeature
 import ReciterService

@@ -9,8 +9,6 @@
 //
 
 import NoorFont
-import QuranKit
-import QuranLocalization
 import QuranText
 import SwiftUI
 
@@ -27,16 +25,4 @@ public extension Font {
     static func arabicTafseer() -> Font {
         custom(.arabic, size: arabicTafseerTextFontSize)
     }
-}
-
-public func attributedString(of sura: Sura, fontSize: CGFloat) -> NSAttributedString {
-    let systemFont = UIFont.systemFont(ofSize: fontSize)
-    let text = NSMutableAttributedString(string: sura.localizedName(), attributes: [.font: systemFont])
-    if NSLocale.preferredLanguages.first == "ar" {
-        return text
-    }
-    text.append(NSAttributedString(string: " "))
-    let decoratedFont = UIFont(.suraNames, size: fontSize + 4)
-    text.append(NSAttributedString(string: sura.decoratedSuraNameGlyph, attributes: [.font: decoratedFont]))
-    return text
 }

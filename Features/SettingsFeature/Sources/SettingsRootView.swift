@@ -115,7 +115,7 @@ private struct SettingsRootViewUI: View {
                 NoorListItem(
                     image: .init(.audio),
                     title: .text(l("audio.download-play-amount")),
-                    subtitle: .init(text: audioEnd, location: .trailing),
+                    subtitle: .init(text: .text(audioEnd), location: .trailing),
                     accessory: .disclosureIndicator,
                     action: navigateToAudioEndSelector
                 )

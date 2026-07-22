@@ -107,8 +107,8 @@ private struct NotesViewUI: View {
             ),
             rightPretitle: quranText(item, color: color),
             title: titleText(for: noteText),
-            subtitle: .init(text: note.modifiedDate.timeAgo(), location: .bottom),
-            accessory: .text(NumberFormatter.shared.format(page.pageNumber))
+            subtitle: .init(text: .text(note.modifiedDate.timeAgo()), location: .bottom),
+            accessory: .text(page.localizedNumber, accessibilityLabel: page.localizedName)
         ) {
             selectAction(item)
         }
@@ -133,8 +133,8 @@ private struct NotesViewUI: View {
     }
 
     private func subheadingText(ayah: AyahNumber, ayahCount: Int) -> MultipartText {
-        let ranges = highlightRanges(in: ayah.localizedName)
-        let ayahText: MultipartText = "\(ayah: ayah, highlighting: ranges)"
+        let emphasizesSura = !highlightRanges(in: ayah.sura.localizedName()).isEmpty
+        let ayahText: MultipartText = "\(ayah: ayah, emphasizingSura: emphasizesSura)"
         if ayahCount > 1 {
             return "\(ayahText) \(lFormat("notes.verses-count", ayahCount - 1))"
         } else {

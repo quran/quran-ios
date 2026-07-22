@@ -12,18 +12,15 @@ import QuranKit
 extension AyahNumber {
     public var localizedAyahNumber: String { lFormat("quran_ayah", table: .android, ayah) }
 
-    public var localizedCompactName: String {
-        "\(sura.localizedName()) \(sura.localizedSuraNumber):\(NumberFormatter.shared.format(ayah))"
+    public func localizedCoordinate(locale: Locale = .preferredLanguageLocale) -> String {
+        let formatter = NumberFormatter()
+        formatter.locale = locale.fixedLocaleNumbers()
+        return "\(formatter.format(sura.suraNumber)):\(formatter.format(ayah))"
     }
 
     public var localizedName: String {
         let suraName = sura.localizedName()
         return "\(suraName), \(localizedAyahNumber)"
-    }
-
-    public var localizedNameWithSuraNumber: String {
-        let localizedSura = sura.localizedName(withNumber: true)
-        return "\(localizedSura) - \(localizedAyahNumber)"
     }
 }
 
@@ -81,13 +78,10 @@ extension Sura {
         NumberFormatter.shared.format(suraNumber)
     }
 
-    public func localizedName(withPrefix: Bool = false, withNumber: Bool = false, language: Language? = nil) -> String {
+    public func localizedName(withPrefix: Bool = false, language: Language? = nil) -> String {
         var suraName = l("sura_names[\(suraNumber - 1)]", table: .suras, language: language)
         if withPrefix {
             suraName = lFormat("quran_sura_title", table: .android, language: language, suraName)
-        }
-        if withNumber {
-            suraName = "\(localizedSuraNumber). \(suraName)"
         }
         return suraName
     }

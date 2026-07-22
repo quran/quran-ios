@@ -168,8 +168,8 @@ private struct TranslationsListViewUI: View {
     func subtitle(of translation: Translation) -> NoorListItem.Subtitle? {
         if let translatorDisplayName = translation.translatorDisplayName, !translatorDisplayName.isEmpty {
             return .init(
-                label: l("translation.translator"),
-                text: translatorDisplayName,
+                label: .text(l("translation.translator")),
+                text: .text(translatorDisplayName),
                 location: .bottom
             )
         } else {

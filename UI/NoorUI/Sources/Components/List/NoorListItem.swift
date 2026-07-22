@@ -14,7 +14,7 @@ public struct NoorListItem: View {
     public struct Subtitle {
         // MARK: Lifecycle
 
-        public init(label: String? = nil, text: String, location: SubtitleLocation) {
+        public init(label: MultipartText? = nil, text: MultipartText, location: SubtitleLocation) {
             self.label = label
             self.text = text
             self.location = location
@@ -22,8 +22,8 @@ public struct NoorListItem: View {
 
         // MARK: Internal
 
-        let label: String?
-        let text: String
+        let label: MultipartText?
+        let text: MultipartText
         let location: SubtitleLocation
     }
 
@@ -84,7 +84,7 @@ public struct NoorListItem: View {
     }
 
     public enum Accessory {
-        case text(String)
+        case text(String, accessibilityLabel: String? = nil)
         case disclosureIndicator
         case download(DownloadType, action: AsyncAction)
         case image(NoorSystemImage, color: Color? = nil)
@@ -157,7 +157,7 @@ public struct NoorListItem: View {
                 ("rightPretitle", rightPretitle?.rawValue),
                 ("title", title.rawValue),
                 ("rightSubtitle", rightSubtitle?.rawValue),
-                ("subtitle", subtitle?.label),
+                ("subtitle", subtitle?.label?.rawValue),
             ]
             let description = properties.compactMap { p in p.1.map { "\(p.0)=\($0)" } }.joined()
             logger.info("NoorListItem tapped. {\(description)}")
@@ -247,10 +247,11 @@ public struct NoorListItem: View {
     @ViewBuilder
     private func accessoryView(_ accessory: Accessory) -> some View {
         switch accessory {
-        case .text(let text):
+        case .text(let text, let accessibilityLabel):
             Text(text)
                 .foregroundColor(.secondaryLabel)
                 .fontWeight(.light)
+                .accessibilityLabel(accessibilityLabel ?? text)
         case .disclosureIndicator:
             DisclosureIndicator()
         case let .download(type, action):
@@ -282,19 +283,25 @@ public struct NoorListItem: View {
     }
 
     @ViewBuilder
-    private func subtitleText(_ subtitle: Subtitle, textFont: Font) -> Text {
-        Text(subtitle.text)
+    private func subtitleText(_ subtitle: Subtitle, textFont: MultipartText.FontSize) -> some View {
+        subtitle.text.view(ofSize: textFont)
             .foregroundColor(.secondaryLabel)
-            .font(textFont)
     }
 
     @ViewBuilder
-    private func subtitleView(_ subtitle: Subtitle, textFont: Font) -> some View {
+    private func subtitleView(_ subtitle: Subtitle, textFont: MultipartText.FontSize) -> some View {
         if let label = subtitle.label {
-            Text(label)
-                .foregroundColor(.secondaryLabel)
-                .font(textFont.bold()) +
+            HStack {
+                if #available(iOS 16.0, *) {
+                    label.view(ofSize: textFont)
+                        .foregroundColor(.secondaryLabel)
+                        .bold()
+                } else {
+                    label.view(ofSize: textFont)
+                        .foregroundColor(.secondaryLabel)
+                }
                 subtitleText(subtitle, textFont: textFont)
+            }
         } else {
             subtitleText(subtitle, textFont: textFont)
         }
@@ -349,7 +356,7 @@ struct NoorListItem_Previews: PreviewProvider {
 
                     NoorListItem(
                         image: .init(.bookmark, color: .red),
-                        title: "\(sura: quran.suras[0], format: .numbered)",
+                        title: "\(quran.suras[0].localizedSuraNumber). \(sura: quran.suras[0])",
                         subtitle: .init(text: "Just now", location: .bottom),
                         accessory: .text("44")
                     ) {

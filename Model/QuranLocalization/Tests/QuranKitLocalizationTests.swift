@@ -12,8 +12,11 @@ import XCTest
 final class QuranKitLocalizationTests: XCTestCase {
     // MARK: Internal
 
-    func testAyahCompactLocalization() {
-        XCTAssertEqual("Al-Baqarah 2:255", quran.suras[1].verses[254].localizedCompactName)
+    func testAyahCoordinateLocalization() {
+        let ayah = quran.suras[1].verses[254]
+
+        XCTAssertEqual("2:255", ayah.localizedCoordinate(locale: Locale(identifier: "en-CA")))
+        XCTAssertEqual("٢:٢٥٥", ayah.localizedCoordinate(locale: Locale(identifier: "ar-SA")))
     }
 
     func testQuarterLocalization() {

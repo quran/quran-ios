@@ -16,7 +16,7 @@ struct MoreMenuWordPointerType: View {
     var body: some View {
         NoorListItem(
             title: .text(l("menu.pointer.select_translation")),
-            subtitle: .init(text: type.localizedName, location: .trailing),
+            subtitle: .init(text: .text(type.localizedName), location: .trailing),
             accessory: .disclosureIndicator
         )
         .padding()

@@ -44,7 +44,7 @@ private struct AudioDownloadsViewUI: View {
                 listItem: { item in
                     NoorListItem(
                         title: .text(item.reciter.localizedName),
-                        subtitle: .init(text: item.size.formattedString(), location: .bottom),
+                        subtitle: .init(text: .text(item.size.formattedString()), location: .bottom),
                         accessory: accessory(item)
                     )
                 },

@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2024-02-10.
 //
 
+import QuranKit
 import QuranText
 import SwiftUI
 
@@ -12,12 +13,12 @@ public struct QuranSuraName: View {
     @ScaledMetric var bottomPadding = 5
     @ScaledMetric var topPadding = 10
 
-    let suraName: String
+    let sura: Sura
     let besmAllah: String
     let besmAllahFontSize: FontSize
 
-    public init(suraName: String, besmAllah: String, besmAllahFontSize: FontSize) {
-        self.suraName = suraName
+    public init(sura: Sura, besmAllah: String, besmAllahFontSize: FontSize) {
+        self.sura = sura
         self.besmAllah = besmAllah
         self.besmAllahFontSize = besmAllahFontSize
     }
@@ -27,8 +28,8 @@ public struct QuranSuraName: View {
             NoorImage.suraHeader.image.resizable()
                 .aspectRatio(contentMode: .fit)
                 .overlay {
-                    Text(suraName)
-                        .font(.title3)
+                    let name: MultipartText = "\(sura: sura)"
+                    name.view(ofSize: .title3, alignment: .center, allowsWrapping: false)
                         .lineLimit(1)
                         .minimumScaleFactor(0.3)
                 }

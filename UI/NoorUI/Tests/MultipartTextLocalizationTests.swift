@@ -13,9 +13,8 @@ import XCTest
 
 final class MultipartTextLocalizationTests: XCTestCase {
     func test_localizedFormat_insertsMultipartTextArguments() {
-        let sura = Quran.hafsMadani1405.suras[1]
-        let start: MultipartText = "Al-Baqarah 2:255 \(sura: sura)"
-        let end: MultipartText = "Al-Baqarah 2:256"
+        let start: MultipartText = "\(ayah: Quran.hafsMadani1405.suras[1].verses[254])"
+        let end: MultipartText = "\(ayah: Quran.hafsMadani1405.suras[1].verses[255])"
 
         let result = MultipartText.localizedFormat(
             "audio.playing.message",
@@ -25,8 +24,8 @@ final class MultipartTextLocalizationTests: XCTestCase {
         )
 
         XCTAssertEqual(
-            result.rawValue,
-            "Playing audio from Al-Baqarah 2:255 \(sura.localizedName()) \u{E905} to Al-Baqarah 2:256"
+            result.rawValue(locale: Locale(identifier: "en")),
+            "Playing audio from Al-Baqarah \u{E905} · 2:255 to Al-Baqarah \u{E905} · 2:256"
         )
     }
 
@@ -39,6 +38,6 @@ final class MultipartTextLocalizationTests: XCTestCase {
             arguments: [first, second]
         )
 
-        XCTAssertEqual(result.rawValue, "second / first / second")
+        XCTAssertEqual(result.rawValue(locale: Locale(identifier: "en")), "second / first / second")
     }
 }

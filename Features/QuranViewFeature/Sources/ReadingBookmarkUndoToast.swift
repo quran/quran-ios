@@ -48,7 +48,7 @@ enum ReadingBookmarkUndoToast {
     private static func location(of bookmark: ReadingPositionBookmark) -> MultipartText {
         switch bookmark.location {
         case .ayah(let ayah):
-            return "\(ayah: ayah, format: .compact)"
+            return "\(ayah: ayah)"
         case .page(let page):
             return .text(page.localizedName)
         }

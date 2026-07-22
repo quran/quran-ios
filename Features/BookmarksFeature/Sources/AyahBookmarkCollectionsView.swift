@@ -114,7 +114,7 @@ private struct AyahBookmarkCollectionDetails: View {
 
     private func bookmarkLocation(_ bookmark: AyahCollectionBookmark) -> MultipartText {
         let ayah = bookmark.ayah
-        return "\(ayah: ayah, format: .numberedSura) · \(ayah.page.localizedName)"
+        return "\(ayah: ayah) · \(ayah.page.localizedName)"
     }
 
     private func quranText(_ bookmark: AyahCollectionBookmark) -> MultipartText? {

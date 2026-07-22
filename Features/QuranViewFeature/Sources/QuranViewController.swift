@@ -368,6 +368,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         if pages.isEmpty {
             titleView?.firstLine = ""
             titleView?.secondLine = ""
+            titleView?.isAccessibilityElement = false
             return
         }
         let suras = pages.map(\.startSura)
@@ -379,8 +380,12 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             pageNumbers,
             NumberFormatter.shared.format(juzs.min()!.juzNumber)
         )
-        titleView?.firstLine = suras.min()!.localizedName(withPrefix: true)
+        let sura = suras.min()!
+        let suraReference: MultipartText = "\(sura: sura)"
+        titleView?.firstLineAttributedText = suraReference.attributedString(ofSize: .subheadline)
         titleView?.secondLine = pageDescription
+        titleView?.isAccessibilityElement = true
+        titleView?.accessibilityLabel = "\(suraReference.accessibilityText), \(pageDescription)"
     }
 
     private func updateRightBarItems(animated: Bool, isBookmarked: Bool) {

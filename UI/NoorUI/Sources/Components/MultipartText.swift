@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Localization
 import QuranKit
 import QuranLocalization
 import SwiftUI
@@ -42,12 +43,13 @@ private struct TextPartView: View {
             highlighting(text: text, ranges: ranges)
                 .lineLimit(lineLimit)
                 .font(size.plainFont)
-        case .sura(let sura, let format):
-            referenceText(Text(sura.referenceName(format: format)), sura: sura)
-        case .ayah(let ayah, let format, let ranges):
-            referenceText(
-                highlighting(text: ayah.referenceName(format: format), ranges: ranges),
-                sura: ayah.sura
+        case .sura(let sura):
+            QuranReferenceView(reference: .sura(sura), size: size)
+        case .ayah(let ayah, let emphasizesSura):
+            QuranReferenceView(
+                reference: .ayah(ayah),
+                size: size,
+                emphasizesSura: emphasizesSura
             )
         case .quran(let text, let color, let lineLimit):
             Text(text)
@@ -61,20 +63,6 @@ private struct TextPartView: View {
     // MARK: Private
 
     @ScaledMetric private var quranTextPadding = 5
-
-    @ViewBuilder
-    private func referenceText(_ text: Text, sura: Sura) -> some View {
-        HStack {
-            text
-                .font(size.plainFont)
-            if NSLocale.preferredLanguages.first != "ar" {
-                Text(sura.decoratedSuraNameGlyph)
-                    .padding(.top, 5)
-                    .frame(alignment: .center)
-                    .font(size.suraFont)
-            }
-        }
-    }
 
     private func highlighting(text: String, ranges: [HighlightingRange]) -> Text {
         var attributedString = AttributedString(text)
@@ -94,23 +82,36 @@ private struct TextPartView: View {
     }
 }
 
-private enum TextPart {
+enum TextPart {
     case plain(text: String)
     case highlighting(text: String, ranges: [HighlightingRange], lineLimit: Int?)
-    case sura(Sura, format: MultipartText.SuraReferenceFormat)
-    case ayah(AyahNumber, format: MultipartText.AyahReferenceFormat, highlighting: [HighlightingRange])
+    case sura(Sura)
+    case ayah(AyahNumber, emphasizesSura: Bool)
     case quran(text: String, color: Color, lineLimit: Int?)
 
     // MARK: Internal
 
-    var rawValue: String {
+    func rawValue(locale: Locale) -> String {
         switch self {
         case .plain(let text), .highlighting(let text, _, _):
             text
-        case .sura(let sura, let format):
-            "\(sura.referenceName(format: format)) \(sura.decoratedSuraNameGlyph)"
-        case .ayah(let ayah, let format, _):
-            "\(ayah.referenceName(format: format)) \(ayah.sura.decoratedSuraNameGlyph)"
+        case .sura(let sura):
+            QuranReference.sura(sura).rawValue(locale: locale)
+        case .ayah(let ayah, _):
+            QuranReference.ayah(ayah).rawValue(locale: locale)
+        case .quran(let text, _, _):
+            text
+        }
+    }
+
+    var accessibilityText: String {
+        switch self {
+        case .plain(let text), .highlighting(let text, _, _):
+            text
+        case .sura(let sura):
+            QuranReference.sura(sura).accessibilityText
+        case .ayah(let ayah, _):
+            QuranReference.ayah(ayah).accessibilityText
         case .quran(let text, _, _):
             text
         }
@@ -129,19 +130,15 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             parts.append(.plain(text: literal))
         }
 
-        public mutating func appendInterpolation(
-            sura: Sura,
-            format: SuraReferenceFormat = .name
-        ) {
-            parts.append(.sura(sura, format: format))
+        public mutating func appendInterpolation(sura: Sura) {
+            parts.append(.sura(sura))
         }
 
         public mutating func appendInterpolation(
             ayah: AyahNumber,
-            format: AyahReferenceFormat = .descriptive,
-            highlighting: [HighlightingRange] = []
+            emphasizingSura: Bool = false
         ) {
-            parts.append(.ayah(ayah, format: format, highlighting: highlighting))
+            parts.append(.ayah(ayah, emphasizesSura: emphasizingSura))
         }
 
         public mutating func appendInterpolation(
@@ -185,19 +182,10 @@ public struct MultipartText: ExpressibleByStringInterpolation {
 
     // MARK: Public
 
-    public enum SuraReferenceFormat {
-        case name
-        case numbered
-    }
-
-    public enum AyahReferenceFormat {
-        case compact
-        case descriptive
-        case numberedSura
-    }
-
     public enum FontSize {
+        case title3
         case body
+        case subheadline
         case caption
         case footnote
 
@@ -205,7 +193,9 @@ public struct MultipartText: ExpressibleByStringInterpolation {
 
         var plainFont: Font {
             switch self {
+            case .title3: return .title3
             case .body: return .body
+            case .subheadline: return .subheadline
             case .footnote: return .footnote
             case .caption: return .caption
             }
@@ -213,7 +203,9 @@ public struct MultipartText: ExpressibleByStringInterpolation {
 
         var suraFont: Font {
             switch self {
+            case .title3: return .custom(.suraNames, size: 24, relativeTo: .title3)
             case .body: return .custom(.suraNames, size: 20, relativeTo: .body)
+            case .subheadline: return .custom(.suraNames, size: 19, relativeTo: .subheadline)
             case .footnote: return .custom(.suraNames, size: 16, relativeTo: .footnote)
             case .caption: return .custom(.suraNames, size: 15, relativeTo: .caption)
             }
@@ -221,7 +213,9 @@ public struct MultipartText: ExpressibleByStringInterpolation {
 
         var quranFont: Font {
             switch self {
+            case .title3: return .custom(.quran, size: 24, relativeTo: .title3)
             case .body: return .custom(.quran, size: 20, relativeTo: .body)
+            case .subheadline: return .custom(.quran, size: 18, relativeTo: .subheadline)
             case .footnote: return .custom(.quran, size: 16, relativeTo: .footnote)
             case .caption: return .custom(.quran, size: 15, relativeTo: .caption)
             }
@@ -240,70 +234,29 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         MultiPartTextView(text: self, size: size, alignment: alignment, allowsWrapping: allowsWrapping)
     }
 
+    // MARK: Public
+
+    public var accessibilityText: String {
+        parts.map(\.accessibilityText).joined()
+    }
+
     // MARK: Internal
 
     var rawValue: String {
-        parts.map(\.rawValue).joined()
+        rawValue(locale: .preferredLanguageLocale)
     }
 
-    // MARK: Fileprivate
+    func rawValue(locale: Locale) -> String {
+        parts.map { $0.rawValue(locale: locale) }.joined()
+    }
 
-    fileprivate var parts: [TextPart]
+    var parts: [TextPart]
 }
 
 extension MultipartText {
     public static func text(_ plain: String) -> MultipartText {
         MultipartText(stringLiteral: plain)
     }
-}
-
-private extension Sura {
-    func referenceName(format: MultipartText.SuraReferenceFormat) -> String {
-        switch format {
-        case .name: localizedName()
-        case .numbered: localizedName(withNumber: true)
-        }
-    }
-}
-
-private extension AyahNumber {
-    func referenceName(format: MultipartText.AyahReferenceFormat) -> String {
-        switch format {
-        case .compact: localizedCompactName
-        case .descriptive: localizedName
-        case .numberedSura: localizedNameWithSuraNumber
-        }
-    }
-}
-
-extension Sura {
-    // TODO: make private
-    var decoratedSuraNameGlyph: String {
-        let codePoint = Self.decoratedSuraNameCodePoints[suraNumber - 1]
-        return String(UnicodeScalar(codePoint)!)
-    }
-
-    private static let decoratedSuraNameCodePoints = [
-        0xE904, 0xE905, 0xE906, 0xE907, 0xE908, 0xE90B,
-        0xE90C, 0xE90D, 0xE90E, 0xE90F, 0xE910, 0xE911,
-        0xE912, 0xE913, 0xE914, 0xE915, 0xE916, 0xE917,
-        0xE918, 0xE919, 0xE91A, 0xE91B, 0xE91C, 0xE91D,
-        0xE91E, 0xE91F, 0xE920, 0xE921, 0xE922, 0xE923,
-        0xE924, 0xE925, 0xE926, 0xE92E, 0xE92F, 0xE930,
-        0xE931, 0xE909, 0xE90A, 0xE927, 0xE928, 0xE929,
-        0xE92A, 0xE92B, 0xE92C, 0xE92D, 0xE932, 0xE902,
-        0xE933, 0xE934, 0xE935, 0xE936, 0xE937, 0xE938,
-        0xE939, 0xE93A, 0xE93B, 0xE93C, 0xE900, 0xE901,
-        0xE941, 0xE942, 0xE943, 0xE944, 0xE945, 0xE946,
-        0xE947, 0xE948, 0xE949, 0xE94A, 0xE94B, 0xE94C,
-        0xE94D, 0xE94E, 0xE94F, 0xE950, 0xE951, 0xE952,
-        0xE93D, 0xE93E, 0xE93F, 0xE940, 0xE953, 0xE954,
-        0xE955, 0xE956, 0xE957, 0xE958, 0xE959, 0xE95A,
-        0xE95B, 0xE95C, 0xE95D, 0xE95E, 0xE95F, 0xE960,
-        0xE961, 0xE962, 0xE963, 0xE964, 0xE965, 0xE966,
-        0xE967, 0xE968, 0xE969, 0xE96A, 0xE96B, 0xE96C,
-        0xE96D, 0xE96E, 0xE96F, 0xE970, 0xE971, 0xE972,
-    ]
 }
 
 private struct MultiPartTextView: View {
@@ -320,6 +273,8 @@ private struct MultiPartTextView: View {
                 TextPartView(part: text.parts[i], size: size)
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(text.accessibilityText)
     }
 
     @ViewBuilder

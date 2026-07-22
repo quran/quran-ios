@@ -17,12 +17,10 @@ import QueuePlayer
 import QuranAudio
 import QuranAudioKit
 import QuranKit
-import QuranLocalization
 import ReciterListFeature
 import ReciterService
 import SwiftUI
 import UIKit
-import UIx
 import Utilities
 import VLogging
 
@@ -90,7 +88,7 @@ public final class AudioBannerViewModel: ObservableObject {
     weak var listener: AudioBannerListener?
 
     @Published var error: Error?
-    @Published var toast: (message: String, action: ToastAction?)?
+    @Published var toast: (message: MultipartText, action: ToastAction?)?
     @Published var viewControllerToPresent: UIViewController?
     @Published var dismissPresentedViewController = false
     @Published var playbackRate: Float
@@ -443,8 +441,10 @@ public final class AudioBannerViewModel: ObservableObject {
         playbackEnded()
     }
 
-    private func audioMessage(_ format: String, audioRange: AudioRange) -> String {
-        lFormat(format, audioRange.start.localizedName, audioRange.end.localizedName)
+    private func audioMessage(_ format: String, audioRange: AudioRange) -> MultipartText {
+        let start: MultipartText = "\(ayah: audioRange.start)"
+        let end: MultipartText = "\(ayah: audioRange.end)"
+        return MultipartText.localizedFormat(format, start, end)
     }
 }
 

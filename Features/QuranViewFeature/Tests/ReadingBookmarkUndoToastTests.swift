@@ -3,6 +3,7 @@ import Foundation
 import QuranAnnotations
 import QuranKit
 import XCTest
+@testable import NoorUI
 @testable import QuranViewFeature
 
 final class ReadingBookmarkUndoToastTests: XCTestCase {
@@ -11,7 +12,7 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
 
         let toast = ReadingBookmarkUndoToast.saved(bookmark)
 
-        XCTAssertEqual(toast.message, "Reading bookmark saved at Al-Baqarah 2:255")
+        XCTAssertEqual(toast.message.rawValue, "Reading bookmark saved at Al-Baqarah 2:255 \u{E905}")
         XCTAssertNil(toast.action)
     }
 
@@ -20,7 +21,7 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
 
         let toast = ReadingBookmarkUndoToast.saved(bookmark)
 
-        XCTAssertEqual(toast.message, "Reading bookmark saved at Page 42")
+        XCTAssertEqual(toast.message.rawValue, "Reading bookmark saved at Page 42")
         XCTAssertNil(toast.action)
     }
 
@@ -33,7 +34,10 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
             didUndo = true
         }
 
-        XCTAssertEqual(toast.message, "Reading bookmark moved from Page 42 to Al-Baqarah 2:255")
+        XCTAssertEqual(
+            toast.message.rawValue,
+            "Reading bookmark moved from Page 42 to Al-Baqarah 2:255 \u{E905}"
+        )
         XCTAssertEqual(toast.action?.title, "Undo")
         toast.action?.handler()
         XCTAssertTrue(didUndo)
@@ -47,7 +51,7 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
             didUndo = true
         }
 
-        XCTAssertEqual(toast.message, "Reading bookmark removed from Al-Baqarah 2:255")
+        XCTAssertEqual(toast.message.rawValue, "Reading bookmark removed from Al-Baqarah 2:255 \u{E905}")
         XCTAssertEqual(toast.action?.title, "Undo")
         toast.action?.handler()
         XCTAssertTrue(didUndo)
@@ -61,7 +65,7 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
             didUndo = true
         }
 
-        XCTAssertEqual(toast.message, "Reading bookmark removed from Page 42")
+        XCTAssertEqual(toast.message.rawValue, "Reading bookmark removed from Page 42")
         XCTAssertEqual(toast.action?.title, "Undo")
         toast.action?.handler()
         XCTAssertTrue(didUndo)

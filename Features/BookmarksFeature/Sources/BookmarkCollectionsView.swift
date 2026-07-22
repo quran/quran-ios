@@ -116,7 +116,7 @@ private struct BookmarkCollectionsContent: View {
             image: .init(image, color: imageColor),
             title: .text(title),
             subtitle: .init(
-                text: NumberFormatter.shared.format(collection?.bookmarks.count ?? 0),
+                text: .text(NumberFormatter.shared.format(collection?.bookmarks.count ?? 0)),
                 location: .trailing
             ),
             accessory: .disclosureIndicator,

@@ -141,19 +141,28 @@ class TranslationVerseViewController: UIHostingController<TranslationVerseView> 
     }
 
     private func updateTitle() {
+        let verse = viewModel.currentVerse
+        let suraReference: MultipartText = "\(sura: verse.sura)"
         updateTitle(
-            firstLine: viewModel.currentVerse.sura.localizedName(withNumber: true),
-            secondLine: viewModel.currentVerse.localizedAyahNumber
+            firstLine: suraReference,
+            secondLine: verse.localizedAyahNumber,
+            accessibilityLabel: verse.localizedName
         )
     }
 
-    private func updateTitle(firstLine: String, secondLine: String) {
+    private func updateTitle(
+        firstLine: MultipartText,
+        secondLine: String,
+        accessibilityLabel: String
+    ) {
         let titleView = navigationItem.titleView as? TwoLineNavigationTitleView ?? TwoLineNavigationTitleView(
             firstLineFont: .systemFont(ofSize: 15, weight: .light),
             secondLineFont: .boldSystemFont(ofSize: 15)
         )
-        titleView.firstLine = firstLine
+        titleView.firstLineAttributedText = firstLine.attributedString(ofSize: .subheadline)
         titleView.secondLine = secondLine
+        titleView.isAccessibilityElement = true
+        titleView.accessibilityLabel = accessibilityLabel
         if navigationItem.titleView == nil {
             navigationItem.titleView = titleView
         }

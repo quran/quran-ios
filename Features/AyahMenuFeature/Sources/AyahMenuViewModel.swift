@@ -258,7 +258,7 @@ final class AyahMenuViewModel {
     private func readingBookmarkLocation(_ bookmark: ReadingPositionBookmark) -> MultipartText {
         let location: MultipartText = switch bookmark.location {
         case .ayah(let ayah):
-            "\(ayah: ayah, format: .compact)"
+            "\(ayah: ayah)"
         case .page(let page):
             "\(page.localizedName)"
         }

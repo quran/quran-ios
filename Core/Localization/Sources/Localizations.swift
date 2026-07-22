@@ -42,7 +42,7 @@ public func l(_ key: String, table: Table = .localizable, language: Language? = 
         return localizedString(key, table: table, language: language)
     }
     let value = NSLocalizedString(key, tableName: table.rawValue, bundle: Bundle.fixedModule, comment: "")
-    if value != key || NSLocale.preferredLanguages.first == "en" {
+    if value != key || Locale.preferredLanguageLocale.languageCode == Language.english.rawValue {
         return value
     }
 

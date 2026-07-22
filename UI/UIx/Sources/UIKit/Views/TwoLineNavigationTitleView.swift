@@ -25,6 +25,12 @@ public class TwoLineNavigationTitleView: UIView {
     // MARK: Public
 
     public var firstLine: String = "" {
+        didSet {
+            firstLineAttributedText = nil
+        }
+    }
+
+    public var firstLineAttributedText: NSAttributedString? {
         didSet { updateAttributedText() }
     }
 
@@ -68,9 +74,8 @@ public class TwoLineNavigationTitleView: UIView {
     }
 
     private func updateAttributedText() {
-        let string = NSMutableAttributedString(string: firstLine, attributes: [
-            .font: firstLineFont,
-        ])
+        let string = firstLineAttributedText.map(NSMutableAttributedString.init(attributedString:))
+            ?? NSMutableAttributedString(string: firstLine, attributes: [.font: firstLineFont])
         if !isCompressed {
             string.append(NSAttributedString(string: "\n"))
         } else {

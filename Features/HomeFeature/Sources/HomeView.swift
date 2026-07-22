@@ -115,8 +115,8 @@ private struct HomeViewUI: View {
         return NoorListItem(
             image: .init(.lastPage, color: .secondaryLabel),
             title: "\(sura: ayah.sura)",
-            subtitle: .init(text: lastPage.modifiedOn.timeAgo(), location: .bottom),
-            accessory: .text(NumberFormatter.shared.format(lastPage.page.pageNumber))
+            subtitle: .init(text: .text(lastPage.modifiedOn.timeAgo()), location: .bottom),
+            accessory: .text(lastPage.page.localizedNumber, accessibilityLabel: lastPage.page.localizedName)
         ) {
             selectLastPage(lastPage)
         }
@@ -126,12 +126,10 @@ private struct HomeViewUI: View {
         let ayahsString = lFormat("verses", table: .android, sura.verses.count)
         let suraType = sura.isMakki ? lAndroid("makki") : lAndroid("madani")
 
-        let numberFormatter = NumberFormatter.shared
-
         return NoorListItem(
-            title: "\(sura: sura, format: .numbered)",
+            title: "\(sura.localizedSuraNumber). \(sura: sura)",
             subtitle: .init(text: "\(suraType) - \(ayahsString)", location: .bottom),
-            accessory: .text(numberFormatter.format(sura.page.pageNumber))
+            accessory: .text(sura.page.localizedNumber, accessibilityLabel: sura.page.localizedName)
         ) {
             selectSura(sura)
         }
@@ -143,9 +141,10 @@ private struct HomeViewUI: View {
         let page = ayah.page
 
         return NoorListItem(
-            title: "\(quarter.localizedName) - \(ayah: ayah)",
+            subheading: .text(quarter.localizedName),
+            title: "\(ayah: ayah)",
             rightSubtitle: "\(quran: item.ayahText, lineLimit: 1)",
-            accessory: .text(NumberFormatter.shared.format(page.pageNumber))
+            accessory: .text(page.localizedNumber, accessibilityLabel: page.localizedName)
         ) {
             selectQuarter(item)
         }

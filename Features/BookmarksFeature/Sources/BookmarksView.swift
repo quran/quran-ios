@@ -80,8 +80,8 @@ private struct BookmarksViewUI: View {
         return NoorListItem(
             image: .init(.bookmark, color: .red),
             title: "\(sura: ayah.sura)",
-            subtitle: .init(text: bookmark.creationDate.timeAgo(), location: .bottom),
-            accessory: .text(NumberFormatter.shared.format(bookmark.page.pageNumber))
+            subtitle: .init(text: .text(bookmark.creationDate.timeAgo()), location: .bottom),
+            accessory: .text(bookmark.page.localizedNumber, accessibilityLabel: bookmark.page.localizedName)
         ) {
             selectAction(bookmark)
         }

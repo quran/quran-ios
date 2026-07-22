@@ -12,7 +12,10 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
 
         let toast = ReadingBookmarkUndoToast.saved(bookmark)
 
-        XCTAssertEqual(toast.message.rawValue, "Reading bookmark saved at Al-Baqarah 2:255 \u{E905}")
+        XCTAssertEqual(
+            toast.message.rawValue(locale: Locale(identifier: "en")),
+            "Reading bookmark saved at Al-Baqarah \u{E905} · 2:255"
+        )
         XCTAssertNil(toast.action)
     }
 
@@ -21,7 +24,7 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
 
         let toast = ReadingBookmarkUndoToast.saved(bookmark)
 
-        XCTAssertEqual(toast.message.rawValue, "Reading bookmark saved at Page 42")
+        XCTAssertEqual(toast.message.rawValue(locale: Locale(identifier: "en")), "Reading bookmark saved at Page 42")
         XCTAssertNil(toast.action)
     }
 
@@ -35,8 +38,8 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
         }
 
         XCTAssertEqual(
-            toast.message.rawValue,
-            "Reading bookmark moved from Page 42 to Al-Baqarah 2:255 \u{E905}"
+            toast.message.rawValue(locale: Locale(identifier: "en")),
+            "Reading bookmark moved from Page 42 to Al-Baqarah \u{E905} · 2:255"
         )
         XCTAssertEqual(toast.action?.title, "Undo")
         toast.action?.handler()
@@ -51,7 +54,10 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
             didUndo = true
         }
 
-        XCTAssertEqual(toast.message.rawValue, "Reading bookmark removed from Al-Baqarah 2:255 \u{E905}")
+        XCTAssertEqual(
+            toast.message.rawValue(locale: Locale(identifier: "en")),
+            "Reading bookmark removed from Al-Baqarah \u{E905} · 2:255"
+        )
         XCTAssertEqual(toast.action?.title, "Undo")
         toast.action?.handler()
         XCTAssertTrue(didUndo)
@@ -65,7 +71,7 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
             didUndo = true
         }
 
-        XCTAssertEqual(toast.message.rawValue, "Reading bookmark removed from Page 42")
+        XCTAssertEqual(toast.message.rawValue(locale: Locale(identifier: "en")), "Reading bookmark removed from Page 42")
         XCTAssertEqual(toast.action?.title, "Undo")
         toast.action?.handler()
         XCTAssertTrue(didUndo)

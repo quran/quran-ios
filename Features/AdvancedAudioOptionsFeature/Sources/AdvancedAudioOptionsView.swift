@@ -86,16 +86,20 @@ struct AdvancedAudioOptionsRootViewUI: View {
 
             Section(header: Text(l("audio.playback-ayah-range"))) {
                 FromRow(verse: fromVerse) {
-                    navigator?.push {
-                        StaticViewControllerRepresentable(viewController: fromVerseSelectionViewController)
-                    }
+                    showVerseSelection(
+                        title: l("audio.select-start-verse"),
+                        selected: fromVerse,
+                        onSelection: updateFromVerseTo
+                    )
                 }
                 EndAtRow(selection: endAtBinding)
                 if endAt == .custom {
                     ToRow(verse: toVerse) {
-                        navigator?.push {
-                            StaticViewControllerRepresentable(viewController: toVerseSelectionViewController)
-                        }
+                        showVerseSelection(
+                            title: l("audio.select-end-verse"),
+                            selected: toVerse,
+                            onSelection: updateToVerseTo
+                        )
                     }
                 }
             }
@@ -139,22 +143,20 @@ struct AdvancedAudioOptionsRootViewUI: View {
         )
     }
 
-    private var fromVerseSelectionViewController: UIViewController {
-        let verseSelection = AdvancedAudioVersesViewController(suras: fromVerse.quran.suras, selected: fromVerse) { fromVerse in
-            updateFromVerseTo(fromVerse)
-            navigator?.pop()
+    private func showVerseSelection(
+        title: String,
+        selected: AyahNumber,
+        onSelection: @escaping ItemAction<AyahNumber>
+    ) {
+        navigator?.push(configuration: .init(title: title)) {
+            AdvancedAudioVersesView(
+                suras: selected.quran.suras,
+                selected: selected
+            ) { ayah in
+                onSelection(ayah)
+                navigator?.pop()
+            }
         }
-        verseSelection.title = l("audio.select-start-verse")
-        return verseSelection
-    }
-
-    private var toVerseSelectionViewController: UIViewController {
-        let verseSelection = AdvancedAudioVersesViewController(suras: toVerse.quran.suras, selected: toVerse) { toVerse in
-            updateToVerseTo(toVerse)
-            navigator?.pop()
-        }
-        verseSelection.title = l("audio.select-end-verse")
-        return verseSelection
     }
 }
 
@@ -297,7 +299,7 @@ private struct FromRow: View {
     var body: some View {
         NoorListItem(
             title: .text(lAndroid("from")),
-            subtitle: .init(text: verse.localizedNameWithSuraNumber, location: .trailing),
+            subtitle: .init(text: "\(ayah: verse)", location: .trailing),
             accessory: .disclosureIndicator,
             action: action
         )
@@ -311,7 +313,7 @@ private struct ToRow: View {
     var body: some View {
         NoorListItem(
             title: .text(lAndroid("to")),
-            subtitle: .init(text: verse.localizedNameWithSuraNumber, location: .trailing),
+            subtitle: .init(text: "\(ayah: verse)", location: .trailing),
             accessory: .disclosureIndicator,
             action: action
         )

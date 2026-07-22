@@ -8,37 +8,42 @@ import XCTest
 @testable import NoorUI
 
 final class MultipartTextQuranTests: XCTestCase {
-    func test_suraReference_usesLocalizedNameAndDecoratedGlyph() {
+    func test_suraReference_inNonArabicLocale_usesLocalizedNameAndDecoratedGlyph() {
         let text: MultipartText = "\(sura: sura)"
 
-        XCTAssertEqual(text.rawValue, "\(sura.localizedName()) \u{E905}")
+        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) \u{E905}")
     }
 
-    func test_numberedSuraReference_includesSuraNumber() {
-        let text: MultipartText = "\(sura: sura, format: .numbered)"
+    func test_suraReference_inArabicLocale_usesOnlyDecoratedGlyph() {
+        let text: MultipartText = "\(sura: sura)"
 
-        XCTAssertEqual(text.rawValue, "\(sura.localizedName(withNumber: true)) \u{E905}")
+        XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905}")
     }
 
-    func test_ayahReference_usesLocalizedNameAndDecoratedSuraGlyph() {
+    func test_suraReference_inNonArabicRightToLeftLocale_keepsLocalizedName() {
+        let text: MultipartText = "\(sura: sura)"
+
+        XCTAssertEqual(text.rawValue(locale: Locale(identifier: "fa-IR")), "\(sura.localizedName()) \u{E905}")
+    }
+
+    func test_ayahReference_inNonArabicLocale_usesCanonicalReference() {
         let text: MultipartText = "\(ayah: ayah)"
 
-        XCTAssertEqual(text.rawValue, "\(ayah.localizedName) \u{E905}")
+        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) \u{E905} · 2:255")
     }
 
-    func test_numberedSuraAyahReference_includesSuraNumber() {
-        let text: MultipartText = "\(ayah: ayah, format: .numberedSura)"
+    func test_ayahReference_inArabicLocale_usesGlyphAndLocalizedCoordinate() {
+        let text: MultipartText = "\(ayah: ayah)"
 
-        XCTAssertEqual(text.rawValue, "\(ayah.localizedNameWithSuraNumber) \u{E905}")
+        XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905} · ٢:٢٥٥")
     }
 
-    func test_compactAyahReference_usesSuraAndAyahNumbers() {
-        let text: MultipartText = "\(ayah: ayah, format: .compact)"
+    func test_references_useSemanticAccessibilityText() {
+        let suraText: MultipartText = "\(sura: sura)"
+        let ayahText: MultipartText = "\(ayah: ayah)"
 
-        XCTAssertEqual(
-            text.rawValue,
-            "\(ayah.localizedCompactName) \u{E905}"
-        )
+        XCTAssertEqual(suraText.accessibilityText, sura.localizedName())
+        XCTAssertEqual(ayahText.accessibilityText, ayah.localizedName)
     }
 
     func test_quranText_preservesText() {
@@ -58,4 +63,6 @@ final class MultipartTextQuranTests: XCTestCase {
 
     private let sura = Quran.hafsMadani1405.suras[1]
     private let ayah = Quran.hafsMadani1405.suras[1].verses[254]
+    private let english = Locale(identifier: "en-CA")
+    private let arabic = Locale(identifier: "ar-SA")
 }

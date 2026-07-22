@@ -598,6 +598,7 @@ private func featuresTargets() -> [[Target]] {
         ]),
 
         target(type, name: "AdvancedAudioOptionsFeature", dependencies: [
+            "NoorUI",
             "ReciterListFeature",
             "QuranAudioKit",
             "QuranLocalization",
@@ -724,6 +725,7 @@ private func featuresTargets() -> [[Target]] {
 
         target(type, name: "TranslationVerseFeature", hasTests: false, dependencies: [
             "AppDependencies",
+            "NoorUI",
             "MoreMenuFeature",
             "TranslationsFeature",
             "QuranTranslationFeature",
@@ -735,6 +737,7 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "SearchFeature", hasTests: false, dependencies: [
             "AppDependencies",
             "QuranTextKit",
+            "QuranLocalization",
             "FeaturesSupport",
             "ReadingService",
             "NoorUI",
@@ -761,6 +764,7 @@ private func featuresTargets() -> [[Target]] {
             "TranslationVerseFeature",
             "FeaturesSupport",
             "BookmarksFeature",
+            "NoorUI",
             "QuranLocalization",
         ], testDependencies: [
             "MobileSyncTestSupport",

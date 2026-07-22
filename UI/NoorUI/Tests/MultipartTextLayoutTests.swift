@@ -17,7 +17,7 @@ final class MultipartTextLayoutTests: XCTestCase {
 
         let heights = await MainActor.run {
             let sura = Quran.hafsMadani1405.suras[15]
-            let text: MultipartText = "At An-Nahl 16:30 \(sura: sura) • Move here"
+            let text: MultipartText = "At \(ayah: sura.verses[29]) • Move here"
 
             let wrappingHeight = fittingHeight(
                 text.view(ofSize: .footnote)

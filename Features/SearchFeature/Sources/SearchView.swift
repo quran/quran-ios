@@ -8,6 +8,7 @@
 import Localization
 import NoorUI
 import QuranKit
+import QuranLocalization
 import QuranText
 import SwiftUI
 import UIx
@@ -124,9 +125,12 @@ private struct SearchViewUI: View {
                     let title = lFormat("search.result.count", plainTitle, result.items.count)
                     NoorSection(title: title, result.items) { item in
                         NoorListItem(
-                            subheading: "(\(String(item.ayah.sura.suraNumber))) \(ayah: item.ayah)",
+                            subheading: "\(ayah: item.ayah)",
                             title: searchResultText(of: item),
-                            accessory: .text(NumberFormatter.shared.format(item.ayah.page.pageNumber))
+                            accessory: .text(
+                                item.ayah.page.localizedNumber,
+                                accessibilityLabel: item.ayah.page.localizedName
+                            )
                         ) {
                             selectSearchResult((item, result.source))
                         }

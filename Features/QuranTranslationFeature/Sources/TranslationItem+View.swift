@@ -26,7 +26,7 @@ extension TranslationPageFooter: View {
 extension TranslationSuraName: View {
     var body: some View {
         QuranSuraName(
-            suraName: sura.localizedName(withPrefix: false),
+            sura: sura,
             besmAllah: sura.startsWithBesmAllah ? sura.quran.arabicBesmAllah : "",
             besmAllahFontSize: arabicFontSize
         )

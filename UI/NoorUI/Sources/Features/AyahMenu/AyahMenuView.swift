@@ -181,6 +181,7 @@ private struct AyahMenuViewList: View {
                     editNote
                 }
 
+                #if !QURAN_SYNC
                 if dataObject.state != .noHighlight {
                     Divider()
                         .padding(.leading)
@@ -190,6 +191,7 @@ private struct AyahMenuViewList: View {
                             .foregroundColor(Color.red)
                     }
                 }
+                #endif
 
                 Divider()
             }

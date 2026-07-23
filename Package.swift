@@ -762,6 +762,7 @@ private func featuresTargets() -> [[Target]] {
             "AyahMenuFeature",
             "MoreMenuFeature",
             "NoteEditorFeature",
+            "NotesFeature",
             "WordPointerFeature",
             "TranslationsFeature",
             "TranslationVerseFeature",

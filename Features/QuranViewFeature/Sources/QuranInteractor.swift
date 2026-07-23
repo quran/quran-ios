@@ -19,6 +19,9 @@ import FeaturesSupport
 import MoreMenuFeature
 import NoorUI
 import NoteEditorFeature
+#if QURAN_SYNC
+import NotesFeature
+#endif
 import QuranAnnotations
 import QuranContentFeature
 import QuranKit
@@ -49,6 +52,7 @@ protocol QuranPresentable: UIViewController {
     func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint)
     #if QURAN_SYNC
     func presentBookmarkAyahs(_ viewController: UIViewController)
+    func presentAyahNotes(_ viewController: UIViewController)
     #endif
     func presentTranslatedVerse(_ viewController: UIViewController, didDismiss: @escaping () -> Void)
     func presentAudioBanner(_ audioBanner: UIViewController)
@@ -77,12 +81,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let translationVerseBuilder: TranslationVerseBuilder
         let resources: ReadingResourcesService
         let notesObserver: QuranNotesObserver
-        let noteEditorBuilder: NoteEditorBuilder
         #if QURAN_SYNC
+        let ayahNotesBuilder: AyahNotesBuilder
         let bookmarkAyahsBuilder: BookmarkAyahsBuilder
         let syncedHighlightsObserver: QuranSyncedHighlightsObserver
         let readingBookmarkObserver: QuranReadingBookmarkObserver
         #else
+        let noteEditorBuilder: NoteEditorBuilder
         let analytics: AnalyticsLibrary
         let pageBookmarkService: PageBookmarkService
         let noteService: NoteService
@@ -243,15 +248,18 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     func showNoteEditor(for verses: [AyahNumber]) async {
-        let notes = notesInteractingVerses(verses)
         #if QURAN_SYNC
-        let mode: NoteEditorMode = if let note = notes.first {
-            .edit(note)
-        } else {
-            .create(verses: verses)
+        logger.info("Quran: show ayah notes. Verses: \(verses)")
+        contentViewModel?.removeAyahMenuHighlight()
+        presenter?.dismissPresentedViewController { [weak self] in
+            guard let self else {
+                return
+            }
+            let viewController = deps.ayahNotesBuilder.build(verses: verses)
+            presenter?.presentAyahNotes(viewController)
         }
-        presentNoteEditor(mode: mode)
         #else
+        let notes = notesInteractingVerses(verses)
         if let note = notes.first {
             presentNoteEditor(note: note)
             return
@@ -556,14 +564,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         deps.notesObserver.notes(interacting: verses)
     }
 
-    #if QURAN_SYNC
-    private func presentNoteEditor(mode: NoteEditorMode) {
-        dismissAyahMenu()
-        presenter?.rotateToPortraitIfPhone()
-        let viewController = deps.noteEditorBuilder.build(withListener: self, mode: mode)
-        presenter?.present(viewController, animated: true)
-    }
-    #else
+    #if !QURAN_SYNC
     private func presentNoteEditor(note: Note) {
         dismissAyahMenu()
         presenter?.rotateToPortraitIfPhone()

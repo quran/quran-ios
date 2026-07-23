@@ -32,6 +32,11 @@ private extension TextPart {
                 locale: locale,
                 emphasizesSura: emphasizesSura
             )
+        case .ayahCoordinate(let ayah):
+            NSAttributedString(
+                string: ayah.localizedCoordinate(locale: locale),
+                attributes: [.font: size.plainUIFont]
+            )
         case .quran(let text, let color, _):
             NSAttributedString(string: text, attributes: [
                 .backgroundColor: UIColor(color),

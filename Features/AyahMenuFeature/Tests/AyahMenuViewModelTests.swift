@@ -73,6 +73,28 @@ final class AyahMenuViewModelTests: XCTestCase {
         XCTAssertEqual(lFormat("ayah.menu.notes-count", language: .arabic, 2), "الملاحظات (2)")
     }
 
+    func test_editNote_requestsNotesListAndNewNoteWhenSelectionHasNoNotes() async {
+        let sut = makeSUT()
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        await sut.editNote()
+
+        XCTAssertEqual(listener.shownNoteVerses, verses)
+        XCTAssertTrue(listener.isAddingNewNote)
+    }
+
+    func test_editNote_requestsOnlyNotesListWhenSelectionHasNotes() async {
+        let sut = makeSUT(notes: [note(id: "note")])
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        await sut.editNote()
+
+        XCTAssertEqual(listener.shownNoteVerses, verses)
+        XCTAssertFalse(listener.isAddingNewNote)
+    }
+
     func test_readingBookmarkCopy_describesEachLocationState() {
         XCTAssertEqual(l("ayah.menu.reading-bookmark.save-here"), "Save your place here")
         XCTAssertEqual(l("ayah.menu.reading-bookmark.saved-here"), "Saved here • Tap to delete")
@@ -233,13 +255,19 @@ private final class BookmarkListenerSpy: AyahMenuListener {
     private(set) var bookmarkedVerses: [AyahNumber]?
     private(set) var readingBookmarkSet: (ayah: AyahNumber, replacedBookmark: ReadingPositionBookmark?)?
     private(set) var removedReadingBookmark: ReadingPositionBookmark?
+    private(set) var shownNoteVerses: [AyahNumber]?
+    private(set) var isAddingNewNote = false
 
     func dismissAyahMenu() {}
     func playAudio(_ from: AyahNumber, to: AyahNumber?, repeatVerses: Bool) {}
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint) {}
     func showTranslation(_ verses: [AyahNumber]) {}
-    func showNoteEditor(for verses: [AyahNumber]) async {}
     func deleteNotes(in verses: [AyahNumber]) async {}
+
+    func showNotes(for verses: [AyahNumber], addingNewNote: Bool) async {
+        shownNoteVerses = verses
+        isAddingNewNote = addingNewNote
+    }
 
     func setReadingBookmark(at ayah: AyahNumber, replacing bookmark: ReadingPositionBookmark?) async {
         readingBookmarkSet = (ayah, bookmark)

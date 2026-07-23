@@ -19,7 +19,7 @@ public struct AyahNotesBuilder {
 
     // MARK: Public
 
-    public func build(verses: [AyahNumber]) -> UIViewController {
+    public func build(verses: [AyahNumber], presentsNewNote: Bool = false) -> UIViewController {
         let viewControllerReference = AyahNotesViewControllerReference()
         let viewModel = AyahNotesViewModel(
             verses: verses,
@@ -28,6 +28,7 @@ public struct AyahNotesBuilder {
         let viewController = AyahNotesViewController(
             viewModel: viewModel,
             noteEditorBuilder: .init(container: container),
+            presentsNewNote: presentsNewNote,
             addAction: { [viewControllerReference] in
                 viewControllerReference.value?.addNote()
             },

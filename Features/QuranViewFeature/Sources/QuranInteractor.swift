@@ -247,18 +247,24 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         presenter?.shareText(lines, in: sourceView, at: point, completion: {})
     }
 
-    func showNoteEditor(for verses: [AyahNumber]) async {
-        #if QURAN_SYNC
+    #if QURAN_SYNC
+    func showNotes(for verses: [AyahNumber], addingNewNote: Bool) async {
         logger.info("Quran: show ayah notes. Verses: \(verses)")
         contentViewModel?.removeAyahMenuHighlight()
         presenter?.dismissPresentedViewController { [weak self] in
             guard let self else {
                 return
             }
-            let viewController = deps.ayahNotesBuilder.build(verses: verses)
+            let viewController = deps.ayahNotesBuilder.build(
+                verses: verses,
+                presentsNewNote: addingNewNote
+            )
             presenter?.presentAyahNotes(viewController)
         }
-        #else
+    }
+
+    #else
+    func showNoteEditor(for verses: [AyahNumber]) async {
         let notes = notesInteractingVerses(verses)
         if let note = notes.first {
             presentNoteEditor(note: note)
@@ -270,8 +276,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         } catch {
             crasher.recordError(error, reason: "Failed to prepare note editor")
         }
-        #endif
     }
+    #endif
 
     #if QURAN_SYNC
     func showCollectionEditor(for verses: [AyahNumber]) {

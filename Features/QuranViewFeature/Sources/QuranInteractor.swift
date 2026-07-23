@@ -10,7 +10,9 @@ import Analytics
 import AnnotationsService
 import AudioBannerFeature
 import AyahMenuFeature
+#if QURAN_SYNC
 import BookmarksFeature
+#endif
 import Combine
 import Crashing
 import FeaturesSupport
@@ -45,7 +47,9 @@ protocol QuranPresentable: UIViewController {
 
     func presentMoreMenu(_ viewController: UIViewController)
     func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint)
+    #if QURAN_SYNC
     func presentBookmarkAyahs(_ viewController: UIViewController)
+    #endif
     func presentTranslatedVerse(_ viewController: UIViewController, didDismiss: @escaping () -> Void)
     func presentAudioBanner(_ audioBanner: UIViewController)
     func presentWordPointer(_ viewController: UIViewController)
@@ -65,7 +69,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let quran: Quran
         let highlightsService: QuranHighlightsService
         let ayahMenuBuilder: AyahMenuBuilder
-        let bookmarkAyahsBuilder: BookmarkAyahsBuilder
         let moreMenuBuilder: MoreMenuBuilder
         let audioBannerBuilder: AudioBannerBuilder
         let wordPointerBuilder: WordPointerBuilder
@@ -76,6 +79,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let notesObserver: QuranNotesObserver
         let noteEditorBuilder: NoteEditorBuilder
         #if QURAN_SYNC
+        let bookmarkAyahsBuilder: BookmarkAyahsBuilder
         let syncedHighlightsObserver: QuranSyncedHighlightsObserver
         let readingBookmarkObserver: QuranReadingBookmarkObserver
         #else
@@ -261,29 +265,22 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         #endif
     }
 
-    func showBookmarkEditor(for verses: [AyahNumber]) {
+    #if QURAN_SYNC
+    func showCollectionEditor(for verses: [AyahNumber]) {
         logger.info("Quran: show bookmark editor. Verses: \(verses)")
         contentViewModel?.removeAyahMenuHighlight()
         presenter?.dismissPresentedViewController { [weak self] in
             guard let self else {
                 return
             }
-            #if QURAN_SYNC
             let viewController = deps.bookmarkAyahsBuilder.build(
                 verses: verses,
                 collections: deps.syncedHighlightsObserver.collections
             )
-            #else
-            let viewController = deps.bookmarkAyahsBuilder.build(
-                verses: verses,
-                notes: notesInteractingVerses(verses)
-            )
-            #endif
             presenter?.presentBookmarkAyahs(viewController)
         }
     }
 
-    #if QURAN_SYNC
     func setReadingBookmark(at ayah: AyahNumber, replacing previousBookmark: ReadingPositionBookmark?) async {
         if await performReadingBookmarkAction(
             .set(location: .ayah(ayah), replacing: previousBookmark)
@@ -329,9 +326,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let bookmarkedVerses = Set(deps.syncedHighlightsObserver.collections.flatMap { collection in
             collection.bookmarks.map(\.ayah)
         })
-        #else
-        let highlightVerses = deps.highlightsService.highlights.noteVerses.mapValues(\.color)
-        let bookmarkedVerses: Set<AyahNumber> = []
         #endif
         #if QURAN_SYNC
         let input = AyahMenuInput(
@@ -348,9 +342,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             sourceView: sourceView,
             pointInView: point,
             verses: verses,
-            notes: notesInteractingVerses(verses),
-            highlightVerses: highlightVerses,
-            bookmarkedVerses: bookmarkedVerses
+            notes: notesInteractingVerses(verses)
         )
         #endif
         let ayahMenuViewController = deps.ayahMenuBuilder.build(withListener: self, input: input)

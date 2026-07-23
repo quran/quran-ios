@@ -573,6 +573,9 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
             "NoorUI",
             "QuranLocalization",
+        ], testDependencies: [
+            "Analytics",
+            "NotePersistence",
         ]),
 
         target(type, name: "WhatsNewFeature", hasTests: false, dependencies: [

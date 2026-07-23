@@ -27,10 +27,10 @@ public protocol AyahMenuListener: AnyObject {
 
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint)
     func showTranslation(_ verses: [AyahNumber])
-    func showBookmarkEditor(for verses: [AyahNumber])
     func showNoteEditor(for verses: [AyahNumber]) async
     func deleteNotes(in verses: [AyahNumber]) async
     #if QURAN_SYNC
+    func showCollectionEditor(for verses: [AyahNumber])
     func setReadingBookmark(at ayah: AyahNumber, replacing bookmark: ReadingPositionBookmark?) async
     func removeReadingBookmark(_ bookmark: ReadingPositionBookmark) async
     #endif
@@ -46,9 +46,9 @@ final class AyahMenuViewModel {
         let verses: [AyahNumber]
         let textRetriever: ShareableVerseTextRetriever
         let notes: [QuranAnnotations.Note]
+        #if QURAN_SYNC
         let highlightVerses: [AyahNumber: HighlightColor]
         let bookmarkedVerses: Set<AyahNumber>
-        #if QURAN_SYNC
         let readingBookmark: ReadingPositionBookmark?
         #else
         let noteService: NoteService
@@ -90,6 +90,7 @@ final class AyahMenuViewModel {
         }
     }
 
+    #if QURAN_SYNC
     var bookmarkTitle: String {
         lFormat("bookmarks.editor.title", deps.verses.count)
     }
@@ -105,6 +106,7 @@ final class AyahMenuViewModel {
         }
         return .highlighted(color)
     }
+    #endif
 
     var repeatSubtitle: String {
         if deps.verses.count == 1 {
@@ -168,10 +170,29 @@ final class AyahMenuViewModel {
         listener?.playAudio(verses[0], to: verses.last, repeatVerses: true)
     }
 
+    #if QURAN_SYNC
     func bookmark() {
         logger.info("AyahMenu: bookmark tapped. Verses: \(deps.verses)")
-        listener?.showBookmarkEditor(for: deps.verses)
+        listener?.showCollectionEditor(for: deps.verses)
     }
+
+    #else
+    func updateHighlight(color: HighlightColor) async {
+        logger.info("AyahMenu: update verse highlights. Verses: \(deps.verses)")
+        listener?.dismissAyahMenu()
+
+        do {
+            _ = try await deps.noteService.updateHighlight(
+                verses: deps.verses,
+                color: color,
+                quran: ReadingPreferences.shared.reading.quran
+            )
+            logger.info("AyahMenu: notes updated")
+        } catch {
+            crasher.recordError(error, reason: "Failed to update highlights")
+        }
+    }
+    #endif
 
     #if QURAN_SYNC
     func setReadingBookmark() async {

@@ -227,7 +227,7 @@ private final class BookmarkListenerSpy: AyahMenuListener {
         removedReadingBookmark = bookmark
     }
 
-    func showBookmarkEditor(for verses: [AyahNumber]) {
+    func showCollectionEditor(for verses: [AyahNumber]) {
         bookmarkedVerses = verses
     }
 }

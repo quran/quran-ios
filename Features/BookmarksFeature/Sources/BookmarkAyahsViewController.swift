@@ -1,3 +1,4 @@
+#if QURAN_SYNC
 //
 //  BookmarkAyahsViewController.swift
 //
@@ -36,3 +37,4 @@ final class BookmarkAyahsViewController: UIHostingController<BookmarkAyahsView> 
         navigationItem.rightBarButtonItem = doneButton
     }
 }
+#endif

@@ -199,16 +199,19 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertFalse(sut.listener.didDismiss)
     }
 
-    func test_emptyNote_doneDismissesWithoutSavingInLegacy() async throws {
-        let sut = makeLegacySUT(noteBody: "")
-        _ = try await sut.viewModel.fetchNote()
+    func test_emptyNote_doneSavesLegacyHighlightColorAndDismisses() async throws {
+        let sut = makeLegacySUT(noteBody: "", color: .blue)
+        let editableNote = try await sut.viewModel.fetchNote()
+        editableNote.selectedColor = .green
 
         let didFinish = await sut.viewModel.commitEditsAndExit(dismissOnSave: true)
 
         XCTAssertTrue(sut.viewModel.canDismissNote)
         XCTAssertFalse(sut.viewModel.shouldAutoSaveOnDismiss)
         XCTAssertTrue(didFinish)
-        XCTAssertTrue(sut.noteService.setNoteCalls.isEmpty)
+        XCTAssertEqual(sut.noteService.setNoteCalls, [
+            .init(note: "", verses: [ayah(1), ayah(2)], color: .green),
+        ])
         XCTAssertTrue(sut.listener.didDismiss)
     }
 

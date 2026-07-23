@@ -1,10 +1,10 @@
+#if QURAN_SYNC
 //
 //  BookmarkAyahsBuilder.swift
 //
 
 import AppDependencies
 import NoorUI
-import QuranAnnotations
 import QuranKit
 import UIKit
 
@@ -18,7 +18,6 @@ public struct BookmarkAyahsBuilder {
 
     // MARK: Public
 
-    #if QURAN_SYNC
     public func build(
         verses: [AyahNumber],
         collections: [AyahBookmarkCollection]
@@ -32,19 +31,6 @@ public struct BookmarkAyahsBuilder {
         )
         return navigationController(viewModel: viewModel)
     }
-    #else
-    public func build(
-        verses: [AyahNumber],
-        notes: [QuranAnnotations.Note]
-    ) -> UIViewController {
-        let viewModel = BookmarkAyahsViewModel(
-            verses: verses,
-            notes: notes,
-            noteService: container.noteService()
-        )
-        return navigationController(viewModel: viewModel)
-    }
-    #endif
 
     // MARK: Private
 
@@ -57,3 +43,4 @@ public struct BookmarkAyahsBuilder {
         return navigationController
     }
 }
+#endif

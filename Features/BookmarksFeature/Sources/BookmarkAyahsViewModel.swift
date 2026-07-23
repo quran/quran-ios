@@ -1,3 +1,4 @@
+#if QURAN_SYNC
 //
 //  BookmarkAyahsViewModel.swift
 //
@@ -8,10 +9,8 @@ import Foundation
 import Localization
 import QuranAnnotations
 import QuranKit
-import ReadingService
 import VLogging
 
-#if QURAN_SYNC
 @MainActor
 final class BookmarkAyahsViewModel: ObservableObject {
     enum HighlightSelection: Equatable {
@@ -241,60 +240,5 @@ final class BookmarkAyahsViewModel: ObservableObject {
         var seen = Set<AyahNumber>()
         return verses.filter { seen.insert($0).inserted }
     }
-}
-#else
-@MainActor
-final class BookmarkAyahsViewModel: ObservableObject {
-    // MARK: Lifecycle
-
-    init(
-        verses: [AyahNumber],
-        notes: [QuranAnnotations.Note],
-        noteService: NoteService
-    ) {
-        self.verses = verses
-        self.noteService = noteService
-        selectedHighlightColor = noteService.color(from: notes)
-    }
-
-    // MARK: Internal
-
-    @Published private(set) var isUpdatingHighlight = false
-    @Published var error: Error?
-    @Published private(set) var selectedHighlightColor: HighlightColor
-
-    var title: String {
-        lFormat("bookmarks.editor.title", verses.count)
-    }
-
-    func selectHighlight(_ color: HighlightColor?) async {
-        guard let color, color != selectedHighlightColor, !isUpdatingHighlight else {
-            return
-        }
-
-        let previousColor = selectedHighlightColor
-        selectedHighlightColor = color
-        isUpdatingHighlight = true
-        defer { isUpdatingHighlight = false }
-
-        do {
-            _ = try await noteService.updateHighlight(
-                verses: verses,
-                color: color,
-                quran: ReadingPreferences.shared.reading.quran
-            )
-        } catch is CancellationError {
-            selectedHighlightColor = previousColor
-        } catch {
-            logger.error("Bookmarks: failed to update highlight: \(error)")
-            selectedHighlightColor = previousColor
-            self.error = error
-        }
-    }
-
-    // MARK: Private
-
-    private let verses: [AyahNumber]
-    private let noteService: NoteService
 }
 #endif

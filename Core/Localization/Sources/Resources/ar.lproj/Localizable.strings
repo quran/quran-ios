@@ -160,6 +160,9 @@
 "notes.delete.alert.body" = "سيتم حذف الملاحظة أيضًا.";
 "notes.delete-note.alert.title" = "حذف الملاحظة";
 "notes.delete-note.alert.body" = "سيتم حذف هذه الملاحظة.";
+"notes.editor.created" = "تم الإنشاء %@";
+"notes.editor.delete" = "حذف الملاحظة";
+"notes.editor.note-divider" = "ملاحظتك";
 "notes.icloud.alert.title" = "مزامنة iCloud";
 "notes.icloud.alert.body" = "يستخدم التطبيق iCloud لمزامنة الإشارات المرجعية والملاحظات عبر أجهزتك. يمكنك تعطيله من جهازك من خلال إعدادات iCloud.";
 "notes.search.placeholder.text" = "ابحث في ملاحظاتك";

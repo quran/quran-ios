@@ -62,6 +62,17 @@ final class AyahMenuViewModelTests: XCTestCase {
         XCTAssertEqual(lFormat("bookmarks.editor.title", language: .english, 2), "Save Ayahs...")
     }
 
+    func test_notesTitle_showsLocalizedNumberOfNotes() {
+        let sut = makeSUT(notes: [
+            note(id: "first"),
+            note(id: "second"),
+        ])
+
+        XCTAssertEqual(sut.notesTitle, lFormat("ayah.menu.notes-count", 2))
+        XCTAssertEqual(lFormat("ayah.menu.notes-count", language: .english, 2), "Notes (2)")
+        XCTAssertEqual(lFormat("ayah.menu.notes-count", language: .arabic, 2), "الملاحظات (2)")
+    }
+
     func test_readingBookmarkCopy_describesEachLocationState() {
         XCTAssertEqual(l("ayah.menu.reading-bookmark.save-here"), "Save your place here")
         XCTAssertEqual(l("ayah.menu.reading-bookmark.saved-here"), "Saved here • Tap to delete")
@@ -181,6 +192,7 @@ final class AyahMenuViewModelTests: XCTestCase {
 
     private func makeSUT(
         verses: [AyahNumber]? = nil,
+        notes: [Note] = [],
         highlightVerses: [AyahNumber: HighlightColor] = [:],
         bookmarkedVerses: Set<AyahNumber> = [],
         readingBookmark: ReadingPositionBookmark? = nil
@@ -194,7 +206,7 @@ final class AyahMenuViewModelTests: XCTestCase {
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
             ),
-            notes: [],
+            notes: notes,
             highlightVerses: highlightVerses,
             bookmarkedVerses: bookmarkedVerses,
             readingBookmark: readingBookmark
@@ -203,6 +215,16 @@ final class AyahMenuViewModelTests: XCTestCase {
 
     private func readingBookmark(at location: ReadingPositionBookmark.Location) -> ReadingPositionBookmark {
         ReadingPositionBookmark(id: "reading-bookmark", location: location, modifiedOn: .distantPast)
+    }
+
+    private func note(id: String) -> Note {
+        Note(
+            id: id,
+            text: "Note",
+            startAyah: verses[0],
+            endAyah: verses[0],
+            modifiedDate: .distantPast
+        )
     }
 }
 

@@ -86,6 +86,7 @@ public enum AyahMenuUI {
             highlightingColor: HighlightColor,
             state: NoteState,
             bookmarkTitle: String,
+            notesTitle: String,
             bookmarkState: BookmarkState = .unhighlighted,
             playSubtitle: String,
             repeatSubtitle: String,
@@ -97,6 +98,7 @@ public enum AyahMenuUI {
             self.highlightingColor = highlightingColor
             self.state = state
             self.bookmarkTitle = bookmarkTitle
+            self.notesTitle = notesTitle
             self.bookmarkState = bookmarkState
             self.playSubtitle = playSubtitle
             self.repeatSubtitle = repeatSubtitle
@@ -132,6 +134,7 @@ public enum AyahMenuUI {
         let actions: Actions
         #if QURAN_SYNC
         let bookmarkTitle: String
+        let notesTitle: String
         let bookmarkState: BookmarkState
         #endif
         let playSubtitle: String

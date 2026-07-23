@@ -95,6 +95,10 @@ final class AyahMenuViewModel {
         lFormat("bookmarks.editor.title", deps.verses.count)
     }
 
+    var notesTitle: String {
+        lFormat("ayah.menu.notes-count", deps.notes.count)
+    }
+
     var bookmarkState: AyahMenuUI.BookmarkState {
         let colors = deps.verses.compactMap { deps.highlightVerses[$0] }
         guard !colors.isEmpty else {

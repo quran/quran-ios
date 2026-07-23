@@ -18,11 +18,13 @@ final class AyahNotesViewController: UIHostingController<AyahNotesView>, NoteEdi
     init(
         viewModel: AyahNotesViewModel,
         noteEditorBuilder: NoteEditorBuilder,
+        presentsNewNote: Bool,
         addAction: @escaping @MainActor @Sendable () -> Void,
         editAction: @escaping @MainActor @Sendable (Note) -> Void
     ) {
         self.viewModel = viewModel
         self.noteEditorBuilder = noteEditorBuilder
+        shouldPresentNewNote = presentsNewNote
         super.init(rootView: AyahNotesView(
             viewModel: viewModel,
             addAction: addAction,
@@ -41,6 +43,16 @@ final class AyahNotesViewController: UIHostingController<AyahNotesView>, NoteEdi
 
     // MARK: Internal
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        guard shouldPresentNewNote else {
+            return
+        }
+        shouldPresentNewNote = false
+        addNote()
+    }
+
     func addNote() {
         presentNoteEditor(mode: .create(verses: viewModel.verses))
     }
@@ -57,6 +69,7 @@ final class AyahNotesViewController: UIHostingController<AyahNotesView>, NoteEdi
 
     private let viewModel: AyahNotesViewModel
     private let noteEditorBuilder: NoteEditorBuilder
+    private var shouldPresentNewNote: Bool
     private var editController: EditController?
 
     private var currentEditMode: EditMode? {

@@ -40,7 +40,7 @@ public enum AyahMenuUI {
         public init(
             play: @escaping AsyncAction,
             repeatVerses: @escaping AsyncAction,
-            bookmark: @escaping AsyncAction,
+            highlight: @Sendable @escaping (HighlightColor) async -> Void,
             addNote: @escaping AsyncAction,
             deleteNote: @escaping AsyncAction,
             showTranslation: @escaping AsyncAction,
@@ -49,7 +49,7 @@ public enum AyahMenuUI {
         ) {
             self.play = play
             self.repeatVerses = repeatVerses
-            self.bookmark = bookmark
+            self.highlight = highlight
             self.addNote = addNote
             self.deleteNote = deleteNote
             self.showTranslation = showTranslation
@@ -62,7 +62,11 @@ public enum AyahMenuUI {
 
         let play: AsyncAction
         let repeatVerses: AsyncAction
+        #if QURAN_SYNC
         let bookmark: AsyncAction
+        #else
+        let highlight: @Sendable (HighlightColor) async -> Void
+        #endif
         let addNote: AsyncAction
         let deleteNote: AsyncAction
         let showTranslation: AsyncAction
@@ -105,8 +109,6 @@ public enum AyahMenuUI {
         public init(
             highlightingColor: HighlightColor,
             state: NoteState,
-            bookmarkTitle: String,
-            bookmarkState: BookmarkState = .unhighlighted,
             playSubtitle: String,
             repeatSubtitle: String,
             actions: Actions,
@@ -115,8 +117,6 @@ public enum AyahMenuUI {
         ) {
             self.highlightingColor = highlightingColor
             self.state = state
-            self.bookmarkTitle = bookmarkTitle
-            self.bookmarkState = bookmarkState
             self.playSubtitle = playSubtitle
             self.repeatSubtitle = repeatSubtitle
             self.actions = actions
@@ -130,8 +130,10 @@ public enum AyahMenuUI {
         let highlightingColor: HighlightColor
         let state: NoteState
         let actions: Actions
+        #if QURAN_SYNC
         let bookmarkTitle: String
         let bookmarkState: BookmarkState
+        #endif
         let playSubtitle: String
         let repeatSubtitle: String
         let isTranslationView: Bool
@@ -149,12 +151,14 @@ public enum AyahMenuUI {
         case noted
     }
 
+    #if QURAN_SYNC
     public enum BookmarkState: Equatable {
         case unhighlighted
         case bookmarked
         case partiallyHighlighted
         case highlighted(HighlightColor)
     }
+    #endif
 
     #if QURAN_SYNC
     public enum ReadingBookmarkState {

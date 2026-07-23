@@ -1,10 +1,10 @@
+#if QURAN_SYNC
 //
 //  BookmarkAyahsView.swift
 //
 
 import Localization
 import NoorUI
-import QuranAnnotations
 import SwiftUI
 import UIx
 
@@ -15,7 +15,6 @@ struct BookmarkAyahsView: View {
     var body: some View {
         NoorList {
             NoorBasicSection(title: l("ayah.menu.highlight")) {
-                #if QURAN_SYNC
                 HighlightColorPicker(
                     selectedColor: viewModel.selectedHighlightColor,
                     partiallySelectedColors: viewModel.partiallySelectedHighlightColors,
@@ -25,16 +24,8 @@ struct BookmarkAyahsView: View {
                         : { await viewModel.selectHighlight(nil) }
                 )
                 .disabled(viewModel.isUpdatingHighlight)
-                #else
-                HighlightColorPicker(
-                    selectedColor: viewModel.selectedHighlightColor,
-                    onSelect: { await viewModel.selectHighlight($0) }
-                )
-                .disabled(viewModel.isUpdatingHighlight)
-                #endif
             }
 
-            #if QURAN_SYNC
             NoorBasicSection(title: l("bookmarks.collections.mine")) {
                 ForEach(viewModel.displayedCollections, id: \.collection.id) { collection in
                     collectionRow(collection)
@@ -47,16 +38,12 @@ struct BookmarkAyahsView: View {
                     action: { viewModel.presentAddCollection() }
                 )
             }
-            #endif
         }
-        #if QURAN_SYNC
         .task { await viewModel.start() }
-            .addBookmarkCollectionAlert(viewModel: viewModel)
-        #endif
-            .errorAlert(error: $viewModel.error)
+        .addBookmarkCollectionAlert(viewModel: viewModel)
+        .errorAlert(error: $viewModel.error)
     }
 
-    #if QURAN_SYNC
     private func collectionRow(_ collection: AyahBookmarkCollection) -> some View {
         let selection = viewModel.collectionSelection(for: collection)
         return NoorListItem(
@@ -94,10 +81,8 @@ struct BookmarkAyahsView: View {
             l("bookmarks.editor.collection.selected")
         }
     }
-    #endif
 }
 
-#if QURAN_SYNC
 private extension View {
     @MainActor
     func addBookmarkCollectionAlert(viewModel: BookmarkAyahsViewModel) -> some View {

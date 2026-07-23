@@ -115,14 +115,20 @@ final class NoteEditorViewModel {
     @discardableResult
     func commitEditsAndExit(dismissOnSave: Bool) async -> Bool {
         logger.info("NoteEditor: done tapped")
+        #if QURAN_SYNC
         guard hasNoteText else {
             if dismissOnSave {
                 listener?.dismissNoteEditor()
             }
             return dismissOnSave
         }
+        #else
+        guard hasNoteText || dismissOnSave else {
+            return false
+        }
+        #endif
 
-        guard canSubmitNote else {
+        guard !hasNoteText || canSubmitNote else {
             return false
         }
 

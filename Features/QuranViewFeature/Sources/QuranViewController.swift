@@ -203,6 +203,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         )
     }
 
+    #if QURAN_SYNC
     func presentBookmarkAyahs(_ viewController: UIViewController) {
         if let sheet = viewController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
@@ -210,6 +211,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         }
         present(viewController, animated: true)
     }
+    #endif
 
     func presentQuranContent(_ viewController: UIViewController) {
         addContent(viewController)

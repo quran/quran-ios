@@ -11,6 +11,13 @@ import QuranAnnotations
 import SwiftUI
 import UIx
 
+#if !QURAN_SYNC
+private enum MenuState {
+    case list
+    case highlights
+}
+#endif
+
 public struct AyahMenuView: View {
     // MARK: Lifecycle
 
@@ -21,21 +28,60 @@ public struct AyahMenuView: View {
     // MARK: Public
 
     public var body: some View {
+        #if QURAN_SYNC
         ScrollView {
             AyahMenuViewList(dataObject: dataObject)
         }
         .preferredContentSizeMatchesScrollView()
+        #else
+        switch state {
+        case .list:
+            ScrollView {
+                AyahMenuViewList(dataObject: dataObject) {
+                    withAnimation {
+                        state = .highlights
+                    }
+                }
+            }
+            .preferredContentSizeMatchesScrollView()
+            .transition(.opacity)
+        case .highlights:
+            ScrollView {
+                NoteCircles(selectedColor: existingHighlightedColor, tapped: dataObject.actions.highlight)
+            }
+            .preferredContentSizeMatchesScrollView()
+            .transition(.scale(scale: 2).combined(with: .opacity))
+        }
+        #endif
     }
 
     // MARK: Internal
 
     let dataObject: AyahMenuUI.DataObject
+
+    // MARK: Private
+
+    #if !QURAN_SYNC
+    @State private var state: MenuState = .list
+
+    private var existingHighlightedColor: HighlightColor? {
+        switch dataObject.state {
+        case .highlighted, .noted:
+            return dataObject.highlightingColor
+        case .noHighlight:
+            return nil
+        }
+    }
+    #endif
 }
 
 private struct AyahMenuViewList: View {
     // MARK: Internal
 
     let dataObject: AyahMenuUI.DataObject
+    #if !QURAN_SYNC
+    let showHighlights: AsyncAction
+    #endif
 
     var noteDeleteText: String {
         switch dataObject.state {
@@ -100,9 +146,31 @@ private struct AyahMenuViewList: View {
                     .padding(.leading)
                 #endif
 
+                #if QURAN_SYNC
                 Row(title: dataObject.bookmarkTitle, action: dataObject.actions.bookmark) {
                     bookmarkIcon
                 }
+                #else
+                if dataObject.state == .noHighlight {
+                    Row(
+                        title: l("ayah.menu.highlight"),
+                        action: {
+                            await dataObject.actions.highlight(dataObject.highlightingColor)
+                        }
+                    ) {
+                        IconCircle(color: dataObject.highlightingColor)
+                    }
+                    Divider()
+                        .padding(.leading)
+                }
+                Row(
+                    title: l("ayah.menu.highlight"),
+                    subtitle: .text(l("ayah.menu.highlight-select-color")),
+                    action: showHighlights
+                ) {
+                    HighlightPaletteIcon()
+                }
+                #endif
                 Divider()
                     .padding(.leading)
 
@@ -148,6 +216,7 @@ private struct AyahMenuViewList: View {
 
     // MARK: Private
 
+    #if QURAN_SYNC
     @ViewBuilder private var bookmarkIcon: some View {
         switch dataObject.bookmarkState {
         case .unhighlighted:
@@ -159,6 +228,7 @@ private struct AyahMenuViewList: View {
                 .foregroundColor(color.color)
         }
     }
+    #endif
 
     #if QURAN_SYNC
     @ViewBuilder
@@ -352,109 +422,154 @@ private struct MenuGroup<Content: View>: View {
     }
 }
 
-struct AyahMenuView_Previews: PreviewProvider {
+#if !QURAN_SYNC
+private struct IconCircle: View {
+    @ScaledMetric private var minLength = 20.0
+
+    let color: HighlightColor
+
+    var body: some View {
+        ColoredCircle(color: color.color, selected: false, minLength: minLength)
+    }
+}
+
+private struct NoteCircles: View {
+    let selectedColor: HighlightColor?
+    let tapped: @Sendable (HighlightColor) async -> Void
+
+    var body: some View {
+        HStack {
+            ForEach(HighlightColor.sortedColors, id: \.self) { color in
+                AsyncButton(
+                    action: { await tapped(color) },
+                    label: { NoteCircle(color: color.color, selected: color == selectedColor) }
+                )
+                .shadow(color: Color.tertiarySystemGroupedBackground, radius: 1)
+                .accessibilityLabel(color.localizedName)
+                .accessibilityAddTraits(color == selectedColor ? .isSelected : [])
+            }
+        }
+        .padding()
+    }
+}
+#endif
+
+#if QURAN_SYNC
+private let previewActions = AyahMenuUI.Actions(
+    play: {},
+    repeatVerses: {},
+    bookmark: {},
+    addNote: {},
+    deleteNote: {},
+    showTranslation: {},
+    copy: {},
+    share: {},
+    setReadingBookmark: {},
+    removeReadingBookmark: {}
+)
+#else
+private let previewActions = AyahMenuUI.Actions(
+    play: {},
+    repeatVerses: {},
+    highlight: { _ in },
+    addNote: {},
+    deleteNote: {},
+    showTranslation: {},
+    copy: {},
+    share: {}
+)
+#endif
+
+#Preview("Noted") {
+    VStack {
+        Spacer()
+        AyahMenuView(dataObject: previewDataObject(
+            highlightingColor: .green,
+            state: .noted,
+            isTranslationView: true
+        ))
+        Spacer()
+    }
+    .frame(width: 320, height: 470)
+    .background(Color.systemGroupedBackground)
+}
+
+#Preview("Highlighted · Dark") {
+    VStack {
+        Spacer()
+        AyahMenuView(dataObject: previewDataObject(
+            highlightingColor: .red,
+            state: .highlighted,
+            isTranslationView: true
+        ))
+        Spacer()
+    }
+    .frame(width: 320, height: 470)
+    .background(Color.systemGroupedBackground)
+    .colorScheme(.dark)
+}
+
+#Preview("No Highlight · XXXL") {
+    VStack {
+        Spacer()
+        AyahMenuView(dataObject: previewDataObject(
+            highlightingColor: .green,
+            state: .noHighlight,
+            isTranslationView: true
+        ))
+        Spacer()
+    }
+    .frame(width: 320, height: 470)
+    .background(Color.systemGroupedBackground)
+    .environment(\.sizeCategory, .extraExtraExtraLarge)
+}
+
+#if !QURAN_SYNC
+#Preview("Highlight Colors") {
+    NoteCircles(selectedColor: .blue, tapped: { _ in })
+        .background(Color.secondarySystemGroupedBackground)
+}
+#endif
+
+private func previewDataObject(
+    highlightingColor: HighlightColor,
+    state: AyahMenuUI.NoteState,
+    isTranslationView: Bool
+) -> AyahMenuUI.DataObject {
     #if QURAN_SYNC
-    static let actions = AyahMenuUI.Actions(
-        play: {},
-        repeatVerses: {},
-        bookmark: {},
-        addNote: {},
-        deleteNote: {},
-        showTranslation: {},
-        copy: {},
-        share: {},
-        setReadingBookmark: {},
-        removeReadingBookmark: {}
+    let bookmarkState: AyahMenuUI.BookmarkState = switch state {
+    case .noHighlight:
+        .unhighlighted
+    case .highlighted:
+        .partiallyHighlighted
+    case .noted:
+        .highlighted(highlightingColor)
+    }
+    let bookmarkTitle = switch state {
+    case .highlighted:
+        "Save Ayahs..."
+    case .noHighlight, .noted:
+        "Save Ayah..."
+    }
+    return AyahMenuUI.DataObject(
+        highlightingColor: highlightingColor,
+        state: state,
+        bookmarkTitle: bookmarkTitle,
+        bookmarkState: bookmarkState,
+        playSubtitle: "To the end of Juz'",
+        repeatSubtitle: "selected verses",
+        actions: previewActions,
+        isTranslationView: isTranslationView,
+        readingBookmarkState: .unset
     )
     #else
-    static let actions = AyahMenuUI.Actions(
-        play: {},
-        repeatVerses: {},
-        bookmark: {},
-        addNote: {},
-        deleteNote: {},
-        showTranslation: {},
-        copy: {},
-        share: {}
+    return AyahMenuUI.DataObject(
+        highlightingColor: highlightingColor,
+        state: state,
+        playSubtitle: "To the end of Juz'",
+        repeatSubtitle: "selected verses",
+        actions: previewActions,
+        isTranslationView: isTranslationView
     )
     #endif
-
-    static var previews: some View {
-        Group {
-            VStack {
-                Spacer()
-                AyahMenuView(dataObject: dataObject(
-                    highlightingColor: .green,
-                    state: .noted,
-                    bookmarkTitle: "Save Ayah...",
-                    bookmarkState: .highlighted(.green),
-                    isTranslationView: true
-                ))
-                Spacer()
-            }
-            .background(Color.systemGroupedBackground)
-
-            VStack {
-                Spacer()
-                AyahMenuView(dataObject: dataObject(
-                    highlightingColor: .red,
-                    state: .highlighted,
-                    bookmarkTitle: "Save Ayahs...",
-                    bookmarkState: .partiallyHighlighted,
-                    isTranslationView: true
-                ))
-                Spacer()
-            }
-            .background(Color.systemGroupedBackground)
-            .colorScheme(.dark)
-
-            VStack {
-                Spacer()
-                AyahMenuView(dataObject: dataObject(
-                    highlightingColor: .green,
-                    state: .noHighlight,
-                    bookmarkTitle: "Save Ayah...",
-                    bookmarkState: .unhighlighted,
-                    isTranslationView: true
-                ))
-                Spacer()
-            }
-            .background(Color.systemGroupedBackground)
-            .environment(\.sizeCategory, .extraExtraExtraLarge)
-        }
-        .previewLayout(.fixed(width: 320, height: 470))
-    }
-
-    private static func dataObject(
-        highlightingColor: HighlightColor,
-        state: AyahMenuUI.NoteState,
-        bookmarkTitle: String,
-        bookmarkState: AyahMenuUI.BookmarkState,
-        isTranslationView: Bool
-    ) -> AyahMenuUI.DataObject {
-        #if QURAN_SYNC
-        AyahMenuUI.DataObject(
-            highlightingColor: highlightingColor,
-            state: state,
-            bookmarkTitle: bookmarkTitle,
-            bookmarkState: bookmarkState,
-            playSubtitle: "To the end of Juz'",
-            repeatSubtitle: "selected verses",
-            actions: actions,
-            isTranslationView: isTranslationView,
-            readingBookmarkState: .unset
-        )
-        #else
-        AyahMenuUI.DataObject(
-            highlightingColor: highlightingColor,
-            state: state,
-            bookmarkTitle: bookmarkTitle,
-            bookmarkState: bookmarkState,
-            playSubtitle: "To the end of Juz'",
-            repeatSubtitle: "selected verses",
-            actions: actions,
-            isTranslationView: isTranslationView
-        )
-        #endif
-    }
 }

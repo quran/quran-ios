@@ -39,16 +39,12 @@ public struct AyahMenuInput {
         sourceView: UIView,
         pointInView: CGPoint,
         verses: [AyahNumber],
-        notes: [QuranAnnotations.Note],
-        highlightVerses: [AyahNumber: HighlightColor] = [:],
-        bookmarkedVerses: Set<AyahNumber> = []
+        notes: [QuranAnnotations.Note]
     ) {
         self.sourceView = sourceView
         self.pointInView = pointInView
         self.verses = verses
         self.notes = notes
-        self.highlightVerses = highlightVerses
-        self.bookmarkedVerses = bookmarkedVerses
     }
     #endif
 
@@ -58,9 +54,9 @@ public struct AyahMenuInput {
     let pointInView: CGPoint
     let verses: [AyahNumber]
     let notes: [QuranAnnotations.Note]
+    #if QURAN_SYNC
     let highlightVerses: [AyahNumber: HighlightColor]
     let bookmarkedVerses: Set<AyahNumber>
-    #if QURAN_SYNC
     let readingBookmark: ReadingPositionBookmark?
     #endif
 }
@@ -98,8 +94,6 @@ public struct AyahMenuBuilder {
             verses: input.verses,
             textRetriever: textRetriever,
             notes: input.notes,
-            highlightVerses: input.highlightVerses,
-            bookmarkedVerses: input.bookmarkedVerses,
             noteService: container.noteService()
         )
         #endif

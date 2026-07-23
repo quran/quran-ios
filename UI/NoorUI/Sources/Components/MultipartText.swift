@@ -34,6 +34,8 @@ private struct TextPartView: View {
     let part: TextPart
     let size: MultipartText.FontSize
 
+    @Environment(\.locale) private var locale
+
     var body: some View {
         switch part {
         case .plain(let text):
@@ -51,6 +53,10 @@ private struct TextPartView: View {
                 size: size,
                 emphasizesSura: emphasizesSura
             )
+        case .ayahCoordinate(let ayah):
+            Text(ayah.localizedCoordinate(locale: locale))
+                .font(size.plainFont)
+                .environment(\.layoutDirection, .leftToRight)
         case .quran(let text, let color, let lineLimit):
             Text(text)
                 .optionalLineLimit(lineLimit)
@@ -106,6 +112,7 @@ enum TextPart {
     case highlighting(text: String, ranges: [HighlightingRange], lineLimit: Int?)
     case sura(Sura)
     case ayah(AyahNumber, emphasizesSura: Bool)
+    case ayahCoordinate(AyahNumber)
     case quran(text: String, color: Color, lineLimit: Int?)
 
     // MARK: Internal
@@ -118,6 +125,8 @@ enum TextPart {
             QuranReference.sura(sura).rawValue(locale: locale)
         case .ayah(let ayah, _):
             QuranReference.ayah(ayah).rawValue(locale: locale)
+        case .ayahCoordinate(let ayah):
+            ayah.localizedCoordinate(locale: locale)
         case .quran(let text, _, _):
             text
         }
@@ -131,6 +140,8 @@ enum TextPart {
             QuranReference.sura(sura).accessibilityText
         case .ayah(let ayah, _):
             QuranReference.ayah(ayah).accessibilityText
+        case .ayahCoordinate(let ayah):
+            ayah.localizedCoordinate()
         case .quran(let text, _, _):
             text
         }
@@ -158,6 +169,23 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             emphasizingSura: Bool = false
         ) {
             parts.append(.ayah(ayah, emphasizesSura: emphasizingSura))
+        }
+
+        public mutating func appendInterpolation(ayahRange range: ClosedRange<AyahNumber>) {
+            let start = range.lowerBound
+            let end = range.upperBound
+            parts.append(.ayah(start, emphasizesSura: false))
+
+            guard start != end else {
+                return
+            }
+
+            parts.append(.plain(text: " - "))
+            if start.sura == end.sura {
+                parts.append(.ayahCoordinate(end))
+            } else {
+                parts.append(.ayah(end, emphasizesSura: false))
+            }
         }
 
         public mutating func appendInterpolation(

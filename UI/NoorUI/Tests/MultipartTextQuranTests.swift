@@ -38,12 +38,44 @@ final class MultipartTextQuranTests: XCTestCase {
         XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905} · ٢:٢٥٥")
     }
 
+    func test_singleAyahRange_usesStartReference() {
+        let text: MultipartText = "\(ayahRange: ayah ... ayah)"
+
+        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) \u{E905} · 2:255")
+    }
+
+    func test_sameSuraAyahRange_usesEndCoordinate() {
+        let end = sura.verses[255]
+        let text: MultipartText = "\(ayahRange: ayah ... end)"
+
+        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) \u{E905} · 2:255 - 2:256")
+        XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905} · ٢:٢٥٥ - ٢:٢٥٦")
+    }
+
+    func test_crossSuraAyahRange_usesBothReferences() {
+        let start = Quran.hafsMadani1405.suras[0].verses[6]
+        let end = Quran.hafsMadani1405.suras[1].verses[0]
+        let text: MultipartText = "\(ayahRange: start ... end)"
+
+        XCTAssertEqual(
+            text.rawValue(locale: english),
+            "\(start.sura.localizedName()) \u{E904} · 1:7 - \(end.sura.localizedName()) \u{E905} · 2:1"
+        )
+    }
+
     func test_references_useSemanticAccessibilityText() {
         let suraText: MultipartText = "\(sura: sura)"
         let ayahText: MultipartText = "\(ayah: ayah)"
 
         XCTAssertEqual(suraText.accessibilityText, sura.localizedName())
         XCTAssertEqual(ayahText.accessibilityText, ayah.localizedName)
+    }
+
+    func test_ayahRange_usesSemanticAccessibilityText() {
+        let end = sura.verses[255]
+        let text: MultipartText = "\(ayahRange: ayah ... end)"
+
+        XCTAssertEqual(text.accessibilityText, "\(ayah.localizedName) - \(end.localizedCoordinate())")
     }
 
     func test_quranText_preservesText() {

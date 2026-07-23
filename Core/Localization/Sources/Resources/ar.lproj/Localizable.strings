@@ -155,6 +155,7 @@
 "notes.no-data.title" = "إضافة آيات مرجعية...";
 "notes.no-data.text" = "اضغط مع الاستمرار على الآيات. يمكنك تمديد التحديد ليشمل عدة آيات ، ثم اضغط على زر الإشارة المرجعية.";
 "notes.verses-count" = "(+%d آيات)";
+"notes.new" = "ملاحظة جديدة";
 "notes.delete.alert.title" = "حذف الإشارة المرجعية";
 "notes.delete.alert.body" = "سيتم حذف الملاحظة أيضًا.";
 "notes.delete-note.alert.title" = "حذف الملاحظة";

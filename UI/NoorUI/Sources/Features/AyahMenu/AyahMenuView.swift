@@ -50,13 +50,13 @@ private struct AyahMenuViewList: View {
 
     var editNote: some View {
         Row(title: l("ayah.menu.edit-note"), action: dataObject.actions.addNote) {
-            noteIcon(legacySystemName: "text.bubble.fill")
+            noteIcon
         }
     }
 
     var addNote: some View {
         Row(title: l("ayah.menu.add-note"), action: dataObject.actions.addNote) {
-            noteIcon(legacySystemName: "plus.bubble.fill")
+            noteIcon
         }
     }
 
@@ -207,12 +207,12 @@ private struct AyahMenuViewList: View {
 
     #endif
 
-    private func noteIcon(legacySystemName: String) -> some View {
+    private var noteIcon: some View {
         Group {
             if dataObject.usesSyncedNotesIcon {
                 NoorSystemImage.note.image
             } else {
-                Image(systemName: legacySystemName)
+                NoorSystemImage.note.image
                     .foregroundColor(dataObject.highlightingColor.color)
             }
         }

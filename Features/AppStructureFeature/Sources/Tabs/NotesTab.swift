@@ -50,8 +50,8 @@ private class NotesTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
         UITabBarItem(
             title: l("tab.notes"),
-            image: .symbol("text.badge.star"),
-            selectedImage: .symbol("text.badge.star", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))
+            image: .symbol("text.justify.leading"),
+            selectedImage: .symbol("text.justify.leading", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))
         )
     }
 }

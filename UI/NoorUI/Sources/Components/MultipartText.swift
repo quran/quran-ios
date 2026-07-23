@@ -41,7 +41,7 @@ private struct TextPartView: View {
                 .font(size.plainFont)
         case .highlighting(let text, let ranges, let lineLimit):
             highlighting(text: text, ranges: ranges)
-                .lineLimit(lineLimit)
+                .optionalLineLimit(lineLimit)
                 .font(size.plainFont)
         case .sura(let sura):
             QuranReferenceView(reference: .sura(sura), size: size)
@@ -53,7 +53,7 @@ private struct TextPartView: View {
             )
         case .quran(let text, let color, let lineLimit):
             Text(text)
-                .lineLimit(lineLimit)
+                .optionalLineLimit(lineLimit)
                 .font(size.quranFont)
                 .padding(quranTextPadding)
                 .background(color)
@@ -79,6 +79,25 @@ private struct TextPartView: View {
             }
         }
         return Text(attributedString)
+    }
+}
+
+private struct OptionalLineLimitModifier: ViewModifier {
+    let lineLimit: Int?
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if let lineLimit {
+            content.lineLimit(lineLimit)
+        } else {
+            content
+        }
+    }
+}
+
+private extension View {
+    func optionalLineLimit(_ lineLimit: Int?) -> some View {
+        modifier(OptionalLineLimitModifier(lineLimit: lineLimit))
     }
 }
 

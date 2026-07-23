@@ -56,6 +56,9 @@ private struct NotesViewUI: View {
                 NoorList {
                     NoorSection(notes) { note in
                         listItem(note)
+                            .listRowInsets(.init(top: 6, leading: 0, bottom: 6, trailing: 0))
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
                     }
                     .onDelete(action: deleteAction)
                 }
@@ -93,25 +96,22 @@ private struct NotesViewUI: View {
         let ayah = note.startAyah
         let page = ayah.page
         #if QURAN_SYNC
-        let color = Color.clear
+        let noteColor: Color? = nil
         #else
-        let color = note.color.color.opacity(QuranHighlights.opacity)
+        let noteColor: Color? = note.color.color
         #endif
         let noteText = item.noteText.trimmingCharacters(in: .whitespacesAndNewlines)
-        return NoorListItem(
-            subheading: subheadingText(ayah: ayah, ayahCount: note.verses.count),
-            headerAccessory: .button(
-                image: .edit,
-                accessibilityLabel: l("ayah.menu.edit-note"),
-                action: { editAction(item) }
-            ),
-            rightPretitle: quranText(item, color: color),
-            title: titleText(for: noteText),
-            subtitle: .init(text: .text(note.modifiedDate.timeAgo()), location: .bottom),
-            accessory: .text(page.localizedNumber, accessibilityLabel: page.localizedName)
-        ) {
-            selectAction(item)
-        }
+        return NoteCard(
+            reference: subheadingText(ayah: ayah, ayahCount: note.verses.count),
+            location: "\(page.startJuz.localizedName) · \(page.localizedName)",
+            quranText: quranText(item),
+            noteText: noteText.isEmpty ? nil : titleText(for: noteText),
+            modifiedDate: note.modifiedDate.timeAgo(),
+            noteColor: noteColor,
+            editAccessibilityHint: l("ayah.menu.edit-note"),
+            selectAction: { selectAction(item) },
+            editAction: { editAction(item) }
+        )
     }
 
     private func highlightRanges(in text: String) -> [HighlightingRange] {
@@ -142,11 +142,11 @@ private struct NotesViewUI: View {
         }
     }
 
-    private func quranText(_ item: NoteItem, color: Color) -> MultipartText? {
+    private func quranText(_ item: NoteItem) -> MultipartText? {
         guard let text = item.quranText else {
             return nil
         }
-        return "\(quran: text, color: color, lineLimit: 2)"
+        return "\(quran: text, color: .clear, lineLimit: 2)"
     }
 }
 

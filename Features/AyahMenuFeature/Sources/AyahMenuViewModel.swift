@@ -27,7 +27,11 @@ public protocol AyahMenuListener: AnyObject {
 
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint)
     func showTranslation(_ verses: [AyahNumber])
+    #if QURAN_SYNC
+    func showNotes(for verses: [AyahNumber], addingNewNote: Bool) async
+    #else
     func showNoteEditor(for verses: [AyahNumber]) async
+    #endif
     func deleteNotes(in verses: [AyahNumber]) async
     #if QURAN_SYNC
     func showCollectionEditor(for verses: [AyahNumber])
@@ -227,8 +231,13 @@ final class AyahMenuViewModel {
     }
 
     func editNote() async {
+        #if QURAN_SYNC
+        logger.info("AyahMenu: show notes. Verses: \(deps.verses)")
+        await listener?.showNotes(for: deps.verses, addingNewNote: deps.notes.isEmpty)
+        #else
         logger.info("AyahMenu: edit notes. Verses: \(deps.verses)")
         await listener?.showNoteEditor(for: deps.verses)
+        #endif
     }
 
     func showTranslation() {

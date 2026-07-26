@@ -194,6 +194,7 @@
 "ayah.menu.highlight-select-color" = "select color";
 "ayah.menu.add-note" = "Add Note";
 "ayah.menu.edit-note" = "Edit Note";
+"ayah.menu.notes-count" = "Notes (%d)";
 "ayah.menu.delete-note" = "Delete Note";
 "ayah.menu.delete-highlight" = "Delete Highlight";
 "ayah.menu.reading-bookmark.title" = "Reading Bookmark";

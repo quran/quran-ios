@@ -181,6 +181,7 @@
 "ayah.menu.highlight-select-color" = "اختر لون";
 "ayah.menu.add-note" = "اضف ملاحظة";
 "ayah.menu.edit-note" = "تحرير الملاحظة";
+"ayah.menu.notes-count" = "الملاحظات (%d)";
 "ayah.menu.delete-note" = "حذف الملاحظة";
 "ayah.menu.delete-highlight" = "حذف التحديد";
 

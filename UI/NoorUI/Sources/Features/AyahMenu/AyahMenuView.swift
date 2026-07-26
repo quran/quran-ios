@@ -95,9 +95,15 @@ private struct AyahMenuViewList: View {
     }
 
     var editNote: some View {
+        #if QURAN_SYNC
+        Row(title: dataObject.notesTitle, action: dataObject.actions.addNote) {
+            noteIcon
+        }
+        #else
         Row(title: l("ayah.menu.edit-note"), action: dataObject.actions.addNote) {
             noteIcon
         }
+        #endif
     }
 
     var addNote: some View {
@@ -557,6 +563,7 @@ private func previewDataObject(
         highlightingColor: highlightingColor,
         state: state,
         bookmarkTitle: bookmarkTitle,
+        notesTitle: "Notes (3)",
         bookmarkState: bookmarkState,
         playSubtitle: "To the end of Juz'",
         repeatSubtitle: "selected verses",

@@ -35,9 +35,9 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
 
     @Published private(set) var collection: AyahBookmarkCollection
     @Published private(set) var ayahTexts: [AyahNumber: String] = [:]
+    @Published var collectionPendingDeletion: AyahBookmarkCollection?
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
-    @Published var isPresentingDeleteCollectionConfirmation = false
     @Published var isPresentingRenameCollection = false
     @Published var pendingCollectionName = ""
 
@@ -102,13 +102,13 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
             return
         }
         guard !collection.bookmarks.isEmpty else {
-            await deleteCollection()
+            await deleteCollection(collection)
             return
         }
-        isPresentingDeleteCollectionConfirmation = true
+        collectionPendingDeletion = collection
     }
 
-    func deleteCollection() async {
+    func deleteCollection(_ collection: AyahBookmarkCollection) async {
         guard collection.kind.canDelete else {
             return
         }

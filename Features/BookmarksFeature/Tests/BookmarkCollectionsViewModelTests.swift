@@ -341,13 +341,12 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let unchangedCollections = try await storedCollections()
         XCTAssertTrue(unchangedCollections.contains { $0.collection.id == collection.id })
 
-        await sut.deletePendingCollection()
+        await sut.deleteCollection(collection)
 
         let collectionsAfterConfirmation = try await storedCollections {
             !$0.contains { $0.collection.id == collection.id }
         }
         XCTAssertFalse(collectionsAfterConfirmation.contains { $0.collection.id == collection.id })
-        XCTAssertNil(sut.collectionPendingDeletion)
         XCTAssertNil(sut.error)
     }
 

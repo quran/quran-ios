@@ -29,8 +29,8 @@ struct AyahBookmarkCollectionsView: View {
             .task { await viewModel.start() }
             .renameCollectionAlert(viewModel: viewModel)
             .collectionDeleteConfirmation(
-                isPresented: $viewModel.isPresentingDeleteCollectionConfirmation,
-                delete: { await viewModel.deleteCollection() }
+                item: $viewModel.collectionPendingDeletion,
+                delete: { await viewModel.deleteCollection($0) }
             )
             .errorAlert(error: $viewModel.error)
             .environment(\.editMode, $viewModel.editMode)

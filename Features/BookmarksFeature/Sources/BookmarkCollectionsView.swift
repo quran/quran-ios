@@ -97,15 +97,8 @@ private struct BookmarkCollectionsContent: View {
         .task { await viewModel.start() }
         .addCollectionAlert(viewModel: viewModel)
         .collectionDeleteConfirmation(
-            isPresented: Binding(
-                get: { viewModel.collectionPendingDeletion != nil },
-                set: { isPresented in
-                    if !isPresented {
-                        viewModel.collectionPendingDeletion = nil
-                    }
-                }
-            ),
-            delete: { await viewModel.deletePendingCollection() }
+            item: $viewModel.collectionPendingDeletion,
+            delete: { await viewModel.deleteCollection($0) }
         )
         .errorAlert(error: $viewModel.error)
         .environment(\.editMode, $viewModel.editMode)

@@ -159,14 +159,6 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         collectionPendingDeletion = collection
     }
 
-    func deletePendingCollection() async {
-        guard let collection = collectionPendingDeletion else {
-            return
-        }
-        collectionPendingDeletion = nil
-        await deleteCollection(collection)
-    }
-
     func deleteCollection(_ collection: AyahBookmarkCollection) async {
         guard collection.kind.canDelete else {
             return

@@ -141,7 +141,7 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertEqual(stored.map(\.collection.name), ["Default"])
         XCTAssertTrue(stored[0].collection.isDefault)
         XCTAssertTrue(didDeleteCollection)
-        XCTAssertFalse(sut.isPresentingDeleteCollectionConfirmation)
+        XCTAssertNil(sut.collectionPendingDeletion)
         XCTAssertNil(sut.error)
     }
 
@@ -169,7 +169,7 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
 
         await sut.requestDeleteCollection()
 
-        XCTAssertTrue(sut.isPresentingDeleteCollectionConfirmation)
+        XCTAssertEqual(sut.collectionPendingDeletion?.id, collection.id)
         let unchangedCollections = try await storedCollections()
         XCTAssertTrue(unchangedCollections.contains { $0.collection.id == collection.id })
         XCTAssertFalse(didDeleteCollection)
@@ -189,7 +189,7 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         sut.pendingCollectionName = "Renamed"
 
         await sut.renamePendingCollection()
-        await sut.deleteCollection()
+        await sut.deleteCollection(collection)
 
         let storedCollection = try await firstCollection()
         XCTAssertEqual(storedCollection.collection.name, "Red")

@@ -122,7 +122,7 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
-    func test_deleteCollection_removesCollectionAndNotifiesListener() async throws {
+    func test_requestDeleteCollection_deletesEmptyCollectionAndNotifiesListener() async throws {
         let service = makeService()
         try await service.createCollection(named: "Favorites")
         let collection = try await firstCollection()
@@ -133,7 +133,7 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
             collectionDeleted: { didDeleteCollection = true }
         )
 
-        await sut.deleteCollection()
+        await sut.requestDeleteCollection()
 
         let stored = try await storedCollections {
             $0.count == 1 && $0[0].collection.isDefault
@@ -141,6 +141,38 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertEqual(stored.map(\.collection.name), ["Default"])
         XCTAssertTrue(stored[0].collection.isDefault)
         XCTAssertTrue(didDeleteCollection)
+        XCTAssertFalse(sut.isPresentingDeleteCollectionConfirmation)
+        XCTAssertNil(sut.error)
+    }
+
+    func test_requestDeleteCollection_requiresConfirmationForNonEmptyCollection() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Favorites")
+        let storedCollection = try await firstCollection()
+        try await service.addAyahBookmarkToCollection(
+            collectionId: storedCollection.collection.id,
+            ayah: AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
+        )
+        let stored = try await storedCollections {
+            $0.first { $0.collection.name == "Favorites" }?.bookmarks.count == 1
+        }
+        let collection = try XCTUnwrap(
+            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
+                .first { $0.collection.name == "Favorites" }
+        )
+        var didDeleteCollection = false
+        let sut = makeSUT(
+            collection: collection,
+            service: service,
+            collectionDeleted: { didDeleteCollection = true }
+        )
+
+        await sut.requestDeleteCollection()
+
+        XCTAssertTrue(sut.isPresentingDeleteCollectionConfirmation)
+        let unchangedCollections = try await storedCollections()
+        XCTAssertTrue(unchangedCollections.contains { $0.collection.id == collection.id })
+        XCTAssertFalse(didDeleteCollection)
         XCTAssertNil(sut.error)
     }
 

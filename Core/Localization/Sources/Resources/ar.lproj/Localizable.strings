@@ -131,6 +131,8 @@
 "bookmarks.collections.new" = "مجموعة جديدة...";
 "bookmarks.collections.new.placeholder" = "اسم المجموعة";
 "bookmarks.collections.rename" = "إعادة التسمية";
+"bookmarks.collections.delete.confirmation.title" = "هل تريد حذف المجموعة؟";
+"bookmarks.collections.delete.confirmation.message" = "تحتوي هذه المجموعة على إشارات مرجعية. هل أنت متأكد من رغبتك في حذفها؟";
 "bookmarks.collections.no-data.title" = "لا توجد مجموعات حتى الآن";
 "bookmarks.collections.no-data.text" = "أنشئ مجموعة لتنظيم الآيات حسب الموضوع أو الدعاء أو خطة الحفظ.";
 "bookmarks.collections.ayah-count" = "%d إشارات مرجعية للآيات";

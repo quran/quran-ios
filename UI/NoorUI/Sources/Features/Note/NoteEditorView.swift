@@ -6,10 +6,13 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
+import Localization
 import QuranAnnotations
+import QuranKit
 import SwiftUI
 import UIx
 
+@MainActor
 public struct NoteEditorView: View {
     // MARK: Lifecycle
 
@@ -17,7 +20,7 @@ public struct NoteEditorView: View {
         note: EditableNote,
         showsColors: Bool = true,
         done: @escaping () -> Void,
-        delete: @Sendable @escaping () async -> Void
+        delete: @escaping AsyncAction
     ) {
         _note = StateObject(wrappedValue: note)
         self.showsColors = showsColors
@@ -28,59 +31,64 @@ public struct NoteEditorView: View {
     // MARK: Public
 
     public var body: some View {
-        VStack {
-            ZStack(alignment: .leading) {
-                HStack {
-                    Spacer()
-                    if showsColors {
-                        ForEach(HighlightColor.sortedColors, id: \.self) { color in
-                            Button(
-                                action: { note.selectedColor = color },
-                                label: { NoteCircle(color: color.color, selected: color == note.selectedColor) }
-                            )
-                        }
-                    }
-                    Spacer()
-                }
+        NoteEditorContent(
+            note: note,
+            showsColors: showsColors,
+            delete: delete
+        )
+        .populateThemeStyle()
+    }
 
-                Button(action: {
-                    Task {
-                        await delete()
-                    }
-                }, label: {
-                    Image(systemName: "trash")
-                        .foregroundColor(Color.red)
-                        .padding()
-                        .background(
-                            Circle()
-                                .fill(Color.systemBackground)
-                                .shadow(color: Color.primary.opacity(0.5), radius: 1)
-                        )
-                })
-            }
-            HStack {
-                Spacer()
-                Text(note.ayahText)
-                    .lineLimit(3)
-                    .font(.quran(ofSize: .small))
-                    .padding(.leading)
-                    .overlay(HStack {
-                        if showsColors {
-                            Rectangle().fill(note.selectedColor.color)
-                                .frame(width: 4)
-                        }
-                        Spacer()
-                    })
-                    .environment(\.layoutDirection, .rightToLeft)
+    // MARK: Internal
+
+    @StateObject var note: EditableNote
+
+    let showsColors: Bool
+    let done: () -> Void
+    let delete: AsyncAction
+}
+
+@MainActor
+private struct NoteEditorContent: View {
+    @ObservedObject var note: EditableNote
+
+    let showsColors: Bool
+    let delete: AsyncAction
+
+    @Environment(\.locale) private var locale
+    @Environment(\.themeStyle) private var themeStyle
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @ScaledMetric private var highlightSpacing = 12.0
+
+    var body: some View {
+        VStack(spacing: 0) {
+            if verticalSizeClass != .compact && !showsColors {
+                quranDivider
+                quranText
             }
 
-            TextView($note.note, editing: $note.editing)
-                .font(.headline)
-                .multilineTextAlignment(.leading)
-                .frame(maxHeight: .infinity)
-                .onTapGesture { } // to prevent from tapping text view dismissing the keyboard
+            if showsColors {
+                highlightPicker
+            }
+
+            if verticalSizeClass != .compact {
+                noteDivider
+            }
+
+            TextView(
+                $note.note,
+                editing: $note.editing,
+                textColor: themeStyle.textColor
+            )
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding()
+            .onTapGesture { } // Prevent the parent tap gesture from dismissing the keyboard.
         }
-        .padding()
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            footer
+        }
+        .foregroundColor(Color(themeStyle.textColor))
+        .background(Color(themeStyle.backgroundColor).ignoresSafeArea())
         .contentShape(Rectangle())
         .onTapGesture {
             note.editing = false
@@ -90,38 +98,132 @@ public struct NoteEditorView: View {
         }
     }
 
-    // MARK: Internal
+    private var quranText: some View {
+        let text: MultipartText = "\(quran: note.ayahText, color: .clear, lineLimit: 2)"
+        return text
+            .view(ofSize: .footnote, alignment: .trailing)
+            .foregroundColor(.secondaryLabel)
+            .environment(\.layoutDirection, .rightToLeft)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding()
+    }
 
-    @StateObject var note: EditableNote
-
-    let showsColors: Bool
-    let done: () -> Void
-    let delete: @Sendable () async -> Void
-}
-
-struct NoteEditorView_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            NoteEditorView(
-                note: EditableNote(
-                    ayahText: "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ",
-                    modifiedSince: "3 hours ago",
-                    selectedColor: .blue,
-                    note: "A good note! What about a very very very long note where it will reach today is Sunday 1st of Jan today"
-                ),
-                done: {},
-                delete: {}
-            )
-            NoteEditorView(
-                note: EditableNote(
-                    ayahText: "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ",
-                    modifiedSince: "10 seconds ago",
-                    selectedColor: .blue,
-                    note: "A good note!"
-                ),
-                done: {},
-                delete: {}
-            )
+    private var quranDivider: some View {
+        sectionDivider {
+            Text("✳︎")
+                .font(.title3)
+                .foregroundColor(Color(themeStyle.pageSeparatorLine))
+                .accessibilityHidden(true)
         }
     }
+
+    private var noteDivider: some View {
+        sectionDivider {
+            Text(l("notes.editor.note-divider"))
+                .font(.footnote)
+                .tracking(locale.isArabicLanguage ? 0 : 3)
+                .foregroundColor(Color(themeStyle.secondaryTextColor))
+                .lineLimit(1)
+        }
+    }
+
+    private var highlightPicker: some View {
+        HStack(spacing: highlightSpacing) {
+            ForEach(HighlightColor.sortedColors, id: \.self) { color in
+                Button {
+                    note.selectedColor = color
+                } label: {
+                    NoteCircle(color: color.color, selected: color == note.selectedColor)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top)
+        .padding(.bottom, verticalSizeClass == .compact ? 0 : nil)
+    }
+
+    private var footer: some View {
+        HStack(alignment: .firstTextBaseline) {
+            metadata
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
+
+            Spacer()
+
+            AsyncButton(action: delete) {
+                Text(l("notes.editor.delete"))
+                    .foregroundColor(.red)
+            }
+        }
+        .font(.footnote)
+        .padding()
+        .background(Color(themeStyle.backgroundColor))
+        .overlay(alignment: .top) {
+            thinDivider
+        }
+    }
+
+    private var metadata: some View {
+        HStack(spacing: 4) {
+            if !note.modifiedSince.isEmpty {
+                Text(lFormat("notes.editor.created", note.modifiedSince))
+                Text("·")
+                    .accessibilityHidden(true)
+            }
+            Text(lFormat("notes.editor.words-count", note.wordCount))
+        }
+        .foregroundColor(Color(themeStyle.secondaryTextColor))
+        .accessibilityElement(children: .combine)
+    }
+
+    private var thinDivider: some View {
+        Divider()
+            .overlay(Color(themeStyle.secondaryTextColor).opacity(0.2))
+    }
+
+    private var dividerLine: some View {
+        Rectangle()
+            .fill(Color(themeStyle.pageSeparatorLine))
+            .frame(height: 1)
+    }
+
+    private func sectionDivider(
+        @ViewBuilder label: () -> some View
+    ) -> some View {
+        HStack(spacing: 16) {
+            dividerLine
+            label()
+            dividerLine
+        }
+        .padding(.horizontal)
+    }
+}
+
+@MainActor
+private struct NoteEditorPreview: View {
+    let showsColors: Bool
+
+    var body: some View {
+        let verses = Quran.hafsMadani1405.suras[15].verses
+        NoteEditorView(
+            note: EditableNote(
+                ayahRange: verses[34] ... verses[35],
+                ayahText: "وَقَالَ ٱلَّذِينَ أَشْرَكُوا۟ لَوْ شَآءَ ٱللَّهُ مَا عَبَدْنَا مِن دُونِهِۦ مِن شَىْءٍ نَّحْنُ وَلَآ ءَابَآؤُنَا",
+                modifiedSince: "2 hours ago",
+                selectedColor: .blue,
+                note: "The “if Allah willed” excuse — the same argument every nation made. Cross-ref 6:148."
+            ),
+            showsColors: showsColors,
+            done: {},
+            delete: {}
+        )
+    }
+}
+
+#Preview("Synced note") {
+    NoteEditorPreview(showsColors: false)
+}
+
+#Preview("Legacy note") {
+    NoteEditorPreview(showsColors: true)
 }

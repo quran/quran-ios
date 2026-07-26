@@ -97,8 +97,12 @@ final class NoteEditorViewModel {
     func fetchNote() async throws -> EditableNote {
         do {
             let versesText = try await getTextForVerses(verses)
+            guard let versesRange else {
+                throw NoteEditorError.noVerses
+            }
             logger.info("NoteEditor: note loaded")
             let editableNote = EditableNote(
+                ayahRange: versesRange.start ... versesRange.end,
                 ayahText: versesText,
                 modifiedSince: modifiedSince,
                 selectedColor: selectedColor,
@@ -274,3 +278,7 @@ protocol NoteEditorLegacyServicing {
 
 extension NoteService: NoteEditorLegacyServicing {}
 #endif
+
+private enum NoteEditorError: Error {
+    case noVerses
+}

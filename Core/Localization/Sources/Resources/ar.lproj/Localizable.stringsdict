@@ -50,5 +50,29 @@
             <string>حفظ الآيات...</string>
         </dict>
     </dict>
+    <key>notes.editor.words-count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@words@</string>
+        <key>words</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>لا توجد كلمات</string>
+            <key>one</key>
+            <string>كلمة واحدة</string>
+            <key>two</key>
+            <string>كلمتان</string>
+            <key>few</key>
+            <string>%d كلمات</string>
+            <key>many</key>
+            <string>%d كلمة</string>
+            <key>other</key>
+            <string>%d كلمة</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

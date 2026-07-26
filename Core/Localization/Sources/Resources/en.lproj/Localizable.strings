@@ -173,6 +173,9 @@
 "notes.delete.alert.body" = "The associated note will also be deleted.";
 "notes.delete-note.alert.title" = "Delete Note";
 "notes.delete-note.alert.body" = "This note will be deleted.";
+"notes.editor.created" = "Created %@";
+"notes.editor.delete" = "Delete note";
+"notes.editor.note-divider" = "YOUR NOTE";
 "notes.icloud.alert.title" = "iCloud Sync";
 "notes.icloud.alert.body" = "The app uses iCloud to sync bookmarks & notes across your devices. You can disable it from your device's iCloud settings.";
 "notes.search.placeholder.text" = "Search your notes";

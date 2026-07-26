@@ -81,15 +81,30 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
     }
 
     private func buildNavigationController(rootViewController: UIViewController, note: EditableNote) -> UINavigationController {
-        let modifiedText = UIBarButtonItem(title: note.modifiedSince, style: .plain, target: nil, action: nil)
-        modifiedText.isEnabled = false
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
 
+        let title: MultipartText = "\(ayahRange: note.ayahRange)"
+        let titleLabel = UILabel()
+        titleLabel.attributedText = title.attributedString(ofSize: .body)
+        titleLabel.accessibilityLabel = title.accessibilityText
+        titleLabel.adjustsFontForContentSizeCategory = true
+
         rootViewController.navigationItem.largeTitleDisplayMode = .never
-        rootViewController.navigationItem.leftBarButtonItem = modifiedText
+        rootViewController.navigationItem.titleView = titleLabel
         rootViewController.navigationItem.rightBarButtonItem = doneButton
 
         let navigationController = UINavigationController(rootViewController: rootViewController)
+        let themeStyle = ThemeService.shared.themeStyle
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = themeStyle.backgroundColor
+        appearance.shadowColor = .clear
+
+        navigationController.navigationBar.standardAppearance = appearance
+        navigationController.navigationBar.scrollEdgeAppearance = appearance
+        navigationController.navigationBar.compactAppearance = appearance
+        navigationController.navigationBar.tintColor = .appIdentity
+        navigationController.view.backgroundColor = themeStyle.backgroundColor
         return navigationController
     }
 

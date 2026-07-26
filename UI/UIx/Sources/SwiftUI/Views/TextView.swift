@@ -1,14 +1,22 @@
 // Copied from https://gist.github.com/shaps80/8a3170160f80cfdc6e8179fa0f5e1621
 
 import SwiftUI
+import UIKit
 
 // TODO: Use SwiftUI.TextEditor
 public struct TextView: View {
     // MARK: Lifecycle
 
-    public init(_ text: Binding<String>, editing: Binding<Bool>) {
+    public init(
+        _ text: Binding<String>,
+        editing: Binding<Bool>,
+        font: UIFont = .preferredFont(forTextStyle: .body),
+        textColor: UIColor = .label
+    ) {
         _text = text
         _editing = editing
+        self.font = font
+        self.textColor = textColor
     }
 
     // MARK: Public
@@ -17,7 +25,8 @@ public struct TextView: View {
         SwiftUITextView(
             text: $text,
             editing: $editing,
-            font: font
+            font: font,
+            textColor: textColor
         )
     }
 
@@ -29,6 +38,7 @@ public struct TextView: View {
     // MARK: Private
 
     private var font: UIFont = .preferredFont(forTextStyle: .body)
+    private var textColor: UIColor = .label
 }
 
 extension TextView {
@@ -71,6 +81,7 @@ private struct SwiftUITextView: UIViewRepresentable {
     @Binding var text: String
     @Binding var editing: Bool
     let font: UIFont
+    let textColor: UIColor
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -80,6 +91,7 @@ private struct SwiftUITextView: UIViewRepresentable {
         let textView = UITextView()
         textView.delegate = context.coordinator
         textView.font = font
+        textView.textColor = textColor
         textView.adjustsFontForContentSizeCategory = true
         textView.backgroundColor = .clear
         return textView
@@ -87,6 +99,8 @@ private struct SwiftUITextView: UIViewRepresentable {
 
     func updateUIView(_ textView: UITextView, context: Context) {
         textView.text = text
+        textView.font = font
+        textView.textColor = textColor
         // move it to the next run loop to fix an iOS 13 issue
         DispatchQueue.main.async {
             if editing {
@@ -99,10 +113,10 @@ private struct SwiftUITextView: UIViewRepresentable {
 }
 
 // swiftlint:disable line_length
-struct TextView_Previews: PreviewProvider {
-    @State static var editing: Bool = true
+private struct TextViewPreview: View {
+    @State private var editing = true
 
-    static var previews: some View {
+    var body: some View {
         VStack {
             TextView(
                 .constant("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."),
@@ -114,6 +128,10 @@ struct TextView_Previews: PreviewProvider {
         }
         .previewLayout(.sizeThatFits)
     }
+}
+
+#Preview {
+    TextViewPreview()
 }
 
 // swiftlint:enable line_length

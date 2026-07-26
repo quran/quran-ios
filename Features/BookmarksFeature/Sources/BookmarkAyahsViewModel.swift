@@ -6,7 +6,6 @@
 import AnnotationsService
 import Combine
 import Foundation
-import Localization
 import QuranAnnotations
 import QuranKit
 import VLogging
@@ -48,9 +47,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
     @Published var isPresentingAddCollection = false
     @Published var newCollectionName = ""
 
-    var title: String {
-        lFormat("bookmarks.editor.title", verses.count)
-    }
+    let verses: [AyahNumber]
 
     var displayedCollections: [AyahBookmarkCollection] {
         BookmarkCollectionsViewModel.displayedCollections(from: collections)
@@ -173,7 +170,6 @@ final class BookmarkAyahsViewModel: ObservableObject {
 
     // MARK: Private
 
-    private let verses: [AyahNumber]
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
 
     private func updateCollections(_ collections: [AyahBookmarkCollection]) {

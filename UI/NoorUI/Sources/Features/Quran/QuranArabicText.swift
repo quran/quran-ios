@@ -33,8 +33,7 @@ public struct QuranArabicText: View {
                 .themedSecondaryBackground()
                 .cornerRadius(cornerRadius)
 
-            Text(text)
-                .font(.quran())
+            QuranText(text)
                 .dynamicTypeSize(fontSize.dynamicTypeSize)
                 .textAlignment(follows: .rightToLeft)
         }

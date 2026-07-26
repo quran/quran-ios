@@ -58,9 +58,8 @@ private struct TextPartView: View {
                 .font(size.plainFont)
                 .environment(\.layoutDirection, .leftToRight)
         case .quran(let text, let color, let lineLimit):
-            Text(text)
+            QuranText(text, font: size.quranFont)
                 .optionalLineLimit(lineLimit)
-                .font(size.quranFont)
                 .padding(quranTextPadding)
                 .background(color)
         }

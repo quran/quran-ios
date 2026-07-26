@@ -19,15 +19,18 @@
 //
 
 import QuranKit
+import QuranText
 
 public protocol SearchableTextPersistence {
     func autocomplete(term: String) async throws -> [String]
     func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)]
 }
 
-public protocol VerseTextPersistence: SearchableTextPersistence {
-    func textForVerse(_ verse: AyahNumber) async throws -> String
-    func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String]
+public protocol VerseTextPersistence {
+    func textForVerse(_ verse: AyahNumber) async throws -> QuranText
+    func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: QuranText]
+    func autocomplete(term: String) async throws -> [QuranText]
+    func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: QuranText)]
 }
 
 public enum TranslationTextPersistenceModel: Equatable {

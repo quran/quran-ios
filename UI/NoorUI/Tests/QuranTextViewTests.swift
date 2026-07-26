@@ -1,5 +1,5 @@
 //
-//  QuranTextTests.swift
+//  QuranTextViewTests.swift
 //
 //
 //  Created by Mohamed Afifi on 2026-07-26.
@@ -11,12 +11,12 @@ import UIKit
 import XCTest
 @testable import NoorUI
 
-final class QuranTextTests: XCTestCase {
+final class QuranTextViewTests: XCTestCase {
     func test_view_fontCannotBeOverriddenByInheritedFont() async {
         let sizes = await MainActor.run {
-            let expected = fittingSize(QuranText("Quran text"))
+            let expected = fittingSize(QuranTextView("Quran text"))
             let inherited = fittingSize(
-                QuranText("Quran text")
+                QuranTextView("Quran text")
                     .font(.system(size: 100))
             )
             return (expected, inherited)

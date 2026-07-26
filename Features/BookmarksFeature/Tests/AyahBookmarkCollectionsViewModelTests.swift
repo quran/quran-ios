@@ -61,14 +61,14 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         let sut = makeSUT(collection: collection, service: service)
         let retrieved = expectation(description: "Retrieves Arabic text")
         let observation = sut.$ayahTexts
-            .filter { $0[ayah]?.isEmpty == false }
+            .filter { $0[ayah]?.text.isEmpty == false }
             .prefix(1)
             .sink { _ in retrieved.fulfill() }
 
         let task = Task { await sut.start() }
         await fulfillment(of: [retrieved], timeout: 2)
 
-        XCTAssertFalse(try XCTUnwrap(sut.ayahTexts[ayah]).isEmpty)
+        XCTAssertFalse(try XCTUnwrap(sut.ayahTexts[ayah]).text.isEmpty)
         XCTAssertNil(sut.error)
         task.cancel()
         observation.cancel()

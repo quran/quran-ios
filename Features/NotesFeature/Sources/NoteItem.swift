@@ -8,10 +8,11 @@
 
 import Foundation
 import QuranAnnotations
+import QuranText
 
 struct NoteItem: Equatable, Identifiable {
     let note: Note
-    let quranText: String?
+    let quranText: QuranText?
 
     var id: String {
         #if QURAN_SYNC

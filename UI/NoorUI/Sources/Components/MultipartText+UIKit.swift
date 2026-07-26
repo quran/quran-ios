@@ -4,6 +4,7 @@
 
 import Foundation
 import Localization
+import QuranText
 import SwiftUI
 import UIKit
 
@@ -37,11 +38,8 @@ private extension TextPart {
                 string: ayah.localizedCoordinate(locale: locale),
                 attributes: [.font: size.plainUIFont]
             )
-        case .quran(let text, let color, _):
-            NSAttributedString(string: text, attributes: [
-                .backgroundColor: UIColor(color),
-                .font: size.quranUIFont,
-            ])
+        case .quran(let text, let color, _, let highlighting):
+            highlightedQuranAttributedString(text: text, ranges: highlighting, color: color, size: size)
         }
     }
 
@@ -58,6 +56,28 @@ private extension TextPart {
             }
             if highlight.fontWeight != nil {
                 result.addAttribute(.font, value: size.plainUIFont(emphasized: true), range: range)
+            }
+        }
+        return result
+    }
+
+    func highlightedQuranAttributedString(
+        text: QuranText,
+        ranges: [HighlightingRange],
+        color: Color,
+        size: MultipartText.FontSize
+    ) -> NSAttributedString {
+        let result = NSMutableAttributedString(string: text.text, attributes: [
+            .backgroundColor: UIColor(color),
+            .font: size.quranUIFont,
+        ])
+        for highlight in ranges {
+            let range = NSRange(highlight.range, in: text.text)
+            if let foregroundColor = highlight.foregroundColor {
+                result.addAttribute(.foregroundColor, value: UIColor(foregroundColor), range: range)
+            }
+            if highlight.fontWeight != nil {
+                result.addAttribute(.font, value: size.quranUIFont(emphasized: true), range: range)
             }
         }
         return result

@@ -6,10 +6,11 @@
 //
 
 import QuranKit
+import QuranText
 
 struct QuarterItem: Identifiable {
     let quarter: Quarter
-    let ayahText: String
+    let ayahText: QuranText
 
     var id: Quarter { quarter }
 }

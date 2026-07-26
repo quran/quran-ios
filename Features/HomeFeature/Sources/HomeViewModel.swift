@@ -230,7 +230,7 @@ final class HomeViewModel: ObservableObject {
 
     private func textForQuarters(
         _ quarters: [Quarter]
-    ) async -> [Quarter: String] {
+    ) async -> [Quarter: QuranText] {
         do {
             let verses = Array(quarters.map(\.firstVerse))
             let verseTexts = try await textRetriever.textForVerses(verses, translations: [])
@@ -241,10 +241,12 @@ final class HomeViewModel: ObservableObject {
         }
     }
 
-    private func cleanUpText(quarters: [Quarter], verseTexts: [AyahNumber: VerseText]) -> [Quarter: String] {
+    private func cleanUpText(quarters: [Quarter], verseTexts: [AyahNumber: VerseText]) -> [Quarter: QuranText] {
         let quarterStart = "۞" // Hizb marker
-        let cleanedVersesText = verseTexts.mapValues { $0.arabicText.replacingOccurrences(of: quarterStart, with: "") }
-        return quarters.reduce(into: [Quarter: String]()) { partialResult, quarter in
+        let cleanedVersesText = verseTexts.mapValues {
+            QuranText($0.arabicText.text.replacingOccurrences(of: quarterStart, with: ""))
+        }
+        return quarters.reduce(into: [Quarter: QuranText]()) { partialResult, quarter in
             partialResult[quarter] = cleanedVersesText[quarter.firstVerse]
         }
     }

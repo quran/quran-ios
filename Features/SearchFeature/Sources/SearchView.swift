@@ -41,7 +41,7 @@ private struct SearchViewUI: View {
     let term: String
     let recents: [String]
     let populars: [String]
-    let autocompletions: [String]
+    let autocompletions: [SearchText]
 
     let start: AsyncAction
     let search: AsyncItemAction<String>
@@ -87,7 +87,7 @@ private struct SearchViewUI: View {
                     image: .init(.search),
                     title: autocompletionText(of: item.value)
                 ) {
-                    await search(item.value)
+                    await search(item.value.text)
                 }
             }
         }
@@ -151,15 +151,25 @@ private struct SearchViewUI: View {
         }
     }
 
-    func autocompletionText(of item: String) -> MultipartText {
-        let ranges = [item.range(of: term, options: .caseInsensitive)].compactMap { $0 }
+    func autocompletionText(of item: SearchText) -> MultipartText {
+        let ranges = [item.text.range(of: term, options: .caseInsensitive)].compactMap { $0 }
         let highlightRanges = ranges.map { HighlightingRange($0, foregroundColor: .secondaryLabel) }
-        return "\(item, lineLimit: 1, highlighting: highlightRanges)"
+        switch item {
+        case .plain(let text):
+            return "\(text, lineLimit: 1, highlighting: highlightRanges)"
+        case .quran(let text):
+            return "\(quran: text, lineLimit: 1, highlighting: highlightRanges)"
+        }
     }
 
     func searchResultText(of item: SearchResult) -> MultipartText {
         let highlightRanges = item.ranges.map { HighlightingRange($0, fontWeight: .heavy) }
-        return "\(item.text, highlighting: highlightRanges)"
+        switch item.text {
+        case .plain(let text):
+            return "\(text, highlighting: highlightRanges)"
+        case .quran(let text):
+            return "\(quran: text, highlighting: highlightRanges)"
+        }
     }
 }
 
@@ -195,7 +205,7 @@ struct SearchView_Previews: PreviewProvider {
         @State var uiState = SearchUIState.search("abc")
         @State var searchState = SearchState.searching
         @State var error: Error?
-        @State var autocompletions: [String] = []
+        @State var autocompletions: [SearchText] = []
 
         var body: some View {
             NavigationView {
@@ -221,7 +231,10 @@ struct SearchView_Previews: PreviewProvider {
                             }
                             Button("Autocomplete") {
                                 uiState = .entry
-                                autocompletions = [Self.englishText, Self.arabicText]
+                                autocompletions = [
+                                    .plain(Self.englishText),
+                                    .quran(QuranText(Self.arabicText)),
+                                ]
                             }
                             Button("Search") {
                                 uiState = .search("abc")

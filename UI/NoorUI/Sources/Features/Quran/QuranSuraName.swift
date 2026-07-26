@@ -14,10 +14,10 @@ public struct QuranSuraName: View {
     @ScaledMetric var topPadding = 10
 
     let sura: Sura
-    let besmAllah: String
+    let besmAllah: QuranText
     let besmAllahFontSize: FontSize
 
-    public init(sura: Sura, besmAllah: String, besmAllahFontSize: FontSize) {
+    public init(sura: Sura, besmAllah: QuranText, besmAllahFontSize: FontSize) {
         self.sura = sura
         self.besmAllah = besmAllah
         self.besmAllahFontSize = besmAllahFontSize
@@ -33,7 +33,7 @@ public struct QuranSuraName: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.3)
                 }
-            QuranText(besmAllah)
+            QuranTextView(besmAllah)
                 .dynamicTypeSize(besmAllahFontSize.dynamicTypeSize)
         }
         .padding(.bottom, bottomPadding)

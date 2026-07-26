@@ -92,7 +92,31 @@ struct SearchTerm {
         )
     }
 
-    func buildAutocompletions(searchResults: [String]) -> [String] {
+    func buildAutocompletions(searchResults: [String]) -> [SearchText] {
+        buildAutocompleteStrings(searchResults: searchResults).map(SearchText.plain)
+    }
+
+    func buildAutocompletions(searchResults: [QuranText]) -> [SearchText] {
+        buildAutocompleteStrings(searchResults: searchResults.map(\.text))
+            .map { .quran(QuranText($0)) }
+    }
+
+    func buildSearchResults(verses: [(verse: AyahNumber, text: String)]) -> [SearchResult] {
+        buildSearchResults(verses: verses) { .plain($0) }
+    }
+
+    func buildSearchResults(verses: [(verse: AyahNumber, text: QuranText)]) -> [SearchResult] {
+        buildSearchResults(
+            verses: verses.map { (verse: $0.verse, text: $0.text.text) },
+            transform: { .quran(QuranText($0)) }
+        )
+    }
+
+    // MARK: Private
+
+    private var queryRegex: NSRegularExpression
+
+    private func buildAutocompleteStrings(searchResults: [String]) -> [String] {
         var result: [String] = []
         var added: Set<String> = []
         for searchResult in searchResults {
@@ -118,13 +142,16 @@ struct SearchTerm {
         return result
     }
 
-    func buildSearchResults(verses: [(verse: AyahNumber, text: String)]) -> [SearchResult] {
+    private func buildSearchResults(
+        verses: [(verse: AyahNumber, text: String)],
+        transform: (String) -> SearchText
+    ) -> [SearchResult] {
         var results: [SearchResult] = []
         for verse in verses {
             for text in [verse.text, verse.text.decomposedStringWithCompatibilityMapping] {
                 let ranges = text.split(separatedBy: queryRegex)
                 if !ranges.isEmpty {
-                    let result = SearchResult(text: text, ranges: ranges, ayah: verse.verse)
+                    let result = SearchResult(text: transform(text), ranges: ranges, ayah: verse.verse)
                     results.append(result)
                     break
                 }
@@ -132,10 +159,6 @@ struct SearchTerm {
         }
         return results
     }
-
-    // MARK: Private
-
-    private var queryRegex: NSRegularExpression
 }
 
 extension String {

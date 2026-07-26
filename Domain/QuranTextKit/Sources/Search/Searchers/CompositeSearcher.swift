@@ -21,7 +21,7 @@ public struct CompositeSearcher {
         versePersistenceBuilder: @escaping (Translation) -> TranslationVerseTextPersistence
     ) {
         let numberSearcher = NumberSearcher(quranVerseTextPersistence: quranVerseTextPersistence)
-        let quranSearcher = PersistenceSearcher(versePersistence: quranVerseTextPersistence, source: .quran)
+        let quranSearcher = QuranPersistenceSearcher(versePersistence: quranVerseTextPersistence)
         let suraSearcher = SuraSearcher()
         let translationSearcher = TranslationSearcher(
             localTranslationRetriever: localTranslationRetriever,
@@ -47,7 +47,7 @@ public struct CompositeSearcher {
 
     // MARK: Public
 
-    public func autocomplete(term: String, quran: Quran) async -> [String] {
+    public func autocomplete(term: String, quran: Quran) async -> [SearchText] {
         guard let term = SearchTerm(term) else {
             return []
         }
@@ -61,8 +61,8 @@ public struct CompositeSearcher {
         if shouldPerformTranslationSearch(simpleSearchResults: results, term: term.compactQuery) {
             results += (try? await translationsSearcher.autocomplete(term: term, quran: quran)) ?? []
         }
-        if !results.contains(term.compactQuery) {
-            results.insert(term.compactQuery, at: 0)
+        if !results.contains(where: { $0.text == term.compactQuery }) {
+            results.insert(.plain(term.compactQuery), at: 0)
         }
         return results.orderedUnique()
     }

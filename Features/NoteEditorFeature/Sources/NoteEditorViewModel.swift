@@ -13,6 +13,7 @@ import Foundation
 import NoorUI
 import QuranAnnotations
 import QuranKit
+import QuranText
 import QuranTextKit
 import VLogging
 
@@ -265,7 +266,7 @@ final class NoteEditorViewModel {
         #endif
     }
 
-    private func getTextForVerses(_ verses: [AyahNumber]) async throws -> String {
+    private func getTextForVerses(_ verses: [AyahNumber]) async throws -> QuranText {
         try await textService.numberedArabicText(for: verses)
     }
 }

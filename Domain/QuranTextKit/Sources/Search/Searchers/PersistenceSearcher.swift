@@ -13,7 +13,7 @@ struct PersistenceSearcher: Searcher {
     let versePersistence: SearchableTextPersistence
     let source: SearchResults.Source
 
-    func autocomplete(term: SearchTerm, quran: Quran) async throws -> [String] {
+    func autocomplete(term: SearchTerm, quran: Quran) async throws -> [SearchText] {
         let matches = try await versePersistence.autocomplete(term: term.persistenceQuery)
         return term.buildAutocompletions(searchResults: matches)
     }
@@ -29,5 +29,24 @@ struct PersistenceSearcher: Searcher {
         // Use the passed in term to match the original letters not underscoes.
         let items = term.buildSearchResults(verses: matches)
         return [SearchResults(source: source, items: items)]
+    }
+}
+
+struct QuranPersistenceSearcher: Searcher {
+    let versePersistence: VerseTextPersistence
+
+    func autocomplete(term: SearchTerm, quran: Quran) async throws -> [SearchText] {
+        let matches = try await versePersistence.autocomplete(term: term.persistenceQuery)
+        return term.buildAutocompletions(searchResults: matches)
+    }
+
+    func search(for term: SearchTerm, quran: Quran) async throws -> [SearchResults] {
+        let persistenceSearchTerm = term.persistenceQueryReplacingArabicSimilarityCharactersWithUnderscore()
+        if persistenceSearchTerm.isEmpty {
+            return []
+        }
+        let matches = try await versePersistence.search(for: persistenceSearchTerm, quran: quran)
+        let items = term.buildSearchResults(verses: matches)
+        return [SearchResults(source: .quran, items: items)]
     }
 }

@@ -64,6 +64,15 @@ final class QuranTextDataServiceTests: XCTestCase {
         }
     }
 
+    func testArabicPersistenceReturnsQuranText() async throws {
+        let verse = quran.firstVerse
+        let persistence = GRDBQuranVerseTextPersistence(mode: .arabic, fileURL: TestData.quranTextURL)
+
+        let text: QuranText = try await persistence.textForVerse(verse)
+
+        XCTAssertEqual(text, TestData.quranTextAt(verse))
+    }
+
     func testWithTranslations() async throws {
         let tests = [
             [quran.suras[0].verses[1]],
@@ -129,14 +138,14 @@ final class QuranTextDataServiceTests: XCTestCase {
 
         XCTAssertEqual(
             text,
-            "\(TestData.quranTextAt(first)) ١ \(TestData.quranTextAt(second)) ٢"
+            QuranText("\(TestData.quranTextAt(first)) ١ \(TestData.quranTextAt(second)) ٢")
         )
     }
 
     func testNumberedArabicTextReturnsEmptyTextForEmptyVerses() async throws {
         let text = try await textService.numberedArabicText(for: [])
 
-        XCTAssertEqual(text, "")
+        XCTAssertEqual(text, QuranText(""))
     }
 
     // MARK: Private

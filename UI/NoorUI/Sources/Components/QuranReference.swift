@@ -190,6 +190,15 @@ extension MultipartText.FontSize {
         return UIFont.systemFont(ofSize: plainUIFont.pointSize, weight: .heavy)
     }
 
+    func quranUIFont(emphasized: Bool) -> UIFont {
+        guard emphasized,
+              let descriptor = quranUIFont.fontDescriptor.withSymbolicTraits(.traitBold)
+        else {
+            return quranUIFont
+        }
+        return UIFont(descriptor: descriptor, size: quranUIFont.pointSize)
+    }
+
     private var uiTextStyle: UIFont.TextStyle {
         switch self {
         case .title3: .title3

@@ -77,7 +77,8 @@ public struct ShareableVerseTextRetriever {
         let rightToLeftMark = "\u{202B}"
         let endMark = "\u{202C}"
 
-        let arabicVerse = try await shareableVersePersistence.textForVerse(verse) + "﴿ \(verseNumber) ﴾"
+        let quranText = try await shareableVersePersistence.textForVerse(verse)
+        let arabicVerse = quranText.text + "﴿ \(verseNumber) ﴾"
 
         return "\(rightToLeftMark)\(arabicVerse)\(endMark)"
     }

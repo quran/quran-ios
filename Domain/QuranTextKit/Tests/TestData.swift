@@ -23,8 +23,8 @@ enum TestData {
 
     static let quranTextURL = QuranResources.quranUthmaniV2Database
 
-    static func quranTextAt(_ verse: AyahNumber) -> String {
-        quranText[verse] ?? "Not added to TestData.swift"
+    static func quranTextAt(_ verse: AyahNumber) -> QuranText {
+        QuranText(quranText[verse] ?? "Not added to TestData.swift")
     }
 
     static func translationTextAt(_ translation: Translation, _ verse: AyahNumber) -> String {

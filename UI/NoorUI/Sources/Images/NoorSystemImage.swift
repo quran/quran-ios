@@ -26,6 +26,7 @@ public enum NoorSystemImage: String {
     case book
     case folder = "folder.fill"
     case folderOutline = "folder"
+    case plus
     case plusCircle = "plus.circle"
     case note = "text.justify.leading"
     case lastPage = "clock"

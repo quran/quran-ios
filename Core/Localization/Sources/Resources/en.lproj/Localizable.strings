@@ -168,6 +168,7 @@
 "notes.no-data.title" = "Adding Ayah Highlights...";
 "notes.no-data.text" = "Tap and hold on an Ayah. You can extend the selection to include multiple Ayat, then tap the Bookmark button.";
 "notes.verses-count" = "(+%d ayat)";
+"notes.new" = "New Note";
 "notes.delete.alert.title" = "Delete Highlight";
 "notes.delete.alert.body" = "The associated note will also be deleted.";
 "notes.delete-note.alert.title" = "Delete Note";

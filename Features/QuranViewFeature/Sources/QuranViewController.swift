@@ -205,6 +205,14 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     #if QURAN_SYNC
     func presentBookmarkAyahs(_ viewController: UIViewController) {
+        presentPageSheet(viewController)
+    }
+
+    func presentAyahNotes(_ viewController: UIViewController) {
+        presentPageSheet(viewController)
+    }
+
+    private func presentPageSheet(_ viewController: UIViewController) {
         if let sheet = viewController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true

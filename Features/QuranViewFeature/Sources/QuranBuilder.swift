@@ -15,6 +15,9 @@ import BookmarksFeature
 #endif
 import MoreMenuFeature
 import NoteEditorFeature
+#if QURAN_SYNC
+import NotesFeature
+#endif
 import QuranContentFeature
 import QuranKit
 import ReadingService
@@ -59,7 +62,7 @@ public struct QuranBuilder {
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources,
             notesObserver: notesObserver,
-            noteEditorBuilder: NoteEditorBuilder(container: container),
+            ayahNotesBuilder: AyahNotesBuilder(container: container),
             bookmarkAyahsBuilder: BookmarkAyahsBuilder(container: container),
             syncedHighlightsObserver: syncedHighlightsObserver,
             readingBookmarkObserver: readingBookmarkObserver

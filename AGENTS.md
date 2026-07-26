@@ -66,6 +66,10 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Avoid drive-by cleanup in unrelated modules.
 - Use SwiftFormat; do not hand-format around it.
 
+## Pull requests
+
+- When uploading a screenshot to a PR description, edit its width to around 300 px and remove the height.
+
 ## Dependencies
 
 - New third-party dependencies need a quick health check and should be added only when they remove meaningful complexity.

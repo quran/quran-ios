@@ -210,12 +210,25 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         try await service.createCollection(named: oldPageBookmarksCollectionName)
         let sut = makeSUT(collectionService: service)
         let viewController = BookmarkCollectionsViewController(viewModel: sut)
+        var cancellable: AnyCancellable?
+        let collections = AsyncStream<[AyahBookmarkCollection]> { continuation in
+            cancellable = sut.$collections.sink { continuation.yield($0) }
+        }
+        var iterator = collections.makeAsyncIterator()
 
         let task = Task { await sut.start() }
-        await waitUntil { viewController.navigationItem.leftBarButtonItem != nil }
+        defer {
+            task.cancel()
+            cancellable?.cancel()
+        }
+
+        while let collections = await iterator.next() {
+            if !BookmarkCollectionsViewModel.deletableCollections(from: collections).isEmpty {
+                break
+            }
+        }
 
         XCTAssertNotNil(viewController.navigationItem.leftBarButtonItem)
-        task.cancel()
     }
 
     func test_start_setsAuthenticatedState_whenRestoreSucceeds() async {

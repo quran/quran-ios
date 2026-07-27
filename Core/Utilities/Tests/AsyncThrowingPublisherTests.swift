@@ -44,9 +44,10 @@ class AsyncThrowingPublisherTests: XCTestCase {
     func test_passThroughSubject_failure() async {
         let asyncPublisher = subject.values()
 
-        Task {
+        Task { [iterator = asyncPublisher.makeAsyncIterator()] in
+            var iterator = iterator
             do {
-                for try await number in asyncPublisher {
+                while let number = try await iterator.next() {
                     await values.append(number)
                 }
             } catch {
@@ -54,9 +55,6 @@ class AsyncThrowingPublisherTests: XCTestCase {
             }
             await channel.send(())
         }
-
-        // Wait until loop starts.
-        await Task.megaYield()
 
         // Send failure
         subject.send(completion: .failure(.invalid))
@@ -71,18 +69,20 @@ class AsyncThrowingPublisherTests: XCTestCase {
         let prefix = 2
         let asyncPublisher = subject.values(bufferingPolicy: .unbounded)
 
-        Task {
-            for try await number in asyncPublisher {
-                await values.append(number)
-                if await values.results.count == prefix {
-                    break
+        Task { [iterator = asyncPublisher.makeAsyncIterator()] in
+            var iterator = iterator
+            do {
+                while let number = try await iterator.next() {
+                    await values.append(number)
+                    if await values.results.count == prefix {
+                        break
+                    }
                 }
+            } catch {
+                XCTFail("Unexpected error: \(error)")
             }
             await channel.send(())
         }
-
-        // Wait until loop starts.
-        await Task.megaYield()
 
         for number in numbers {
             subject.send(number)
@@ -96,26 +96,29 @@ class AsyncThrowingPublisherTests: XCTestCase {
 
     func test_passThroughSubject_taskCancellation() async {
         let asyncPublisher = subject.values(bufferingPolicy: .unbounded)
+        let received = AsyncChannel<Int>()
 
-        let task = Task {
-            for try await number in asyncPublisher {
-                await values.append(number)
+        let task = Task { [iterator = asyncPublisher.makeAsyncIterator()] in
+            var iterator = iterator
+            do {
+                while let number = try await iterator.next() {
+                    await values.append(number)
+                    await received.send(number)
+                }
+            } catch {
+                XCTFail("Unexpected error: \(error)")
             }
             await values.append(1945)
+            await channel.send(())
         }
-
-        // Wait until loop starts.
-        await Task.megaYield()
 
         for number in numbers {
             subject.send(number)
-            await Task.megaYield()
+            await AsyncAssertEqual(await received.next(), number)
         }
 
-        // Cancel the task.
         task.cancel()
-        // Wait for cancellation to happen.
-        await Task.megaYield()
+        await channel.next()
 
         await AsyncAssertEqual(await values.results, numbers + [1945])
     }

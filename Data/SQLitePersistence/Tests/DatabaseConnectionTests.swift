@@ -43,51 +43,55 @@ class DatabaseConnectionTests: XCTestCase {
     }
 
     func test_readPublisher() async throws {
-        // Since we can't guarantee a defined sequence of intermediate states, the test
-        // here attempts to perform a series of changes in a way that would eventually
-        // deliver a specifc set of values.
-        // Adding some latency is key, as it allows SQLite to commit changes to the desk.
         let connection = DatabaseConnection(url: testURL, readonly: false)
         try await connection.createNamesTable()
         let publisher = try connection.namesPublisher()
+        var cancellable: AnyCancellable?
+        let values = AsyncThrowingStream<[String], Error> { continuation in
+            cancellable = publisher.sink(
+                receiveCompletion: { completion in
+                    switch completion {
+                    case .finished:
+                        continuation.finish()
+                    case .failure(let error):
+                        continuation.finish(throwing: error)
+                    }
+                },
+                receiveValue: { continuation.yield($0) }
+            )
+        }
+        defer { cancellable?.cancel() }
+        var iterator = values.makeAsyncIterator()
 
-        var assertExpectation: XCTestExpectation?
-        var expectedNames: [String]?
-        let cancellable = publisher.sink(
-            receiveCompletion: { _ in },
-            receiveValue: { names in
-                guard let expected = expectedNames else { return }
+        try await assertNextNames([], from: &iterator)
 
-                if Set(expected) == Set(names) {
-                    assertExpectation?.fulfill()
-                    assertExpectation = nil
-                    expectedNames = nil
-                }
-            }
-        )
-
-        expectedNames = ["Alice"]
-        let expectation1 = expectation(description: "Expected to deliver the first batch of inserted names")
-        assertExpectation = expectation1
         try await connection.insert(name: "Alice")
-        await fulfillment(of: [expectation1], timeout: 2)
+        try await assertNextNames(["Alice"], from: &iterator)
 
-        // Add more
-        expectedNames = ["Alice", "Bob", "Derek"]
-        let expectation2 = expectation(description: "Expected to deliver the second batch of names")
-        assertExpectation = expectation2
         try await connection.insert(name: "Bob")
         try await connection.insert(name: "Derek")
-        await fulfillment(of: [expectation2], timeout: 2)
+        try await assertNextNames(["Alice", "Bob", "Derek"], from: &iterator)
 
-        // Remove one
-        expectedNames = ["Alice", "Derek"]
-        let expectation3 = expectation(description: "Expected to deliver the third batch of names")
-        assertExpectation = expectation3
         try await connection.remove(name: "Bob")
-        await fulfillment(of: [expectation3], timeout: 2)
+        try await assertNextNames(["Alice", "Derek"], from: &iterator)
+    }
 
-        cancellable.cancel()
+    private func assertNextNames(
+        _ expectedNames: [String],
+        from iterator: inout AsyncThrowingStream<[String], Error>.Iterator,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async throws {
+        while let names = try await iterator.next() {
+            if Set(expectedNames) == Set(names) {
+                return
+            }
+        }
+        XCTFail(
+            "Publisher completed before delivering \(expectedNames)",
+            file: file,
+            line: line
+        )
     }
 
     func test_sharing() async throws {

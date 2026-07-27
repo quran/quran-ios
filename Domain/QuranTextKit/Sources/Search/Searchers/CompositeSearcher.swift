@@ -21,7 +21,7 @@ public struct CompositeSearcher {
         versePersistenceBuilder: @escaping (Translation) -> any TranslationVerseTextPersistence
     ) {
         let numberSearcher = NumberSearcher(quranVerseTextPersistence: quranVerseTextPersistence)
-        let quranSearcher = PersistenceSearcher(
+        let quranSearcher = PersistenceSearcher<QuranText>(
             versePersistence: quranVerseTextPersistence,
             source: .quran
         )

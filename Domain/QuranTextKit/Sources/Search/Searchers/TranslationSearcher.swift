@@ -20,7 +20,10 @@ struct TranslationSearcher: Searcher {
         let translations = try await getDownloadedTranslations()
         for translation in translations {
             let persistence = versePersistenceBuilder(translation)
-            let persistenceSearcher = PersistenceSearcher(versePersistence: persistence, source: .translation(translation))
+            let persistenceSearcher = PersistenceSearcher<String>(
+                versePersistence: persistence,
+                source: .translation(translation)
+            )
             let results = try await persistenceSearcher.autocomplete(term: term, quran: quran)
             if !results.isEmpty {
                 return results
@@ -33,7 +36,10 @@ struct TranslationSearcher: Searcher {
         let translations = try await getDownloadedTranslations()
         let results = try await translations.asyncMap { translation -> [SearchResults] in
             let persistence = versePersistenceBuilder(translation)
-            let persistenceSearcher = PersistenceSearcher(versePersistence: persistence, source: .translation(translation))
+            let persistenceSearcher = PersistenceSearcher<String>(
+                versePersistence: persistence,
+                source: .translation(translation)
+            )
             let results = try await persistenceSearcher.search(for: term, quran: quran)
             return results
         }

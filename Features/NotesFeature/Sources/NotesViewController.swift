@@ -7,6 +7,7 @@
 
 import Combine
 import Localization
+import NoorUI
 import NoteEditorFeature
 import QuranAnnotations
 import SwiftUI
@@ -75,7 +76,7 @@ final class NotesViewController: UIHostingController<NotesView>, UISearchBarDele
 
     // MARK: Private
 
-    private var editController: EditController?
+    private var editController: NavigationEditModeController?
     private let viewModel: NotesViewModel
     private let noteEditorBuilder: NoteEditorBuilder
     private let searchController = UISearchController(searchResultsController: nil)
@@ -94,7 +95,7 @@ final class NotesViewController: UIHostingController<NotesView>, UISearchBarDele
         addCloudSyncInfo()
         #endif
 
-        editController = EditController(
+        editController = NavigationEditModeController(
             navigationItem: navigationItem,
             reload: viewModel.objectWillChange.eraseToAnyPublisher(),
             editMode: Binding(

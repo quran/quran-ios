@@ -6,6 +6,7 @@
 //
 
 import Localization
+import NoorUI
 import QuranText
 import SwiftUI
 
@@ -47,12 +48,8 @@ struct TranslationFootnote: View, Identifiable {
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(lFormat("translation.text.footnote-title", footnoteIndex + 1))
             .toolbar {
-                Button {
+                CloseToolbarItem {
                     dismiss()
-                } label: {
-                    Text(l("button.done"))
-                        .bold()
-                        .foregroundStyle(Color.appIdentity)
                 }
             }
         }

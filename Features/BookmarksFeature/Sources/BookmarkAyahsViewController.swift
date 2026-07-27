@@ -3,7 +3,6 @@
 //  BookmarkAyahsViewController.swift
 //
 
-import Localization
 import NoorUI
 import QuranKit
 import SwiftUI
@@ -48,14 +47,9 @@ final class BookmarkAyahsViewController: UIHostingController<BookmarkAyahsView> 
     }
 
     private func configureDoneButton() {
-        let doneButton = UIBarButtonItem(
-            title: l("button.done"),
-            primaryAction: UIAction { [weak self] _ in
-                self?.dismiss(animated: true)
-            }
-        )
-        doneButton.tintColor = .appIdentity
-        navigationItem.rightBarButtonItem = doneButton
+        navigationItem.rightBarButtonItem = NavigationBarButton.done { [weak self] in
+            self?.dismiss(animated: true)
+        }
     }
 }
 #endif

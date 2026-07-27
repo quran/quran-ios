@@ -136,17 +136,7 @@ struct AudioDownloadsView_Previews: PreviewProvider {
 
         var body: some View {
             VStack {
-                Button {
-                    withAnimation {
-                        if editMode == .inactive {
-                            editMode = .active
-                        } else {
-                            editMode = .inactive
-                        }
-                    }
-                } label: {
-                    Text(editMode == .inactive ? "Edit" : "Done")
-                }
+                EditModeButton(editMode: $editMode)
 
                 AudioDownloadsViewUI(
                     editMode: $editMode,

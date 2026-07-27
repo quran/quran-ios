@@ -209,9 +209,7 @@ struct NotesView_Previews: PreviewProvider {
                         Button("Error") { error = URLError(.notConnectedToInternet) }
                     }
 
-                    Button(editMode == .inactive ? "Edit" : "Done") {
-                        withAnimation { editMode = editMode == .inactive ? .active : .inactive }
-                    }
+                    EditModeButton(editMode: $editMode)
                 }
             }
         }

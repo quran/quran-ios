@@ -5,7 +5,8 @@
 
 // MARK: - General
 
-"button.done" = "Xong";
+// Metadata: Translated by ChatGPT; human review required.
+"button.close" = "Đóng";
 "button.delete" = "Xóa";
 
 // MARK: - Errors

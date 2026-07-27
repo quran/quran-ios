@@ -2,7 +2,7 @@
 
 // MARK: - General
 
-"button.done" = "تم";
+"button.close" = "إغلاق";
 "button.delete" = "حذف";
 
 // MARK: - Errors
@@ -124,7 +124,6 @@
 "bookmarks.no-data.text" = "عندما تقرأ القرآن، اضغط على زر الإشارة المرجعية لإضافة الصفحة.";
 "bookmarks.collections" = "المجموعات";
 "bookmarks.collections.add" = "إضافة مجموعة";
-"bookmarks.collections.edit.action" = "تحرير";
 "bookmarks.collections.colored" = "الإشارات المرجعية الملونة";
 "bookmarks.collections.favorites" = "المفضلة";
 "bookmarks.collections.mine" = "مجموعاتي";
@@ -267,9 +266,7 @@
 "new.miscellaneous.details" = "* تحديث مظهر التطبيق.\n* تحسين ميزة البحث (قادم قريباً خوارزمية بحث جديدة).\n* دعم توطين التطبيق باللغة الفيتنامية.\n* الوصول إلى خيارات الصوت المتقدمة متاح عند عدم تشغيل التلاوة.\n* التطبيق أصبح مفتوح المصدر: https://github.com/quran/quran-ios";
 
 // Audio upgrades
-// Metadata: Translated by ChatGPT; human review required.
 "new.audio_upgrades" = "صوتيات:";
-// Metadata: Translated by ChatGPT; human review required.
 "new.audio_upgrades.details" = "* التحكم في سرعة التلاوة: 0.5x، 0.75x، 1x، 1.25x، 1.5x - بفضل @adnan29979.\n* يتذكر تشغيل تلاوة جديدة السرعة المفضلة لديك - بفضل @adnan29979.";
 
 // Personalization
@@ -277,9 +274,7 @@
 "new.personalization.details" = "* دعم لعدة أنماط. افتح صفحة من القرآن -> القائمة العلوية اليمنى -> السمات والإعدادات.\n* استخدم \"الأصلي\" إذا كنت تريد العودة إلى النمط السابق.";
 
 // Library & Navigation
-// Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation" = "التنقل:";
-// Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* قم بترتيب السور والأجزاء على الصفحة الرئيسية، وعرض أرقام السور حتى تتمكن من الانتقال إلى ما تحتاجه بشكل أسرع - بفضل @yismailuofa.";
 
 "notes.minimum-length.alert.title" = "الملاحظة قصيرة جدًا";

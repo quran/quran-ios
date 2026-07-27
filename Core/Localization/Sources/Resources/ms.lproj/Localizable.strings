@@ -6,7 +6,7 @@
 // MARK: - General
 
 // Metadata: Translated by ChatGPT; human review required.
-"button.done" = "Selesai";
+"button.close" = "Tutup";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "Padam";
 

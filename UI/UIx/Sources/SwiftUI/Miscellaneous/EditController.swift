@@ -7,19 +7,32 @@
 
 import Combine
 import SwiftUI
+import UIKit
 
 @MainActor
 public final class EditController {
+    public typealias ButtonProvider = @MainActor (
+        _ editMode: EditMode,
+        _ action: @escaping @MainActor @Sendable () -> Void
+    ) -> UIBarButtonItem
+
     // MARK: Lifecycle
 
     public init(
         navigationItem: UINavigationItem,
         reload: AnyPublisher<Void, Never>,
         editMode: Binding<EditMode?>,
-        customItems: [UIBarButtonItem] = []
+        customItems: [UIBarButtonItem] = [],
+        buttonProvider: @escaping ButtonProvider = { editMode, action in
+            UIBarButtonItem(
+                systemItem: editMode.isEditing ? .done : .edit,
+                primaryAction: UIAction { _ in action() }
+            )
+        }
     ) {
         self.navigationItem = navigationItem
         self.customItems = customItems
+        self.buttonProvider = buttonProvider
         _editMode = editMode
 
         reload
@@ -28,12 +41,16 @@ public final class EditController {
                 self?.updateEditButtonStateIfNeeded()
             }
             .store(in: &cancellables)
+
+        buttonEditModeState = editMode.wrappedValue
+        updateEditButton()
     }
 
     // MARK: Private
 
     private let navigationItem: UINavigationItem
     private var customItems: [UIBarButtonItem]
+    private let buttonProvider: ButtonProvider
     @Binding private var editMode: EditMode?
     private var cancellables: Set<AnyCancellable> = []
 
@@ -50,10 +67,10 @@ public final class EditController {
         case .none:
             return nil
         case .some(let editMode):
-            if editMode.isEditing {
-                return UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(endEditing))
-            } else {
-                return UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(startEditing))
+            return buttonProvider(editMode) { [weak self] in
+                withAnimation {
+                    self?.editMode = editMode.isEditing ? .inactive : .active
+                }
             }
         }
     }
@@ -64,23 +81,9 @@ public final class EditController {
 
     private func updateEditButton() {
         if let editButton {
-            navigationItem.setRightBarButtonItems(customItems + [editButton], animated: true)
+            navigationItem.setRightBarButtonItems([editButton] + customItems, animated: true)
         } else {
             navigationItem.setRightBarButtonItems(customItems, animated: true)
-        }
-    }
-
-    @objc
-    private func startEditing() {
-        withAnimation {
-            editMode = .active
-        }
-    }
-
-    @objc
-    private func endEditing() {
-        withAnimation {
-            editMode = .inactive
         }
     }
 }

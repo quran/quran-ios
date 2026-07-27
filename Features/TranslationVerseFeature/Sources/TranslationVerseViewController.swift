@@ -80,33 +80,21 @@ class TranslationVerseViewController: UIHostingController<TranslationVerseView> 
     private var firstTime = true
 
     private func configureNavigationBar() {
-        navigationItem.rightBarButtonItems?.append(
-            UIBarButtonItem(
-                image: UIImage(systemName: "ellipsis.circle"),
-                style: .plain,
-                target: self,
-                action: #selector(settingsTapped)
-            )
-        )
-
-        let next = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.left"),
-            style: .plain,
-            target: self,
-            action: #selector(nextTapped)
-        )
-        let previous = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.right"),
-            style: .plain,
-            target: self,
-            action: #selector(previousTapped)
-        )
+        let overflow = NavigationBarButton.overflow { [weak self] in
+            self?.settingsTapped()
+        }
+        let next = NavigationBarButton.secondary(systemName: "chevron.left") { [weak self] in
+            self?.viewModel.next()
+        }
+        let previous = NavigationBarButton.secondary(systemName: "chevron.right") { [weak self] in
+            self?.viewModel.previous()
+        }
 
         switch view.effectiveUserInterfaceLayoutDirection {
         case .leftToRight:
-            navigationItem.leftBarButtonItems = [next, previous]
+            navigationItem.rightBarButtonItems = [overflow, previous, next]
         case .rightToLeft:
-            navigationItem.leftBarButtonItems = [previous, next]
+            navigationItem.rightBarButtonItems = [overflow, next, previous]
         @unknown default:
             fatalError("Unhandled case")
         }
@@ -115,8 +103,10 @@ class TranslationVerseViewController: UIHostingController<TranslationVerseView> 
         previousButton = previous
     }
 
-    @objc
-    private func settingsTapped(_ item: UIBarButtonItem) {
+    private func settingsTapped() {
+        guard let item = navigationItem.rightBarButtonItems?.first else {
+            return
+        }
         logger.info("Verse Translation: Settings button tapped")
         var state = MoreMenuControlsState()
         state.mode = .alwaysOff
@@ -128,16 +118,6 @@ class TranslationVerseViewController: UIHostingController<TranslationVerseView> 
         state.verticalScrolling = .alwaysOff
         let viewController = moreMenuBuilder.build(withListener: self, model: MoreMenuModel(isWordPointerActive: false, state: state))
         presentPopover(viewController, pointingTo: item, permittedArrowDirections: [.up, .down])
-    }
-
-    @objc
-    private func nextTapped() {
-        viewModel.next()
-    }
-
-    @objc
-    private func previousTapped() {
-        viewModel.previous()
     }
 
     private func updateTitle() {
@@ -181,16 +161,12 @@ extension TranslationVerseViewController: MoreMenuListener {
     private func presentTranslationsSelection() {
         let controller = translationsSelectionBuilder.build()
         let navigationController = TranslationsSelectionNavigationController(rootViewController: controller)
-        controller.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "x.circle"),
-            style: .done,
-            target: self,
-            action: #selector(onTranslationsSelectionDoneTapped)
-        )
+        controller.navigationItem.leftBarButtonItem = NavigationBarButton.close { [weak self] in
+            self?.onTranslationsSelectionDoneTapped()
+        }
         present(navigationController, animated: true, completion: nil)
     }
 
-    @objc
     private func onTranslationsSelectionDoneTapped() {
         logger.info("Quran: translations selection dismissed")
         dismiss(animated: true)

@@ -70,14 +70,14 @@ final class AyahNotesViewController: UIHostingController<AyahNotesView>, NoteEdi
     private let viewModel: AyahNotesViewModel
     private let noteEditorBuilder: NoteEditorBuilder
     private var shouldPresentNewNote: Bool
-    private var editController: EditController?
+    private var editController: NavigationEditModeController?
 
     private var currentEditMode: EditMode? {
         viewModel.notes.isEmpty ? nil : viewModel.editMode
     }
 
     private func configureEditButton() {
-        editController = EditController(
+        editController = NavigationEditModeController(
             navigationItem: navigationItem,
             reload: viewModel.objectWillChange.eraseToAnyPublisher(),
             editMode: Binding(

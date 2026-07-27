@@ -3,7 +3,7 @@
 // MARK: - General
 
 // Metadata: Translated by ChatGPT; human review required.
-"button.done" = "Hecho";
+"button.close" = "Cerrar";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "Eliminar";
 

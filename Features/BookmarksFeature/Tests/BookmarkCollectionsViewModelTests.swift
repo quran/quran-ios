@@ -133,11 +133,14 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let viewModel = makeCollectionDetailsViewModel(collection: collection)
         let viewController = AyahBookmarkCollectionsViewController(viewModel: viewModel)
 
-        let button = viewController.navigationItem.rightBarButtonItem
+        let buttons = viewController.navigationItem.rightBarButtonItems
+        let button = buttons?.first
+        let systemEditTitle = UIBarButtonItem(barButtonSystemItem: .edit, target: nil, action: nil).title
 
-        XCTAssertEqual(button?.title, l("bookmarks.collections.edit.action"))
+        XCTAssertEqual(button?.title, systemEditTitle)
         XCTAssertNotNil(button?.primaryAction)
         XCTAssertNil(button?.menu)
+        XCTAssertEqual(buttons?.count, 1)
     }
 
     func test_collectionDetailsController_usesNativeTitleAndSubtitle() {
@@ -180,10 +183,12 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let viewModel = makeCollectionDetailsViewModel(collection: collection)
         let viewController = AyahBookmarkCollectionsViewController(viewModel: viewModel)
 
-        let titles = viewController.navigationItem.rightBarButtonItem?.menu?.children.map(\.title)
+        let buttons = viewController.navigationItem.rightBarButtonItems
+        let systemEditTitle = UIBarButtonItem(barButtonSystemItem: .edit, target: nil, action: nil).title
+        let titles = buttons?.last?.menu?.children.map(\.title)
 
+        XCTAssertEqual(buttons?.first?.title, systemEditTitle)
         XCTAssertEqual(titles, [
-            l("bookmarks.collections.edit.action"),
             l("bookmarks.collections.rename"),
             l("button.delete"),
         ])
@@ -196,13 +201,16 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
         viewModel.editMode = .active
 
-        XCTAssertEqual(viewController.navigationItem.rightBarButtonItem?.title, l("button.done"))
+        let systemDoneTitle = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: nil).title
+        XCTAssertEqual(viewController.navigationItem.rightBarButtonItem?.title, systemDoneTitle)
     }
 
     func test_collectionsViewController_hidesEditButtonWithoutDeletableCollections() {
         let viewController = BookmarkCollectionsViewController(viewModel: makeSUT())
 
         XCTAssertNil(viewController.navigationItem.leftBarButtonItem)
+        XCTAssertEqual(viewController.navigationItem.rightBarButtonItems?.count, 1)
+        XCTAssertNil(viewController.navigationItem.rightBarButtonItem?.title)
     }
 
     func test_collectionsViewController_showsEditButtonForOldPageBookmarks() async throws {
@@ -228,7 +236,10 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             }
         }
 
-        XCTAssertNotNil(viewController.navigationItem.leftBarButtonItem)
+        let systemEditTitle = UIBarButtonItem(barButtonSystemItem: .edit, target: nil, action: nil).title
+        XCTAssertNil(viewController.navigationItem.leftBarButtonItem)
+        XCTAssertEqual(viewController.navigationItem.rightBarButtonItems?.count, 2)
+        XCTAssertEqual(viewController.navigationItem.rightBarButtonItems?.first?.title, systemEditTitle)
     }
 
     func test_start_setsAuthenticatedState_whenRestoreSucceeds() async {

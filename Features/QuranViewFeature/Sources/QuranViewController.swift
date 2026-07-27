@@ -177,12 +177,9 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     func presentTranslationsSelection(_ viewController: UIViewController) {
         let translationsNavigationController = TranslationsSelectionNavigationController(rootViewController: viewController)
-        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "x.circle"),
-            style: .done,
-            target: self,
-            action: #selector(onTranslationsSelectionDoneTapped)
-        )
+        viewController.navigationItem.leftBarButtonItem = NavigationBarButton.close { [weak self] in
+            self?.onTranslationsSelectionDoneTapped()
+        }
         present(translationsNavigationController, animated: true, completion: nil)
     }
 
@@ -231,11 +228,9 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             sheet.prefersGrabberVisible = true
         }
         if let navigationController = viewController as? UINavigationController {
-            navigationController.visibleViewController?.navigationItem.rightBarButtonItem = UIBarButtonItem(
-                barButtonSystemItem: .done,
-                target: self,
-                action: #selector(dismissTranslatedVerse)
-            )
+            navigationController.visibleViewController?.navigationItem.leftBarButtonItem = NavigationBarButton.close { [weak self] in
+                self?.dismiss(animated: true)
+            }
         }
         presentationsMonitor.monitor(viewController, actions: .init(didDismiss: { _ in
             didDismiss()
@@ -363,12 +358,6 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         viewController.didMove(toParent: self)
     }
 
-    @objc
-    private func dismissTranslatedVerse() {
-        dismiss(animated: true)
-    }
-
-    @objc
     private func onTranslationsSelectionDoneTapped() {
         logger.info("Quran: translations selection dismissed")
         dismiss(animated: true)

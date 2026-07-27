@@ -30,17 +30,18 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
         options: AdvancedAudioOptions,
         reciterListBuilder: ReciterListBuilder
     ) {
+        let normalizedEnd = max(options.end, options.start)
         self.options = options
         self.reciterListBuilder = reciterListBuilder
         reciter = options.reciter
         fromVerse = options.start
-        toVerse = options.end
+        toVerse = normalizedEnd
         verseRuns = options.verseRuns
         listRuns = options.listRuns
         verseDelay = options.verseDelay
         repetitionDelay = options.repetitionDelay
         playbackRate = AudioPreferences.shared.playbackRate
-        endAt = Self.deduceEndAt(from: options.start, to: options.end)
+        endAt = Self.deduceEndAt(from: options.start, to: normalizedEnd)
 
         AudioPreferences.shared.$playbackRate.assign(to: &$playbackRate)
     }
@@ -59,10 +60,6 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
 
     @Published var repetitionDelay: RepetitionDelay
     @Published var verseDelay: VerseDelay
-
-    var suras: [Sura] {
-        options.start.quran.suras
-    }
 
     func play() {
         listener?.updateAudioOptions(to: currentOptions())
@@ -85,10 +82,7 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     }
 
     func updateToVerseTo(_ to: AyahNumber) {
-        toVerse = to
-        if to < fromVerse {
-            fromVerse = to
-        }
+        toVerse = max(to, fromVerse)
         endAt = .custom
     }
 

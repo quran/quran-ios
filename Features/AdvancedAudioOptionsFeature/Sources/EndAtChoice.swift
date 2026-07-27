@@ -14,6 +14,8 @@ enum EndAtChoice: Hashable, CaseIterable {
     case quran
     case custom
 
+    static let pickerChoices: [EndAtChoice] = [.custom, .page, .surah, .juz, .quran]
+
     var audioEnd: AudioEnd? {
         switch self {
         case .page: return .page

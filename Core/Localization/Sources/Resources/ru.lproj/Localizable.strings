@@ -290,6 +290,24 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "Продолжить";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "Новая иконка";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "В следующем обновлении значок приложения «Коран» на экране «Домой» изменится. Этот новый значок станет общим символом семейства инструментов, созданных вокруг слова Аллаха. Скоро расскажем подробнее.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "СЕЙЧАС";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "СКОРО";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "То же приложение, новая иконка";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "Все ваши закладки, прогресс и настройки останутся на своих местах.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "Появится в следующей версии";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "Обновите приложение до последней версии, чтобы увидеть новый значок на экране «Домой».";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "Новые Мусхафы:";

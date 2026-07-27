@@ -232,6 +232,24 @@
 "new.title" = "Yenilikler";
 "new.action" = "Devam Et";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "Yeni bir simge";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "Bir sonraki güncellememizde Ana Ekranınızdaki Kur’an uygulaması simgesi değişecek. Bu yeni simge, artık Allah’ın kelamı etrafında geliştirilen bir araç ailesinin ortak işaretidir. Ayrıntılar yakında.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "ŞİMDİ";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "YAKINDA";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "Aynı uygulama, yeni simge";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "Tüm yer imleriniz, ilerlemeniz ve ayarlarınız tam olarak yerinde kalacak.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "Bir sonraki sürümde geliyor";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "Ana Ekranınızda yeni simgeyi görmek için en son sürüme güncelleyin.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "Yeni Mushaflar:";

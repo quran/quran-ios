@@ -290,6 +290,24 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "Fortfahren";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "Ein neues App-Symbol";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "Mit unserem nächsten Update ändert sich das Symbol der Quran-App auf deinem Home-Bildschirm. Dieses neue Symbol ist jetzt das gemeinsame Erkennungszeichen einer Familie von Werkzeugen rund um Allahs Wort. Weitere Details folgen in Kürze.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "JETZT";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "DEMNÄCHST";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "Dieselbe App, neues Symbol";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "Alle deine Lesezeichen, Fortschritte und Einstellungen bleiben genau dort, wo sie sind.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "Erscheint mit der nächsten Version";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "Aktualisiere auf die neueste Version, um das neue Symbol auf deinem Home-Bildschirm zu sehen.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "Neue Mushafs:";

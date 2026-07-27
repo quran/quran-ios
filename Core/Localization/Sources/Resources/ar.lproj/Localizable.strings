@@ -255,13 +255,21 @@
 "new.action" = "استمر";
 
 // New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.title" = "أيقونة جديدة";
+// Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.body" = "في تحديثنا القادم، ستتغير أيقونة تطبيق القرآن على شاشتك الرئيسية. أصبحت هذه الأيقونة الجديدة العلامة المشتركة لعائلة من الأدوات المبنية حول كلام الله. المزيد من التفاصيل قريبًا.";
+// Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.now" = "الآن";
+// Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.coming_soon" = "قريبًا";
+// Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.same_app.title" = "التطبيق نفسه، بأيقونة جديدة";
+// Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.same_app.body" = "ستبقى جميع علاماتك المرجعية وتقدّمك وإعداداتك في مكانها تمامًا.";
+// Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.release.title" = "ستُطرح في الإصدار القادم";
+// Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.release.body" = "حدّث إلى أحدث إصدار لرؤية الأيقونة الجديدة على شاشتك الرئيسية.";
 
 // Mushafs

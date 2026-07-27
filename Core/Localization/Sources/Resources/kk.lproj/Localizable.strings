@@ -274,6 +274,24 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "Жалғастыру";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "Жаңа белгіше";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "Келесі жаңартуымызда басты экрандағы Құран қолданбасының белгішесі өзгереді. Бұл жаңа белгіше енді Алланың сөзіне негізделген құралдар топтамасының ортақ нышаны болады. Толығырақ ақпарат жақында.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "ҚАЗІР";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "ЖАҚЫНДА";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "Сол қолданба, жаңа белгіше";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "Барлық бетбелгілеріңіз, оқу барысыңыз және параметрлеріңіз өз орнында қалады.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "Келесі нұсқада шығады";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "Басты экранда жаңа белгішені көру үшін соңғы нұсқаға жаңартыңыз.";
+
 // Mushafs
 "new.mushafs" = "Жаңа Мусхафтар:";
 // Metadata: Translated by ChatGPT; human review required.

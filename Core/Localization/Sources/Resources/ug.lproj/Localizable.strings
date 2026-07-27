@@ -293,6 +293,24 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "داۋاملاشتۇرۇش";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "يېڭى سىنبەلگە";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "كېيىنكى يېڭىلاش نەشرىمىزدە باش ئېكراندىكى قۇرئان ئەپ سىنبەلگىسى ئۆزگىرىدۇ. بۇ يېڭى سىنبەلگە ئەمدى ئاللاھنىڭ كالامىنى چۆرىدىگەن ھالدا ياسالغان بىر يۈرۈش قوراللارنىڭ ئورتاق بەلگىسىدۇر. تېخىمۇ كۆپ تەپسىلاتلار پات يېقىندا.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "ھازىر";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "پات يېقىندا";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "ئوخشاش ئەپ، يېڭى سىنبەلگە";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "بارلىق خەتكۈچلىرىڭىز، ئىلگىرىلەش ئەھۋالىڭىز ۋە تەڭشەكلىرىڭىز دەل ئۆز ئورنىدا قالىدۇ.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "كېيىنكى نەشرىدە تارقىتىلىدۇ";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "باش ئېكرانىڭىزدا يېڭى سىنبەلگىنى كۆرۈش ئۈچۈن ئەڭ يېڭى نەشرىگە يېڭىلاڭ.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "يېڭى مۇشاپلار:";

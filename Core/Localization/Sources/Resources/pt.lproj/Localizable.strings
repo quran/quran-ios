@@ -291,6 +291,24 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "Continuar";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "Um novo ícone";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "Na nossa próxima atualização, o ícone do aplicativo Alcorão na sua Tela de Início será alterado. Este novo ícone agora é a marca compartilhada de uma família de ferramentas criadas em torno da palavra de Allah. Mais detalhes em breve.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "AGORA";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "EM BREVE";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "Mesmo aplicativo, novo ícone";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "Todos os seus marcadores, progresso e configurações continuarão exatamente onde estão.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "Chega na próxima versão";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "Atualize para a versão mais recente para ver o novo ícone na sua Tela de Início.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "Novos Mushafs:";

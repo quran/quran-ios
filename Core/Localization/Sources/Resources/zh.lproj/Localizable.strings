@@ -291,6 +291,24 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "继续";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "新图标";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "在下次更新中，主屏幕上的《古兰经》应用图标将会更改。这个新图标将成为一系列围绕真主之言打造的工具的共同标志。更多详情，敬请期待。";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "现在";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "即将推出";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "应用不变，图标焕新";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "你的所有书签、进度和设置都会原封不动地保留。";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "将在下一版本推出";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "更新至最新版本，即可在主屏幕上看到新图标。";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "新穆沙夫:";

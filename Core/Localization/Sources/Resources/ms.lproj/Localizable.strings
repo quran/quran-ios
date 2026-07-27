@@ -273,6 +273,24 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "Teruskan";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "Ikon baharu";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "Pada kemas kini kami yang seterusnya, ikon aplikasi Quran pada Skrin Utama anda akan berubah. Ikon baharu ini kini menjadi lambang bersama bagi sebuah keluarga alat yang dibina berteraskan kalam Allah. Butiran lanjut akan datang.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "SEKARANG";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "AKAN DATANG";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "Aplikasi sama, ikon baharu";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "Semua penanda halaman, kemajuan dan tetapan anda kekal tepat di tempatnya.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "Akan dilancarkan dalam keluaran seterusnya";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "Kemas kini kepada versi terkini untuk melihat ikon baharu pada Skrin Utama anda.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "Mushaf Baru:";

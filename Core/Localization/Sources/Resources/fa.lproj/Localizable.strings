@@ -292,6 +292,24 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "ادامه";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "یک نماد جدید";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "در به‌روزرسانی بعدی ما، نماد برنامهٔ قرآن در صفحهٔ اصلی شما تغییر خواهد کرد. این نماد جدید اکنون نشان مشترک خانواده‌ای از ابزارهای ساخته‌شده پیرامون کلام الله است. جزئیات بیشتر به‌زودی.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "اکنون";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "به‌زودی";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "همان برنامه، نمادی جدید";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "همهٔ نشانک‌ها، پیشرفت و تنظیمات شما دقیقاً در جای خود باقی می‌مانند.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "در نسخهٔ بعدی عرضه می‌شود";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "برای دیدن نماد جدید در صفحهٔ اصلی، برنامه را به جدیدترین نسخه به‌روزرسانی کنید.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "مشاف جدید:";

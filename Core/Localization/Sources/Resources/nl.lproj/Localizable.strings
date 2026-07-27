@@ -202,6 +202,24 @@
 "new.title" = "Wat is er nieuw";
 "new.action" = "Ga verder";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "Een nieuw icoon";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "Bij onze volgende update verandert het icoon van de Quran-app op je beginscherm. Dit nieuwe icoon is voortaan het gezamenlijke herkenningsteken van een familie hulpmiddelen die rond het woord van Allah zijn gebouwd. Binnenkort meer details.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "NU";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "BINNENKORT";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "Dezelfde app, nieuw icoon";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "Al je bladwijzers, voortgang en instellingen blijven precies waar ze zijn.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "Beschikbaar in de volgende release";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "Werk bij naar de nieuwste versie om het nieuwe icoon op je beginscherm te zien.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "Nieuwe Mushafs:";

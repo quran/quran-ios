@@ -197,12 +197,12 @@ public final class ContentViewModel: ObservableObject {
 
     private func configureInitialPage() {
         deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
-        highlights.searchVerses = [input.highlightingSearchAyah].compactMap { $0 }
+        highlights.navigationVerse = input.navigationAyah
     }
 
     private func visiblePagesUpdated() {
-        // remove search highlight when page changes
-        highlights.searchVerses = []
+        // Remove the navigation highlight when the reader changes pages.
+        highlights.navigationVerse = nil
 
         let pages = visiblePages
         let isTranslationView = deps.quranContentStatePreferences.quranMode == .translation

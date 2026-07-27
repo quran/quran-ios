@@ -21,14 +21,14 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
         collection: AyahBookmarkCollection,
         quranTextDataService: QuranTextDataService,
-        navigateToPage: @escaping (Page) -> Void,
+        navigateToAyah: @escaping (AyahNumber) -> Void,
         collectionDeleted: @escaping () -> Void
     ) {
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
         self.collection = collection
         collectionID = collection.collection.id
         self.quranTextDataService = quranTextDataService
-        self.navigateToPage = navigateToPage
+        self.navigateToAyah = navigateToAyah
         self.collectionDeleted = collectionDeleted
     }
 
@@ -60,7 +60,7 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
 
     func navigateTo(_ bookmark: AyahCollectionBookmark) {
         logger.info("Bookmarks: select collection bookmark at \(bookmark.ayah)")
-        navigateToPage(bookmark.ayah.page)
+        navigateToAyah(bookmark.ayah)
     }
 
     func deleteBookmark(_ bookmark: AyahCollectionBookmark) async {
@@ -128,7 +128,7 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let quranTextDataService: QuranTextDataService
     private let collectionID: String
-    private let navigateToPage: (Page) -> Void
+    private let navigateToAyah: (AyahNumber) -> Void
     private let collectionDeleted: () -> Void
 
     private func loadAyahTexts(for collection: AyahBookmarkCollection?) async throws {

@@ -27,10 +27,16 @@ class TabInteractor: QuranNavigator {
 
     weak var presenter: TabPresenter?
 
-    func navigateTo(page: Page, lastPage: LastPage?, highlightingSearchAyah: AyahNumber?) {
-        let input = QuranInput(initialPage: page, lastPage: lastPage, highlightingSearchAyah: highlightingSearchAyah)
-        let viewController = quranBuilder.build(input: input)
-        presenter?.pushViewController(viewController, animated: true)
+    func navigateTo(page: Page, lastPage: LastPage?) {
+        navigateTo(
+            input: QuranInput(initialPage: page, lastPage: lastPage, navigationAyah: nil)
+        )
+    }
+
+    func navigateTo(ayah: AyahNumber, lastPage: LastPage?) {
+        navigateTo(
+            input: QuranInput(initialPage: ayah.page, lastPage: lastPage, navigationAyah: ayah)
+        )
     }
 
     func start() {
@@ -39,4 +45,9 @@ class TabInteractor: QuranNavigator {
     // MARK: Private
 
     private let quranBuilder: QuranBuilder
+
+    private func navigateTo(input: QuranInput) {
+        let viewController = quranBuilder.build(input: input)
+        presenter?.pushViewController(viewController, animated: true)
+    }
 }

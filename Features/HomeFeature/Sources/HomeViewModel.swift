@@ -36,16 +36,14 @@ final class HomeViewModel: ObservableObject {
         lastPageService: any LastPageService,
         textRetriever: QuranTextDataService,
         readingBookmarkService: MobileSyncReadingBookmarkService,
-        navigateToPage: @escaping (Page, LastPage?, AyahNumber?) -> Void,
-        navigateToSura: @escaping (Sura) -> Void,
-        navigateToQuarter: @escaping (Quarter) -> Void
+        navigateToPage: @escaping (Page, LastPage?) -> Void,
+        navigateToAyah: @escaping (AyahNumber) -> Void
     ) {
         self.lastPageService = lastPageService
         self.textRetriever = textRetriever
         self.readingBookmarkService = readingBookmarkService
         self.navigateToPage = navigateToPage
-        self.navigateToSura = navigateToSura
-        self.navigateToQuarter = navigateToQuarter
+        self.navigateToAyah = navigateToAyah
 
         HomePreferences.shared.$surahSortOrder
             .assign(to: &$surahSortOrder)
@@ -54,15 +52,13 @@ final class HomeViewModel: ObservableObject {
     init(
         lastPageService: any LastPageService,
         textRetriever: QuranTextDataService,
-        navigateToPage: @escaping (Page, LastPage?, AyahNumber?) -> Void,
-        navigateToSura: @escaping (Sura) -> Void,
-        navigateToQuarter: @escaping (Quarter) -> Void
+        navigateToPage: @escaping (Page, LastPage?) -> Void,
+        navigateToAyah: @escaping (AyahNumber) -> Void
     ) {
         self.lastPageService = lastPageService
         self.textRetriever = textRetriever
         self.navigateToPage = navigateToPage
-        self.navigateToSura = navigateToSura
-        self.navigateToQuarter = navigateToQuarter
+        self.navigateToAyah = navigateToAyah
 
         HomePreferences.shared.$surahSortOrder
             .assign(to: &$surahSortOrder)
@@ -113,26 +109,26 @@ final class HomeViewModel: ObservableObject {
     }
 
     func navigateTo(_ lastPage: LastPage) {
-        navigateToPage(lastPage.page, lastPage, nil)
+        navigateToPage(lastPage.page, lastPage)
     }
 
     #if QURAN_SYNC
     func navigateTo(_ readingBookmark: ReadingPositionBookmark) {
         switch readingBookmark.location {
         case .ayah(let ayahNumber):
-            navigateToPage(ayahNumber.page, nil, ayahNumber)
+            navigateToAyah(ayahNumber)
         case .page(let page):
-            navigateToPage(page, nil, nil)
+            navigateToPage(page, nil)
         }
     }
     #endif
 
     func navigateTo(_ sura: Sura) {
-        navigateToSura(sura)
+        navigateToAyah(sura.firstVerse)
     }
 
     func navigateTo(_ item: QuarterItem) {
-        navigateToQuarter(item.quarter)
+        navigateToAyah(item.quarter.firstVerse)
     }
 
     func toggleSurahSortOrder() {
@@ -146,9 +142,8 @@ final class HomeViewModel: ObservableObject {
     #if QURAN_SYNC
     private let readingBookmarkService: MobileSyncReadingBookmarkService
     #endif
-    private let navigateToPage: (Page, LastPage?, AyahNumber?) -> Void
-    private let navigateToSura: (Sura) -> Void
-    private let navigateToQuarter: (Quarter) -> Void
+    private let navigateToPage: (Page, LastPage?) -> Void
+    private let navigateToAyah: (AyahNumber) -> Void
     private let readingPreferences = ReadingPreferences.shared
 
     private func loadLastPages() async {

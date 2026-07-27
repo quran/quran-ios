@@ -16,7 +16,7 @@ public struct QuranHighlights: Equatable {
 
     public var readingVerses: [AyahNumber] = []
     public var shareVerses: [AyahNumber] = []
-    public var searchVerses: [AyahNumber] = []
+    public var navigationVerse: AyahNumber?
     #if QURAN_SYNC
     public var highlightVerses: [AyahNumber: HighlightColor] = [:]
     #else
@@ -28,11 +28,10 @@ public struct QuranHighlights: Equatable {
 
 extension QuranHighlights {
     public func needsScrolling(comparingTo oldValue: Self) -> Bool {
-        // Check readingHighlights & searchHighlights
         if oldValue.readingVerses != readingVerses {
             return true
         }
-        if oldValue.searchVerses != searchVerses {
+        if oldValue.navigationVerse != navigationVerse {
             return true
         }
         return false
@@ -42,7 +41,7 @@ extension QuranHighlights {
         if let firstReadingVerse = readingVerses.first {
             return firstReadingVerse
         }
-        return searchVerses.first
+        return navigationVerse
     }
 
     public func verseToScrollTo(comparingTo oldValue: Self) -> AyahNumber? {

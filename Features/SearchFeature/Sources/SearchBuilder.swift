@@ -31,7 +31,7 @@ public struct SearchBuilder {
                 quranFileURL: container.quranUthmaniV2Database
             ),
             navigateTo: { [weak listener] verse in
-                listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: verse)
+                listener?.navigateTo(ayah: verse, lastPage: nil)
             }
         )
         let viewController = SearchViewController(viewModel: viewModel)

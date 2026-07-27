@@ -120,6 +120,37 @@ final class NotesViewModelTests: XCTestCase {
         XCTAssertTrue(text.hasSuffix("Al-Fātihah, Ayah 1"))
     }
 
+    func test_navigateToNote_navigatesToStartAyah() throws {
+        let startAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
+        let endAyah = try XCTUnwrap(startAyah.next)
+        let note = QuranAnnotations.Note(
+            id: "note",
+            text: "Ayat al-Kursi",
+            startAyah: startAyah,
+            endAyah: endAyah,
+            modifiedDate: .distantPast
+        )
+        let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
+        var navigatedAyah: AyahNumber?
+        let sut = NotesViewModel(
+            noteService: noteService,
+            textService: QuranTextDataService(
+                databasesURL: unavailableDatabase,
+                quranFileURL: unavailableDatabase
+            ),
+            textRetriever: ShareableVerseTextRetriever(
+                databasesURL: unavailableDatabase,
+                quranFileURL: unavailableDatabase
+            ),
+            navigateTo: { navigatedAyah = $0 },
+            editNote: { _ in }
+        )
+
+        sut.navigateTo(NoteItem(note: note, quranText: nil))
+
+        XCTAssertEqual(navigatedAyah, startAyah)
+    }
+
     private func storedNotes() async throws -> [QuranAnnotations.Note] {
         var iterator = noteService.notesSequence(quran: .hafsMadani1405).makeAsyncIterator()
         return try await iterator.next() ?? []

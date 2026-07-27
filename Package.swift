@@ -18,6 +18,12 @@ let quranSyncEnabled = quranSyncValue != nil && quranSyncValue != "0" && quranSy
 let quranSyncSettings: [SwiftSetting] = quranSyncEnabled ? [
     .define("QURAN_SYNC"),
 ] : []
+let mobileSyncPackageDependencies: [Package.Dependency] = quranSyncEnabled ? [
+    .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.1.16"),
+] : []
+let mobileSyncTargetDependencies: [Target.Dependency] = quranSyncEnabled ? [
+    .product(name: "MobileSync", package: "mobile-sync-spm"),
+] : []
 
 let settings = (enforceSwiftConcurrencyChecks ? swiftConcurrencySettings : []) + quranSyncSettings
 
@@ -64,10 +70,7 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.9.0"),
         .package(url: "https://github.com/pointfreeco/combine-schedulers", from: "1.0.0"),
 
-        // Sync
-        .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.1.16"),
-
-    ], targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
+    ] + mobileSyncPackageDependencies, targets: validated(targets) + [testTargetLinkingAllPackageTargets(targets)]
 )
 
 private func coreTargets() -> [[Target]] {
@@ -204,9 +207,12 @@ private func uiTargets() -> [[Target]] {
 private func dataTargets() -> [[Target]] {
     let type = TargetType.data
     return [
-        target(type, name: "MobileSyncTestSupport", hasTests: false, dependencies: [
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
-        ]),
+        target(
+            type,
+            name: "MobileSyncTestSupport",
+            hasTests: false,
+            dependencies: mobileSyncTargetDependencies
+        ),
 
         // MARK: - Page Bookmarks
 
@@ -346,17 +352,14 @@ private func dataTargets() -> [[Target]] {
 
         target(type, name: "AuthenticationClient", dependencies: [
             "VLogging",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
-        ], testDependencies: [
+        ] + mobileSyncTargetDependencies, testDependencies: [
             "AuthenticationClientFake",
             "MobileSyncTestSupport",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
-        ]),
+        ] + mobileSyncTargetDependencies),
 
         target(type, name: "AuthenticationClientFake", hasTests: false, dependencies: [
             "AuthenticationClient",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
-        ]),
+        ] + mobileSyncTargetDependencies),
     ]
 }
 
@@ -509,7 +512,6 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "AnnotationsService", dependencies: [
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
             "QuranAnnotations",
             "LastPagePersistence",
             "NotePersistence",
@@ -519,7 +521,7 @@ private func domainTargets() -> [[Target]] {
             "Localization",
             "Analytics",
             "Utilities",
-        ], testDependencies: [
+        ] + mobileSyncTargetDependencies, testDependencies: [
             "LastPagePersistence",
             "MobileSyncTestSupport",
             "PageBookmarkPersistence",
@@ -548,8 +550,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "QuranResources",
             "AuthenticationClient",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
-        ]),
+        ] + mobileSyncTargetDependencies),
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [
             "BatchDownloader",
@@ -661,10 +662,9 @@ private func featuresTargets() -> [[Target]] {
             "AuthenticationClient",
             "AuthenticationClientFake",
             "MobileSyncTestSupport",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
             "PageBookmarkPersistence",
             "QuranResources",
-        ]),
+        ] + mobileSyncTargetDependencies),
 
         target(type, name: "QuranPagesFeature", hasTests: false, dependencies: [
             "NoorUI",
@@ -772,13 +772,11 @@ private func featuresTargets() -> [[Target]] {
             "QuranLocalization",
         ], testDependencies: [
             "MobileSyncTestSupport",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
-        ]),
+        ] + mobileSyncTargetDependencies),
 
         target(type, name: "SettingsFeature", dependencies: [
             "AppDependencies",
             "AuthenticationClient",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
             "SettingsService",
             "NoorUI",
             "VLogging",
@@ -787,14 +785,13 @@ private func featuresTargets() -> [[Target]] {
             "ReadingSelectorFeature",
             "Preferences",
             "Zip",
-        ], testDependencies: [
+        ] + mobileSyncTargetDependencies, testDependencies: [
             "Analytics",
             "AppDependencies",
             "AudioDownloadsFeature",
             "AuthenticationClient",
             "AuthenticationClientFake",
             "MobileSyncTestSupport",
-            .product(name: "MobileSync", package: "mobile-sync-spm"),
             "BatchDownloader",
             "LastPagePersistence",
             "NotePersistence",
@@ -803,7 +800,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "SettingsService",
             "TranslationsFeature",
-        ]),
+        ] + mobileSyncTargetDependencies),
 
         target(type, name: "AppStructureFeature", hasTests: false, dependencies: [
             "HomeFeature",

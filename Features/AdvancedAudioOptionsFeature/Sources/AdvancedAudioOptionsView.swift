@@ -238,7 +238,7 @@ private struct RunsPicker: View {
 
                     Spacer(minLength: spacing)
 
-                    Text(runs.localizedDescription)
+                    selectedRunsLabel
                         .foregroundStyle(isExpanded ? Color.appIdentity : .secondary)
 
                     Image(systemName: "chevron.down")
@@ -256,6 +256,19 @@ private struct RunsPicker: View {
     }
 
     // MARK: Private
+
+    @ViewBuilder
+    private var selectedRunsLabel: some View {
+        switch runs {
+        case .finite:
+            Text(runs.localizedDescription)
+        case .indefinite:
+            HStack {
+                Text(runs.localizedDescription.capitalized)
+                Image(systemName: "infinity")
+            }
+        }
+    }
 
     private var picker: some View {
         Picker(l("audio.repeat-count"), selection: $runs) {

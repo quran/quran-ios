@@ -234,10 +234,10 @@ private struct RunsPicker: View {
 
     private var picker: some View {
         Picker(l("audio.repeat-count"), selection: $runs) {
-            Label(
-                Runs.indefinite.localizedDescription.capitalized,
-                systemImage: "infinity"
-            )
+            HStack {
+                Text(Runs.indefinite.localizedDescription.capitalized)
+                Image(systemName: "infinity")
+            }
             .tag(Runs.indefinite)
 
             ForEach(1 ... 100, id: \.self) { count in

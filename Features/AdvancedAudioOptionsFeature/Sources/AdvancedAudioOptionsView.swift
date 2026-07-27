@@ -222,21 +222,12 @@ private struct RunsMenuPicker: View {
     @Binding var runs: Runs
 
     var body: some View {
-        Menu {
-            Button {
-                runs = .indefinite
-            } label: {
-                Label(Runs.indefinite.localizedDescription.capitalized, systemImage: "infinity")
-            }
-
-            Divider()
-
+        Picker(selection: $runs) {
+            Label(Runs.indefinite.localizedDescription.capitalized, systemImage: "infinity")
+                .tag(Runs.indefinite)
             ForEach(1 ... 100, id: \.self) { count in
-                Button {
-                    runs = .finite(count)
-                } label: {
-                    Text(Runs.finite(count).localizedDescription)
-                }
+                Text(Runs.finite(count).localizedDescription)
+                    .tag(Runs.finite(count))
             }
         } label: {
             HStack {
@@ -251,6 +242,7 @@ private struct RunsMenuPicker: View {
             }
             .contentShape(Rectangle())
         }
+        .pickerStyle(.menu)
     }
 }
 

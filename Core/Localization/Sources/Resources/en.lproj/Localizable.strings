@@ -282,7 +282,7 @@
 
 // New app icon announcement
 "new.icon_announcement.title" = "A new icon";
-"new.icon_announcement.body" = "In our next update, the Quran app icon on your Home Screen will change. This new icon is now the shared mark of a family of tools built around Allah's word. More to details soon.";
+"new.icon_announcement.body" = "In our next update, the Quran app icon on your Home Screen will change. This new icon is now the shared mark of a family of tools built around Allah's word. More details soon.";
 "new.icon_announcement.now" = "NOW";
 "new.icon_announcement.coming_soon" = "COMING SOON";
 "new.icon_announcement.same_app.title" = "Same app, new icon";

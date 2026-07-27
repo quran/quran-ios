@@ -8,6 +8,7 @@
 #if !QURAN_SYNC
 import Combine
 import Localization
+import NoorUI
 import SwiftUI
 import UIx
 
@@ -29,7 +30,7 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
 
     // MARK: Private
 
-    private var editController: EditController?
+    private var editController: NavigationEditModeController?
     private let viewModel: BookmarksViewModel
     private var cancellables: Set<AnyCancellable> = []
 
@@ -42,7 +43,7 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
 
     private func initialize() {
         title = lAndroid("menu_bookmarks")
-        editController = EditController(
+        editController = NavigationEditModeController(
             navigationItem: navigationItem,
             reload: viewModel.objectWillChange.eraseToAnyPublisher(),
             editMode: Binding(

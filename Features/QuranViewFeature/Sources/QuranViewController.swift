@@ -228,7 +228,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             sheet.prefersGrabberVisible = true
         }
         if let navigationController = viewController as? UINavigationController {
-            navigationController.visibleViewController?.navigationItem.rightBarButtonItem = NavigationBarButton.close { [weak self] in
+            navigationController.visibleViewController?.navigationItem.leftBarButtonItem = NavigationBarButton.close { [weak self] in
                 self?.dismiss(animated: true)
             }
         }

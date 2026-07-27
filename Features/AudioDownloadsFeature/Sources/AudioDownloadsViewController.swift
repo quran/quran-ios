@@ -7,6 +7,7 @@
 
 import Combine
 import Localization
+import NoorUI
 import SwiftUI
 import UIx
 
@@ -28,7 +29,7 @@ final class AudioDownloadsViewController: UIHostingController<AudioDownloadsView
 
     // MARK: Private
 
-    private var editController: EditController?
+    private var editController: NavigationEditModeController?
     private let viewModel: AudioDownloadsViewModel
 
     private var currentEditMode: EditMode? {
@@ -41,7 +42,7 @@ final class AudioDownloadsViewController: UIHostingController<AudioDownloadsView
     private func initialize() {
         title = lAndroid("audio_manager")
 
-        editController = EditController(
+        editController = NavigationEditModeController(
             navigationItem: navigationItem,
             reload: viewModel.objectWillChange.eraseToAnyPublisher(),
             editMode: Binding(

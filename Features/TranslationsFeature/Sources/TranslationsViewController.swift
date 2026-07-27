@@ -6,6 +6,7 @@
 //
 
 import Localization
+import NoorUI
 import SwiftUI
 import UIKit
 import UIx
@@ -28,7 +29,7 @@ final class TranslationsViewController: UIHostingController<TranslationsListView
 
     // MARK: Private
 
-    private var editController: EditController?
+    private var editController: NavigationEditModeController?
     private let viewModel: TranslationsListViewModel
 
     private var currentEditMode: EditMode? {
@@ -41,7 +42,7 @@ final class TranslationsViewController: UIHostingController<TranslationsListView
     private func initialize() {
         title = lAndroid("prefs_translations")
 
-        editController = EditController(
+        editController = NavigationEditModeController(
             navigationItem: navigationItem,
             reload: viewModel.objectWillChange.eraseToAnyPublisher(),
             editMode: Binding(

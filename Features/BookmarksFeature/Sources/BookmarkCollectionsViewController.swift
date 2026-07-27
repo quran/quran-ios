@@ -28,18 +28,14 @@ final class BookmarkCollectionsViewController: UIHostingController<BookmarkColle
     }
 
     private let viewModel: BookmarkCollectionsViewModel
-    private var editController: EditController?
+    private var editController: NavigationEditModeController?
 
     private func configureEditButton() {
-        let addButton = UIBarButtonItem(
-            image: UIImage(systemName: "plus"),
-            primaryAction: UIAction { [weak self] _ in
-                self?.viewModel.presentAddCollection()
-            }
-        )
-        addButton.tintColor = .appIdentity
+        let addButton = NavigationBarButton.add { [weak self] in
+            self?.viewModel.presentAddCollection()
+        }
 
-        editController = EditController(
+        editController = NavigationEditModeController(
             navigationItem: navigationItem,
             reload: viewModel.objectWillChange.eraseToAnyPublisher(),
             editMode: Binding(

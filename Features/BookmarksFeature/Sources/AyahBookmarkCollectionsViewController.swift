@@ -81,11 +81,7 @@ private final class AyahBookmarkCollectionMenuController {
             if actions.isEmpty {
                 viewController.navigationItem.rightBarButtonItems = [editButton]
             } else {
-                let menuButton = UIBarButtonItem(
-                    image: UIImage(systemName: "ellipsis.circle"),
-                    menu: UIMenu(children: actions)
-                )
-                menuButton.tintColor = .appIdentity
+                let menuButton = NavigationBarButton.overflow(menu: UIMenu(children: actions))
                 viewController.navigationItem.rightBarButtonItems = [editButton, menuButton]
             }
         }

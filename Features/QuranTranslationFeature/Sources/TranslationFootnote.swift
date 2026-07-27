@@ -32,6 +32,8 @@ struct TranslationFootnote: View, Identifiable {
     let translation: Translation
     let translationFontSize: FontSize
 
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -46,7 +48,9 @@ struct TranslationFootnote: View, Identifiable {
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(lFormat("translation.text.footnote-title", footnoteIndex + 1))
             .toolbar {
-                CloseToolbarItem()
+                CloseToolbarItem {
+                    dismiss()
+                }
             }
         }
         .sheetPresentationDetents([.medium, .large])

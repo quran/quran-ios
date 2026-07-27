@@ -280,6 +280,18 @@
 "new.title" = "What's new";
 "new.action" = "Continue";
 
+// New app icon announcement
+"new.icon_announcement.title" = "A new icon";
+"new.icon_announcement.body" = "In our next update, the Quran app icon on your Home Screen will change. This new icon is now the shared mark of a family of tools built around Allah's word. More to details soon.";
+"new.icon_announcement.now" = "NOW";
+"new.icon_announcement.coming_soon" = "COMING SOON";
+"new.icon_announcement.same_app.title" = "Same app, new icon";
+"new.icon_announcement.same_app.body" = "All your bookmarks, progress, and settings stay exactly where they are.";
+"new.icon_announcement.release.title" = "Rolling out next release";
+"new.icon_announcement.release.body" = "Update to the latest version to see the new icon on your Home Screen.";
+"new.icon_announcement.action" = "Got it";
+"new.icon_announcement.close" = "Close";
+
 // Mushafs
 "new.mushafs" = "New Mushafs:";
 "new.mushafs.details" = "* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Edition.\n* Medina Mushaf 1421 hijri.\n* Medina Mushaf 1440 hijri.\n* Plus, continue enjoying the classic 1405 hijri version.";

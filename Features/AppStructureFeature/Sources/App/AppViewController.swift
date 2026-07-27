@@ -30,7 +30,6 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
 
     init(analytics: AnalyticsLibrary, interactor: AppInteractor) {
         self.interactor = interactor
-        appIconAnnouncementController = AppIconAnnouncementController()
         whatsNewController = AppWhatsNewController(analytics: analytics)
         super.init(nibName: nil, bundle: nil)
         interactor.presenter = self
@@ -76,16 +75,12 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         guard !hasStartedPostLaunchPresentation else { return }
         hasStartedPostLaunchPresentation = true
 
-        appIconAnnouncementController.presentIfNeeded(from: self) { [weak self] in
-            guard let self else { return }
-            whatsNewController.presentWhatsNewIfNeeded(from: self)
-        }
+        whatsNewController.presentWhatsNewIfNeeded(from: self)
     }
 
     // MARK: Private
 
     private let interactor: AppInteractor
-    private let appIconAnnouncementController: AppIconAnnouncementController
     private let whatsNewController: AppWhatsNewController
     private var hasStartedPostLaunchPresentation = false
 

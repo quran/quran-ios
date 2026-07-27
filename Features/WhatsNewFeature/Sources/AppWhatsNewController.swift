@@ -9,6 +9,7 @@
 import Analytics
 import Localization
 import NoorUI
+import SwiftUI
 import UIKit
 import VLogging
 import WhatsNewKit
@@ -32,7 +33,7 @@ public class AppWhatsNewController {
             let versions = self.whatsNewItems(after: lastSeenVersion, whatsNew: whatsNew)
             if !versions.isEmpty {
                 DispatchQueue.main.async {
-                    self.present(versions, in: parent)
+                    self.presentAnnouncement(before: versions, in: parent)
                 }
             } else {
                 logger.info("Ignoring whats new")
@@ -45,7 +46,30 @@ public class AppWhatsNewController {
     private let analytics: AnalyticsLibrary
     private let store = AppWhatsNewVersionStore()
 
-    private func present(_ versions: [WhatsNewVersion], in parent: UIViewController) {
+    private func presentAnnouncement(before versions: [WhatsNewVersion], in parent: UIViewController) {
+        let navigationController = UINavigationController()
+        let view = AppIconAnnouncementView { [weak self, weak navigationController] in
+            guard let self, let navigationController else { return }
+
+            guard let whatsNewViewController = makeWhatsNewViewController(versions: versions) else {
+                navigationController.dismiss(animated: true)
+                return
+            }
+
+            analytics.presentWhatsNew(versions: versions.map(\.version))
+            navigationController.pushViewController(whatsNewViewController, animated: true)
+        }
+        let announcementViewController = UIHostingController(rootView: view)
+
+        navigationController.setViewControllers([announcementViewController], animated: false)
+        navigationController.setNavigationBarHidden(true, animated: false)
+        navigationController.modalPresentationStyle = .pageSheet
+        navigationController.sheetPresentationController?.detents = [.large()]
+
+        parent.present(navigationController, animated: true)
+    }
+
+    private func makeWhatsNewViewController(versions: [WhatsNewVersion]) -> WhatsNewViewController? {
         let whatsNewItems = versions.flatMap(\.items).map(\.whatsNewItem)
 
         let whatsNew = WhatsNew(
@@ -58,7 +82,7 @@ public class AppWhatsNewController {
 
         configuration.completionButton.title = l("new.action")
         configuration.completionButton.action = .custom { vc in
-            vc.dismiss(animated: true)
+            (vc.navigationController ?? vc).dismiss(animated: true)
             logger.info("WhatsNew continue button tapped")
         }
         configuration.titleView.titleMode = .scrolls
@@ -72,15 +96,11 @@ public class AppWhatsNewController {
         configuration.itemsView.subtitleFont = .preferredFont(forTextStyle: .callout)
         configuration.itemsView.imageSize = .fixed(height: 30)
 
-        // Initialize WhatsNewViewController with WhatsNew
-        if let whatsNewViewController = WhatsNewViewController(
+        return WhatsNewViewController(
             whatsNew: whatsNew,
             configuration: configuration,
             versionStore: store
-        ) {
-            analytics.presentWhatsNew(versions: versions.map(\.version))
-            parent.present(whatsNewViewController, animated: true)
-        }
+        )
     }
 
     private nonisolated func whatsNewItems(after lastSeen: String?, whatsNew: AppWhatsNew) -> [WhatsNewVersion] {

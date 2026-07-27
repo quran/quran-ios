@@ -167,7 +167,7 @@ private struct PlayEachVerseSection: View {
 
     var body: some View {
         Section(header: Text(lAndroid("play_each_verse").replacingOccurrences(of: ":", with: ""))) {
-            RunsMenuPicker(runs: $verseRuns)
+            RunsPicker(runs: $verseRuns)
 
             VStack(alignment: .leading, spacing: 10) {
                 Text(l("audio.verse-delay"))
@@ -194,7 +194,7 @@ private struct PlaySetChoicesSection: View {
 
     var body: some View {
         Section(header: Text(lAndroid("play_verses_range").replacingOccurrences(of: ":", with: ""))) {
-            RunsMenuPicker(runs: $listRuns)
+            RunsPicker(runs: $listRuns)
 
             VStack(alignment: .leading, spacing: 10) {
                 Text(l("audio.repetition-delay"))
@@ -215,42 +215,80 @@ private struct PlaySetChoicesSection: View {
     }
 }
 
-/// Keeps repeat counts compact in the form while still exposing every supported count.
-private struct RunsMenuPicker: View {
+private struct RunsPicker: View {
     // MARK: Internal
 
     @Binding var runs: Runs
 
-    var body: some View {
-        Menu {
-            Button {
-                runs = .indefinite
-            } label: {
-                Label(Runs.indefinite.localizedDescription.capitalized, systemImage: "infinity")
-            }
+    @State private var isExpanded = false
 
-            Divider()
+    @ScaledMetric private var pickerHeight: CGFloat = 150
+    @ScaledMetric private var spacing: CGFloat = 8
+
+    var body: some View {
+        Group {
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isExpanded.toggle()
+                }
+            } label: {
+                HStack(spacing: spacing) {
+                    Text(l("audio.repeat-count"))
+                        .foregroundStyle(.primary)
+
+                    Spacer(minLength: spacing)
+
+                    selectedRunsLabel
+                        .foregroundStyle(isExpanded ? Color.appIdentity : .secondary)
+
+                    Image(systemName: "chevron.down")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(isExpanded ? Color.appIdentity : Color(.tertiaryLabel))
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+
+            if isExpanded {
+                picker
+            }
+        }
+    }
+
+    // MARK: Private
+
+    @ViewBuilder
+    private var selectedRunsLabel: some View {
+        switch runs {
+        case .finite:
+            Text(runs.localizedDescription)
+        case .indefinite:
+            HStack {
+                Text(runs.localizedDescription.capitalized)
+                Image(systemName: "infinity")
+            }
+        }
+    }
+
+    private var picker: some View {
+        Picker(l("audio.repeat-count"), selection: $runs) {
+            HStack {
+                Text(Runs.indefinite.localizedDescription.capitalized)
+                Image(systemName: "infinity")
+            }
+            .tag(Runs.indefinite)
 
             ForEach(1 ... 100, id: \.self) { count in
-                Button {
-                    runs = .finite(count)
-                } label: {
-                    Text(Runs.finite(count).localizedDescription)
-                }
+                let option = Runs.finite(count)
+                Text(option.localizedDescription.capitalized)
+                    .tag(option)
             }
-        } label: {
-            HStack {
-                Text(l("audio.repeat-count"))
-                    .foregroundStyle(Color(.label))
-                Spacer()
-                Text(runs.localizedDescription)
-                    .foregroundStyle(.secondary)
-                Image(systemName: "chevron.up.chevron.down")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(.tertiary)
-            }
-            .contentShape(Rectangle())
         }
+        .pickerStyle(.wheel)
+        .labelsHidden()
+        .frame(maxWidth: .infinity)
+        .frame(height: pickerHeight)
+        .clipped()
     }
 }
 

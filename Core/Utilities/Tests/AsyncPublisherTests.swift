@@ -35,8 +35,9 @@ class AsyncPublisherTests: XCTestCase {
         let prefix = 2
         let asyncPublisher = subject.values(bufferingPolicy: .unbounded)
 
-        Task {
-            for await number in asyncPublisher {
+        Task { [iterator = asyncPublisher.makeAsyncIterator()] in
+            var iterator = iterator
+            while let number = await iterator.next() {
                 await values.append(number)
                 if await values.results.count == prefix {
                     break
@@ -44,9 +45,6 @@ class AsyncPublisherTests: XCTestCase {
             }
             await channel.send(())
         }
-
-        // Wait until loop starts.
-        await Task.megaYield()
 
         for number in numbers {
             subject.send(number)
@@ -60,26 +58,25 @@ class AsyncPublisherTests: XCTestCase {
 
     func test_passThroughSubject_taskCancellation() async {
         let asyncPublisher = subject.values(bufferingPolicy: .unbounded)
+        let received = AsyncChannel<Int>()
 
-        let task = Task {
-            for await number in asyncPublisher {
+        let task = Task { [iterator = asyncPublisher.makeAsyncIterator()] in
+            var iterator = iterator
+            while let number = await iterator.next() {
                 await values.append(number)
+                await received.send(number)
             }
             await values.append(1945)
+            await channel.send(())
         }
-
-        // Wait until loop starts.
-        await Task.megaYield()
 
         for number in numbers {
             subject.send(number)
-            await Task.megaYield()
+            await AsyncAssertEqual(await received.next(), number)
         }
 
-        // Cancel the task.
         task.cancel()
-        // Wait for cancellation to happen.
-        await Task.megaYield()
+        await channel.next()
 
         await AsyncAssertEqual(await values.results, numbers + [1945])
     }

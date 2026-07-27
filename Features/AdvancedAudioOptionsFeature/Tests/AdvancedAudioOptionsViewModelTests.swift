@@ -86,6 +86,28 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(sut.endAt, .custom)
     }
 
+    func test_updateToVerseTo_clampsEndToStart_whenSelectionIsEarlier() {
+        let alFatihah = quran.suras[0]
+        let start = alFatihah.firstVerse.next!
+        let sut = makeSUT(start: start, end: alFatihah.lastVerse)
+
+        sut.updateToVerseTo(alFatihah.firstVerse)
+
+        XCTAssertEqual(sut.fromVerse, start)
+        XCTAssertEqual(sut.toVerse, start)
+        XCTAssertEqual(sut.endAt, .custom)
+    }
+
+    func test_init_clampsEndToStart_whenOptionsEndIsEarlier() {
+        let alFatihah = quran.suras[0]
+        let start = alFatihah.firstVerse.next!
+
+        let sut = makeSUT(start: start, end: alFatihah.firstVerse)
+
+        XCTAssertEqual(sut.fromVerse, start)
+        XCTAssertEqual(sut.toVerse, start)
+    }
+
     func test_updateFromVerseTo_reAppliesEndAt_whenNotCustom() {
         let alFatihah = quran.suras[0]
         let alBaqarah = quran.suras[1]

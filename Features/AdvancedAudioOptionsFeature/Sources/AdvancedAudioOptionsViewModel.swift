@@ -42,8 +42,6 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
         repetitionDelay = options.repetitionDelay
         playbackRate = AudioPreferences.shared.playbackRate
         endAt = Self.deduceEndAt(from: options.start, to: normalizedEnd)
-
-        AudioPreferences.shared.$playbackRate.assign(to: &$playbackRate)
     }
 
     // MARK: Internal
@@ -62,6 +60,7 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     @Published var verseDelay: VerseDelay
 
     func play() {
+        AudioPreferences.shared.playbackRate = playbackRate
         listener?.updateAudioOptions(to: currentOptions())
         dismiss()
     }
@@ -94,7 +93,7 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     // MARK: - Updating Playback Rate
 
     func updatePlaybackRate(to rate: Float) {
-        AudioPreferences.shared.playbackRate = rate
+        playbackRate = rate
     }
 
     // MARK: Private

@@ -9,13 +9,14 @@ import Combine
 import Foundation
 import QuranAnnotations
 import QuranKit
+import QuranText
 
 public class EditableNote: ObservableObject {
     // MARK: Lifecycle
 
     public init(
         ayahRange: ClosedRange<AyahNumber>,
-        ayahText: String,
+        ayahText: QuranText,
         modifiedSince: String,
         selectedColor: HighlightColor,
         note: String
@@ -31,7 +32,7 @@ public class EditableNote: ObservableObject {
     // MARK: Public
 
     public let ayahRange: ClosedRange<AyahNumber>
-    public let ayahText: String
+    public let ayahText: QuranText
     public let modifiedSince: String
     @Published public internal(set) var selectedColor: HighlightColor
     @Published public internal(set) var note: String

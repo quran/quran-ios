@@ -308,6 +308,7 @@ private func dataTargets() -> [[Target]] {
         target(type, name: "VerseTextPersistence", hasTests: false, dependencies: [
             "SQLitePersistence",
             "QuranKit",
+            "QuranText",
         ]),
 
         target(type, name: "TranslationPersistence", hasTests: false, dependencies: [
@@ -438,6 +439,7 @@ private func domainTargets() -> [[Target]] {
             "WordFrameService",
             "QuranKit",
             "QuranLocalization",
+            "QuranText",
             "VerseTextPersistence",
         ], testDependencies: [
             .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),

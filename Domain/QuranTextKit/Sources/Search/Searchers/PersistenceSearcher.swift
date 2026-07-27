@@ -9,11 +9,42 @@ import QuranKit
 import QuranText
 import VerseTextPersistence
 
-struct PersistenceSearcher: Searcher {
-    let versePersistence: SearchableTextPersistence
-    let source: SearchResults.Source
+protocol PersistenceSearchText {
+    var searchableText: String { get }
 
-    func autocomplete(term: SearchTerm, quran: Quran) async throws -> [String] {
+    static func makeSearchText(_ text: String) -> SearchText
+}
+
+extension String: PersistenceSearchText {
+    var searchableText: String { self }
+
+    static func makeSearchText(_ text: String) -> SearchText {
+        .plain(text)
+    }
+}
+
+extension QuranText: PersistenceSearchText {
+    var searchableText: String { text }
+
+    static func makeSearchText(_ text: String) -> SearchText {
+        .quran(QuranText(text))
+    }
+}
+
+struct PersistenceSearcher<Text: PersistenceSearchText>: Searcher {
+    // MARK: Lifecycle
+
+    init<Persistence: SearchableTextPersistence>(
+        versePersistence: Persistence,
+        source: SearchResults.Source
+    ) where Persistence.Text == Text {
+        self.versePersistence = versePersistence
+        self.source = source
+    }
+
+    // MARK: Internal
+
+    func autocomplete(term: SearchTerm, quran: Quran) async throws -> [SearchText] {
         let matches = try await versePersistence.autocomplete(term: term.persistenceQuery)
         return term.buildAutocompletions(searchResults: matches)
     }
@@ -30,4 +61,9 @@ struct PersistenceSearcher: Searcher {
         let items = term.buildSearchResults(verses: matches)
         return [SearchResults(source: source, items: items)]
     }
+
+    // MARK: Private
+
+    private let versePersistence: any SearchableTextPersistence<Text>
+    private let source: SearchResults.Source
 }

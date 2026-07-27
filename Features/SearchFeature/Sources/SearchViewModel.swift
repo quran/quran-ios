@@ -32,7 +32,7 @@ final class SearchViewModel: ObservableObject {
     @Published var searchState = SearchState.searching
 
     @Published var searchTerm = ""
-    @Published var autocompletions: [String] = []
+    @Published var autocompletions: [SearchText] = []
     @Published var recents: [String] = []
 
     @Published var keyboardState: KeyboardState = .closed
@@ -170,7 +170,7 @@ final class SearchViewModel: ObservableObject {
         }
     }
 
-    private func autocomplete(_ term: String) async -> [String] {
+    private func autocomplete(_ term: String) async -> [SearchText] {
         let quran = readingPreferences.reading.quran
         return await searchService.autocomplete(term: term, quran: quran)
     }

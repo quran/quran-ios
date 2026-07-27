@@ -4,6 +4,7 @@
 
 import QuranKit
 import QuranLocalization
+import QuranText
 import XCTest
 @testable import NoorUI
 
@@ -79,7 +80,7 @@ final class MultipartTextQuranTests: XCTestCase {
     }
 
     func test_quranText_preservesText() {
-        let quranText = "Quran text"
+        let quranText = QuranText("Quran text")
         let text: MultipartText = "\(quran: quranText)"
 
         XCTAssertEqual(text.rawValue, "Quran text")

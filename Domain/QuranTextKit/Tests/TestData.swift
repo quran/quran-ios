@@ -16,15 +16,15 @@ enum TestData {
     static let khanTranslation = TranslationTestData.khanTranslation
     static let sahihTranslation = TranslationTestData.sahihTranslation
 
-    static let translationsPersistenceBuilder = { (translation: Translation) -> TranslationVerseTextPersistence in
+    static let translationsPersistenceBuilder = { (translation: Translation) -> any TranslationVerseTextPersistence in
         let url = TestResources.resourceURL(translation.fileName)
         return GRDBTranslationVerseTextPersistence(fileURL: url)
     }
 
     static let quranTextURL = QuranResources.quranUthmaniV2Database
 
-    static func quranTextAt(_ verse: AyahNumber) -> String {
-        quranText[verse] ?? "Not added to TestData.swift"
+    static func quranTextAt(_ verse: AyahNumber) -> QuranText {
+        QuranText(quranText[verse] ?? "Not added to TestData.swift")
     }
 
     static func translationTextAt(_ translation: Translation, _ verse: AyahNumber) -> String {

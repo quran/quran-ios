@@ -20,7 +20,7 @@ public struct QuranTextDataService {
         self.init(databasesURL: databasesURL, arabicPersistence: GRDBQuranVerseTextPersistence(fileURL: quranFileURL))
     }
 
-    init(databasesURL: URL, arabicPersistence: VerseTextPersistence) {
+    init(databasesURL: URL, arabicPersistence: any VerseTextPersistence) {
         self.init(
             localTranslationRetriever: LocalTranslationsRetriever(databasesURL: databasesURL),
             arabicPersistence: arabicPersistence,
@@ -32,8 +32,8 @@ public struct QuranTextDataService {
 
     init(
         localTranslationRetriever: LocalTranslationsRetriever,
-        arabicPersistence: VerseTextPersistence,
-        translationsPersistenceBuilder: @escaping (Translation) -> TranslationVerseTextPersistence
+        arabicPersistence: any VerseTextPersistence,
+        translationsPersistenceBuilder: @escaping (Translation) -> any TranslationVerseTextPersistence
     ) {
         self.localTranslationRetriever = localTranslationRetriever
         self.arabicPersistence = arabicPersistence
@@ -47,15 +47,16 @@ public struct QuranTextDataService {
         return Dictionary(uniqueKeysWithValues: (0 ..< verses.count).map { i in (verses[i], translatedVerses.verses[i]) })
     }
 
-    public func numberedArabicText(for verses: [AyahNumber]) async throws -> String {
+    public func numberedArabicText(for verses: [AyahNumber]) async throws -> QuranText {
         let verseTexts = try await textForVerses(verses, translations: [])
-        return verses.sorted()
+        let text = verses.sorted()
             .compactMap { verse in
                 verseTexts[verse].map {
-                    $0.arabicText + " \(NumberFormatter.arabicNumberFormatter.format(verse.ayah))"
+                    $0.arabicText.text + " \(NumberFormatter.arabicNumberFormatter.format(verse.ayah))"
                 }
             }
             .joined(separator: " ")
+        return QuranText(text)
     }
 
     // MARK: Internal
@@ -66,8 +67,8 @@ public struct QuranTextDataService {
     static let footnotesRegex = try! NSRegularExpression(pattern: #"\[\[[\s\S]*?]]"#)
 
     let localTranslationRetriever: LocalTranslationsRetriever
-    let arabicPersistence: VerseTextPersistence
-    let translationsPersistenceBuilder: (Translation) -> TranslationVerseTextPersistence
+    let arabicPersistence: any VerseTextPersistence
+    let translationsPersistenceBuilder: (Translation) -> any TranslationVerseTextPersistence
     let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
     // MARK: Private
@@ -93,7 +94,11 @@ public struct QuranTextDataService {
         return translatedVerse
     }
 
-    private func merge(verses: [AyahNumber], translations: [(Translation, [TranslationText])], arabic: [String]) -> [VerseText] {
+    private func merge(
+        verses: [AyahNumber],
+        translations: [(Translation, [TranslationText])],
+        arabic: [QuranText]
+    ) -> [VerseText] {
         var versesText: [VerseText] = []
 
         for i in 0 ..< verses.count {
@@ -102,16 +107,18 @@ public struct QuranTextDataService {
             let ayahTranslations = translations.map { translation, ayahs in
                 ayahs[i]
             }
-            let prefix = verse == verse.sura.firstVerse && verse.sura.startsWithBesmAllah ? [verse.quran.arabicBesmAllah] : []
+            let prefix = verse == verse.sura.firstVerse && verse.sura.startsWithBesmAllah
+                ? [QuranText(verse.quran.arabicBesmAllah)]
+                : []
             let verseText = VerseText(arabicText: arabicText, translations: ayahTranslations, arabicPrefix: prefix, arabicSuffix: [])
             versesText.append(verseText)
         }
         return versesText
     }
 
-    private func retrieveArabicText(verses: [AyahNumber]) async throws -> [String] {
+    private func retrieveArabicText(verses: [AyahNumber]) async throws -> [QuranText] {
         let versesText = try await arabicPersistence.textForVerses(verses)
-        var verseTextList: [String] = []
+        var verseTextList: [QuranText] = []
         for verse in verses {
             let text = versesText[verse]!
             verseTextList.append(text)

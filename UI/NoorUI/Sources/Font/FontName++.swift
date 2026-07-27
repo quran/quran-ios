@@ -9,17 +9,9 @@
 //
 
 import NoorFont
-import QuranText
 import SwiftUI
 
-private let arabicQuranTextFontSize: CGFloat = 21
 private let arabicTafseerTextFontSize: CGFloat = 21
-
-extension Font {
-    static func quran(ofSize size: FontSize? = nil) -> Font {
-        custom(.quran, size: size?.fontSize(forMediumSize: arabicQuranTextFontSize) ?? arabicQuranTextFontSize)
-    }
-}
 
 public extension Font {
     static func arabicTafseer() -> Font {

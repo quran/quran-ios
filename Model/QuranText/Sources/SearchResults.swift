@@ -7,10 +7,34 @@
 
 import QuranKit
 
+public enum SearchText: Hashable, Sendable {
+    case plain(String)
+    case quran(QuranText)
+
+    // MARK: Public
+
+    public var text: String {
+        switch self {
+        case .plain(let text):
+            text
+        case .quran(let text):
+            text.text
+        }
+    }
+}
+
 public struct SearchResult: Hashable, Identifiable {
     // MARK: Lifecycle
 
     public init(text: String, ranges: [Range<String.Index>], ayah: AyahNumber) {
+        self.init(text: .plain(text), ranges: ranges, ayah: ayah)
+    }
+
+    public init(text: QuranText, ranges: [Range<String.Index>], ayah: AyahNumber) {
+        self.init(text: .quran(text), ranges: ranges, ayah: ayah)
+    }
+
+    public init(text: SearchText, ranges: [Range<String.Index>], ayah: AyahNumber) {
         self.text = text
         self.ranges = ranges
         self.ayah = ayah
@@ -18,7 +42,7 @@ public struct SearchResult: Hashable, Identifiable {
 
     // MARK: Public
 
-    public let text: String
+    public let text: SearchText
     public let ranges: [Range<String.Index>]
     public let ayah: AyahNumber
 

@@ -77,7 +77,7 @@ private struct EncodableSearchResultItem: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(result.text, forKey: .text)
+        try container.encode(result.text.text, forKey: .text)
         try container.encode(result.ayah, forKey: .ayah)
     }
 }

@@ -8,6 +8,7 @@
 import Combine
 import QuranAnnotations
 import QuranKit
+import QuranText
 import QuranTextKit
 import SwiftUI
 import VLogging
@@ -34,7 +35,7 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
     // MARK: Internal
 
     @Published private(set) var collection: AyahBookmarkCollection
-    @Published private(set) var ayahTexts: [AyahNumber: String] = [:]
+    @Published private(set) var ayahTexts: [AyahNumber: QuranText] = [:]
     @Published var collectionPendingDeletion: AyahBookmarkCollection?
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?

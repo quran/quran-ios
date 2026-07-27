@@ -220,13 +220,38 @@ private struct RunsPicker: View {
 
     @Binding var runs: Runs
 
-    @ViewBuilder
+    @State private var isExpanded = false
+
+    @ScaledMetric private var pickerHeight: CGFloat = 150
+    @ScaledMetric private var spacing: CGFloat = 8
+
     var body: some View {
-        if #available(iOS 16.0, *) {
-            picker
-                .pickerStyle(.navigationLink)
-        } else {
-            picker
+        Group {
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isExpanded.toggle()
+                }
+            } label: {
+                HStack(spacing: spacing) {
+                    Text(l("audio.repeat-count"))
+                        .foregroundStyle(.primary)
+
+                    Spacer(minLength: spacing)
+
+                    Text(runs.localizedDescription)
+                        .foregroundStyle(isExpanded ? Color.appIdentity : .secondary)
+
+                    Image(systemName: "chevron.down")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(isExpanded ? Color.appIdentity : Color(.tertiaryLabel))
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+
+            if isExpanded {
+                picker
+            }
         }
     }
 
@@ -246,6 +271,11 @@ private struct RunsPicker: View {
                     .tag(option)
             }
         }
+        .pickerStyle(.wheel)
+        .labelsHidden()
+        .frame(maxWidth: .infinity)
+        .frame(height: pickerHeight)
+        .clipped()
     }
 }
 

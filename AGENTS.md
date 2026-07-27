@@ -43,6 +43,12 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Always use `#Preview` for SwiftUI previews; do not use `PreviewProvider`.
 - Preserve localized strings; do not hardcode user-facing text unless existing nearby code does.
 
+## Localization
+
+- When adding or removing a supported language, update `supportedLocalizations` in `Core/Localization/Tests/LocalizationCatalogTests.swift`.
+- When adding, renaming, or removing an Android localization key used by iOS, update `requiredAndroidKeys` in `Core/Localization/Tests/LocalizationCatalogTests.swift`.
+- Run `make test-no-sync TARGET=LocalizationTests` and `make test-sync TARGET=LocalizationTests` after localization catalog changes.
+
 ## Concurrency
 
 - Prefer `Sendable` on models/services crossing concurrency boundaries.

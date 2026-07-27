@@ -247,3 +247,6 @@
 "undo" = "Deshacer";
 "update_available" = "Actualización disponible";
 "warning" = "Advertencia";
+
+// Metadata: Translated by ChatGPT; human review required.
+"repeatValues[3]" = "en bucle";

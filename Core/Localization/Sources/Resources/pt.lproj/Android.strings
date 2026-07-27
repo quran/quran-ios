@@ -253,3 +253,6 @@ Voce gostaria fazer download dessas imagens agora?";
 "undo" = "Desfazer";
 "update_available" = "Atualização Disponível";
 "warning" = "Advertência";
+
+// Metadata: Translated by ChatGPT; human review required.
+"repeatValues[3]" = "continuamente";

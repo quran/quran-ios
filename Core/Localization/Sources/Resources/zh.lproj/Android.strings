@@ -228,6 +228,8 @@
 "quran_page" = "页";
 "quran_rob3" = "¼";
 "quran_sura" = "章";
+// Metadata: Translated by ChatGPT; human review required.
+"quran_sura_title" = "苏拉 %1$@";
 "quran_talt_arb3" = "¾";
 "quranSearchType" = "Verses of the Quran";
 "recent_pages" = "最近的页面";
@@ -266,3 +268,6 @@
 "undo" = "撤销";
 "update_available" = "有可用更新";
 "warning" = "警告";
+
+// Metadata: Translated by ChatGPT; human review required.
+"repeatValues[3]" = "循环";

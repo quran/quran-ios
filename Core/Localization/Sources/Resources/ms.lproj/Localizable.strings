@@ -324,3 +324,189 @@
 "new.library_navigation" = "Perpustakaan & Navigasi:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Susun surah dan juz di Halaman Utama serta paparkan nombor surah supaya anda boleh pergi ke yang diperlukan dengan lebih pantas - terima kasih kepada @yismailuofa.";
+
+// Audio
+// Metadata: Translated by ChatGPT; human review required.
+"audio.delay.off" = "Mati";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at" = "Tamat pada";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at.custom" = "Tersuai";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-ayah-range" = "Julat ayat untuk dimainkan";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-speed" = "Kelajuan main balik";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repeat-count" = "Bilangan ulangan";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay" = "Jeda antara ulangan (saat)";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.10s" = "10s";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.1s" = "1s";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.2s" = "2s";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.3s" = "3s";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.5s" = "5s";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.description" = "Menetapkan tempoh jeda sebelum ulangan seterusnya bermula.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.description" = "Menjimatkan ruang cakera dengan menstrim audio, tetapi memerlukan sambungan internet.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.title" = "Strim audio";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay" = "Jeda selepas setiap ayat";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay.description" = "Pilih tempoh jeda selepas setiap ayat. Pada 1×, jeda berlangsung kira-kira selama ayat dimainkan, supaya anda sempat mengulang atau menghafalnya sebelum meneruskan.";
+
+// Ayah menu
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.notes-count" = "Nota (%d)";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.move-here" = "Pada %@ • Alih ke sini";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved" = "Penanda bacaan dialihkan dari %@ ke %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.removed" = "Penanda bacaan pada %@ telah dialih keluar";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.save-here" = "Simpan tempat bacaan anda di sini";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved" = "Penanda bacaan disimpan pada %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved-here" = "Disimpan di sini • Ketik untuk memadam";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.single-ayah-only" = "Pilih satu ayat sahaja";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.title" = "Penanda bacaan";
+
+// Bookmarks
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections" = "Koleksi";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.add" = "Tambah koleksi";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.delete-hint" = "Leret penanda halaman untuk memadamkannya.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.colored.text" = "Ayat yang anda serlahkan dengan penanda halaman berwarna %@ semasa membaca akan muncul di sini.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.text" = "Ayat yang anda tandai semasa membaca akan muncul di sini.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.open-hint" = "Membuka ayat ini dalam Quran.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.colored" = "Penanda halaman berwarna";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.message" = "Koleksi ini mengandungi penanda halaman. Adakah anda pasti mahu memadamkannya?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.title" = "Padam koleksi?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.favorites" = "Kegemaran";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.mine" = "Koleksi saya";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new" = "Koleksi baharu...";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new.placeholder" = "Nama koleksi";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.text" = "Cipta koleksi untuk menyusun ayat mengikut tema, doa atau rancangan hafazan.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.title" = "Belum ada koleksi";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.rename" = "Namakan semula";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all" = "Padam semua";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all.confirmation" = "Adakah anda pasti mahu memadam semua penanda halaman?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.mixed" = "Dipilih sebahagian";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.selected" = "Dipilih";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.unselected" = "Tidak dipilih";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.error.highlight-unavailable" = "Warna serlahan masih dimuatkan. Sila cuba lagi.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.old-page-bookmarks" = "Penanda halaman lama";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.action" = "Log masuk";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.body" = "Log masuk ke Quran.com untuk memastikan penanda halaman anda tersedia pada semua peranti.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.title" = "Segerakkan penanda halaman";
+
+// Highlight colors
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.blue" = "Biru";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.green" = "Hijau";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.purple" = "Ungu";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.red" = "Merah";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.yellow" = "Kuning";
+
+// Notes
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.body" = "Nota ini akan dipadamkan.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.title" = "Padam nota";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.created" = "Dicipta %@";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.delete" = "Padam nota";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.note-divider" = "NOTA ANDA";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.body" = "Nota mestilah sekurang-kurangnya %d aksara.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.title" = "Nota terlalu pendek";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.new" = "Nota baharu";
+
+// Reading selector
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.description" = "Tulisan Madani 1439 daripada Kompleks Percetakan Quran Raja Fahd. Dioptimumkan untuk skrin yang lebih besar.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.issue" = "Diterbitkan pada 1439 Hijrah";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.title" = "Mushaf Madani (1439)";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.description" = "Mushaf Madani 1441 daripada Kompleks Percetakan Quran Raja Fahd. Dioptimumkan untuk skrin yang lebih besar.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.issue" = "Diterbitkan pada 1441 Hijrah";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.title" = "Mushaf Madani (1441)";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.description" = "Imej ini diambil daripada Kompleks Percetakan Quran Raja Fahd.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.title" = "Tulisan Naskh";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.pages.611" = "611 halaman";
+
+// Quran.com account
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.attach_notes" = "Pastikan nota ayat anda disegerakkan";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.custom_collections" = "Pastikan koleksi tersuai anda disegerakkan";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.profile" = "Profil Quran.com";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in" = "Log masuk";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_out" = "Log keluar";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sync_devices" = "Segerakkan penanda halaman pada semua peranti";
+
+// Translation text
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.ayah-number" = "%d:%d";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "Nota kaki #%d";
+
+// What's new
+// Metadata: Translated by ChatGPT; human review required.
+"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

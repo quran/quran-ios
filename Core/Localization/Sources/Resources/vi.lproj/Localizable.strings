@@ -249,3 +249,189 @@
 "new.library_navigation" = "Thư viện & Điều hướng:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Sắp xếp surah và juz trên Trang chủ và hiển thị số surah để bạn đến nội dung cần nhanh hơn - nhờ @yismailuofa.";
+
+// Audio
+// Metadata: Translated by ChatGPT; human review required.
+"audio.delay.off" = "Tắt";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at" = "Kết thúc tại";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at.custom" = "Tùy chỉnh";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-ayah-range" = "Phạm vi ayah phát";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-speed" = "Tốc độ phát";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repeat-count" = "Số lần lặp";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay" = "Khoảng nghỉ giữa các lần lặp (giây)";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.10s" = "10 giây";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.1s" = "1 giây";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.2s" = "2 giây";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.3s" = "3 giây";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.5s" = "5 giây";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.description" = "Đặt thời gian tạm dừng trước khi lần lặp tiếp theo bắt đầu.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.description" = "Tiết kiệm dung lượng bằng cách phát trực tuyến âm thanh nhưng cần kết nối internet.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.title" = "Phát trực tuyến âm thanh";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay" = "Tạm dừng sau mỗi ayah";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay.description" = "Chọn thời gian tạm dừng sau mỗi ayah. Ở mức 1×, khoảng nghỉ dài gần bằng thời gian phát ayah, giúp bạn có thời gian lặp lại hoặc ghi nhớ trước khi tiếp tục.";
+
+// Ayah Menu
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.notes-count" = "Ghi chú (%d)";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.move-here" = "Tại %@ • Chuyển đến đây";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved" = "Dấu trang đọc đã được chuyển từ %@ đến %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.removed" = "Dấu trang đọc tại %@ đã được xóa";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.save-here" = "Lưu vị trí đọc của bạn tại đây";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved" = "Dấu trang đọc đã được lưu tại %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved-here" = "Đã lưu tại đây • Chạm để xóa";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.single-ayah-only" = "Chọn một ayah";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.title" = "Dấu trang đọc";
+
+// Bookmarks
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections" = "Bộ sưu tập";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.add" = "Thêm bộ sưu tập";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.delete-hint" = "Vuốt dấu trang sang trái để xóa.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.colored.text" = "Các ayah bạn tô sáng bằng dấu trang màu %@ khi đọc sẽ xuất hiện ở đây.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.text" = "Các ayah bạn đánh dấu khi đọc sẽ xuất hiện ở đây.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.open-hint" = "Mở ayah này trong Quran.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.colored" = "Dấu trang có màu";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.message" = "Bộ sưu tập này chứa dấu trang. Bạn có chắc muốn xóa không?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.title" = "Xóa bộ sưu tập?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.favorites" = "Yêu thích";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.mine" = "Bộ sưu tập của tôi";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new" = "Bộ sưu tập mới…";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new.placeholder" = "Tên bộ sưu tập";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.text" = "Tạo bộ sưu tập để sắp xếp các ayah theo chủ đề, dua hoặc kế hoạch ghi nhớ.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.title" = "Chưa có bộ sưu tập";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.rename" = "Đổi tên";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all" = "Xóa tất cả";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all.confirmation" = "Bạn có chắc muốn xóa tất cả dấu trang không?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.mixed" = "Đã chọn một phần";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.selected" = "Đã chọn";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.unselected" = "Chưa chọn";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.error.highlight-unavailable" = "Màu tô sáng vẫn đang tải. Vui lòng thử lại.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.old-page-bookmarks" = "Dấu trang trang cũ";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.action" = "Đăng nhập";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.body" = "Đăng nhập vào Quran.com để giữ dấu trang khả dụng trên mọi thiết bị.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.title" = "Đồng bộ dấu trang";
+
+// Highlight Colors
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.blue" = "Xanh dương";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.green" = "Xanh lá";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.purple" = "Tím";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.red" = "Đỏ";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.yellow" = "Vàng";
+
+// Notes
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.body" = "Ghi chú này sẽ bị xóa.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.title" = "Xóa ghi chú";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.created" = "Đã tạo %@";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.delete" = "Xóa ghi chú";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.note-divider" = "GHI CHÚ CỦA BẠN";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.body" = "Ghi chú phải có ít nhất %d ký tự.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.title" = "Ghi chú quá ngắn";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.new" = "Ghi chú mới";
+
+// Reading Selector
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.description" = "Phông chữ Madani 1439 từ Khu liên hợp In ấn Quran Vua Fahd. Được tối ưu cho màn hình lớn hơn.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.issue" = "Phát hành năm 1439 Hijri";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.title" = "Mushaf Madani (1439)";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.description" = "Phông chữ Madani 1441 từ Khu liên hợp In ấn Quran Vua Fahd. Được tối ưu cho màn hình lớn hơn.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.issue" = "Phát hành năm 1441 Hijri";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.title" = "Mushaf Madani (1441)";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.description" = "Những hình ảnh này được lấy từ Khu liên hợp In ấn Quran Vua Fahd.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.title" = "Chữ Naskh";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.pages.611" = "611 trang";
+
+// Quran.com Account
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.attach_notes" = "Giữ ghi chú ayah được đồng bộ";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.custom_collections" = "Giữ bộ sưu tập tùy chỉnh được đồng bộ";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.profile" = "Hồ sơ Quran.com";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in" = "Đăng nhập";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_out" = "Đăng xuất";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sync_devices" = "Đồng bộ dấu trang trên mọi thiết bị";
+
+// Translation Text
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.ayah-number" = "%d:%d";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "Chú thích #%d";
+
+// What's New
+// Metadata: Translated by ChatGPT; human review required.
+"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

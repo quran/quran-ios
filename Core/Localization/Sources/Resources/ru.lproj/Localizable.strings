@@ -341,3 +341,189 @@
 "new.library_navigation" = "Библиотека и навигация:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Сортируйте суры и джузы на главном экране и показывайте номера сур, чтобы быстрее перейти к нужному - спасибо @yismailuofa.";
+
+// Audio
+// Metadata: Translated by ChatGPT; human review required.
+"audio.delay.off" = "Выкл.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at" = "Закончить на";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at.custom" = "Настроить";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-ayah-range" = "Диапазон аятов для воспроизведения";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-speed" = "Скорость воспроизведения";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repeat-count" = "Количество повторов";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay" = "Пауза между повторами (секунды)";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.10s" = "10 с";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.1s" = "1 с";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.2s" = "2 с";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.3s" = "3 с";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.5s" = "5 с";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.description" = "Определяет длительность паузы перед началом следующего повтора.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.description" = "Экономит место на устройстве за счёт потокового воспроизведения, но требует подключения к интернету.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.title" = "Потоковое аудио";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay" = "Пауза после каждого аята";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay.description" = "Выберите длительность паузы после каждого аята. При 1× пауза длится примерно столько же, сколько воспроизведение аята, чтобы вы успели повторить или выучить его перед продолжением.";
+
+// Ayah menu
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.notes-count" = "Заметки (%d)";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.move-here" = "На %@ • Переместить сюда";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved" = "Закладка чтения перемещена с %@ на %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.removed" = "Закладка чтения на %@ удалена";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.save-here" = "Сохранить это место";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved" = "Закладка чтения сохранена на %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved-here" = "Сохранено здесь • Нажмите, чтобы удалить";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.single-ayah-only" = "Выберите один аят";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.title" = "Закладка чтения";
+
+// Bookmarks
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections" = "Коллекции";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.add" = "Добавить коллекцию";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.delete-hint" = "Смахните закладку, чтобы удалить её.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.colored.text" = "Аяты, выделенные во время чтения закладкой цвета %@, появятся здесь.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.text" = "Аяты, добавленные в закладки во время чтения, появятся здесь.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.open-hint" = "Открывает этот аят в Коране.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.colored" = "Цветные закладки";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.message" = "В этой коллекции есть закладки. Вы уверены, что хотите удалить её?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.title" = "Удалить коллекцию?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.favorites" = "Избранное";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.mine" = "Мои коллекции";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new" = "Новая коллекция...";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new.placeholder" = "Название коллекции";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.text" = "Создайте коллекцию, чтобы организовать аяты по теме, дуа или плану заучивания.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.title" = "Коллекций пока нет";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.rename" = "Переименовать";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all" = "Удалить все";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all.confirmation" = "Вы уверены, что хотите удалить все закладки?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.mixed" = "Выбрано частично";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.selected" = "Выбрано";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.unselected" = "Не выбрано";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.error.highlight-unavailable" = "Цвета выделения ещё загружаются. Повторите попытку.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.old-page-bookmarks" = "Старые закладки страниц";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.action" = "Войти";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.body" = "Войдите в Quran.com, чтобы ваши закладки были доступны на всех устройствах.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.title" = "Синхронизация закладок";
+
+// Highlight colors
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.blue" = "Синий";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.green" = "Зелёный";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.purple" = "Фиолетовый";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.red" = "Красный";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.yellow" = "Жёлтый";
+
+// Notes
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.body" = "Эта заметка будет удалена.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.title" = "Удалить заметку";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.created" = "Создано %@";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.delete" = "Удалить заметку";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.note-divider" = "ВАША ЗАМЕТКА";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.body" = "Заметка должна содержать не менее %d символов.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.title" = "Заметка слишком короткая";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.new" = "Новая заметка";
+
+// Reading selector
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.description" = "Мединский шрифт 1439 года из Комплекса имени короля Фахда по печати Корана. Оптимизирован для больших экранов.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.issue" = "Издано в 1439 году хиджры";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.title" = "Мединский мусхаф (1439)";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.description" = "Мединский мусхаф 1441 года из Комплекса имени короля Фахда по печати Корана. Оптимизирован для больших экранов.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.issue" = "Издано в 1441 году хиджры";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.title" = "Мединский мусхаф (1441)";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.description" = "Эти изображения взяты из Комплекса имени короля Фахда по печати Корана.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.title" = "Шрифт насх";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.pages.611" = "611 страниц";
+
+// Quran.com account
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.attach_notes" = "Синхронизировать заметки к аятам";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.custom_collections" = "Синхронизировать пользовательские коллекции";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.profile" = "Профиль Quran.com";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in" = "Войти";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_out" = "Выйти";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sync_devices" = "Синхронизировать закладки на всех устройствах";
+
+// Translation text
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.ayah-number" = "%d:%d";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "Сноска №%d";
+
+// What's new
+// Metadata: Translated by ChatGPT; human review required.
+"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <plist version="1.0">
     <dict>
+        <!-- Metadata: Translated by ChatGPT; human review required. -->
+        <key>audio_manager_files_downloaded</key>
+        <dict>
+            <key>NSStringLocalizedFormatKey</key>
+            <string>%#@audio_manager_files_downloaded@</string>
+            <key>audio_manager_files_downloaded</key>
+            <dict>
+                <key>NSStringFormatSpecTypeKey</key>
+                <string>NSStringPluralRuleType</string>
+                <key>NSStringFormatValueTypeKey</key>
+                <string>d</string>
+                <key>one</key>
+                <string>1 sura descargada</string>
+                <key>other</key>
+                <string>%1$d suras descargadas</string>
+            </dict>
+        </dict>
         <key>search_results</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>

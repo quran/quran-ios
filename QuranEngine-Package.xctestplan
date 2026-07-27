@@ -63,6 +63,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "LocalizationTests",
+        "name" : "LocalizationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "CoreDataPersistenceTests",
         "name" : "CoreDataPersistenceTests"
       }

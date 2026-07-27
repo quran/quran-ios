@@ -92,23 +92,17 @@ struct SearchTerm {
         )
     }
 
-    func buildAutocompletions(searchResults: [String]) -> [SearchText] {
-        buildAutocompleteStrings(searchResults: searchResults).map(SearchText.plain)
+    func buildAutocompletions<Text: PersistenceSearchText>(searchResults: [Text]) -> [SearchText] {
+        buildAutocompleteStrings(searchResults: searchResults.map(\.searchableText))
+            .map { Text.makeSearchText($0) }
     }
 
-    func buildAutocompletions(searchResults: [QuranText]) -> [SearchText] {
-        buildAutocompleteStrings(searchResults: searchResults.map(\.text))
-            .map { .quran(QuranText($0)) }
-    }
-
-    func buildSearchResults(verses: [(verse: AyahNumber, text: String)]) -> [SearchResult] {
-        buildSearchResults(verses: verses) { .plain($0) }
-    }
-
-    func buildSearchResults(verses: [(verse: AyahNumber, text: QuranText)]) -> [SearchResult] {
+    func buildSearchResults<Text: PersistenceSearchText>(
+        verses: [(verse: AyahNumber, text: Text)]
+    ) -> [SearchResult] {
         buildSearchResults(
-            verses: verses.map { (verse: $0.verse, text: $0.text.text) },
-            transform: { .quran(QuranText($0)) }
+            verses: verses.map { (verse: $0.verse, text: $0.text.searchableText) },
+            transform: { Text.makeSearchText($0) }
         )
     }
 

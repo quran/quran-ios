@@ -14,7 +14,7 @@ import VerseTextPersistence
 struct NumberSearcher: Searcher {
     // MARK: Internal
 
-    let quranVerseTextPersistence: VerseTextPersistence
+    let quranVerseTextPersistence: any VerseTextPersistence
 
     func autocomplete(term: SearchTerm, quran: Quran) throws -> [SearchText] {
         if Int(term.compactQuery) != nil {

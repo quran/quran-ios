@@ -16,12 +16,15 @@ public struct CompositeSearcher {
     // MARK: Lifecycle
 
     init(
-        quranVerseTextPersistence: VerseTextPersistence,
+        quranVerseTextPersistence: any VerseTextPersistence,
         localTranslationRetriever: LocalTranslationsRetriever,
-        versePersistenceBuilder: @escaping (Translation) -> TranslationVerseTextPersistence
+        versePersistenceBuilder: @escaping (Translation) -> any TranslationVerseTextPersistence
     ) {
         let numberSearcher = NumberSearcher(quranVerseTextPersistence: quranVerseTextPersistence)
-        let quranSearcher = QuranPersistenceSearcher(versePersistence: quranVerseTextPersistence)
+        let quranSearcher = PersistenceSearcher(
+            versePersistence: quranVerseTextPersistence,
+            source: .quran
+        )
         let suraSearcher = SuraSearcher()
         let translationSearcher = TranslationSearcher(
             localTranslationRetriever: localTranslationRetriever,

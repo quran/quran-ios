@@ -16,7 +16,7 @@ enum TestData {
     static let khanTranslation = TranslationTestData.khanTranslation
     static let sahihTranslation = TranslationTestData.sahihTranslation
 
-    static let translationsPersistenceBuilder = { (translation: Translation) -> TranslationVerseTextPersistence in
+    static let translationsPersistenceBuilder = { (translation: Translation) -> any TranslationVerseTextPersistence in
         let url = TestResources.resourceURL(translation.fileName)
         return GRDBTranslationVerseTextPersistence(fileURL: url)
     }

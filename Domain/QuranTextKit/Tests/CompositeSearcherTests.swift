@@ -110,6 +110,19 @@ class CompositeSearcherTests: XCTestCase {
         try await testSearch(term: "All")
     }
 
+    func testTranslationMatchesRetainPlainTextType() async throws {
+        let term = "All"
+
+        let autocompletions = await searcher.autocomplete(term: term, quran: quran)
+        let results = try await searcher.search(for: term, quran: quran)
+            .flatMap(\.items)
+
+        XCTAssertFalse(autocompletions.isEmpty)
+        XCTAssertTrue(autocompletions.allSatisfy(\.isPlainText))
+        XCTAssertFalse(results.isEmpty)
+        XCTAssertTrue(results.map(\.text).allSatisfy(\.isPlainText))
+    }
+
     func test_autocomplete_allSuras_prefixed() async {
         await enumerateAllSuras { sura, language in
             // Autocomplete sura name unchanged.
@@ -187,6 +200,13 @@ class CompositeSearcherTests: XCTestCase {
 }
 
 private extension SearchText {
+    var isPlainText: Bool {
+        if case .plain = self {
+            return true
+        }
+        return false
+    }
+
     var isQuranText: Bool {
         if case .quran = self {
             return true

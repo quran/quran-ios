@@ -20,7 +20,7 @@ public struct QuranTextDataService {
         self.init(databasesURL: databasesURL, arabicPersistence: GRDBQuranVerseTextPersistence(fileURL: quranFileURL))
     }
 
-    init(databasesURL: URL, arabicPersistence: VerseTextPersistence) {
+    init(databasesURL: URL, arabicPersistence: any VerseTextPersistence) {
         self.init(
             localTranslationRetriever: LocalTranslationsRetriever(databasesURL: databasesURL),
             arabicPersistence: arabicPersistence,
@@ -32,8 +32,8 @@ public struct QuranTextDataService {
 
     init(
         localTranslationRetriever: LocalTranslationsRetriever,
-        arabicPersistence: VerseTextPersistence,
-        translationsPersistenceBuilder: @escaping (Translation) -> TranslationVerseTextPersistence
+        arabicPersistence: any VerseTextPersistence,
+        translationsPersistenceBuilder: @escaping (Translation) -> any TranslationVerseTextPersistence
     ) {
         self.localTranslationRetriever = localTranslationRetriever
         self.arabicPersistence = arabicPersistence
@@ -67,8 +67,8 @@ public struct QuranTextDataService {
     static let footnotesRegex = try! NSRegularExpression(pattern: #"\[\[[\s\S]*?]]"#)
 
     let localTranslationRetriever: LocalTranslationsRetriever
-    let arabicPersistence: VerseTextPersistence
-    let translationsPersistenceBuilder: (Translation) -> TranslationVerseTextPersistence
+    let arabicPersistence: any VerseTextPersistence
+    let translationsPersistenceBuilder: (Translation) -> any TranslationVerseTextPersistence
     let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
     // MARK: Private

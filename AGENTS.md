@@ -29,6 +29,10 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Views should stay mostly declarative; business logic belongs in view models/interactors/services.
 - Reuse NoorUI/UIx components before adding one-off controls.
 - Put new reusable UI components in NoorUI; avoid feature-local component duplicates.
+- Use NoorUI navigation-action components instead of constructing feature-local buttons.
+- Keep Edit, Close, overflow, and secondary navigation actions neutral. Reserve the app tint for Done and primary actions.
+- Use Done only to commit or finish an editing/confirmation flow. Use a leading Close × for dismissal-only modals, with localized accessibility text.
+- Let pushed screens use the standard Back button; do not add Close or Done solely to pop them.
 - Match established layouts in analogous features before introducing a new visual pattern.
 - Render Quran Arabic with NoorUI's Quran text APIs and Quran font; never use a system font.
 - Render sura names with NoorUI's locale-aware `MultipartText` sura interpolation: localized plus decorated Arabic outside Arabic locales, localized Arabic only in Arabic locales.

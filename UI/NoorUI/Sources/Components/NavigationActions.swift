@@ -118,21 +118,6 @@ public struct EditModeButton: View {
     @Binding private var editMode: EditMode
 }
 
-public struct DoneToolbarItem: ToolbarContent {
-    public init(action: @escaping @MainActor @Sendable () -> Void) {
-        self.action = action
-    }
-
-    public var body: some ToolbarContent {
-        ToolbarItem(placement: .confirmationAction) {
-            Button(l("button.done"), action: action)
-                .foregroundStyle(Color.appIdentity)
-        }
-    }
-
-    private let action: @MainActor @Sendable () -> Void
-}
-
 public struct CloseToolbarItem: ToolbarContent {
     public init(action: @escaping @MainActor @Sendable () -> Void) {
         self.action = action

@@ -63,7 +63,22 @@ private struct ReciterListViewUI: View {
 
     // MARK: Private
 
+    @ViewBuilder
     private var content: some View {
+        if standalone {
+            list
+                .toolbar {
+                    CloseToolbarItem {
+                        logger.info("Reciters: close reciters list tapped")
+                        dismiss()
+                    }
+                }
+        } else {
+            list
+        }
+    }
+
+    private var list: some View {
         NoorList {
             NoorSection(
                 title: l("reciters.recent"),
@@ -99,12 +114,6 @@ private struct ReciterListViewUI: View {
         }
         .task { await start() }
         .navigationTitle(l("reciters.title"))
-        .toolbar {
-            DoneToolbarItem {
-                logger.info("Reciters: dismiss reciters list tapped")
-                dismiss()
-            }
-        }
     }
 
     private func allTitle(languageCode: String) -> String {

@@ -38,6 +38,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     // MARK: Internal
 
     @Published var collections: [AyahBookmarkCollection] = []
+    @Published var collectionPendingDeletion: AyahBookmarkCollection?
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
     @Published var isAuthenticated = false
@@ -145,6 +146,17 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         } catch {
             self.error = error
         }
+    }
+
+    func requestDeleteCollection(_ collection: AyahBookmarkCollection) async {
+        guard collection.kind.canDelete else {
+            return
+        }
+        guard !collection.bookmarks.isEmpty else {
+            await deleteCollection(collection)
+            return
+        }
+        collectionPendingDeletion = collection
     }
 
     func deleteCollection(_ collection: AyahBookmarkCollection) async {

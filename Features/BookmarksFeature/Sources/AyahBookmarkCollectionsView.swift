@@ -28,6 +28,10 @@ struct AyahBookmarkCollectionsView: View {
         AyahBookmarkCollectionDetails(viewModel: viewModel, collection: viewModel.collection)
             .task { await viewModel.start() }
             .renameCollectionAlert(viewModel: viewModel)
+            .collectionDeleteConfirmation(
+                item: $viewModel.collectionPendingDeletion,
+                delete: { await viewModel.deleteCollection($0) }
+            )
             .errorAlert(error: $viewModel.error)
             .environment(\.editMode, $viewModel.editMode)
     }

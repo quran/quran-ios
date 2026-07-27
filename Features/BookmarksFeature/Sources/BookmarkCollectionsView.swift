@@ -80,7 +80,7 @@ private struct BookmarkCollectionsContent: View {
                     let collections = offsets.map { viewModel.displayedCollections[$0] }
                     Task {
                         for collection in collections {
-                            await viewModel.deleteCollection(collection)
+                            await viewModel.requestDeleteCollection(collection)
                         }
                     }
                 }
@@ -96,6 +96,10 @@ private struct BookmarkCollectionsContent: View {
         }
         .task { await viewModel.start() }
         .addCollectionAlert(viewModel: viewModel)
+        .collectionDeleteConfirmation(
+            item: $viewModel.collectionPendingDeletion,
+            delete: { await viewModel.deleteCollection($0) }
+        )
         .errorAlert(error: $viewModel.error)
         .environment(\.editMode, $viewModel.editMode)
     }

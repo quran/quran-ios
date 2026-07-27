@@ -5,6 +5,7 @@
 import Foundation
 import QueuePlayer
 import QuranAudio
+import QuranAudioKit
 import QuranKit
 import ReciterListFeature
 import XCTest
@@ -194,6 +195,32 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         sut.play()
 
         XCTAssertEqual(listener.updatedOptions?.verseDelay, .threeQuarters)
+    }
+
+    // MARK: - Playback rate
+
+    func test_dismiss_doesNotPersistSelectedPlaybackRate() {
+        let originalRate = AudioPreferences.shared.playbackRate
+        defer { AudioPreferences.shared.playbackRate = originalRate }
+        AudioPreferences.shared.playbackRate = 1
+        let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
+
+        sut.updatePlaybackRate(to: 1.25)
+        sut.dismiss()
+
+        XCTAssertEqual(AudioPreferences.shared.playbackRate, 1)
+    }
+
+    func test_play_persistsSelectedPlaybackRate() {
+        let originalRate = AudioPreferences.shared.playbackRate
+        defer { AudioPreferences.shared.playbackRate = originalRate }
+        AudioPreferences.shared.playbackRate = 1
+        let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
+
+        sut.updatePlaybackRate(to: 1.25)
+        sut.play()
+
+        XCTAssertEqual(AudioPreferences.shared.playbackRate, 1.25)
     }
 
     func test_verseDelaySorted_matchesExpectedOrder() {

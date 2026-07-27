@@ -17,7 +17,7 @@ struct AyahRangePicker: View {
     let updateFromVerseTo: ItemAction<AyahNumber>
     let updateToVerseTo: ItemAction<AyahNumber>
 
-    @State private var expandedBoundary: Boundary? = .from
+    @State private var expandedBoundary: Boundary?
 
     var body: some View {
         Group {

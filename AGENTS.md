@@ -66,6 +66,10 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Avoid drive-by cleanup in unrelated modules.
 - Use SwiftFormat; do not hand-format around it.
 
+## Pull requests
+
+- Do not add PR screenshots to git. Upload them directly to GitHub and reference the attachment URLs in the PR description.
+
 ## Dependencies
 
 - New third-party dependencies need a quick health check and should be added only when they remove meaningful complexity.

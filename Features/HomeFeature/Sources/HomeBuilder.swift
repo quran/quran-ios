@@ -33,28 +33,22 @@ public struct HomeBuilder {
             lastPageService: container.lastPageService(),
             textRetriever: textRetriever,
             readingBookmarkService: container.readingBookmarkService(),
-            navigateToPage: { [weak listener] page, lastPage, ayah in
-                listener?.navigateTo(page: page, lastPage: lastPage, highlightingSearchAyah: ayah)
+            navigateToPage: { [weak listener] page, lastPage in
+                listener?.navigateTo(page: page, lastPage: lastPage)
             },
-            navigateToSura: { [weak listener] sura in
-                listener?.navigateTo(page: sura.page, lastPage: nil, highlightingSearchAyah: nil)
-            },
-            navigateToQuarter: { [weak listener] quarter in
-                listener?.navigateTo(page: quarter.page, lastPage: nil, highlightingSearchAyah: nil)
+            navigateToAyah: { [weak listener] ayah in
+                listener?.navigateTo(ayah: ayah, lastPage: nil)
             }
         )
         #else
         let viewModel = HomeViewModel(
             lastPageService: container.lastPageService(),
             textRetriever: textRetriever,
-            navigateToPage: { [weak listener] page, lastPage, ayah in
-                listener?.navigateTo(page: page, lastPage: lastPage, highlightingSearchAyah: ayah)
+            navigateToPage: { [weak listener] page, lastPage in
+                listener?.navigateTo(page: page, lastPage: lastPage)
             },
-            navigateToSura: { [weak listener] sura in
-                listener?.navigateTo(page: sura.page, lastPage: nil, highlightingSearchAyah: nil)
-            },
-            navigateToQuarter: { [weak listener] quarter in
-                listener?.navigateTo(page: quarter.page, lastPage: nil, highlightingSearchAyah: nil)
+            navigateToAyah: { [weak listener] ayah in
+                listener?.navigateTo(ayah: ayah, lastPage: nil)
             }
         )
         #endif

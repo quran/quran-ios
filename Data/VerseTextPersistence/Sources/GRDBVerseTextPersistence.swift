@@ -8,6 +8,7 @@
 import Foundation
 import GRDB
 import QuranKit
+import QuranText
 import SQLitePersistence
 
 public struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
@@ -39,28 +40,29 @@ public struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
 
     // MARK: Public
 
-    public func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String] {
+    public func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: QuranText] {
         try await persistence.textForVerses(verses, transform: textFromRow)
     }
 
-    public func textForVerse(_ verse: AyahNumber) async throws -> String {
+    public func textForVerse(_ verse: AyahNumber) async throws -> QuranText {
         try await persistence.textForVerse(verse, transform: textFromRow)
     }
 
-    public func autocomplete(term: String) async throws -> [String] {
-        try await persistence.autocomplete(term: term)
+    public func autocomplete(term: String) async throws -> [QuranText] {
+        try await persistence.autocomplete(term: term).map { QuranText($0) }
     }
 
-    public func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
+    public func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: QuranText)] {
         try await persistence.search(for: term, quran: quran)
+            .map { (verse: $0.verse, text: QuranText($0.text)) }
     }
 
     // MARK: Private
 
     private let persistence: GRDBVerseTextPersistence
 
-    private func textFromRow(_ row: Row, quran: Quran) -> String {
-        row["text"]
+    private func textFromRow(_ row: Row, quran: Quran) -> QuranText {
+        QuranText(row["text"])
     }
 }
 

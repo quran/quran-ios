@@ -9,6 +9,7 @@ import Foundation
 import Localization
 import QuranKit
 import QuranLocalization
+import QuranText
 import SwiftUI
 import UIx
 
@@ -57,10 +58,9 @@ private struct TextPartView: View {
             Text(ayah.localizedCoordinate(locale: locale))
                 .font(size.plainFont)
                 .environment(\.layoutDirection, .leftToRight)
-        case .quran(let text, let color, let lineLimit):
-            Text(text)
+        case .quran(let text, let color, let lineLimit, let highlighting):
+            QuranTextView(text, font: size.quranFont, highlighting: highlighting)
                 .optionalLineLimit(lineLimit)
-                .font(size.quranFont)
                 .padding(quranTextPadding)
                 .background(color)
         }
@@ -113,7 +113,7 @@ enum TextPart {
     case sura(Sura)
     case ayah(AyahNumber, emphasizesSura: Bool)
     case ayahCoordinate(AyahNumber)
-    case quran(text: String, color: Color, lineLimit: Int?)
+    case quran(text: QuranText, color: Color, lineLimit: Int?, highlighting: [HighlightingRange])
 
     // MARK: Internal
 
@@ -127,8 +127,8 @@ enum TextPart {
             QuranReference.ayah(ayah).rawValue(locale: locale)
         case .ayahCoordinate(let ayah):
             ayah.localizedCoordinate(locale: locale)
-        case .quran(let text, _, _):
-            text
+        case .quran(let text, _, _, _):
+            text.text
         }
     }
 
@@ -142,8 +142,8 @@ enum TextPart {
             QuranReference.ayah(ayah).accessibilityText
         case .ayahCoordinate(let ayah):
             ayah.localizedCoordinate()
-        case .quran(let text, _, _):
-            text
+        case .quran(let text, _, _, _):
+            text.text
         }
     }
 }
@@ -189,11 +189,12 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         }
 
         public mutating func appendInterpolation(
-            quran text: String,
+            quran text: QuranText,
             color: Color = .clear,
-            lineLimit: Int? = nil
+            lineLimit: Int? = nil,
+            highlighting: [HighlightingRange] = []
         ) {
-            parts.append(.quran(text: text, color: color, lineLimit: lineLimit))
+            parts.append(.quran(text: text, color: color, lineLimit: lineLimit, highlighting: highlighting))
         }
 
         public mutating func appendInterpolation(

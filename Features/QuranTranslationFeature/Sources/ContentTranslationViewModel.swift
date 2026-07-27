@@ -100,7 +100,7 @@ public final class ContentTranslationViewModel: ObservableObject {
 
             // Add arabic quran text
             let arabicVerseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
-            let arabicText = verseText.arabicText + " " + arabicVerseNumber
+            let arabicText = QuranText(verseText.arabicText.text + " " + arabicVerseNumber)
             items.append(.arabicText(TranslationArabicText(verse: verse, text: arabicText, arabicFontSize: arabicFontSize), color))
 
             for (index, translation) in translations.enumerated() {

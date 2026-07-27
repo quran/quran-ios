@@ -61,14 +61,14 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         let sut = makeSUT(collection: collection, service: service)
         let retrieved = expectation(description: "Retrieves Arabic text")
         let observation = sut.$ayahTexts
-            .filter { $0[ayah]?.isEmpty == false }
+            .filter { $0[ayah]?.text.isEmpty == false }
             .prefix(1)
             .sink { _ in retrieved.fulfill() }
 
         let task = Task { await sut.start() }
         await fulfillment(of: [retrieved], timeout: 2)
 
-        XCTAssertFalse(try XCTUnwrap(sut.ayahTexts[ayah]).isEmpty)
+        XCTAssertFalse(try XCTUnwrap(sut.ayahTexts[ayah]).text.isEmpty)
         XCTAssertNil(sut.error)
         task.cancel()
         observation.cancel()
@@ -122,7 +122,7 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
-    func test_deleteCollection_removesCollectionAndNotifiesListener() async throws {
+    func test_requestDeleteCollection_deletesEmptyCollectionAndNotifiesListener() async throws {
         let service = makeService()
         try await service.createCollection(named: "Favorites")
         let collection = try await firstCollection()
@@ -133,7 +133,7 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
             collectionDeleted: { didDeleteCollection = true }
         )
 
-        await sut.deleteCollection()
+        await sut.requestDeleteCollection()
 
         let stored = try await storedCollections {
             $0.count == 1 && $0[0].collection.isDefault
@@ -141,6 +141,38 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertEqual(stored.map(\.collection.name), ["Default"])
         XCTAssertTrue(stored[0].collection.isDefault)
         XCTAssertTrue(didDeleteCollection)
+        XCTAssertNil(sut.collectionPendingDeletion)
+        XCTAssertNil(sut.error)
+    }
+
+    func test_requestDeleteCollection_requiresConfirmationForNonEmptyCollection() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Favorites")
+        let storedCollection = try await firstCollection()
+        try await service.addAyahBookmarkToCollection(
+            collectionId: storedCollection.collection.id,
+            ayah: AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
+        )
+        let stored = try await storedCollections {
+            $0.first { $0.collection.name == "Favorites" }?.bookmarks.count == 1
+        }
+        let collection = try XCTUnwrap(
+            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
+                .first { $0.collection.name == "Favorites" }
+        )
+        var didDeleteCollection = false
+        let sut = makeSUT(
+            collection: collection,
+            service: service,
+            collectionDeleted: { didDeleteCollection = true }
+        )
+
+        await sut.requestDeleteCollection()
+
+        XCTAssertEqual(sut.collectionPendingDeletion?.id, collection.id)
+        let unchangedCollections = try await storedCollections()
+        XCTAssertTrue(unchangedCollections.contains { $0.collection.id == collection.id })
+        XCTAssertFalse(didDeleteCollection)
         XCTAssertNil(sut.error)
     }
 
@@ -157,7 +189,7 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         sut.pendingCollectionName = "Renamed"
 
         await sut.renamePendingCollection()
-        await sut.deleteCollection()
+        await sut.deleteCollection(collection)
 
         let storedCollection = try await firstCollection()
         XCTAssertEqual(storedCollection.collection.name, "Red")
@@ -165,17 +197,41 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_navigateToBookmark_navigatesToBookmarkedAyah() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Highlights")
+        let storedCollection = try await firstCollection()
+        let ayah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
+        try await service.addAyahBookmarkToCollection(
+            collectionId: storedCollection.collection.id,
+            ayah: ayah
+        )
+        let collection = try await firstCollection()
+        let bookmark = try XCTUnwrap(collection.bookmarks.first)
+        var navigatedAyah: AyahNumber?
+        let sut = makeSUT(
+            collection: collection,
+            service: service,
+            navigateToAyah: { navigatedAyah = $0 }
+        )
+
+        sut.navigateTo(bookmark)
+
+        XCTAssertEqual(navigatedAyah, ayah)
+    }
+
     private func makeSUT(
         collection: AyahBookmarkCollection,
         service: AyahBookmarkCollectionService? = nil,
         quranTextDataService: QuranTextDataService? = nil,
+        navigateToAyah: @escaping (AyahNumber) -> Void = { _ in },
         collectionDeleted: @escaping () -> Void = {}
     ) -> AyahBookmarkCollectionsViewModel {
         AyahBookmarkCollectionsViewModel(
             ayahBookmarkCollectionService: service ?? makeService(),
             collection: collection,
             quranTextDataService: quranTextDataService ?? makeQuranTextDataService(),
-            navigateToPage: { _ in },
+            navigateToAyah: navigateToAyah,
             collectionDeleted: collectionDeleted
         )
     }

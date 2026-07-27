@@ -10,7 +10,7 @@ import QuranLocalization
 import QuranText
 
 struct SuraSearcher: Searcher {
-    func autocomplete(term: SearchTerm, quran: Quran) throws -> [String] {
+    func autocomplete(term: SearchTerm, quran: Quran) throws -> [SearchText] {
         let defaultSuraNames = quran.suras.map { $0.localizedName(withPrefix: true) }
         let arabicSuraNames = quran.suras.map { $0.localizedName(withPrefix: true, language: .arabic) }
         var suraNames = Set(defaultSuraNames)

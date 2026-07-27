@@ -19,15 +19,18 @@
 //
 
 import QuranKit
+import QuranText
 
-public protocol SearchableTextPersistence {
-    func autocomplete(term: String) async throws -> [String]
-    func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)]
+public protocol SearchableTextPersistence<Text> {
+    associatedtype Text
+
+    func autocomplete(term: String) async throws -> [Text]
+    func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: Text)]
 }
 
-public protocol VerseTextPersistence: SearchableTextPersistence {
-    func textForVerse(_ verse: AyahNumber) async throws -> String
-    func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: String]
+public protocol VerseTextPersistence: SearchableTextPersistence<QuranText> {
+    func textForVerse(_ verse: AyahNumber) async throws -> QuranText
+    func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: QuranText]
 }
 
 public enum TranslationTextPersistenceModel: Equatable {
@@ -35,7 +38,7 @@ public enum TranslationTextPersistenceModel: Equatable {
     case reference(AyahNumber)
 }
 
-public protocol TranslationVerseTextPersistence: SearchableTextPersistence {
+public protocol TranslationVerseTextPersistence: SearchableTextPersistence<String> {
     func textForVerse(_ verse: AyahNumber) async throws -> TranslationTextPersistenceModel
     func textForVerses(_ verses: [AyahNumber]) async throws -> [AyahNumber: TranslationTextPersistenceModel]
 }

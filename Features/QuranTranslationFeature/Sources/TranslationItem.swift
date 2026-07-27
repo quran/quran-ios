@@ -62,7 +62,7 @@ struct TranslationSuraName: Identifiable & Hashable {
 
 struct TranslationArabicText: Identifiable & Hashable {
     let verse: AyahNumber
-    let text: String
+    let text: QuranText
     let arabicFontSize: FontSize
 
     var id: TranslationItemId { .arabic(verse) }

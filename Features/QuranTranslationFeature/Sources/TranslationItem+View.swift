@@ -27,7 +27,7 @@ extension TranslationSuraName: View {
     var body: some View {
         QuranSuraName(
             sura: sura,
-            besmAllah: sura.startsWithBesmAllah ? sura.quran.arabicBesmAllah : "",
+            besmAllah: QuranText(sura.startsWithBesmAllah ? sura.quran.arabicBesmAllah : ""),
             besmAllahFontSize: arabicFontSize
         )
     }
@@ -159,7 +159,7 @@ private struct ContentTranslationPreview: View {
                 TranslationItem.pageHeader(.init(page: quran.pages[0]))
                 TranslationItem.suraName(.init(sura: quran.firstSura, arabicFontSize: fontSize), nil)
                 TranslationItem.arabicText(.init(
-                    verse: quran.firstVerse, text: quran.arabicBesmAllah, arabicFontSize: fontSize
+                    verse: quran.firstVerse, text: QuranText(quran.arabicBesmAllah), arabicFontSize: fontSize
                 ), nil)
                 ForEach(0 ..< (readMore ? 1 : chunks.count), id: \.self) { chunkIndex in
                     TranslationItem.translationTextChunk(

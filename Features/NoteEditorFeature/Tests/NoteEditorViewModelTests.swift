@@ -32,8 +32,8 @@ final class NoteEditorViewModelTests: XCTestCase {
 
         let editableNote = try await sut.viewModel.fetchNote()
 
-        XCTAssertFalse(editableNote.ayahText.isEmpty)
-        XCTAssertTrue(editableNote.ayahText.contains("١"))
+        XCTAssertFalse(editableNote.ayahText.text.isEmpty)
+        XCTAssertTrue(editableNote.ayahText.text.contains("١"))
         XCTAssertEqual(editableNote.note, "Stored note")
         XCTAssertEqual(editableNote.selectedColor, .red)
         XCTAssertEqual(editableNote.ayahRange, ayah(1) ... ayah(2))
@@ -177,8 +177,8 @@ final class NoteEditorViewModelTests: XCTestCase {
 
         let editableNote = try await sut.viewModel.fetchNote()
 
-        XCTAssertFalse(editableNote.ayahText.isEmpty)
-        XCTAssertTrue(editableNote.ayahText.contains("١"))
+        XCTAssertFalse(editableNote.ayahText.text.isEmpty)
+        XCTAssertTrue(editableNote.ayahText.text.contains("١"))
         XCTAssertEqual(editableNote.note, "Stored note")
         XCTAssertEqual(editableNote.selectedColor, .blue)
         XCTAssertEqual(editableNote.ayahRange, ayah(1) ... ayah(2))

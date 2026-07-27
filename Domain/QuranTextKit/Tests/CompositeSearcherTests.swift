@@ -94,9 +94,33 @@ class CompositeSearcherTests: XCTestCase {
         try await testSearch(term: term)
     }
 
+    func testQuranMatchesRetainSemanticTextType() async throws {
+        let term = "لكنا"
+
+        let autocompletions = await searcher.autocomplete(term: term, quran: quran)
+        let results = try await searcher.search(for: term, quran: quran)
+            .flatMap(\.items)
+
+        XCTAssertTrue(autocompletions.contains(where: \.isQuranText))
+        XCTAssertTrue(results.map(\.text).contains(where: \.isQuranText))
+    }
+
     func testMatchTranslation() async throws {
         await testAutocomplete(term: "All")
         try await testSearch(term: "All")
+    }
+
+    func testTranslationMatchesRetainPlainTextType() async throws {
+        let term = "All"
+
+        let autocompletions = await searcher.autocomplete(term: term, quran: quran)
+        let results = try await searcher.search(for: term, quran: quran)
+            .flatMap(\.items)
+
+        XCTAssertFalse(autocompletions.isEmpty)
+        XCTAssertTrue(autocompletions.allSatisfy(\.isPlainText))
+        XCTAssertFalse(results.isEmpty)
+        XCTAssertTrue(results.map(\.text).allSatisfy(\.isPlainText))
     }
 
     func test_autocomplete_allSuras_prefixed() async {
@@ -105,7 +129,7 @@ class CompositeSearcherTests: XCTestCase {
             let suraName = sura.localizedName(withPrefix: false, language: language)
             let suraNamePrefix = prefixSuraName(suraName)
             let result = await searcher.autocomplete(term: suraNamePrefix, quran: quran)
-                .map { $0.removeInvalidSearchCharacters() }
+                .map { $0.text.removeInvalidSearchCharacters() }
             let strippedSuraName = suraName.removeInvalidSearchCharacters()
             XCTAssertTrue(result.contains(strippedSuraName), "[\(language)] \(result) doesn't contain \(strippedSuraName)")
         }
@@ -120,12 +144,12 @@ class CompositeSearcherTests: XCTestCase {
 
             // Check autocomplete partial pure letters and spaces sura name results contains the full sura name.
             let autocompleteResult = await searcher.autocomplete(term: cleanedSuraNamePrefix, quran: quran)
-                .map { $0.removeInvalidSearchCharacters() }
+                .map { $0.text.removeInvalidSearchCharacters() }
             XCTAssertTrue(autocompleteResult.contains(cleanedSuraName), "[\(language)] \(autocompleteResult) doesn't contain \(cleanedSuraName)")
 
             // Check search partial pure letters and spaces sura name results contains the full sura name.
             let searchResult = try await searcher.search(for: cleanedSuraNamePrefix, quran: quran)
-                .flatMap { $0.items.map(\.text) }
+                .flatMap { $0.items.map(\.text.text) }
             XCTAssertTrue(searchResult.contains(fullSuraName), "[\(language)] \(searchResult) doesn't contain \(fullSuraName)")
         }
     }
@@ -143,7 +167,7 @@ class CompositeSearcherTests: XCTestCase {
 
     private func autocompleteNumber(_ number: String) async {
         let result = await searcher.autocomplete(term: number, quran: quran)
-        XCTAssertEqual(result, [number])
+        XCTAssertEqual(result.map(\.text), [number])
     }
 
     @MainActor
@@ -151,7 +175,7 @@ class CompositeSearcherTests: XCTestCase {
         let result = await searcher.autocomplete(term: term, quran: quran)
 
         // assert the text
-        assertSnapshot(matching: result.sorted(), as: .json, record: record, testName: testName)
+        assertSnapshot(matching: result.map(\.text).sorted(), as: .json, record: record, testName: testName)
     }
 
     @MainActor
@@ -172,5 +196,21 @@ class CompositeSearcherTests: XCTestCase {
 
     private func prefixSuraName(_ suraName: String) -> String {
         suraName.count == 1 ? suraName : String(suraName.prefix(suraName.count - 1))
+    }
+}
+
+private extension SearchText {
+    var isPlainText: Bool {
+        if case .plain = self {
+            return true
+        }
+        return false
+    }
+
+    var isQuranText: Bool {
+        if case .quran = self {
+            return true
+        }
+        return false
     }
 }

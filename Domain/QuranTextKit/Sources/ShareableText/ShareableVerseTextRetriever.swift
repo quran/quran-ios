@@ -37,7 +37,7 @@ public struct ShareableVerseTextRetriever {
 
     init(
         textService: QuranTextDataService,
-        shareableVersePersistence: VerseTextPersistence,
+        shareableVersePersistence: any VerseTextPersistence,
         localTranslationsRetriever: LocalTranslationsRetriever
     ) {
         self.textService = textService
@@ -60,7 +60,7 @@ public struct ShareableVerseTextRetriever {
     private let preferences = QuranContentStatePreferences.shared
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     private let textService: QuranTextDataService
-    private let shareableVersePersistence: VerseTextPersistence
+    private let shareableVersePersistence: any VerseTextPersistence
     private let localTranslationsRetriever: LocalTranslationsRetriever
 
     private func versesSummary(_ verses: [AyahNumber]) -> String {
@@ -77,7 +77,8 @@ public struct ShareableVerseTextRetriever {
         let rightToLeftMark = "\u{202B}"
         let endMark = "\u{202C}"
 
-        let arabicVerse = try await shareableVersePersistence.textForVerse(verse) + "﴿ \(verseNumber) ﴾"
+        let quranText = try await shareableVersePersistence.textForVerse(verse)
+        let arabicVerse = quranText.text + "﴿ \(verseNumber) ﴾"
 
         return "\(rightToLeftMark)\(arabicVerse)\(endMark)"
     }

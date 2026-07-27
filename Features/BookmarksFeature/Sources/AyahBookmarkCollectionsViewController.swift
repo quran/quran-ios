@@ -128,7 +128,7 @@ private final class AyahBookmarkCollectionMenuController {
                     guard let self else {
                         return
                     }
-                    Task { await self.viewModel.deleteCollection() }
+                    Task { await self.viewModel.requestDeleteCollection() }
                 }
             )
         }

@@ -218,14 +218,28 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         try await service.createCollection(named: oldPageBookmarksCollectionName)
         let sut = makeSUT(collectionService: service)
         let viewController = BookmarkCollectionsViewController(viewModel: sut)
+        var cancellable: AnyCancellable?
+        let collections = AsyncStream<[AyahBookmarkCollection]> { continuation in
+            cancellable = sut.$collections.sink { continuation.yield($0) }
+        }
+        var iterator = collections.makeAsyncIterator()
 
         let task = Task { await sut.start() }
-        await waitUntil { viewController.navigationItem.rightBarButtonItems?.count == 2 }
+        defer {
+            task.cancel()
+            cancellable?.cancel()
+        }
+
+        while let collections = await iterator.next() {
+            if !BookmarkCollectionsViewModel.deletableCollections(from: collections).isEmpty {
+                break
+            }
+        }
 
         let systemEditTitle = UIBarButtonItem(barButtonSystemItem: .edit, target: nil, action: nil).title
         XCTAssertNil(viewController.navigationItem.leftBarButtonItem)
+        XCTAssertEqual(viewController.navigationItem.rightBarButtonItems?.count, 2)
         XCTAssertEqual(viewController.navigationItem.rightBarButtonItems?.first?.title, systemEditTitle)
-        task.cancel()
     }
 
     func test_start_setsAuthenticatedState_whenRestoreSucceeds() async {
@@ -302,7 +316,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
-    func test_deleteCollection_removesFromRealMobileSyncDatabase() async throws {
+    func test_requestDeleteCollection_deletesEmptyCollectionWithoutConfirmation() async throws {
         let service = makeService()
         try await service.createCollection(named: "Favorites")
         let stored = try await storedCollections()
@@ -312,13 +326,51 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         )
         let sut = makeSUT(collectionService: service)
 
-        await sut.deleteCollection(collection)
+        await sut.requestDeleteCollection(collection)
 
         let collections = try await storedCollections {
             $0.count == 1 && $0[0].collection.isDefault
         }
         XCTAssertEqual(collections.map(\.collection.name), ["Default"])
         XCTAssertTrue(collections[0].collection.isDefault)
+        XCTAssertNil(sut.collectionPendingDeletion)
+        XCTAssertNil(sut.error)
+    }
+
+    func test_requestDeleteCollection_requiresConfirmationBeforeDeletingNonEmptyCollection() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Favorites")
+        var stored = try await storedCollections {
+            $0.contains { $0.collection.name == "Favorites" }
+        }
+        let storedCollection = try XCTUnwrap(
+            stored.first { $0.collection.name == "Favorites" }
+        )
+        try await service.addAyahBookmarkToCollection(
+            collectionId: storedCollection.collection.id,
+            ayah: AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
+        )
+        stored = try await storedCollections {
+            $0.first { $0.collection.name == "Favorites" }?.bookmarks.count == 1
+        }
+        let collection = try XCTUnwrap(
+            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
+                .first { $0.collection.name == "Favorites" }
+        )
+        let sut = makeSUT(collectionService: service)
+
+        await sut.requestDeleteCollection(collection)
+
+        XCTAssertEqual(sut.collectionPendingDeletion?.id, collection.id)
+        let unchangedCollections = try await storedCollections()
+        XCTAssertTrue(unchangedCollections.contains { $0.collection.id == collection.id })
+
+        await sut.deleteCollection(collection)
+
+        let collectionsAfterConfirmation = try await storedCollections {
+            !$0.contains { $0.collection.id == collection.id }
+        }
+        XCTAssertFalse(collectionsAfterConfirmation.contains { $0.collection.id == collection.id })
         XCTAssertNil(sut.error)
     }
 
@@ -369,7 +421,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         task.cancel()
     }
 
-    func test_navigateToPageReadingBookmark_navigatesToPageWithoutAyah() {
+    func test_navigateToPageReadingBookmark_navigatesToPage() {
         let page = Quran.hafsMadani1405.pages[269]
         let bookmark = ReadingPositionBookmark(
             id: "reading-bookmark",
@@ -377,35 +429,25 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             modifiedOn: .distantPast
         )
         var navigatedPage: Page?
-        var navigatedAyah: AyahNumber?
-        let sut = makeSUT(navigateToPage: {
-            navigatedPage = $0
-            navigatedAyah = $1
-        })
+        let sut = makeSUT(navigateToPage: { navigatedPage = $0 })
 
         sut.navigateTo(bookmark)
 
         XCTAssertEqual(navigatedPage, page)
-        XCTAssertNil(navigatedAyah)
     }
 
-    func test_navigateToAyahReadingBookmark_navigatesToPageAndAyah() {
+    func test_navigateToAyahReadingBookmark_navigatesToBookmarkedAyah() {
         let ayah = Quran.hafsMadani1405.pages[269].firstVerse
         let bookmark = ReadingPositionBookmark(
             id: "reading-bookmark",
             location: .ayah(ayah),
             modifiedOn: .distantPast
         )
-        var navigatedPage: Page?
         var navigatedAyah: AyahNumber?
-        let sut = makeSUT(navigateToPage: {
-            navigatedPage = $0
-            navigatedAyah = $1
-        })
+        let sut = makeSUT(navigateToAyah: { navigatedAyah = $0 })
 
         sut.navigateTo(bookmark)
 
-        XCTAssertEqual(navigatedPage, ayah.page)
         XCTAssertEqual(navigatedAyah, ayah)
     }
 
@@ -434,7 +476,8 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         collectionService: AyahBookmarkCollectionService? = nil,
         readingBookmarkService: MobileSyncReadingBookmarkService? = nil,
         navigationController: UINavigationController? = nil,
-        navigateToPage: @escaping (Page, AyahNumber?) -> Void = { _, _ in }
+        navigateToPage: @escaping (Page) -> Void = { _ in },
+        navigateToAyah: @escaping (AyahNumber) -> Void = { _ in }
     ) -> BookmarkCollectionsViewModel {
         let collectionService = collectionService ?? makeService()
         let readingBookmarkService = readingBookmarkService ?? makeReadingBookmarkService()
@@ -442,7 +485,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let collectionsBuilder = AyahBookmarkCollectionsBuilder(
             ayahBookmarkCollectionService: collectionService,
             quranTextDataService: makeQuranTextDataService(),
-            navigateToPage: { _ in }
+            navigateToAyah: { _ in }
         )
         return BookmarkCollectionsViewModel(
             authenticationClient: authenticationClient,
@@ -450,7 +493,8 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             readingBookmarkService: readingBookmarkService,
             collectionsBuilder: collectionsBuilder,
             navigationController: navigationController,
-            navigateToPage: navigateToPage
+            navigateToPage: navigateToPage,
+            navigateToAyah: navigateToAyah
         )
     }
 
@@ -469,7 +513,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             ayahBookmarkCollectionService: makeService(),
             collection: collection,
             quranTextDataService: makeQuranTextDataService(),
-            navigateToPage: { _ in },
+            navigateToAyah: { _ in },
             collectionDeleted: {}
         )
     }

@@ -15,6 +15,7 @@ import QuranLocalization
 import SwiftUI
 import UIx
 
+@MainActor
 struct AdvancedAudioOptionsView: View {
     @StateObject var viewModel: AdvancedAudioOptionsViewModel
 
@@ -27,6 +28,7 @@ struct AdvancedAudioOptionsView: View {
     }
 }
 
+@MainActor
 private struct AdvancedAudioOptionsRootView: View {
     @StateObject var viewModel: AdvancedAudioOptionsViewModel
 
@@ -52,6 +54,7 @@ private struct AdvancedAudioOptionsRootView: View {
     }
 }
 
+@MainActor
 struct AdvancedAudioOptionsRootViewUI: View {
     // MARK: Internal
 
@@ -85,23 +88,13 @@ struct AdvancedAudioOptionsRootViewUI: View {
             }
 
             Section(header: Text(l("audio.playback-ayah-range"))) {
-                FromRow(verse: fromVerse) {
-                    showVerseSelection(
-                        title: l("audio.select-start-verse"),
-                        selected: fromVerse,
-                        onSelection: updateFromVerseTo
-                    )
-                }
+                AyahRangePicker(
+                    fromVerse: fromVerse,
+                    toVerse: toVerse,
+                    updateFromVerseTo: updateFromVerseTo,
+                    updateToVerseTo: updateToVerseTo
+                )
                 EndAtRow(selection: endAtBinding)
-                if endAt == .custom {
-                    ToRow(verse: toVerse) {
-                        showVerseSelection(
-                            title: l("audio.select-end-verse"),
-                            selected: toVerse,
-                            onSelection: updateToVerseTo
-                        )
-                    }
-                }
             }
 
             PlaybackSpeedSection(
@@ -141,22 +134,6 @@ struct AdvancedAudioOptionsRootViewUI: View {
             get: { endAt },
             set: { setEndAt($0) }
         )
-    }
-
-    private func showVerseSelection(
-        title: String,
-        selected: AyahNumber,
-        onSelection: @escaping ItemAction<AyahNumber>
-    ) {
-        navigator?.push(configuration: .init(title: title)) {
-            AdvancedAudioVersesView(
-                suras: selected.quran.suras,
-                selected: selected
-            ) { ayah in
-                onSelection(ayah)
-                navigator?.pop()
-            }
-        }
     }
 }
 
@@ -292,50 +269,34 @@ private struct ReciterRow: View {
     }
 }
 
-private struct FromRow: View {
-    let verse: AyahNumber
-    let action: AsyncAction
-
-    var body: some View {
-        NoorListItem(
-            title: .text(lAndroid("from")),
-            subtitle: .init(text: "\(ayah: verse)", location: .trailing),
-            accessory: .disclosureIndicator,
-            action: action
-        )
-    }
-}
-
-private struct ToRow: View {
-    let verse: AyahNumber
-    let action: AsyncAction
-
-    var body: some View {
-        NoorListItem(
-            title: .text(lAndroid("to")),
-            subtitle: .init(text: "\(ayah: verse)", location: .trailing),
-            accessory: .disclosureIndicator,
-            action: action
-        )
-    }
-}
-
 private struct EndAtRow: View {
     @Binding var selection: EndAtChoice
 
+    @ScaledMetric private var spacing: CGFloat = 8
+
     var body: some View {
-        HStack {
+        HStack(spacing: spacing) {
             Text(l("audio.end-at"))
-            Spacer()
-            Picker(l("audio.end-at"), selection: $selection) {
-                ForEach(EndAtChoice.allCases, id: \.self) { choice in
-                    Text(choice.localizedName).tag(choice)
-                }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize()
+
+            SegmentedChoicesPicker(
+                title: l("audio.end-at"),
+                items: EndAtChoice.pickerChoices,
+                selection: $selection
+            ) { choice in
+                choice.localizedName
             }
-            .pickerStyle(.menu)
+            .font(.footnote)
+            .foregroundStyle(.secondary)
             .labelsHidden()
-            .tint(.appIdentity)
+            .controlSize(.small)
+            .tint(Color.secondary)
+            .opacity(0.75)
+            .frame(maxWidth: .infinity)
         }
+        .padding(.vertical, spacing)
     }
 }
 

@@ -16,10 +16,10 @@ public struct QuranArabicText: View {
     @ScaledMetric var cornerRadius = 6
 
     let verse: AyahNumber
-    let text: String
+    let text: QuranText
     let fontSize: FontSize
 
-    public init(verse: AyahNumber, text: String, fontSize: FontSize) {
+    public init(verse: AyahNumber, text: QuranText, fontSize: FontSize) {
         self.verse = verse
         self.text = text
         self.fontSize = fontSize
@@ -33,8 +33,7 @@ public struct QuranArabicText: View {
                 .themedSecondaryBackground()
                 .cornerRadius(cornerRadius)
 
-            Text(text)
-                .font(.quran())
+            QuranTextView(text)
                 .dynamicTypeSize(fontSize.dynamicTypeSize)
                 .textAlignment(follows: .rightToLeft)
         }

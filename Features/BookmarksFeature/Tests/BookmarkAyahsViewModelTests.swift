@@ -1,6 +1,7 @@
 #if QURAN_SYNC
 import MobileSync
 import MobileSyncTestSupport
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import XCTest
@@ -101,6 +102,21 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
 
         XCTAssertEqual(sut.highlightSelection, .mixed([.red, .green]))
         XCTAssertEqual(sut.partiallySelectedHighlightColors, [.red, .green])
+    }
+
+    func test_titleShowsSingleAyah() {
+        let title = BookmarkAyahsViewController.title(for: [verses[0]])
+
+        XCTAssertEqual(title?.accessibilityText, verses[0].localizedName)
+    }
+
+    func test_titleShowsAyahRange() {
+        let title = BookmarkAyahsViewController.title(for: verses)
+
+        XCTAssertEqual(
+            title?.accessibilityText,
+            "\(verses[0].localizedName) - \(verses[1].localizedName)"
+        )
     }
 
     private var verses: [AyahNumber] {

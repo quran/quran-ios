@@ -46,7 +46,12 @@ public enum TranslationText: Hashable {
 public struct VerseText: Equatable {
     // MARK: Lifecycle
 
-    public init(arabicText: String, translations: [TranslationText], arabicPrefix: [String], arabicSuffix: [String]) {
+    public init(
+        arabicText: QuranText,
+        translations: [TranslationText],
+        arabicPrefix: [QuranText],
+        arabicSuffix: [QuranText]
+    ) {
         self.arabicText = arabicText
         self.translations = translations
         self.arabicPrefix = arabicPrefix
@@ -55,10 +60,10 @@ public struct VerseText: Equatable {
 
     // MARK: Public
 
-    public let arabicText: String
+    public let arabicText: QuranText
     public let translations: [TranslationText] // count equals to TranslatedVerses.translations.count
-    public let arabicPrefix: [String]
-    public let arabicSuffix: [String]
+    public let arabicPrefix: [QuranText]
+    public let arabicSuffix: [QuranText]
 }
 
 // TODO: Remove

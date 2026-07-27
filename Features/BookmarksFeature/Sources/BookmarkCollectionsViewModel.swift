@@ -24,7 +24,8 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         readingBookmarkService: MobileSyncReadingBookmarkService,
         collectionsBuilder: AyahBookmarkCollectionsBuilder,
         navigationController: UINavigationController,
-        navigateToPage: @escaping (Page, AyahNumber?) -> Void
+        navigateToPage: @escaping (Page) -> Void,
+        navigateToAyah: @escaping (AyahNumber) -> Void
     ) {
         self.authenticationClient = authenticationClient
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
@@ -32,12 +33,14 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         self.collectionsBuilder = collectionsBuilder
         self.navigationController = navigationController
         self.navigateToPage = navigateToPage
+        self.navigateToAyah = navigateToAyah
         isSyncBannerDismissed = preferences.isSyncBannerDismissed
     }
 
     // MARK: Internal
 
     @Published var collections: [AyahBookmarkCollection] = []
+    @Published var collectionPendingDeletion: AyahBookmarkCollection?
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
     @Published var isAuthenticated = false
@@ -147,6 +150,17 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         }
     }
 
+    func requestDeleteCollection(_ collection: AyahBookmarkCollection) async {
+        guard collection.kind.canDelete else {
+            return
+        }
+        guard !collection.bookmarks.isEmpty else {
+            await deleteCollection(collection)
+            return
+        }
+        collectionPendingDeletion = collection
+    }
+
     func deleteCollection(_ collection: AyahBookmarkCollection) async {
         guard collection.kind.canDelete else {
             return
@@ -173,9 +187,9 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     func navigateTo(_ readingBookmark: ReadingPositionBookmark) {
         switch readingBookmark.location {
         case .ayah(let ayahNumber):
-            navigateToPage(ayahNumber.page, ayahNumber)
+            navigateToAyah(ayahNumber)
         case .page(let page):
-            navigateToPage(page, nil)
+            navigateToPage(page)
         }
     }
 
@@ -185,7 +199,8 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let readingBookmarkService: MobileSyncReadingBookmarkService
     private let collectionsBuilder: AyahBookmarkCollectionsBuilder
-    private let navigateToPage: (Page, AyahNumber?) -> Void
+    private let navigateToPage: (Page) -> Void
+    private let navigateToAyah: (AyahNumber) -> Void
     private let preferences = BookmarkCollectionsPreferences.shared
     private let readingPreferences = ReadingPreferences.shared
     private weak var navigationController: UINavigationController?

@@ -8,6 +8,7 @@
 import Combine
 import QuranAnnotations
 import QuranKit
+import QuranText
 import QuranTextKit
 import SwiftUI
 import VLogging
@@ -20,21 +21,22 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
         collection: AyahBookmarkCollection,
         quranTextDataService: QuranTextDataService,
-        navigateToPage: @escaping (Page) -> Void,
+        navigateToAyah: @escaping (AyahNumber) -> Void,
         collectionDeleted: @escaping () -> Void
     ) {
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
         self.collection = collection
         collectionID = collection.collection.id
         self.quranTextDataService = quranTextDataService
-        self.navigateToPage = navigateToPage
+        self.navigateToAyah = navigateToAyah
         self.collectionDeleted = collectionDeleted
     }
 
     // MARK: Internal
 
     @Published private(set) var collection: AyahBookmarkCollection
-    @Published private(set) var ayahTexts: [AyahNumber: String] = [:]
+    @Published private(set) var ayahTexts: [AyahNumber: QuranText] = [:]
+    @Published var collectionPendingDeletion: AyahBookmarkCollection?
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
     @Published var isPresentingRenameCollection = false
@@ -58,7 +60,7 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
 
     func navigateTo(_ bookmark: AyahCollectionBookmark) {
         logger.info("Bookmarks: select collection bookmark at \(bookmark.ayah)")
-        navigateToPage(bookmark.ayah.page)
+        navigateToAyah(bookmark.ayah)
     }
 
     func deleteBookmark(_ bookmark: AyahCollectionBookmark) async {
@@ -96,11 +98,21 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
         }
     }
 
-    func deleteCollection() async {
+    func requestDeleteCollection() async {
         guard collection.kind.canDelete else {
             return
         }
+        guard !collection.bookmarks.isEmpty else {
+            await deleteCollection(collection)
+            return
+        }
+        collectionPendingDeletion = collection
+    }
 
+    func deleteCollection(_ collection: AyahBookmarkCollection) async {
+        guard collection.kind.canDelete else {
+            return
+        }
         do {
             try await ayahBookmarkCollectionService.removeCollection(
                 id: collection.collection.id
@@ -116,7 +128,7 @@ final class AyahBookmarkCollectionsViewModel: ObservableObject {
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let quranTextDataService: QuranTextDataService
     private let collectionID: String
-    private let navigateToPage: (Page) -> Void
+    private let navigateToAyah: (AyahNumber) -> Void
     private let collectionDeleted: () -> Void
 
     private func loadAyahTexts(for collection: AyahBookmarkCollection?) async throws {

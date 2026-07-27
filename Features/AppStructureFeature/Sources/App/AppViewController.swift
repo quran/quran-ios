@@ -72,7 +72,9 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        // show whats new controller if needed
+        guard !hasStartedPostLaunchPresentation else { return }
+        hasStartedPostLaunchPresentation = true
+
         whatsNewController.presentWhatsNewIfNeeded(from: self)
     }
 
@@ -80,6 +82,7 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
 
     private let interactor: AppInteractor
     private let whatsNewController: AppWhatsNewController
+    private var hasStartedPostLaunchPresentation = false
 
     private var visibleViewController: UIViewController? {
         presentedViewController ?? selectedViewController

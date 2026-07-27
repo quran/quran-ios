@@ -254,6 +254,16 @@
 "new.title" = "المضاف حديثاً";
 "new.action" = "استمر";
 
+// New app icon announcement
+"new.icon_announcement.title" = "أيقونة جديدة";
+"new.icon_announcement.body" = "في تحديثنا القادم، ستتغير أيقونة تطبيق القرآن على شاشتك الرئيسية. أصبحت هذه الأيقونة الجديدة العلامة المشتركة لعائلة من الأدوات المبنية حول كلام الله. المزيد من التفاصيل قريبًا.";
+"new.icon_announcement.now" = "الآن";
+"new.icon_announcement.coming_soon" = "قريبًا";
+"new.icon_announcement.same_app.title" = "التطبيق نفسه، بأيقونة جديدة";
+"new.icon_announcement.same_app.body" = "ستبقى جميع علاماتك المرجعية وتقدّمك وإعداداتك في مكانها تمامًا.";
+"new.icon_announcement.release.title" = "ستُطرح في الإصدار القادم";
+"new.icon_announcement.release.body" = "حدّث إلى أحدث إصدار لرؤية الأيقونة الجديدة على شاشتك الرئيسية.";
+
 // Mushafs
 "new.mushafs" = "مصاحف جديدة:";
 "new.mushafs.details" = "* مصحف حفص بالتجويد: القرآن الكريم - طبعة دار المعرفة.\n* مصحف المدينة 1421 هجري.\n* مصحف المدينة 1440 هجري.\n* بالإضافة إلى الاستمتاع بالنسخة الكلاسيكية 1405 هجري المستخدمة منذ بداية البرنامج.";

@@ -12,15 +12,13 @@ import QuranKit
 public struct QuranInput {
     // MARK: Lifecycle
 
-    public init(initialPage: Page, lastPage: LastPage?, highlightingSearchAyah: AyahNumber?) {
-        self.initialPage = initialPage
+    public init(initialAyah: AyahNumber, lastPage: LastPage?) {
+        self.initialAyah = initialAyah
         self.lastPage = lastPage
-        self.highlightingSearchAyah = highlightingSearchAyah
     }
 
     // MARK: Public
 
-    public let initialPage: Page
+    public let initialAyah: AyahNumber
     public let lastPage: LastPage?
-    public let highlightingSearchAyah: AyahNumber?
 }

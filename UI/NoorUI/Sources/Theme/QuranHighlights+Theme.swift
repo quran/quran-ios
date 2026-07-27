@@ -31,11 +31,11 @@ extension QuranHighlights {
 
     static let readingColor = UIColor.appIdentity.withAlphaComponent(opacity)
     static let shareColor = UIColor.systemBlue.withAlphaComponent(opacity)
-    static let searchColor = UIColor.systemGray.withAlphaComponent(opacity)
+    static let navigationColor = UIColor.systemGray.withAlphaComponent(opacity)
 
     // TODO: Use Color
     public func versesByHighlights() -> [AyahNumber: UIColor] {
-        // Sort order: share, reading, search, .note
+        // Sort order: share, reading, navigation, .note
         var versesByHighlights: [AyahNumber: UIColor] = [:]
 
         #if QURAN_SYNC
@@ -54,7 +54,9 @@ extension QuranHighlights {
             }
         }
 
-        add(verses: searchVerses, color: Self.searchColor)
+        if let navigationVerse {
+            versesByHighlights[navigationVerse] = Self.navigationColor
+        }
         add(verses: readingVerses, color: Self.readingColor)
         add(verses: shareVerses, color: Self.shareColor)
         return versesByHighlights

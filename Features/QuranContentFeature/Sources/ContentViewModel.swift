@@ -58,7 +58,7 @@ public final class ContentViewModel: ObservableObject {
         self.deps = deps
         self.input = input
 
-        visiblePages = [input.initialPage]
+        visiblePages = [input.initialAyah.page]
 
         highlights = deps.highlightsService.highlights
         twoPagesEnabled = deps.quranContentStatePreferences.twoPagesEnabled
@@ -196,13 +196,13 @@ public final class ContentViewModel: ObservableObject {
     }
 
     private func configureInitialPage() {
-        deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
-        highlights.searchVerses = [input.highlightingSearchAyah].compactMap { $0 }
+        deps.lastPageUpdater.configure(initialPage: input.initialAyah.page, lastPage: input.lastPage)
+        highlights.navigationVerse = input.initialAyah
     }
 
     private func visiblePagesUpdated() {
-        // remove search highlight when page changes
-        highlights.searchVerses = []
+        // Remove the navigation highlight when the reader changes pages.
+        highlights.navigationVerse = nil
 
         let pages = visiblePages
         let isTranslationView = deps.quranContentStatePreferences.quranMode == .translation

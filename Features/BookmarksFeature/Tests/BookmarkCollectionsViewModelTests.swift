@@ -397,43 +397,33 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         task.cancel()
     }
 
-    func test_navigateToPageReadingBookmark_navigatesToPageWithoutAyah() {
+    func test_navigateToPageReadingBookmark_navigatesToFirstAyahOnPage() {
         let page = Quran.hafsMadani1405.pages[269]
         let bookmark = ReadingPositionBookmark(
             id: "reading-bookmark",
             location: .page(page),
             modifiedOn: .distantPast
         )
-        var navigatedPage: Page?
         var navigatedAyah: AyahNumber?
-        let sut = makeSUT(navigateToPage: {
-            navigatedPage = $0
-            navigatedAyah = $1
-        })
+        let sut = makeSUT(navigateToAyah: { navigatedAyah = $0 })
 
         sut.navigateTo(bookmark)
 
-        XCTAssertEqual(navigatedPage, page)
-        XCTAssertNil(navigatedAyah)
+        XCTAssertEqual(navigatedAyah, page.firstVerse)
     }
 
-    func test_navigateToAyahReadingBookmark_navigatesToPageAndAyah() {
+    func test_navigateToAyahReadingBookmark_navigatesToBookmarkedAyah() {
         let ayah = Quran.hafsMadani1405.pages[269].firstVerse
         let bookmark = ReadingPositionBookmark(
             id: "reading-bookmark",
             location: .ayah(ayah),
             modifiedOn: .distantPast
         )
-        var navigatedPage: Page?
         var navigatedAyah: AyahNumber?
-        let sut = makeSUT(navigateToPage: {
-            navigatedPage = $0
-            navigatedAyah = $1
-        })
+        let sut = makeSUT(navigateToAyah: { navigatedAyah = $0 })
 
         sut.navigateTo(bookmark)
 
-        XCTAssertEqual(navigatedPage, ayah.page)
         XCTAssertEqual(navigatedAyah, ayah)
     }
 
@@ -462,7 +452,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         collectionService: AyahBookmarkCollectionService? = nil,
         readingBookmarkService: MobileSyncReadingBookmarkService? = nil,
         navigationController: UINavigationController? = nil,
-        navigateToPage: @escaping (Page, AyahNumber?) -> Void = { _, _ in }
+        navigateToAyah: @escaping (AyahNumber) -> Void = { _ in }
     ) -> BookmarkCollectionsViewModel {
         let collectionService = collectionService ?? makeService()
         let readingBookmarkService = readingBookmarkService ?? makeReadingBookmarkService()
@@ -470,7 +460,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let collectionsBuilder = AyahBookmarkCollectionsBuilder(
             ayahBookmarkCollectionService: collectionService,
             quranTextDataService: makeQuranTextDataService(),
-            navigateToPage: { _ in }
+            navigateToAyah: { _ in }
         )
         return BookmarkCollectionsViewModel(
             authenticationClient: authenticationClient,
@@ -478,7 +468,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             readingBookmarkService: readingBookmarkService,
             collectionsBuilder: collectionsBuilder,
             navigationController: navigationController,
-            navigateToPage: navigateToPage
+            navigateToAyah: navigateToAyah
         )
     }
 
@@ -497,7 +487,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             ayahBookmarkCollectionService: makeService(),
             collection: collection,
             quranTextDataService: makeQuranTextDataService(),
-            navigateToPage: { _ in },
+            navigateToAyah: { _ in },
             collectionDeleted: {}
         )
     }

@@ -24,14 +24,28 @@ final class BookmarksViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_navigateToBookmark_navigatesToFirstAyahOnPage() {
+        let page = Quran.hafsMadani1405.pages[269]
+        let bookmark = PageBookmark(page: page, creationDate: .distantPast)
+        var navigatedAyah: AyahNumber?
+        let sut = makeSUT(navigateTo: { navigatedAyah = $0 })
+
+        sut.navigateTo(bookmark)
+
+        XCTAssertEqual(navigatedAyah, page.firstVerse)
+    }
+
     // MARK: Private
 
-    private func makeSUT(persistence: PageBookmarkPersistenceSpy = PageBookmarkPersistenceSpy()) -> BookmarksViewModel {
+    private func makeSUT(
+        persistence: PageBookmarkPersistenceSpy = PageBookmarkPersistenceSpy(),
+        navigateTo: @escaping (AyahNumber) -> Void = { _ in }
+    ) -> BookmarksViewModel {
         let service = PageBookmarkService(persistence: persistence)
         return BookmarksViewModel(
             analytics: AnalyticsSpy(),
             service: service,
-            navigateTo: { _ in }
+            navigateTo: navigateTo
         )
     }
 }

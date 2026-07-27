@@ -197,17 +197,41 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_navigateToBookmark_navigatesToBookmarkedAyah() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Highlights")
+        let storedCollection = try await firstCollection()
+        let ayah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
+        try await service.addAyahBookmarkToCollection(
+            collectionId: storedCollection.collection.id,
+            ayah: ayah
+        )
+        let collection = try await firstCollection()
+        let bookmark = try XCTUnwrap(collection.bookmarks.first)
+        var navigatedAyah: AyahNumber?
+        let sut = makeSUT(
+            collection: collection,
+            service: service,
+            navigateToAyah: { navigatedAyah = $0 }
+        )
+
+        sut.navigateTo(bookmark)
+
+        XCTAssertEqual(navigatedAyah, ayah)
+    }
+
     private func makeSUT(
         collection: AyahBookmarkCollection,
         service: AyahBookmarkCollectionService? = nil,
         quranTextDataService: QuranTextDataService? = nil,
+        navigateToAyah: @escaping (AyahNumber) -> Void = { _ in },
         collectionDeleted: @escaping () -> Void = {}
     ) -> AyahBookmarkCollectionsViewModel {
         AyahBookmarkCollectionsViewModel(
             ayahBookmarkCollectionService: service ?? makeService(),
             collection: collection,
             quranTextDataService: quranTextDataService ?? makeQuranTextDataService(),
-            navigateToPage: { _ in },
+            navigateToAyah: navigateToAyah,
             collectionDeleted: collectionDeleted
         )
     }

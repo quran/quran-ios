@@ -16,11 +16,11 @@ struct AyahBookmarkCollectionsBuilder {
     init(
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
         quranTextDataService: QuranTextDataService,
-        navigateToPage: @escaping (Page) -> Void
+        navigateToAyah: @escaping (AyahNumber) -> Void
     ) {
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
         self.quranTextDataService = quranTextDataService
-        self.navigateToPage = navigateToPage
+        self.navigateToAyah = navigateToAyah
     }
 
     func buildCollection(
@@ -31,7 +31,7 @@ struct AyahBookmarkCollectionsBuilder {
             ayahBookmarkCollectionService: ayahBookmarkCollectionService,
             collection: collection,
             quranTextDataService: quranTextDataService,
-            navigateToPage: navigateToPage,
+            navigateToAyah: navigateToAyah,
             collectionDeleted: collectionDeleted
         )
         return AyahBookmarkCollectionsViewController(viewModel: viewModel)
@@ -39,6 +39,6 @@ struct AyahBookmarkCollectionsBuilder {
 
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let quranTextDataService: QuranTextDataService
-    private let navigateToPage: (Page) -> Void
+    private let navigateToAyah: (AyahNumber) -> Void
 }
 #endif

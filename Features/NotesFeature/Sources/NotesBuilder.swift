@@ -42,7 +42,7 @@ public struct NotesBuilder {
             textService: textService,
             textRetriever: textRetriever,
             navigateTo: { [weak listener] verse in
-                listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: nil)
+                listener?.navigateTo(ayah: verse, lastPage: nil)
             },
             editNote: editNote
         )
@@ -53,7 +53,7 @@ public struct NotesBuilder {
             textRetriever: textRetriever,
             textService: textService,
             navigateTo: { [weak listener] verse in
-                listener?.navigateTo(page: verse.page, lastPage: nil, highlightingSearchAyah: nil)
+                listener?.navigateTo(ayah: verse, lastPage: nil)
             },
             editNote: editNote
         )

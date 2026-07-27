@@ -37,8 +37,8 @@ public struct BookmarksBuilder {
         let viewModel = BookmarksViewModel(
             analytics: container.analytics,
             service: service,
-            navigateTo: { [weak listener] page in
-                listener?.navigateTo(page: page, lastPage: nil, highlightingSearchAyah: nil)
+            navigateTo: { [weak listener] ayah in
+                listener?.navigateTo(ayah: ayah, lastPage: nil)
             }
         )
         return BookmarksViewController(viewModel: viewModel)

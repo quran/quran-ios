@@ -218,17 +218,7 @@ struct TranslationsListView_Previews: PreviewProvider {
 
         var body: some View {
             VStack {
-                Button {
-                    withAnimation {
-                        if editMode == .inactive {
-                            editMode = .active
-                        } else {
-                            editMode = .inactive
-                        }
-                    }
-                } label: {
-                    Text(editMode == .inactive ? "Edit" : "Done")
-                }
+                EditModeButton(editMode: $editMode)
 
                 TranslationsListViewUI(
                     editMode: $editMode,

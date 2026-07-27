@@ -6,6 +6,7 @@
 // MARK: - General
 
 "button.done" = "Done";
+"button.close" = "Close";
 "button.delete" = "Delete";
 
 // MARK: - Errors
@@ -143,7 +144,6 @@
 
 "bookmarks.collections" = "Collections";
 "bookmarks.collections.add" = "Add Collection";
-"bookmarks.collections.edit.action" = "Edit";
 "bookmarks.collections.colored" = "Colored Bookmarks";
 "bookmarks.collections.favorites" = "Favorites";
 "bookmarks.collections.mine" = "My Collections";

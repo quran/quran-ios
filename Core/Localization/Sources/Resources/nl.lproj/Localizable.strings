@@ -6,6 +6,8 @@
 // MARK: - General
 
 "button.done" = "Klaar";
+// Metadata: Translated by ChatGPT; human review required.
+"button.close" = "Sluiten";
 "button.delete" = "Verwijderen";
 
 // MARK: - Errors

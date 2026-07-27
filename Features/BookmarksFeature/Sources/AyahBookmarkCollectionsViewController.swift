@@ -68,29 +68,26 @@ private final class AyahBookmarkCollectionMenuController {
 
         updateTitle(for: collection, in: viewController)
         if editMode.isEditing {
-            let doneButton = UIBarButtonItem(
-                title: l("button.done"),
-                primaryAction: UIAction { [weak self] _ in
+            viewController.navigationItem.rightBarButtonItems = [
+                NavigationBarButton.done { [weak self] in
                     self?.viewModel.editMode = .inactive
-                }
-            )
-            doneButton.tintColor = .appIdentity
-            viewController.navigationItem.rightBarButtonItem = doneButton
+                },
+            ]
         } else {
-            let actions = actions(for: collection)
-            let button = if let singleAction = actions.first, actions.count == 1 {
-                UIBarButtonItem(
-                    title: singleAction.title,
-                    primaryAction: singleAction
-                )
+            let editButton = NavigationBarButton.edit { [weak self] in
+                self?.viewModel.editMode = .active
+            }
+            let actions = secondaryActions(for: collection)
+            if actions.isEmpty {
+                viewController.navigationItem.rightBarButtonItems = [editButton]
             } else {
-                UIBarButtonItem(
+                let menuButton = UIBarButtonItem(
                     image: UIImage(systemName: "ellipsis.circle"),
                     menu: UIMenu(children: actions)
                 )
+                menuButton.tintColor = .appIdentity
+                viewController.navigationItem.rightBarButtonItems = [editButton, menuButton]
             }
-            button.tintColor = .appIdentity
-            viewController.navigationItem.rightBarButtonItem = button
         }
     }
 
@@ -112,16 +109,8 @@ private final class AyahBookmarkCollectionMenuController {
         lFormat("bookmarks.collections.ayahs.count", count)
     }
 
-    private func actions(for collection: AyahBookmarkCollection) -> [UIAction] {
-        var actions = [
-            UIAction(
-                title: l("bookmarks.collections.edit.action"),
-                image: UIImage(systemName: "pencil")
-            ) { [weak self] _ in
-                self?.viewModel.editMode = .active
-            },
-        ]
-
+    private func secondaryActions(for collection: AyahBookmarkCollection) -> [UIAction] {
+        var actions: [UIAction] = []
         if collection.kind.canRename {
             actions.append(
                 UIAction(

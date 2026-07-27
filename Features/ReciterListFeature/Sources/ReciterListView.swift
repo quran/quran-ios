@@ -100,14 +100,9 @@ private struct ReciterListViewUI: View {
         .task { await start() }
         .navigationTitle(l("reciters.title"))
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    logger.info("Reciters: dismiss reciters list tapped")
-                    dismiss()
-                } label: {
-                    Text(l("button.done"))
-                        .font(.headline)
-                }
+            DoneToolbarItem {
+                logger.info("Reciters: dismiss reciters list tapped")
+                dismiss()
             }
         }
     }

@@ -5,6 +5,8 @@
 // Metadata: Translated by ChatGPT; human review required.
 "button.done" = "Concluído";
 // Metadata: Translated by ChatGPT; human review required.
+"button.close" = "Fechar";
+// Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "Excluir";
 
 // MARK: - Errors

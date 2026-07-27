@@ -81,7 +81,9 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
     }
 
     private func buildNavigationController(rootViewController: UIViewController, note: EditableNote) -> UINavigationController {
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
+        let doneButton = NavigationBarButton.done { [weak self] in
+            self?.done()
+        }
 
         let title: MultipartText = "\(ayahRange: note.ayahRange)"
         let titleLabel = UILabel()
@@ -106,11 +108,6 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
         navigationController.navigationBar.tintColor = .appIdentity
         navigationController.view.backgroundColor = themeStyle.backgroundColor
         return navigationController
-    }
-
-    @objc
-    private func doneTapped() {
-        done()
     }
 
     private func done() {

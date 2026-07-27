@@ -131,7 +131,7 @@ private struct AyahNotesPreview: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+                    EditModeButton(editMode: $editMode)
                 }
             }
         }

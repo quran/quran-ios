@@ -181,16 +181,12 @@ extension TranslationVerseViewController: MoreMenuListener {
     private func presentTranslationsSelection() {
         let controller = translationsSelectionBuilder.build()
         let navigationController = TranslationsSelectionNavigationController(rootViewController: controller)
-        controller.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "x.circle"),
-            style: .done,
-            target: self,
-            action: #selector(onTranslationsSelectionDoneTapped)
-        )
+        controller.navigationItem.leftBarButtonItem = NavigationBarButton.close { [weak self] in
+            self?.onTranslationsSelectionDoneTapped()
+        }
         present(navigationController, animated: true, completion: nil)
     }
 
-    @objc
     private func onTranslationsSelectionDoneTapped() {
         logger.info("Quran: translations selection dismissed")
         dismiss(animated: true)

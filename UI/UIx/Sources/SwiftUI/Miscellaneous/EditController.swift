@@ -28,6 +28,9 @@ public final class EditController {
                 self?.updateEditButtonStateIfNeeded()
             }
             .store(in: &cancellables)
+
+        buttonEditModeState = editMode.wrappedValue
+        updateEditButton()
     }
 
     // MARK: Private
@@ -64,7 +67,7 @@ public final class EditController {
 
     private func updateEditButton() {
         if let editButton {
-            navigationItem.setRightBarButtonItems(customItems + [editButton], animated: true)
+            navigationItem.setRightBarButtonItems([editButton] + customItems, animated: true)
         } else {
             navigationItem.setRightBarButtonItems(customItems, animated: true)
         }

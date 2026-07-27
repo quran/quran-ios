@@ -3,6 +3,8 @@
 // MARK: - General
 
 "button.done" = "تم";
+// Metadata: Translated by ChatGPT; human review required.
+"button.close" = "إغلاق";
 "button.delete" = "حذف";
 
 // MARK: - Errors
@@ -124,7 +126,6 @@
 "bookmarks.no-data.text" = "عندما تقرأ القرآن، اضغط على زر الإشارة المرجعية لإضافة الصفحة.";
 "bookmarks.collections" = "المجموعات";
 "bookmarks.collections.add" = "إضافة مجموعة";
-"bookmarks.collections.edit.action" = "تحرير";
 "bookmarks.collections.colored" = "الإشارات المرجعية الملونة";
 "bookmarks.collections.favorites" = "المفضلة";
 "bookmarks.collections.mine" = "مجموعاتي";

@@ -5,6 +5,8 @@
 // Metadata: Translated by ChatGPT; human review required.
 "button.done" = "完成";
 // Metadata: Translated by ChatGPT; human review required.
+"button.close" = "关闭";
+// Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "删除";
 
 // MARK: - Errors

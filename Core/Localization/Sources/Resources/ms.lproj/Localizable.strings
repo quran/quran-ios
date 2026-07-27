@@ -8,6 +8,8 @@
 // Metadata: Translated by ChatGPT; human review required.
 "button.done" = "Selesai";
 // Metadata: Translated by ChatGPT; human review required.
+"button.close" = "Tutup";
+// Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "Padam";
 
 // MARK: - Errors

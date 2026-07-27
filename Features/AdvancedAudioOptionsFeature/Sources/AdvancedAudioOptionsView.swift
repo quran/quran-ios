@@ -167,7 +167,7 @@ private struct PlayEachVerseSection: View {
 
     var body: some View {
         Section(header: Text(lAndroid("play_each_verse").replacingOccurrences(of: ":", with: ""))) {
-            RunsMenuPicker(runs: $verseRuns)
+            RunsPicker(runs: $verseRuns)
 
             VStack(alignment: .leading, spacing: 10) {
                 Text(l("audio.verse-delay"))
@@ -194,7 +194,7 @@ private struct PlaySetChoicesSection: View {
 
     var body: some View {
         Section(header: Text(lAndroid("play_verses_range").replacingOccurrences(of: ":", with: ""))) {
-            RunsMenuPicker(runs: $listRuns)
+            RunsPicker(runs: $listRuns)
 
             VStack(alignment: .leading, spacing: 10) {
                 Text(l("audio.repetition-delay"))
@@ -215,36 +215,36 @@ private struct PlaySetChoicesSection: View {
     }
 }
 
-/// Keeps repeat counts compact in the form while still exposing every supported count.
-private struct RunsMenuPicker: View {
+private struct RunsPicker: View {
     // MARK: Internal
 
     @Binding var runs: Runs
 
+    @ViewBuilder
     var body: some View {
-        Menu {
-            Picker(selection: $runs) {
-                Label(Runs.indefinite.localizedDescription.capitalized, systemImage: "infinity")
-                    .tag(Runs.indefinite)
-                ForEach(1 ... 100, id: \.self) { count in
-                    Text(Runs.finite(count).localizedDescription)
-                        .tag(Runs.finite(count))
-                }
-            } label: {
-                EmptyView()
+        if #available(iOS 16.0, *) {
+            picker
+                .pickerStyle(.navigationLink)
+        } else {
+            picker
+        }
+    }
+
+    // MARK: Private
+
+    private var picker: some View {
+        Picker(l("audio.repeat-count"), selection: $runs) {
+            Label(
+                Runs.indefinite.localizedDescription.capitalized,
+                systemImage: "infinity"
+            )
+            .tag(Runs.indefinite)
+
+            ForEach(1 ... 100, id: \.self) { count in
+                let option = Runs.finite(count)
+                Text(option.localizedDescription.capitalized)
+                    .tag(option)
             }
-        } label: {
-            HStack {
-                Text(l("audio.repeat-count"))
-                    .foregroundStyle(Color(.label))
-                Spacer()
-                Text(runs.localizedDescription)
-                    .foregroundStyle(.secondary)
-                Image(systemName: "chevron.up.chevron.down")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(.tertiary)
-            }
-            .contentShape(Rectangle())
         }
     }
 }

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Metadata: Translated by ChatGPT; human review required. -->
+    <key>bookmarks.collections.ayahs.count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@bookmarks@</string>
+        <key>bookmarks</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d закладка</string>
+            <key>few</key>
+            <string>%d закладки</string>
+            <key>many</key>
+            <string>%d закладок</string>
+            <key>other</key>
+            <string>%d закладок</string>
+        </dict>
+    </dict>
+    <!-- Metadata: Translated by ChatGPT; human review required. -->
+    <key>bookmarks.editor.title</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@ayahs@</string>
+        <key>ayahs</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>Сохранить аят...</string>
+            <key>few</key>
+            <string>Сохранить аяты...</string>
+            <key>many</key>
+            <string>Сохранить аяты...</string>
+            <key>other</key>
+            <string>Сохранить аяты...</string>
+        </dict>
+    </dict>
+    <!-- Metadata: Translated by ChatGPT; human review required. -->
+    <key>notes.editor.words-count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@words@</string>
+        <key>words</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d слово</string>
+            <key>few</key>
+            <string>%d слова</string>
+            <key>many</key>
+            <string>%d слов</string>
+            <key>other</key>
+            <string>%d слов</string>
+        </dict>
+    </dict>
+</dict>
+</plist>

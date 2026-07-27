@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Metadata: Translated by ChatGPT; human review required. -->
+    <key>bookmarks.collections.ayahs.count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@bookmarks@</string>
+        <key>bookmarks</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>other</key>
+            <string>%d 个书签</string>
+        </dict>
+    </dict>
+    <!-- Metadata: Translated by ChatGPT; human review required. -->
+    <key>bookmarks.editor.title</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@ayahs@</string>
+        <key>ayahs</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>other</key>
+            <string>保存经文…</string>
+        </dict>
+    </dict>
+    <!-- Metadata: Translated by ChatGPT; human review required. -->
+    <key>notes.editor.words-count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@words@</string>
+        <key>words</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>other</key>
+            <string>%d 个词</string>
+        </dict>
+    </dict>
+</dict>
+</plist>

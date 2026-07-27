@@ -291,6 +291,24 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "继续";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "新图标";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "在下次更新中，主屏幕上的《古兰经》应用图标将会更改。这个新图标将成为一系列围绕真主之言打造的工具的共同标志。更多详情，敬请期待。";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "现在";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "即将推出";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "应用不变，图标焕新";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "你的所有书签、进度和设置都会原封不动地保留。";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "将在下一版本推出";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "更新至最新版本，即可在主屏幕上看到新图标。";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "新穆沙夫:";
@@ -324,3 +342,189 @@
 "new.library_navigation" = "书库与导航:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* 在主页排序苏拉和朱兹并显示苏拉编号，帮助你更快跳转到所需内容 - 感谢 @yismailuofa。";
+
+// Audio
+// Metadata: Translated by ChatGPT; human review required.
+"audio.delay.off" = "关闭";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at" = "结束于";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at.custom" = "自定义";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-ayah-range" = "播放经文范围";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-speed" = "播放速度";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repeat-count" = "重复次数";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay" = "重复间隔（秒）";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.10s" = "10秒";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.1s" = "1秒";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.2s" = "2秒";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.3s" = "3秒";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.5s" = "5秒";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.description" = "设置下一次重复开始前的暂停时长。";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.description" = "通过流式播放音频节省存储空间，但需要互联网连接。";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.title" = "流式播放音频";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay" = "每节经文后暂停";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay.description" = "选择每节经文后的暂停时长。1× 时，暂停时间大约与经文播放时长相同，让你有时间在继续前跟读或背诵。";
+
+// Ayah Menu
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.notes-count" = "笔记（%d）";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.move-here" = "位于 %@ • 移到这里";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved" = "阅读书签已从 %@ 移至 %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.removed" = "已移除 %@ 的阅读书签";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.save-here" = "在此保存阅读位置";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved" = "阅读书签已保存至 %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved-here" = "已保存在这里 • 轻点删除";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.single-ayah-only" = "请选择一节经文";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.title" = "阅读书签";
+
+// Bookmarks
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections" = "收藏集";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.add" = "添加收藏集";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.delete-hint" = "向左轻扫书签即可删除。";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.colored.text" = "阅读时使用 %@ 书签高亮的经文会显示在这里。";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.text" = "阅读时加入书签的经文会显示在这里。";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.open-hint" = "在《古兰经》中打开这节经文。";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.colored" = "彩色书签";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.message" = "此收藏集包含书签。确定要删除吗？";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.title" = "删除收藏集？";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.favorites" = "收藏";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.mine" = "我的收藏集";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new" = "新建收藏集…";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new.placeholder" = "收藏集名称";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.text" = "创建收藏集，按主题、杜阿或背诵计划整理经文。";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.title" = "暂无收藏集";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.rename" = "重命名";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all" = "全部删除";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all.confirmation" = "确定要删除所有书签吗？";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.mixed" = "部分选中";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.selected" = "已选中";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.unselected" = "未选中";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.error.highlight-unavailable" = "高亮颜色仍在加载，请重试。";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.old-page-bookmarks" = "旧页面书签";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.action" = "登录";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.body" = "登录 Quran.com，让书签可在所有设备上使用。";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.title" = "同步书签";
+
+// Highlight Colors
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.blue" = "蓝色";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.green" = "绿色";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.purple" = "紫色";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.red" = "红色";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.yellow" = "黄色";
+
+// Notes
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.body" = "此笔记将被删除。";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.title" = "删除笔记";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.created" = "创建于 %@";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.delete" = "删除笔记";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.note-divider" = "你的笔记";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.body" = "笔记至少需要 %d 个字符。";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.title" = "笔记太短";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.new" = "新建笔记";
+
+// Reading Selector
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.description" = "由法赫德国王《古兰经》印刷中心制作的 1439 年麦地那体，针对更大屏幕进行了优化。";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.issue" = "发行于伊历 1439 年";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.title" = "麦地那穆沙夫（1439）";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.description" = "由法赫德国王《古兰经》印刷中心制作的 1441 年麦地那体，针对更大屏幕进行了优化。";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.issue" = "发行于伊历 1441 年";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.title" = "麦地那穆沙夫（1441）";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.description" = "这些图像取自法赫德国王《古兰经》印刷中心。";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.title" = "纳斯赫体";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.pages.611" = "611 页";
+
+// Quran.com Account
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.attach_notes" = "同步你的经文笔记";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.custom_collections" = "同步你的自定义收藏集";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.profile" = "Quran.com 个人资料";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in" = "登录";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_out" = "退出登录";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sync_devices" = "在所有设备间同步书签";
+
+// Translation Text
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.ayah-number" = "%d:%d";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "脚注 #%d";
+
+// What's New
+// Metadata: Translated by ChatGPT; human review required.
+"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

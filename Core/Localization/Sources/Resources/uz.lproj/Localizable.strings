@@ -292,6 +292,24 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "Davom etish";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "Yangi ilova belgisi";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "Keyingi yangilanishimizda bosh ekraningizdagi Qur’on ilovasi belgisi o‘zgaradi. Bu yangi belgi endi Allohning kalomi atrofida yaratilgan vositalar oilasining umumiy ramzidir. Batafsil ma’lumot tez orada.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "HOZIR";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "TEZ ORADA";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "O‘sha ilova, yangi belgi";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "Barcha xatcho‘plaringiz, o‘qish jarayoningiz va sozlamalaringiz aynan o‘z joyida qoladi.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "Keyingi versiyada taqdim etiladi";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "Bosh ekraningizda yangi belgini ko‘rish uchun eng so‘nggi versiyaga yangilang.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "Yangi Mushaflar:";
@@ -325,3 +343,189 @@
 "new.library_navigation" = "Kutubxona va navigatsiya:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Bosh sahifada suralar va juzlarni tartiblang hamda sura raqamlarini ko'rsating, shunda kerakli joyga tezroq o'tasiz - @yismailuofa ga rahmat.";
+
+// Audio
+// Metadata: Translated by ChatGPT; human review required.
+"audio.delay.off" = "O‘chiq";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at" = "Yakunlash joyi";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at.custom" = "Maxsus";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-ayah-range" = "O‘qiladigan oyatlar oralig‘i";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-speed" = "Ijro tezligi";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repeat-count" = "Takrorlash soni";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay" = "Takrorlar orasidagi tanaffus (soniya)";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.10s" = "10 soniya";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.1s" = "1 soniya";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.2s" = "2 soniya";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.3s" = "3 soniya";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.5s" = "5 soniya";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.description" = "Keyingi takror boshlanishidan oldingi tanaffus davomiyligini belgilaydi.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.description" = "Audioni internet orqali ijro etib, qurilma xotirasini tejaydi, ammo internet aloqasini talab qiladi.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.title" = "Audioni internet orqali ijro etish";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay" = "Har bir oyatdan keyingi tanaffus";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay.description" = "Har bir oyatdan keyin qancha tanaffus qilishni tanlang. 1× holatida tanaffus oyat ijro etilgan vaqtcha davom etadi, shunda davom etishdan oldin takrorlash yoki yodlashga vaqtingiz bo‘ladi.";
+
+// Ayah menu
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.notes-count" = "Eslatmalar (%d)";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.move-here" = "%@ da • Bu yerga ko‘chirish";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved" = "O‘qish xatcho‘pi %@ dan %@ ga ko‘chirildi";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.removed" = "%@ dagi o‘qish xatcho‘pi olib tashlandi";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.save-here" = "O‘qish joyingizni shu yerda saqlang";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved" = "O‘qish xatcho‘pi %@ da saqlandi";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved-here" = "Shu yerda saqlangan • O‘chirish uchun bosing";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.single-ayah-only" = "Bitta oyatni tanlang";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.title" = "O‘qish xatcho‘pi";
+
+// Bookmarks
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections" = "To‘plamlar";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.add" = "To‘plam qo‘shish";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.delete-hint" = "Xatcho‘pni o‘chirish uchun uni suring.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.colored.text" = "O‘qish paytida %@ xatcho‘p bilan ajratgan oyatlaringiz shu yerda ko‘rinadi.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.text" = "O‘qish paytida xatcho‘p qo‘ygan oyatlaringiz shu yerda ko‘rinadi.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.open-hint" = "Bu oyatni Qur’onda ochadi.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.colored" = "Rangli xatcho‘plar";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.message" = "Bu to‘plamda xatcho‘plar bor. Uni o‘chirmoqchi ekaningizga ishonchingiz komilmi?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.title" = "To‘plam o‘chirilsinmi?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.favorites" = "Sevimlilar";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.mine" = "To‘plamlarim";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new" = "Yangi to‘plam...";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new.placeholder" = "To‘plam nomi";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.text" = "Oyatlarni mavzu, duo yoki yodlash rejasi bo‘yicha tartiblash uchun to‘plam yarating.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.title" = "Hali to‘plamlar yo‘q";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.rename" = "Nomini o‘zgartirish";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all" = "Hammasini o‘chirish";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all.confirmation" = "Barcha xatcho‘plarni o‘chirmoqchi ekaningizga ishonchingiz komilmi?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.mixed" = "Qisman tanlangan";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.selected" = "Tanlangan";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.unselected" = "Tanlanmagan";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.error.highlight-unavailable" = "Ajratish ranglari hali yuklanmoqda. Qayta urinib ko‘ring.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.old-page-bookmarks" = "Eski sahifa xatcho‘plari";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.action" = "Kirish";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.body" = "Xatcho‘plaringiz barcha qurilmalarda mavjud bo‘lishi uchun Quran.com saytiga kiring.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.title" = "Xatcho‘plarni sinxronlash";
+
+// Highlight colors
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.blue" = "Ko‘k";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.green" = "Yashil";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.purple" = "Binafsha";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.red" = "Qizil";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.yellow" = "Sariq";
+
+// Notes
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.body" = "Bu eslatma o‘chiriladi.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.title" = "Eslatmani o‘chirish";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.created" = "%@ yaratildi";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.delete" = "Eslatmani o‘chirish";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.note-divider" = "ESLATMANGIZ";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.body" = "Eslatma kamida %d ta belgidan iborat bo‘lishi kerak.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.title" = "Eslatma juda qisqa";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.new" = "Yangi eslatma";
+
+// Reading selector
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.description" = "Qirol Fahd Qur’on bosma majmuasining 1439-yilgi Madina yozuvi. Kattaroq ekranlar uchun moslashtirilgan.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.issue" = "Hijriy 1439-yilda nashr etilgan";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.title" = "Madina mushafi (1439)";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.description" = "Qirol Fahd Qur’on bosma majmuasining 1441-yilgi Madina mushafi. Kattaroq ekranlar uchun moslashtirilgan.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.issue" = "Hijriy 1441-yilda nashr etilgan";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.title" = "Madina mushafi (1441)";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.description" = "Bu tasvirlar Qirol Fahd Qur’on bosma majmuasidan olingan.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.title" = "Nasx yozuvi";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.pages.611" = "611 sahifa";
+
+// Quran.com account
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.attach_notes" = "Oyat eslatmalaringizni sinxron saqlang";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.custom_collections" = "Maxsus to‘plamlaringizni sinxron saqlang";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.profile" = "Quran.com profili";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in" = "Kirish";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_out" = "Chiqish";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sync_devices" = "Xatcho‘plaringizni barcha qurilmalarda sinxronlang";
+
+// Translation text
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.ayah-number" = "%d:%d";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "Izoh #%d";
+
+// What's new
+// Metadata: Translated by ChatGPT; human review required.
+"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

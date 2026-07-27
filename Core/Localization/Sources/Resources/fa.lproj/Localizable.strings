@@ -292,6 +292,24 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "ادامه";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "یک نماد جدید";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "در به‌روزرسانی بعدی ما، نماد برنامهٔ قرآن در صفحهٔ اصلی شما تغییر خواهد کرد. این نماد جدید اکنون نشان مشترک خانواده‌ای از ابزارهای ساخته‌شده پیرامون کلام الله است. جزئیات بیشتر به‌زودی.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "اکنون";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "به‌زودی";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "همان برنامه، نمادی جدید";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "همهٔ نشانک‌ها، پیشرفت و تنظیمات شما دقیقاً در جای خود باقی می‌مانند.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "در نسخهٔ بعدی عرضه می‌شود";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "برای دیدن نماد جدید در صفحهٔ اصلی، برنامه را به جدیدترین نسخه به‌روزرسانی کنید.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "مشاف جدید:";
@@ -325,3 +343,189 @@
 "new.library_navigation" = "کتابخانه و پیمایش:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* سوره‌ها و جزءها را در صفحه اصلی مرتب کنید و شماره سوره‌ها را نمایش دهید تا سریع‌تر به آنچه نیاز دارید برسید - با تشکر از @yismailuofa.";
+
+// Audio
+// Metadata: Translated by ChatGPT; human review required.
+"audio.delay.off" = "خاموش";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at" = "پایان در";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at.custom" = "سفارشی";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-ayah-range" = "محدودهٔ آیات پخش";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-speed" = "سرعت پخش";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repeat-count" = "تعداد تکرار";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay" = "مکث بین تکرارها (ثانیه)";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.10s" = "۱۰ ثانیه";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.1s" = "۱ ثانیه";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.2s" = "۲ ثانیه";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.3s" = "۳ ثانیه";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.5s" = "۵ ثانیه";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.description" = "مدت مکث پیش از آغاز تکرار بعدی را تعیین می‌کند.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.description" = "با پخش جریانی صوت در فضای ذخیره‌سازی صرفه‌جویی می‌کند، اما به اتصال اینترنت نیاز دارد.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.title" = "پخش جریانی صوت";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay" = "مکث پس از هر آیه";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay.description" = "مدت مکث پس از هر آیه را انتخاب کنید. در حالت ۱×، مکث تقریباً به‌اندازهٔ زمان پخش آیه است تا پیش از ادامه فرصت تکرار یا حفظ کردن داشته باشید.";
+
+// Ayah menu
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.notes-count" = "یادداشت‌ها (%d)";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.move-here" = "در %@ • انتقال به اینجا";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved" = "نشانک مطالعه از %@ به %@ منتقل شد";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.removed" = "نشانک مطالعه از %@ حذف شد";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.save-here" = "جای مطالعه را اینجا ذخیره کنید";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved" = "نشانک مطالعه در %@ ذخیره شد";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved-here" = "اینجا ذخیره شده • برای حذف ضربه بزنید";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.single-ayah-only" = "یک آیه را انتخاب کنید";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.title" = "نشانک مطالعه";
+
+// Bookmarks
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections" = "مجموعه‌ها";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.add" = "افزودن مجموعه";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.delete-hint" = "برای حذف نشانک، آن را بکشید.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.colored.text" = "آیاتی که هنگام مطالعه با نشانک %@ برجسته می‌کنید، اینجا نمایش داده می‌شوند.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.text" = "آیاتی که هنگام مطالعه نشانک‌گذاری می‌کنید، اینجا نمایش داده می‌شوند.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.open-hint" = "این آیه را در قرآن باز می‌کند.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.colored" = "نشانک‌های رنگی";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.message" = "این مجموعه شامل نشانک است. آیا از حذف آن مطمئن هستید؟";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.title" = "مجموعه حذف شود؟";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.favorites" = "برگزیده‌ها";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.mine" = "مجموعه‌های من";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new" = "مجموعهٔ جدید...";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new.placeholder" = "نام مجموعه";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.text" = "برای سازمان‌دهی آیات بر اساس موضوع، دعا یا برنامهٔ حفظ، یک مجموعه بسازید.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.title" = "هنوز مجموعه‌ای وجود ندارد";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.rename" = "تغییر نام";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all" = "حذف همه";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all.confirmation" = "آیا از حذف همهٔ نشانک‌ها مطمئن هستید؟";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.mixed" = "تا حدی انتخاب شده";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.selected" = "انتخاب شده";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.unselected" = "انتخاب نشده";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.error.highlight-unavailable" = "رنگ‌های برجسته‌سازی هنوز در حال بارگیری هستند. دوباره تلاش کنید.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.old-page-bookmarks" = "نشانک‌های قدیمی صفحات";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.action" = "ورود";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.body" = "برای دسترسی به نشانک‌ها در همهٔ دستگاه‌ها، وارد Quran.com شوید.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.title" = "همگام‌سازی نشانک‌ها";
+
+// Highlight colors
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.blue" = "آبی";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.green" = "سبز";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.purple" = "بنفش";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.red" = "قرمز";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.yellow" = "زرد";
+
+// Notes
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.body" = "این یادداشت حذف خواهد شد.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.title" = "حذف یادداشت";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.created" = "ایجادشده در %@";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.delete" = "حذف یادداشت";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.note-divider" = "یادداشت شما";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.body" = "یادداشت باید دست‌کم %d نویسه داشته باشد.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.title" = "یادداشت خیلی کوتاه است";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.new" = "یادداشت جدید";
+
+// Reading selector
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.description" = "خط مدنی ۱۴۳۹ از مجتمع چاپ قرآن ملک فهد. بهینه‌شده برای صفحه‌نمایش‌های بزرگ‌تر.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.issue" = "منتشرشده در سال ۱۴۳۹ هجری";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.title" = "مصحف مدنی (۱۴۳۹)";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.description" = "مصحف مدنی ۱۴۴۱ از مجتمع چاپ قرآن ملک فهد. بهینه‌شده برای صفحه‌نمایش‌های بزرگ‌تر.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.issue" = "منتشرشده در سال ۱۴۴۱ هجری";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.title" = "مصحف مدنی (۱۴۴۱)";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.description" = "این تصاویر از مجتمع چاپ قرآن ملک فهد گرفته شده‌اند.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.title" = "خط نسخ";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.pages.611" = "۶۱۱ صفحه";
+
+// Quran.com account
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.attach_notes" = "یادداشت‌های آیات را همگام نگه دارید";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.custom_collections" = "مجموعه‌های سفارشی را همگام نگه دارید";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.profile" = "نمایهٔ Quran.com";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in" = "ورود";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_out" = "خروج";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sync_devices" = "همگام‌سازی نشانک‌ها در همهٔ دستگاه‌ها";
+
+// Translation text
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.ayah-number" = "%d:%d";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "پاورقی شمارهٔ %d";
+
+// What's new
+// Metadata: Translated by ChatGPT; human review required.
+"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

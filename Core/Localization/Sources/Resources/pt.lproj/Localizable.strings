@@ -291,6 +291,24 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "Continuar";
 
+// New app icon announcement
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.title" = "Um novo ícone";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.body" = "Na nossa próxima atualização, o ícone do aplicativo Alcorão na sua Tela de Início será alterado. Este novo ícone agora é a marca compartilhada de uma família de ferramentas criadas em torno da palavra de Allah. Mais detalhes em breve.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.now" = "AGORA";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.coming_soon" = "EM BREVE";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.title" = "Mesmo aplicativo, novo ícone";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.same_app.body" = "Todos os seus marcadores, progresso e configurações continuarão exatamente onde estão.";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.title" = "Chega na próxima versão";
+// Metadata: Translated by ChatGPT; human review required.
+"new.icon_announcement.release.body" = "Atualize para a versão mais recente para ver o novo ícone na sua Tela de Início.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "Novos Mushafs:";
@@ -324,3 +342,189 @@
 "new.library_navigation" = "Biblioteca e navegação:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.library_navigation.details" = "* Classifique suratas e juz na tela inicial e exiba os números das suras para chegar mais rápido ao que precisa - graças ao @yismailuofa.";
+
+// Audio
+// Metadata: Translated by ChatGPT; human review required.
+"audio.delay.off" = "Desativado";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at" = "Terminar em";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.end-at.custom" = "Personalizado";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-ayah-range" = "Intervalo de ayahs da reprodução";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.playback-speed" = "Velocidade de reprodução";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repeat-count" = "Número de repetições";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay" = "Pausa entre repetições (segundos)";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.10s" = "10 s";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.1s" = "1 s";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.2s" = "2 s";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.3s" = "3 s";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.5s" = "5 s";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.repetition-delay.description" = "Define por quanto tempo pausar antes do início da próxima repetição.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.description" = "Economiza espaço em disco transmitindo o áudio, mas requer conexão com a internet.";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.streaming.title" = "Transmitir áudio";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay" = "Pausa após cada ayah";
+// Metadata: Translated by ChatGPT; human review required.
+"audio.verse-delay.description" = "Escolha por quanto tempo pausar após cada ayah. Em 1×, a pausa dura aproximadamente o mesmo tempo da reprodução da ayah, dando tempo para repetir ou memorizar antes de continuar.";
+
+// Ayah menu
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.notes-count" = "Notas (%d)";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.move-here" = "Em %@ • Mover para cá";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved" = "Marcador de leitura movido de %@ para %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.removed" = "Marcador de leitura removido de %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.save-here" = "Salve sua posição aqui";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved" = "Marcador de leitura salvo em %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved-here" = "Salvo aqui • Toque para excluir";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.single-ayah-only" = "Selecione uma única ayah";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.title" = "Marcador de leitura";
+
+// Bookmarks
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections" = "Coleções";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.add" = "Adicionar coleção";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.delete-hint" = "Deslize um marcador para excluí-lo.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.colored.text" = "As ayahs destacadas com um marcador %@ durante a leitura aparecerão aqui.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.no-data.text" = "As ayahs marcadas durante a leitura aparecerão aqui.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.ayahs.open-hint" = "Abre esta ayah no Alcorão.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.colored" = "Marcadores coloridos";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.message" = "Esta coleção contém marcadores. Tem certeza de que deseja excluí-la?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.delete.confirmation.title" = "Excluir coleção?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.favorites" = "Favoritos";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.mine" = "Minhas coleções";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new" = "Nova coleção...";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.new.placeholder" = "Nome da coleção";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.text" = "Crie uma coleção para organizar ayahs por tema, dua ou plano de memorização.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.no-data.title" = "Nenhuma coleção ainda";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.collections.rename" = "Renomear";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all" = "Excluir tudo";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.delete-all.confirmation" = "Tem certeza de que deseja excluir todos os marcadores?";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.mixed" = "Parcialmente selecionado";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.selected" = "Selecionado";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.collection.unselected" = "Não selecionado";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.editor.error.highlight-unavailable" = "As cores de destaque ainda estão sendo carregadas. Tente novamente.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.old-page-bookmarks" = "Marcadores de páginas antigos";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.action" = "Entrar";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.body" = "Entre no Quran.com para manter seus marcadores disponíveis em todos os dispositivos.";
+// Metadata: Translated by ChatGPT; human review required.
+"bookmarks.sync.title" = "Sincronizar seus marcadores";
+
+// Highlight colors
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.blue" = "Azul";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.green" = "Verde";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.purple" = "Roxo";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.red" = "Vermelho";
+// Metadata: Translated by ChatGPT; human review required.
+"highlight.color.yellow" = "Amarelo";
+
+// Notes
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.body" = "Esta nota será excluída.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.delete-note.alert.title" = "Excluir nota";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.created" = "Criada em %@";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.delete" = "Excluir nota";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.editor.note-divider" = "SUA NOTA";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.body" = "As notas devem ter pelo menos %d caracteres.";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.minimum-length.alert.title" = "A nota é curta demais";
+// Metadata: Translated by ChatGPT; human review required.
+"notes.new" = "Nova nota";
+
+// Reading selector
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.description" = "A escrita Madani de 1439 do Complexo do Rei Fahd para Impressão do Alcorão. Otimizada para telas maiores.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.issue" = "Publicado em 1439 Hijri";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1439.title" = "Mushaf Madani (1439)";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.description" = "O Mushaf Madani de 1441 do Complexo do Rei Fahd para Impressão do Alcorão. Otimizado para telas maiores.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.issue" = "Publicado em 1441 Hijri";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.hafs-1441.title" = "Mushaf Madani (1441)";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.description" = "Estas imagens foram obtidas do Complexo do Rei Fahd para Impressão do Alcorão.";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.naskh.title" = "Escrita Naskh";
+// Metadata: Translated by ChatGPT; human review required.
+"reading.selector.property.pages.611" = "611 páginas";
+
+// Quran.com account
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.attach_notes" = "Mantenha suas notas de ayahs sincronizadas";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.custom_collections" = "Mantenha suas coleções personalizadas sincronizadas";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.profile" = "Perfil do Quran.com";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in" = "Entrar";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_out" = "Sair";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sync_devices" = "Sincronize seus marcadores em todos os dispositivos";
+
+// Translation text
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.ayah-number" = "%d:%d";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "Nota de rodapé nº %d";
+
+// What's new
+// Metadata: Translated by ChatGPT; human review required.
+"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

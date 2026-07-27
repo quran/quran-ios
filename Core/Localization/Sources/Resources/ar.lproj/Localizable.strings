@@ -134,7 +134,6 @@
 "bookmarks.collections.delete.confirmation.message" = "تحتوي هذه المجموعة على إشارات مرجعية. هل أنت متأكد من رغبتك في حذفها؟";
 "bookmarks.collections.no-data.title" = "لا توجد مجموعات حتى الآن";
 "bookmarks.collections.no-data.text" = "أنشئ مجموعة لتنظيم الآيات حسب الموضوع أو الدعاء أو خطة الحفظ.";
-"bookmarks.collections.ayah-count" = "%d إشارات مرجعية للآيات";
 "bookmarks.collections.ayahs.delete-hint" = "اسحب الإشارة المرجعية لحذفها.";
 "bookmarks.collections.ayahs.open-hint" = "يفتح هذه الآية في القرآن.";
 "bookmarks.collections.ayahs.no-data.text" = "ستظهر هنا الآيات التي تضيف لها إشارة مرجعية أثناء القراءة.";
@@ -145,7 +144,6 @@
 "bookmarks.sync.body" = "سجّل الدخول إلى Quran.com للاحتفاظ بعلاماتك المرجعية متاحة عبر أجهزتك.";
 "bookmarks.sync.action" = "تسجيل الدخول";
 
-"bookmarks.highlights" = "التمييزات";
 "bookmarks.editor.collection.unselected" = "غير محددة";
 "bookmarks.editor.collection.mixed" = "محددة جزئيًا";
 "bookmarks.editor.collection.selected" = "محددة";
@@ -289,3 +287,36 @@
 
 "notes.minimum-length.alert.title" = "الملاحظة قصيرة جدًا";
 "notes.minimum-length.alert.body" = "يجب أن تكون الملاحظة %d أحرف على الأقل.";
+
+// Audio
+"audio.end-at" = "الانتهاء عند";
+"audio.end-at.custom" = "مخصص";
+"audio.playback-ayah-range" = "نطاق تشغيل الآيات";
+"audio.playback-speed" = "سرعة التشغيل";
+
+// Reading bookmark
+"ayah.menu.reading-bookmark.move-here" = "عند %@ • انقل إلى هنا";
+"ayah.menu.reading-bookmark.moved" = "تم نقل علامة موضع القراءة من %@ إلى %@";
+"ayah.menu.reading-bookmark.removed" = "تمت إزالة علامة موضع القراءة من %@";
+"ayah.menu.reading-bookmark.save-here" = "احفظ موضعك هنا";
+"ayah.menu.reading-bookmark.saved" = "تم حفظ علامة موضع القراءة عند %@";
+"ayah.menu.reading-bookmark.saved-here" = "محفوظ هنا • اضغط للحذف";
+"ayah.menu.reading-bookmark.single-ayah-only" = "حدد آية واحدة";
+"ayah.menu.reading-bookmark.title" = "علامة موضع القراءة";
+
+// Bookmarks
+"bookmarks.delete-all" = "حذف الكل";
+"bookmarks.delete-all.confirmation" = "هل أنت متأكد من رغبتك في حذف جميع الإشارات المرجعية؟";
+
+// Reading selector
+"reading.naskh.description" = "هذه الصور مأخوذة من مجمع الملك فهد لطباعة المصحف الشريف.";
+"reading.naskh.title" = "خط النسخ";
+"reading.selector.property.pages.611" = "٦١١ صفحة";
+
+// Translation
+"translation.text.ayah-number" = "%d:%d";
+"translation.text.footnote-number" = "[%d]";
+"translation.text.footnote-title" = "الحاشية رقم %d";
+
+// What's new
+"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

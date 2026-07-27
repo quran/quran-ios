@@ -129,7 +129,7 @@ private func coreTargets() -> [[Target]] {
             "SystemDependenciesFake",
         ]),
 
-        target(type, name: "Localization", hasTests: false, dependencies: []),
+        target(type, name: "Localization", dependencies: []),
 
         target(type, name: "QueuePlayer", hasTests: false, dependencies: [
             "Timing",

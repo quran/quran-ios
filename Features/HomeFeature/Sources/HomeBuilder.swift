@@ -33,16 +33,22 @@ public struct HomeBuilder {
             lastPageService: container.lastPageService(),
             textRetriever: textRetriever,
             readingBookmarkService: container.readingBookmarkService(),
-            navigateToQuran: { [weak listener] ayah, lastPage in
-                listener?.navigateTo(ayah: ayah, lastPage: lastPage)
+            navigateToPage: { [weak listener] page, lastPage in
+                listener?.navigateTo(page: page, lastPage: lastPage)
+            },
+            navigateToAyah: { [weak listener] ayah in
+                listener?.navigateTo(ayah: ayah, lastPage: nil)
             }
         )
         #else
         let viewModel = HomeViewModel(
             lastPageService: container.lastPageService(),
             textRetriever: textRetriever,
-            navigateToQuran: { [weak listener] ayah, lastPage in
-                listener?.navigateTo(ayah: ayah, lastPage: lastPage)
+            navigateToPage: { [weak listener] page, lastPage in
+                listener?.navigateTo(page: page, lastPage: lastPage)
+            },
+            navigateToAyah: { [weak listener] ayah in
+                listener?.navigateTo(ayah: ayah, lastPage: nil)
             }
         )
         #endif

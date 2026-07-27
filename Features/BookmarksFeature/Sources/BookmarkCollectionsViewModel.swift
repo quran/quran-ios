@@ -24,6 +24,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         readingBookmarkService: MobileSyncReadingBookmarkService,
         collectionsBuilder: AyahBookmarkCollectionsBuilder,
         navigationController: UINavigationController,
+        navigateToPage: @escaping (Page) -> Void,
         navigateToAyah: @escaping (AyahNumber) -> Void
     ) {
         self.authenticationClient = authenticationClient
@@ -31,6 +32,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         self.readingBookmarkService = readingBookmarkService
         self.collectionsBuilder = collectionsBuilder
         self.navigationController = navigationController
+        self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
         isSyncBannerDismissed = preferences.isSyncBannerDismissed
     }
@@ -187,7 +189,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         case .ayah(let ayahNumber):
             navigateToAyah(ayahNumber)
         case .page(let page):
-            navigateToAyah(page.firstVerse)
+            navigateToPage(page)
         }
     }
 
@@ -197,6 +199,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let readingBookmarkService: MobileSyncReadingBookmarkService
     private let collectionsBuilder: AyahBookmarkCollectionsBuilder
+    private let navigateToPage: (Page) -> Void
     private let navigateToAyah: (AyahNumber) -> Void
     private let preferences = BookmarkCollectionsPreferences.shared
     private let readingPreferences = ReadingPreferences.shared

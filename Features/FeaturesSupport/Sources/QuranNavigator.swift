@@ -10,5 +10,6 @@ import QuranKit
 
 @MainActor
 public protocol QuranNavigator: AnyObject {
+    func navigateTo(page: Page, lastPage: LastPage?)
     func navigateTo(ayah: AyahNumber, lastPage: LastPage?)
 }

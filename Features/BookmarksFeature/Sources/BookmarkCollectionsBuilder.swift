@@ -30,6 +30,9 @@ struct BookmarkCollectionsBuilder {
             readingBookmarkService: container.readingBookmarkService(),
             collectionsBuilder: collectionsBuilder,
             navigationController: navigationController,
+            navigateToPage: { [weak listener] page in
+                listener?.navigateTo(page: page, lastPage: nil)
+            },
             navigateToAyah: { [weak listener] ayah in
                 listener?.navigateTo(ayah: ayah, lastPage: nil)
             }

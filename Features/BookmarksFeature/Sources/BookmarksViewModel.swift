@@ -22,7 +22,7 @@ final class BookmarksViewModel: ObservableObject {
     init(
         analytics: AnalyticsLibrary,
         service: PageBookmarkService,
-        navigateTo: @escaping (AyahNumber) -> Void
+        navigateTo: @escaping (Page) -> Void
     ) {
         self.analytics = analytics
         self.service = service
@@ -53,7 +53,7 @@ final class BookmarksViewModel: ObservableObject {
     func navigateTo(_ item: PageBookmark) {
         logger.info("Bookmarks: select bookmark at \(item.page)")
         analytics.openingQuran(from: .bookmarks)
-        navigateTo(item.page.firstVerse)
+        navigateTo(item.page)
     }
 
     func deleteItem(_ pageBookmark: PageBookmark) async {
@@ -77,7 +77,7 @@ final class BookmarksViewModel: ObservableObject {
 
     // MARK: Private
 
-    private let navigateTo: (AyahNumber) -> Void
+    private let navigateTo: (Page) -> Void
     private let analytics: AnalyticsLibrary
     private let service: PageBookmarkService
     private let readingPreferences = ReadingPreferences.shared

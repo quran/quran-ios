@@ -58,7 +58,7 @@ public final class ContentViewModel: ObservableObject {
         self.deps = deps
         self.input = input
 
-        visiblePages = [input.initialAyah.page]
+        visiblePages = [input.initialPage]
 
         highlights = deps.highlightsService.highlights
         twoPagesEnabled = deps.quranContentStatePreferences.twoPagesEnabled
@@ -196,8 +196,8 @@ public final class ContentViewModel: ObservableObject {
     }
 
     private func configureInitialPage() {
-        deps.lastPageUpdater.configure(initialPage: input.initialAyah.page, lastPage: input.lastPage)
-        highlights.navigationVerse = input.initialAyah
+        deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
+        highlights.navigationVerse = input.navigationAyah
     }
 
     private func visiblePagesUpdated() {

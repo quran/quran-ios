@@ -397,19 +397,19 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         task.cancel()
     }
 
-    func test_navigateToPageReadingBookmark_navigatesToFirstAyahOnPage() {
+    func test_navigateToPageReadingBookmark_navigatesToPage() {
         let page = Quran.hafsMadani1405.pages[269]
         let bookmark = ReadingPositionBookmark(
             id: "reading-bookmark",
             location: .page(page),
             modifiedOn: .distantPast
         )
-        var navigatedAyah: AyahNumber?
-        let sut = makeSUT(navigateToAyah: { navigatedAyah = $0 })
+        var navigatedPage: Page?
+        let sut = makeSUT(navigateToPage: { navigatedPage = $0 })
 
         sut.navigateTo(bookmark)
 
-        XCTAssertEqual(navigatedAyah, page.firstVerse)
+        XCTAssertEqual(navigatedPage, page)
     }
 
     func test_navigateToAyahReadingBookmark_navigatesToBookmarkedAyah() {
@@ -452,6 +452,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         collectionService: AyahBookmarkCollectionService? = nil,
         readingBookmarkService: MobileSyncReadingBookmarkService? = nil,
         navigationController: UINavigationController? = nil,
+        navigateToPage: @escaping (Page) -> Void = { _ in },
         navigateToAyah: @escaping (AyahNumber) -> Void = { _ in }
     ) -> BookmarkCollectionsViewModel {
         let collectionService = collectionService ?? makeService()
@@ -468,6 +469,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             readingBookmarkService: readingBookmarkService,
             collectionsBuilder: collectionsBuilder,
             navigationController: navigationController,
+            navigateToPage: navigateToPage,
             navigateToAyah: navigateToAyah
         )
     }

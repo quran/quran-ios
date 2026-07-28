@@ -6,40 +6,56 @@
 	<array>
 		<dict>
 			<key>version</key>
-			<string>2.4.5</string>
+			<string>2.6.0</string>
 			<key>items</key>
 			<array>
 				<dict>
 					<key>title</key>
-					<string>new.audio_upgrades</string>
+					<string>new.reading_layouts</string>
 					<key>subtitle</key>
-					<string>new.audio_upgrades.details</string>
+					<string>new.reading_layouts.details</string>
 					<key>image</key>
-					<string>speedometer</string>
+					<string>book</string>
 				</dict>
 				<dict>
 					<key>title</key>
-					<string>new.personalization</string>
+					<string>new.experimental_naskh</string>
 					<key>subtitle</key>
-					<string>new.personalization.details</string>
+					<string>new.experimental_naskh.details</string>
 					<key>image</key>
-					<string>paintpalette.fill</string>
+					<string>flask</string>
 				</dict>
 				<dict>
 					<key>title</key>
-					<string>new.library_navigation</string>
+					<string>new.audio_controls</string>
 					<key>subtitle</key>
-					<string>new.library_navigation.details</string>
+					<string>new.audio_controls.details</string>
 					<key>image</key>
-					<string>book.fill</string>
+					<string>headphones</string>
 				</dict>
 				<dict>
 					<key>title</key>
-					<string>new.reciters</string>
+					<string>new.notes_updates</string>
 					<key>subtitle</key>
-					<string>new.reciters.details</string>
+					<string>new.notes_updates.details</string>
 					<key>image</key>
-					<string>mic.fill</string>
+					<string>text.justify.leading</string>
+				</dict>
+				<dict>
+					<key>title</key>
+					<string>new.navigation_updates</string>
+					<key>subtitle</key>
+					<string>new.navigation_updates.details</string>
+					<key>image</key>
+					<string>doc.text</string>
+				</dict>
+				<dict>
+					<key>title</key>
+					<string>new.translation_update</string>
+					<key>subtitle</key>
+					<string>new.translation_update.details</string>
+					<key>image</key>
+					<string>globe</string>
 				</dict>
 			</array>
 		</dict>

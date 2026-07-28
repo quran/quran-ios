@@ -292,37 +292,52 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.release.body" = "Басты экранда жаңа белгішені көру үшін соңғы нұсқаға жаңартыңыз.";
 
+// Reading layouts
+// Metadata: Translated by ChatGPT; human review required.
+"new.reading_layouts" = "Жаңа Мәдина мұсхафтары";
+// Metadata: Translated by ChatGPT; human review required.
+"new.reading_layouts.details" = "* Мәдина мұсхафы 1439 және Мәдина мұсхафы 1441 оқу үлгілері қосылды — @ahmedre-ға рақмет.\n* Оқу беттерін жүктеуді қалпына келтіру және толық емес файлдарды өңдеу жақсартылды — @ahmedre-ға рақмет.";
+
+// Experimental Naskh
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh" = "Эксперименттік насх жазуы";
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh.details" = "* Насх жазуы бар эксперименттік оқу үлгісін қолданып көріңіз — @ahmedre-ға рақмет.\n* Кейбір мүмкіндіктер әлі жоқ және болашақ жаңартуларда қосылады.";
+
+// Audio controls
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_controls" = "Кеңейтілген аудио параметрлері";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_controls.details" = "Кеңейтілген аудио параметрлері қайта жасалып, қосымша басқару элементтері қосылды — @OKKHALIL3-ке рақмет.\n* 0,25×-тен 2×-ке дейінгі ойнату жылдамдығы — @OKKHALIL3-ке рақмет.\n* 1×-тен 100×-ке дейінгі қайталау саны және цикл опциясы — @OKKHALIL3-ке рақмет.\n* Аяттар мен қайталанатын аралықтар арасындағы реттелетін үзілістер — @abdorizak пен @OKKHALIL3-ке рақмет.\n* Алдымен жүктемей, аудионы ағынмен ойнату — @OKKHALIL3-ке рақмет.\n* Кірістірілген аят таңдау құралы — @OKKHALIL3-ке рақмет.";
+
+// Notes
+// Metadata: Translated by ChatGPT; human review required.
+"new.notes_updates" = "Жазбаларды іздеу және өңдеу";
+// Metadata: Translated by ChatGPT; human review required.
+"new.notes_updates.details" = "* Жазбаларды мәтіні немесе сүресі бойынша іздеңіз — @abdorizak-қа рақмет.\n* Жазба карталары мен жазба редакторы қайта жасалды.";
+
+// Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.navigation_updates" = "Басты бет және навигация";
+// Metadata: Translated by ChatGPT; human review required.
+"new.navigation_updates.details" = "* Басты беттегі сүре және жүз тізімдеріне жиналмалы жүз бөлімдері қосылды — @OKKHALIL3-ке рақмет.\n* Беттер мен аяттар арасындағы навигация бірізді болды.";
+
+// Translation
+// Metadata: Translated by ChatGPT; human review required.
+"new.translation_update" = "Аударма жаңартуы";
+// Metadata: Translated by ChatGPT; human review required.
+"new.translation_update.details" = "* «Мұсхаф» сөзінің орысша аудармасы түзетілді — @pulatovpro-ға рақмет.";
+
 // Mushafs
 "new.mushafs" = "Жаңа Мусхафтар:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs.details" = "Аллаһ Газадағы бауырларымыздың және қарындастарымыздың зұлымдығын жеңілдетсін.\n\n* Тажвид Хафс Мусхафы: Аль-Құран Аль-Карим - Дар аль-Марефа басылымы.\n* Медина Мусхафы 1421 хижри.\n* Медина Мусхафы 1440 хижри.\n* Сондай-ақ, 1405 хижридегі классикалық нұсқаны әрі қарай ләззат алыңыз.";
-
-// Reciters
-"new.reciters" = "Жаңа қарилар:";
 
 // Miscellaneous
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous" = "Әртүрлі:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* Қосымшаның жаңартылған көрінісі.\n* Іздеу қызметі жақсартылды (жаңа алгоритм жақында шығады).\n* Вьетнам тіліндегі локализация қолдауы.\n* Қайталау ойнатылмайтын кезде кеңейтілген аудио параметрлеріне қолжетімділік.\n* Қосымша қазір ашық кодты: https://github.com/quran/quran-ios";
-
-// Audio upgrades
-// Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades" = "Дыбыс:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades.details" = "* Қайта оқу жылдамдығын 0.5x, 0.75x, 1x, 1.25x, 1.5x деңгейінде реттеңіз - @adnan29979-ға рахмет.\n* Ойнату сүйікті жылдамдығыңызды есте сақтайды - @adnan29979-ға рахмет.";
-
-// Personalization
-// Metadata: Translated by ChatGPT; human review required.
-"new.personalization" = "Оқу тақырыптары:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* Бірнеше тақырыпты қолдау. Құранның бір бетін ашыңыз -> жоғарғы оң мәзір -> Тақырыптар және баптаулар.\n* Алдыңғы стильге оралғыңыз келсе, 'Original' параметрін пайдаланыңыз.";
-
-// Library & Navigation
-// Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation" = "Кітапхана және навигация:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation.details" = "* Үй бетінде сүрелер мен жүздерді сұрыптап, сүре нөмірлерін көрсетіңіз, сонда қажет нәрсеге тезірек жете аласыз - @yismailuofa-ға рахмет.";
 
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
@@ -505,7 +520,3 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Түсіндірме №%d";
-
-// What's new
-// Metadata: Translated by ChatGPT; human review required.
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

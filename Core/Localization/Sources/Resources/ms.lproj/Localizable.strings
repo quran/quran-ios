@@ -291,39 +291,53 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.release.body" = "Kemas kini kepada versi terkini untuk melihat ikon baharu pada Skrin Utama anda.";
 
+// Reading layouts
+// Metadata: Translated by ChatGPT; human review required.
+"new.reading_layouts" = "Mushaf Madani Baharu";
+// Metadata: Translated by ChatGPT; human review required.
+"new.reading_layouts.details" = "* Susun atur bacaan Mushaf Madani 1439 dan Mushaf Madani 1441 telah ditambah — terima kasih kepada @ahmedre.\n* Pemulihan muat turun halaman bacaan dan pengendalian fail yang tidak lengkap telah ditambah baik — terima kasih kepada @ahmedre.";
+
+// Experimental Naskh
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh" = "Tulisan Naskh Eksperimen";
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh.details" = "* Cuba susun atur bacaan eksperimen dengan tulisan Naskh — terima kasih kepada @ahmedre.\n* Beberapa ciri masih belum tersedia dan akan ditambah dalam kemas kini akan datang.";
+
+// Audio controls
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_controls" = "Pilihan Audio Lanjutan";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_controls.details" = "Pilihan Audio Lanjutan telah direka semula dan lebih banyak kawalan telah ditambah — terima kasih kepada @OKKHALIL3.\n* Kelajuan main balik dari 0.25× hingga 2× — terima kasih kepada @OKKHALIL3.\n* Bilangan ulangan dari 1× hingga 100×, serta pilihan gelung — terima kasih kepada @OKKHALIL3.\n* Jeda boleh laras antara ayat dan julat berulang — terima kasih kepada @abdorizak dan @OKKHALIL3.\n* Strim audio tanpa memuat turunnya terlebih dahulu — terima kasih kepada @OKKHALIL3.\n* Pemilih ayat sebaris — terima kasih kepada @OKKHALIL3.";
+
+// Notes
+// Metadata: Translated by ChatGPT; human review required.
+"new.notes_updates" = "Cari dan Edit Nota";
+// Metadata: Translated by ChatGPT; human review required.
+"new.notes_updates.details" = "* Cari nota mengikut teks atau surah — terima kasih kepada @abdorizak.\n* Kad nota dan penyunting nota telah direka semula.";
+
+// Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.navigation_updates" = "Halaman Utama dan Navigasi";
+// Metadata: Translated by ChatGPT; human review required.
+"new.navigation_updates.details" = "* Bahagian juz boleh diruntuhkan telah ditambah pada senarai surah dan juz di Halaman Utama — terima kasih kepada @OKKHALIL3.\n* Navigasi antara halaman dan ayat kini lebih konsisten.";
+
+// Translation
+// Metadata: Translated by ChatGPT; human review required.
+"new.translation_update" = "Kemas Kini Terjemahan";
+// Metadata: Translated by ChatGPT; human review required.
+"new.translation_update.details" = "* Terjemahan bahasa Rusia bagi “mushaf” telah dibetulkan — terima kasih kepada @pulatovpro.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "Mushaf Baru:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs.details" = "* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Edisi Dar al-Marefa.\n* Mushaf Madinah 1421 hijri.\n* Mushaf Madinah 1440 hijri.\n* Selain itu, terus menikmati versi klasik 1405 hijri.";
 
-// Reciters
-// Metadata: Translated by ChatGPT; human review required.
-"new.reciters" = "Qari Baru:";
-
 // Miscellaneous
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous" = "Pelbagai:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* Rupa aplikasi dikemas kini.\n* Ciri carian diperhebatkan (algoritma baru akan datang tidak lama lagi).\n* Sokongan penyetempatan Bahasa Vietnam.\n* Akses opsyen audio lanjutan tersedia apabila tiada bacaan sedang dimainkan.\n* Aplikasi kini bersumber terbuka: https://github.com/quran/quran-ios";
-
-// Audio upgrades
-// Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades" = "Audio:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades.details" = "* Kawalan kelajuan bacaan boleh laras: 0.5x, 0.75x, 1x, 1.25x, 1.5x - terima kasih kepada @adnan29979.\n* Main balik mengingati kadar pilihan anda - terima kasih kepada @adnan29979.";
-
-// Personalization
-// Metadata: Translated by ChatGPT; human review required.
-"new.personalization" = "Tema Membaca:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* Sokongan untuk pelbagai tema. Buka satu halaman Al-Quran -> Menu kanan atas -> Tema & Tetapan.\n* Gunakan 'Original' jika anda mahu kembali kepada gaya sebelumnya.";
-
-// Library & Navigation
-// Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation" = "Perpustakaan & Navigasi:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation.details" = "* Susun surah dan juz di Halaman Utama serta paparkan nombor surah supaya anda boleh pergi ke yang diperlukan dengan lebih pantas - terima kasih kepada @yismailuofa.";
 
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
@@ -506,7 +520,3 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Nota kaki #%d";
-
-// What's new
-// Metadata: Translated by ChatGPT; human review required.
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

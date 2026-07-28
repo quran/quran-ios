@@ -250,39 +250,53 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.release.body" = "Ana Ekranınızda yeni simgeyi görmek için en son sürüme güncelleyin.";
 
+// Reading layouts
+// Metadata: Translated by ChatGPT; human review required.
+"new.reading_layouts" = "Yeni Medine Mushafları";
+// Metadata: Translated by ChatGPT; human review required.
+"new.reading_layouts.details" = "* Medine Mushafı 1439 ve Medine Mushafı 1441 okuma düzenleri eklendi — @ahmedre sayesinde.\n* Okuma sayfası indirmelerini kurtarma ve eksik dosyaları işleme geliştirildi — @ahmedre sayesinde.";
+
+// Experimental Naskh
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh" = "Deneysel Nesih Yazısı";
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh.details" = "* Deneysel Nesih yazılı okuma düzenini deneyin — @ahmedre sayesinde.\n* Bazı özellikler henüz eksik ve gelecekteki güncellemelerde eklenecek.";
+
+// Audio controls
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_controls" = "Gelişmiş Ses Seçenekleri";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_controls.details" = "Gelişmiş Ses Seçenekleri yeniden tasarlandı ve daha fazla denetim eklendi — @OKKHALIL3 sayesinde.\n* 0,25× ile 2× arasında oynatma hızları — @OKKHALIL3 sayesinde.\n* 1× ile 100× arasında tekrar sayısı ve döngü seçeneği — @OKKHALIL3 sayesinde.\n* Ayetler ve tekrarlanan aralıklar arasında ayarlanabilir duraklamalar — @abdorizak ve @OKKHALIL3 sayesinde.\n* Önce indirmeden ses akışı — @OKKHALIL3 sayesinde.\n* Satır içi ayet seçici — @OKKHALIL3 sayesinde.";
+
+// Notes
+// Metadata: Translated by ChatGPT; human review required.
+"new.notes_updates" = "Not Arama ve Düzenleme";
+// Metadata: Translated by ChatGPT; human review required.
+"new.notes_updates.details" = "* Notları metinlerine veya sureye göre arayın — @abdorizak sayesinde.\n* Not kartları ve not düzenleyici yeniden tasarlandı.";
+
+// Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.navigation_updates" = "Ana Sayfa ve Gezinme";
+// Metadata: Translated by ChatGPT; human review required.
+"new.navigation_updates.details" = "* Ana Sayfa’daki sure ve cüz listelerine daraltılabilir cüz bölümleri eklendi — @OKKHALIL3 sayesinde.\n* Sayfalar ve ayetler arasındaki gezinme daha tutarlı hale getirildi.";
+
+// Translation
+// Metadata: Translated by ChatGPT; human review required.
+"new.translation_update" = "Çeviri Güncellemesi";
+// Metadata: Translated by ChatGPT; human review required.
+"new.translation_update.details" = "* “Mushaf” sözcüğünün Rusça çevirisi düzeltildi — @pulatovpro sayesinde.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "Yeni Mushaflar:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs.details" = "Allah, Gazze'deki kardeşlerimizin ve bacılarımızın üzerindeki zulmü kaldırsın.\n\n* Tecvid Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Baskısı.\n* Medine Mushafı 1421 hicri.\n* Medine Mushafı 1440 hicri.\n* Ayrıca, klasik 1405 hicri versiyonunun keyfini çıkarmaya devam edin.";
 
-// Reciters
-// Metadata: Translated by ChatGPT; human review required.
-"new.reciters" = "Yeni Hafızlar:";
-
 // Miscellaneous
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous" = "Çeşitli:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* Güncellenmiş uygulama görünümü.\n* Geliştirilmiş arama özelliği (yakında yeni algoritma).\n* Vietnamca yerelleştirme desteği.\n* Kıraat oynatılmadığında gelişmiş ses seçeneklerine erişim mevcut.\n* Uygulama artık açık kaynaklı: https://github.com/quran/quran-ios";
-
-// Audio upgrades
-// Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades" = "Ses:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades.details" = "* Ayarlanabilir kıraat hız kontrolü: 0.5x, 0.75x, 1x, 1.25x, 1.5x - @adnan29979 sayesinde.\n* Oynatma tercih ettiğiniz hızı hatırlar - @adnan29979 sayesinde.";
-
-// Personalization
-// Metadata: Translated by ChatGPT; human review required.
-"new.personalization" = "Okuma Temaları:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* Birden fazla tema desteği. Bir Kur'an sayfası açın -> Sağ üst menü -> Temalar ve Ayarlar.\n* Önceki stile dönmek isterseniz 'Original'i kullanın.";
-
-// Library & Navigation
-// Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation" = "Kütüphane ve Gezinme:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation.details" = "* Ana Sayfa'da sureleri ve cüzleri sıralayın ve sure numaralarını gösterin, böylece ihtiyacınız olana daha hızlı ulaşabilirsiniz - @yismailuofa sayesinde.";
 
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
@@ -465,7 +479,3 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Dipnot #%d";
-
-// What's new
-// Metadata: Translated by ChatGPT; human review required.
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

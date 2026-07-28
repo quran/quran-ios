@@ -220,38 +220,53 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.release.body" = "Werk bij naar de nieuwste versie om het nieuwe icoon op je beginscherm te zien.";
 
+// Reading layouts
+// Metadata: Translated by ChatGPT; human review required.
+"new.reading_layouts" = "Nieuwe Madani-mushafs";
+// Metadata: Translated by ChatGPT; human review required.
+"new.reading_layouts.details" = "* De leesindelingen Madani Mushaf 1439 en Madani Mushaf 1441 zijn toegevoegd — met dank aan @ahmedre.\n* Het herstellen van downloads van leespagina’s en het verwerken van onvolledige bestanden is verbeterd — met dank aan @ahmedre.";
+
+// Experimental Naskh
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh" = "Experimenteel Naskh-schrift";
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh.details" = "* Probeer de experimentele leesindeling met Naskh-schrift — met dank aan @ahmedre.\n* Enkele functies ontbreken nog en worden in toekomstige updates toegevoegd.";
+
+// Audio controls
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_controls" = "Geavanceerde audio-opties";
+// Metadata: Translated by ChatGPT; human review required.
+"new.audio_controls.details" = "De Geavanceerde audio-opties zijn opnieuw ontworpen en uitgebreid met meer bedieningselementen — met dank aan @OKKHALIL3.\n* Afspeelsnelheden van 0,25× tot 2× — met dank aan @OKKHALIL3.\n* Herhalingen van 1× tot 100×, plus een lusoptie — met dank aan @OKKHALIL3.\n* Instelbare pauzes tussen ayat en herhaalde bereiken — met dank aan @abdorizak en @OKKHALIL3.\n* Audio streamen zonder het eerst te downloaden — met dank aan @OKKHALIL3.\n* Ingebouwde ayah-kiezer — met dank aan @OKKHALIL3.";
+
+// Notes
+// Metadata: Translated by ChatGPT; human review required.
+"new.notes_updates" = "Notities zoeken en bewerken";
+// Metadata: Translated by ChatGPT; human review required.
+"new.notes_updates.details" = "* Zoek notities op tekst of soera — met dank aan @abdorizak.\n* De notitiekaarten en notitie-editor zijn opnieuw ontworpen.";
+
+// Navigation
+// Metadata: Translated by ChatGPT; human review required.
+"new.navigation_updates" = "Startscherm en navigatie";
+// Metadata: Translated by ChatGPT; human review required.
+"new.navigation_updates.details" = "* Inklapbare juz-secties zijn toegevoegd aan de soera- en juz-lijsten op het Startscherm — met dank aan @OKKHALIL3.\n* De navigatie tussen pagina’s en ayat is consistenter gemaakt.";
+
+// Translation
+// Metadata: Translated by ChatGPT; human review required.
+"new.translation_update" = "Vertaalupdate";
+// Metadata: Translated by ChatGPT; human review required.
+"new.translation_update.details" = "* De Russische vertaling van ‘mushaf’ is gecorrigeerd — met dank aan @pulatovpro.";
+
 // Mushafs
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs" = "Nieuwe Mushafs:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.mushafs.details" = "* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Editie.\n* Medina Mushaf 1421 hijri.\n* Medina Mushaf 1440 hijri.\n* Plus, blijf genieten van de klassieke versie uit 1405 hijri.";
 
-// Reciters
-"new.reciters" = "Nieuwe Reciteurs";
-
 // Miscellaneous
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous" = "Diversen:";
 // Metadata: Translated by ChatGPT; human review required.
 "new.miscellaneous.details" = "* Bijgewerkte app-uitstraling.\n* Verbeterde zoekfunctie (nieuw algoritme binnenkort beschikbaar).\n* Ondersteuning voor Vietnamese lokalisatie.\n* Geavanceerde audio-opties toegankelijk wanneer er geen recitatie wordt afgespeeld.\n* App is nu open source: https://github.com/quran/quran-ios";
-
-// Audio upgrades
-// Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades" = "Audio:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades.details" = "* Instelbare recitatiesnelheid: 0,5x, 0,75x, 1x, 1,25x, 1,5x - dankzij @adnan29979.\n* De weergave onthoudt je favoriete snelheid - dankzij @adnan29979.";
-
-// Personalization
-// Metadata: Translated by ChatGPT; human review required.
-"new.personalization" = "Leesthema's:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* Ondersteuning voor meerdere thema's. Open een pagina van de Koran -> Menu rechtsboven -> Thema's & Instellingen.\n* Gebruik 'Original' als je wilt teruggaan naar de vorige stijl.";
-
-// Library & Navigation
-// Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation" = "Bibliotheek & Navigatie:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation.details" = "* Sorteer soera's en juz op het Startscherm en toon soeranummers zodat je sneller gaat naar wat je nodig hebt - dankzij @yismailuofa.";
 
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
@@ -434,7 +449,3 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Voetnoot nr. %d";
-
-// What's new
-// Metadata: Translated by ChatGPT; human review required.
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

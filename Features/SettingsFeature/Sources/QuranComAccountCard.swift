@@ -162,7 +162,7 @@ struct QuranComAccountCard: View {
     List {
         QuranComAccountCard(
             isAuthenticated: true,
-            email: "mohamede1945@gmail.com",
+            email: "user@example.com",
             manageAccountAction: {},
             signInAction: {},
             signOutAction: {}

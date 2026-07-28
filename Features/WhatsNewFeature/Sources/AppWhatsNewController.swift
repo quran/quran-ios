@@ -12,7 +12,6 @@ import NoorUI
 import SwiftUI
 import UIKit
 import VLogging
-import WhatsNewKit
 
 @MainActor
 public class AppWhatsNewController {
@@ -51,56 +50,45 @@ public class AppWhatsNewController {
         let view = AppIconAnnouncementView { [weak self, weak navigationController] in
             guard let self, let navigationController else { return }
 
-            guard let whatsNewViewController = makeWhatsNewViewController(versions: versions) else {
-                navigationController.dismiss(animated: true)
-                return
-            }
+            let whatsNewViewController = makeWhatsNewViewController(
+                versions: versions,
+                navigationController: navigationController
+            )
 
             analytics.presentWhatsNew(versions: versions.map(\.version))
             navigationController.pushViewController(whatsNewViewController, animated: true)
         }
         let announcementViewController = UIHostingController(rootView: view)
+        announcementViewController.navigationItem.title = l("new.title")
+        announcementViewController.navigationItem.largeTitleDisplayMode = .never
 
         navigationController.setViewControllers([announcementViewController], animated: false)
-        navigationController.setNavigationBarHidden(true, animated: false)
         navigationController.modalPresentationStyle = .pageSheet
         navigationController.sheetPresentationController?.detents = [.large()]
 
         parent.present(navigationController, animated: true)
     }
 
-    private func makeWhatsNewViewController(versions: [WhatsNewVersion]) -> WhatsNewViewController? {
-        let whatsNewItems = versions.flatMap(\.items).map(\.whatsNewItem)
+    private func makeWhatsNewViewController(
+        versions: [WhatsNewVersion],
+        navigationController: UINavigationController
+    ) -> UIViewController {
+        let latestVersion = versions
+            .map(\.version)
+            .max { lhs, rhs in
+                lhs.compare(rhs, options: .numeric) == .orderedAscending
+            }
 
-        let whatsNew = WhatsNew(
-            title: l("new.title"),
-            items: whatsNewItems
+        let view = AppWhatsNewView(
+            items: versions.flatMap(\.items),
+            onContinue: { [weak navigationController] in
+                navigationController?.dismiss(animated: true)
+                logger.info("WhatsNew continue button tapped")
+            }
         )
-
-        // custom whats new configuration
-        var configuration = WhatsNewViewController.Configuration()
-
-        configuration.completionButton.title = l("new.action")
-        configuration.completionButton.action = .custom { vc in
-            (vc.navigationController ?? vc).dismiss(animated: true)
-            logger.info("WhatsNew continue button tapped")
-        }
-        configuration.titleView.titleMode = .scrolls
-
-        configuration.tintColor = .appIdentity
-        configuration.backgroundColor = .systemBackground
-        configuration.titleView.titleColor = .label
-        configuration.itemsView.titleColor = .label
-        configuration.itemsView.subtitleColor = .secondaryLabel
-        configuration.itemsView.titleFont = .preferredFont(forTextStyle: .headline)
-        configuration.itemsView.subtitleFont = .preferredFont(forTextStyle: .callout)
-        configuration.itemsView.imageSize = .fixed(height: 30)
-
-        return WhatsNewViewController(
-            whatsNew: whatsNew,
-            configuration: configuration,
-            versionStore: store
-        )
+        let viewController = AppWhatsNewViewController(rootView: view)
+        store.lastSeenVersion = latestVersion
+        return viewController
     }
 
     private nonisolated func whatsNewItems(after lastSeen: String?, whatsNew: AppWhatsNew) -> [WhatsNewVersion] {

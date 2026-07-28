@@ -7,24 +7,10 @@
 //
 
 import Preferences
-import WhatsNewKit
 
-/// The InMemoryWhatsNewVersionStore
-final class AppWhatsNewVersionStore: WhatsNewVersionStore {
-    // MARK: Public
-
-    func has(version: WhatsNew.Version) -> Bool {
-        false
-    }
-
-    // MARK: Internal
-
+final class AppWhatsNewVersionStore {
     @Preference(whatsNewVersion)
     var lastSeenVersion: String?
-
-    func set(version: WhatsNew.Version) {
-        lastSeenVersion = version.description
-    }
 
     // MARK: Private
 

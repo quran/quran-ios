@@ -7,8 +7,6 @@
 //
 
 import Localization
-import UIKit
-import WhatsNewKit
 
 struct AppWhatsNew: Decodable {
     let versions: [WhatsNewVersion]
@@ -26,14 +24,17 @@ struct WhatsNewItem: Decodable {
     let subtitle: String
     let image: String
 
-    var whatsNewItem: WhatsNew.Item {
-        let image: UIImage?
-        image = UIImage.symbol(self.image, withConfiguration: UIImage.SymbolConfiguration(weight: .light))
-        return .init(
-            title: l(title),
-            subtitle: subtitleText,
-            image: image ?? UIColor.clear.image()
-        )
+    var localizedTitle: String {
+        l(title)
+    }
+
+    var localizedDetails: [String] {
+        subtitleText
+            .components(separatedBy: .newlines)
+            .map { detail in
+                detail.hasPrefix("* ") ? String(detail.dropFirst(2)) : detail
+            }
+            .filter { !$0.isEmpty }
     }
 
     // MARK: Private

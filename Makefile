@@ -28,6 +28,7 @@ WITH_QURAN_SYNC=set -o pipefail; env QURAN_SYNC=QURAN_SYNC
 WITHOUT_QURAN_SYNC_DERIVED_DATA=$(DERIVED_DATA_DIR)/no-sync
 WITH_QURAN_SYNC_DERIVED_DATA=$(DERIVED_DATA_DIR)/sync
 WITH_QURAN_SYNC_APP_SWIFT_FLAGS='OTHER_SWIFT_FLAGS=$$(inherited) -D QURAN_SYNC'
+WHATS_NEW_LAUNCH_ARGUMENTS=-whats-new.seen-version 0
 comma := ,
 simulator-os = $(lastword $(subst $(comma), ,$(1)))
 simulator-name = $(subst $(comma)$(call simulator-os,$(1)),,$(1))
@@ -45,13 +46,16 @@ define run-example-app
 	open -a Simulator --args -CurrentDeviceUDID "$$simulator"; \
 	xcrun simctl bootstatus "$$simulator" -b; \
 	xcrun simctl install "$$simulator" "$(2)/Build/Products/Debug-iphonesimulator/$(EXAMPLE_SCHEME).app"; \
-	xcrun simctl launch "$$simulator" "$(EXAMPLE_BUNDLE_IDENTIFIER)"
+	if [ -n "$(strip $(3))" ]; then \
+		xcrun simctl terminate "$$simulator" "$(EXAMPLE_BUNDLE_IDENTIFIER)" >/dev/null 2>&1 || true; \
+	fi; \
+	xcrun simctl launch "$$simulator" "$(EXAMPLE_BUNDLE_IDENTIFIER)" $(3)
 endef
 
 .PHONY: test-no-sync test-sync
 .PHONY: build-no-sync build-sync
 .PHONY: build-example-no-sync build-example-sync
-.PHONY: run-example-no-sync run-example-sync
+.PHONY: run-example-no-sync run-example-sync run-example-no-sync-whats-new run-example-sync-whats-new
 .PHONY: clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect lint-no-kotlin-interop
 .PHONY: install-swiftlint build-for-analyzer swiftlint-analyzer
 
@@ -75,12 +79,20 @@ build-example-sync:
 
 run-example-no-sync: EXAMPLE_DESTINATION = $(call simulator-destination,$(EXAMPLE_NO_SYNC_SIMULATOR))
 run-example-sync: EXAMPLE_DESTINATION = $(call simulator-destination,$(EXAMPLE_SYNC_SIMULATOR))
+run-example-no-sync-whats-new: EXAMPLE_DESTINATION = $(call simulator-destination,$(EXAMPLE_NO_SYNC_SIMULATOR))
+run-example-sync-whats-new: EXAMPLE_DESTINATION = $(call simulator-destination,$(EXAMPLE_SYNC_SIMULATOR))
 
 run-example-no-sync: build-example-no-sync
 	$(call run-example-app,$(EXAMPLE_NO_SYNC_SIMULATOR),$(WITHOUT_QURAN_SYNC_DERIVED_DATA))
 
 run-example-sync: build-example-sync
 	$(call run-example-app,$(EXAMPLE_SYNC_SIMULATOR),$(WITH_QURAN_SYNC_DERIVED_DATA))
+
+run-example-no-sync-whats-new: build-example-no-sync
+	$(call run-example-app,$(EXAMPLE_NO_SYNC_SIMULATOR),$(WITHOUT_QURAN_SYNC_DERIVED_DATA),$(WHATS_NEW_LAUNCH_ARGUMENTS))
+
+run-example-sync-whats-new: build-example-sync
+	$(call run-example-app,$(EXAMPLE_SYNC_SIMULATOR),$(WITH_QURAN_SYNC_DERIVED_DATA),$(WHATS_NEW_LAUNCH_ARGUMENTS))
 
 clone-swiftformat:
 	@mkdir -p $(BUILD_TOOLS_DIR)

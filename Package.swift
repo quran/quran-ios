@@ -63,7 +63,6 @@ let package = Package(
 
         // UI
         .package(url: "https://github.com/GenericDataSource/GenericDataSource", from: "3.1.3"),
-        .package(url: "https://github.com/SvenTiigi/WhatsNewKit", from: "1.3.7"),
         .package(url: "https://github.com/mohamede1945/Popover", branch: "master"),
 
         // Testing
@@ -582,7 +581,6 @@ private func featuresTargets() -> [[Target]] {
         ]),
 
         target(type, name: "WhatsNewFeature", hasTests: false, dependencies: [
-            "WhatsNewKit",
             "NoorUI",
             "Analytics",
         ], resources: [

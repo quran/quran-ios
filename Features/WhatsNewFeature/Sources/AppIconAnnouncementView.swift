@@ -23,8 +23,6 @@ struct AppIconAnnouncementView: View {
     @ScaledMetric(relativeTo: .body) private var comparisonSpacing = 12.0
     @ScaledMetric(relativeTo: .body) private var contentSpacing = 28.0
     @ScaledMetric(relativeTo: .body) private var detailRowVerticalPadding = 12.0
-    @ScaledMetric(relativeTo: .headline) private var headerBottomPadding = 4.0
-    @ScaledMetric(relativeTo: .headline) private var headerTopPadding = 20.0
     @ScaledMetric(relativeTo: .title) private var iconCornerRadius = 22.0
     @ScaledMetric(relativeTo: .caption) private var iconLabelSpacing = 10.0
     @ScaledMetric(relativeTo: .title) private var iconLength = 100.0
@@ -39,8 +37,6 @@ struct AppIconAnnouncementView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            whatsNewTitle
-
             ScrollView(showsIndicators: false) {
                 VStack(spacing: contentSpacing) {
                     introduction
@@ -56,15 +52,6 @@ struct AppIconAnnouncementView: View {
         }
         .background(Color(.systemGroupedBackground).ignoresSafeArea())
         .tint(.newAppIconTint)
-    }
-
-    private var whatsNewTitle: some View {
-        Text(l("new.title"))
-            .font(.headline)
-            .multilineTextAlignment(.center)
-            .foregroundStyle(.secondary)
-            .padding(.top, headerTopPadding)
-            .padding(.bottom, headerBottomPadding)
     }
 
     private var introduction: some View {

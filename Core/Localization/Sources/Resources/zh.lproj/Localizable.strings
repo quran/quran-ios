@@ -345,18 +345,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.translation_update.details" = "* 修正了“穆沙夫”的俄语翻译 — 感谢 @pulatovpro。";
 
-// Mushafs
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "新穆沙夫:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "愿真主解除我们在加沙的兄弟姐妹所受的压迫。\n\n* 塔吉维德哈夫斯穆沙夫：阿尔古兰阿尔克里姆 - 达尔马雷法版。\n* 麦地那穆沙夫1421希杰里。\n* 麦地那穆沙夫1440希杰里。\n* 此外，继续享受经典的1405希杰里版本。";
-
-// Miscellaneous
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "杂项:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* 更新应用程序外观。\n* 增强搜索功能（新算法即将推出）。\n* 支持越南本地化。\n* 在没有朗诵播放时可访问高级音频选项。\n* 应用现在是开源的：https://github.com/quran/quran-ios";
-
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "关闭";

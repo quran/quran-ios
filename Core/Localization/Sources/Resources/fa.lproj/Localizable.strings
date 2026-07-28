@@ -346,18 +346,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.translation_update.details" = "* ترجمهٔ روسی «مصحف» اصلاح شد - با تشکر از @pulatovpro.";
 
-// Mushafs
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "مشاف جدید:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "خداوند ظلم برادران و خواهران ما در غزه را برطرف کند.\n\n* مشاف حفص تجوید: القرآن الکریم - نسخه دار المعرفه.\n* مشاف مدینه 1421 هجری.\n* مشاف مدینه 1440 هجری.\n* علاوه بر این، از نسخه کلاسیک 1405 هجری لذت ببرید.";
-
-// Miscellaneous
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "متفرقه:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* به‌روزرسانی ظاهر برنامه.\n* بهبود ویژگی جستجو (الگوریتم جدید به زودی).\n* پشتیبانی از محلی‌سازی ویتنامی.\n* دسترسی پیشرفته به گزینه‌های صوتی در دسترس هنگامی که قرائت در حال پخش نیست.\n* برنامه اکنون متن باز است: https://github.com/quran/quran-ios";
-
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "خاموش";

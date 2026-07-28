@@ -253,18 +253,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.translation_update.details" = "* Đã sửa bản dịch tiếng Nga của “mushaf” — cảm ơn @pulatovpro.";
 
-// Mushafs
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "Mushaf Mới:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Ấn bản Dar al-Marefa.\n* Mushaf Madina 1421 hijri.\n* Mushaf Madina 1440 hijri.\n* Ngoài ra, tiếp tục thưởng thức phiên bản cổ điển 1405 hijri.";
-
-// Miscellaneous
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "Đa dạng:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* Cập nhật giao diện ứng dụng.\n* Cải tiến tính năng tìm kiếm (thuật toán mới sắp ra mắt).\n* Hỗ trợ đa ngôn ngữ tiếng Việt.\n* Truy cập tùy chọn âm thanh nâng cao khi không có bản đọc nào đang phát.\n* Ứng dụng hiện đã là mã nguồn mở: https://github.com/quran/quran-ios";
-
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "Tắt";

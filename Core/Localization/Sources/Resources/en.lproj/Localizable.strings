@@ -312,15 +312,6 @@
 "new.translation_update" = "Translation Update";
 "new.translation_update.details" = "* Corrected the Russian translation of “mushaf” - thanks to @pulatovpro.";
 
-// Mushafs
-"new.mushafs" = "New Mushafs:";
-"new.mushafs.details" = "* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Edition.\n* Medina Mushaf 1421 hijri.\n* Medina Mushaf 1440 hijri.\n* Plus, continue enjoying the classic 1405 hijri version.";
-
-
-// Miscellaneous
-"new.miscellaneous" = "Miscellaneous:";
-"new.miscellaneous.details" = "* Updated app look.\n* Enhanced search feature (new algorithm coming soon).\n* Vietnamese localization support.\n* Advanced audio options access available when no recitation is playing.\n* App now is open source: https://github.com/quran/quran-ios";
-
 "bookmarks.old-page-bookmarks" = "Old Page Bookmarks";
 
 "notes.minimum-length.alert.title" = "Note is too short";

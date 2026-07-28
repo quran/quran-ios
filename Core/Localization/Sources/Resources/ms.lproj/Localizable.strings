@@ -327,18 +327,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.translation_update.details" = "* Terjemahan bahasa Rusia bagi “mushaf” telah dibetulkan — terima kasih kepada @pulatovpro.";
 
-// Mushafs
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "Mushaf Baru:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Edisi Dar al-Marefa.\n* Mushaf Madinah 1421 hijri.\n* Mushaf Madinah 1440 hijri.\n* Selain itu, terus menikmati versi klasik 1405 hijri.";
-
-// Miscellaneous
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "Pelbagai:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* Rupa aplikasi dikemas kini.\n* Ciri carian diperhebatkan (algoritma baru akan datang tidak lama lagi).\n* Sokongan penyetempatan Bahasa Vietnam.\n* Akses opsyen audio lanjutan tersedia apabila tiada bacaan sedang dimainkan.\n* Aplikasi kini bersumber terbuka: https://github.com/quran/quran-ios";
-
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "Mati";

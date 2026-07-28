@@ -344,18 +344,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.translation_update.details" = "* Correction de la traduction russe de « mushaf », grâce à @pulatovpro.";
 
-// Mushafs
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "Nouveaux Mushafs:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Édition Dar al-Marefa.\n* Mushaf de Médine 1421 hijri.\n* Mushaf de Médine 1440 hijri.\n* De plus, continuez à profiter de la version classique de 1405 hijri.";
-
-// Miscellaneous
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "Divers:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* Mise à jour de l'apparence de l'application.\n* Fonction de recherche améliorée (nouvel algorithme à venir bientôt).\n* Prise en charge de la localisation vietnamienne.\n* Accès avancé aux options audio disponible lorsque aucune récitation n'est en cours.\n* L'application est désormais open source : https://github.com/quran/quran-ios";
-
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "Désactivé";

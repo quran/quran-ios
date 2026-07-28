@@ -286,18 +286,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.translation_update.details" = "* “Mushaf” sözcüğünün Rusça çevirisi düzeltildi — @pulatovpro sayesinde.";
 
-// Mushafs
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "Yeni Mushaflar:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "Allah, Gazze'deki kardeşlerimizin ve bacılarımızın üzerindeki zulmü kaldırsın.\n\n* Tecvid Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Baskısı.\n* Medine Mushafı 1421 hicri.\n* Medine Mushafı 1440 hicri.\n* Ayrıca, klasik 1405 hicri versiyonunun keyfini çıkarmaya devam edin.";
-
-// Miscellaneous
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "Çeşitli:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* Güncellenmiş uygulama görünümü.\n* Geliştirilmiş arama özelliği (yakında yeni algoritma).\n* Vietnamca yerelleştirme desteği.\n* Kıraat oynatılmadığında gelişmiş ses seçeneklerine erişim mevcut.\n* Uygulama artık açık kaynaklı: https://github.com/quran/quran-ios";
-
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "Kapalı";

@@ -346,18 +346,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.translation_update.details" = "* “Mushaf” so‘zining ruscha tarjimasi tuzatildi — @pulatovpro ga rahmat.";
 
-// Mushafs
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "Yangi Mushaflar:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "* Tajvid Hafs Mushafi: Al-Qur'an Al-Karim - Dar al-Marefa nashri.\n* 1421 hijriy Madina Mushafi.\n* 1440 hijriy Madina Mushafi.\n* Bundan tashqari, klassik 1405 hijriy versiyasidan zavqlanishda davom eting.";
-
-// Miscellaneous
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "Turli-tuman:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* Yangi ilovalarning tashqi ko'rinishi yangilandi.\n* Qidiruvni yaxshi qilish imkoniyatini oshirdi (yaqinda yangi algoritm keladi).\n* Vietnam lokalizatsiya qo'llab-quvvatlash.\n* Tilovchi ishlayotganida yuqori audio sozlamalari yo'l qo'yiladi.\n* Ilovadan hozirgi kunlarda ochiq manbai: https://github.com/quran/quran-ios";
-
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "O‘chiq";

@@ -347,18 +347,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.translation_update.details" = "* «مۇشاپ» سۆزىنىڭ رۇسچە تەرجىمىسى تۈزىتىلدى — @pulatovpro غا رەھمەت.";
 
-// Mushafs
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "يېڭى مۇشاپلار:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "اللاھ گەززەدىكى قېرىنداشلىرىمىزنىڭ زۇلمىنى يۇقىتىپ بەرسۇن.\n\n* تەجۋىد حافس مۇشافى: ئەلقۇرئان ئەلكەرىم - دار ئەلمەرىپە نەشرى.\n* 1421 ھ.ق. مەدىنە مۇشافى.\n* 1440 ھ.ق. مەدىنە مۇشافى.\n* يەنە، كلاسسىك 1405 ھ.ق. نەشرىنى داۋاملىق ياخشى كۆرۈڭ.";
-
-// Miscellaneous
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "ھەرخىل:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* يېڭىلانغان ئەپ كۆرۈنۈشى.\n* ئىزدەش خۇسۇسىيىتى ياخشىلاندى (يېڭى ئالگورىتم تېزدىن بولىدۇ).\n* ۋىيېتنام تىلىدىكى يەرلىكلەشتۈرۈش قوللىمىسى.\n* تىلاۋەت قىلىنمىغاندا ئالىي دەرىجىلىك ئاۋاز تاللاشلىرىغا كىرىشكە بولىدۇ.\n* ئەپ ھازىر ئوچۇق مەنبە: https://github.com/quran/quran-ios";
-
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "تاقاق";

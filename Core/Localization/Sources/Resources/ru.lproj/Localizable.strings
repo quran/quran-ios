@@ -344,18 +344,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.translation_update.details" = "* Исправлен русский перевод слова «мусхаф» — благодаря @pulatovpro.";
 
-// Mushafs
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "Новые Мусхафы:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "Да облегчит Аллах угнетение наших братьев и сестер в Газе.\n\n* Таджвид Хафс Мусхаф: Аль-Куран Аль-Карим - Издание Дар аль-Марефа.\n* Мединский Мусхаф 1421 хиджри.\n* Мединский Мусхаф 1440 хиджри.\n* Кроме того, продолжайте наслаждаться классической версией 1405 хиджри.";
-
-// Miscellaneous
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "Разное:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* Обновленный внешний вид приложения.\n* Улучшенная функция поиска (скоро новый алгоритм).\n* Поддержка локализации на вьетнамский язык.\n* Доступ к расширенным аудио настройкам, когда чтение не воспроизводится.\n* Приложение теперь с открытым исходным кодом: https://github.com/quran/quran-ios";
-
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "Выкл.";

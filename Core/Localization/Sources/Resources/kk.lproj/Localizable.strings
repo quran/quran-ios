@@ -328,17 +328,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.translation_update.details" = "* «Мұсхаф» сөзінің орысша аудармасы түзетілді — @pulatovpro-ға рақмет.";
 
-// Mushafs
-"new.mushafs" = "Жаңа Мусхафтар:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "Аллаһ Газадағы бауырларымыздың және қарындастарымыздың зұлымдығын жеңілдетсін.\n\n* Тажвид Хафс Мусхафы: Аль-Құран Аль-Карим - Дар аль-Марефа басылымы.\n* Медина Мусхафы 1421 хижри.\n* Медина Мусхафы 1440 хижри.\n* Сондай-ақ, 1405 хижридегі классикалық нұсқаны әрі қарай ләззат алыңыз.";
-
-// Miscellaneous
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "Әртүрлі:";
-// Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* Қосымшаның жаңартылған көрінісі.\n* Іздеу қызметі жақсартылды (жаңа алгоритм жақында шығады).\n* Вьетнам тіліндегі локализация қолдауы.\n* Қайталау ойнатылмайтын кезде кеңейтілген аудио параметрлеріне қолжетімділік.\n* Қосымша қазір ашық кодты: https://github.com/quran/quran-ios";
-
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "Өшірулі";

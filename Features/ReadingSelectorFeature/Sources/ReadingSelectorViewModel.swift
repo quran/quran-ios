@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Localization
 import QuranKit
 import ReadingService
 
@@ -24,8 +25,30 @@ class ReadingSelectorViewModel: ObservableObject {
     @Published var progress: Double?
     @Published var error: Error?
 
-    var readings: [ReadingInfo<Reading>] {
-        Reading.allReadings.map { ReadingInfo($0) }
+    var readingGroups: [ReadingGroup<Reading>] {
+        [
+            ReadingGroup(
+                id: "uthmani",
+                title: l("reading.selector.group.uthmani"),
+                readings: [
+                    .hafs_1405,
+                    .hafs_1441,
+                    .hafs_1440,
+                    .hafs_1439,
+                    .hafs_1421,
+                ].map(ReadingInfo.init)
+            ),
+            ReadingGroup(
+                id: "tajweed",
+                title: l("reading.selector.group.tajweed"),
+                readings: [Reading.tajweed].map(ReadingInfo.init)
+            ),
+            ReadingGroup(
+                id: "naskh",
+                title: l("reading.selector.group.naskh"),
+                readings: [Reading.naskh].map(ReadingInfo.init)
+            ),
+        ]
     }
 
     func start() async {
@@ -72,11 +95,27 @@ class ReadingSelectorViewModel: ObservableObject {
 
 private extension ReadingInfo where Value == Reading {
     init(_ reading: Reading) {
+        let badge: ReadingBadge? = switch reading {
+        case .hafs_1441, .hafs_1439:
+            ReadingBadge(
+                title: l("reading.selector.badge.large-screen-optimized"),
+                style: .informational
+            )
+        case .naskh:
+            ReadingBadge(
+                title: l("reading.selector.badge.experimental"),
+                style: .experimental
+            )
+        default:
+            nil
+        }
+
         self.init(
             value: reading,
             title: reading.title,
             description: reading.description,
-            properties: reading.properties
+            properties: reading.properties,
+            badge: badge
         )
     }
 }

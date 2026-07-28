@@ -225,6 +225,11 @@
 "reading.selector.selectMushaf.long" = "Установить как текущий Мусхаф";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.title" = "Выбрать Мусхаф";
+"reading.selector.group.uthmani" = "Усмани";
+"reading.selector.group.tajweed" = "Таджвид";
+"reading.selector.group.naskh" = "Насх";
+"reading.selector.badge.experimental" = "Экспериментальный";
+"reading.selector.badge.large-screen-optimized" = "Оптимизирован для больших экранов";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.selection-description" = "Нажмите на Мусхаф для получения дополнительной информации.";
 // Metadata: Translated by ChatGPT; human review required.

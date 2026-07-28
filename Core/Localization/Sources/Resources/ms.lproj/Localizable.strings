@@ -208,6 +208,11 @@
 "reading.selector.selectMushaf.long" = "Tetapkan sebagai Mushaf semasa";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.title" = "Pilih Mushaf";
+"reading.selector.group.uthmani" = "Uthmani";
+"reading.selector.group.tajweed" = "Tajwid";
+"reading.selector.group.naskh" = "Naskh";
+"reading.selector.badge.experimental" = "Eksperimen";
+"reading.selector.badge.large-screen-optimized" = "Dioptimumkan untuk skrin yang lebih besar";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.selection-description" = "Ketik pada Mushaf untuk maklumat lanjut.";
 // Metadata: Translated by ChatGPT; human review required.

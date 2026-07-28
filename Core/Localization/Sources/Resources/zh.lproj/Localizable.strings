@@ -226,6 +226,11 @@
 "reading.selector.selectMushaf.long" = "设为当前Mushaf";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.title" = "选择Mushaf";
+"reading.selector.group.uthmani" = "奥斯曼体";
+"reading.selector.group.tajweed" = "泰吉威德";
+"reading.selector.group.naskh" = "纳斯赫体";
+"reading.selector.badge.experimental" = "实验性";
+"reading.selector.badge.large-screen-optimized" = "针对更大屏幕优化";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.selection-description" = "点击Mushaf获取更多信息。";
 // Metadata: Translated by ChatGPT; human review required.

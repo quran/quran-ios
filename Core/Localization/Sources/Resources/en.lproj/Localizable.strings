@@ -222,6 +222,11 @@
 "reading.selector.selectMushaf.short" = "Select";
 "reading.selector.selectMushaf.long" = "Set as current Mushaf";
 "reading.selector.title" = "Choose Mushaf";
+"reading.selector.group.uthmani" = "Uthmani";
+"reading.selector.group.tajweed" = "Tajweed";
+"reading.selector.group.naskh" = "Naskh";
+"reading.selector.badge.experimental" = "Experimental";
+"reading.selector.badge.large-screen-optimized" = "Large-screen optimized";
 "reading.selector.selection-description" = "Tap on a Mushaf for more information.";
 "reading.selector.property.hafs" = "Hafs Mushaf";
 "reading.selector.property.pages.604" = "604 pages";

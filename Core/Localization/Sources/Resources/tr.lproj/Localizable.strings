@@ -169,6 +169,11 @@
 "reading.selector.selectMushaf.long" = "Mevcut Mushaf olarak ayarla";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.title" = "Mushaf Seç";
+"reading.selector.group.uthmani" = "Osmanî";
+"reading.selector.group.tajweed" = "Tecvid";
+"reading.selector.group.naskh" = "Nesih";
+"reading.selector.badge.experimental" = "Deneysel";
+"reading.selector.badge.large-screen-optimized" = "Daha büyük ekranlar için optimize edildi";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.selection-description" = "Daha fazla bilgi için bir Mushaf'a dokunun.";
 // Metadata: Translated by ChatGPT; human review required.

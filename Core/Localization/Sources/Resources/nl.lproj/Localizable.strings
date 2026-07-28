@@ -153,6 +153,11 @@
 "reading.selector.selectMushaf.short" = "Selecteer";
 "reading.selector.selectMushaf.long" = "Stel in als huidige Mushaf";
 "reading.selector.title" = "Kies Musaf";
+"reading.selector.group.uthmani" = "Uthmani";
+"reading.selector.group.tajweed" = "Tajweed";
+"reading.selector.group.naskh" = "Naskh";
+"reading.selector.badge.experimental" = "Experimenteel";
+"reading.selector.badge.large-screen-optimized" = "Geoptimaliseerd voor grotere schermen";
 "reading.selector.selection-description" = "Tik op een Mushaf voor meer informatie.";
 "reading.selector.property.hafs" = "Hafs Mushaf";
 "reading.selector.property.pages.604" = "604 pagina's";

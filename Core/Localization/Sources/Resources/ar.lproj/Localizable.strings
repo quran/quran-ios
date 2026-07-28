@@ -201,6 +201,11 @@
 "reading.selector.selectMushaf.short" = "اختر";
 "reading.selector.selectMushaf.long" = "اختر هذا المصحف";
 "reading.selector.title" = "اختر المصحف";
+"reading.selector.group.uthmani" = "العثماني";
+"reading.selector.group.tajweed" = "التجويد";
+"reading.selector.group.naskh" = "النسخ";
+"reading.selector.badge.experimental" = "تجريبي";
+"reading.selector.badge.large-screen-optimized" = "مهيأ للشاشات الأكبر";
 "reading.selector.selection-description" = "اضغط على المصحف للمزيد من المعلومات.";
 "reading.selector.property.hafs" = "مصحف حفص عن عاصم";
 "reading.selector.property.pages.604" = "٦٠٤ صفحة";

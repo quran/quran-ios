@@ -10,7 +10,6 @@
 "about_open_source" = "Open-Source-Projekte";
 "about_others" = "Andere";
 "about_qaloon_images" = "Die Bilder von Qaloon werden mit Genehmigung von Nous-Mêmes Éditions Et Diffusion (Tunesien) verwendet.";
-"about_quran_enc" = "Die Enzyklopädie von dem heiligen Quran";
 "about_quran_enc_summary" = "Übersetzungen für viele Sprachen";
 "about_quran_ksu" = "Elektronisches Moshaf-Projekt";
 "about_quran_ksu_summary" = "Das elektronische Moshaf-Projekt der König Saud Universität ist die Quelle der App für den arabischen Tafaseer und die Übersetzungen für verschiedene Sprachen. Es ist auch die Quelle für die Rezitation von Dr. Ayman Suwaid.";
@@ -31,6 +30,8 @@
 "available_translations" = "Zum Download verfügbar";
 "ayah_copied_popup" = "Vers kopiert";
 "bookmark_ayah" = "Lesezeichen für diesen Vers hinzufügen";
+"bookmarks_empty_subtitle" = "Tippe auf das Lesezeichen-Symbol, um eine Seite zu speichern, oder halte einen Vers gedrückt, um ihn als Lesezeichen zu markieren.";
+"bookmarks_empty_title" = "Noch keine Lesezeichen";
 "bookmarks_list_empty" = "Keine Lesezeichen";
 "cancel" = "Abbrechen";
 "canceling" = "Abbrechen…";
@@ -153,7 +154,7 @@ wir Ihnen leider auch nicht weiterhelfen.\
 "help_title" = "Häufig gestellte Fragen";
 "highlighting_database" = "Benötigte Dateien";
 "import_data" = "Daten importieren";
-"import_data_and_override" = "Wenn Sie diese Datei importieren, ersetzt sie alle Ihre Lesezeichen durch %1$d Lesezeichen und %2$d Tags. Importieren?";
+"import_data_and_merge" = "Wenn Sie diese Datei importieren, werden %1$d Lesezeichen und %2$d Tags zu Ihren aktuellen Daten hinzugefügt. Importieren?";
 "import_data_error" = "Ungültige Sicherungsdatei (oder Sicherungsdatei kann nicht gelesen werden).";
 "import_data_permissions_error" = "Die Sicherungsdatei kann aufgrund eines Berechtigungsfehlers nicht gelesen werden.";
 "import_successful" = "Import erfolgreich";
@@ -200,6 +201,7 @@ heruntergeladen. Bitte laden Sie dieses herunter und versuchen Sie es danach ern
 "notification_channel_audio" = "Koran-Rezitation";
 "notification_channel_download" = "Koran Downloads";
 "notification_download_canceled" = "Download abgebrochen";
+"old_page_bookmarks" = "Alte Seitenlesezeichen";
 "page_description" = "Seite %1$@, Juz\' %2$@";
 "pause" = "Pause";
 "play" = "Abspielen";
@@ -251,6 +253,16 @@ dargestellt.\
 "prefs_highlight_bookmarks_title" = "Lesezeichen hervorheben";
 "prefs_import_summary" = "Lesezeichen und Tags importieren";
 "prefs_import_title" = "Importieren";
+"prefs_landscape_orientation_summary_off" = "Hochformat wird genutzt.";
+"prefs_landscape_orientation_summary_on" = "Querformat wird genutzt.";
+"prefs_landscape_orientation_title" = "Querformat";
+"prefs_lock_orientation_summary_off" = "Verwendet für die Bildschirmausrichtung die\
+aktuellen System-Einstellungen.\
+";
+"prefs_lock_orientation_summary_on" = "Die Quranseiten werden immer in einer bestimmten\
+Bildschirmausrichtung angezeigt.\
+";
+"prefs_lock_orientation_title" = "Bildschirmausrichtung sperren";
 "prefs_megabytes_int" = "%1$d MB";
 "prefs_new_background_title" = "Neuen Hintergrund verwenden";
 "prefs_night_mode_background_brightness_summary" = "Helligkeit der Seite im Nachtmodus.";
@@ -313,6 +325,12 @@ mittels der Lautstärketasten.\
 "quran_sura_title" = "Sure %1$@";
 "quran_talt_arb3" = "¾";
 "quranSearchType" = "Quranverse";
+"reading_bookmark_added" = "Lesezeichen hinzugefügt";
+"reading_bookmark_dismiss_education" = "Schließen";
+"reading_bookmark_movable_education_body" = "Das Speichern eines Lesezeichens ersetzt das alte. Um mehrere Verse zu speichern, halte einen Vers gedrückt und füge ihn einer Sammlung hinzu.";
+"reading_bookmark_movable_education_title" = "Dies ist ein verschiebbares Lesezeichen";
+"reading_bookmark_moved_from" = "Verschoben von %1$@";
+"reading_bookmark_moved_from_title" = "Lesezeichen von %1$@ verschoben";
 "recent_pages" = "Neueste Seiten";
 "recite_from_here" = "Ab hier rezitieren";
 "remove_button" = "Entfernen";
@@ -340,7 +358,6 @@ erneut ein und versuchen Sie es nochmals.\
 "storage_permission_rationale" = "Quran für Android möchte Ihre Erlaubnis, seine Daten auf einem externen Speicher zu speichern. Quran für Android funktioniert auch ohne diese Erlaubnis, aber wenn Sie die Daten löschen oder die App deinstallieren, werden alle heruntergeladenen Seiten, Audios und Daten entfernt. Erlauben Sie Quran für Android die Speicherung?";
 "sura_ayah_notification_str" = "Sure %1$@, Vers %2$d";
 "sura_ayah_sharing_str" = "Sure %1$@: %2$d";
-"tag_ayah" = "Ein Schlagwort zum Vers hinzufügen";
 "tag_blank_tag_error" = "Tag-Namen dürfen nicht leer sein!";
 "tag_bookmark" = "Ein Schlagwort zum Lesezeichen hinzufügen";
 "tag_dlg_title" = "Schlagwort";

@@ -34,6 +34,8 @@ versiyalar oʻchirildi, keyingi safar foydalanganingizda yangilangan versiyalari
 "available_translations" = "Saqlab olish mumkin";
 "ayah_copied_popup" = "Oyat xotiraga koʻchirildi";
 "bookmark_ayah" = "Oyatni xatchoʻplash";
+"bookmarks_empty_subtitle" = "Sahifani saqlash uchun xatchoʻp belgisiga bosing yoki oyatni xatchoʻp qilish uchun uni bosib turing.";
+"bookmarks_empty_title" = "Hozircha xatchoʻplar yoʻq";
 "bookmarks_list_empty" = "Xatchoʻplar mavjud emas";
 "cancel" = "Bekor qilish";
 "canceling" = "Bekor qilinmoqda…";
@@ -108,7 +110,7 @@ Tarjima matnlari shriftini esa sozlamalar orqali oʻzgartirishingiz mumkin.\
 <br/>\
 <br/><b>Oyatni boshqalar bilan qanday boʻlishish mumkin?</b>\
 <br/>Qurʼonning istalgan sahifasini oching va biror oyat ustiga biroz bosib turing.\
-Yangi ochilgan menyu orqali oyatni xatchoʻplarga qoʻshishingiz, teglashingiz, boʻlishingiz,\
+Yangi ochilgan menyu orqali oyatni xatchoʻplarga qoʻshishingiz, boʻlishingiz,\
 tarjimasini koʻrishingiz hamda qiroatini tinglashingiz mumkin.\
 <br/>\
 <br/><b>Malayalam/Tamil/Bengali/Urdu shriflari ishlamayabdi!</b>\
@@ -118,8 +120,7 @@ bu boradi biz biror yordam qila olmaymiz.\
 "help_title" = "Koʻp soʻralgan savollar";
 "highlighting_database" = "Kerakli fayllar";
 "import_data" = "Import";
-"import_data_and_override" = "Ushbu import barcha xatchoʻplarni %1$d ta xatchoʻp(lar) va %2$d ta teg(lar) bilan almashtiradi.\
-Import qilasizmi?";
+"import_data_and_merge" = "Ushbu fayl import qilinsa, joriy maʼlumotlaringizga %1$d ta xatchoʻp va %2$d ta teg qoʻshiladi. Import qilinsinmi?";
 "import_data_error" = "Yaroqsiz zaxira fayl (yoxud zaxira faylni oʻqib boʻlmadi).";
 "import_data_permissions_error" = "Ruxsat xatoliklari tufayli zaxira faylini oʻqib boʻlmadi.";
 "import_successful" = "Muvaffaqiyatli import qilindi";
@@ -161,6 +162,7 @@ olishga toʻgʻri keladi. Baribir tashqi xotiradan foydalanmoqchimisiz?";
 "notification_channel_audio" = "Qurʼon qiroati";
 "notification_channel_download" = "Qurʼon yuklamalari";
 "notification_download_canceled" = "Saqlash bekor qilindi";
+"old_page_bookmarks" = "Eski sahifa xatchoʻplari";
 "page_description" = "%1$@-bet, %2$@-juz";
 "pause" = "Pauza";
 "play" = "Chalish";
@@ -207,6 +209,12 @@ olishga toʻgʻri keladi. Baribir tashqi xotiradan foydalanmoqchimisiz?";
 "prefs_highlight_bookmarks_title" = "Xatchoʻp maʼlumotlari";
 "prefs_import_summary" = "Xatchoʻp va teglarni import qilish";
 "prefs_import_title" = "Import";
+"prefs_landscape_orientation_summary_off" = "Tik oriyentatsiyadan foydalaniladi";
+"prefs_landscape_orientation_summary_on" = "Yotiq oriyentatsiyadan foydalaniladi";
+"prefs_landscape_orientation_title" = "Landshaft rejim";
+"prefs_lock_orientation_summary_off" = "Joriy oriyentatsiyadan foydalaniladi";
+"prefs_lock_orientation_summary_on" = "Qurʼon sahifalari doim belgilangan oriyentatsiyada boʻladi";
+"prefs_lock_orientation_title" = "Ekran oriyentatsiyasini qulflash";
 "prefs_megabytes_int" = "%1$d Mb";
 "prefs_new_background_title" = "Yangi fon";
 "prefs_night_mode_background_brightness_summary" = "Tungi rejim faol boʼlganda sahifaning yorqinligi";
@@ -260,6 +268,12 @@ olishga toʻgʻri keladi. Baribir tashqi xotiradan foydalanmoqchimisiz?";
 "quran_sura_title" = "%1$@ surasi";
 "quran_talt_arb3" = "¾";
 "quranSearchType" = "Suralar";
+"reading_bookmark_added" = "Xatchoʻp qoʻshildi";
+"reading_bookmark_dismiss_education" = "Yopish";
+"reading_bookmark_movable_education_body" = "Oʻqish xatchoʻpini saqlash eskisining oʻrnini bosadi. Bir nechta oyatni saqlash uchun oyatni bosib turing va toʻplamga qoʻshing.";
+"reading_bookmark_movable_education_title" = "Bu koʻchiriladigan oʻqish xatchoʻpi";
+"reading_bookmark_moved_from" = "%1$@ dan koʻchirildi";
+"reading_bookmark_moved_from_title" = "Xatchoʻp %1$@ dan koʻchirildi";
 "recent_pages" = "Soʻnggi sahifalar";
 "recite_from_here" = "Bu yerdan o\'qing";
 "remove_button" = "Oʻchirish";
@@ -292,7 +306,6 @@ suralar, audio va tarjimalar ham oʻchib ketadi. Tashqi xotiraga bogʻlanishga r
 berasizmi?";
 "sura_ayah_notification_str" = "%1$@ surasi %2$d-oyat";
 "sura_ayah_sharing_str" = "%1$@ - %2$d";
-"tag_ayah" = "Oyatni teglash";
 "tag_blank_tag_error" = "Teg nomi boʻsh boʻlmasligi kerak!";
 "tag_bookmark" = "Xatchoʻpni teglash";
 "tag_dlg_title" = "Teg";

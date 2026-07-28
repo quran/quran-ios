@@ -32,6 +32,8 @@
 "available_translations" = "Жүктеуге болатындар";
 "ayah_copied_popup" = "Аят көшірілді";
 "bookmark_ayah" = "Аятқа бетбелгі қою";
+"bookmarks_empty_subtitle" = "Бетті сақтау үшін бетбелгі белгішесін түртіңіз немесе аятты бетбелгіге қосу үшін оны басып тұрыңыз.";
+"bookmarks_empty_title" = "Әлі бетбелгілер жоқ";
 "bookmarks_list_empty" = "Бетбелгі жоқ";
 "cancel" = "Болдырмау";
 "canceling" = "Болдырмау…";
@@ -114,8 +116,7 @@
 "help_title" = "Жиі қойылатын сұрақтар (FAQ)";
 "highlighting_database" = "Керекті файлдар";
 "import_data" = "Импорт";
-"import_data_and_override" = "Бұл импорт барлық бетбелгілерді %1$d бетбелгі(лер) және %2$d белгі(лер)ге алмастырады.\
-Импорттау керек пе?";
+"import_data_and_merge" = "Бұл файлды импорттасаңыз, ағымдағы деректеріңізге %1$d бетбелгі және %2$d белгі қосылады. Импорттау керек пе?";
 "import_data_error" = "Жарамсыз резервтік файл (немесе резервтік файл оқылмайды).";
 "import_data_permissions_error" = "Рұқсат қателіктеріне байланысты резервтік файлдарды оқу мүмкін емес.";
 "import_successful" = "Деректер импортталды";
@@ -158,6 +159,7 @@
 "notification_channel_audio" = "Құранды қайталау";
 "notification_channel_download" = "Құран жүктеулері";
 "notification_download_canceled" = "Жүктелу тоқтатылды";
+"old_page_bookmarks" = "Ескі бет бетбелгілері";
 "page_description" = "%1$@-бет, %2$@-пара";
 "pause" = "Кідірту";
 "play" = "Тыңдау";
@@ -200,6 +202,12 @@
 "prefs_highlight_bookmarks_title" = "Бетбелгі деректері";
 "prefs_import_summary" = "Бетбелгілер мен тегтерді импорттау";
 "prefs_import_title" = "Импорттау";
+"prefs_landscape_orientation_summary_off" = "Тік бағытта пайдалану";
+"prefs_landscape_orientation_summary_on" = "Көлденең бағытта пайдалану";
+"prefs_landscape_orientation_title" = "Көлденең бағыт";
+"prefs_lock_orientation_summary_off" = "Ағымдық бағытта пайдалану";
+"prefs_lock_orientation_summary_on" = "Құран беттері экранның белгіленген бағытында ұсталады";
+"prefs_lock_orientation_title" = "Экран бағытын құлыптау";
 "prefs_megabytes_int" = "%1$d Mб";
 "prefs_new_background_title" = "Жаңа фон";
 "prefs_night_mode_background_brightness_summary" = "Түнгі режим белсенді болған кездегі беттің жарықтығы";
@@ -253,6 +261,12 @@
 "quran_sura_title" = "%1$@ сүресі";
 "quran_talt_arb3" = "¾";
 "quranSearchType" = "Сүрелер";
+"reading_bookmark_added" = "Бетбелгі қосылды";
+"reading_bookmark_dismiss_education" = "Жабу";
+"reading_bookmark_movable_education_body" = "Оқу бетбелгісін сақтау ескісін алмастырады. Бірнеше аятты сақтау үшін аятты басып тұрып, оны жинаққа қосыңыз.";
+"reading_bookmark_movable_education_title" = "Бұл жылжымалы оқу бетбелгісі";
+"reading_bookmark_moved_from" = "%1$@ дегеннен жылжытылды";
+"reading_bookmark_moved_from_title" = "Бетбелгі %1$@ дегеннен жылжытылды";
 "recent_pages" = "Соңғы беттер";
 "recite_from_here" = "Осы жерден айт";
 "remove_button" = "Жою";
@@ -284,7 +298,6 @@
 ";
 "sura_ayah_notification_str" = "%1$@ сүресі, %2$d-аят";
 "sura_ayah_sharing_str" = "%1$@ сүресі: %2$d";
-"tag_ayah" = "Аятты белгілеу";
 "tag_blank_tag_error" = "Тег атаулары бос бола алмайды!";
 "tag_bookmark" = "Бетбелгіні белгілеу";
 "tag_dlg_title" = "Белгі";

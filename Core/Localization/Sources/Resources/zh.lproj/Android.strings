@@ -10,7 +10,6 @@
 "about_open_source" = "开源项目";
 "about_others" = "其他";
 "about_qaloon_images" = "Qaloon图片经Nous Memes Editions Et Diffusion（突尼斯）许可使用。";
-"about_quran_enc" = "《古兰经》合辑";
 "about_quran_enc_summary" = "多种语言的翻译";
 "about_quran_ksu" = "电子莫沙夫项目";
 "about_quran_ksu_summary" = "沙特国王大学电子Moshaf项目是该应用程序的阿拉伯语Tafaseer和各种语言的翻译来源。它也是艾曼-苏韦德博士朗诵的来源。";
@@ -31,6 +30,8 @@
 "available_translations" = "可供下载";
 "ayah_copied_popup" = "复制成功";
 "bookmark_ayah" = "收藏此节";
+"bookmarks_empty_subtitle" = "点击书签图标可保存页面，或长按经文将其加入收藏。";
+"bookmarks_empty_title" = "暂无收藏";
 "bookmarks_list_empty" = "没有收藏";
 "cancel" = "取消";
 "canceling" = "正在取消…";
@@ -98,7 +99,7 @@
 "help_title" = "常见问题";
 "highlighting_database" = "所需文件";
 "import_data" = "进口数据";
-"import_data_and_override" = "如果你导入这个文件，它将用%1$d书签和%2$d标签替换你所有的书签。导入？";
+"import_data_and_merge" = "如果导入此文件，它会将 %1$d 个书签和 %2$d 个标签添加到你当前的数据中。导入？";
 "import_data_error" = "无效的备份文件（或无法读取备份文件）。";
 "import_data_permissions_error" = "由于权限错误，无法读取备份文件。";
 "import_successful" = "进口成功";
@@ -137,6 +138,7 @@
 "notification_channel_audio" = "古兰经诵读";
 "notification_channel_download" = "古兰经下载";
 "notification_download_canceled" = "下载已取消";
+"old_page_bookmarks" = "旧页面书签";
 "page_description" = "第%2$@卷，第%1$@页";
 "pause" = "暂停";
 "play" = "播放";
@@ -179,6 +181,12 @@
 "prefs_highlight_bookmarks_title" = "突出显示书签";
 "prefs_import_summary" = "导入书签和标签";
 "prefs_import_title" = "进口";
+"prefs_landscape_orientation_summary_off" = "锁定竖屏";
+"prefs_landscape_orientation_summary_on" = "锁定横屏";
+"prefs_landscape_orientation_title" = "锁屏方向";
+"prefs_lock_orientation_summary_off" = "跟随系统";
+"prefs_lock_orientation_summary_on" = "古兰经页面的屏幕旋转方向";
+"prefs_lock_orientation_title" = "屏幕旋转方向";
 "prefs_new_background_title" = "新的壁纸";
 "prefs_night_mode_background_brightness_summary" = "夜间模式激活时的页面亮度";
 "prefs_night_mode_background_brightness_title" = "背景亮度";
@@ -228,15 +236,21 @@
 "quran_page" = "页";
 "quran_rob3" = "¼";
 "quran_sura" = "章";
-// Metadata: Translated by ChatGPT; human review required.
 "quran_sura_title" = "苏拉 %1$@";
 "quran_talt_arb3" = "¾";
 "quranSearchType" = "Verses of the Quran";
+"reading_bookmark_added" = "已添加书签";
+"reading_bookmark_dismiss_education" = "关闭";
+"reading_bookmark_movable_education_body" = "保存阅读书签会替换旧的书签。要保存多节经文，请长按经文并将其添加到收藏集。";
+"reading_bookmark_movable_education_title" = "这是一个可移动的阅读书签";
+"reading_bookmark_moved_from" = "已从%1$@移动";
+"reading_bookmark_moved_from_title" = "书签已从%1$@移动";
 "recent_pages" = "最近的页面";
 "recite_from_here" = "从这里背诵";
 "remove_button" = "移除";
 "remove_dlg_msg" = "确定要移除译文%1$@吗？";
 "remove_dlg_title" = "移除译文吗？";
+"repeatValues[3]" = "循环";
 "scoped_storage_message" = "由于安卓系统为增加用户隐私而做出的改变，在未来的安卓系统版本中，将文件复制到应用目录之外可能会阻止Quran for Android访问其数据。你确定你要使用这个路径吗？";
 "sdcard_error" = "无法找到SD卡。请安装它并重试。";
 "search_data" = "搜索数据";
@@ -253,7 +267,6 @@
 "storage_permission_rationale" = "安卓版 \"古兰经 \"希望得到你的许可，将其数据存储在外部存储器上。Quran for Android在没有这个许可的情况下也能工作，但如果你清除数据或卸载该应用，所有下载的页面、音频和数据都会被删除。授予Quran for Android的权限？";
 "sura_ayah_notification_str" = "第%1$@章，第%2$d节";
 "sura_ayah_sharing_str" = "第%1$@章: %2$d";
-"tag_ayah" = "为此节加上标签";
 "tag_blank_tag_error" = "标签名称不能是空白的!";
 "tag_bookmark" = "为收藏加标签";
 "tag_dlg_title" = "标签";
@@ -268,6 +281,3 @@
 "undo" = "撤销";
 "update_available" = "有可用更新";
 "warning" = "警告";
-
-// Metadata: Translated by ChatGPT; human review required.
-"repeatValues[3]" = "循环";

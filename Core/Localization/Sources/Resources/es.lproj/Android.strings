@@ -10,7 +10,6 @@
 "about_open_source" = "Proyectos de código abierto";
 "about_others" = "Otros";
 "about_qaloon_images" = "Las imágenes de Qaloon se utilizan con el permiso de Nous-Mêmes Éditions Et Diffusion (Túnez)";
-"about_quran_enc" = "Enciclopedia del Sagrado Corán";
 "about_quran_enc_summary" = "Traducciones para muchos idiomas";
 "about_quran_ksu" = "Proyecto electrónico Moshaf";
 "about_quran_ksu_summary" = "El Proyecto de Moshaf Electrónico de la Universidad Rey Saud es la fuente de la aplicación del Tafaseer árabe y de las traducciones para varios idiomas. También es la fuente de la recitación del Dr. Ayman Suwaid.";
@@ -31,6 +30,8 @@
 "available_translations" = "Disponible para descargar";
 "ayah_copied_popup" = "Versículo copiado";
 "bookmark_ayah" = "Agregar este versículo a Favoritos";
+"bookmarks_empty_subtitle" = "Toca el icono de marcador para guardar una página, o mantén pulsado un versículo para añadirlo a favoritos.";
+"bookmarks_empty_title" = "Aún no hay favoritos";
 "bookmarks_list_empty" = "Sin Favoritos";
 "cancel" = "Cancelar";
 "canceling" = "Cancelando…";
@@ -77,7 +78,7 @@
 "help_title" = "Preguntas Frecuentes";
 "highlighting_database" = "Archivos requeridos";
 "import_data" = "Importar datos";
-"import_data_and_override" = "Si importas este archivo, reemplazará todos tus marcadores con %1$d marcador(es) y %2$d etiqueta(s). ¿Importar?";
+"import_data_and_merge" = "Si importas este archivo, agregará %1$d marcador(es) y %2$d etiqueta(s) a tus datos actuales. ¿Importar?";
 "import_data_error" = "Archivo de copia de seguridad no válido (o no se puede leer el archivo de copia de seguridad).";
 "import_data_permissions_error" = "No se puede leer el archivo de copia de seguridad debido a un error de permisos.";
 "import_successful" = "Importar con éxito";
@@ -116,6 +117,7 @@
 "notification_channel_audio" = "Recitación del Corán";
 "notification_channel_download" = "Descargas del Corán";
 "notification_download_canceled" = "Descarga cancelada";
+"old_page_bookmarks" = "Marcadores de páginas antiguos";
 "page_description" = "Página %1$@, Yuz %2$@";
 "pause" = "Pausa";
 "play" = "Reproducir";
@@ -158,6 +160,12 @@
 "prefs_highlight_bookmarks_title" = "Resaltar favoritos";
 "prefs_import_summary" = "Importar marcadores y etiquetas";
 "prefs_import_title" = "Importar";
+"prefs_landscape_orientation_summary_off" = "Se utilizará la orientación vertical";
+"prefs_landscape_orientation_summary_on" = "Se utilizará orientación horizontal";
+"prefs_landscape_orientation_title" = "Orientación horizontal";
+"prefs_lock_orientation_summary_off" = "Adaptable a la orientación actual";
+"prefs_lock_orientation_summary_on" = "La Página del Corán estará en modo de orientación fija";
+"prefs_lock_orientation_title" = "Bloquear orientación de la pantalla";
 "prefs_megabytes_int" = "%1$d MB";
 "prefs_new_background_title" = "Nuevo fondo";
 "prefs_night_mode_background_brightness_summary" = "Brillo de la página cuando se activa el modo nocturno";
@@ -211,11 +219,18 @@
 "quran_sura_title" = "Capítulo %1$@";
 "quran_talt_arb3" = "¾";
 "quranSearchType" = "Versículos del Corán";
+"reading_bookmark_added" = "Marcador añadido";
+"reading_bookmark_dismiss_education" = "Descartar";
+"reading_bookmark_movable_education_body" = "Guardar un marcador de lectura reemplaza el anterior. Para guardar varios versículos, mantén pulsado un versículo y añádelo a una colección.";
+"reading_bookmark_movable_education_title" = "Este es un marcador de lectura movible";
+"reading_bookmark_moved_from" = "Movido desde %1$@";
+"reading_bookmark_moved_from_title" = "Marcador movido desde %1$@";
 "recent_pages" = "Páginas recientes";
 "recite_from_here" = "Recita desde aquí";
 "remove_button" = "Eliminar";
 "remove_dlg_msg" = "¿Está seguro que desea eliminar el %1$@?";
 "remove_dlg_title" = "¿Eliminar traducción?";
+"repeatValues[3]" = "en bucle";
 "scoped_storage_message" = "Debido a los cambios de Android para aumentar la privacidad del usuario, copiar archivos fuera de los directorios de la aplicación podría impedir que Quran para Android acceda a sus datos en futuras versiones de Android. Estás seguro de que quieres usar esta ruta?";
 "sdcard_error" = "No se pudo encontrar tarjetas SD. Por favor, inserte la tarjeta SD y vuelva a intentarlo.";
 "search_data" = "Buscar datos";
@@ -232,7 +247,6 @@
 "storage_permission_rationale" = "Quran para Android quiere su permiso para almacenar sus datos en el almacenamiento externo. Quran para Android funcionará sin este permiso, pero si borras los datos o desinstalas la aplicación, se eliminarán todas las páginas, el audio y los datos descargados. ¿Dar permiso a Quran para Android?";
 "sura_ayah_notification_str" = "Capítulo %1$@, Versículo %2$d";
 "sura_ayah_sharing_str" = "Capítulo %1$@: %2$d";
-"tag_ayah" = "Etiquetar esta versículo";
 "tag_blank_tag_error" = "Los nombres de las etiquetas no pueden estar en blanco.";
 "tag_bookmark" = "Etiquetar Favorito";
 "tag_dlg_title" = "Etiqueta";
@@ -247,6 +261,3 @@
 "undo" = "Deshacer";
 "update_available" = "Actualización disponible";
 "warning" = "Advertencia";
-
-// Metadata: Translated by ChatGPT; human review required.
-"repeatValues[3]" = "en bucle";

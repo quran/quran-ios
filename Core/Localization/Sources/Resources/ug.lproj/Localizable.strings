@@ -311,39 +311,41 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.release.body" = "باش ئېكرانىڭىزدا يېڭى سىنبەلگىنى كۆرۈش ئۈچۈن ئەڭ يېڭى نەشرىگە يېڭىلاڭ.";
 
-// Mushafs
+// Reading layouts
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "يېڭى مۇشاپلار:";
+"new.reading_layouts" = "يېڭى مەدىنە مۇشاپلىرى";
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "اللاھ گەززەدىكى قېرىنداشلىرىمىزنىڭ زۇلمىنى يۇقىتىپ بەرسۇن.\n\n* تەجۋىد حافس مۇشافى: ئەلقۇرئان ئەلكەرىم - دار ئەلمەرىپە نەشرى.\n* 1421 ھ.ق. مەدىنە مۇشافى.\n* 1440 ھ.ق. مەدىنە مۇشافى.\n* يەنە، كلاسسىك 1405 ھ.ق. نەشرىنى داۋاملىق ياخشى كۆرۈڭ.";
+"new.reading_layouts.details" = "* مەدىنە مۇشاپى 1439 ۋە مەدىنە مۇشاپى 1441 ئوقۇش كۆرۈنۈشلىرى قوشۇلدى — @ahmedre غا رەھمەت.\n* ئوقۇش بەتلىرىنى چۈشۈرۈشنى ئەسلىگە كەلتۈرۈش ۋە تولۇق بولمىغان ھۆججەتلەرنى بىر تەرەپ قىلىش ياخشىلاندى — @ahmedre غا رەھمەت.";
 
-// Reciters
+// Experimental Naskh
 // Metadata: Translated by ChatGPT; human review required.
-"new.reciters" = "يېڭى قارىلار:";
+"new.experimental_naskh" = "تەجرىبە خاراكتېرلىك نەسخ خېتى";
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh.details" = "* تەجرىبە خاراكتېرلىك نەسخ خېتى ئوقۇش كۆرۈنۈشىنى سىناپ بېقىڭ — @ahmedre غا رەھمەت.\n* بەزى ئىقتىدارلار تېخى يوق، كېيىنكى يېڭىلانمىلاردا قوشۇلىدۇ.";
 
-// Miscellaneous
+// Audio controls
 // Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "ھەرخىل:";
+"new.audio_controls" = "ئىلغار ئاۋاز تاللانمىلىرى";
 // Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* يېڭىلانغان ئەپ كۆرۈنۈشى.\n* ئىزدەش خۇسۇسىيىتى ياخشىلاندى (يېڭى ئالگورىتم تېزدىن بولىدۇ).\n* ۋىيېتنام تىلىدىكى يەرلىكلەشتۈرۈش قوللىمىسى.\n* تىلاۋەت قىلىنمىغاندا ئالىي دەرىجىلىك ئاۋاز تاللاشلىرىغا كىرىشكە بولىدۇ.\n* ئەپ ھازىر ئوچۇق مەنبە: https://github.com/quran/quran-ios";
+"new.audio_controls.details" = "ئىلغار ئاۋاز تاللانمىلىرى قايتا لايىھەلەندى ۋە تېخىمۇ كۆپ كونترول قوشۇلدى — @OKKHALIL3 غا رەھمەت.\n* قويۇش سۈرئىتى 0.25× دىن 2× گىچە — @OKKHALIL3 غا رەھمەت.\n* تەكرار سانى 1× دىن 100× گىچە ۋە ئايلانما تاللاش — @OKKHALIL3 غا رەھمەت.\n* ئايەتلەر ۋە تەكرارلىنىدىغان دائىرىلەر ئارىسىدىكى تەڭشىگىلى بولىدىغان توختاشلار — @abdorizak ۋە @OKKHALIL3 غا رەھمەت.\n* ئالدىن چۈشۈرمەي ئاۋازنى بىۋاسىتە قويۇش — @OKKHALIL3 غا رەھمەت.\n* قۇر ئىچىدىكى ئايەت تاللىغۇچ — @OKKHALIL3 غا رەھمەت.";
 
-// Audio upgrades
+// Notes
 // Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades" = "ئاۋاز:";
+"new.notes_updates" = "ئىزاھلارنى ئىزدەش ۋە تەھرىرلەش";
 // Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades.details" = "* تىلىۋەت سۈرئىتىنى 0.5x، 0.75x، 1x، 1.25x، 1.5x قىلدۇرىدۇ - @adnan29979 غا رەھمەت.\n* قويۇش سىز ياخشى كۆرىدىغان سۈرئەتنى ئەستە تۇتىدۇ - @adnan29979 غا رەھمەت.";
+"new.notes_updates.details" = "* ئىزاھلارنى تېكىستى ياكى سۈرىسى بويىچە ئىزدەڭ — @abdorizak غا رەھمەت.\n* ئىزاھ كارتىلىرى ۋە ئىزاھ تەھرىرلىگۈچ قايتا لايىھەلەندى.";
 
-// Personalization
+// Navigation
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization" = "ئوقۇش تېمىلىرى:";
+"new.navigation_updates" = "باش بەت ۋە يولباشچىلىق";
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* كۆپ تېمىلارنى قوللايدۇ. قۇرئاننىڭ بىر بېتىنى ئېچىڭ -> ئوڭ يۇقىرى تەرەپتىكى تىزىملىك -> تېمиләр ۋە تەڭشەكلەر.\n* 'Original' نى ئىشلىتىپ بۇرۇنقى ئۇسلۇپقا قايتالايسىز.";
+"new.navigation_updates.details" = "* باش بەتتىكى سۈرە ۋە جۇز تىزىملىكلىرىگە يىغىشقا بولىدىغان جۇز بۆلەكلىرى قوشۇلدى — @OKKHALIL3 غا رەھمەت.\n* بەتلەر ۋە ئايەتلەر ئارىسىدىكى يولباشچىلىق تېخىمۇ بىردەك قىلىندى.";
 
-// Library & Navigation
+// Translation
 // Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation" = "كىتەپخانا ۋە يولباشچىلىق:";
+"new.translation_update" = "تەرجىمە يېڭىلىنىشى";
 // Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation.details" = "* باش بەتتە سۈرە ۋە جۇزلارنى تەرتىپلەپ، سۈرە نومۇرلىرىنى كۆرسىتىڭ، شۇنداق قىلىپ لازىملىق بەتكە تېز يېتىڭ - @yismailuofa غا رەھمەت.";
+"new.translation_update.details" = "* «مۇشاپ» سۆزىنىڭ رۇسچە تەرجىمىسى تۈزىتىلدى — @pulatovpro غا رەھمەت.";
 
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
@@ -526,7 +528,3 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "بەت ئاستى ئىزاھى #%d";
-
-// What's new
-// Metadata: Translated by ChatGPT; human review required.
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

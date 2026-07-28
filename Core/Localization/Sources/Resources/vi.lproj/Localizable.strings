@@ -217,38 +217,41 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.release.body" = "Cập nhật lên phiên bản mới nhất để thấy biểu tượng mới trên Màn hình chính.";
 
-// Mushafs
+// Reading layouts
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "Mushaf Mới:";
+"new.reading_layouts" = "Các Mushaf Madani mới";
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Ấn bản Dar al-Marefa.\n* Mushaf Madina 1421 hijri.\n* Mushaf Madina 1440 hijri.\n* Ngoài ra, tiếp tục thưởng thức phiên bản cổ điển 1405 hijri.";
+"new.reading_layouts.details" = "* Đã thêm bố cục đọc Mushaf Madani 1439 và Mushaf Madani 1441 — cảm ơn @ahmedre.\n* Cải thiện khả năng khôi phục tải xuống trang đọc và xử lý tệp chưa hoàn chỉnh — cảm ơn @ahmedre.";
 
-// Reciters
-"new.reciters" = "Người đọc Mới";
+// Experimental Naskh
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh" = "Chữ Naskh thử nghiệm";
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh.details" = "* Hãy thử bố cục đọc dùng chữ Naskh thử nghiệm — cảm ơn @ahmedre.\n* Một số tính năng vẫn còn thiếu và sẽ được bổ sung trong các bản cập nhật sau.";
 
-// Miscellaneous
+// Audio controls
 // Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "Đa dạng:";
+"new.audio_controls" = "Tùy chọn âm thanh nâng cao";
 // Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* Cập nhật giao diện ứng dụng.\n* Cải tiến tính năng tìm kiếm (thuật toán mới sắp ra mắt).\n* Hỗ trợ đa ngôn ngữ tiếng Việt.\n* Truy cập tùy chọn âm thanh nâng cao khi không có bản đọc nào đang phát.\n* Ứng dụng hiện đã là mã nguồn mở: https://github.com/quran/quran-ios";
+"new.audio_controls.details" = "Tùy chọn âm thanh nâng cao đã được thiết kế lại và bổ sung thêm nhiều điều khiển — cảm ơn @OKKHALIL3.\n* Tốc độ phát từ 0,25× đến 2× — cảm ơn @OKKHALIL3.\n* Số lần lặp từ 1× đến 100×, cùng tùy chọn lặp liên tục — cảm ơn @OKKHALIL3.\n* Khoảng dừng có thể cấu hình giữa các ayah và phạm vi lặp — cảm ơn @abdorizak và @OKKHALIL3.\n* Phát trực tuyến âm thanh mà không cần tải xuống trước — cảm ơn @OKKHALIL3.\n* Bộ chọn ayah ngay trong dòng — cảm ơn @OKKHALIL3.";
 
-// Audio upgrades
+// Notes
 // Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades" = "Âm thanh:";
+"new.notes_updates" = "Tìm kiếm và chỉnh sửa ghi chú";
 // Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades.details" = "* Điều chỉnh tốc độ đọc: 0.5x, 0.75x, 1x, 1.25x, 1.5x - nhờ @adnan29979.\n* Phát lại ghi nhớ tốc độ ưa thích của bạn - nhờ @adnan29979.";
+"new.notes_updates.details" = "* Tìm ghi chú theo nội dung hoặc surah — cảm ơn @abdorizak.\n* Thẻ ghi chú và trình chỉnh sửa ghi chú đã được thiết kế lại.";
 
-// Personalization
+// Navigation
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization" = "Chủ đề đọc:";
+"new.navigation_updates" = "Trang chủ và điều hướng";
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* Hỗ trợ nhiều chủ đề. Mở một trang Quran -> Menu góc trên bên phải -> Chủ đề & Cài đặt.\n* Dùng 'Original' nếu bạn muốn quay lại phong cách trước.";
+"new.navigation_updates.details" = "* Đã thêm các phần juz có thể thu gọn vào danh sách surah và juz trên Trang chủ — cảm ơn @OKKHALIL3.\n* Điều hướng giữa trang và ayah trở nên nhất quán hơn.";
 
-// Library & Navigation
+// Translation
 // Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation" = "Thư viện & Điều hướng:";
+"new.translation_update" = "Cập nhật bản dịch";
 // Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation.details" = "* Sắp xếp surah và juz trên Trang chủ và hiển thị số surah để bạn đến nội dung cần nhanh hơn - nhờ @yismailuofa.";
+"new.translation_update.details" = "* Đã sửa bản dịch tiếng Nga của “mushaf” — cảm ơn @pulatovpro.";
 
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
@@ -431,7 +434,3 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Chú thích #%d";
-
-// What's New
-// Metadata: Translated by ChatGPT; human review required.
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

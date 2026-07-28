@@ -310,39 +310,41 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.release.body" = "برای دیدن نماد جدید در صفحهٔ اصلی، برنامه را به جدیدترین نسخه به‌روزرسانی کنید.";
 
-// Mushafs
+// Reading layouts
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "مشاف جدید:";
+"new.reading_layouts" = "مصحف‌های جدید مدینه";
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "خداوند ظلم برادران و خواهران ما در غزه را برطرف کند.\n\n* مشاف حفص تجوید: القرآن الکریم - نسخه دار المعرفه.\n* مشاف مدینه 1421 هجری.\n* مشاف مدینه 1440 هجری.\n* علاوه بر این، از نسخه کلاسیک 1405 هجری لذت ببرید.";
+"new.reading_layouts.details" = "* چیدمان‌های مطالعهٔ مصحف مدینه ۱۴۳۹ و مصحف مدینه ۱۴۴۱ اضافه شدند - با تشکر از @ahmedre.\n* بازیابی دانلود صفحات مطالعه و مدیریت فایل‌های ناقص بهبود یافت - با تشکر از @ahmedre.";
 
-// Reciters
+// Experimental Naskh
 // Metadata: Translated by ChatGPT; human review required.
-"new.reciters" = "قاریان جدید:";
+"new.experimental_naskh" = "خط نسخ آزمایشی";
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh.details" = "* چیدمان مطالعهٔ آزمایشی با خط نسخ را امتحان کنید - با تشکر از @ahmedre.\n* چند قابلیت هنوز در دسترس نیست و در به‌روزرسانی‌های آینده اضافه خواهد شد.";
 
-// Miscellaneous
+// Audio controls
 // Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "متفرقه:";
+"new.audio_controls" = "گزینه‌های پیشرفتهٔ صوتی";
 // Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* به‌روزرسانی ظاهر برنامه.\n* بهبود ویژگی جستجو (الگوریتم جدید به زودی).\n* پشتیبانی از محلی‌سازی ویتنامی.\n* دسترسی پیشرفته به گزینه‌های صوتی در دسترس هنگامی که قرائت در حال پخش نیست.\n* برنامه اکنون متن باز است: https://github.com/quran/quran-ios";
+"new.audio_controls.details" = "گزینه‌های پیشرفتهٔ صوتی بازطراحی شدند و کنترل‌های بیشتری اضافه شد - با تشکر از @OKKHALIL3.\n* سرعت پخش از 0.25× تا 2× - با تشکر از @OKKHALIL3.\n* تعداد تکرار از 1× تا 100×، به‌همراه گزینهٔ حلقه - با تشکر از @OKKHALIL3.\n* مکث‌های قابل تنظیم بین آیات و محدوده‌های تکرارشونده - با تشکر از @abdorizak و @OKKHALIL3.\n* پخش جریانی صوت بدون دانلود اولیه - با تشکر از @OKKHALIL3.\n* انتخاب‌گر درون‌خطی آیه - با تشکر از @OKKHALIL3.";
 
-// Audio upgrades
+// Notes
 // Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades" = "صوتی:";
+"new.notes_updates" = "جست‌وجو و ویرایش یادداشت‌ها";
 // Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades.details" = "* کنترل سرعت تلاوت قابل تنظیم: 0.5x، 0.75x، 1x، 1.25x، 1.5x - با تشکر از @adnan29979.\n* پخش، سرعت دلخواه شما را به خاطر می‌سپارد - با تشکر از @adnan29979.";
+"new.notes_updates.details" = "* یادداشت‌ها را بر اساس متن یا سوره جست‌وجو کنید - با تشکر از @abdorizak.\n* کارت‌های یادداشت و ویرایشگر یادداشت بازطراحی شدند.";
 
-// Personalization
+// Navigation
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization" = "موضوعات مطالعه:";
+"new.navigation_updates" = "صفحهٔ اصلی و پیمایش";
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* پشتیبانی از چندین تم. یک صفحه از قرآن را باز کنید -> منوی بالا سمت راست -> تم‌ها و تنظیمات.\n* اگر می‌خواهید به سبک قبلی برگردید از 'Original' استفاده کنید.";
+"new.navigation_updates.details" = "* بخش‌های جمع‌شوندهٔ جزء به فهرست‌های سوره و جزء در صفحهٔ اصلی اضافه شدند - با تشکر از @OKKHALIL3.\n* پیمایش بین صفحات و آیات هماهنگ‌تر شد.";
 
-// Library & Navigation
+// Translation
 // Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation" = "کتابخانه و پیمایش:";
+"new.translation_update" = "به‌روزرسانی ترجمه";
 // Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation.details" = "* سوره‌ها و جزءها را در صفحه اصلی مرتب کنید و شماره سوره‌ها را نمایش دهید تا سریع‌تر به آنچه نیاز دارید برسید - با تشکر از @yismailuofa.";
+"new.translation_update.details" = "* ترجمهٔ روسی «مصحف» اصلاح شد - با تشکر از @pulatovpro.";
 
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
@@ -525,7 +527,3 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "پاورقی شمارهٔ %d";
-
-// What's new
-// Metadata: Translated by ChatGPT; human review required.
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

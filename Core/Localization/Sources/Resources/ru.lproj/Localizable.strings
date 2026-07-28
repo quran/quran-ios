@@ -308,39 +308,41 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.release.body" = "Обновите приложение до последней версии, чтобы увидеть новый значок на экране «Домой».";
 
-// Mushafs
+// Reading layouts
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "Новые Мусхафы:";
+"new.reading_layouts" = "Новые мединские мусхафы";
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "Да облегчит Аллах угнетение наших братьев и сестер в Газе.\n\n* Таджвид Хафс Мусхаф: Аль-Куран Аль-Карим - Издание Дар аль-Марефа.\n* Мединский Мусхаф 1421 хиджри.\n* Мединский Мусхаф 1440 хиджри.\n* Кроме того, продолжайте наслаждаться классической версией 1405 хиджри.";
+"new.reading_layouts.details" = "* Добавлены варианты чтения «Мединский мусхаф 1439» и «Мединский мусхаф 1441» — благодаря @ahmedre.\n* Улучшено восстановление загрузок страниц для чтения и обработка неполных файлов — благодаря @ahmedre.";
 
-// Reciters
+// Experimental Naskh
 // Metadata: Translated by ChatGPT; human review required.
-"new.reciters" = "Новые чтецы:";
+"new.experimental_naskh" = "Экспериментальный шрифт насх";
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh.details" = "* Попробуйте экспериментальный вариант чтения со шрифтом насх — благодаря @ahmedre.\n* Некоторые функции пока отсутствуют и будут добавлены в будущих обновлениях.";
 
-// Miscellaneous
+// Audio controls
 // Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "Разное:";
+"new.audio_controls" = "Расширенные настройки аудио";
 // Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* Обновленный внешний вид приложения.\n* Улучшенная функция поиска (скоро новый алгоритм).\n* Поддержка локализации на вьетнамский язык.\n* Доступ к расширенным аудио настройкам, когда чтение не воспроизводится.\n* Приложение теперь с открытым исходным кодом: https://github.com/quran/quran-ios";
+"new.audio_controls.details" = "Расширенные настройки аудио были переработаны и получили больше элементов управления — благодаря @OKKHALIL3.\n* Скорость воспроизведения от 0,25× до 2× — благодаря @OKKHALIL3.\n* Количество повторов от 1× до 100× и режим цикла — благодаря @OKKHALIL3.\n* Настраиваемые паузы между аятами и повторяемыми диапазонами — благодаря @abdorizak и @OKKHALIL3.\n* Потоковое воспроизведение без предварительной загрузки — благодаря @OKKHALIL3.\n* Встроенный выбор аята — благодаря @OKKHALIL3.";
 
-// Audio upgrades
+// Notes
 // Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades" = "Аудио:";
+"new.notes_updates" = "Поиск и редактирование заметок";
 // Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades.details" = "* Регулируемая скорость чтения: 0,5x, 0,75x, 1x, 1,25x, 1,5x - спасибо @adnan29979.\n* Воспроизведение запоминает предпочитаемую вами скорость - спасибо @adnan29979.";
+"new.notes_updates.details" = "* Ищите заметки по тексту или суре — благодаря @abdorizak.\n* Карточки заметок и редактор заметок были переработаны.";
 
-// Personalization
+// Navigation
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization" = "Темы чтения:";
+"new.navigation_updates" = "Главная и навигация";
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* Поддержка нескольких тем. Откройте страницу Корана -> верхнее правое меню -> Темы и настройки.\n* Используйте 'Original', если хотите вернуться к предыдущему стилю.";
+"new.navigation_updates.details" = "* В списки сур и джузов на главной добавлены сворачиваемые разделы джузов — благодаря @OKKHALIL3.\n* Навигация между страницами и аятами стала более последовательной.";
 
-// Library & Navigation
+// Translation
 // Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation" = "Библиотека и навигация:";
+"new.translation_update" = "Обновление перевода";
 // Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation.details" = "* Сортируйте суры и джузы на главном экране и показывайте номера сур, чтобы быстрее перейти к нужному - спасибо @yismailuofa.";
+"new.translation_update.details" = "* Исправлен русский перевод слова «мусхаф» — благодаря @pulatovpro.";
 
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
@@ -523,7 +525,3 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Сноска №%d";
-
-// What's new
-// Metadata: Translated by ChatGPT; human review required.
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

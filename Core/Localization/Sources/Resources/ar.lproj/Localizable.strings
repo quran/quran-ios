@@ -262,28 +262,29 @@
 "new.icon_announcement.release.title" = "ستُطرح في الإصدار القادم";
 "new.icon_announcement.release.body" = "حدّث إلى أحدث إصدار لرؤية الأيقونة الجديدة على شاشتك الرئيسية.";
 
-// Mushafs
-"new.mushafs" = "مصاحف جديدة:";
-"new.mushafs.details" = "* مصحف حفص بالتجويد: القرآن الكريم - طبعة دار المعرفة.\n* مصحف المدينة 1421 هجري.\n* مصحف المدينة 1440 هجري.\n* بالإضافة إلى الاستمتاع بالنسخة الكلاسيكية 1405 هجري المستخدمة منذ بداية البرنامج.";
+// Reading layouts
+"new.reading_layouts" = "مصاحف مدنية جديدة";
+"new.reading_layouts.details" = "* تمت إضافة مصحف المدينة ١٤٣٩ ومصحف المدينة ١٤٤١ كتخطيطين جديدين للقراءة - بفضل @ahmedre.\n* تم تحسين استعادة تنزيل صفحات القراءة والتعامل مع الملفات غير المكتملة - بفضل @ahmedre.";
 
-// Reciters
-"new.reciters" = "قراء جدد:";
+// Experimental Naskh
+"new.experimental_naskh" = "خط النسخ التجريبي";
+"new.experimental_naskh.details" = "* جرّب تخطيط القراءة التجريبي بخط النسخ - بفضل @ahmedre.\n* ما زالت بعض الميزات غير متاحة وستُضاف في تحديثات مستقبلية.";
 
-// Miscellaneous
-"new.miscellaneous" = "متفرقات:";
-"new.miscellaneous.details" = "* تحديث مظهر التطبيق.\n* تحسين ميزة البحث (قادم قريباً خوارزمية بحث جديدة).\n* دعم توطين التطبيق باللغة الفيتنامية.\n* الوصول إلى خيارات الصوت المتقدمة متاح عند عدم تشغيل التلاوة.\n* التطبيق أصبح مفتوح المصدر: https://github.com/quran/quran-ios";
+// Audio controls
+"new.audio_controls" = "خيارات الصوت المتقدمة";
+"new.audio_controls.details" = "أُعيد تصميم خيارات الصوت المتقدمة وأُضيفت المزيد من عناصر التحكم - بفضل @OKKHALIL3.\n* سرعات تشغيل من ٠٫٢٥× إلى ٢× - بفضل @OKKHALIL3.\n* عدد مرات تكرار من ١× إلى ١٠٠×، بالإضافة إلى خيار التكرار المستمر - بفضل @OKKHALIL3.\n* فواصل زمنية قابلة للضبط بين الآيات ونطاقات التكرار - بفضل @abdorizak و@OKKHALIL3.\n* بث الصوت بدلًا من تنزيله أولًا - بفضل @OKKHALIL3.\n* منتقي آيات مضمّن - بفضل @OKKHALIL3.";
 
-// Audio upgrades
-"new.audio_upgrades" = "صوتيات:";
-"new.audio_upgrades.details" = "* التحكم في سرعة التلاوة: 0.5x، 0.75x، 1x، 1.25x، 1.5x - بفضل @adnan29979.\n* يتذكر تشغيل تلاوة جديدة السرعة المفضلة لديك - بفضل @adnan29979.";
+// Notes
+"new.notes_updates" = "البحث في الملاحظات وتحريرها";
+"new.notes_updates.details" = "* ابحث في الملاحظات حسب نصها أو السورة - بفضل @abdorizak.\n* أُعيد تصميم بطاقات الملاحظات ومحرر الملاحظات.";
 
-// Personalization
-"new.personalization" = "الأنماط:";
-"new.personalization.details" = "* دعم لعدة أنماط. افتح صفحة من القرآن -> القائمة العلوية اليمنى -> السمات والإعدادات.\n* استخدم \"الأصلي\" إذا كنت تريد العودة إلى النمط السابق.";
+// Navigation
+"new.navigation_updates" = "الرئيسية والتنقل";
+"new.navigation_updates.details" = "* تمت إضافة أقسام أجزاء قابلة للطي إلى قوائم السور والأجزاء على الصفحة الرئيسية - بفضل @OKKHALIL3.\n* أصبح التنقل بين الصفحات والآيات أكثر اتساقًا.";
 
-// Library & Navigation
-"new.library_navigation" = "التنقل:";
-"new.library_navigation.details" = "* قم بترتيب السور والأجزاء على الصفحة الرئيسية، وعرض أرقام السور حتى تتمكن من الانتقال إلى ما تحتاجه بشكل أسرع - بفضل @yismailuofa.";
+// Translation
+"new.translation_update" = "تحديث الترجمة";
+"new.translation_update.details" = "* تم تصحيح الترجمة الروسية لكلمة «مصحف» - بفضل @pulatovpro.";
 
 "notes.minimum-length.alert.title" = "الملاحظة قصيرة جدًا";
 "notes.minimum-length.alert.body" = "يجب أن تكون الملاحظة %d أحرف على الأقل.";
@@ -317,6 +318,3 @@
 "translation.text.ayah-number" = "%d:%d";
 "translation.text.footnote-number" = "[%d]";
 "translation.text.footnote-title" = "الحاشية رقم %d";
-
-// What's new
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

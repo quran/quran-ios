@@ -308,39 +308,41 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.release.body" = "Actualiza a la versión más reciente para ver el nuevo icono en tu pantalla de inicio.";
 
-// Mushafs
+// Reading layouts
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "Nuevos Mushafs:";
+"new.reading_layouts" = "Nuevos mushafs de Medina";
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Edición Dar al-Marefa.\n* Mushaf Medina 1421 hijri.\n* Mushaf Medina 1440 hijri.\n* Además, sigue disfrutando de la versión clásica de 1405 hijri.";
+"new.reading_layouts.details" = "* Se añadieron los diseños de lectura Mushaf de Medina 1439 y Mushaf de Medina 1441, gracias a @ahmedre.\n* Se mejoró la recuperación de descargas de páginas de lectura y el manejo de archivos incompletos, gracias a @ahmedre.";
 
-// Reciters
+// Experimental Naskh
 // Metadata: Translated by ChatGPT; human review required.
-"new.reciters" = "Nuevos Recitadores:";
+"new.experimental_naskh" = "Escritura Naskh experimental";
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh.details" = "* Prueba el diseño de lectura experimental con escritura Naskh, gracias a @ahmedre.\n* Todavía faltan algunas funciones y se añadirán en futuras actualizaciones.";
 
-// Miscellaneous
+// Audio controls
 // Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "Misceláneas:";
+"new.audio_controls" = "Opciones de audio avanzadas";
 // Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* Aspecto actualizado de la aplicación.\n* Función de búsqueda mejorada (nuevo algoritmo próximamente).\n* Soporte de localización en vietnamita.\n* Acceso avanzado a opciones de audio disponible cuando no se reproduce una recitación.\n* La aplicación ahora es de código abierto: https://github.com/quran/quran-ios";
+"new.audio_controls.details" = "Se rediseñaron las Opciones de audio avanzadas y se añadieron más controles, gracias a @OKKHALIL3.\n* Velocidades de reproducción de 0,25× a 2×, gracias a @OKKHALIL3.\n* Repeticiones de 1× a 100×, además de una opción de bucle, gracias a @OKKHALIL3.\n* Pausas configurables entre aleyas y rangos repetidos, gracias a @abdorizak y @OKKHALIL3.\n* Transmisión de audio sin descargarlo primero, gracias a @OKKHALIL3.\n* Selector de aleyas integrado, gracias a @OKKHALIL3.";
 
-// Audio upgrades
+// Notes
 // Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades" = "Audio:";
+"new.notes_updates" = "Búsqueda y edición de notas";
 // Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades.details" = "* Control de velocidad de recitación ajustable: 0,5x, 0,75x, 1x, 1,25x, 1,5x - gracias a @adnan29979.\n* La reproducción recuerda tu velocidad preferida - gracias a @adnan29979.";
+"new.notes_updates.details" = "* Busca notas por su texto o sura, gracias a @abdorizak.\n* Se rediseñaron las tarjetas de notas y el editor de notas.";
 
-// Personalization
+// Navigation
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization" = "Temas de lectura:";
+"new.navigation_updates" = "Inicio y navegación";
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* Soporte para múltiples temas. Abre una página del Corán -> Menú superior derecho -> Temas y configuraciones.\n* Usa 'Original' si quieres volver al estilo anterior.";
+"new.navigation_updates.details" = "* Se añadieron secciones de juz contraíbles a las listas de suras y juz de Inicio, gracias a @OKKHALIL3.\n* La navegación entre páginas y aleyas ahora es más coherente.";
 
-// Library & Navigation
+// Translation
 // Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation" = "Biblioteca y navegación:";
+"new.translation_update" = "Actualización de traducción";
 // Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation.details" = "* Ordena suras y juz en Inicio y muestra los números de sura para que puedas acceder a lo que necesitas más rápido - gracias a @yismailuofa.";
+"new.translation_update.details" = "* Se corrigió la traducción rusa de «mushaf», gracias a @pulatovpro.";
 
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
@@ -523,7 +525,3 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Nota al pie n.º %d";
-
-// What's new
-// Metadata: Translated by ChatGPT; human review required.
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

@@ -288,29 +288,29 @@
 "new.icon_announcement.release.title" = "Rolling out next release";
 "new.icon_announcement.release.body" = "Update to the latest version to see the new icon on your Home Screen.";
 
-// Mushafs
-"new.mushafs" = "New Mushafs:";
-"new.mushafs.details" = "* Tajweed Hafs Mushaf: Al-Quran Al-Kareem - Dar al-Marefa Edition.\n* Medina Mushaf 1421 hijri.\n* Medina Mushaf 1440 hijri.\n* Plus, continue enjoying the classic 1405 hijri version.";
+// Reading layouts
+"new.reading_layouts" = "New Madani Mushafs";
+"new.reading_layouts.details" = "* Added Madani Mushaf 1439 and Madani Mushaf 1441 reading layouts - thanks to @ahmedre.\n* Improved reading download recovery and handling of incomplete files - thanks to @ahmedre.";
 
-// Reciters
-"new.reciters" = "New Reciters:";
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";
+// Experimental Naskh
+"new.experimental_naskh" = "Experimental Naskh Script";
+"new.experimental_naskh.details" = "* Try the experimental Naskh Script reading layout - thanks to @ahmedre.\n* A few features are still missing and will be added in future updates.";
 
-// Miscellaneous
-"new.miscellaneous" = "Miscellaneous:";
-"new.miscellaneous.details" = "* Updated app look.\n* Enhanced search feature (new algorithm coming soon).\n* Vietnamese localization support.\n* Advanced audio options access available when no recitation is playing.\n* App now is open source: https://github.com/quran/quran-ios";
+// Audio controls
+"new.audio_controls" = "Advanced Audio Options";
+"new.audio_controls.details" = "Redesigned Advanced Audio Options and added more controls - thanks to @OKKHALIL3.\n* Playback speeds from 0.25× to 2× - thanks to @OKKHALIL3.\n* Repeat counts from 1× to 100×, plus a loop option - thanks to @OKKHALIL3.\n* Configurable pauses between ayahs and repeated ranges - thanks to @abdorizak and @OKKHALIL3.\n* Stream audio instead of downloading it first - thanks to @OKKHALIL3.\n* Inline ayah picker - thanks to @OKKHALIL3.";
 
-// Audio upgrades
-"new.audio_upgrades" = "Audio:";
-"new.audio_upgrades.details" = "* Adjustable recitation speed control: 0.5x, 0.75x, 1x, 1.25x, 1.5x - thanks to @adnan29979.\n* Playback remembers your preferred rate - thanks to @adnan29979.";
+// Notes
+"new.notes_updates" = "Notes Search & Editing";
+"new.notes_updates.details" = "* Search notes by their text or surah - thanks to @abdorizak.\n* Redesigned note cards and the note editor.";
 
-// Personalization
-"new.personalization" = "Reading Themes:";
-"new.personalization.details" = "* Support for multiple themes. Open a Quran Page -> Top Right Menu -> Themes & Settings.\n* Use 'Original' if you want to revert to the previous style.";
+// Navigation
+"new.navigation_updates" = "Home & Navigation";
+"new.navigation_updates.details" = "* Added collapsible Juz sections to the Home surah and Juz lists - thanks to @OKKHALIL3.\n* Made page and ayah navigation more consistent.";
 
-// Library & Navigation
-"new.library_navigation" = "Library & Navigation:";
-"new.library_navigation.details" = "* Sort surahs and juz on Home, and display surah numbers so you can jump to what you need faster - thanks to @yismailuofa.";
+// Translation
+"new.translation_update" = "Translation Update";
+"new.translation_update.details" = "* Corrected the Russian translation of “mushaf” - thanks to @pulatovpro.";
 
 "bookmarks.old-page-bookmarks" = "Old Page Bookmarks";
 

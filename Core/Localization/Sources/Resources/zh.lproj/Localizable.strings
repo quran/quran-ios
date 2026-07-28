@@ -309,39 +309,41 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.icon_announcement.release.body" = "更新至最新版本，即可在主屏幕上看到新图标。";
 
-// Mushafs
+// Reading layouts
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs" = "新穆沙夫:";
+"new.reading_layouts" = "全新麦地那穆沙夫";
 // Metadata: Translated by ChatGPT; human review required.
-"new.mushafs.details" = "愿真主解除我们在加沙的兄弟姐妹所受的压迫。\n\n* 塔吉维德哈夫斯穆沙夫：阿尔古兰阿尔克里姆 - 达尔马雷法版。\n* 麦地那穆沙夫1421希杰里。\n* 麦地那穆沙夫1440希杰里。\n* 此外，继续享受经典的1405希杰里版本。";
+"new.reading_layouts.details" = "* 新增麦地那穆沙夫 1439 和麦地那穆沙夫 1441 阅读布局 — 感谢 @ahmedre。\n* 改进阅读页面下载恢复及不完整文件的处理 — 感谢 @ahmedre。";
 
-// Reciters
+// Experimental Naskh
 // Metadata: Translated by ChatGPT; human review required.
-"new.reciters" = "新颂经者:";
+"new.experimental_naskh" = "实验性纳斯赫字体";
+// Metadata: Translated by ChatGPT; human review required.
+"new.experimental_naskh.details" = "* 试用采用纳斯赫字体的实验性阅读布局 — 感谢 @ahmedre。\n* 目前仍缺少部分功能，未来更新将陆续补充。";
 
-// Miscellaneous
+// Audio controls
 // Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous" = "杂项:";
+"new.audio_controls" = "高级音频选项";
 // Metadata: Translated by ChatGPT; human review required.
-"new.miscellaneous.details" = "* 更新应用程序外观。\n* 增强搜索功能（新算法即将推出）。\n* 支持越南本地化。\n* 在没有朗诵播放时可访问高级音频选项。\n* 应用现在是开源的：https://github.com/quran/quran-ios";
+"new.audio_controls.details" = "重新设计高级音频选项并加入更多控制 — 感谢 @OKKHALIL3。\n* 播放速度支持 0.25× 至 2× — 感谢 @OKKHALIL3。\n* 重复次数支持 1× 至 100×，并提供循环选项 — 感谢 @OKKHALIL3。\n* 可配置经文之间及重复范围之间的暂停 — 感谢 @abdorizak 和 @OKKHALIL3。\n* 无需先下载即可串流播放音频 — 感谢 @OKKHALIL3。\n* 内嵌经文选择器 — 感谢 @OKKHALIL3。";
 
-// Audio upgrades
+// Notes
 // Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades" = "音频:";
+"new.notes_updates" = "搜索与编辑笔记";
 // Metadata: Translated by ChatGPT; human review required.
-"new.audio_upgrades.details" = "* 可调节的诵读速度：0.5x、0.75x、1x、1.25x、1.5x - 感谢 @adnan29979。\n* 播放会记住你偏好的速度 - 感谢 @adnan29979。";
+"new.notes_updates.details" = "* 按笔记内容或苏拉搜索 — 感谢 @abdorizak。\n* 重新设计笔记卡片和笔记编辑器。";
 
-// Personalization
+// Navigation
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization" = "阅读主题:";
+"new.navigation_updates" = "主页与导航";
 // Metadata: Translated by ChatGPT; human review required.
-"new.personalization.details" = "* 支持多种主题。打开一页《古兰经》 -> 右上角菜单 -> 主题与设置。\n* 如果想恢复以前的样式，请使用 'Original'。";
+"new.navigation_updates.details" = "* 在主页的苏拉和朱兹列表中加入可折叠的朱兹分区 — 感谢 @OKKHALIL3。\n* 页面与经文之间的导航更加一致。";
 
-// Library & Navigation
+// Translation
 // Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation" = "书库与导航:";
+"new.translation_update" = "翻译更新";
 // Metadata: Translated by ChatGPT; human review required.
-"new.library_navigation.details" = "* 在主页排序苏拉和朱兹并显示苏拉编号，帮助你更快跳转到所需内容 - 感谢 @yismailuofa。";
+"new.translation_update.details" = "* 修正了“穆沙夫”的俄语翻译 — 感谢 @pulatovpro。";
 
 // Audio
 // Metadata: Translated by ChatGPT; human review required.
@@ -524,7 +526,3 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "脚注 #%d";
-
-// What's New
-// Metadata: Translated by ChatGPT; human review required.
-"new.reciters.details" = "* %%Readers:qari_abdulhadi_kanakeri_gapless%%\n* %%Readers:qari_ahmed_al_nufais_gapless%%\n* %%Readers:qari_alijon_qari_gapless%%\n* %%Readers:qari_badr_al_turki_gapless%%\n* %%Readers:qari_farman_shawani_gapless%%\n* %%Readers:qari_idrees_abkar_gapless%%\n* %%Readers:qari_luhaidan_gapless%%\n* %%Readers:qari_peshawa_qadir_al_qurdi_gapless%%\n* %%Readers:qari_raad_al_kurdi_gapless%%";

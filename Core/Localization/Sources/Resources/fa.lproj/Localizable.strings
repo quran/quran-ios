@@ -227,6 +227,11 @@
 "reading.selector.selectMushaf.long" = "تنظیم به عنوان مشاف فعلی";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.title" = "انتخاب مشاف";
+"reading.selector.group.uthmani" = "عثمانی";
+"reading.selector.group.tajweed" = "تجوید";
+"reading.selector.group.naskh" = "نسخ";
+"reading.selector.badge.experimental" = "آزمایشی";
+"reading.selector.badge.large-screen-optimized" = "بهینه‌شده برای صفحه‌نمایش‌های بزرگ‌تر";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.selection-description" = "برای اطلاعات بیشتر روی مشاف ضربه بزنید.";
 // Metadata: Translated by ChatGPT; human review required.

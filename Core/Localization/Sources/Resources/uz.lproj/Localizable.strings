@@ -227,6 +227,11 @@
 "reading.selector.selectMushaf.long" = "Joriy Mushaf sifatida belgilash";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.title" = "Mushaf tanlash";
+"reading.selector.group.uthmani" = "Usmoniy";
+"reading.selector.group.tajweed" = "Tajvid";
+"reading.selector.group.naskh" = "Nasx";
+"reading.selector.badge.experimental" = "Tajribaviy";
+"reading.selector.badge.large-screen-optimized" = "Kattaroq ekranlar uchun moslashtirilgan";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.selection-description" = "Ko'proq ma'lumot olish uchun Mushafni bosing.";
 // Metadata: Translated by ChatGPT; human review required.

@@ -209,6 +209,11 @@
 "reading.selector.selectMushaf.long" = "Ағымдағы Мусхаф ретінде орнату";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.title" = "Мусхафты таңдау";
+"reading.selector.group.uthmani" = "Османи";
+"reading.selector.group.tajweed" = "Тәжуид";
+"reading.selector.group.naskh" = "Насх";
+"reading.selector.badge.experimental" = "Эксперименттік";
+"reading.selector.badge.large-screen-optimized" = "Үлкен экрандарға бейімделген";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.selection-description" = "Көбірек ақпарат алу үшін Мусхафқа түртіңіз.";
 // Metadata: Translated by ChatGPT; human review required.

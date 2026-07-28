@@ -153,6 +153,11 @@
 "reading.selector.selectMushaf.short" = "Chọn";
 "reading.selector.selectMushaf.long" = "Đặt làm Mushaf hiện tại";
 "reading.selector.title" = "Chọn Mushaf";
+"reading.selector.group.uthmani" = "Uthmani";
+"reading.selector.group.tajweed" = "Tajweed";
+"reading.selector.group.naskh" = "Naskh";
+"reading.selector.badge.experimental" = "Thử nghiệm";
+"reading.selector.badge.large-screen-optimized" = "Tối ưu cho màn hình lớn hơn";
 "reading.selector.selection-description" = "Chạm vào Mushaf để biết thêm thông tin.";
 "reading.selector.property.hafs" = "Hafs Mushaf";
 "reading.selector.property.pages.604" = "604 trang";

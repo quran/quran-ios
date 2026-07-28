@@ -226,6 +226,11 @@
 "reading.selector.selectMushaf.long" = "Definir como Mushaf atual";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.title" = "Escolher Mushaf";
+"reading.selector.group.uthmani" = "Uthmani";
+"reading.selector.group.tajweed" = "Tajwid";
+"reading.selector.group.naskh" = "Naskh";
+"reading.selector.badge.experimental" = "Experimental";
+"reading.selector.badge.large-screen-optimized" = "Otimizado para telas maiores";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.selection-description" = "Toque em um Mushaf para mais informações.";
 // Metadata: Translated by ChatGPT; human review required.

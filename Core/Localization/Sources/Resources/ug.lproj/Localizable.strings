@@ -228,6 +228,11 @@
 "reading.selector.selectMushaf.long" = "نۆۋەتتىكى مۇشاف قىلىپ بەلگىلەش";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.title" = "مۇشاف تاللاش";
+"reading.selector.group.uthmani" = "ئوسمانى";
+"reading.selector.group.tajweed" = "تەجۋىد";
+"reading.selector.group.naskh" = "نەسخ";
+"reading.selector.badge.experimental" = "تەجرىبە";
+"reading.selector.badge.large-screen-optimized" = "چوڭ ئېكرانلارغا ماسلاشتۇرۇلغان";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.selection-description" = "تېخىمۇ كۆپ ئۇچۇرلار ئۈچۈن مۇشافنى تەكشۈرۈڭ.";
 // Metadata: Translated by ChatGPT; human review required.

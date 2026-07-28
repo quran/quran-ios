@@ -518,9 +518,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.custom_collections" = "Синхронизировать пользовательские коллекции";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.profile" = "Профиль Quran.com";
+"setting.quran_account.profile" = "Управление аккаунтом";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in" = "Войти";
+"setting.quran_account.sign_in" = "Войти в Quran.com";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in.subtitle" = "Синхронизируйте заметки, закладки и коллекции";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.signed_in" = "Выполнен вход";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Выйти";
 // Metadata: Translated by ChatGPT; human review required.

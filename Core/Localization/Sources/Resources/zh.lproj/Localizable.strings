@@ -519,9 +519,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.custom_collections" = "同步你的自定义收藏集";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.profile" = "Quran.com 个人资料";
+"setting.quran_account.profile" = "管理账户";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in" = "登录";
+"setting.quran_account.sign_in" = "登录 Quran.com";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in.subtitle" = "同步笔记、书签和收藏集";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.signed_in" = "已登录";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "退出登录";
 // Metadata: Translated by ChatGPT; human review required.

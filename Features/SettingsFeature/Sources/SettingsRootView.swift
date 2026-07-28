@@ -88,11 +88,15 @@ private struct SettingsRootViewUI: View {
         NoorList {
             #if QURAN_SYNC
             NoorBasicSection {
-                if isAuthenticated {
-                    authenticatedQuranComSection
-                } else {
-                    unauthenticatedQuranComSection
-                }
+                QuranComAccountCard(
+                    isAuthenticated: isAuthenticated,
+                    email: loggedInUserEmail,
+                    manageAccountAction: { await openQuranComProfile() },
+                    signInAction: { await loginAction() },
+                    signOutAction: { await logoutAction() }
+                )
+                .listRowInsets(.zero)
+                .listRowBackground(Color.clear)
             }
             #endif
 
@@ -195,62 +199,6 @@ private struct SettingsRootViewUI: View {
         #endif
         .errorAlert(error: $error)
     }
-
-    // MARK: Private
-
-    #if QURAN_SYNC
-    private var unauthenticatedQuranComSection: some View {
-        Group {
-            NoorListItem(
-                image: .init(.profile, color: .secondaryLabel),
-                title: styledText(l("setting.quran_account.sign_in"), fontWeight: .semibold),
-                accessory: .disclosureIndicator,
-                action: loginAction
-            )
-
-            NoorListItem(
-                image: .init(.checkmark, color: .accentColor),
-                title: .text(l("setting.quran_account.sync_devices"))
-            )
-
-            NoorListItem(
-                image: .init(.checkmark, color: .accentColor),
-                title: .text(l("setting.quran_account.custom_collections"))
-            )
-
-            NoorListItem(
-                image: .init(.checkmark, color: .accentColor),
-                title: .text(l("setting.quran_account.attach_notes"))
-            )
-        }
-    }
-
-    private var authenticatedQuranComSection: some View {
-        Group {
-            NoorListItem(
-                image: .init(.profile, color: .secondaryLabel),
-                title: .text(loggedInUserEmail ?? l("setting.quran_account.profile")),
-                accessory: .image(.settings, color: .secondaryLabel),
-                action: openQuranComProfile
-            )
-
-            NoorListItem(
-                image: .init(.signOut, color: .secondaryLabel),
-                title: styledText(l("setting.quran_account.sign_out"), foregroundColor: .red),
-                action: logoutAction
-            )
-        }
-    }
-
-    private func styledText(
-        _ text: String,
-        foregroundColor: Color? = nil,
-        fontWeight: Font.Weight? = nil
-    ) -> MultipartText {
-        let range = text.startIndex ..< text.endIndex
-        return "\(text, highlighting: [HighlightingRange(range, foregroundColor: foregroundColor, fontWeight: fontWeight)])"
-    }
-    #endif
 }
 
 struct SettingsRootView_Previews: PreviewProvider {

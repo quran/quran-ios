@@ -518,9 +518,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.custom_collections" = "Eigene Sammlungen synchron halten";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.profile" = "Quran.com-Profil";
+"setting.quran_account.profile" = "Konto verwalten";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in" = "Anmelden";
+"setting.quran_account.sign_in" = "Bei Quran.com anmelden";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in.subtitle" = "Notizen, Lesezeichen und Sammlungen synchronisieren";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.signed_in" = "Angemeldet";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Abmelden";
 // Metadata: Translated by ChatGPT; human review required.

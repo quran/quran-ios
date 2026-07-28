@@ -427,9 +427,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.custom_collections" = "Giữ bộ sưu tập tùy chỉnh được đồng bộ";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.profile" = "Hồ sơ Quran.com";
+"setting.quran_account.profile" = "Quản lý tài khoản";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in" = "Đăng nhập";
+"setting.quran_account.sign_in" = "Đăng nhập Quran.com";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in.subtitle" = "Đồng bộ ghi chú, dấu trang và bộ sưu tập";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.signed_in" = "Đã đăng nhập";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Đăng xuất";
 // Metadata: Translated by ChatGPT; human review required.

@@ -502,9 +502,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.custom_collections" = "Арнаулы жинақтарды синхрондап сақтау";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.profile" = "Quran.com профилі";
+"setting.quran_account.profile" = "Есептік жазбаны басқару";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in" = "Кіру";
+"setting.quran_account.sign_in" = "Quran.com сайтына кіру";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in.subtitle" = "Жазбаларды, бетбелгілерді және жинақтарды синхрондау";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.signed_in" = "Кірдіңіз";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Шығу";
 // Metadata: Translated by ChatGPT; human review required.

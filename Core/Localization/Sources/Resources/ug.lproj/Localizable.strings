@@ -521,9 +521,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.custom_collections" = "ئىختىيارىي توپلاملىرىڭىزنى ماسقەدەم ساقلاڭ";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.profile" = "Quran.com ئارخىپى";
+"setting.quran_account.profile" = "ھېساباتنى باشقۇرۇش";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in" = "كىرىش";
+"setting.quran_account.sign_in" = "Quran.com غا كىرىش";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in.subtitle" = "خاتىرە، خەتكۈچ ۋە توپلاملارنى ماسقەدەملەڭ";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.signed_in" = "كىردىڭىز";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "چىقىش";
 // Metadata: Translated by ChatGPT; human review required.

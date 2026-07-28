@@ -52,8 +52,10 @@
 "setting.donate" = "Donate";
 "setting.share_app" = "Share the app...";
 "setting.app_version" = "App Version";
-"setting.quran_account.sign_in" = "Sign in";
-"setting.quran_account.profile" = "Quran.com Profile";
+"setting.quran_account.sign_in" = "Sign in to Quran.com";
+"setting.quran_account.sign_in.subtitle" = "Sync notes, bookmarks and collections";
+"setting.quran_account.signed_in" = "Signed in";
+"setting.quran_account.profile" = "Manage account";
 "setting.quran_account.sign_out" = "Sign out";
 "setting.quran_account.sync_devices" = "Sync your bookmarks across all devices";
 "setting.quran_account.custom_collections" = "Keep your custom collections in sync";

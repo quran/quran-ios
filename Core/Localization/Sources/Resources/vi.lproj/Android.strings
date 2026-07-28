@@ -32,6 +32,8 @@ bản sao của các tệp này để có thể tải xuống các phiên bản 
 "available_translations" = "Có sẵn để tải xuống";
 "ayah_copied_popup" = "Đã sao chép Ayah";
 "bookmark_ayah" = "Đánh dấu Ayah này";
+"bookmarks_empty_subtitle" = "Nhấn vào biểu tượng dấu trang để lưu một trang, hoặc nhấn giữ một Ayah để đánh dấu.";
+"bookmarks_empty_title" = "Chưa có dấu trang nào";
 "bookmarks_list_empty" = "Không có Đánh dấu";
 "cancel" = "Hủy";
 "canceling" = "Đang hủy…";
@@ -109,7 +111,7 @@ một lần nữa để xóa dấu trang.\
 <br/>\
 <br/><b>Làm cách nào để chia sẻ ayah?</b>\
 <br/>Khi đang ở bất kỳ trang tiếng Ả Rập nào, hãy nhấn và giữ bất kỳ ayah nào để có menu nơi bạn có thể\
-chọn đánh dấu, gắn thẻ, chia sẻ hoặc sao chép ayah đó vào khay nhớ tạm, xem bản dịch,\
+chọn đánh dấu, chia sẻ hoặc sao chép ayah đó vào khay nhớ tạm, xem bản dịch,\
 hoặc nghe bản đọc của nó.<br/>\
 <br/><b>Phông Malayalam/Tamil/Bengali/Urdu không dùng được!</b>\
 <br/>Rất tiếc, các phiên bản Android trước 4.0 không hỗ trợ các phông chữ này và\
@@ -118,7 +120,7 @@ chúng tôi không giúp được gì nhiều.\
 "help_title" = "(FAQ) Câu hỏi thường gặp";
 "highlighting_database" = "Tệp cần thiết";
 "import_data" = "Nhập Data";
-"import_data_and_override" = "Nếu bạn nhập tệp này, nó sẽ thay thế tất cả đánh dấu của bạn bằng %1$d đánh dấu và %2$d thẻ. Nhập?";
+"import_data_and_merge" = "Nếu bạn nhập tệp này, %1$d đánh dấu và %2$d thẻ sẽ được thêm vào dữ liệu hiện tại của bạn. Nhập?";
 "import_data_error" = "Tệp sao lưu không hợp lệ (hoặc không thể đọc tệp sao lưu).";
 "import_data_permissions_error" = "Không thể đọc tệp sao lưu do lỗi quyền.";
 "import_successful" = "Nhập thành công";
@@ -162,6 +164,7 @@ chắc chắn muốn sử dụng thẻ nhớ SD ngoài?";
 "notification_channel_audio" = "Quran Xướng đọc";
 "notification_channel_download" = "Quran Tải xuống";
 "notification_download_canceled" = "Đã hủy tải xuống";
+"old_page_bookmarks" = "Đánh dấu trang cũ";
 "page_description" = "Trang %1$@, Juz\' %2$@";
 "pause" = "Nghỉ";
 "play" = "Phát";
@@ -206,6 +209,12 @@ chắc chắn muốn sử dụng thẻ nhớ SD ngoài?";
 "prefs_highlight_bookmarks_title" = "Tô sáng các đánh dấu";
 "prefs_import_summary" = "Nhập đánh dấu và thẻ";
 "prefs_import_title" = "Nhập";
+"prefs_landscape_orientation_summary_off" = "Luôn dùng chế độ nằm dọc";
+"prefs_landscape_orientation_summary_on" = "Luôn dùng chế độ nằm ngang";
+"prefs_landscape_orientation_title" = "Hướng ngang";
+"prefs_lock_orientation_summary_off" = "Tự chuyển hướng cùng thiết bị";
+"prefs_lock_orientation_summary_on" = "Khóa một hướng cố định";
+"prefs_lock_orientation_title" = "Khóa hướng màn hình";
 "prefs_megabytes_int" = "%1$d MB";
 "prefs_new_background_title" = "Màu nền mới";
 "prefs_night_mode_background_brightness_summary" = "Độ sáng của trang khi chế độ tối được kích hoạt";
@@ -259,6 +268,12 @@ chắc chắn muốn sử dụng thẻ nhớ SD ngoài?";
 "quran_sura_title" = "Surah %1$@";
 "quran_talt_arb3" = "¾";
 "quranSearchType" = "Những câu Kinh Quran";
+"reading_bookmark_added" = "Đã thêm dấu trang";
+"reading_bookmark_dismiss_education" = "Bỏ qua";
+"reading_bookmark_movable_education_body" = "Lưu dấu trang đọc sẽ thay thế dấu cũ. Để lưu nhiều Ayah, nhấn giữ một Ayah và thêm vào bộ sưu tập.";
+"reading_bookmark_movable_education_title" = "Đây là dấu trang đọc có thể di chuyển";
+"reading_bookmark_moved_from" = "Đã di chuyển từ %1$@";
+"reading_bookmark_moved_from_title" = "Dấu trang đã di chuyển từ %1$@";
 "recent_pages" = "Vừa Đọc";
 "recite_from_here" = "Đọc từ đây";
 "remove_button" = "Xóa";
@@ -289,7 +304,6 @@ gỡ cài đặt ứng dụng, tất cả các trang, âm thanh và dữ liệu 
 cho kinh Quran?";
 "sura_ayah_notification_str" = "Surah %1$@, Ayah %2$d";
 "sura_ayah_sharing_str" = "Surah %1$@: %2$d";
-"tag_ayah" = "Gắn thẻ Ayah này";
 "tag_blank_tag_error" = "Tên thẻ không được để trống!";
 "tag_bookmark" = "Đánh dấu Thẻ";
 "tag_dlg_title" = "Thẻ";

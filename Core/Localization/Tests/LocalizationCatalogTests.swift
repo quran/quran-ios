@@ -37,6 +37,7 @@ final class LocalizationCatalogTests: XCTestCase {
     }
 
     func testRequiredAndroidStringsExistInEveryLocalization() throws {
+        let requiredAndroidKeys = try requiredAndroidKeys()
         for localization in supportedLocalizations {
             let availableKeys = Set(try strings(named: "Android", for: localization).keys)
                 .union(try stringsdict(named: "Android", for: localization).keys)
@@ -49,44 +50,6 @@ final class LocalizationCatalogTests: XCTestCase {
     }
 
     // MARK: - Private
-
-    private let requiredAndroidKeys: Set<String> = [
-        "audio_manager",
-        "audio_manager_files_downloaded",
-        "bookmarks_list_empty",
-        "cancel",
-        "dialog_ok",
-        "download_retry",
-        "downloaded_translations",
-        "from",
-        "juz2_description",
-        "madani",
-        "makki",
-        "menu_bookmarks",
-        "menu_search",
-        "menu_settings",
-        "no_results",
-        "page_description",
-        "play",
-        "play_each_verse",
-        "play_verses_range",
-        "prefs_translations",
-        "quran_ayah",
-        "quran_hizb",
-        "quran_juz2",
-        "quran_nos",
-        "quran_page",
-        "quran_rob3",
-        "quran_sura",
-        "quran_sura_title",
-        "quran_talt_arb3",
-        "recent_pages",
-        "remove_button",
-        "repeatValues[3]",
-        "to",
-        "undo",
-        "verses",
-    ]
 
     private let supportedLocalizations = [
         "ar",
@@ -142,6 +105,17 @@ final class LocalizationCatalogTests: XCTestCase {
         return try XCTUnwrap(propertyList as? [String: Value])
     }
 
+    private func requiredAndroidKeys() throws -> Set<String> {
+        let configurationURL = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Generator/AndroidImport.json")
+        let data = try Data(contentsOf: configurationURL)
+        return try JSONDecoder()
+            .decode(AndroidImportConfiguration.self, from: data)
+            .requiredKeys
+    }
+
     private func formatTokens(in value: String) -> [String] {
         let formatExpression = try! NSRegularExpression(pattern: #"%(?:\d+\$)?([@d])"#)
         let readerExpression = try! NSRegularExpression(pattern: #"%%Readers:[^%]+%%"#)
@@ -155,4 +129,8 @@ final class LocalizationCatalogTests: XCTestCase {
         }
         return (formatTokens + readerTokens).sorted()
     }
+}
+
+private struct AndroidImportConfiguration: Decodable {
+    let requiredKeys: Set<String>
 }

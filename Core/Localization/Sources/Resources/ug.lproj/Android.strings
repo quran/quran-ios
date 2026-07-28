@@ -10,7 +10,6 @@
 "about_open_source" = "ئوچۇق مەنبەلىك قۇرۇلۇش";
 "about_others" = "باشقىلار";
 "about_qaloon_images" = "قالۇن سۈرەتلىرى Nous Memes Editions Et Diffusion (تۇنىس) نىڭ رۇخسىتى بىلەن ئىشلىتىلدى.";
-"about_quran_enc" = "قۇرئان كەرىم ئىنىسكىلوپىدىيىسى";
 "about_quran_enc_summary" = "نۇرغۇن تىللارنىڭ تەرجىمىسى";
 "about_quran_ksu" = "ئېلېكترونلۇق موشاف قۇرۇلۇشى";
 "about_quran_ksu_summary" = "پادىشاھ سەئۇد ئۇنىۋېرسىتېتى ئېلېكترونلۇق موشاف قۇرۇلۇشى كۆپلىگەن تىلدىكى ئەرەبچە تەپسىر ۋە تەرجىمىلەرنىڭ مەنبەسى. ئۇ يەنە دوكتور ئايمان سۇۋەيدنىڭ قىرائىتىنىڭمۇ مەنبەسى.";
@@ -31,6 +30,8 @@
 "available_translations" = "چۈشۈرگىلى بولىدۇ";
 "ayah_copied_popup" = "ئايەت كۆچۈرۈلدى";
 "bookmark_ayah" = "بۇ ئايەتنى خەتكۈچلە";
+"bookmarks_empty_subtitle" = "بەتنى ساقلاش ئۈچۈن خەتكۈچ سىنبەلگىسىنى چېكىڭ ياكى ئايەتنى خەتكۈچلەش ئۈچۈن ئۇنى بېسىپ تۇرۇڭ.";
+"bookmarks_empty_title" = "تېخى خەتكۈچ يوق";
 "bookmarks_list_empty" = "خەتكۈچ يوق";
 "cancel" = "ۋاز كەچ";
 "canceling" = "ۋاز كېچىۋاتىدۇ…";
@@ -77,7 +78,7 @@
 "help_title" = "كۆپ سورىلىدىغان سوئاللار";
 "highlighting_database" = "زۆرۈر ھۆججەتلەر";
 "import_data" = "سانلىق مەلۇمات ئەكىر";
-"import_data_and_override" = "ئەگەر بۇ ھۆججەتنى ئەكىرسىڭىز، %1$d خەتكۈچ ۋە %2$d بەلگە بار ھەممە خەتكۈچلىرىڭىزنى ئالماشتۇرۇۋېتىدۇ. ئەكىرەمدۇ؟";
+"import_data_and_merge" = "ئەگەر بۇ ھۆججەتنى ئەكىرسىڭىز، ھازىرقى سانلىق مەلۇماتىڭىزغا %1$d خەتكۈچ ۋە %2$d بەلگە قوشۇلىدۇ. ئەكىرەمدۇ؟";
 "import_data_error" = "ئىناۋەتسىز زاپاس ھۆججەت (ياكى زاپاس ھۆججەتنى ئوقۇيالمىدى).";
 "import_data_permissions_error" = "ئىجازەت خاتالىقى سەۋەبىدىن زاپاس ھۆججەتنى ئوقۇيالمىدى.";
 "import_successful" = "مۇۋەپپەقىيەتلىك ئەكىرىلدى";
@@ -117,6 +118,7 @@
 "notification_channel_audio" = "قۇرئان قىرائىتى";
 "notification_channel_download" = "قۇرئان چۈشۈرۈش";
 "notification_download_canceled" = "چۈشۈرۈشتىن ۋاز كەچتى";
+"old_page_bookmarks" = "كونا بەت خەتكۈچلىرى";
 "page_description" = "%1$@-بەت، %2$@-پارە";
 "pause" = "ۋاقتىنچە توختاش";
 "play" = "قويۇش";
@@ -162,6 +164,12 @@
 "prefs_highlight_bookmarks_title" = "خەتكۈچنى گەۋدىلەندۈرىدۇ";
 "prefs_import_summary" = "خەتكۈچ ۋە بەلگىلەرنى ئەكىرىدۇ";
 "prefs_import_title" = "ئەكىر";
+"prefs_landscape_orientation_summary_off" = "ھەمىشە بويىغا يۆنىلىش ھالىتىنى ئىشلىتىدۇ";
+"prefs_landscape_orientation_summary_on" = "ھەمىشە توغرىسىغا يۆنىلىش ھالىتىنى ئىشلىتىدۇ";
+"prefs_landscape_orientation_title" = "توغرىسىغا يۆنىلىش";
+"prefs_lock_orientation_summary_off" = "نۆۋەتتىكى يۆنىلىش ھالىتىگە ماسلىشىدۇ";
+"prefs_lock_orientation_summary_on" = "مۇقىم يۆنىلىش ھالىتىنى ئىشلىتىدۇ";
+"prefs_lock_orientation_title" = "قۇلۇپ ئېكران يۆنىلىشى";
 "prefs_megabytes_int" = "%1$d MB";
 "prefs_new_background_title" = "يېڭى تەگلىك";
 "prefs_night_mode_background_brightness_summary" = "كېچە ھالىتى قوزغىتىلغان ۋاقىتتىكى بەتنىڭ يورۇقلۇقى";
@@ -215,11 +223,18 @@
 "quran_sura_title" = "سۈرە %1$@";
 "quran_talt_arb3" = "¾";
 "quranSearchType" = "قۇرئان سۈرەلىرى";
+"reading_bookmark_added" = "خەتكۈچ قوشۇلدى";
+"reading_bookmark_dismiss_education" = "تاقاش";
+"reading_bookmark_movable_education_body" = "ئوقۇش خەتكۈچىنى ساقلاش كونىسىنىڭ ئورنىنى ئالىدۇ. بىر قانچە ئايەتنى ساقلاش ئۈچۈن، ئايەتنى بېسىپ تۇرۇپ يىغقۇچقا قوشۇڭ.";
+"reading_bookmark_movable_education_title" = "بۇ يۆتكىلىشچان ئوقۇش خەتكۈچى";
+"reading_bookmark_moved_from" = "%1$@ دىن يۆتكەلدى";
+"reading_bookmark_moved_from_title" = "خەتكۈچ %1$@ دىن يۆتكەلدى";
 "recent_pages" = "يېقىنقى بەتلەر";
 "recite_from_here" = "بۇ يەردىن ئوقۇڭ";
 "remove_button" = "چىقىرىۋەت";
 "remove_dlg_msg" = "سىز %1$@ نى راسلا چىقىرىۋېتەمسىز؟";
 "remove_dlg_title" = "تەرجىمىنى چىقىرىۋېتەمدۇ؟";
+"repeatValues[3]" = "توختىماي";
 "scoped_storage_message" = "ئاندىرويىد ئىشلەتكۈچى شەخسىيەت ھوقۇقىنى يۇقىرىلىتىپ ئۆزگەرتكەنلىكتىن، ھۆججەتلەرنى ئەپ مۇندەرىجىسىنىڭ سىرتىغا كۆچۈرگەندە قۇرئان ئەپنىڭ سانلىق مەلۇماتنى زىيارەت قىلىشى كەلگۈسىدىكى ئاندىرويىد نەشرىدە توختىتىلىشى مۇمكىن. بۇ يولنى راستىنلا ئىشلىتەمسىز؟";
 "sdcard_error" = "SD كارتىنى تاپالمىدى. ئۇنى قىستۇرۇپ ئاندىن قايتا سىناڭ.";
 "search_data" = "سانلىق مەلۇمات ئىزدە";
@@ -236,7 +251,6 @@
 "storage_permission_rationale" = "قۇرئان سانلىق مەلۇماتلىرىنى سىرتقى ساقلىغۇچقا ساقلاش ئۈچۈن ئىجازىتىڭىزگە موھتاج. قۇرئان بۇ ئىجازەتنى ئالماي ئىشلەيدۇ، ئەمما ئەگەر سانلىق مەلۇماتلارنى ئۆچۈرۈپ ياكى ئەپنى ئۆچۈرۈۋەتسىڭىز، چۈشۈرگەن بارلىق بەت، ئۈن ۋە سانلىق مەلۇماتلارنىڭ ھەممىسى ئۆچۈرۈلىدۇ، شۇڭا ئىجازەت بېرەمسىز؟";
 "sura_ayah_notification_str" = "سۈرە %1$@، %2$d-ئايەت";
 "sura_ayah_sharing_str" = "سۈرە %1$@: %2$d";
-"tag_ayah" = "بۇ ئايەتكە بەلگە قوش";
 "tag_blank_tag_error" = "بەلگە ئاتى بوش قالمايدۇ!";
 "tag_bookmark" = "خەتكۈچكە بەلگە قوش";
 "tag_dlg_title" = "بەلگە";
@@ -251,6 +265,3 @@
 "undo" = "يېنىۋال";
 "update_available" = "يېڭىلانما بار";
 "warning" = "ئاگاھلاندۇرۇش";
-
-// Metadata: Translated by ChatGPT; human review required.
-"repeatValues[3]" = "توختىماي";

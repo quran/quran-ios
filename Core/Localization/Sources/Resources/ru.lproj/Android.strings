@@ -44,6 +44,8 @@ Editions Et Diffusion (Тунис)\
 "available_translations" = "Доступные для загрузки";
 "ayah_copied_popup" = "Аят скопирован";
 "bookmark_ayah" = "Создать закладку этого аята";
+"bookmarks_empty_subtitle" = "Нажмите на значок закладки, чтобы сохранить страницу, или удерживайте аят, чтобы добавить его в закладки.";
+"bookmarks_empty_title" = "Пока нет закладок";
 "bookmarks_list_empty" = "Закладки отсутствуют";
 "cancel" = "Отмена";
 "canceling" = "Отмена…";
@@ -132,8 +134,7 @@ Editions Et Diffusion (Тунис)\
 "help_title" = "Часто задаваемые вопросы (FAQ)";
 "highlighting_database" = "Необходимые файлы";
 "import_data" = "Импорт данных";
-"import_data_and_override" = "Если вы будете импортировать этот файл, все ваши закладки будут заменены\
-с %1$d закладки и %2$d тегов. Импортировать?";
+"import_data_and_merge" = "Если вы импортируете этот файл, к текущим данным будут добавлены %1$d закладок и %2$d тегов. Импортировать?";
 "import_data_error" = "Неверный файл резервной копии (или не удалось открыть файл с резервной копией).";
 "import_data_permissions_error" = "Не удается прочитать файл резервной копии из-за ошибки разрешения.";
 "import_successful" = "Данные успешно импортированы";
@@ -177,6 +178,7 @@ Editions Et Diffusion (Тунис)\
 "notification_channel_audio" = "Рецитация Корана";
 "notification_channel_download" = "Загрузки Корана";
 "notification_download_canceled" = "Загрузка отменена";
+"old_page_bookmarks" = "Старые закладки страниц";
 "page_description" = "стр. %1$@, джуз %2$@";
 "pause" = "Пауза";
 "play" = "Воспроизвести";
@@ -219,6 +221,12 @@ Editions Et Diffusion (Тунис)\
 "prefs_highlight_bookmarks_title" = "Выделять закладки";
 "prefs_import_summary" = "Импорт закладок и тегов";
 "prefs_import_title" = "Импорт";
+"prefs_landscape_orientation_summary_off" = "Использовать портретный режим";
+"prefs_landscape_orientation_summary_on" = "Использовать альбомный режим";
+"prefs_landscape_orientation_title" = "Альбомный режим";
+"prefs_lock_orientation_summary_off" = "Адаптировать под текущую ориентацию";
+"prefs_lock_orientation_summary_on" = "Страницы Корана будут удерживаться в выбранном режиме";
+"prefs_lock_orientation_title" = "Удерживать ориентацию экрана";
 "prefs_megabytes_int" = "%1$d Mб";
 "prefs_new_background_title" = "Новый фон";
 "prefs_night_mode_background_brightness_summary" = "Яркость страницы при активном ночном режиме";
@@ -272,6 +280,12 @@ Editions Et Diffusion (Тунис)\
 "quran_sura_title" = "Сура %1$@";
 "quran_talt_arb3" = "¾";
 "quranSearchType" = "Стихи Корана";
+"reading_bookmark_added" = "Закладка добавлена";
+"reading_bookmark_dismiss_education" = "Закрыть";
+"reading_bookmark_movable_education_body" = "Сохранение закладки чтения заменяет старую. Чтобы сохранить несколько аятов, удерживайте аят и добавьте его в коллекцию.";
+"reading_bookmark_movable_education_title" = "Это перемещаемая закладка чтения";
+"reading_bookmark_moved_from" = "Перемещено с %1$@";
+"reading_bookmark_moved_from_title" = "Закладка перемещена с %1$@";
 "recent_pages" = "Недавние страницы";
 "recite_from_here" = "Читать отсюда";
 "remove_button" = "Удалить";
@@ -305,7 +319,6 @@ Editions Et Diffusion (Тунис)\
 ";
 "sura_ayah_notification_str" = "Сура %1$@, аят %2$d";
 "sura_ayah_sharing_str" = "Сура %1$@: %2$d";
-"tag_ayah" = "Создать тег для этого аята";
 "tag_blank_tag_error" = "Имена тегов не могут быть пустыми!";
 "tag_bookmark" = "Отметить закладку";
 "tag_dlg_title" = "Тег";

@@ -33,22 +33,6 @@
                 <string>%d items verwijderd</string>
             </dict>
         </dict>
-        <key>plural_recent_pages</key>
-        <dict>
-            <key>NSStringLocalizedFormatKey</key>
-            <string>%#@plural_recent_pages@</string>
-            <key>plural_recent_pages</key>
-            <dict>
-                <key>NSStringFormatSpecTypeKey</key>
-                <string>NSStringPluralRuleType</string>
-                <key>NSStringFormatValueTypeKey</key>
-                <string>d</string>
-                <key>one</key>
-                <string>Laatste Pagina</string>
-                <key>other</key>
-                <string>Recente pagina\&apos;s</string>
-            </dict>
-        </dict>
         <key>search_results</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>

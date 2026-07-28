@@ -1,0 +1,95 @@
+{
+  "_comment": "Overrides were machine-translated and require human review. They are applied after Android locale resources.",
+  "requiredKeys": [
+    "audio_manager",
+    "audio_manager_files_downloaded",
+    "bookmarks_list_empty",
+    "cancel",
+    "dialog_ok",
+    "download_retry",
+    "downloaded_translations",
+    "from",
+    "juz2_description",
+    "madani",
+    "makki",
+    "menu_bookmarks",
+    "menu_search",
+    "menu_settings",
+    "no_results",
+    "page_description",
+    "play",
+    "play_each_verse",
+    "play_verses_range",
+    "prefs_translations",
+    "quran_ayah",
+    "quran_hizb",
+    "quran_juz2",
+    "quran_nos",
+    "quran_page",
+    "quran_rob3",
+    "quran_sura",
+    "quran_sura_title",
+    "quran_talt_arb3",
+    "recent_pages",
+    "remove_button",
+    "repeatValues[3]",
+    "to",
+    "undo",
+    "verses"
+  ],
+  "overrides": {
+    "es": {
+      "strings": {
+        "repeatValues[3]": "en bucle"
+      },
+      "plurals": {
+        "audio_manager_files_downloaded": {
+          "one": "1 sura descargada",
+          "other": "%1$d suras descargadas"
+        }
+      }
+    },
+    "fr": {
+      "strings": {},
+      "plurals": {
+        "audio_manager_files_downloaded": {
+          "one": "1 sourate téléchargée",
+          "other": "%1$d sourates téléchargées"
+        }
+      }
+    },
+    "pt": {
+      "strings": {
+        "repeatValues[3]": "continuamente"
+      },
+      "plurals": {
+        "audio_manager_files_downloaded": {
+          "one": "1 sura baixada",
+          "other": "%1$d suras baixadas"
+        }
+      }
+    },
+    "ug": {
+      "strings": {
+        "repeatValues[3]": "توختىماي"
+      },
+      "plurals": {
+        "audio_manager_files_downloaded": {
+          "one": "1 سۈرە چۈشۈرۈلدى",
+          "other": "%1$d سۈرە چۈشۈرۈلدى"
+        }
+      }
+    },
+    "zh": {
+      "strings": {
+        "quran_sura_title": "苏拉 %1$@",
+        "repeatValues[3]": "循环"
+      },
+      "plurals": {
+        "audio_manager_files_downloaded": {
+          "other": "已下载 %1$d 个苏拉"
+        }
+      }
+    }
+  }
+}

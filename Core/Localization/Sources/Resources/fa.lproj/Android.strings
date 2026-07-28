@@ -10,7 +10,6 @@
 "about_open_source" = "پروژه‌های متن‌باز";
 "about_others" = "دیگران";
 "about_qaloon_images" = "تصاویر قلون با اجازه Nous-Mêmes Éditions Et Diffusion (تونس) استفاده می شود";
-"about_quran_enc" = "دایرة المعارف قرآن کریم";
 "about_quran_enc_summary" = "ترجمه برای بسیاری از زبان ها";
 "about_quran_ksu" = "پروژه مصحف الکترونیکی";
 "about_quran_ksu_summary" = "پروژه مصحف الکترونیکی در دانشگاه ملک سعود منبع تفاسیر عربی و برخی ترجمه‌هاست.";
@@ -31,6 +30,8 @@
 "available_translations" = "آماده بارگذاری";
 "ayah_copied_popup" = "آیه کپی شد";
 "bookmark_ayah" = "نشانک‌گذاری بر آیه";
+"bookmarks_empty_subtitle" = "برای ذخیره صفحه روی نماد نشانک ضربه بزنید، یا برای نشانک‌گذاری یک آیه، روی آن فشار طولانی دهید.";
+"bookmarks_empty_title" = "هنوز نشانکی وجود ندارد";
 "bookmarks_list_empty" = "نشانکی وجود ندارد";
 "cancel" = "لغو";
 "canceling" = "در حال لغو";
@@ -95,7 +96,7 @@
 "help_title" = "پرسش و پاسخ‌های متداول";
 "highlighting_database" = "فایل‌های موردنیاز";
 "import_data" = "درون‌بُرد داده‌ها";
-"import_data_and_override" = "عملیات درون‌بُرد نشانک‌های فعلی را با %1$d نشانک و %2$d برچسب جایگزین می‌نماید. موافق‌اید؟";
+"import_data_and_merge" = "اگر این پرونده را درون‌ریزی کنید، %1$d نشانک و %2$d برچسب به داده‌های فعلی شما افزوده می‌شود. درون‌ریزی شود؟";
 "import_data_error" = "درون‌برد با خطا مواجه شد.  داده‌ها معتبر نیست.";
 "import_data_permissions_error" = "هنگام عملیات درون‌برد خطای دسترسی رخ داد.";
 "import_successful" = "درون‌بُرد موفقیت‌آمیز";
@@ -134,6 +135,7 @@
 "notification_channel_audio" = "قرائت قرآن";
 "notification_channel_download" = "دانلود فایل های قرآن";
 "notification_download_canceled" = "بارگذاری لغو شد";
+"old_page_bookmarks" = "نشانک‌های قدیمی صفحات";
 "page_description" = "صفحه %1$@، جزء %2$@";
 "pause" = "مکث";
 "play" = "پخش";
@@ -176,6 +178,12 @@
 "prefs_highlight_bookmarks_title" = "برجسته‌سازی نشانک‌ها";
 "prefs_import_summary" = "درون‌برد نشانک‌ها و برچسب‌ها";
 "prefs_import_title" = "درون‌برد";
+"prefs_landscape_orientation_summary_off" = "استفاده در جهت عمودی";
+"prefs_landscape_orientation_summary_on" = "استفاده در جهت افقی";
+"prefs_landscape_orientation_title" = "جهت افقی";
+"prefs_lock_orientation_summary_off" = "تطبیق خودکار با جهت دستگاه";
+"prefs_lock_orientation_summary_on" = "عدم تغییر خودکار جهت نمایش";
+"prefs_lock_orientation_title" = "حفظ جهت نمایش";
 "prefs_new_background_title" = "پس‌زمینه جدید";
 "prefs_night_mode_background_brightness_summary" = "روشنایی صفحه زمانی که حالت شب فعال است";
 "prefs_night_mode_background_brightness_title" = "درخشش پس زمینه";
@@ -228,6 +236,12 @@
 "quran_sura_title" = "سوره %1$@";
 "quran_talt_arb3" = "سه‌ربع";
 "quranSearchType" = "آیات قرآن";
+"reading_bookmark_added" = "نشانک اضافه شد";
+"reading_bookmark_dismiss_education" = "رد کردن";
+"reading_bookmark_movable_education_body" = "ذخیره نشانک مطالعه، نشانک قبلی را جایگزین می‌کند. برای ذخیره چند آیه، روی یک آیه فشار طولانی دهید و آن را به یک مجموعه اضافه کنید.";
+"reading_bookmark_movable_education_title" = "این یک نشانک مطالعه قابل‌جابجایی است";
+"reading_bookmark_moved_from" = "جابجا شده از %1$@";
+"reading_bookmark_moved_from_title" = "نشانک از %1$@ جابجا شد";
 "recent_pages" = "آخرین صفحات";
 "recite_from_here" = "از اینجا بخوان";
 "remove_button" = "حذف";
@@ -256,7 +270,6 @@
 آیا اجازه ذخیره داده‌ها در حافظه خارجی را صادر می‌کنید؟";
 "sura_ayah_notification_str" = "سوره %1$@، آیه %2$d";
 "sura_ayah_sharing_str" = "سوره %1$@: %2$d";
-"tag_ayah" = "برچسب‌گذاری بر آیه";
 "tag_blank_tag_error" = "نام برچسب نمی تواند خالی باشد!";
 "tag_bookmark" = "تعیین برچسب برای نشانک";
 "tag_dlg_title" = "برچسب";

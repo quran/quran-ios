@@ -65,22 +65,6 @@
                 <string>Deleted %d items</string>
             </dict>
         </dict>
-        <key>plural_recent_pages</key>
-        <dict>
-            <key>NSStringLocalizedFormatKey</key>
-            <string>%#@plural_recent_pages@</string>
-            <key>plural_recent_pages</key>
-            <dict>
-                <key>NSStringFormatSpecTypeKey</key>
-                <string>NSStringPluralRuleType</string>
-                <key>NSStringFormatValueTypeKey</key>
-                <string>d</string>
-                <key>one</key>
-                <string>Last page</string>
-                <key>other</key>
-                <string>Recent pages</string>
-            </dict>
-        </dict>
         <key>search_results</key>
         <dict>
             <key>NSStringLocalizedFormatKey</key>

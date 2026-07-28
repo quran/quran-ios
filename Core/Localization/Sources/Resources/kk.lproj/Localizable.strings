@@ -151,6 +151,9 @@
 
 // MARK: - Notes
 
+"notes.sync.title" = "Жазбаларыңызды синхрондау";
+"notes.sync.body" = "Жазбаларыңыз барлық құрылғыларда қолжетімді болуы үшін Quran.com сайтына кіріңіз.";
+
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "Аяттың ерекше түсірілімдерін қосу...";
 // Metadata: Translated by ChatGPT; human review required.
@@ -439,9 +442,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.sync.action" = "Кіру";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Бетбелгілеріңіз барлық құрылғыларда қолжетімді болуы үшін Quran.com сайтына кіріңіз.";
+"bookmarks.sync.body" = "Жинақтарыңыз барлық құрылғыларда қолжетімді болуы үшін Quran.com сайтына кіріңіз.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Бетбелгілерді синхрондау";
+"bookmarks.sync.title" = "Жинақтарыңызды синхрондау";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

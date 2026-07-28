@@ -123,6 +123,9 @@
 
 // MARK: - Notes
 
+"notes.sync.title" = "Notlarınızı eşitleyin";
+"notes.sync.body" = "Notlarınızı tüm cihazlarda kullanılabilir tutmak için Quran.com’da oturum açın.";
+
 "notes.no-data.title" = "Vurgulanan ayetler kaydediliyor...";
 "notes.no-data.text" = "Ayete dokunup basılı tutun. Birden fazla ayet seçmek için parmağınızı sürükleyebilirsiniz, sonrasında tekrar Ayraç butonuna basın.";
 "notes.verses-count" = "(+%d ayet)";
@@ -397,9 +400,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.sync.action" = "Giriş yap";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Yer imlerinizi tüm cihazlarda kullanılabilir tutmak için Quran.com’da oturum açın.";
+"bookmarks.sync.body" = "Koleksiyonlarınızı tüm cihazlarda kullanılabilir tutmak için Quran.com’da oturum açın.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Yer imlerinizi eşitleyin";
+"bookmarks.sync.title" = "Koleksiyonlarınızı eşitleyin";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

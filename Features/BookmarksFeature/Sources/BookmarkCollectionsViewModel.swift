@@ -34,7 +34,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         self.navigationController = navigationController
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
-        isSyncBannerDismissed = preferences.isSyncBannerDismissed
+        isSyncBannerDismissed = preferences.isCollectionsSyncBannerDismissed
     }
 
     // MARK: Internal
@@ -129,7 +129,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     func dismissSyncBanner() {
         isSyncBannerDismissed = true
-        preferences.isSyncBannerDismissed = true
+        preferences.isCollectionsSyncBannerDismissed = true
     }
 
     func presentAddCollection() {
@@ -201,7 +201,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     private let collectionsBuilder: AyahBookmarkCollectionsBuilder
     private let navigateToPage: (Page) -> Void
     private let navigateToAyah: (AyahNumber) -> Void
-    private let preferences = BookmarkCollectionsPreferences.shared
+    private let preferences = AuthenticationPreferences.shared
     private let readingPreferences = ReadingPreferences.shared
     private weak var navigationController: UINavigationController?
 

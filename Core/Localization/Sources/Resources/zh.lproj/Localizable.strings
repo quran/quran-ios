@@ -165,6 +165,9 @@
 
 // MARK: - Notes
 
+"notes.sync.title" = "同步您的笔记";
+"notes.sync.body" = "登录 Quran.com，让您的笔记可在所有设备上使用。";
+
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "添加经文高亮...";
 // Metadata: Translated by ChatGPT; human review required.
@@ -456,9 +459,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.sync.action" = "登录";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "登录 Quran.com，让书签可在所有设备上使用。";
+"bookmarks.sync.body" = "登录 Quran.com，让您的收藏集可在所有设备上使用。";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "同步书签";
+"bookmarks.sync.title" = "同步您的收藏集";
 
 // Highlight Colors
 // Metadata: Translated by ChatGPT; human review required.

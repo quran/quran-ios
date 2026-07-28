@@ -24,7 +24,10 @@ public struct NotesBuilder {
 
     // MARK: Public
 
-    public func build(withListener listener: QuranNavigator) -> UIViewController {
+    public func build(
+        withListener listener: QuranNavigator,
+        navigationController: UINavigationController
+    ) -> UIViewController {
         let viewControllerReference = NotesViewControllerReference()
         let editNote: (Note) -> Void = { [viewControllerReference] note in
             viewControllerReference.value?.editNote(note)
@@ -38,6 +41,8 @@ public struct NotesBuilder {
         #if QURAN_SYNC
         let noteService = container.mobileSyncNoteService()
         let viewModel = NotesViewModel(
+            authenticationClient: container.authenticationClient,
+            navigationController: navigationController,
             noteService: noteService,
             textService: textService,
             textRetriever: textRetriever,

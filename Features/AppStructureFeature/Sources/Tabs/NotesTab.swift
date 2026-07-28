@@ -37,8 +37,14 @@ private final class NotesTabInteractor: TabInteractor {
     // MARK: Internal
 
     override func start() {
-        let rootViewController = notesBuilder.build(withListener: self)
-        presenter?.setViewControllers([rootViewController], animated: false)
+        guard let presenter else {
+            return
+        }
+        let rootViewController = notesBuilder.build(
+            withListener: self,
+            navigationController: presenter
+        )
+        presenter.setViewControllers([rootViewController], animated: false)
     }
 
     // MARK: Private

@@ -8,6 +8,8 @@
 #if !QURAN_SYNC
 import Analytics
 import Combine
+#else
+import AuthenticationClient
 #endif
 import AnnotationsService
 import Crashing
@@ -19,6 +21,7 @@ import QuranLocalization
 import QuranTextKit
 import ReadingService
 import SwiftUI
+import UIKit
 import Utilities
 import VLogging
 
@@ -28,17 +31,22 @@ final class NotesViewModel: ObservableObject {
 
     #if QURAN_SYNC
     init(
+        authenticationClient: any AuthenticationClient,
+        navigationController: UINavigationController,
         noteService: MobileSyncNoteService,
         textService: QuranTextDataService,
         textRetriever: ShareableVerseTextRetriever,
         navigateTo: @escaping (AyahNumber) -> Void,
         editNote: @escaping (Note) -> Void
     ) {
+        self.authenticationClient = authenticationClient
+        self.navigationController = navigationController
         self.noteService = noteService
         self.textService = textService
         self.textRetriever = textRetriever
         self.navigateTo = navigateTo
         editNoteAction = editNote
+        isSyncBannerDismissed = preferences.isNotesSyncBannerDismissed
     }
     #else
     init(
@@ -62,8 +70,18 @@ final class NotesViewModel: ObservableObject {
 
     @Published var editMode: EditMode = .inactive
     @Published var error: Error? = nil
+    #if QURAN_SYNC
+    @Published var isAuthenticated = false
+    @Published var isSyncBannerDismissed: Bool
+    #endif
     @Published var notes: [NoteItem] = []
     @Published var searchTerm: String = ""
+
+    #if QURAN_SYNC
+    var shouldShowSyncBanner: Bool {
+        !isAuthenticated && !isSyncBannerDismissed
+    }
+    #endif
 
     var filteredNotes: [NoteItem] {
         let term = searchTerm.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -81,6 +99,7 @@ final class NotesViewModel: ObservableObject {
 
     func start() async {
         #if QURAN_SYNC
+        isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
         do {
             let sequence = noteService.notesSequence(quran: readingPreferences.reading.quran)
             for try await notes in sequence {
@@ -104,6 +123,27 @@ final class NotesViewModel: ObservableObject {
         }
         #endif
     }
+
+    #if QURAN_SYNC
+    func loginToQuranCom() async {
+        guard let navigationController else {
+            return
+        }
+
+        do {
+            try await authenticationClient.login(on: navigationController)
+            isAuthenticated = true
+        } catch {
+            logger.error("Failed to login to Quran.com from notes: \(error)")
+            self.error = error
+        }
+    }
+
+    func dismissSyncBanner() {
+        isSyncBannerDismissed = true
+        preferences.isNotesSyncBannerDismissed = true
+    }
+    #endif
 
     func navigateTo(_ item: NoteItem) {
         logger.info("Notes: select note at \(item.note.startAyah)")
@@ -167,7 +207,10 @@ final class NotesViewModel: ObservableObject {
     // MARK: Private
 
     #if QURAN_SYNC
+    private let authenticationClient: any AuthenticationClient
     private let noteService: MobileSyncNoteService
+    private weak var navigationController: UINavigationController?
+    private let preferences = AuthenticationPreferences.shared
     #else
     private let analytics: AnalyticsLibrary
     private let noteService: NoteService

@@ -165,6 +165,9 @@
 
 // MARK: - Notes
 
+"notes.sync.title" = "همگام‌سازی یادداشت‌هایتان";
+"notes.sync.body" = "برای دسترسی به یادداشت‌هایتان در همهٔ دستگاه‌ها، وارد Quran.com شوید.";
+
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "در حال افزودن برجسته‌های آیه...";
 // Metadata: Translated by ChatGPT; human review required.
@@ -457,9 +460,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.sync.action" = "ورود";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "برای دسترسی به نشانک‌ها در همهٔ دستگاه‌ها، وارد Quran.com شوید.";
+"bookmarks.sync.body" = "برای دسترسی به مجموعه‌هایتان در همهٔ دستگاه‌ها، وارد Quran.com شوید.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "همگام‌سازی نشانک‌ها";
+"bookmarks.sync.title" = "همگام‌سازی مجموعه‌هایتان";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

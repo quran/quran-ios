@@ -140,8 +140,8 @@
 "bookmarks.collections.ayahs.no-data.colored.text" = "ستظهر هنا الآيات التي تميّزها أثناء القراءة بإشارة مرجعية باللون %@.";
 "bookmarks.old-page-bookmarks" = "إشارات الصفحات المرجعية القديمة";
 
-"bookmarks.sync.title" = "زامن العلامات المرجعية";
-"bookmarks.sync.body" = "سجّل الدخول إلى Quran.com للاحتفاظ بعلاماتك المرجعية متاحة عبر أجهزتك.";
+"bookmarks.sync.title" = "زامن مجموعاتك";
+"bookmarks.sync.body" = "سجّل الدخول إلى Quran.com للاحتفاظ بمجموعاتك متاحة عبر أجهزتك.";
 "bookmarks.sync.action" = "تسجيل الدخول";
 
 "bookmarks.editor.collection.unselected" = "غير محددة";
@@ -150,6 +150,9 @@
 "bookmarks.editor.error.highlight-unavailable" = "لا تزال ألوان التمييز قيد التحميل. حاول مرة أخرى.";
 
 // MARK: - Notes
+
+"notes.sync.title" = "زامن ملاحظاتك";
+"notes.sync.body" = "سجّل الدخول إلى Quran.com للاحتفاظ بملاحظاتك متاحة عبر أجهزتك.";
 
 "notes.no-data.title" = "إضافة آيات مرجعية...";
 "notes.no-data.text" = "اضغط مع الاستمرار على الآيات. يمكنك تمديد التحديد ليشمل عدة آيات ، ثم اضغط على زر الإشارة المرجعية.";

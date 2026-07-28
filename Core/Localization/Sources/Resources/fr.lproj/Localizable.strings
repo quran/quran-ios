@@ -165,6 +165,9 @@
 
 // MARK: - Notes
 
+"notes.sync.title" = "Synchroniser vos notes";
+"notes.sync.body" = "Connectez-vous à Quran.com pour garder vos notes disponibles sur tous vos appareils.";
+
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "Ajout de surbrillances Ayah...";
 // Metadata: Translated by ChatGPT; human review required.
@@ -455,9 +458,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.sync.action" = "Se connecter";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Connectez-vous à Quran.com pour garder vos signets disponibles sur tous vos appareils.";
+"bookmarks.sync.body" = "Connectez-vous à Quran.com pour garder vos collections disponibles sur tous vos appareils.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Synchroniser vos signets";
+"bookmarks.sync.title" = "Synchroniser vos collections";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

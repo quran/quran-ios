@@ -14,6 +14,7 @@ import QuranText
 import SwiftUI
 import UIx
 
+@MainActor
 struct NotesView: View {
     @StateObject var viewModel: NotesViewModel
 
@@ -21,6 +22,9 @@ struct NotesView: View {
         NotesViewUI(
             editMode: $viewModel.editMode,
             error: $viewModel.error,
+            shouldShowSyncBanner: shouldShowSyncBanner,
+            dismissSyncBanner: { dismissSyncBanner() },
+            signInAction: { await signIn() },
             notes: viewModel.filteredNotes,
             searchTerm: viewModel.searchTerm,
             start: { await viewModel.start() },
@@ -29,14 +33,38 @@ struct NotesView: View {
             deleteAction: { await viewModel.deleteItem($0) }
         )
     }
+
+    private var shouldShowSyncBanner: Bool {
+        #if QURAN_SYNC
+        viewModel.shouldShowSyncBanner
+        #else
+        false
+        #endif
+    }
+
+    private func dismissSyncBanner() {
+        #if QURAN_SYNC
+        viewModel.dismissSyncBanner()
+        #endif
+    }
+
+    private func signIn() async {
+        #if QURAN_SYNC
+        await viewModel.loginToQuranCom()
+        #endif
+    }
 }
 
+@MainActor
 private struct NotesViewUI: View {
     // MARK: Internal
 
     @Binding var editMode: EditMode
     @Binding var error: Error?
 
+    let shouldShowSyncBanner: Bool
+    let dismissSyncBanner: @MainActor @Sendable () -> Void
+    let signInAction: AsyncAction
     let notes: [NoteItem]
     let searchTerm: String
 
@@ -46,6 +74,26 @@ private struct NotesViewUI: View {
     let deleteAction: AsyncItemAction<NoteItem>
 
     var body: some View {
+        if shouldShowSyncBanner, !isSearching {
+            VStack(spacing: 0) {
+                SyncSignInCard(
+                    title: l("notes.sync.title"),
+                    subtitle: l("notes.sync.body"),
+                    actionLabel: l("bookmarks.sync.action"),
+                    dismiss: dismissSyncBanner,
+                    signInAction: signInAction
+                )
+                .padding()
+
+                content
+            }
+            .background(Color.systemGroupedBackground)
+        } else {
+            content
+        }
+    }
+
+    private var content: some View {
         Group {
             if notes.isEmpty {
                 if isSearching {
@@ -190,6 +238,9 @@ struct NotesView_Previews: PreviewProvider {
                 NotesViewUI(
                     editMode: $editMode,
                     error: $error,
+                    shouldShowSyncBanner: false,
+                    dismissSyncBanner: {},
+                    signInAction: {},
                     notes: items,
                     searchTerm: searchTerm,
                     start: {},

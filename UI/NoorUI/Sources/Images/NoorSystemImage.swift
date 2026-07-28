@@ -11,6 +11,7 @@ public enum NoorSystemImage: String {
     case audio = "headphones"
     case downloads = "square.and.arrow.down"
     case download = "icloud.and.arrow.down"
+    case cloud = "cloud.fill"
     case translation = "globe"
     case heart = "heart.fill"
     case share = "square.and.arrow.up"

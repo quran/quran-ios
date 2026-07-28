@@ -31,10 +31,15 @@ private struct BookmarkCollectionsContent: View {
         NoorList {
             if viewModel.shouldShowSyncBanner {
                 NoorBasicSection {
-                    BookmarkCollectionsSyncBanner(
+                    SyncSignInCard(
+                        title: l("bookmarks.sync.title"),
+                        subtitle: l("bookmarks.sync.body"),
+                        actionLabel: l("bookmarks.sync.action"),
                         dismiss: { viewModel.dismissSyncBanner() },
                         signInAction: { await viewModel.loginToQuranCom() }
                     )
+                    .listRowInsets(.zero)
+                    .listRowBackground(Color.clear)
                 }
             }
 
@@ -161,60 +166,4 @@ private extension View {
     }
 }
 
-@MainActor
-private struct BookmarkCollectionsSyncBanner: View {
-    @ScaledMetric private var closeButtonInset = 8.0
-    @ScaledMetric private var containerCornerRadius = Dimensions.cornerRadius
-    @ScaledMetric private var containerPadding = 16.0
-    @ScaledMetric private var contentSpacing = 12.0
-    @ScaledMetric private var titleSpacing = 4.0
-    @ScaledMetric private var trailingSpacing = 8.0
-
-    let dismiss: () -> Void
-    let signInAction: @MainActor () async -> Void
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: contentSpacing) {
-            HStack(alignment: .top, spacing: contentSpacing) {
-                NoorSystemImage.bookmark.image
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(Color.accentColor)
-                    .accessibilityHidden(true)
-
-                VStack(alignment: .leading, spacing: titleSpacing) {
-                    Text(l("bookmarks.sync.title"))
-                        .font(.headline)
-
-                    Text(l("bookmarks.sync.body"))
-                        .font(.subheadline)
-                        .foregroundStyle(Color.secondaryLabel)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                Spacer(minLength: trailingSpacing)
-
-                Button(action: dismiss) {
-                    NoorSystemImage.cancel.image
-                        .font(.footnote.weight(.bold))
-                        .foregroundStyle(Color.secondaryLabel)
-                        .padding(closeButtonInset)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(lAndroid("cancel"))
-            }
-
-            ProminentRoundedButton(label: l("bookmarks.sync.action")) {
-                await signInAction()
-            }
-        }
-        .padding(containerPadding)
-        .background(Color.secondarySystemBackground)
-        .overlay(
-            RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous)
-                .stroke(Color.accentColor.opacity(0.18), lineWidth: 1)
-        )
-        .background(Color.accentColor.opacity(0.08))
-        .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous))
-    }
-}
 #endif

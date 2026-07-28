@@ -137,8 +137,8 @@
 "bookmarks.delete-all" = "Delete All";
 "bookmarks.delete-all.confirmation" = "Are you sure you want to delete all bookmarks?";
 
-"bookmarks.sync.title" = "Sync your bookmarks";
-"bookmarks.sync.body" = "Sign in to Quran.com to keep your bookmarks available across devices.";
+"bookmarks.sync.title" = "Sync your collections";
+"bookmarks.sync.body" = "Sign in to Quran.com to keep your collections available across devices.";
 "bookmarks.sync.action" = "Sign In";
 
 "bookmarks.collections" = "Collections";
@@ -163,6 +163,9 @@
 "bookmarks.editor.error.highlight-unavailable" = "Highlight colors are still loading. Please try again.";
 
 // MARK: - Notes
+
+"notes.sync.title" = "Sync your notes";
+"notes.sync.body" = "Sign in to Quran.com to keep your notes available across devices.";
 
 "notes.no-data.title" = "Adding Ayah Highlights...";
 "notes.no-data.text" = "Tap and hold on an Ayah. You can extend the selection to include multiple Ayat, then tap the Bookmark button.";

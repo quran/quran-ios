@@ -165,6 +165,9 @@
 
 // MARK: - Notes
 
+"notes.sync.title" = "Синхронизация заметок";
+"notes.sync.body" = "Войдите в Quran.com, чтобы ваши заметки были доступны на всех устройствах.";
+
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "Добавление выделений Аята...";
 // Metadata: Translated by ChatGPT; human review required.
@@ -455,9 +458,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.sync.action" = "Войти";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Войдите в Quran.com, чтобы ваши закладки были доступны на всех устройствах.";
+"bookmarks.sync.body" = "Войдите в Quran.com, чтобы ваши коллекции были доступны на всех устройствах.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Синхронизация закладок";
+"bookmarks.sync.title" = "Синхронизация коллекций";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

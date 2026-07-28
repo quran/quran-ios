@@ -114,6 +114,9 @@
 
 // MARK: - Notes
 
+"notes.sync.title" = "Đồng bộ ghi chú của bạn";
+"notes.sync.body" = "Đăng nhập vào Quran.com để giữ ghi chú của bạn khả dụng trên mọi thiết bị.";
+
 "notes.no-data.title" = "Thêm Tô sáng Ayah...";
 "notes.no-data.text" = "Chạm và giữ vào một Ayah. Bạn có thể mở rộng lựa chọn để bao gồm nhiều Ayat, sau đó chạm vào nút Đánh dấu.";
 "notes.verses-count" = "(+%d ayat)";
@@ -364,9 +367,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.sync.action" = "Đăng nhập";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Đăng nhập vào Quran.com để giữ dấu trang khả dụng trên mọi thiết bị.";
+"bookmarks.sync.body" = "Đăng nhập vào Quran.com để giữ bộ sưu tập của bạn khả dụng trên mọi thiết bị.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Đồng bộ dấu trang";
+"bookmarks.sync.title" = "Đồng bộ bộ sưu tập của bạn";
 
 // Highlight Colors
 // Metadata: Translated by ChatGPT; human review required.

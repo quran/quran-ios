@@ -148,6 +148,9 @@
 
 // MARK: - Notes
 
+"notes.sync.title" = "Segerakkan nota anda";
+"notes.sync.body" = "Log masuk ke Quran.com untuk memastikan nota anda tersedia pada semua peranti.";
+
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "Menambah penekanan Ayah...";
 // Metadata: Translated by ChatGPT; human review required.
@@ -438,9 +441,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.sync.action" = "Log masuk";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Log masuk ke Quran.com untuk memastikan penanda halaman anda tersedia pada semua peranti.";
+"bookmarks.sync.body" = "Log masuk ke Quran.com untuk memastikan koleksi anda tersedia pada semua peranti.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Segerakkan penanda halaman";
+"bookmarks.sync.title" = "Segerakkan koleksi anda";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

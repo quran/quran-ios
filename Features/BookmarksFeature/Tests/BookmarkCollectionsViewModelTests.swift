@@ -23,11 +23,11 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         try await database.reset()
-        BookmarkCollectionsPreferences.shared.isSyncBannerDismissed = false
+        AuthenticationPreferences.shared.isCollectionsSyncBannerDismissed = false
     }
 
     override func tearDown() async throws {
-        BookmarkCollectionsPreferences.shared.isSyncBannerDismissed = false
+        AuthenticationPreferences.shared.isCollectionsSyncBannerDismissed = false
         try await database.reset()
         try await super.tearDown()
     }
@@ -299,7 +299,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         sut.dismissSyncBanner()
 
         XCTAssertTrue(sut.isSyncBannerDismissed)
-        XCTAssertTrue(BookmarkCollectionsPreferences.shared.isSyncBannerDismissed)
+        XCTAssertTrue(AuthenticationPreferences.shared.isCollectionsSyncBannerDismissed)
         XCTAssertFalse(sut.shouldShowSyncBanner)
     }
 

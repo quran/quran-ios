@@ -165,6 +165,9 @@
 
 // MARK: - Notes
 
+"notes.sync.title" = "Notizen synchronisieren";
+"notes.sync.body" = "Melde dich bei Quran.com an, damit deine Notizen auf allen Geräten verfügbar bleiben.";
+
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "Ayah-Highlights hinzufügen...";
 // Metadata: Translated by ChatGPT; human review required.
@@ -455,9 +458,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.sync.action" = "Anmelden";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Melde dich bei Quran.com an, damit deine Lesezeichen auf allen Geräten verfügbar bleiben.";
+"bookmarks.sync.body" = "Melde dich bei Quran.com an, damit deine Sammlungen auf allen Geräten verfügbar bleiben.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Lesezeichen synchronisieren";
+"bookmarks.sync.title" = "Sammlungen synchronisieren";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

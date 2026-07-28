@@ -114,6 +114,9 @@
 
 // MARK: - Notes
 
+"notes.sync.title" = "Je notities synchroniseren";
+"notes.sync.body" = "Log in bij Quran.com om je notities op al je apparaten beschikbaar te houden.";
+
 "notes.no-data.title" = "Ayah-hoogtepunten toevoegen...";
 "notes.no-data.text" = "Tik op een Ayah en houd deze vast. U kunt de selectie uitbreiden om meerdere Ayat op te nemen en tik vervolgens op de bladwijzerknop.";
 "notes.verses-count" = "(+%d ayat)";
@@ -367,9 +370,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.sync.action" = "Inloggen";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Log in bij Quran.com om je bladwijzers op al je apparaten beschikbaar te houden.";
+"bookmarks.sync.body" = "Log in bij Quran.com om je collecties op al je apparaten beschikbaar te houden.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Je bladwijzers synchroniseren";
+"bookmarks.sync.title" = "Je collecties synchroniseren";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

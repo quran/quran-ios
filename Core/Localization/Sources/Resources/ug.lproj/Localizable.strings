@@ -165,6 +165,9 @@
 
 // MARK: - Notes
 
+"notes.sync.title" = "ئىزاھاتلىرىڭىزنى ماسقەدەملەش";
+"notes.sync.body" = "ئىزاھاتلىرىڭىزنى بارلىق ئۈسكۈنىلەردە ساقلاش ئۈچۈن Quran.com غا كىرىڭ.";
+
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "ئايەتلەرنىڭ ئەڭ ياخشىلىرىنى قوشۇش...";
 // Metadata: Translated by ChatGPT; human review required.
@@ -458,9 +461,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.sync.action" = "كىرىش";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "خەتكۈچلىرىڭىزنى بارلىق ئۈسكۈنىلەردە ساقلاش ئۈچۈن Quran.com غا كىرىڭ.";
+"bookmarks.sync.body" = "توپلاملىرىڭىزنى بارلىق ئۈسكۈنىلەردە ساقلاش ئۈچۈن Quran.com غا كىرىڭ.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "خەتكۈچلەرنى ماسقەدەملەش";
+"bookmarks.sync.title" = "توپلاملىرىڭىزنى ماسقەدەملەش";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

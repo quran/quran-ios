@@ -165,6 +165,9 @@
 
 // MARK: - Notes
 
+"notes.sync.title" = "Qaydlaringizni sinxronlash";
+"notes.sync.body" = "Qaydlaringiz barcha qurilmalarda mavjud bo‘lishi uchun Quran.com saytiga kiring.";
+
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "Oyat ta'kidlarini qo'shish...";
 // Metadata: Translated by ChatGPT; human review required.
@@ -457,9 +460,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.sync.action" = "Kirish";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Xatcho‘plaringiz barcha qurilmalarda mavjud bo‘lishi uchun Quran.com saytiga kiring.";
+"bookmarks.sync.body" = "To‘plamlaringiz barcha qurilmalarda mavjud bo‘lishi uchun Quran.com saytiga kiring.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Xatcho‘plarni sinxronlash";
+"bookmarks.sync.title" = "To‘plamlaringizni sinxronlash";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

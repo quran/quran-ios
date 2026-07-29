@@ -460,9 +460,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.custom_collections" = "Özel koleksiyonlarınızı eşitlenmiş tutun";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.profile" = "Quran.com profili";
+"setting.quran_account.profile" = "Hesabı yönet";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in" = "Giriş yap";
+"setting.quran_account.sign_in" = "Quran.com'da oturum aç";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in.subtitle" = "Notları, yer imlerini ve koleksiyonları eşitleyin";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.signed_in" = "Oturum açıldı";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Çıkış yap";
 // Metadata: Translated by ChatGPT; human review required.

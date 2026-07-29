@@ -520,9 +520,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.custom_collections" = "Maxsus to‘plamlaringizni sinxron saqlang";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.profile" = "Quran.com profili";
+"setting.quran_account.profile" = "Hisobni boshqarish";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in" = "Kirish";
+"setting.quran_account.sign_in" = "Quran.comʼga kirish";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in.subtitle" = "Eslatmalar, xatcho‘plar va to‘plamlarni sinxronlang";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.signed_in" = "Kirilgan";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Chiqish";
 // Metadata: Translated by ChatGPT; human review required.

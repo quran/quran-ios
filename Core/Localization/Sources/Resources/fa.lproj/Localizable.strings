@@ -520,9 +520,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.custom_collections" = "مجموعه‌های سفارشی را همگام نگه دارید";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.profile" = "نمایهٔ Quran.com";
+"setting.quran_account.profile" = "مدیریت حساب";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in" = "ورود";
+"setting.quran_account.sign_in" = "ورود به Quran.com";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in.subtitle" = "همگام‌سازی یادداشت‌ها، نشانک‌ها و مجموعه‌ها";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.signed_in" = "وارد شده‌اید";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "خروج";
 // Metadata: Translated by ChatGPT; human review required.

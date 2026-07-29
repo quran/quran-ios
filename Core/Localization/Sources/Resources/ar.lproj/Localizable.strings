@@ -45,8 +45,10 @@
 "setting.donate" = "تبرع";
 "setting.share_app" = "مشاركة التطبيق...";
 "setting.app_version" = "نسخة التطبيق";
-"setting.quran_account.sign_in" = "تسجيل الدخول";
-"setting.quran_account.profile" = "ملف Quran.com";
+"setting.quran_account.sign_in" = "تسجيل الدخول إلى Quran.com";
+"setting.quran_account.sign_in.subtitle" = "مزامنة الملاحظات والعلامات المرجعية والمجموعات";
+"setting.quran_account.signed_in" = "تم تسجيل الدخول";
+"setting.quran_account.profile" = "إدارة الحساب";
 "setting.quran_account.sign_out" = "تسجيل الخروج";
 "setting.quran_account.sync_devices" = "مزامنة العلامات عبر جميع الأجهزة";
 "setting.quran_account.custom_collections" = "إبقاء مجموعاتك المخصصة متزامنة";

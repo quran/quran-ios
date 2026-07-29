@@ -501,9 +501,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.custom_collections" = "Pastikan koleksi tersuai anda disegerakkan";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.profile" = "Profil Quran.com";
+"setting.quran_account.profile" = "Urus akaun";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in" = "Log masuk";
+"setting.quran_account.sign_in" = "Log masuk ke Quran.com";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.sign_in.subtitle" = "Segerakkan nota, penanda halaman dan koleksi";
+// Metadata: Translated by ChatGPT; human review required.
+"setting.quran_account.signed_in" = "Telah log masuk";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Log keluar";
 // Metadata: Translated by ChatGPT; human review required.

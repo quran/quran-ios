@@ -26,6 +26,7 @@ let mobileSyncPackageDependency: Package.Dependency = {
     }
     return .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.1.16")
 }()
+
 let mobileSyncPackageDependencies: [Package.Dependency] =
     quranSyncEnabled ? [mobileSyncPackageDependency] : []
 let mobileSyncTargetDependencies: [Target.Dependency] = quranSyncEnabled ? [

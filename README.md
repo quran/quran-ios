@@ -46,6 +46,43 @@ make test-sync TARGET=AyahMenuFeatureTests
 
 For test commands, `TARGET` accepts either the production target or its `Tests` target. Both focused examples above select `AyahMenuFeatureTests`. New test targets must also be added to `QuranEngine-Package.xctestplan`.
 
+### Local MobileSync Development
+
+For local sync development, keep the three repositories under the same workspace:
+
+```text
+Quran/
+├── mobile-sync/
+├── mobile-sync-spm/
+└── quran-ios/
+```
+
+The Makefile derives the workspace from Git's common directory. This works from both the primary `quran-ios` checkout and Git worktrees, whose immediate parent does not contain the sibling repositories.
+
+```sh
+# Build the KMP debug XCFramework, then build mobile-sync-spm against it
+make build-mobile-sync-spm
+
+# Build or test QuranEngine against both local dependencies
+make build-sync-local-debug
+make test-sync-local-debug
+
+# Build or launch the example app against both local dependencies
+make build-example-sync-local-debug
+make run-example-sync-local-debug QURAN_OAUTH_CLIENT_ID=<client-id>
+```
+
+`MOBILE_SYNC_SPM_PATH` selects the local `mobile-sync-spm` package, while `MOBILE_SYNC_XCFRAMEWORK_PATH` selects the local KMP binary. The Makefile provides and validates defaults for the sibling-repository layout. Override the paths when using another layout:
+
+```sh
+make build-sync-local-debug \
+  MOBILE_SYNC_DIR=/path/to/mobile-sync \
+  MOBILE_SYNC_SPM_PATH=/path/to/mobile-sync-spm \
+  MOBILE_SYNC_XCFRAMEWORK_PATH=../relative/path/to/Shared.xcframework
+```
+
+`MOBILE_SYNC_XCFRAMEWORK_PATH` is relative to the `mobile-sync-spm` package root, as required by Swift Package Manager binary targets. Local example launches default to full HTTP request and response logging; set `MOBILE_SYNC_HTTP_LOG_LEVEL=INFO` or `NONE` to reduce it. Authentication and cookie headers are redacted.
+
 ## Repository Structure and Architecture
 
 The library consists of 6 top-level directories:

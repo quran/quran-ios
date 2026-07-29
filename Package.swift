@@ -18,9 +18,17 @@ let quranSyncEnabled = quranSyncValue != nil && quranSyncValue != "0" && quranSy
 let quranSyncSettings: [SwiftSetting] = quranSyncEnabled ? [
     .define("QURAN_SYNC"),
 ] : []
-let mobileSyncPackageDependencies: [Package.Dependency] = quranSyncEnabled ? [
-    .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.1.16"),
-] : []
+let localMobileSyncPackagePath = ProcessInfo.processInfo.environment["MOBILE_SYNC_SPM_PATH"]?
+    .trimmingCharacters(in: .whitespacesAndNewlines)
+let mobileSyncPackageDependency: Package.Dependency = {
+    if let localMobileSyncPackagePath, !localMobileSyncPackagePath.isEmpty {
+        return .package(path: localMobileSyncPackagePath)
+    }
+    return .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.1.16")
+}()
+
+let mobileSyncPackageDependencies: [Package.Dependency] =
+    quranSyncEnabled ? [mobileSyncPackageDependency] : []
 let mobileSyncTargetDependencies: [Target.Dependency] = quranSyncEnabled ? [
     .product(name: "MobileSync", package: "mobile-sync-spm"),
 ] : []

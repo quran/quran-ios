@@ -6,9 +6,12 @@ The Makefile exposes explicit targets for each sync mode:
 
 - no sync: `make build-no-sync`, `make test-no-sync`, `make build-example-no-sync`, `make run-example-no-sync`
 - sync enabled: `make build-sync`, `make test-sync`, `make build-example-sync`, `make run-example-sync`
+- local sync: `make build-mobile-sync-spm`, `make build-sync-local-debug`, `make test-sync-local-debug`, `make build-example-sync-local-debug`, `make run-example-sync-local-debug`
 - SwiftFormat: `make format-lint`
 
 Package build targets honor `TARGET` as a scheme override, such as `make build-no-sync TARGET=NoorUI`. Package test targets always use the `QuranEngine-Package` scheme. Omit `TARGET` to run its full test plan, or set a production or test target to filter the run, such as `make test-sync TARGET=AyahMenuFeature` or `make test-sync TARGET=AyahMenuFeatureTests`. Keep every package test target in `QuranEngine-Package.xctestplan`. Ambient `QURAN_SYNC` may be set or unset through `launchctl`, so always use an explicit sync-mode target.
+
+Local sync targets expect `quran-ios`, `mobile-sync`, and `mobile-sync-spm` under one workspace. The Makefile finds that workspace through `git rev-parse --git-common-dir`, so the defaults work from both the primary checkout and Git worktrees. Do not derive sibling repositories from `../` relative to a worktree. `MOBILE_SYNC_DIR` locates the Gradle repository, `MOBILE_SYNC_SPM_PATH` selects the local Swift package, and `MOBILE_SYNC_XCFRAMEWORK_PATH` selects its local binary; path presence is the local/remote switch. The Makefile must supply and validate these paths. Keep the XCFramework path relative to the `mobile-sync-spm` package root because SwiftPM binary target paths must be relative.
 
 Keeping these commands green locally should keep the CI workflow green as well.
 

@@ -21,6 +21,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     init(
         authenticationClient: any AuthenticationClient,
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
+        ayahHighlightService: MobileSyncAyahHighlightService,
         readingBookmarkService: MobileSyncReadingBookmarkService,
         collectionsBuilder: AyahBookmarkCollectionsBuilder,
         navigationController: UINavigationController,
@@ -29,6 +30,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     ) {
         self.authenticationClient = authenticationClient
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
+        self.ayahHighlightService = ayahHighlightService
         self.readingBookmarkService = readingBookmarkService
         self.collectionsBuilder = collectionsBuilder
         self.navigationController = navigationController
@@ -40,6 +42,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     // MARK: Internal
 
     @Published var collections: [AyahBookmarkCollection] = []
+    @Published var highlights: [AyahNumber: HighlightColor] = [:]
     @Published var collectionPendingDeletion: AyahBookmarkCollection?
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
@@ -73,16 +76,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
         collections.sorted { lhs, rhs in
-            switch (highlightSortIndex(lhs), highlightSortIndex(rhs)) {
-            case let (.some(lhsIndex), .some(rhsIndex)):
-                return lhsIndex < rhsIndex
-            case (.some, .none):
-                return true
-            case (.none, .some):
-                return false
-            case (.none, .none):
-                return lhs.collection.name.localizedCaseInsensitiveCompare(rhs.collection.name) == .orderedAscending
-            }
+            lhs.collection.name.localizedCaseInsensitiveCompare(rhs.collection.name) == .orderedAscending
         }
     }
 
@@ -95,7 +89,6 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     static func displayedCollections(from collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
         collections
-            .filter { $0.kind.highlightColor == nil }
             .sorted { lhs, rhs in
                 let lhsIndex = displayedCollectionSortIndex(lhs)
                 let rhsIndex = displayedCollectionSortIndex(rhs)
@@ -108,9 +101,10 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     func start() async {
         async let observeCollections: Void = observeCollections()
+        async let observeHighlights: Void = observeHighlights()
         async let observeReadingBookmark: Void = observeReadingBookmark()
         isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
-        _ = await (observeCollections, observeReadingBookmark)
+        _ = await (observeCollections, observeHighlights, observeReadingBookmark)
     }
 
     func loginToQuranCom() async {
@@ -197,6 +191,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     private let authenticationClient: any AuthenticationClient
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
+    private let ayahHighlightService: MobileSyncAyahHighlightService
     private let readingBookmarkService: MobileSyncReadingBookmarkService
     private let collectionsBuilder: AyahBookmarkCollectionsBuilder
     private let navigateToPage: (Page) -> Void
@@ -204,13 +199,6 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     private let preferences = AuthenticationPreferences.shared
     private let readingPreferences = ReadingPreferences.shared
     private weak var navigationController: UINavigationController?
-
-    private static func highlightSortIndex(_ collection: AyahBookmarkCollection) -> Int? {
-        guard let color = collection.kind.highlightColor else {
-            return nil
-        }
-        return HighlightColor.alphabeticallySortedColors.firstIndex(of: color)
-    }
 
     private static func displayedCollectionSortIndex(_ collection: AyahBookmarkCollection) -> Int {
         switch collection.kind {
@@ -220,8 +208,16 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             1
         case .user:
             2
-        case .colored:
-            3
+        }
+    }
+
+    private func observeHighlights() async {
+        do {
+            for try await highlights in ayahHighlightService.highlightsSequence() {
+                self.highlights = highlights
+            }
+        } catch {
+            self.error = error
         }
     }
 

@@ -529,7 +529,6 @@ private func domainTargets() -> [[Target]] {
             "PageBookmarkPersistence",
             "Preferences",
             "QuranTextKit",
-            "ReadingService",
             "Localization",
             "Analytics",
             "Utilities",
@@ -561,6 +560,7 @@ private func featuresTargets() -> [[Target]] {
             "LastPagePersistence",
             "ReadingService",
             "QuranResources",
+            "QuranKit",
             "AuthenticationClient",
         ] + mobileSyncTargetDependencies),
 

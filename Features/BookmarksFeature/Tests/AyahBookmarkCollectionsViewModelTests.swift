@@ -177,27 +177,6 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
-    func test_highlightCollectionCannotBeRenamedOrDeleted() async throws {
-        let service = makeService()
-        try await service.createCollection(named: "Red")
-        let collection = try await firstCollection()
-        var didDeleteCollection = false
-        let sut = makeSUT(
-            collection: collection,
-            service: service,
-            collectionDeleted: { didDeleteCollection = true }
-        )
-        sut.pendingCollectionName = "Renamed"
-
-        await sut.renamePendingCollection()
-        await sut.deleteCollection(collection)
-
-        let storedCollection = try await firstCollection()
-        XCTAssertEqual(storedCollection.collection.name, "Red")
-        XCTAssertFalse(didDeleteCollection)
-        XCTAssertNil(sut.error)
-    }
-
     func test_navigateToBookmark_navigatesToBookmarkedAyah() async throws {
         let service = makeService()
         try await service.createCollection(named: "Highlights")
@@ -238,7 +217,10 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
     }
 
     private func makeService() -> AyahBookmarkCollectionService {
-        AyahBookmarkCollectionService(quranDataService: database.quranDataService)
+        AyahBookmarkCollectionService(
+            quranDataService: database.quranDataService,
+            quran: .hafsMadani1405
+        )
     }
 
     private func makeQuranTextDataService() -> QuranTextDataService {

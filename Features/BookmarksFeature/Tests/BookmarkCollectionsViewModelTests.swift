@@ -32,25 +32,22 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func test_sorted_groupsHighlightCollectionsBeforeUserCollections() {
+    func test_sorted_sortsCollectionsByName() {
         let collections = BookmarkCollectionsViewModel.sorted([
             collection(name: "Z Collection"),
-            collection(name: "blue"),
+            collection(name: "B Collection"),
             collection(name: "A Collection"),
-            collection(name: "red"),
         ])
 
         XCTAssertEqual(collections.map(\.collection.name), [
-            "blue",
-            "red",
             "A Collection",
+            "B Collection",
             "Z Collection",
         ])
     }
 
     func test_deletableCollections_includesOldPageBookmarksAndUserCollections() {
         let collections = BookmarkCollectionsViewModel.deletableCollections(from: [
-            collection(name: "red"),
             collection(name: "Favorites"),
             collection(name: oldPageBookmarksCollectionName),
         ])
@@ -64,7 +61,6 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     func test_displayedCollections_sortsDefaultThenOldPageBookmarksThenCustomCollections() {
         let collections = BookmarkCollectionsViewModel.displayedCollections(from: [
             collection(name: "Z Collection"),
-            collection(name: "red"),
             collection(name: oldPageBookmarksCollectionName),
             collection(name: "A Collection"),
             collection(name: "Default", id: "__default__"),
@@ -95,26 +91,17 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             collection(name: oldPageBookmarksCollectionName.uppercased()).kind,
             .oldPageBookmarks
         )
-        for color in HighlightColor.allCases {
-            XCTAssertEqual(
-                collection(name: color.collectionName.uppercased()).kind,
-                .colored(color)
-            )
-        }
         XCTAssertEqual(collection(name: "Default", id: "__default__").kind, .defaultBookmarks)
         XCTAssertEqual(collection(name: "Favorites").kind, .user)
     }
 
-    func test_collectionCapabilities_protectSystemCollections() {
+    func test_collectionCapabilities_protectDefaultCollection() {
         let defaultBookmarks = collection(name: "Default", id: "__default__")
-        let highlight = collection(name: "Red")
         let oldPageBookmarks = collection(name: oldPageBookmarksCollectionName)
         let user = collection(name: "Favorites")
 
         XCTAssertFalse(defaultBookmarks.kind.canRename)
         XCTAssertFalse(defaultBookmarks.kind.canDelete)
-        XCTAssertFalse(highlight.kind.canRename)
-        XCTAssertFalse(highlight.kind.canDelete)
         XCTAssertTrue(oldPageBookmarks.kind.canRename)
         XCTAssertTrue(oldPageBookmarks.kind.canDelete)
         XCTAssertTrue(user.kind.canRename)
@@ -126,21 +113,6 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
         XCTAssertEqual(collection.displayName, l("bookmarks.collections.favorites"))
         XCTAssertEqual(collection.displayImage, .starFilled)
-    }
-
-    func test_collectionDetailsController_showsDirectEditButtonForHighlightCollection() {
-        let collection = collection(name: "Red")
-        let viewModel = makeCollectionDetailsViewModel(collection: collection)
-        let viewController = AyahBookmarkCollectionsViewController(viewModel: viewModel)
-
-        let buttons = viewController.navigationItem.rightBarButtonItems
-        let button = buttons?.first
-        let systemEditTitle = UIBarButtonItem(barButtonSystemItem: .edit, target: nil, action: nil).title
-
-        XCTAssertEqual(button?.title, systemEditTitle)
-        XCTAssertNotNil(button?.primaryAction)
-        XCTAssertNil(button?.menu)
-        XCTAssertEqual(buttons?.count, 1)
     }
 
     func test_collectionDetailsController_usesNativeTitleAndSubtitle() {
@@ -490,6 +462,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         return BookmarkCollectionsViewModel(
             authenticationClient: authenticationClient,
             ayahBookmarkCollectionService: collectionService,
+            ayahHighlightService: makeHighlightService(),
             readingBookmarkService: readingBookmarkService,
             collectionsBuilder: collectionsBuilder,
             navigationController: navigationController,
@@ -499,7 +472,17 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     }
 
     private func makeService() -> AyahBookmarkCollectionService {
-        AyahBookmarkCollectionService(quranDataService: database.quranDataService)
+        AyahBookmarkCollectionService(
+            quranDataService: database.quranDataService,
+            quran: .hafsMadani1405
+        )
+    }
+
+    private func makeHighlightService() -> MobileSyncAyahHighlightService {
+        MobileSyncAyahHighlightService(
+            quranDataService: database.quranDataService,
+            quran: .hafsMadani1405
+        )
     }
 
     private func makeReadingBookmarkService() -> MobileSyncReadingBookmarkService {

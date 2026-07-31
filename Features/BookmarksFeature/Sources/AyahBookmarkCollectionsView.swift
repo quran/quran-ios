@@ -57,10 +57,6 @@ private struct AyahBookmarkCollectionDetails: View {
 
     // MARK: Private
 
-    private var highlightColor: HighlightColor? {
-        collection.kind.highlightColor
-    }
-
     private var filledCollection: some View {
         NoorList {
             Section {
@@ -91,20 +87,12 @@ private struct AyahBookmarkCollectionDetails: View {
             title: lAndroid("bookmarks_list_empty"),
             text: emptyStateText,
             image: .bookmark,
-            style: .prominent(
-                imageColor: highlightColor?.color ?? Color.appIdentity
-            )
+            style: .prominent(imageColor: Color.appIdentity)
         )
     }
 
     private var emptyStateText: String {
-        if let highlightColor {
-            return lFormat(
-                "bookmarks.collections.ayahs.no-data.colored.text",
-                highlightColor.localizedName.lowercased()
-            )
-        }
-        return l("bookmarks.collections.ayahs.no-data.text")
+        l("bookmarks.collections.ayahs.no-data.text")
     }
 
     private func bookmarkRow(_ bookmark: AyahCollectionBookmark) -> some View {

@@ -29,11 +29,15 @@ final class BookmarkAyahsViewModel: ObservableObject {
     init(
         verses: [AyahNumber],
         collections: [AyahBookmarkCollection],
-        ayahBookmarkCollectionService: AyahBookmarkCollectionService
+        highlights: [AyahNumber: HighlightColor] = [:],
+        ayahBookmarkCollectionService: AyahBookmarkCollectionService,
+        ayahHighlightService: MobileSyncAyahHighlightService
     ) {
         self.verses = Self.unique(verses)
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
+        self.ayahHighlightService = ayahHighlightService
         updateCollections(collections)
+        highlightSelection = Self.highlightSelection(for: self.verses, in: highlights)
     }
 
     // MARK: Internal
@@ -68,16 +72,9 @@ final class BookmarkAyahsViewModel: ObservableObject {
     }
 
     func start() async {
-        do {
-            for try await collections in ayahBookmarkCollectionService.collectionsSequence() {
-                updateCollections(collections)
-            }
-        } catch {
-            guard !Task.isCancelled else {
-                return
-            }
-            self.error = error
-        }
+        async let observeCollections: Void = observeCollections()
+        async let observeHighlights: Void = observeHighlights()
+        _ = await (observeCollections, observeHighlights)
     }
 
     func selectHighlight(_ color: HighlightColor?) async {
@@ -92,9 +89,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
         defer { isUpdatingHighlight = false }
 
         do {
-            try await ayahBookmarkCollectionService.setHighlight(color, for: verses)
             if let color {
+                try await ayahHighlightService.setHighlight(color, for: verses)
                 HighlightPreferences.shared.lastUsedHighlightColor = color
+            } else {
+                try await ayahHighlightService.removeHighlight(for: verses)
             }
         } catch is CancellationError {
             highlightSelection = previousSelection
@@ -171,14 +170,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
     // MARK: Private
 
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
+    private let ayahHighlightService: MobileSyncAyahHighlightService
 
     private func updateCollections(_ collections: [AyahBookmarkCollection]) {
         let collections = BookmarkCollectionsViewModel.sorted(collections)
         self.collections = collections
-
-        if !isUpdatingHighlight {
-            highlightSelection = Self.highlightSelection(for: verses, in: collections)
-        }
 
         let displayedCollections = BookmarkCollectionsViewModel.displayedCollections(from: collections)
         let displayedCollectionIDs = Set(displayedCollections.map(\.collection.id))
@@ -194,14 +190,9 @@ final class BookmarkAyahsViewModel: ObservableObject {
 
     private static func highlightSelection(
         for verses: [AyahNumber],
-        in collections: [AyahBookmarkCollection]
+        in highlights: [AyahNumber: HighlightColor]
     ) -> HighlightSelection {
-        let coloredCollections = collections.filter { $0.kind.highlightColor != nil }
-        let colors = verses.map { ayah in
-            coloredCollections.first { collection in
-                collection.bookmarks.contains { $0.ayah == ayah }
-            }?.kind.highlightColor
-        }
+        let colors = verses.map { highlights[$0] }
 
         guard let firstColor = colors.first else {
             return .none
@@ -213,6 +204,29 @@ final class BookmarkAyahsViewModel: ObservableObject {
             return .color(firstColor)
         }
         return .none
+    }
+
+    private func observeCollections() async {
+        do {
+            for try await collections in ayahBookmarkCollectionService.collectionsSequence() {
+                updateCollections(collections)
+            }
+        } catch {
+            guard !Task.isCancelled else { return }
+            self.error = error
+        }
+    }
+
+    private func observeHighlights() async {
+        do {
+            for try await highlights in ayahHighlightService.highlightsSequence() {
+                guard !isUpdatingHighlight else { continue }
+                highlightSelection = Self.highlightSelection(for: verses, in: highlights)
+            }
+        } catch {
+            guard !Task.isCancelled else { return }
+            self.error = error
+        }
     }
 
     private static func collectionSelection(

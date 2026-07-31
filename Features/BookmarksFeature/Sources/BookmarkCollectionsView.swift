@@ -59,7 +59,7 @@ private struct BookmarkCollectionsContent: View {
                         title: color.localizedName,
                         image: .bookmark,
                         imageColor: color.color,
-                        collection: highlightCollection(for: color)
+                        count: viewModel.highlights.values.count { $0 == color }
                     )
                 }
             }
@@ -110,26 +110,21 @@ private struct BookmarkCollectionsContent: View {
         .environment(\.editMode, $viewModel.editMode)
     }
 
-    private func highlightCollection(for color: HighlightColor) -> AyahBookmarkCollection? {
-        viewModel.collections.first {
-            $0.kind == .colored(color)
-        }
-    }
-
     private func collectionRow(
         title: String,
         image: NoorSystemImage,
         imageColor: Color,
-        collection: AyahBookmarkCollection?
+        collection: AyahBookmarkCollection? = nil,
+        count: Int? = nil
     ) -> some View {
         NoorListItem(
             image: .init(image, color: imageColor),
             title: .text(title),
             subtitle: .init(
-                text: .text(NumberFormatter.shared.format(collection?.bookmarks.count ?? 0)),
+                text: .text(NumberFormatter.shared.format(count ?? collection?.bookmarks.count ?? 0)),
                 location: .trailing
             ),
-            accessory: .disclosureIndicator,
+            accessory: collection == nil ? nil : .disclosureIndicator,
             action: collectionAction(for: collection)
         )
     }

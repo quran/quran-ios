@@ -11,16 +11,6 @@ public enum HighlightColor: Int, CaseIterable, Equatable, Hashable, Sendable {
     case yellow = 3
     case purple = 4
 
-    public var collectionName: String {
-        switch self {
-        case .red: return "red"
-        case .green: return "green"
-        case .blue: return "blue"
-        case .yellow: return "yellow"
-        case .purple: return "purple"
-        }
-    }
-
     public static var sortedColors: [Self] {
         [.yellow, .green, .blue, .red, .purple]
     }

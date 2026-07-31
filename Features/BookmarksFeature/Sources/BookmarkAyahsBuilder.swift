@@ -6,7 +6,9 @@
 import AnnotationsService
 import AppDependencies
 import NoorUI
+import QuranAnnotations
 import QuranKit
+import ReadingService
 import UIKit
 
 @MainActor
@@ -21,14 +23,16 @@ public struct BookmarkAyahsBuilder {
 
     public func build(
         verses: [AyahNumber],
-        collections: [AyahBookmarkCollection]
+        collections: [AyahBookmarkCollection],
+        highlights: [AyahNumber: HighlightColor] = [:]
     ) -> UIViewController {
+        let quran = ReadingPreferences.shared.reading.quran
         let viewModel = BookmarkAyahsViewModel(
             verses: verses,
             collections: collections,
-            ayahBookmarkCollectionService: AyahBookmarkCollectionService(
-                quranDataService: container.quranDataService
-            )
+            highlights: highlights,
+            ayahBookmarkCollectionService: container.ayahBookmarkCollectionService(quran: quran),
+            ayahHighlightService: container.ayahHighlightService(quran: quran)
         )
         return navigationController(viewModel: viewModel)
     }

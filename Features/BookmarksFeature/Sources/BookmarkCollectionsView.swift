@@ -3,6 +3,7 @@
 //  BookmarkCollectionsView.swift
 //
 
+import AnnotationsService
 import FeaturesSupport
 import Localization
 import NoorUI

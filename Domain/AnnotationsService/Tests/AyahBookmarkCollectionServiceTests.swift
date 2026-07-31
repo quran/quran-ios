@@ -5,7 +5,7 @@ import QuranAnnotations
 import QuranKit
 import Utilities
 import XCTest
-@testable import BookmarksFeature
+@testable import AnnotationsService
 
 final class AyahBookmarkCollectionServiceTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared

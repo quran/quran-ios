@@ -1,11 +1,11 @@
 #if QURAN_SYNC
-import AnnotationsService
 import Combine
 import MobileSync
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
 import XCTest
+@testable import AnnotationsService
 @testable import BookmarksFeature
 @testable import QuranViewFeature
 

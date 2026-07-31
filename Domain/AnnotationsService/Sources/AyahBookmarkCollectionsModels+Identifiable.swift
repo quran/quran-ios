@@ -1,6 +1,4 @@
 #if QURAN_SYNC
-import MobileSync
-
 extension AyahBookmarkCollection: Identifiable {
     public var id: String { collection.id }
 }

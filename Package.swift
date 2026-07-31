@@ -523,11 +523,13 @@ private func domainTargets() -> [[Target]] {
 
         target(type, name: "AnnotationsService", dependencies: [
             "QuranAnnotations",
+            "QuranKit",
             "LastPagePersistence",
             "NotePersistence",
             "PageBookmarkPersistence",
             "Preferences",
             "QuranTextKit",
+            "ReadingService",
             "Localization",
             "Analytics",
             "Utilities",

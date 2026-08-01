@@ -6,17 +6,8 @@
 //
 
 import Localization
+import NoorUI
 import QuranKit
-
-struct ReadingBadge: Hashable {
-    enum Style: Hashable {
-        case informational
-        case experimental
-    }
-
-    let title: String
-    let style: Style
-}
 
 struct ReadingInfo<Value: Hashable>: Hashable, Identifiable {
     // MARK: Internal
@@ -25,7 +16,7 @@ struct ReadingInfo<Value: Hashable>: Hashable, Identifiable {
     let title: String
     let description: String
     let properties: [Reading.Property]
-    let badge: ReadingBadge?
+    let tags: [NoorTag]
 
     var id: Value { value }
 }
@@ -55,9 +46,9 @@ enum ReadingInfoTestData {
                     .init(type: .supports, property: "Property 2"),
                     .init(type: .lacks, property: "Property 3"),
                 ],
-                badge: $0 == .e
-                    ? ReadingBadge(title: "Experimental", style: .experimental)
-                    : nil
+                tags: $0 == .e
+                    ? [NoorTag(title: "Experimental", tone: .red)]
+                    : []
             )
         }
     }

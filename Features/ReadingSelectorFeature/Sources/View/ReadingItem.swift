@@ -19,7 +19,6 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
     let action: () -> Void
 
     @ScaledMetric var cornerRadius = Dimensions.cornerRadius
-    @ScaledMetric private var badgeDotSize = 6
 
     var body: some View {
         Button(action: action) {
@@ -30,8 +29,8 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
                             if let progress {
                                 ProgressView(value: progress, total: 1)
                             }
-                            if let badge = reading.badge {
-                                badgeView(badge)
+                            if !reading.tags.isEmpty {
+                                tagsView
                             }
                             titleView
                             descriptionView
@@ -65,38 +64,13 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
             .font(.footnote)
     }
 
-    private func badgeView(_ badge: ReadingBadge) -> some View {
-        HStack(spacing: 6) {
-            Circle()
-                .frame(width: badgeDotSize, height: badgeDotSize)
-
-            Text(badge.title)
-                .font(.caption2.bold())
-                .textCase(.uppercase)
+    private var tagsView: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            ForEach(reading.tags, id: \.self) { tag in
+                NoorTagView(tag)
+            }
         }
-        .foregroundColor(badgeForegroundColor(badge.style))
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(Capsule().fill(badgeBackgroundColor(badge.style)))
         .padding(.bottom, 4)
-    }
-
-    private func badgeForegroundColor(_ style: ReadingBadge.Style) -> Color {
-        switch style {
-        case .informational:
-            return .appIdentity
-        case .experimental:
-            return .red
-        }
-    }
-
-    private func badgeBackgroundColor(_ style: ReadingBadge.Style) -> Color {
-        switch style {
-        case .informational:
-            return Color.appIdentity.opacity(0.1)
-        case .experimental:
-            return Color.red.opacity(0.1)
-        }
     }
 
     private var backgroundRectangle: some InsettableShape {

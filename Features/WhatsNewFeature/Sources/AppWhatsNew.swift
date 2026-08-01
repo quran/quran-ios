@@ -7,6 +7,7 @@
 //
 
 import Localization
+import NoorUI
 
 struct AppWhatsNew: Decodable {
     let versions: [WhatsNewVersion]
@@ -23,6 +24,7 @@ struct WhatsNewItem: Decodable {
     let title: String
     let subtitle: String
     let image: String
+    let tags: [WhatsNewTag]?
 
     var localizedTitle: String {
         l(title)
@@ -35,6 +37,10 @@ struct WhatsNewItem: Decodable {
                 detail.hasPrefix("* ") ? String(detail.dropFirst(2)) : detail
             }
             .filter { !$0.isEmpty }
+    }
+
+    var localizedTags: [NoorTag] {
+        tags?.map(\.localizedTag) ?? []
     }
 
     // MARK: Private
@@ -51,5 +57,14 @@ struct WhatsNewItem: Decodable {
         let components = text.replacingOccurrences(of: "%%", with: "")
             .components(separatedBy: ":")
         return l(components[1], table: Table(rawValue: components[0])!)
+    }
+}
+
+struct WhatsNewTag: Decodable {
+    let title: String
+    let tone: NoorTag.Tone
+
+    var localizedTag: NoorTag {
+        NoorTag(title: l(title), tone: tone)
     }
 }

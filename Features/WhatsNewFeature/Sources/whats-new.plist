@@ -16,6 +16,15 @@
 					<string>new.reading_layouts.details</string>
 					<key>image</key>
 					<string>book</string>
+					<key>tags</key>
+					<array>
+						<dict>
+							<key>title</key>
+							<string>reading.selector.badge.large-screen-optimized</string>
+							<key>tone</key>
+							<string>accent</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>title</key>
@@ -24,6 +33,15 @@
 					<string>new.experimental_naskh.details</string>
 					<key>image</key>
 					<string>flask</string>
+					<key>tags</key>
+					<array>
+						<dict>
+							<key>title</key>
+							<string>reading.selector.badge.experimental</string>
+							<key>tone</key>
+							<string>red</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>title</key>

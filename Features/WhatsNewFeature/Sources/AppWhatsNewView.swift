@@ -4,6 +4,7 @@
 //
 
 import Localization
+import NoorUI
 import SwiftUI
 import UIKit
 
@@ -91,6 +92,14 @@ private struct AppWhatsNewCard: View {
                     .foregroundStyle(.primary)
             }
 
+            if !item.localizedTags.isEmpty {
+                VStack(alignment: .leading, spacing: 4) {
+                    ForEach(item.localizedTags, id: \.self) { tag in
+                        NoorTagView(tag)
+                    }
+                }
+            }
+
             VStack(alignment: .leading, spacing: detailSpacing) {
                 ForEach(item.localizedDetails.indices, id: \.self) { index in
                     detail(item.localizedDetails[index])
@@ -153,12 +162,14 @@ final class AppWhatsNewViewController: UIHostingController<AppWhatsNewView> {
             WhatsNewItem(
                 title: "new.audio_upgrades",
                 subtitle: "new.audio_upgrades.details",
-                image: "speedometer"
+                image: "speedometer",
+                tags: [WhatsNewTag(title: "Optimized", tone: .accent)]
             ),
             WhatsNewItem(
                 title: "new.personalization",
                 subtitle: "new.personalization.details",
-                image: "paintpalette.fill"
+                image: "paintpalette.fill",
+                tags: nil
             ),
         ],
         onContinue: {}

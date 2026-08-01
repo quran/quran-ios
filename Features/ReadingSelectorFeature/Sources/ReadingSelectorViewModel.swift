@@ -8,6 +8,7 @@
 
 import Foundation
 import Localization
+import NoorUI
 import QuranKit
 import ReadingService
 
@@ -95,19 +96,19 @@ class ReadingSelectorViewModel: ObservableObject {
 
 private extension ReadingInfo where Value == Reading {
     init(_ reading: Reading) {
-        let badge: ReadingBadge? = switch reading {
+        let tags: [NoorTag] = switch reading {
         case .hafs_1441, .hafs_1439:
-            ReadingBadge(
+            [NoorTag(
                 title: l("reading.selector.badge.large-screen-optimized"),
-                style: .informational
-            )
+                tone: .accent
+            )]
         case .naskh:
-            ReadingBadge(
+            [NoorTag(
                 title: l("reading.selector.badge.experimental"),
-                style: .experimental
-            )
+                tone: .red
+            )]
         default:
-            nil
+            []
         }
 
         self.init(
@@ -115,7 +116,7 @@ private extension ReadingInfo where Value == Reading {
             title: reading.title,
             description: reading.description,
             properties: reading.properties,
-            badge: badge
+            tags: tags
         )
     }
 }

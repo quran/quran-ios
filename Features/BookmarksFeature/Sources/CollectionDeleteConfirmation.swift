@@ -8,8 +8,7 @@ extension View {
         item: Binding<Item?>,
         delete: @escaping @MainActor (Item) async -> Void
     ) -> some View {
-        alert(
-            l("bookmarks.collections.delete.confirmation.title"),
+        collectionDeleteConfirmation(
             isPresented: Binding(
                 get: { item.wrappedValue != nil },
                 set: { isPresented in
@@ -18,13 +17,29 @@ extension View {
                     }
                 }
             ),
-            presenting: item.wrappedValue
-        ) { item in
+            delete: {
+                guard let item = item.wrappedValue else {
+                    return
+                }
+                await delete(item)
+            }
+        )
+    }
+
+    @MainActor
+    func collectionDeleteConfirmation(
+        isPresented: Binding<Bool>,
+        delete: @escaping @MainActor () async -> Void
+    ) -> some View {
+        alert(
+            l("bookmarks.collections.delete.confirmation.title"),
+            isPresented: isPresented
+        ) {
             Button(lAndroid("cancel"), role: .cancel) {}
             Button(l("button.delete"), role: .destructive) {
-                Task { await delete(item) }
+                Task { await delete() }
             }
-        } message: { _ in
+        } message: {
             Text(l("bookmarks.collections.delete.confirmation.message"))
         }
     }

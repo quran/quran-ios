@@ -81,5 +81,13 @@ extension AppDependencies {
     public func mobileSyncNoteService() -> MobileSyncNoteService {
         MobileSyncNoteService(quranDataService: quranDataService)
     }
+
+    public func ayahBookmarkCollectionService() -> AyahBookmarkCollectionService {
+        AyahBookmarkCollectionService(quranDataService: quranDataService)
+    }
+
+    public func ayahHighlightService() -> MobileSyncAyahHighlightService {
+        MobileSyncAyahHighlightService(quranDataService: quranDataService)
+    }
     #endif
 }

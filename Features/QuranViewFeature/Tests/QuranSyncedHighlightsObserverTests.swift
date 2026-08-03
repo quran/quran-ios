@@ -1,11 +1,10 @@
 #if QURAN_SYNC
+import AnnotationsService
 import Combine
-import MobileSync
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
 import XCTest
-@testable import AnnotationsService
 @testable import BookmarksFeature
 @testable import QuranViewFeature
 
@@ -23,23 +22,12 @@ final class QuranSyncedHighlightsObserverTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func test_start_appliesPersistedMobileSyncBookmarksToHighlights() async throws {
-        let collectionService = AyahBookmarkCollectionService(quranDataService: database.quranDataService)
-        try await collectionService.createCollection(named: HighlightColor.green.collectionName.uppercased())
-        let stored = try await storedCollections()
-        let collection = try XCTUnwrap(
-            AyahBookmarkCollectionService.collections(
-                from: stored,
-                quran: .hafsMadani1405
-            ).first { $0.kind == .colored(.green) }
-        )
-        try await collectionService.addAyahBookmarkToCollection(
-            collectionId: collection.collection.id,
-            ayah: ayah
-        )
+    func test_start_appliesPersistedMobileSyncHighlights() async throws {
+        let highlightService = MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
+        try await highlightService.setHighlight(.green, for: [ayah])
         let highlightsService = QuranHighlightsService()
         let observer = QuranSyncedHighlightsObserver(
-            ayahBookmarkCollectionService: collectionService,
+            ayahHighlightService: highlightService,
             highlightsService: highlightsService
         )
         let applied = expectation(description: "Applies persisted synced highlight")
@@ -53,21 +41,12 @@ final class QuranSyncedHighlightsObserverTests: XCTestCase {
         await fulfillment(of: [applied], timeout: 2)
 
         XCTAssertEqual(highlightsService.highlights.highlightVerses[ayah], .green)
-        XCTAssertEqual(
-            observer.collections.first { $0.kind == .colored(.green) }?.bookmarks.first?.ayah,
-            ayah
-        )
         observation.cancel()
         withExtendedLifetime(observer) {}
     }
 
     private var ayah: AyahNumber {
         AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
-    }
-
-    private func storedCollections() async throws -> [CollectionWithAyahBookmarks] {
-        let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
-        return try await iterator.next() ?? []
     }
 }
 #endif

@@ -6,17 +6,15 @@
 //
 
 import AnnotationsService
-import BookmarksFeature
 import QuranAnnotations
-import QuranKit
 import VLogging
 
 @MainActor
 final class QuranSyncedHighlightsObserver {
     // MARK: Lifecycle
 
-    init(ayahBookmarkCollectionService: AyahBookmarkCollectionService, highlightsService: QuranHighlightsService) {
-        self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
+    init(ayahHighlightService: MobileSyncAyahHighlightService, highlightsService: QuranHighlightsService) {
+        self.ayahHighlightService = ayahHighlightService
         self.highlightsService = highlightsService
     }
 
@@ -26,45 +24,38 @@ final class QuranSyncedHighlightsObserver {
 
     // MARK: Internal
 
-    private(set) var collections: [AyahBookmarkCollection] = []
-
     func start() {
         guard task == nil else {
             return
         }
-        let ayahBookmarkCollectionService = ayahBookmarkCollectionService
+        let ayahHighlightService = ayahHighlightService
         let highlightsService = highlightsService
         task = Task {
-            do {
-                let sequence = ayahBookmarkCollectionService.collectionsSequence()
-                for try await collections in sequence {
-                    self.collections = collections
-                    var highlights = highlightsService.highlights
-                    highlights.highlightVerses = highlightedAyahs(from: collections)
-                    highlightsService.highlights = highlights
-                }
-            } catch {
-                logger.error("Failed to observe synced highlights: \(error)")
-            }
+            await observeHighlights(
+                using: ayahHighlightService,
+                highlightsService: highlightsService
+            )
         }
     }
 
-    private func highlightedAyahs(from collections: [AyahBookmarkCollection]) -> [AyahNumber: HighlightColor] {
-        var highlights: [AyahNumber: HighlightColor] = [:]
-        for collection in collections {
-            guard case .colored(let color) = collection.kind else {
-                continue
+    private func observeHighlights(
+        using service: MobileSyncAyahHighlightService,
+        highlightsService: QuranHighlightsService
+    ) async {
+        do {
+            for try await highlightedAyahs in service.highlightsSequence() {
+                var highlights = highlightsService.highlights
+                highlights.highlightVerses = highlightedAyahs
+                highlightsService.highlights = highlights
             }
-            for bookmark in collection.bookmarks {
-                highlights[bookmark.ayah] = color
-            }
+        } catch {
+            logger.error("Failed to observe synced highlights: \(error)")
         }
-        return highlights
     }
 
     // MARK: Private
 
-    private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
+    private let ayahHighlightService: MobileSyncAyahHighlightService
     private let highlightsService: QuranHighlightsService
     private var task: Task<Void, Never>?
 }

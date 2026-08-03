@@ -1,9 +1,7 @@
 #if QURAN_SYNC
 import MobileSync
 import MobileSyncTestSupport
-import QuranAnnotations
 import QuranKit
-import Utilities
 import XCTest
 @testable import AnnotationsService
 
@@ -98,35 +96,14 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         XCTAssertEqual(Set(updatedStudy.bookmarks.map(\.ayah)), [1, 2])
     }
 
-    func test_setHighlight_replacesExistingHighlightAcrossCollections() async throws {
-        try await service.createCollection(named: HighlightColor.red.collectionName)
-        try await service.createCollection(named: HighlightColor.green.collectionName)
-        let red = try await storedCollection(named: HighlightColor.red.collectionName)
-        try await service.addAyahBookmarkToCollection(collectionId: red.collection.id, ayah: ayah(1))
-        try await service.addAyahBookmarkToCollection(collectionId: red.collection.id, ayah: ayah(2))
-
-        try await service.setHighlight(.green, for: [ayah(1), ayah(2)])
-
-        let updatedRed = try await storedCollection(named: HighlightColor.red.collectionName) {
-            $0.bookmarks.isEmpty
-        }
-        let updatedGreen = try await storedCollection(named: HighlightColor.green.collectionName) {
-            $0.bookmarks.count == 2
-        }
-        XCTAssertTrue(updatedRed.bookmarks.isEmpty)
-        XCTAssertEqual(Set(updatedGreen.bookmarks.map(\.ayah)), [1, 2])
-    }
-
-    func test_collectionsSequence_createsAllMissingHighlightCollectionsInDatabase() async throws {
+    func test_collectionsSequence_excludesSystemHighlightCollections() async throws {
+        let highlightService = MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
+        try await highlightService.setHighlight(.purple, for: [ayah(1)])
         var iterator = service.collectionsSequence().makeAsyncIterator()
-        let expectedNames = Set(HighlightColor.sortedColors.map(\.collectionName))
 
-        let collections = try await nextCollections(from: &iterator) { collections in
-            expectedNames.isSubset(of: Set(collections.map(\.collection.name)))
-        }
+        let collections = try await iterator.next() ?? []
 
-        XCTAssertTrue(expectedNames.isSubset(of: Set(collections.map(\.collection.name))))
-        XCTAssertTrue(collections.first?.collection.isDefault == true)
+        XCTAssertEqual(collections.map(\.collection.name), ["Default"])
     }
 
     private func storedCollection(
@@ -143,18 +120,6 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         where predicate: ([CollectionWithAyahBookmarks]) -> Bool
     ) async throws -> [CollectionWithAyahBookmarks] {
         let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
-        while let collections = try await iterator.next() {
-            if predicate(collections) {
-                return collections
-            }
-        }
-        throw TestError.expectedDatabaseStateNotObserved
-    }
-
-    private func nextCollections(
-        from iterator: inout AnyAsyncSequence<[AyahBookmarkCollection]>.AsyncIterator,
-        where predicate: ([AyahBookmarkCollection]) -> Bool
-    ) async throws -> [AyahBookmarkCollection] {
         while let collections = try await iterator.next() {
             if predicate(collections) {
                 return collections

@@ -81,22 +81,27 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
         XCTAssertGreaterThan(updated.modifiedOn, original.modifiedOn)
     }
 
-    func test_updateCollisionPreservesBothReadingSessions() async throws {
+    func test_updateCollisionReturnsDestinationAndRemovesSource() async throws {
         let quran = Quran.hafsMadani1405
         let source = try await service.add(page: quran.pages[10])
         let destination = try await service.add(page: quran.pages[20])
+        var iterator = service.lastPages(quran: quran).makeAsyncIterator()
+        _ = try await iterator.next()
 
-        do {
-            _ = try await service.update(lastPage: source, toPage: quran.pages[20])
-            XCTFail("Expected the MobileSync collision error")
-        } catch is CancellationError {
-            XCTFail("Unexpected cancellation")
-        } catch {}
+        let updated = try await service.update(lastPage: source, toPage: quran.pages[20])
 
-        let iterator = database.quranDataService.readingSessionsSequence().makeAsyncIterator()
-        let value = try await iterator.next()
-        let storedSessions = try XCTUnwrap(value)
-        XCTAssertEqual(Set(storedSessions.map(\.id)), Set([source.id, destination.id]))
+        XCTAssertEqual(updated.id, destination.id)
+        XCTAssertEqual(updated.page, quran.pages[20])
+        XCTAssertGreaterThanOrEqual(updated.modifiedOn, destination.modifiedOn)
+        let nextPublished = try await iterator.next()
+        let published = try XCTUnwrap(nextPublished)
+        XCTAssertEqual(published.map(\.id), [destination.id])
+        XCTAssertEqual(published.map(\.page), [quran.pages[20]])
+
+        let sessions = database.quranDataService.readingSessionsSequence().makeAsyncIterator()
+        let nextStoredSessions = try await sessions.next()
+        let storedSessions = try XCTUnwrap(nextStoredSessions)
+        XCTAssertEqual(storedSessions.map(\.id), [destination.id])
     }
 
     func test_lastPagesObserversCancelIndependently() async throws {

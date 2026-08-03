@@ -27,14 +27,16 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         let sut = BookmarkAyahsViewModel(
             verses: verses,
             collections: fixture.collections,
-            ayahBookmarkCollectionService: fixture.service
+            highlights: fixture.highlights,
+            ayahBookmarkCollectionService: fixture.collectionService,
+            ayahHighlightService: fixture.highlightService
         )
 
         await sut.selectHighlight(.green)
 
-        let stored = try await storedCollections()
-        XCTAssertEqual(bookmarkedAyahs(in: stored, named: HighlightColor.green.collectionName), ["1:7", "2:1"])
-        XCTAssertEqual(bookmarkedAyahs(in: stored, named: HighlightColor.red.collectionName), [])
+        let stored = try await storedHighlights()
+        XCTAssertEqual(stored[verses[0]], .green)
+        XCTAssertEqual(stored[verses[1]], .green)
         XCTAssertEqual(sut.highlightSelection, .color(.green))
     }
 
@@ -43,7 +45,9 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         let sut = BookmarkAyahsViewModel(
             verses: verses,
             collections: fixture.collections,
-            ayahBookmarkCollectionService: fixture.service
+            highlights: fixture.highlights,
+            ayahBookmarkCollectionService: fixture.collectionService,
+            ayahHighlightService: fixture.highlightService
         )
         let study = try XCTUnwrap(sut.displayedCollections.first { $0.collection.name == "Study" })
         XCTAssertEqual(sut.collectionSelection(for: study), .mixed)
@@ -60,45 +64,47 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         let sut = BookmarkAyahsViewModel(
             verses: verses,
             collections: fixture.collections,
-            ayahBookmarkCollectionService: fixture.service
+            highlights: fixture.highlights,
+            ayahBookmarkCollectionService: fixture.collectionService,
+            ayahHighlightService: fixture.highlightService
         )
         await sut.selectHighlight(nil)
 
-        let stored = try await storedCollections()
-        XCTAssertEqual(bookmarkedAyahs(in: stored, named: HighlightColor.red.collectionName), [])
-        XCTAssertEqual(bookmarkedAyahs(in: stored, named: HighlightColor.green.collectionName), [])
+        let stored = try await storedHighlights()
+        XCTAssertNil(stored[verses[0]])
+        XCTAssertNil(stored[verses[1]])
         XCTAssertEqual(sut.highlightSelection, .none)
     }
 
     func test_mixedHighlightSelectionCanBeRemoved() async throws {
         let fixture = try await makeFixture()
-        let red = try XCTUnwrap(fixture.collections.first { $0.kind == .colored(.red) })
-        try await fixture.service.removeAyahs(
-            [verses[1]],
-            fromCollectionWithID: red.collection.id
-        )
+        try await fixture.highlightService.removeHighlight(for: [verses[1]])
         let sut = BookmarkAyahsViewModel(
             verses: verses,
-            collections: try await mappedCollections(),
-            ayahBookmarkCollectionService: fixture.service
+            collections: fixture.collections,
+            highlights: try await storedHighlights(),
+            ayahBookmarkCollectionService: fixture.collectionService,
+            ayahHighlightService: fixture.highlightService
         )
         XCTAssertEqual(sut.highlightSelection, .mixed([.red]))
         XCTAssertEqual(sut.partiallySelectedHighlightColors, [.red])
 
         await sut.selectHighlight(nil)
 
-        let stored = try await storedCollections()
-        XCTAssertEqual(bookmarkedAyahs(in: stored, named: HighlightColor.red.collectionName), [])
+        let stored = try await storedHighlights()
+        XCTAssertNil(stored[verses[0]])
         XCTAssertEqual(sut.highlightSelection, .none)
     }
 
     func test_mixedHighlightSelectionExposesEveryPartiallySelectedColor() async throws {
         let fixture = try await makeFixture()
-        try await fixture.service.setHighlight(.green, for: [verses[1]])
+        try await fixture.highlightService.setHighlight(.green, for: [verses[1]])
         let sut = BookmarkAyahsViewModel(
             verses: verses,
-            collections: try await mappedCollections(),
-            ayahBookmarkCollectionService: fixture.service
+            collections: fixture.collections,
+            highlights: try await storedHighlights(),
+            ayahBookmarkCollectionService: fixture.collectionService,
+            ayahHighlightService: fixture.highlightService
         )
 
         XCTAssertEqual(sut.highlightSelection, .mixed([.red, .green]))
@@ -128,23 +134,23 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
     }
 
     private func makeFixture() async throws -> (
-        service: AyahBookmarkCollectionService,
-        collections: [AyahBookmarkCollection]
+        collectionService: AyahBookmarkCollectionService,
+        highlightService: MobileSyncAyahHighlightService,
+        collections: [AyahBookmarkCollection],
+        highlights: [AyahNumber: HighlightColor]
     ) {
-        let service = AyahBookmarkCollectionService(quranDataService: database.quranDataService)
-        try await service.createCollection(named: HighlightColor.red.collectionName)
-        try await service.createCollection(named: HighlightColor.green.collectionName)
-        try await service.createCollection(named: "Study")
+        let collectionService = makeCollectionService()
+        let highlightService = makeHighlightService()
+        try await collectionService.createCollection(named: "Study")
 
         var collections = try await mappedCollections()
-        let red = try XCTUnwrap(collections.first { $0.kind == .colored(.red) })
         let study = try XCTUnwrap(collections.first { $0.collection.name == "Study" })
         for verse in verses {
-            try await service.addAyahBookmarkToCollection(collectionId: red.collection.id, ayah: verse)
+            try await highlightService.setHighlight(.red, for: [verse])
         }
-        try await service.addAyahBookmarkToCollection(collectionId: study.collection.id, ayah: verses[0])
+        try await collectionService.addAyahBookmarkToCollection(collectionId: study.collection.id, ayah: verses[0])
         collections = try await mappedCollections()
-        return (service, collections)
+        return (collectionService, highlightService, collections, try await storedHighlights(using: highlightService))
     }
 
     private func mappedCollections() async throws -> [AyahBookmarkCollection] {
@@ -157,6 +163,22 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
     private func storedCollections() async throws -> [CollectionWithAyahBookmarks] {
         let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
         return try await iterator.next() ?? []
+    }
+
+    private func storedHighlights(
+        using service: MobileSyncAyahHighlightService? = nil
+    ) async throws -> [AyahNumber: HighlightColor] {
+        let service = service ?? makeHighlightService()
+        var iterator = service.highlightsSequence().makeAsyncIterator()
+        return try await iterator.next() ?? [:]
+    }
+
+    private func makeCollectionService() -> AyahBookmarkCollectionService {
+        AyahBookmarkCollectionService(quranDataService: database.quranDataService)
+    }
+
+    private func makeHighlightService() -> MobileSyncAyahHighlightService {
+        MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
     }
 
     private func bookmarkedAyahs(

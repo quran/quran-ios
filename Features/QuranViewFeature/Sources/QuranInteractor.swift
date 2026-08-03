@@ -85,6 +85,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let ayahNotesBuilder: AyahNotesBuilder
         let bookmarkAyahsBuilder: BookmarkAyahsBuilder
         let syncedHighlightsObserver: QuranSyncedHighlightsObserver
+        let syncedCollectionsObserver: QuranSyncedCollectionsObserver
         let readingBookmarkObserver: QuranReadingBookmarkObserver
         #else
         let noteEditorBuilder: NoteEditorBuilder
@@ -122,6 +123,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         deps.notesObserver.start()
         #if QURAN_SYNC
         deps.syncedHighlightsObserver.start()
+        deps.syncedCollectionsObserver.start()
         deps.readingBookmarkObserver.$bookmark
             .receive(on: DispatchQueue.main) // sink after the bookmark property is updated
             .sink { [weak self] _ in self?.reloadPageBookmark() }
@@ -289,7 +291,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             }
             let viewController = deps.bookmarkAyahsBuilder.build(
                 verses: verses,
-                collections: deps.syncedHighlightsObserver.collections
+                collections: deps.syncedCollectionsObserver.collections,
+                highlights: deps.highlightsService.highlights.highlightVerses
             )
             presenter?.presentBookmarkAyahs(viewController)
         }
@@ -337,7 +340,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         logger.info("Quran: present ayah menu, verses: \(verses)")
         #if QURAN_SYNC
         let highlightVerses = deps.highlightsService.highlights.highlightVerses
-        let bookmarkedVerses = Set(deps.syncedHighlightsObserver.collections.flatMap { collection in
+        let bookmarkedVerses = Set(deps.syncedCollectionsObserver.collections.flatMap { collection in
             collection.bookmarks.map(\.ayah)
         })
         #endif

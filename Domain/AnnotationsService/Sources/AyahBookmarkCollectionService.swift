@@ -6,15 +6,12 @@
 //
 
 import Foundation
-import Localization
-import MobileSync
-import QuranAnnotations
+@preconcurrency import MobileSync
 import QuranKit
 import ReadingService
 import Utilities
-import VLogging
 
-public struct AyahBookmarkCollection {
+public struct AyahBookmarkCollection: Identifiable {
     public init(collection: Collection_, bookmarks: [AyahCollectionBookmark]) {
         self.collection = collection
         self.bookmarks = bookmarks
@@ -22,54 +19,34 @@ public struct AyahBookmarkCollection {
 
     public let collection: Collection_
     public let bookmarks: [AyahCollectionBookmark]
+
+    public var id: String { collection.id }
 }
 
-public struct AyahCollectionBookmark {
+public struct AyahCollectionBookmark: Identifiable {
     public let bookmark: CollectionAyahBookmark
     public let ayah: AyahNumber
+
+    public var id: String { bookmark.bookmarkId }
 }
 
 private enum AyahBookmarkCollectionName {
     static let oldPageBookmarks = "Old Page Bookmarks"
 }
 
-private extension HighlightColor {
-    init?(collectionName: String) {
-        switch collectionName.lowercased() {
-        case "red": self = .red
-        case "green": self = .green
-        case "blue": self = .blue
-        case "yellow": self = .yellow
-        case "purple": self = .purple
-        default: return nil
-        }
-    }
-}
-
 public enum AyahBookmarkCollectionKind: Equatable {
     case defaultBookmarks
     case oldPageBookmarks
-    case colored(HighlightColor)
     case user
 
     fileprivate init(collection: Collection_) {
-        let normalizedName = collection.name.lowercased()
         if collection.isDefault {
             self = .defaultBookmarks
-        } else if normalizedName == AyahBookmarkCollectionName.oldPageBookmarks.lowercased() {
+        } else if collection.name.caseInsensitiveCompare(AyahBookmarkCollectionName.oldPageBookmarks) == .orderedSame {
             self = .oldPageBookmarks
-        } else if let color = HighlightColor(collectionName: collection.name) {
-            self = .colored(color)
         } else {
             self = .user
         }
-    }
-
-    public var highlightColor: HighlightColor? {
-        guard case .colored(let color) = self else {
-            return nil
-        }
-        return color
     }
 
     public var isOldPageBookmarks: Bool {
@@ -77,11 +54,11 @@ public enum AyahBookmarkCollectionKind: Equatable {
     }
 
     public var canDelete: Bool {
-        highlightColor == nil && self != .defaultBookmarks
+        self != .defaultBookmarks
     }
 
     public var canRename: Bool {
-        highlightColor == nil && self != .defaultBookmarks
+        self != .defaultBookmarks
     }
 }
 
@@ -128,26 +105,6 @@ public struct AyahBookmarkCollectionService {
         try await quranDataService.removeAyahBookmarkFromCollection(bookmark.bookmark)
     }
 
-    public func setHighlight(_ color: HighlightColor?, for ayahs: [AyahNumber]) async throws {
-        let collections = try await loadStoredCollections()
-        let coloredCollections = collections.filter { $0.kind.highlightColor != nil }
-
-        guard let color else {
-            try await removeAyahs(ayahs, from: coloredCollections)
-            return
-        }
-
-        guard let targetCollection = coloredCollections.first(where: { $0.kind == .colored(color) }) else {
-            throw AyahBookmarkCollectionServiceError.highlightCollectionUnavailable
-        }
-
-        try await addAyahsIfNeeded(ayahs, to: targetCollection)
-        try await removeAyahs(
-            ayahs,
-            from: coloredCollections.filter { $0.collection.id != targetCollection.collection.id }
-        )
-    }
-
     public func addAyahs(_ ayahs: [AyahNumber], toCollectionWithID collectionID: String) async throws {
         let collections = try await loadStoredCollections()
         guard let collection = collections.first(where: { $0.collection.id == collectionID }) else {
@@ -167,16 +124,10 @@ public struct AyahBookmarkCollectionService {
     }
 
     public func collectionsSequence() -> AnyAsyncSequence<[AyahBookmarkCollection]> {
-        let quranDataService = quranDataService
         let readingPreferences = readingPreferences
         let sequence = quranDataService.collectionsWithBookmarksSequence()
             .map { collections in
-                let collections = Self.collections(
-                    from: collections,
-                    quran: readingPreferences.reading.quran
-                )
-                await quranDataService.createHighlightCollectionsIfNeeded(collections)
-                return collections
+                Self.collections(from: collections, quran: readingPreferences.reading.quran)
             }
         return .init(sequence)
     }
@@ -184,8 +135,11 @@ public struct AyahBookmarkCollectionService {
     // MARK: Internal
 
     static func collections(from collections: [CollectionWithAyahBookmarks], quran: Quran) -> [AyahBookmarkCollection] {
-        collections.map { collection in
-            AyahBookmarkCollection(
+        collections.compactMap { collection in
+            guard !collection.collection.isSystemHighlight else {
+                return nil
+            }
+            return AyahBookmarkCollection(
                 collection: collection.collection,
                 bookmarks: collection.bookmarks.compactMap { bookmark(for: $0, quran: quran) }
             )
@@ -252,83 +206,4 @@ public struct AyahBookmarkCollectionService {
         return AyahCollectionBookmark(bookmark: bookmark, ayah: ayah)
     }
 }
-
-private enum AyahBookmarkCollectionServiceError: LocalizedError {
-    case highlightCollectionUnavailable
-
-    var errorDescription: String? {
-        l("bookmarks.editor.error.highlight-unavailable")
-    }
-}
-
-actor HighlightCollectionCreationPlanner {
-    func reserveMissingCollectionNames(from collections: [AyahBookmarkCollection]) -> [String] {
-        let existingNames = Set(collections.map(\.collection.name))
-        reservedCollectionNames.formUnion(existingNames)
-
-        let missingCollectionNames = HighlightColor.sortedColors
-            .map(\.collectionName)
-            .filter { !existingNames.contains($0) && !reservedCollectionNames.contains($0) }
-
-        reservedCollectionNames.formUnion(missingCollectionNames)
-        return missingCollectionNames
-    }
-
-    func releaseCollectionNames(_ names: some Sequence<String>) {
-        reservedCollectionNames.subtract(names)
-    }
-
-    private var reservedCollectionNames: Set<String> = []
-}
-
-private extension QuranDataService {
-    func createHighlightCollectionsIfNeeded(_ collections: [AyahBookmarkCollection]) async {
-        let planner = await highlightCollectionCreationPlanners.planner(for: self)
-        let missingCollectionNames = await planner.reserveMissingCollectionNames(from: collections)
-
-        let failedCollections = await createHighlightCollections(named: missingCollectionNames)
-        if !failedCollections.isEmpty {
-            await planner.releaseCollectionNames(failedCollections)
-        }
-    }
-
-    private func createHighlightCollections(named names: [String]) async -> [String] {
-        await withTaskGroup(of: String?.self) { group in
-            for name in names {
-                group.addTask {
-                    do {
-                        _ = try await self.createCollection(named: name)
-                        return nil
-                    } catch {
-                        logger.error("Bookmarks: failed to create highlight collection '\(name)': \(error)")
-                        return name
-                    }
-                }
-            }
-
-            var failures: [String] = []
-            for await name in group {
-                if let name {
-                    failures.append(name)
-                }
-            }
-
-            return failures
-        }
-    }
-}
-
-private let highlightCollectionCreationPlanners = HighlightCollectionCreationPlanners()
-
-private actor HighlightCollectionCreationPlanners {
-    func planner(for quranDataService: QuranDataService) -> HighlightCollectionCreationPlanner {
-        let id = ObjectIdentifier(quranDataService)
-        let planner = planners[id] ?? HighlightCollectionCreationPlanner()
-        planners[id] = planner
-        return planner
-    }
-
-    private var planners: [ObjectIdentifier: HighlightCollectionCreationPlanner] = [:]
-}
-
 #endif

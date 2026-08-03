@@ -59,7 +59,8 @@ private struct BookmarkCollectionsContent: View {
                         title: color.localizedName,
                         image: .bookmark,
                         imageColor: color.color,
-                        collection: highlightCollection(for: color)
+                        count: viewModel.highlights.values.count { $0 == color },
+                        action: { viewModel.showHighlights(color) }
                     )
                 }
             }
@@ -78,7 +79,8 @@ private struct BookmarkCollectionsContent: View {
                         title: collection.displayName,
                         image: collection.displayImage,
                         imageColor: collection.displayImageColor,
-                        collection: collection
+                        count: collection.bookmarks.count,
+                        action: { viewModel.showCollection(collection) }
                     )
                     .deleteDisabled(!collection.kind.canDelete)
                 }
@@ -110,35 +112,23 @@ private struct BookmarkCollectionsContent: View {
         .environment(\.editMode, $viewModel.editMode)
     }
 
-    private func highlightCollection(for color: HighlightColor) -> AyahBookmarkCollection? {
-        viewModel.collections.first {
-            $0.kind == .colored(color)
-        }
-    }
-
     private func collectionRow(
         title: String,
         image: NoorSystemImage,
         imageColor: Color,
-        collection: AyahBookmarkCollection?
+        count: Int,
+        action: @escaping AsyncAction
     ) -> some View {
         NoorListItem(
             image: .init(image, color: imageColor),
             title: .text(title),
             subtitle: .init(
-                text: .text(NumberFormatter.shared.format(collection?.bookmarks.count ?? 0)),
+                text: .text(NumberFormatter.shared.format(count)),
                 location: .trailing
             ),
             accessory: .disclosureIndicator,
-            action: collectionAction(for: collection)
+            action: action
         )
-    }
-
-    private func collectionAction(for collection: AyahBookmarkCollection?) -> AsyncAction? {
-        guard let collection else {
-            return nil
-        }
-        return { viewModel.showCollection(collection) }
     }
 }
 

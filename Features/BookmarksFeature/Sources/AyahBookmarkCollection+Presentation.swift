@@ -12,8 +12,6 @@ extension AyahBookmarkCollection {
             l("bookmarks.collections.favorites")
         case .oldPageBookmarks:
             l("bookmarks.old-page-bookmarks")
-        case .colored(let color):
-            color.localizedName
         case .user:
             collection.name
         }
@@ -25,8 +23,6 @@ extension AyahBookmarkCollection {
             .starFilled
         case .oldPageBookmarks:
             .book
-        case .colored:
-            .bookmark
         case .user:
             .folderOutline
         }
@@ -38,7 +34,7 @@ extension AyahBookmarkCollection {
             Color(uiColor: .systemYellow)
         case .oldPageBookmarks:
             .secondaryLabel
-        case .colored, .user:
+        case .user:
             .label
         }
     }

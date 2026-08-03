@@ -320,7 +320,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "Nouveaux mushafs de Médine";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* Ajout des mises en page de lecture Mushaf de Médine 1439 et Mushaf de Médine 1441, grâce à @ahmedre.\n* Amélioration de la récupération des téléchargements de pages de lecture et de la gestion des fichiers incomplets, grâce à @ahmedre.";
+"new.reading_layouts.details" = "* Ajout des Mushafs de Médine 1439 et 1441, optimisés pour occuper tout l’écran — grâce à @ahmedre.";
 
 // Experimental Naskh
 // Metadata: Translated by ChatGPT; human review required.

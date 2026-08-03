@@ -300,7 +300,7 @@
 
 // Reading layouts
 "new.reading_layouts" = "New Madani Mushafs";
-"new.reading_layouts.details" = "* Added Madani Mushaf 1439 and Madani Mushaf 1441 reading layouts - thanks to @ahmedre.\n* Improved reading download recovery and handling of incomplete files - thanks to @ahmedre.";
+"new.reading_layouts.details" = "* Added Madani Mushaf 1439 and 1441, optimized to fill the entire screen — thanks to @ahmedre.";
 
 // Experimental Naskh
 "new.experimental_naskh" = "Experimental Naskh Script";

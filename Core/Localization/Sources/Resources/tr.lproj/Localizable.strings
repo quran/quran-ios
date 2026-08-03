@@ -262,7 +262,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "Yeni Medine Mushafları";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* Medine Mushafı 1439 ve Medine Mushafı 1441 okuma düzenleri eklendi — @ahmedre sayesinde.\n* Okuma sayfası indirmelerini kurtarma ve eksik dosyaları işleme geliştirildi — @ahmedre sayesinde.";
+"new.reading_layouts.details" = "* Medine Mushafı 1439 ve 1441 eklendi; ekranın tamamını dolduracak şekilde optimize edildi — @ahmedre sayesinde.";
 
 // Experimental Naskh
 // Metadata: Translated by ChatGPT; human review required.

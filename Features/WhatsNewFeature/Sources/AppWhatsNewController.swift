@@ -64,6 +64,7 @@ public class AppWhatsNewController {
 
         navigationController.setViewControllers([announcementViewController], animated: false)
         navigationController.modalPresentationStyle = .pageSheet
+        navigationController.isModalInPresentation = true
         navigationController.sheetPresentationController?.detents = [.large()]
 
         parent.present(navigationController, animated: true)

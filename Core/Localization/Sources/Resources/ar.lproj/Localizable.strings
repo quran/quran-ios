@@ -274,7 +274,7 @@
 
 // Reading layouts
 "new.reading_layouts" = "مصاحف مدنية جديدة";
-"new.reading_layouts.details" = "* تمت إضافة مصحف المدينة ١٤٣٩ ومصحف المدينة ١٤٤١ كتخطيطين جديدين للقراءة - بفضل @ahmedre.\n* تم تحسين استعادة تنزيل صفحات القراءة والتعامل مع الملفات غير المكتملة - بفضل @ahmedre.";
+"new.reading_layouts.details" = "* تمت إضافة مصحفي المدينة ١٤٣٩ و١٤٤١، وقد حُسِّنا لملء الشاشة بالكامل — بفضل @ahmedre.";
 
 // Experimental Naskh
 "new.experimental_naskh" = "خط النسخ التجريبي";

@@ -321,7 +321,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "全新麦地那穆沙夫";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* 新增麦地那穆沙夫 1439 和麦地那穆沙夫 1441 阅读布局 — 感谢 @ahmedre。\n* 改进阅读页面下载恢复及不完整文件的处理 — 感谢 @ahmedre。";
+"new.reading_layouts.details" = "* 新增麦地那穆沙夫 1439 和 1441，已优化为全屏显示 — 感谢 @ahmedre。";
 
 // Experimental Naskh
 // Metadata: Translated by ChatGPT; human review required.

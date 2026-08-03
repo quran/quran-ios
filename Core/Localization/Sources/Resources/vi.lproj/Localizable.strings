@@ -229,7 +229,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "Các Mushaf Madani mới";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* Đã thêm bố cục đọc Mushaf Madani 1439 và Mushaf Madani 1441 — cảm ơn @ahmedre.\n* Cải thiện khả năng khôi phục tải xuống trang đọc và xử lý tệp chưa hoàn chỉnh — cảm ơn @ahmedre.";
+"new.reading_layouts.details" = "* Đã thêm Mushaf Madani 1439 và 1441, được tối ưu hóa để hiển thị toàn màn hình — cảm ơn @ahmedre.";
 
 // Experimental Naskh
 // Metadata: Translated by ChatGPT; human review required.

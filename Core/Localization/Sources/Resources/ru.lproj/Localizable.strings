@@ -320,7 +320,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "Новые мединские мусхафы";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* Добавлены варианты чтения «Мединский мусхаф 1439» и «Мединский мусхаф 1441» — благодаря @ahmedre.\n* Улучшено восстановление загрузок страниц для чтения и обработка неполных файлов — благодаря @ahmedre.";
+"new.reading_layouts.details" = "* Добавлены «Мединский мусхаф 1439» и «Мединский мусхаф 1441», оптимизированные для отображения во весь экран — благодаря @ahmedre.";
 
 // Experimental Naskh
 // Metadata: Translated by ChatGPT; human review required.

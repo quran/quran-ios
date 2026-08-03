@@ -114,26 +114,39 @@ final class NotesViewModelTests: XCTestCase {
 
     func test_login_setsAuthenticated_whenLoginSucceeds() async {
         let client = AuthenticationClientFake()
+        client.authenticationStateValue = .authenticated
         let sut = makeSUT(authenticationClient: client)
 
         await sut.loginToQuranCom()
 
         XCTAssertTrue(sut.isAuthenticated)
-        XCTAssertEqual(client.events, [.login])
+        XCTAssertEqual(client.events, [.login, .readAuthenticationState])
         XCTAssertNil(sut.error)
     }
 
     func test_login_setsError_whenLoginFails() async {
         let client = AuthenticationClientFake()
-        client.loginResult = .failure(.clientIsNotAuthenticated(TestError.loginFailed))
+        client.loginResult = .failure(.authenticationFailed(underlying: TestError.loginFailed))
         let sut = makeSUT(authenticationClient: client)
 
         await sut.loginToQuranCom()
 
         XCTAssertFalse(sut.isAuthenticated)
-        guard case .clientIsNotAuthenticated = sut.error as? AuthenticationClientError else {
-            return XCTFail("Expected clientIsNotAuthenticated, got \(String(describing: sut.error))")
+        guard case .authenticationFailed = sut.error as? AuthenticationClientError else {
+            return XCTFail("Expected authenticationFailed, got \(String(describing: sut.error))")
         }
+    }
+
+    func test_login_ignoresCancellation() async {
+        let client = AuthenticationClientFake()
+        client.loginResult = .failure(.cancelled)
+        let sut = makeSUT(authenticationClient: client)
+
+        await sut.loginToQuranCom()
+
+        XCTAssertFalse(sut.isAuthenticated)
+        XCTAssertEqual(client.events, [.login])
+        XCTAssertNil(sut.error)
     }
 
     func test_dismissSyncBanner_persistsDismissal() {

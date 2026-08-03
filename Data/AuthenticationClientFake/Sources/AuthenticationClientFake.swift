@@ -78,7 +78,7 @@ public final class UnavailableAuthenticationClient: AuthenticationClient {
     }
 
     public func login(on _: UIViewController) async throws(AuthenticationClientError) {
-        throw .clientIsNotAuthenticated(UnavailableAuthenticationClientError())
+        throw .notAuthenticated(underlying: nil)
     }
 
     public func restoreState() async throws(AuthenticationClientError) -> AuthenticationState {
@@ -86,18 +86,16 @@ public final class UnavailableAuthenticationClient: AuthenticationClient {
     }
 
     public func logout() async throws(AuthenticationClientError) {
-        throw .clientIsNotAuthenticated(UnavailableAuthenticationClientError())
+        throw .notAuthenticated(underlying: nil)
     }
 
     public func authenticate(request _: URLRequest) async throws(AuthenticationClientError) -> URLRequest {
-        throw .clientIsNotAuthenticated(UnavailableAuthenticationClientError())
+        throw .notAuthenticated(underlying: nil)
     }
 
     public func getAuthenticationHeaders() async throws(AuthenticationClientError) -> [String: String] {
-        throw .clientIsNotAuthenticated(UnavailableAuthenticationClientError())
+        throw .notAuthenticated(underlying: nil)
     }
 }
-
-private struct UnavailableAuthenticationClientError: Error {}
 
 #endif

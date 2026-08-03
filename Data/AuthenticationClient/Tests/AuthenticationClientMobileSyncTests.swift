@@ -26,8 +26,7 @@ final class AuthenticationClientMobileSyncTests: XCTestCase {
             endAyah: 1
         )
         let client = AuthenticationClientMobileSyncImpl(
-            authService: database.authService,
-            quranDataService: database.quranDataService
+            authService: database.authService
         )
 
         try await client.logout()

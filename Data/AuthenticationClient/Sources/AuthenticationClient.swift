@@ -12,11 +12,29 @@ import MobileSync
 import UIKit
 
 public enum AuthenticationClientError: Error {
-    case errorAuthenticating(Error)
+    /// The user dismissed the interactive authentication flow.
+    case cancelled
 
-    /// Thrown when an operation, that needs authentication, is attempted while the client
-    /// hasn't been authenticated or if the client's access has been revoked.
-    case clientIsNotAuthenticated(Error)
+    /// An authenticated operation was attempted without a usable session.
+    case notAuthenticated(underlying: Error?)
+
+    /// Authentication could not reach the remote service.
+    case networkFailure(underlying: Error)
+
+    /// Authentication failed for a non-network reason.
+    case authenticationFailed(underlying: Error)
+
+    public var underlyingError: Error? {
+        switch self {
+        case .cancelled:
+            nil
+        case let .notAuthenticated(underlyingError):
+            underlyingError
+        case let .networkFailure(underlyingError),
+             let .authenticationFailed(underlyingError):
+            Optional(underlyingError)
+        }
+    }
 }
 
 public enum AuthenticationState: Equatable {

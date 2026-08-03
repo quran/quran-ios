@@ -132,7 +132,9 @@ final class NotesViewModel: ObservableObject {
 
         do {
             try await authenticationClient.login(on: navigationController)
-            isAuthenticated = true
+            isAuthenticated = await authenticationClient.authenticationState == .authenticated
+        } catch AuthenticationClientError.cancelled {
+            return
         } catch {
             logger.error("Failed to login to Quran.com from notes: \(error)")
             self.error = error

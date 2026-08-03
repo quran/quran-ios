@@ -16,7 +16,6 @@ import MobileSync
 #endif
 import NotePersistence
 import PageBookmarkPersistence
-import QuranKit
 import QuranResources
 import QuranTextKit
 import ReadingService
@@ -83,12 +82,12 @@ extension AppDependencies {
         MobileSyncNoteService(quranDataService: quranDataService)
     }
 
-    public func ayahBookmarkCollectionService(quran: Quran) -> AyahBookmarkCollectionService {
-        AyahBookmarkCollectionService(quranDataService: quranDataService, quran: quran)
+    public func ayahBookmarkCollectionService() -> AyahBookmarkCollectionService {
+        AyahBookmarkCollectionService(quranDataService: quranDataService)
     }
 
-    public func ayahHighlightService(quran: Quran) -> MobileSyncAyahHighlightService {
-        MobileSyncAyahHighlightService(quranDataService: quranDataService, quran: quran)
+    public func ayahHighlightService() -> MobileSyncAyahHighlightService {
+        MobileSyncAyahHighlightService(quranDataService: quranDataService)
     }
     #endif
 }

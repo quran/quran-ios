@@ -12,10 +12,7 @@ final class MobileSyncAyahHighlightServiceTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         try await database.reset()
-        service = MobileSyncAyahHighlightService(
-            quranDataService: database.quranDataService,
-            quran: .hafsMadani1405
-        )
+        service = MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
     }
 
     override func tearDown() async throws {

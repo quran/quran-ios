@@ -20,10 +20,7 @@ final class QuranSyncedCollectionsObserverTests: XCTestCase {
     }
 
     func test_start_observesBookmarkCollectionsSeparatelyFromHighlights() async throws {
-        let service = AyahBookmarkCollectionService(
-            quranDataService: database.quranDataService,
-            quran: .hafsMadani1405
-        )
+        let service = AyahBookmarkCollectionService(quranDataService: database.quranDataService)
         try await service.createCollection(named: "Duas")
         let observer = QuranSyncedCollectionsObserver(service: service)
 

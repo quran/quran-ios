@@ -23,10 +23,7 @@ final class QuranSyncedHighlightsObserverTests: XCTestCase {
     }
 
     func test_start_appliesPersistedMobileSyncHighlights() async throws {
-        let highlightService = MobileSyncAyahHighlightService(
-            quranDataService: database.quranDataService,
-            quran: .hafsMadani1405
-        )
+        let highlightService = MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
         try await highlightService.setHighlight(.green, for: [ayah])
         let highlightsService = QuranHighlightsService()
         let observer = QuranSyncedHighlightsObserver(

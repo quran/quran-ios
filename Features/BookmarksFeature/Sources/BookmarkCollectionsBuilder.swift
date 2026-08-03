@@ -7,7 +7,6 @@ import AnnotationsService
 import AppDependencies
 import FeaturesSupport
 import QuranKit
-import ReadingService
 import UIKit
 
 @MainActor
@@ -18,8 +17,7 @@ struct BookmarkCollectionsBuilder {
         withListener listener: QuranNavigator,
         navigationController: UINavigationController
     ) -> UIViewController {
-        let quran = ReadingPreferences.shared.reading.quran
-        let collectionService = container.ayahBookmarkCollectionService(quran: quran)
+        let collectionService = container.ayahBookmarkCollectionService()
         let collectionsBuilder = AyahBookmarkCollectionsBuilder(
             ayahBookmarkCollectionService: collectionService,
             quranTextDataService: container.textDataService(),
@@ -30,7 +28,7 @@ struct BookmarkCollectionsBuilder {
         let viewModel = BookmarkCollectionsViewModel(
             authenticationClient: container.authenticationClient,
             ayahBookmarkCollectionService: collectionService,
-            ayahHighlightService: container.ayahHighlightService(quran: quran),
+            ayahHighlightService: container.ayahHighlightService(),
             readingBookmarkService: container.readingBookmarkService(),
             collectionsBuilder: collectionsBuilder,
             navigationController: navigationController,

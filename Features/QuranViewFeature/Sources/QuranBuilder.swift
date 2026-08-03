@@ -43,11 +43,11 @@ public struct QuranBuilder {
         #if QURAN_SYNC
         let notesObserver = QuranNotesObserver(noteService: container.mobileSyncNoteService(), quran: quran)
         let syncedHighlightsObserver = QuranSyncedHighlightsObserver(
-            ayahHighlightService: container.ayahHighlightService(quran: quran),
+            ayahHighlightService: container.ayahHighlightService(),
             highlightsService: highlightsService
         )
         let syncedCollectionsObserver = QuranSyncedCollectionsObserver(
-            service: container.ayahBookmarkCollectionService(quran: quran)
+            service: container.ayahBookmarkCollectionService()
         )
         let readingBookmarkObserver = QuranReadingBookmarkObserver(
             service: container.readingBookmarkService(),

@@ -6,25 +6,29 @@
 @preconcurrency import MobileSync
 import QuranAnnotations
 import QuranKit
+import ReadingService
 import Utilities
 
 public struct MobileSyncAyahHighlightService {
     // MARK: Lifecycle
 
-    public init(quranDataService: QuranDataService, quran: Quran) {
+    public init(
+        quranDataService: QuranDataService,
+        readingPreferences: ReadingPreferences = .shared
+    ) {
         self.quranDataService = quranDataService
-        self.quran = quran
+        self.readingPreferences = readingPreferences
     }
 
     // MARK: Public
 
     public func highlightsSequence() -> AnyAsyncSequence<[AyahNumber: HighlightColor]> {
-        let quran = quran
+        let readingPreferences = readingPreferences
         let sequence = quranDataService.highlightsSequence()
             .map { highlights in
                 highlights.reduce(into: [AyahNumber: HighlightColor]()) { result, highlight in
                     guard let ayah = AyahNumber(
-                        quran: quran,
+                        quran: readingPreferences.reading.quran,
                         sura: Int(highlight.sura),
                         ayah: Int(highlight.ayah)
                     ), let color = HighlightColor(highlight.color) else {
@@ -58,7 +62,7 @@ public struct MobileSyncAyahHighlightService {
     // MARK: Private
 
     private let quranDataService: QuranDataService
-    private let quran: Quran
+    private let readingPreferences: ReadingPreferences
 }
 
 private extension HighlightColor {

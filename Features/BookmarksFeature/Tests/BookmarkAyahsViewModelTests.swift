@@ -174,17 +174,11 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
     }
 
     private func makeCollectionService() -> AyahBookmarkCollectionService {
-        AyahBookmarkCollectionService(
-            quranDataService: database.quranDataService,
-            quran: .hafsMadani1405
-        )
+        AyahBookmarkCollectionService(quranDataService: database.quranDataService)
     }
 
     private func makeHighlightService() -> MobileSyncAyahHighlightService {
-        MobileSyncAyahHighlightService(
-            quranDataService: database.quranDataService,
-            quran: .hafsMadani1405
-        )
+        MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
     }
 
     private func bookmarkedAyahs(

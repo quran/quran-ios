@@ -217,10 +217,7 @@ final class AyahBookmarkCollectionsViewModelTests: XCTestCase {
     }
 
     private func makeService() -> AyahBookmarkCollectionService {
-        AyahBookmarkCollectionService(
-            quranDataService: database.quranDataService,
-            quran: .hafsMadani1405
-        )
+        AyahBookmarkCollectionService(quranDataService: database.quranDataService)
     }
 
     private func makeQuranTextDataService() -> QuranTextDataService {

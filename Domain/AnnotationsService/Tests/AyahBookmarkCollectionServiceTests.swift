@@ -12,10 +12,7 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         try await database.reset()
-        service = AyahBookmarkCollectionService(
-            quranDataService: database.quranDataService,
-            quran: .hafsMadani1405
-        )
+        service = AyahBookmarkCollectionService(quranDataService: database.quranDataService)
     }
 
     override func tearDown() async throws {
@@ -100,10 +97,7 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
     }
 
     func test_collectionsSequence_excludesSystemHighlightCollections() async throws {
-        let highlightService = MobileSyncAyahHighlightService(
-            quranDataService: database.quranDataService,
-            quran: .hafsMadani1405
-        )
+        let highlightService = MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
         try await highlightService.setHighlight(.purple, for: [ayah(1)])
         var iterator = service.collectionsSequence().makeAsyncIterator()
 

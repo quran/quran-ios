@@ -8,6 +8,7 @@
 import Foundation
 @preconcurrency import MobileSync
 import QuranKit
+import ReadingService
 import Utilities
 
 public struct AyahBookmarkCollection: Identifiable {
@@ -70,9 +71,12 @@ extension AyahBookmarkCollection {
 public struct AyahBookmarkCollectionService {
     // MARK: Lifecycle
 
-    public init(quranDataService: QuranDataService, quran: Quran) {
+    public init(
+        quranDataService: QuranDataService,
+        readingPreferences: ReadingPreferences = .shared
+    ) {
         self.quranDataService = quranDataService
-        self.quran = quran
+        self.readingPreferences = readingPreferences
     }
 
     // MARK: Public
@@ -120,10 +124,10 @@ public struct AyahBookmarkCollectionService {
     }
 
     public func collectionsSequence() -> AnyAsyncSequence<[AyahBookmarkCollection]> {
-        let quran = quran
+        let readingPreferences = readingPreferences
         let sequence = quranDataService.collectionsWithBookmarksSequence()
             .map { collections in
-                Self.collections(from: collections, quran: quran)
+                Self.collections(from: collections, quran: readingPreferences.reading.quran)
             }
         return .init(sequence)
     }
@@ -158,12 +162,12 @@ public struct AyahBookmarkCollectionService {
     // MARK: Private
 
     private let quranDataService: QuranDataService
-    private let quran: Quran
+    private let readingPreferences: ReadingPreferences
 
     private func loadStoredCollections() async throws -> [AyahBookmarkCollection] {
         let iterator = quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
         let collections = try await iterator.next() ?? []
-        return Self.collections(from: collections, quran: quran)
+        return Self.collections(from: collections, quran: readingPreferences.reading.quran)
     }
 
     private func addAyahsIfNeeded(

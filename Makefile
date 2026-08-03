@@ -10,7 +10,7 @@ EXAMPLE_SCHEME ?= QuranEngineApp
 EXAMPLE_SDK ?= iphonesimulator
 EXAMPLE_DESTINATION ?= generic/platform=iOS
 EXAMPLE_BUNDLE_IDENTIFIER ?= com.quran.QuranEngineApp
-EXAMPLE_NO_SYNC_SIMULATOR ?= iPhone 17,26.1
+EXAMPLE_NO_SYNC_SIMULATOR ?= iPhone 17,26.2
 EXAMPLE_SYNC_SIMULATOR ?= iPhone 17 Pro,26.1
 DERIVED_DATA_DIR ?= .build/DerivedData
 GIT_COMMON_DIR := $(shell git rev-parse --path-format=absolute --git-common-dir)
@@ -183,7 +183,7 @@ install-swiftlint:
 	brew install swiftlint
 
 build-for-analyzer:
-	xcrun xcodebuild clean build -scheme QuranEngine-Package -sdk "iphonesimulator" -destination "name=iPhone 14 Pro,OS=17.2" > .build/xcodebuild.log
+	xcrun xcodebuild clean build -scheme QuranEngine-Package -sdk "iphonesimulator" -destination "$(PACKAGE_DESTINATION)" > .build/xcodebuild.log
 
 swiftlint-analyzer:
 	swiftlint analyze --strict  --quiet --compiler-log-path .build/xcodebuild.log

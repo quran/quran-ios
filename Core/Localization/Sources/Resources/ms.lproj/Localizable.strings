@@ -150,6 +150,8 @@
 
 "notes.sync.title" = "Segerakkan nota anda";
 "notes.sync.body" = "Log masuk ke Quran.com untuk memastikan nota anda tersedia pada semua peranti.";
+"notes.sync.no-data.title" = "Belum ada nota";
+"notes.sync.no-data.text" = "Tekan dan tahan pada Ayah semasa membaca, kemudian tekan “Tambah nota” untuk menulis nota pertama anda.";
 
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "Menambah penekanan Ayah...";

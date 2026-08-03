@@ -116,6 +116,8 @@
 
 "notes.sync.title" = "Je notities synchroniseren";
 "notes.sync.body" = "Log in bij Quran.com om je notities op al je apparaten beschikbaar te houden.";
+"notes.sync.no-data.title" = "Nog geen notities";
+"notes.sync.no-data.text" = "Houd tijdens het lezen een ayah ingedrukt en tik daarna op ‘Voeg Notitie Toe’ om je eerste notitie te schrijven.";
 
 "notes.no-data.title" = "Ayah-hoogtepunten toevoegen...";
 "notes.no-data.text" = "Tik op een Ayah en houd deze vast. U kunt de selectie uitbreiden om meerdere Ayat op te nemen en tik vervolgens op de bladwijzerknop.";

@@ -167,6 +167,8 @@
 
 "notes.sync.title" = "Qaydlaringizni sinxronlash";
 "notes.sync.body" = "Qaydlaringiz barcha qurilmalarda mavjud bo‘lishi uchun Quran.com saytiga kiring.";
+"notes.sync.no-data.title" = "Hali eslatmalar yo‘q";
+"notes.sync.no-data.text" = "O‘qish paytida oyat ustiga bosib turing, so‘ng birinchi eslatmangizni yozish uchun “Eslatma qo‘shish”ni bosing.";
 
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "Oyat ta'kidlarini qo'shish...";

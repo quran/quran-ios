@@ -116,6 +116,21 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertFalse(sut.listener.didDismiss)
     }
 
+    func test_unchangedSyncedNote_dismissesWithoutSaving() async throws {
+        let note = try await createStoredNote(body: "Stored note")
+        let sut = makeSyncSUT(mode: .edit(note))
+        _ = try await sut.viewModel.fetchNote()
+
+        let didFinish = await sut.viewModel.commitEditsAndExit(dismissOnSave: true)
+        let notes = try await storedNotes()
+
+        XCTAssertTrue(didFinish)
+        XCTAssertFalse(sut.viewModel.shouldAutoSaveOnDismiss)
+        XCTAssertEqual(notes, [note])
+        XCTAssertTrue(sut.analytics.events.isEmpty)
+        XCTAssertTrue(sut.listener.didDismiss)
+    }
+
     func test_createDelete_dismissesWithoutRemovingSyncedNote() async throws {
         let sut = makeSyncSUT(mode: .create(verses: [ayah(1)]))
 
@@ -255,6 +270,18 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertTrue(sut.viewModel.shouldAutoSaveOnDismiss)
         XCTAssertEqual(sut.noteService.setNoteCalls.count, 1)
         XCTAssertFalse(sut.listener.didDismiss)
+    }
+
+    func test_unchangedLegacyNote_dismissesWithoutSaving() async throws {
+        let sut = makeLegacySUT(noteBody: "Stored note", color: .blue)
+        _ = try await sut.viewModel.fetchNote()
+
+        let didFinish = await sut.viewModel.commitEditsAndExit(dismissOnSave: true)
+
+        XCTAssertTrue(didFinish)
+        XCTAssertFalse(sut.viewModel.shouldAutoSaveOnDismiss)
+        XCTAssertTrue(sut.noteService.setNoteCalls.isEmpty)
+        XCTAssertTrue(sut.listener.didDismiss)
     }
 
     func test_delete_removesLegacyNoteVersesAndDismisses() async {

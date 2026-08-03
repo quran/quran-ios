@@ -92,7 +92,7 @@ final class NoteEditorViewModel {
     }
 
     var shouldAutoSaveOnDismiss: Bool {
-        canSubmitNote
+        canSubmitNote && hasChanges
     }
 
     func fetchNote() async throws -> EditableNote {
@@ -135,6 +135,13 @@ final class NoteEditorViewModel {
 
         guard !hasNoteText || canSubmitNote else {
             return false
+        }
+
+        guard hasChanges else {
+            if dismissOnSave {
+                listener?.dismissNoteEditor()
+            }
+            return dismissOnSave
         }
 
         do {
@@ -209,6 +216,14 @@ final class NoteEditorViewModel {
 
     private var trimmedNoteText: String {
         noteText.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var hasChanges: Bool {
+        #if QURAN_SYNC
+        return noteText != body
+        #else
+        return noteText != body || (editableNote?.selectedColor ?? note.color) != note.color
+        #endif
     }
 
     private var selectedColor: HighlightColor {

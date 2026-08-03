@@ -5,6 +5,7 @@
 //  Created by Ahmed Nabil on 2026-05-05.
 //
 
+import AnnotationsService
 import Combine
 import QuranAnnotations
 import QuranKit

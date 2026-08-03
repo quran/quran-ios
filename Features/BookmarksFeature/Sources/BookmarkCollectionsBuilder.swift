@@ -3,6 +3,7 @@
 //  BookmarkCollectionsBuilder.swift
 //
 
+import AnnotationsService
 import AppDependencies
 import FeaturesSupport
 import QuranKit

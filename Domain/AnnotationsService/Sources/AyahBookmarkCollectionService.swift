@@ -15,6 +15,11 @@ import Utilities
 import VLogging
 
 public struct AyahBookmarkCollection {
+    public init(collection: Collection_, bookmarks: [AyahCollectionBookmark]) {
+        self.collection = collection
+        self.bookmarks = bookmarks
+    }
+
     public let collection: Collection_
     public let bookmarks: [AyahCollectionBookmark]
 }
@@ -60,14 +65,14 @@ public enum AyahBookmarkCollectionKind: Equatable {
         }
     }
 
-    var highlightColor: HighlightColor? {
+    public var highlightColor: HighlightColor? {
         guard case .colored(let color) = self else {
             return nil
         }
         return color
     }
 
-    var isOldPageBookmarks: Bool {
+    public var isOldPageBookmarks: Bool {
         self == .oldPageBookmarks
     }
 

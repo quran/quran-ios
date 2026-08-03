@@ -3,6 +3,7 @@
 //  BookmarkAyahsBuilder.swift
 //
 
+import AnnotationsService
 import AppDependencies
 import NoorUI
 import QuranKit

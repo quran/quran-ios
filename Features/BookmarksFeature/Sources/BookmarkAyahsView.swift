@@ -3,6 +3,7 @@
 //  BookmarkAyahsView.swift
 //
 
+import AnnotationsService
 import Localization
 import NoorUI
 import SwiftUI

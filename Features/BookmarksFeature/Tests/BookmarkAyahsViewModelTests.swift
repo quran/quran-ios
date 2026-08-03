@@ -5,6 +5,7 @@ import NoorUI
 import QuranAnnotations
 import QuranKit
 import XCTest
+@testable import AnnotationsService
 @testable import BookmarksFeature
 
 @MainActor

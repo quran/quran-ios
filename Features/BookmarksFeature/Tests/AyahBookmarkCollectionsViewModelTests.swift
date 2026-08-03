@@ -6,6 +6,7 @@ import QuranKit
 import QuranResources
 import QuranTextKit
 import XCTest
+@testable import AnnotationsService
 @testable import BookmarksFeature
 
 @MainActor

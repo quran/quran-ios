@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import AnnotationsService
 import Localization
 import NoorUI
 import QuranAnnotations

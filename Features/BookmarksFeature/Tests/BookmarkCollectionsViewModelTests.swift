@@ -1,5 +1,4 @@
 #if QURAN_SYNC
-import AnnotationsService
 import AuthenticationClient
 import AuthenticationClientFake
 import Combine
@@ -13,6 +12,7 @@ import QuranTextKit
 import ReadingService
 import UIKit
 import XCTest
+@testable import AnnotationsService
 @testable import BookmarksFeature
 
 @MainActor

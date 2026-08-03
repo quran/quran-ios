@@ -7,6 +7,7 @@ import Utilities
 struct AyahSetContent {
     let title: String
     let ayahs: [AyahNumber]
+    let highlightColor: HighlightColor?
     let canRename: Bool
     let canDelete: Bool
 }
@@ -67,6 +68,7 @@ struct BookmarkCollectionAyahSetDataSource: ManageableAyahSetDataSource {
         AyahSetContent(
             title: collection.displayName,
             ayahs: collection.bookmarks.map(\.ayah),
+            highlightColor: nil,
             canRename: collection.kind.canRename,
             canDelete: collection.kind.canDelete
         )
@@ -110,6 +112,7 @@ struct HighlightAyahSetDataSource: AyahSetDataSource {
         AyahSetContent(
             title: color.localizedName,
             ayahs: ayahs.sorted(),
+            highlightColor: color,
             canRename: false,
             canDelete: false
         )

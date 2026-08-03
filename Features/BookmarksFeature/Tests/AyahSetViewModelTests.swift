@@ -221,6 +221,7 @@ final class AyahSetViewModelTests: XCTestCase {
 
         XCTAssertEqual(sut.content.title, HighlightColor.red.localizedName)
         XCTAssertEqual(sut.content.ayahs, [redAyah])
+        XCTAssertEqual(sut.content.highlightColor, .red)
         XCTAssertNil(sut.ayahTexts[greenAyah])
         XCTAssertNil(sut.error)
         task.cancel()

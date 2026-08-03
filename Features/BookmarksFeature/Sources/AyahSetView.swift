@@ -71,9 +71,21 @@ private struct AyahSetContentView: View {
     private var emptyState: some View {
         NoorListEmptyState(
             title: lAndroid("bookmarks_list_empty"),
-            text: l("bookmarks.collections.ayahs.no-data.text"),
+            text: emptyStateText,
             image: .bookmark,
-            style: .prominent(imageColor: Color.appIdentity)
+            style: .prominent(
+                imageColor: viewModel.content.highlightColor?.color ?? Color.appIdentity
+            )
+        )
+    }
+
+    private var emptyStateText: String {
+        guard let highlightColor = viewModel.content.highlightColor else {
+            return l("bookmarks.collections.ayahs.no-data.text")
+        }
+        return lFormat(
+            "bookmarks.collections.ayahs.no-data.colored.text",
+            highlightColor.localizedName.lowercased()
         )
     }
 

@@ -125,6 +125,8 @@
 
 "notes.sync.title" = "Notlarınızı eşitleyin";
 "notes.sync.body" = "Notlarınızı tüm cihazlarda kullanılabilir tutmak için Quran.com’da oturum açın.";
+"notes.sync.no-data.title" = "Henüz not yok";
+"notes.sync.no-data.text" = "Okurken bir ayete basılı tutun, ardından ilk notunuzu yazmak için “Not Ekle”ye dokunun.";
 
 "notes.no-data.title" = "Vurgulanan ayetler kaydediliyor...";
 "notes.no-data.text" = "Ayete dokunup basılı tutun. Birden fazla ayet seçmek için parmağınızı sürükleyebilirsiniz, sonrasında tekrar Ayraç butonuna basın.";

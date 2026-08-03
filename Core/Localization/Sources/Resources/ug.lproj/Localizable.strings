@@ -167,6 +167,8 @@
 
 "notes.sync.title" = "ئىزاھاتلىرىڭىزنى ماسقەدەملەش";
 "notes.sync.body" = "ئىزاھاتلىرىڭىزنى بارلىق ئۈسكۈنىلەردە ساقلاش ئۈچۈن Quran.com غا كىرىڭ.";
+"notes.sync.no-data.title" = "تېخى ئىزاھات يوق";
+"notes.sync.no-data.text" = "ئوقۇۋاتقاندا بىر ئايەتنى بېسىپ تۇرۇڭ، ئاندىن تۇنجى ئىزاھاتىڭىزنى يېزىش ئۈچۈن «قەيتىملىك قوشۇش» نى بېسىڭ.";
 
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "ئايەتلەرنىڭ ئەڭ ياخشىلىرىنى قوشۇش...";

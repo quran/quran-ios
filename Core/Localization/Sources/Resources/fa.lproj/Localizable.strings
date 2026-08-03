@@ -167,6 +167,8 @@
 
 "notes.sync.title" = "همگام‌سازی یادداشت‌هایتان";
 "notes.sync.body" = "برای دسترسی به یادداشت‌هایتان در همهٔ دستگاه‌ها، وارد Quran.com شوید.";
+"notes.sync.no-data.title" = "هنوز یادداشتی ندارید";
+"notes.sync.no-data.text" = "هنگام خواندن، یک آیه را لمس کنید و نگه دارید، سپس برای نوشتن اولین یادداشت خود روی «افزودن یادداشت» بزنید.";
 
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "در حال افزودن برجسته‌های آیه...";

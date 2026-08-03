@@ -167,6 +167,8 @@
 
 "notes.sync.title" = "Синхронизация заметок";
 "notes.sync.body" = "Войдите в Quran.com, чтобы ваши заметки были доступны на всех устройствах.";
+"notes.sync.no-data.title" = "Заметок пока нет";
+"notes.sync.no-data.text" = "Во время чтения нажмите и удерживайте аят, затем нажмите «Добавить заметку», чтобы написать первую заметку.";
 
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "Добавление выделений Аята...";

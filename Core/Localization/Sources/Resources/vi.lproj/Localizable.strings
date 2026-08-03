@@ -116,6 +116,8 @@
 
 "notes.sync.title" = "Đồng bộ ghi chú của bạn";
 "notes.sync.body" = "Đăng nhập vào Quran.com để giữ ghi chú của bạn khả dụng trên mọi thiết bị.";
+"notes.sync.no-data.title" = "Chưa có ghi chú";
+"notes.sync.no-data.text" = "Khi đọc, hãy chạm và giữ một ayah, sau đó chạm vào “Thêm Ghi chú” để viết ghi chú đầu tiên.";
 
 "notes.no-data.title" = "Thêm Tô sáng Ayah...";
 "notes.no-data.text" = "Chạm và giữ vào một Ayah. Bạn có thể mở rộng lựa chọn để bao gồm nhiều Ayat, sau đó chạm vào nút Đánh dấu.";

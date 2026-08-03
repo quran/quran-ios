@@ -167,6 +167,8 @@
 
 "notes.sync.title" = "Notizen synchronisieren";
 "notes.sync.body" = "Melde dich bei Quran.com an, damit deine Notizen auf allen Geräten verfügbar bleiben.";
+"notes.sync.no-data.title" = "Noch keine Notizen";
+"notes.sync.no-data.text" = "Halte beim Lesen eine Ayah gedrückt und tippe dann auf „Notiz hinzufügen“, um deine erste Notiz zu schreiben.";
 
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.title" = "Ayah-Highlights hinzufügen...";

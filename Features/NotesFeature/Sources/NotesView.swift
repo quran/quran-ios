@@ -74,8 +74,8 @@ private struct NotesViewUI: View {
     let deleteAction: AsyncItemAction<NoteItem>
 
     var body: some View {
-        if shouldShowSyncBanner, !isSearching {
-            VStack(spacing: 0) {
+        VStack(spacing: 0) {
+            if shouldShowSyncBanner, !isSearching {
                 SyncSignInCard(
                     title: l("notes.sync.title"),
                     subtitle: l("notes.sync.body"),
@@ -84,13 +84,12 @@ private struct NotesViewUI: View {
                     signInAction: signInAction
                 )
                 .padding()
-
-                content
             }
-            .background(Color.systemGroupedBackground)
-        } else {
+
             content
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.systemGroupedBackground)
     }
 
     private var content: some View {
@@ -113,6 +112,7 @@ private struct NotesViewUI: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .task { await start() }
         .errorAlert(error: $error)
         .environment(\.editMode, $editMode)
@@ -125,11 +125,28 @@ private struct NotesViewUI: View {
     }
 
     private var noData: some View {
-        DataUnavailableView(
-            title: l("notes.no-data.title"),
-            text: l("notes.no-data.text"),
-            image: .note
+        NoorListEmptyState(
+            title: noDataTitle,
+            text: noDataText,
+            image: .note,
+            style: .prominent(imageColor: .accentColor)
         )
+    }
+
+    private var noDataTitle: String {
+        #if QURAN_SYNC
+        l("notes.sync.no-data.title")
+        #else
+        l("notes.no-data.title")
+        #endif
+    }
+
+    private var noDataText: String {
+        #if QURAN_SYNC
+        l("notes.sync.no-data.text")
+        #else
+        l("notes.no-data.text")
+        #endif
     }
 
     private var noResults: some View {
@@ -275,3 +292,37 @@ struct NotesView_Previews: PreviewProvider {
     }
 }
 #endif
+
+private struct NotesEmptyPreview: View {
+    @State private var editMode: EditMode = .inactive
+    @State private var error: Error?
+
+    let showsSignInCard: Bool
+
+    var body: some View {
+        NavigationView {
+            NotesViewUI(
+                editMode: $editMode,
+                error: $error,
+                shouldShowSyncBanner: showsSignInCard,
+                dismissSyncBanner: {},
+                signInAction: {},
+                notes: [],
+                searchTerm: "",
+                start: {},
+                selectAction: { _ in },
+                editAction: { _ in },
+                deleteAction: { _ in }
+            )
+            .navigationTitle(l("tab.notes"))
+        }
+    }
+}
+
+#Preview("Empty — Sign In") {
+    NotesEmptyPreview(showsSignInCard: true)
+}
+
+#Preview("Empty — Dismissed") {
+    NotesEmptyPreview(showsSignInCard: false)
+}

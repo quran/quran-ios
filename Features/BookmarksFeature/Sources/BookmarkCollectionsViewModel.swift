@@ -23,7 +23,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
         ayahHighlightService: MobileSyncAyahHighlightService,
         readingBookmarkService: MobileSyncReadingBookmarkService,
-        collectionsBuilder: AyahBookmarkCollectionsBuilder,
+        ayahSetBuilder: AyahSetBuilder,
         navigationController: UINavigationController,
         navigateToPage: @escaping (Page) -> Void,
         navigateToAyah: @escaping (AyahNumber) -> Void
@@ -32,7 +32,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
         self.ayahHighlightService = ayahHighlightService
         self.readingBookmarkService = readingBookmarkService
-        self.collectionsBuilder = collectionsBuilder
+        self.ayahSetBuilder = ayahSetBuilder
         self.navigationController = navigationController
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
@@ -168,12 +168,22 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     func showCollection(_ collection: AyahBookmarkCollection) {
         navigationController?.pushViewController(
-            collectionsBuilder.buildCollection(
+            ayahSetBuilder.buildCollection(
                 collection,
                 collectionDeleted: { [weak navigationController] in
                     navigationController?.popViewController(animated: true)
                 }
             ),
+            animated: true
+        )
+    }
+
+    func showHighlights(_ color: HighlightColor) {
+        let ayahs = highlights.compactMap { ayah, highlightColor in
+            highlightColor == color ? ayah : nil
+        }
+        navigationController?.pushViewController(
+            ayahSetBuilder.buildHighlights(color: color, ayahs: ayahs),
             animated: true
         )
     }
@@ -193,7 +203,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let ayahHighlightService: MobileSyncAyahHighlightService
     private let readingBookmarkService: MobileSyncReadingBookmarkService
-    private let collectionsBuilder: AyahBookmarkCollectionsBuilder
+    private let ayahSetBuilder: AyahSetBuilder
     private let navigateToPage: (Page) -> Void
     private let navigateToAyah: (AyahNumber) -> Void
     private let preferences = AuthenticationPreferences.shared

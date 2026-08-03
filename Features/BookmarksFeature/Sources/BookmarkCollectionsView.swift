@@ -59,7 +59,8 @@ private struct BookmarkCollectionsContent: View {
                         title: color.localizedName,
                         image: .bookmark,
                         imageColor: color.color,
-                        count: viewModel.highlights.values.count { $0 == color }
+                        count: viewModel.highlights.values.count { $0 == color },
+                        action: { viewModel.showHighlights(color) }
                     )
                 }
             }
@@ -78,7 +79,8 @@ private struct BookmarkCollectionsContent: View {
                         title: collection.displayName,
                         image: collection.displayImage,
                         imageColor: collection.displayImageColor,
-                        collection: collection
+                        count: collection.bookmarks.count,
+                        action: { viewModel.showCollection(collection) }
                     )
                     .deleteDisabled(!collection.kind.canDelete)
                 }
@@ -114,26 +116,19 @@ private struct BookmarkCollectionsContent: View {
         title: String,
         image: NoorSystemImage,
         imageColor: Color,
-        collection: AyahBookmarkCollection? = nil,
-        count: Int? = nil
+        count: Int,
+        action: @escaping AsyncAction
     ) -> some View {
         NoorListItem(
             image: .init(image, color: imageColor),
             title: .text(title),
             subtitle: .init(
-                text: .text(NumberFormatter.shared.format(count ?? collection?.bookmarks.count ?? 0)),
+                text: .text(NumberFormatter.shared.format(count)),
                 location: .trailing
             ),
-            accessory: collection == nil ? nil : .disclosureIndicator,
-            action: collectionAction(for: collection)
+            accessory: .disclosureIndicator,
+            action: action
         )
-    }
-
-    private func collectionAction(for collection: AyahBookmarkCollection?) -> AsyncAction? {
-        guard let collection else {
-            return nil
-        }
-        return { viewModel.showCollection(collection) }
     }
 }
 

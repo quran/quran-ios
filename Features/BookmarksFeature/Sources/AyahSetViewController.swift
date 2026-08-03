@@ -1,25 +1,15 @@
 #if QURAN_SYNC
-//
-//  AyahBookmarkCollectionsViewController.swift
-//
-//  Created by Ahmed Nabil on 2026-05-05.
-//
-
-import AnnotationsService
 import Combine
 import Localization
 import NoorUI
-import QuranAnnotations
 import SwiftUI
 import UIKit
 
-final class AyahBookmarkCollectionsViewController: UIHostingController<AyahBookmarkCollectionsView> {
-    // MARK: Lifecycle
-
-    init(viewModel: AyahBookmarkCollectionsViewModel) {
-        super.init(rootView: AyahBookmarkCollectionsView(viewModel: viewModel))
+final class AyahSetViewController: UIHostingController<AyahSetView> {
+    init(viewModel: AyahSetViewModel) {
+        super.init(rootView: AyahSetView(viewModel: viewModel))
         navigationItem.largeTitleDisplayMode = .always
-        menuController = AyahBookmarkCollectionMenuController(
+        menuController = AyahSetMenuController(
             viewController: self,
             viewModel: viewModel
         )
@@ -41,33 +31,33 @@ final class AyahBookmarkCollectionsViewController: UIHostingController<AyahBookm
         fatalError("init(coder:) has not been implemented")
     }
 
-    private var menuController: AyahBookmarkCollectionMenuController?
+    private var menuController: AyahSetMenuController?
 }
 
 @MainActor
-private final class AyahBookmarkCollectionMenuController {
-    init(viewController: UIViewController, viewModel: AyahBookmarkCollectionsViewModel) {
+private final class AyahSetMenuController {
+    init(viewController: UIViewController, viewModel: AyahSetViewModel) {
         self.viewController = viewController
         self.viewModel = viewModel
 
-        updateNavigationItem(editMode: viewModel.editMode, collection: viewModel.collection)
-        Publishers.CombineLatest(viewModel.$editMode, viewModel.$collection)
-            .sink { [weak self] editMode, collection in
-                self?.updateNavigationItem(editMode: editMode, collection: collection)
+        updateNavigationItem(editMode: viewModel.editMode, content: viewModel.content)
+        Publishers.CombineLatest(viewModel.$editMode, viewModel.$content)
+            .sink { [weak self] editMode, content in
+                self?.updateNavigationItem(editMode: editMode, content: content)
             }
             .store(in: &cancellables)
     }
 
     private weak var viewController: UIViewController?
-    private let viewModel: AyahBookmarkCollectionsViewModel
+    private let viewModel: AyahSetViewModel
     private var cancellables: Set<AnyCancellable> = []
 
-    private func updateNavigationItem(editMode: EditMode, collection: AyahBookmarkCollection) {
+    private func updateNavigationItem(editMode: EditMode, content: AyahSetContent) {
         guard let viewController else {
             return
         }
 
-        updateTitle(for: collection, in: viewController)
+        updateTitle(for: content, in: viewController)
         if editMode.isEditing {
             viewController.navigationItem.rightBarButtonItems = [
                 NavigationBarButton.done { [weak self] in
@@ -78,7 +68,7 @@ private final class AyahBookmarkCollectionMenuController {
             let editButton = NavigationBarButton.edit { [weak self] in
                 self?.viewModel.editMode = .active
             }
-            let actions = secondaryActions(for: collection)
+            let actions = secondaryActions(for: content)
             if actions.isEmpty {
                 viewController.navigationItem.rightBarButtonItems = [editButton]
             } else {
@@ -88,38 +78,33 @@ private final class AyahBookmarkCollectionMenuController {
         }
     }
 
-    private func updateTitle(for collection: AyahBookmarkCollection, in viewController: UIViewController) {
-        let title = collection.displayName
-        let subtitle = bookmarkCountText(collection.bookmarks.count)
+    private func updateTitle(for content: AyahSetContent, in viewController: UIViewController) {
+        let subtitle = lFormat("bookmarks.collections.ayahs.count", content.ayahs.count)
 
         if #available(iOS 26.0, *) {
-            viewController.title = title
+            viewController.title = content.title
             viewController.navigationItem.subtitle = subtitle
-            viewController.navigationItem.largeTitle = title
+            viewController.navigationItem.largeTitle = content.title
             viewController.navigationItem.largeSubtitle = subtitle
         } else {
-            viewController.title = "\(title) (\(subtitle))"
+            viewController.title = "\(content.title) (\(subtitle))"
         }
     }
 
-    private func bookmarkCountText(_ count: Int) -> String {
-        lFormat("bookmarks.collections.ayahs.count", count)
-    }
-
-    private func secondaryActions(for collection: AyahBookmarkCollection) -> [UIAction] {
+    private func secondaryActions(for content: AyahSetContent) -> [UIAction] {
         var actions: [UIAction] = []
-        if collection.kind.canRename {
+        if content.canRename {
             actions.append(
                 UIAction(
                     title: l("bookmarks.collections.rename"),
                     image: UIImage(systemName: "pencil.line")
                 ) { [weak self] _ in
-                    self?.viewModel.presentRenameCollection()
+                    self?.viewModel.presentRename()
                 }
             )
         }
 
-        if collection.kind.canDelete {
+        if content.canDelete {
             actions.append(
                 UIAction(
                     title: l("button.delete"),
@@ -129,7 +114,7 @@ private final class AyahBookmarkCollectionMenuController {
                     guard let self else {
                         return
                     }
-                    Task { await self.viewModel.requestDeleteCollection() }
+                    Task { await self.viewModel.requestDelete() }
                 }
             )
         }

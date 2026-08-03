@@ -18,8 +18,10 @@ struct BookmarkCollectionsBuilder {
         navigationController: UINavigationController
     ) -> UIViewController {
         let collectionService = container.ayahBookmarkCollectionService()
-        let collectionsBuilder = AyahBookmarkCollectionsBuilder(
+        let highlightService = container.ayahHighlightService()
+        let ayahSetBuilder = AyahSetBuilder(
             ayahBookmarkCollectionService: collectionService,
+            ayahHighlightService: highlightService,
             quranTextDataService: container.textDataService(),
             navigateToAyah: { [weak listener] ayah in
                 listener?.navigateTo(ayah: ayah, lastPage: nil)
@@ -28,9 +30,9 @@ struct BookmarkCollectionsBuilder {
         let viewModel = BookmarkCollectionsViewModel(
             authenticationClient: container.authenticationClient,
             ayahBookmarkCollectionService: collectionService,
-            ayahHighlightService: container.ayahHighlightService(),
+            ayahHighlightService: highlightService,
             readingBookmarkService: container.readingBookmarkService(),
-            collectionsBuilder: collectionsBuilder,
+            ayahSetBuilder: ayahSetBuilder,
             navigationController: navigationController,
             navigateToPage: { [weak listener] page in
                 listener?.navigateTo(page: page, lastPage: nil)

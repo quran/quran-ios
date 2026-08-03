@@ -118,7 +118,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     func test_collectionDetailsController_usesNativeTitleAndSubtitle() {
         let collection = collection(name: "Red")
         let viewModel = makeCollectionDetailsViewModel(collection: collection)
-        let viewController = AyahBookmarkCollectionsViewController(viewModel: viewModel)
+        let viewController = AyahSetViewController(viewModel: viewModel)
         let title = collection.displayName
         let subtitle = lFormat("bookmarks.collections.ayahs.count", 0)
 
@@ -153,7 +153,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     func test_collectionDetailsMenu_showsAllActionsForUserCollection() {
         let collection = collection(name: "Favorites")
         let viewModel = makeCollectionDetailsViewModel(collection: collection)
-        let viewController = AyahBookmarkCollectionsViewController(viewModel: viewModel)
+        let viewController = AyahSetViewController(viewModel: viewModel)
 
         let buttons = viewController.navigationItem.rightBarButtonItems
         let systemEditTitle = UIBarButtonItem(barButtonSystemItem: .edit, target: nil, action: nil).title
@@ -169,7 +169,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     func test_collectionDetailsController_showsDoneButtonInEditMode() {
         let collection = collection(name: "Favorites")
         let viewModel = makeCollectionDetailsViewModel(collection: collection)
-        let viewController = AyahBookmarkCollectionsViewController(viewModel: viewModel)
+        let viewController = AyahSetViewController(viewModel: viewModel)
 
         viewModel.editMode = .active
 
@@ -439,8 +439,20 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
         sut.showCollection(collection)
 
-        XCTAssertTrue(navigationController.topViewController is AyahBookmarkCollectionsViewController)
+        XCTAssertTrue(navigationController.topViewController is AyahSetViewController)
         XCTAssertEqual(navigationController.topViewController?.title, collection.collection.name)
+    }
+
+    func test_showHighlights_pushesAyahSetViewController() throws {
+        let navigationController = UINavigationController()
+        let sut = makeSUT(navigationController: navigationController)
+        let ayah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
+        sut.highlights = [ayah: .purple]
+
+        sut.showHighlights(.purple)
+
+        XCTAssertTrue(navigationController.topViewController is AyahSetViewController)
+        XCTAssertEqual(navigationController.topViewController?.title, HighlightColor.purple.localizedName)
     }
 
     private func makeSUT(
@@ -454,8 +466,9 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let collectionService = collectionService ?? makeService()
         let readingBookmarkService = readingBookmarkService ?? makeReadingBookmarkService()
         let navigationController = navigationController ?? UINavigationController()
-        let collectionsBuilder = AyahBookmarkCollectionsBuilder(
+        let ayahSetBuilder = AyahSetBuilder(
             ayahBookmarkCollectionService: collectionService,
+            ayahHighlightService: makeHighlightService(),
             quranTextDataService: makeQuranTextDataService(),
             navigateToAyah: { _ in }
         )
@@ -464,7 +477,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             ayahBookmarkCollectionService: collectionService,
             ayahHighlightService: makeHighlightService(),
             readingBookmarkService: readingBookmarkService,
-            collectionsBuilder: collectionsBuilder,
+            ayahSetBuilder: ayahSetBuilder,
             navigationController: navigationController,
             navigateToPage: navigateToPage,
             navigateToAyah: navigateToAyah
@@ -485,13 +498,16 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
     private func makeCollectionDetailsViewModel(
         collection: AyahBookmarkCollection
-    ) -> AyahBookmarkCollectionsViewModel {
-        AyahBookmarkCollectionsViewModel(
-            ayahBookmarkCollectionService: makeService(),
-            collection: collection,
+    ) -> AyahSetViewModel {
+        let service = makeService()
+        return AyahSetViewModel(
+            dataSource: BookmarkCollectionAyahSetDataSource(
+                collection: collection,
+                service: service
+            ),
             quranTextDataService: makeQuranTextDataService(),
             navigateToAyah: { _ in },
-            collectionDeleted: {}
+            dataSourceDeleted: {}
         )
     }
 

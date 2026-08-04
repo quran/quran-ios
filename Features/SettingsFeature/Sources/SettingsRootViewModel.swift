@@ -138,20 +138,17 @@ final class SettingsRootViewModel: ObservableObject {
 
     func navigateToAudioManager() {
         logger.info("Settings: presentAudioDownloads")
-        let viewController = audioDownloadsBuilder.build()
-        navigationController?.pushViewController(viewController, animated: true)
+        pushViewController { _ in audioDownloadsBuilder.build() }
     }
 
     func navigateToTranslationsList() {
         logger.info("Settings: presentTranslationsList")
-        let viewController = translationsListBuilder.build()
-        navigationController?.pushViewController(viewController, animated: true)
+        pushViewController { _ in translationsListBuilder.build() }
     }
 
     func navigateToReadingSelectors() {
         logger.info("Settings: navigateToReadingSelectors")
-        let viewController = readingSelectorBuilder.build()
-        navigationController?.pushViewController(viewController, animated: true)
+        pushViewController { _ in readingSelectorBuilder.build() }
     }
 
     func shareApp() {
@@ -194,8 +191,9 @@ final class SettingsRootViewModel: ObservableObject {
 
     func navigateToDiagnotics() {
         logger.info("Settings: navigateToDiagnotics")
-        let viewController = diagnosticsBuilder.build(navigationController: navigationController)
-        navigationController?.pushViewController(viewController, animated: true)
+        pushViewController { navigationController in
+            diagnosticsBuilder.build(navigationController: navigationController)
+        }
     }
 
     #if QURAN_SYNC
@@ -247,6 +245,7 @@ final class SettingsRootViewModel: ObservableObject {
     private let quranProfileURL: URL
     private var authenticationClient: any AuthenticationClient
     #endif
+    private var isNavigationInProgress = false
 
     private func showSingleChoiceSelector<T: Hashable>(
         title: String,
@@ -255,16 +254,43 @@ final class SettingsRootViewModel: ObservableObject {
         itemText: @escaping (T) -> String,
         onSelection: @escaping (T) -> Void
     ) {
-        let viewController = singleChoiceSelector(
-            sections: sections,
-            selected: selected,
-            itemText: itemText,
-            onSelection: { [weak self] item in
-                onSelection(item)
-                self?.navigationController?.popViewController(animated: true)
+        pushViewController { [weak self] _ in
+            let viewController = singleChoiceSelector(
+                sections: sections,
+                selected: selected,
+                itemText: itemText,
+                onSelection: { [weak self] item in
+                    onSelection(item)
+                    self?.navigationController?.popViewController(animated: true)
+                }
+            )
+            viewController.title = title
+            return viewController
+        }
+    }
+
+    private func pushViewController(_ makeViewController: (UINavigationController) -> UIViewController) {
+        guard let navigationController,
+              !isNavigationInProgress,
+              navigationController.transitionCoordinator == nil,
+              navigationController.presentedViewController == nil
+        else {
+            logger.info("Settings: ignore navigation while a transition is in progress")
+            return
+        }
+
+        isNavigationInProgress = true
+        navigationController.pushViewController(makeViewController(navigationController), animated: true)
+
+        if let transitionCoordinator = navigationController.transitionCoordinator {
+            transitionCoordinator.animate(alongsideTransition: nil) { [weak self] _ in
+                self?.isNavigationInProgress = false
             }
-        )
-        viewController.title = title
-        navigationController?.pushViewController(viewController, animated: true)
+        } else {
+            Task { @MainActor [weak self] in
+                await Task.yield()
+                self?.isNavigationInProgress = false
+            }
+        }
     }
 }

@@ -72,8 +72,6 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
     let forEach: ForEach<[Element], Element.ID, Content>
     @Binding var selection: Element
 
-    @State var userDraggingStartedTransitionInProgress = false
-
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
@@ -93,13 +91,6 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
 
         pageViewController.view.backgroundColor = .clear
 
-        for view in pageViewController.view.subviews {
-            if let scrollView = view as? UIScrollView {
-                scrollView.delegate = context.coordinator
-                break
-            }
-        }
-
         // Trigger an update.
         updateUIViewController(pageViewController, context: context)
 
@@ -107,37 +98,24 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
     }
 
     func updateUIViewController(_ pageViewController: UIPageViewController, context: Context) {
+        let visibleElement = (pageViewController.viewControllers?.first as? PageContentController)?.element
+        context.coordinator.parent = self
+
         // Early return if showing selection's view controller.
-        if let visibleController = pageViewController.viewControllers?.first as? PageContentController {
-            if visibleController.element == selection {
-                return
-            }
-        }
-
-        if userDraggingStartedTransitionInProgress {
-            logger.info("Cannot change page while user dragging in progress")
-
-            // when user dragging initiated transition is still in progress,
-            // prevent the app from starting simultaneous transitions to avoid assertion failure and crash
-            // reference: https://github.com/hons82/THSegmentedPager/blob/master/THSegmentedPager/THSegmentedPager.m#L233
-
-            // failure type 1: Assertion failure in
-            // -[UIPageViewController queuingScrollView:didEndManualScroll:toRevealView:direction:animated:didFinish:didComplete:],
-            // /SourceCache/UIKit_Sim/UIKit-2935.137/UIPageViewController.m:1866
-            // Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'No view controller managing visible view
-
-            // failure type 2: Assertion failure in -[_UIQueuingScrollView _enqueueCompletionState:],
-            // /SourceCache/UIKit_Sim/UIKit-2935.137/_UIQueuingScrollView.m:499
-            // Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'Duplicate states in queue'
+        if visibleElement == selection {
             return
         }
 
-        let previousSelection = context.coordinator.parent.selection
-        context.coordinator.parent = self
+        if !context.coordinator.transitionState.shouldApply(selection) {
+            logger.info("Cannot change page while user dragging in progress")
+            return
+        }
 
         let viewController = makeController(selection)
 
-        let previousIndex = forEach.data.firstIndex { $0 == previousSelection }
+        let previousIndex = visibleElement.flatMap { visibleElement in
+            forEach.data.firstIndex { $0 == visibleElement }
+        }
         let currentIndex = forEach.data.firstIndex { $0 == selection }
         let direction: UIPageViewController.NavigationDirection = if let previousIndex, let currentIndex {
             currentIndex < previousIndex ? .forward : .reverse
@@ -157,7 +135,7 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
 // MARK: - Coordinator
 
 extension _PageViewController {
-    class Coordinator: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
+    class Coordinator: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
         // MARK: Lifecycle
 
         init(_ pageViewController: _PageViewController) {
@@ -167,6 +145,7 @@ extension _PageViewController {
         // MARK: Internal
 
         var parent: _PageViewController
+        var transitionState = PageTransitionState<Element>()
 
         func pageViewController(
             _ pageViewController: UIPageViewController,
@@ -211,30 +190,66 @@ extension _PageViewController {
 
         func pageViewController(
             _ pageViewController: UIPageViewController,
+            willTransitionTo pendingViewControllers: [UIViewController]
+        ) {
+            transitionState.userTransitionWillBegin()
+        }
+
+        func pageViewController(
+            _ pageViewController: UIPageViewController,
             didFinishAnimating finished: Bool,
             previousViewControllers: [UIViewController],
             transitionCompleted completed: Bool
         ) {
-            if completed,
-               let visibleViewController = pageViewController.viewControllers?.first,
-               let contentController = visibleViewController as? PageContentController
-            {
-                parent.selection = contentController.element
+            let visibleElement = (pageViewController.viewControllers?.first as? PageContentController)?.element
+            let pendingSelection = transitionState.userTransitionDidFinish(visibleElement: visibleElement)
+
+            if let visibleElement {
+                parent.selection = visibleElement
             }
-        }
 
-        // MARK: - UIScrollViewDelegate
-
-        func scrollViewDidScroll(_ scrollView: UIScrollView) {
-            if scrollView.isTracking || scrollView.isDecelerating {
-                parent.userDraggingStartedTransitionInProgress = true
+            if let pendingSelection {
+                Task { @MainActor [weak self] in
+                    await Task.yield()
+                    self?.parent.selection = pendingSelection
+                }
             }
-        }
-
-        func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-            parent.userDraggingStartedTransitionInProgress = false
         }
     }
+}
+
+struct PageTransitionState<Element: Equatable> {
+    // MARK: Internal
+
+    private(set) var isUserTransitionInProgress = false
+
+    mutating func userTransitionWillBegin() {
+        isUserTransitionInProgress = true
+        pendingSelection = nil
+    }
+
+    mutating func shouldApply(_ selection: Element) -> Bool {
+        guard isUserTransitionInProgress else {
+            return true
+        }
+
+        pendingSelection = selection
+        return false
+    }
+
+    mutating func userTransitionDidFinish(visibleElement: Element?) -> Element? {
+        isUserTransitionInProgress = false
+        defer { pendingSelection = nil }
+
+        guard pendingSelection != visibleElement else {
+            return nil
+        }
+        return pendingSelection
+    }
+
+    // MARK: Private
+
+    private var pendingSelection: Element?
 }
 
 extension _PageViewController {

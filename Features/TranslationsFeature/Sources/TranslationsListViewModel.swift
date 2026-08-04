@@ -149,9 +149,9 @@ final class TranslationsListViewModel: ObservableObject {
 
             do {
                 let updatedTranslation = try await deleter.deleteTranslation(item.info)
-                replaceTranslation(updatedTranslation, at: index)
+                restoreTranslation(updatedTranslation, at: index)
             } catch {
-                replaceTranslation(translation, at: index)
+                restoreTranslation(translation, at: index)
                 crasher.recordError(error, reason: "Failed to delete translation \(item.id)")
                 self.error = error
             }
@@ -175,7 +175,7 @@ final class TranslationsListViewModel: ObservableObject {
     @Published private var selectedTranslationIds: [Translation.ID] = []
     @Published private var progress: [Translation: Double] = [:]
 
-    private func replaceTranslation(_ translation: Translation, at index: Int) {
+    private func restoreTranslation(_ translation: Translation, at index: Int) {
         translations.removeAll { $0.id == translation.id }
         translations.insert(translation, at: min(index, translations.endIndex))
     }

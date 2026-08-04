@@ -28,7 +28,7 @@ struct BookmarksView: View {
             bookmarks: viewModel.bookmarks,
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
-            deleteAction: { await viewModel.deleteItem($0) }
+            deleteAction: { viewModel.deleteItem($0) }
         )
     }
 }
@@ -43,7 +43,7 @@ private struct BookmarksViewUI: View {
     let bookmarks: [PageBookmark]
     let start: AsyncAction
     let selectAction: ItemAction<PageBookmark>
-    let deleteAction: AsyncItemAction<PageBookmark>
+    let deleteAction: ItemAction<PageBookmark>
 
     var body: some View {
         Group {
@@ -54,7 +54,7 @@ private struct BookmarksViewUI: View {
                     NoorSection(bookmarks) { bookmark in
                         listItem(bookmark)
                     }
-                    .onDelete(action: deleteAction)
+                    .onDeleteImmediately(action: deleteAction)
                 }
             }
         }

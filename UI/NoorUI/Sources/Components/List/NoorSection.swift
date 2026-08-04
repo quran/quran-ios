@@ -124,6 +124,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
         self.items = items
         self.listItem = listItem
         self.onDelete = onDelete
+        onDeleteImmediately = nil
         self.onMove = onMove
     }
 
@@ -144,6 +145,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     let items: [Item]
     let listItem: (Item) -> ListItem
     var onDelete: AsyncItemAction<Item>?
+    var onDeleteImmediately: ItemAction<Item>?
     var onMove: ((IndexSet, Int) -> Void)?
 
     // MARK: Private
@@ -153,8 +155,21 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
         ForEach(items) { item in
             listItem(item)
         }
-        .onDelete(perform: onDelete.map { onDelete in
-            { indexSet in
+        .onDelete(perform: deleteAction)
+        .onMove(perform: onMove)
+    }
+
+    private var deleteAction: ((IndexSet) -> Void)? {
+        if let onDeleteImmediately {
+            return { indexSet in
+                for itemToDelete in indexSet.map({ items[$0] }) {
+                    onDeleteImmediately(itemToDelete)
+                }
+            }
+        }
+
+        if let onDelete {
+            return { indexSet in
                 Task {
                     let itemsToDelete = indexSet.map { items[$0] }
                     for itemToDelete in itemsToDelete {
@@ -162,8 +177,9 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
                     }
                 }
             }
-        })
-        .onMove(perform: onMove)
+        }
+
+        return nil
     }
 }
 
@@ -171,6 +187,12 @@ extension NoorSection {
     public func onDelete(action: AsyncItemAction<Item>?) -> Self {
         var mutableSelf = self
         mutableSelf.onDelete = action
+        return mutableSelf
+    }
+
+    public func onDeleteImmediately(action: ItemAction<Item>?) -> Self {
+        var mutableSelf = self
+        mutableSelf.onDeleteImmediately = action
         return mutableSelf
     }
 

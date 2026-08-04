@@ -25,13 +25,18 @@ public struct PageBookmarkService {
         let mapper = QuranPageMapper(destination: quran)
         return persistence.pageBookmarks()
             .map { bookmarks in
-                bookmarks.compactMap { bookmark in
+                let mappedBookmarks = bookmarks.compactMap { bookmark in
                     Page(quran: storedPageQuran, pageNumber: bookmark.page)
                         .flatMap(mapper.mapPage)
                         .map {
                             PageBookmark(page: $0, creationDate: bookmark.creationDate)
                         }
                 }
+
+                return Dictionary(grouping: mappedBookmarks, by: \PageBookmark.page)
+                    .values
+                    .compactMap { $0.max(by: { $0.creationDate < $1.creationDate }) }
+                    .sorted { $0.creationDate > $1.creationDate }
             }
             .eraseToAnyPublisher()
     }

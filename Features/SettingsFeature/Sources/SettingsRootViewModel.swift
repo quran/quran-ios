@@ -210,8 +210,10 @@ final class SettingsRootViewModel: ObservableObject {
 
         do {
             try await authenticationClient.login(on: viewController)
-            isAuthenticated = true
-            loggedInUser = await authenticationClient.loggedInUser
+            isAuthenticated = await authenticationClient.authenticationState == .authenticated
+            loggedInUser = isAuthenticated ? await authenticationClient.loggedInUser : nil
+        } catch AuthenticationClientError.cancelled {
+            return
         } catch {
             logger.error("Failed to login to Quran.com: \(error)")
             self.error = error

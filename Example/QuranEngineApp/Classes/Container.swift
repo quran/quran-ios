@@ -47,8 +47,7 @@ class Container: AppDependencies {
 
     private(set) lazy var authenticationClient: any AuthenticationClient = {
         let authService = syncAppGraph.authService
-        let quranDataService = syncAppGraph.quranDataService
-        return AuthenticationClientMobileSyncImpl(authService: authService, quranDataService: quranDataService)
+        return AuthenticationClientMobileSyncImpl(authService: authService)
     }()
     #endif
 

@@ -48,7 +48,7 @@ final class SettingsRootViewModelTests: XCTestCase {
 
     func test_refreshAuthenticationState_fallsBackToCurrentState_whenRestoreFails() async {
         let client = AuthenticationClientFake()
-        client.restoreStateResult = .failure(.clientIsNotAuthenticated(NSError(domain: "test", code: 1)))
+        client.restoreStateResult = .failure(.notAuthenticated(underlying: NSError(domain: "test", code: 1)))
         client.authenticationStateValue = .authenticated
         client.loggedInUserValue = makeUser(email: "user@example.com")
         let sut = makeSUT(authenticationClient: client)
@@ -62,6 +62,7 @@ final class SettingsRootViewModelTests: XCTestCase {
 
     func test_login_updatesAuthenticationStateAndEmail() async {
         let client = AuthenticationClientFake()
+        client.authenticationStateValue = .authenticated
         client.loggedInUserValue = makeUser(email: "user@example.com")
         let navigationController = UINavigationController()
         let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
@@ -70,7 +71,34 @@ final class SettingsRootViewModelTests: XCTestCase {
 
         XCTAssertTrue(sut.isAuthenticated)
         XCTAssertEqual(sut.currentUserEmail, "user@example.com")
-        XCTAssertEqual(client.events, [.login, .readLoggedInUser])
+        XCTAssertEqual(client.events, [.login, .readAuthenticationState, .readLoggedInUser])
+        XCTAssertNil(sut.error)
+    }
+
+    func test_login_doesNotSetErrorWhenLoginCompletesWithoutAuthentication() async {
+        let client = AuthenticationClientFake()
+        let navigationController = UINavigationController()
+        let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
+
+        await sut.loginToQuranCom()
+
+        XCTAssertFalse(sut.isAuthenticated)
+        XCTAssertNil(sut.currentUserEmail)
+        XCTAssertEqual(client.events, [.login, .readAuthenticationState])
+        XCTAssertNil(sut.error)
+    }
+
+    func test_login_doesNotSetErrorWhenUserCancels() async {
+        let client = AuthenticationClientFake()
+        client.loginResult = .failure(.cancelled)
+        let navigationController = UINavigationController()
+        let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
+
+        await sut.loginToQuranCom()
+
+        XCTAssertFalse(sut.isAuthenticated)
+        XCTAssertNil(sut.currentUserEmail)
+        XCTAssertEqual(client.events, [.login])
         XCTAssertNil(sut.error)
     }
 
@@ -128,8 +156,8 @@ final class SettingsRootViewModelTests: XCTestCase {
     }
 
     private func assertClientIsNotAuthenticated(_ error: Error?, file: StaticString = #filePath, line: UInt = #line) {
-        guard case .clientIsNotAuthenticated = error as? AuthenticationClientError else {
-            return XCTFail("Expected clientIsNotAuthenticated, got \(String(describing: error))", file: file, line: line)
+        guard case .notAuthenticated = error as? AuthenticationClientError else {
+            return XCTFail("Expected notAuthenticated, got \(String(describing: error))", file: file, line: line)
         }
     }
 }

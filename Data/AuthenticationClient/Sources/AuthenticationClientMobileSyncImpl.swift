@@ -8,9 +8,8 @@ import VLogging
 public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
     // MARK: Lifecycle
 
-    public init(authService: SyncAuthService, quranDataService: QuranDataService) {
+    public init(authService: SyncAuthService) {
         self.authService = authService
-        self.quranDataService = quranDataService
     }
 
     // MARK: Public
@@ -28,7 +27,7 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
             try await authService.signInWithReauthentication()
         } catch {
             logger.error("Failed to login via mobile sync: \(error)")
-            throw AuthenticationClientError.errorAuthenticating(error)
+            throw AuthenticationClientError(error)
         }
     }
 
@@ -38,16 +37,16 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
             return authenticationState
         } catch {
             logger.error("Failed to restore mobile sync auth state: \(error)")
-            throw AuthenticationClientError.clientIsNotAuthenticated(error)
+            throw AuthenticationClientError(error)
         }
     }
 
     public func logout() async throws(AuthenticationClientError) {
         do {
-            try await quranDataService.logout(clearLocalData: true)
+            try await authService.signOut()
         } catch {
             logger.error("Failed to logout via mobile sync: \(error)")
-            throw AuthenticationClientError.errorAuthenticating(error)
+            throw AuthenticationClientError(error)
         }
     }
 
@@ -62,16 +61,36 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
 
     public func getAuthenticationHeaders() async throws(AuthenticationClientError) -> [String: String] {
         do {
-            return try await authService.authenticationHeaders()
+            let headers = try await authService.authenticationHeaders()
+            guard !headers.isEmpty else {
+                throw AuthenticationClientError.notAuthenticated(underlying: nil)
+            }
+            return headers
+        } catch let error as AuthenticationClientError {
+            throw error
+        } catch let error as MobileSyncAuthenticationError {
+            throw AuthenticationClientError(error)
         } catch {
-            throw AuthenticationClientError.clientIsNotAuthenticated(error)
+            throw .authenticationFailed(underlying: error)
         }
     }
 
     // MARK: Private
 
     private let authService: SyncAuthService
-    private let quranDataService: QuranDataService
+}
+
+private extension AuthenticationClientError {
+    init(_ error: MobileSyncAuthenticationError) {
+        switch error {
+        case .cancelled:
+            self = .cancelled
+        case let .networkFailure(underlyingError):
+            self = .networkFailure(underlying: underlyingError)
+        case let .authenticationFailed(underlyingError):
+            self = .authenticationFailed(underlying: underlyingError)
+        }
+    }
 }
 
 #endif

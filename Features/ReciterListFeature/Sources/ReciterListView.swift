@@ -128,7 +128,7 @@ private struct ReciterListViewUI: View {
             image: recent ? .init(NoorSystemImage.lastPage) : nil,
             title: .text(reciter.localizedName),
             accessory: reciter == selectedReciter ? .image(.checkmark, color: .appIdentity) : nil,
-            action: {
+            action: .sync {
                 logger.info("Reciters: reciter selected \(reciter.id)")
                 selectAction(reciter)
                 dismiss()

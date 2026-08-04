@@ -302,7 +302,7 @@ private struct ReciterRow: View {
         NoorListItem(
             title: .text(name),
             accessory: .disclosureIndicator,
-            action: action
+            action: .sync { action() }
         )
     }
 }

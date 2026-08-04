@@ -82,7 +82,7 @@ private struct BookmarksViewUI: View {
             title: "\(sura: ayah.sura)",
             subtitle: .init(text: .text(bookmark.creationDate.timeAgo()), location: .bottom),
             accessory: .text(bookmark.page.localizedNumber, accessibilityLabel: bookmark.page.localizedName),
-            action: { selectAction(bookmark) }
+            action: .sync { selectAction(bookmark) }
         )
     }
 }

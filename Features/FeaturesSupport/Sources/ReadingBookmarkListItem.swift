@@ -36,7 +36,7 @@ public struct ReadingBookmarkListItem: View {
                 location: .bottom
             ),
             accessory: .disclosureIndicator,
-            action: action
+            action: .sync { action() }
         )
     }
 

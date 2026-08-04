@@ -86,7 +86,7 @@ private struct SearchViewUI: View {
                 NoorListItem(
                     image: .init(.search),
                     title: autocompletionText(of: item.value),
-                    action: { search(item.value.text) }
+                    action: .sync { search(item.value.text) }
                 )
             }
         }
@@ -99,7 +99,7 @@ private struct SearchViewUI: View {
                 NoorListItem(
                     image: .init(.search),
                     title: .text(item.value),
-                    action: { search(item.value) }
+                    action: .sync { search(item.value) }
                 )
             }
 
@@ -107,7 +107,7 @@ private struct SearchViewUI: View {
                 NoorListItem(
                     image: .init(.search),
                     title: .text(item.value),
-                    action: { search(item.value) }
+                    action: .sync { search(item.value) }
                 )
             }
         }
@@ -128,7 +128,7 @@ private struct SearchViewUI: View {
                                 item.ayah.page.localizedNumber,
                                 accessibilityLabel: item.ayah.page.localizedName
                             ),
-                            action: { selectSearchResult((item, result.source)) }
+                            action: .sync { selectSearchResult((item, result.source)) }
                         )
                     }
                 }

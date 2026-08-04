@@ -161,7 +161,7 @@ private struct TranslationsListViewUI: View {
             title: .text(item.displayName),
             subtitle: subtitle(of: item.info),
             accessory: accessory(item, downloaded: downloaded),
-            asyncAction: action
+            action: action.map(NoorListItem.TapAction.async)
         )
     }
 

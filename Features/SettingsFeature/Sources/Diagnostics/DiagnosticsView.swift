@@ -44,7 +44,7 @@ private struct DiagnosticsViewUI: View {
             NoorBasicSection {
                 NoorListItem(
                     title: .text(l("diagnostics.share_app_logs")),
-                    action: shareLog
+                    action: .sync { shareLog() }
                 )
             }
         }

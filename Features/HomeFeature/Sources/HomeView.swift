@@ -118,7 +118,7 @@ private struct HomeViewUI: View {
             title: "\(sura: ayah.sura)",
             subtitle: .init(text: .text(lastPage.modifiedOn.timeAgo()), location: .bottom),
             accessory: .text(lastPage.page.localizedNumber, accessibilityLabel: lastPage.page.localizedName),
-            action: { selectLastPage(lastPage) }
+            action: .sync { selectLastPage(lastPage) }
         )
     }
 
@@ -130,7 +130,7 @@ private struct HomeViewUI: View {
             title: "\(sura.localizedSuraNumber). \(sura: sura)",
             subtitle: .init(text: "\(suraType) - \(ayahsString)", location: .bottom),
             accessory: .text(sura.page.localizedNumber, accessibilityLabel: sura.page.localizedName),
-            action: { selectSura(sura) }
+            action: .sync { selectSura(sura) }
         )
     }
 
@@ -144,7 +144,7 @@ private struct HomeViewUI: View {
             title: "\(ayah: ayah)",
             rightSubtitle: "\(quran: item.ayahText, lineLimit: 1)",
             accessory: .text(page.localizedNumber, accessibilityLabel: page.localizedName),
-            action: { selectQuarter(item) }
+            action: .sync { selectQuarter(item) }
         )
     }
 

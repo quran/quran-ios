@@ -89,7 +89,7 @@ private struct NoteItemView: View {
                 location: .bottom
             ),
             accessory: .disclosureIndicator,
-            action: { editAction(note) }
+            action: .sync { editAction(note) }
         )
         .lineLimit(2)
     }

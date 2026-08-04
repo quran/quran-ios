@@ -97,7 +97,7 @@ private struct BookmarkCollectionsContent: View {
                     image: .init(.plusCircle, color: .appIdentity),
                     title: .text(l("bookmarks.collections.new")),
                     titleColor: .appIdentity,
-                    action: { viewModel.presentAddCollection() }
+                    action: .sync { viewModel.presentAddCollection() }
                 )
                 .deleteDisabled(true)
             }
@@ -127,7 +127,7 @@ private struct BookmarkCollectionsContent: View {
                 location: .trailing
             ),
             accessory: .disclosureIndicator,
-            action: action
+            action: .sync { action() }
         )
     }
 }

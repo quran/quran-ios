@@ -247,6 +247,7 @@ final class SettingsRootViewModel: ObservableObject {
     private let quranProfileURL: URL
     private var authenticationClient: any AuthenticationClient
     #endif
+
     private func showSingleChoiceSelector<T: Hashable>(
         title: String,
         sections: [SingleChoiceSection<T>],

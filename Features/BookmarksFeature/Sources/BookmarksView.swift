@@ -28,7 +28,7 @@ struct BookmarksView: View {
             bookmarks: viewModel.bookmarks,
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
-            deleteAction: { await viewModel.deleteItem($0) }
+            deleteAction: { viewModel.deleteItem($0) }
         )
     }
 }
@@ -43,7 +43,7 @@ private struct BookmarksViewUI: View {
     let bookmarks: [PageBookmark]
     let start: AsyncAction
     let selectAction: ItemAction<PageBookmark>
-    let deleteAction: AsyncItemAction<PageBookmark>
+    let deleteAction: ItemDeletionAction<PageBookmark>
 
     var body: some View {
         Group {
@@ -109,7 +109,10 @@ struct BookmarksView_Previews: PreviewProvider {
                     bookmarks: items,
                     start: {},
                     selectAction: { _ in },
-                    deleteAction: { item in items = items.filter { $0 != item } }
+                    deleteAction: { item in
+                        items = items.filter { $0 != item }
+                        return {}
+                    }
                 )
                 .navigationTitle(lAndroid("menu_bookmarks"))
                 .toolbar {

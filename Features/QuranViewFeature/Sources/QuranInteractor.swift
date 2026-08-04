@@ -468,6 +468,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     func toogleBookmark() async {
+        guard !isBookmarkMutationInFlight else {
+            logger.info("Quran: ignore bookmark tap while mutation is in progress")
+            return
+        }
+        isBookmarkMutationInFlight = true
+        defer { isBookmarkMutationInFlight = false }
+
         logger.info("Quran: onBookmarkBarButtonTapped")
         #if QURAN_SYNC
         guard let action = ReadingBookmarkAction.page(
@@ -515,6 +522,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private var audioBanner: AudioBannerViewModel?
     private var cancellables: Set<AnyCancellable> = []
     private var isWordPointerActive: Bool = false
+    private var isBookmarkMutationInFlight = false
     private var wordPointer: WordPointerViewController?
 
     private var visiblePageCancellable: AnyCancellable?

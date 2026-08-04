@@ -13,15 +13,52 @@ import XCTest
 final class BookmarksViewModelTests: XCTestCase {
     // MARK: Internal
 
-    func test_deleteItem_removesBookmarkPage() async {
+    func test_deleteItem_removesBookmarkPage() async throws {
         let persistence = PageBookmarkPersistenceSpy()
         let sut = makeSUT(persistence: persistence)
         let bookmark = PageBookmark(page: Quran.hafsMadani1405.pages[0], creationDate: Date())
+        sut.bookmarks = [bookmark]
 
-        await sut.deleteItem(bookmark)
+        let operation = try XCTUnwrap(sut.deleteItem(bookmark))
 
+        XCTAssertTrue(sut.bookmarks.isEmpty)
+        await operation()
         XCTAssertEqual(persistence.removedPages, [bookmark.page.pageNumber])
         XCTAssertNil(sut.error)
+    }
+
+    func test_deleteItem_ignoresDuplicateRequestWhileDeletionIsInProgress() async throws {
+        let persistence = PageBookmarkPersistenceSpy()
+        persistence.suspendRemoval = true
+        let sut = makeSUT(persistence: persistence)
+        let bookmark = PageBookmark(page: Quran.hafsMadani1405.pages[0], creationDate: Date())
+        sut.bookmarks = [bookmark]
+
+        let operation = try XCTUnwrap(sut.deleteItem(bookmark))
+        let duplicateOperation = sut.deleteItem(bookmark)
+        let task = Task { await operation() }
+        await fulfillment(of: [persistence.removeExpectation])
+
+        XCTAssertNil(duplicateOperation)
+        XCTAssertEqual(persistence.removedPages, [bookmark.page.pageNumber])
+        persistence.resumeRemoval()
+        await task.value
+    }
+
+    func test_deleteItem_restoresBookmarkWhenPersistenceFails() async throws {
+        let persistence = PageBookmarkPersistenceSpy()
+        persistence.removeError = TestError.expected
+        let sut = makeSUT(persistence: persistence)
+        let bookmark = PageBookmark(page: Quran.hafsMadani1405.pages[0], creationDate: Date())
+        sut.bookmarks = [bookmark]
+
+        let operation = try XCTUnwrap(sut.deleteItem(bookmark))
+        XCTAssertTrue(sut.bookmarks.isEmpty)
+
+        await operation()
+
+        XCTAssertEqual(sut.bookmarks, [bookmark])
+        XCTAssertNotNil(sut.error)
     }
 
     func test_navigateToBookmark_navigatesToPage() {
@@ -55,7 +92,12 @@ private struct AnalyticsSpy: AnalyticsLibrary {
 }
 
 private final class PageBookmarkPersistenceSpy: PageBookmarkPersistence {
+    let removeExpectation = XCTestExpectation(description: "Remove bookmark")
     var removedPages: [Int] = []
+    var removeError: Error?
+    var suspendRemoval = false
+
+    private var removalContinuation: CheckedContinuation<Void, Never>?
 
     func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never> {
         Just([]).eraseToAnyPublisher()
@@ -64,8 +106,24 @@ private final class PageBookmarkPersistenceSpy: PageBookmarkPersistence {
     func insertPageBookmark(_: Int) async throws {}
     func removePageBookmark(_ page: Int) async throws {
         removedPages.append(page)
+        removeExpectation.fulfill()
+        if let removeError {
+            throw removeError
+        }
+        if suspendRemoval {
+            await withCheckedContinuation { removalContinuation = $0 }
+        }
     }
 
     func removeAllPageBookmarks() async throws {}
+
+    func resumeRemoval() {
+        removalContinuation?.resume()
+        removalContinuation = nil
+    }
+}
+
+private enum TestError: Error {
+    case expected
 }
 #endif

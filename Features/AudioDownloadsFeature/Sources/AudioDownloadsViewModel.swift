@@ -15,6 +15,7 @@ import QuranKit
 import ReadingService
 import ReciterService
 import SwiftUI
+import UIx
 import Utilities
 import VLogging
 
@@ -49,13 +50,15 @@ final class AudioDownloadsViewModel: ObservableObject {
     @Published var error: Error?
 
     var items: [AudioDownloadItem] {
-        reciters.map { reciter in
-            AudioDownloadItem(
-                reciter: reciter,
-                size: sizes[reciter],
-                progress: progress[reciter].map { .downloading($0) } ?? .notDownloading
-            )
-        }
+        reciters
+            .filter { !pendingDeletionIDs.contains($0.id) }
+            .map { reciter in
+                AudioDownloadItem(
+                    reciter: reciter,
+                    size: sizes[reciter],
+                    progress: progress[reciter].map { .downloading($0) } ?? .notDownloading
+                )
+            }
     }
 
     func start() async {
@@ -65,15 +68,24 @@ final class AudioDownloadsViewModel: ObservableObject {
         _ = await [downloads, reading, progress]
     }
 
-    func deleteReciterFiles(_ reciter: Reciter) async {
+    func deleteReciterFiles(_ reciter: Reciter) -> AsyncAction? {
+        guard pendingDeletionIDs.insert(reciter.id).inserted else {
+            return nil
+        }
+
         logger.info("Downloads: deleting reciter \(reciter.id)")
         analytics.deletingQuran(reciter: reciter)
-        await cancelDownloading(reciter)
-        do {
-            try await deleter.deleteAudioFiles(for: reciter)
-            sizes[reciter] = .zero(quran: quran)
-        } catch {
-            self.error = error
+
+        return { [weak self] in
+            guard let self else { return }
+            await cancelDownloading(reciter)
+            do {
+                try await deleter.deleteAudioFiles(for: reciter)
+                sizes[reciter] = .zero(quran: quran)
+            } catch {
+                self.error = error
+            }
+            pendingDeletionIDs.remove(reciter.id)
         }
     }
 
@@ -109,6 +121,7 @@ final class AudioDownloadsViewModel: ObservableObject {
     private let sizeInfoRetriever: ReciterSizeInfoRetriever
     private let recitersRetriever: ReciterDataRetriever
     private var downloadsObserver: DownloadsObserver<Reciter>?
+    private var pendingDeletionIDs: Set<Reciter.ID> = []
 
     @Published private var reciters: [Reciter] = []
     @Published private var sizes: [Reciter: AudioDownloadedSize] = [:]

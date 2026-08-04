@@ -58,6 +58,29 @@ final class PageMappingServiceTests: XCTestCase {
         XCTAssertEqual(bookmarks.map(\.creationDate), [date])
     }
 
+    func testPageBookmarksDeduplicatePagesAfterMapping() throws {
+        let sourceQuran = Quran.hafsMadani1405
+        let destinationQuran = Quran.hafsMadani1440
+        let mapper = QuranPageMapper(destination: destinationQuran)
+        let sourcePagesByDestination = Dictionary(grouping: sourceQuran.pages) { mapper.mapPage($0) }
+        let duplicateSourcePages = try XCTUnwrap(
+            sourcePagesByDestination.first(where: { $0.key != nil && $0.value.count > 1 })?.value
+        )
+        let olderPage = duplicateSourcePages[0]
+        let newerPage = duplicateSourcePages[1]
+        let persistence = PageBookmarkPersistenceFake(bookmarks: [
+            PageBookmarkPersistenceModel(page: olderPage.pageNumber, creationDate: date),
+            PageBookmarkPersistenceModel(page: newerPage.pageNumber, creationDate: laterDate),
+        ])
+        let service = PageBookmarkService(persistence: persistence)
+
+        let bookmarks = value(from: service.pageBookmarks(quran: destinationQuran))
+
+        XCTAssertEqual(bookmarks.count, 1)
+        XCTAssertEqual(bookmarks.first?.page, mapper.mapPage(newerPage))
+        XCTAssertEqual(bookmarks.first?.creationDate, laterDate)
+    }
+
     func testInsertPageBookmarkStoresCanonicalPage() async throws {
         let persistence = PageBookmarkPersistenceFake()
         let service = PageBookmarkService(persistence: persistence)

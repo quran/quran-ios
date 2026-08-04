@@ -116,7 +116,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
         isExpanded: Binding<Bool>? = nil,
         _ items: [Item],
         @ViewBuilder listItem: @escaping (Item) -> ListItem,
-        onDelete: AsyncItemAction<Item>? = nil,
+        onDelete: ItemDeletionAction<Item>? = nil,
         onMove: ((IndexSet, Int) -> Void)? = nil
     ) {
         self.title = title
@@ -143,8 +143,10 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     let isExpanded: Binding<Bool>?
     let items: [Item]
     let listItem: (Item) -> ListItem
-    var onDelete: AsyncItemAction<Item>?
+    var onDelete: ItemDeletionAction<Item>?
     var onMove: ((IndexSet, Int) -> Void)?
+
+    @State private var deletingItemIDs: Set<Item.ID> = []
 
     // MARK: Private
 
@@ -153,22 +155,39 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
         ForEach(items) { item in
             listItem(item)
         }
-        .onDelete(perform: onDelete.map { onDelete in
+        .onDelete(perform: deleteAction)
+        .onMove(perform: onMove)
+    }
+
+    private var deleteAction: ((IndexSet) -> Void)? {
+        onDelete.map { _ in
             { indexSet in
-                Task {
-                    let itemsToDelete = indexSet.map { items[$0] }
-                    for itemToDelete in itemsToDelete {
-                        await onDelete(itemToDelete)
-                    }
+                let itemsToDelete = indexSet.map { items[$0] }
+                for itemToDelete in itemsToDelete {
+                    delete(itemToDelete)
                 }
             }
-        })
-        .onMove(perform: onMove)
+        }
+    }
+
+    private func delete(_ item: Item) {
+        guard deletingItemIDs.insert(item.id).inserted else {
+            return
+        }
+        guard let operation = onDelete?(item) else {
+            deletingItemIDs.remove(item.id)
+            return
+        }
+
+        Task { @MainActor in
+            await operation()
+            deletingItemIDs.remove(item.id)
+        }
     }
 }
 
 extension NoorSection {
-    public func onDelete(action: AsyncItemAction<Item>?) -> Self {
+    public func onDelete(action: ItemDeletionAction<Item>?) -> Self {
         var mutableSelf = self
         mutableSelf.onDelete = action
         return mutableSelf

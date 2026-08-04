@@ -13,6 +13,7 @@ import QuranAnnotations
 import QuranKit
 import ReadingService
 import SwiftUI
+import UIx
 import VLogging
 
 @MainActor
@@ -46,6 +47,7 @@ final class BookmarksViewModel: ObservableObject {
 
         for await bookmarks in bookmarksSequence {
             self.bookmarks = bookmarks
+                .filter { !pendingDeletionPages.contains($0.page) }
                 .sorted { $0.creationDate > $1.creationDate }
         }
     }
@@ -56,13 +58,25 @@ final class BookmarksViewModel: ObservableObject {
         navigateTo(item.page)
     }
 
-    func deleteItem(_ pageBookmark: PageBookmark) async {
+    func deleteItem(_ pageBookmark: PageBookmark) -> AsyncAction? {
+        guard pendingDeletionPages.insert(pageBookmark.page).inserted else {
+            return nil
+        }
+
         logger.info("Bookmarks: delete bookmark at \(pageBookmark.page)")
         analytics.removeBookmarkPage(pageBookmark.page)
-        do {
-            try await service.removePageBookmark(pageBookmark.page)
-        } catch {
-            self.error = error
+        bookmarks.removeAll { $0.page == pageBookmark.page }
+
+        return { [weak self] in
+            guard let self else { return }
+            do {
+                try await service.removePageBookmark(pageBookmark.page)
+            } catch {
+                bookmarks.append(pageBookmark)
+                bookmarks.sort { $0.creationDate > $1.creationDate }
+                self.error = error
+            }
+            pendingDeletionPages.remove(pageBookmark.page)
         }
     }
 
@@ -81,5 +95,6 @@ final class BookmarksViewModel: ObservableObject {
     private let analytics: AnalyticsLibrary
     private let service: PageBookmarkService
     private let readingPreferences = ReadingPreferences.shared
+    private var pendingDeletionPages: Set<Page> = []
 }
 #endif

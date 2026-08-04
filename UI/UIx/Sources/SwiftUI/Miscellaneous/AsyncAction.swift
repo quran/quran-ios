@@ -11,6 +11,7 @@ public typealias AsyncAction = @MainActor @Sendable () async -> Void
 
 public typealias ItemAction<Item> = @MainActor @Sendable (Item) -> Void
 public typealias AsyncItemAction<Item> = @MainActor @Sendable (Item) async -> Void
+public typealias ItemDeletionAction<Item> = @MainActor @Sendable (Item) -> AsyncAction?
 
 public struct AsyncButton<Label: View>: View {
     // MARK: Lifecycle

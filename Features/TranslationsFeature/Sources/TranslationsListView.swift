@@ -27,7 +27,7 @@ struct TranslationsListView: View {
             deselectAction: { await viewModel.deselectTranslation($0) },
             downloadAction: { await viewModel.startDownloading($0) },
             cancelAction: { await viewModel.cancelDownloading($0) },
-            deleteAction: { await viewModel.deleteTranslation($0) },
+            deleteAction: { viewModel.deleteTranslation($0) },
             moveSelectedItemsAction: viewModel.moveSelectedTranslations,
             start: { await viewModel.start() },
             refresh: { await viewModel.refresh() }
@@ -50,7 +50,7 @@ private struct TranslationsListViewUI: View {
     let downloadAction: AsyncItemAction<TranslationItem>
     let cancelAction: AsyncItemAction<TranslationItem>
 
-    let deleteAction: AsyncItemAction<TranslationItem>
+    let deleteAction: ItemDeletionAction<TranslationItem>
     let moveSelectedItemsAction: (IndexSet, Int) -> Void
 
     let start: @Sendable () async -> Void
@@ -70,7 +70,7 @@ private struct TranslationsListViewUI: View {
                         await deselectAction(item)
                     }
                 },
-                onDelete: { await deleteAction($0) },
+                onDelete: { item in deleteAction(item) },
                 onMove: moveSelectedItemsAction
             )
 
@@ -82,7 +82,7 @@ private struct TranslationsListViewUI: View {
                         await selectAction(item)
                     }
                 },
-                onDelete: { await deleteAction($0) },
+                onDelete: { item in deleteAction(item) },
                 onMove: nil
             )
 
@@ -178,11 +178,12 @@ private struct TranslationsListViewUI: View {
     }
 }
 
+@MainActor
 private struct TranslationsListSection<ListItem: View>: View {
     let title: String?
     let items: [TranslationItem]
     let listItem: (TranslationItem) -> ListItem
-    let onDelete: AsyncItemAction<TranslationItem>?
+    let onDelete: ItemDeletionAction<TranslationItem>?
     let onMove: ((IndexSet, Int) -> Void)?
 
     var body: some View {
@@ -244,6 +245,7 @@ struct TranslationsListView_Previews: PreviewProvider {
                     deleteAction: { item in
                         selected = selected.filter { item != $0 }
                         downloaded = downloaded.filter { item != $0 }
+                        return {}
                     },
                     moveSelectedItemsAction: { source, destination in
                         selected.move(fromOffsets: source, toOffset: destination)

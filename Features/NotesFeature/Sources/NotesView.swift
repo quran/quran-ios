@@ -30,7 +30,7 @@ struct NotesView: View {
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
             editAction: { viewModel.editNote($0) },
-            deleteAction: { await viewModel.deleteItem($0) }
+            deleteAction: { viewModel.deleteItem($0) }
         )
     }
 
@@ -71,7 +71,7 @@ private struct NotesViewUI: View {
     let start: AsyncAction
     let selectAction: ItemAction<NoteItem>
     let editAction: ItemAction<NoteItem>
-    let deleteAction: AsyncItemAction<NoteItem>
+    let deleteAction: ItemDeletionAction<NoteItem>
 
     var body: some View {
         VStack(spacing: 0) {
@@ -263,7 +263,10 @@ struct NotesView_Previews: PreviewProvider {
                     start: {},
                     selectAction: { _ in },
                     editAction: { _ in },
-                    deleteAction: { item in items = items.filter { $0 != item } }
+                    deleteAction: { item in
+                        items = items.filter { $0 != item }
+                        return {}
+                    }
                 )
                 .navigationTitle("Notes")
                 .toolbar {
@@ -312,7 +315,7 @@ private struct NotesEmptyPreview: View {
                 start: {},
                 selectAction: { _ in },
                 editAction: { _ in },
-                deleteAction: { _ in }
+                deleteAction: { _ in nil }
             )
             .navigationTitle(l("tab.notes"))
         }

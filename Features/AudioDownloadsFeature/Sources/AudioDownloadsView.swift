@@ -22,7 +22,7 @@ struct AudioDownloadsView: View {
             start: { await viewModel.start() },
             downloadAction: { await viewModel.startDownloading($0.reciter) },
             cancelAction: { await viewModel.cancelDownloading($0.reciter) },
-            deleteAction: { @Sendable item in await viewModel.deleteReciterFiles(item.reciter) }
+            deleteAction: { @Sendable item in viewModel.deleteReciterFiles(item.reciter) }
         )
     }
 }
@@ -34,7 +34,7 @@ private struct AudioDownloadsViewUI: View {
     let start: AsyncAction
     let downloadAction: AsyncItemAction<AudioDownloadItem>
     let cancelAction: AsyncItemAction<AudioDownloadItem>
-    let deleteAction: AsyncItemAction<AudioDownloadItem>
+    let deleteAction: ItemDeletionAction<AudioDownloadItem>
 
     var body: some View {
         NoorList {
@@ -48,7 +48,7 @@ private struct AudioDownloadsViewUI: View {
                         accessory: accessory(item)
                     )
                 },
-                onDelete: { @Sendable in await deleteAction($0) }
+                onDelete: { item in deleteAction(item) }
             )
 
             AudioDownloadsSection(
@@ -87,11 +87,12 @@ private struct AudioDownloadsViewUI: View {
     }
 }
 
+@MainActor
 private struct AudioDownloadsSection<ListItem: View>: View {
     let title: String
     let items: [AudioDownloadItem]
     let listItem: (AudioDownloadItem) -> ListItem
-    let onDelete: AsyncItemAction<AudioDownloadItem>?
+    let onDelete: ItemDeletionAction<AudioDownloadItem>?
 
     var body: some View {
         NoorSection(title: title, items) { item in
@@ -145,7 +146,7 @@ struct AudioDownloadsView_Previews: PreviewProvider {
                     start: { },
                     downloadAction: { _ in },
                     cancelAction: { _ in },
-                    deleteAction: { _ in }
+                    deleteAction: { _ in nil }
                 )
             }
         }

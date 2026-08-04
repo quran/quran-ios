@@ -13,6 +13,7 @@ import QuranAnnotations
 import QuranKit
 import ReadingService
 import SwiftUI
+import UIx
 import VLogging
 
 @MainActor
@@ -57,16 +58,17 @@ final class BookmarksViewModel: ObservableObject {
         navigateTo(item.page)
     }
 
-    func deleteItem(_ pageBookmark: PageBookmark) {
+    func deleteItem(_ pageBookmark: PageBookmark) -> AsyncAction? {
         guard pendingDeletionPages.insert(pageBookmark.page).inserted else {
-            return
+            return nil
         }
 
         logger.info("Bookmarks: delete bookmark at \(pageBookmark.page)")
         analytics.removeBookmarkPage(pageBookmark.page)
         bookmarks.removeAll { $0.page == pageBookmark.page }
 
-        Task {
+        return { [weak self] in
+            guard let self else { return }
             do {
                 try await service.removePageBookmark(pageBookmark.page)
             } catch {

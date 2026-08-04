@@ -18,7 +18,7 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
         showsHeaderDeleteAction: Bool = false,
         headerDeleteAction: AsyncAction? = nil,
         @ViewBuilder listItem: @escaping (Item) -> ListItem,
-        onDelete: AsyncItemAction<Item>? = nil
+        onDelete: ItemDeletionAction<Item>? = nil
     ) {
         self.title = title
         _isExpanded = isExpanded
@@ -49,7 +49,9 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
     let showsHeaderDeleteAction: Bool
     let headerDeleteAction: AsyncAction?
     let listItem: (Item) -> ListItem
-    var onDelete: AsyncItemAction<Item>?
+    var onDelete: ItemDeletionAction<Item>?
+
+    @State private var deletionTracker = ItemDeletionTracker<Item.ID>()
 
     // MARK: Private
 
@@ -93,19 +95,32 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
         }
         .onDelete(perform: onDelete.map { onDelete in
             { indexSet in
-                Task {
-                    let itemsToDelete = indexSet.map { items[$0] }
-                    for itemToDelete in itemsToDelete {
-                        await onDelete(itemToDelete)
-                    }
+                let itemsToDelete = indexSet.map { items[$0] }
+                for itemToDelete in itemsToDelete {
+                    delete(itemToDelete, action: onDelete)
                 }
             }
         })
     }
+
+    private func delete(_ item: Item, action: ItemDeletionAction<Item>) {
+        guard deletionTracker.beginDeleting(item.id) else {
+            return
+        }
+        guard let operation = action(item) else {
+            deletionTracker.finishDeleting(item.id)
+            return
+        }
+
+        Task { @MainActor in
+            await operation()
+            deletionTracker.finishDeleting(item.id)
+        }
+    }
 }
 
 extension NoorEditableCollapsibleSection {
-    public func onDelete(action: AsyncItemAction<Item>?) -> Self {
+    public func onDelete(action: ItemDeletionAction<Item>?) -> Self {
         var mutableSelf = self
         mutableSelf.onDelete = action
         return mutableSelf

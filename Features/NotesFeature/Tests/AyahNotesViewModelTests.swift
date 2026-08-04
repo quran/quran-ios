@@ -53,12 +53,24 @@ final class AyahNotesViewModelTests: XCTestCase {
         let notes = try await storedNotes()
         let noteToDelete = try XCTUnwrap(notes.first { $0.text == "Delete" })
         let sut = makeSUT(verses: [ayah(1)])
+        let observed = expectation(description: "Observes notes before deletion")
+        let observation = sut.$notes.sink { notes in
+            if notes.contains(where: { $0.id == noteToDelete.id }) {
+                observed.fulfill()
+            }
+        }
+        let startTask = Task { await sut.start() }
+        await fulfillment(of: [observed], timeout: 2)
 
-        await sut.deleteNote(noteToDelete)
+        let operation = try XCTUnwrap(sut.deleteNote(noteToDelete))
+        XCTAssertFalse(sut.notes.contains(where: { $0.id == noteToDelete.id }))
+        await operation()
 
         let remainingNotes = try await storedNotes()
         XCTAssertEqual(remainingNotes.map(\.text), ["Keep"])
         XCTAssertNil(sut.error)
+        startTask.cancel()
+        observation.cancel()
     }
 
     private func makeSUT(verses: some Sequence<AyahNumber>) -> AyahNotesViewModel {

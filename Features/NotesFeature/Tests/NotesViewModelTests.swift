@@ -59,7 +59,10 @@ final class NotesViewModelTests: XCTestCase {
             editNote: { _ in }
         )
 
-        await sut.deleteItem(item)
+        sut.notes = [item]
+        let operation = try XCTUnwrap(sut.deleteItem(item))
+        XCTAssertTrue(sut.notes.isEmpty)
+        await operation()
 
         let notes = try await storedNotes()
         XCTAssertTrue(notes.isEmpty)

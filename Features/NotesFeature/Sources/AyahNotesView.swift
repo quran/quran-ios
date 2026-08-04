@@ -35,7 +35,7 @@ struct AyahNotesView: View {
             notes: viewModel.notes,
             addAction: addAction,
             editAction: editAction,
-            deleteAction: { await viewModel.deleteNote($0) }
+            deleteAction: { viewModel.deleteNote($0) }
         )
         .task { await viewModel.start() }
         .errorAlert(error: $viewModel.error)
@@ -54,7 +54,7 @@ private struct AyahNotesContent: View {
     let notes: [Note]
     let addAction: @MainActor @Sendable () -> Void
     let editAction: @MainActor @Sendable (Note) -> Void
-    let deleteAction: @MainActor @Sendable (Note) async -> Void
+    let deleteAction: ItemDeletionAction<Note>
 
     var body: some View {
         VStack {
@@ -125,7 +125,7 @@ private struct AyahNotesPreview: View {
                 notes: notes,
                 addAction: {},
                 editAction: { _ in },
-                deleteAction: { _ in }
+                deleteAction: { _ in nil }
             )
             .navigationTitle("An-Nahl, Ayah 35–36")
             .navigationBarTitleDisplayMode(.inline)

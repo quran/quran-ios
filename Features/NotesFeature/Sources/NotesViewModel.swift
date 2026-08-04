@@ -24,6 +24,7 @@ import QuranTextKit
 import ReadingService
 import SwiftUI
 import UIKit
+import UIx
 import Utilities
 import VLogging
 
@@ -109,6 +110,7 @@ final class NotesViewModel: ObservableObject {
             let sequence = noteService.notesSequence(quran: readingPreferences.reading.quran)
             for try await notes in sequence {
                 self.notes = await noteItems(with: notes)
+                    .filter { !pendingDeletionIDs.contains($0.id) }
             }
         } catch {
             guard !Task.isCancelled else { return }
@@ -126,6 +128,7 @@ final class NotesViewModel: ObservableObject {
 
         for await notes in notesSequence {
             self.notes = await noteItems(with: notes)
+                .filter { !pendingDeletionIDs.contains($0.id) }
                 .sorted { $0.note.modifiedDate > $1.note.modifiedDate }
         }
         #endif
@@ -170,23 +173,39 @@ final class NotesViewModel: ObservableObject {
         editNoteAction(item.note)
     }
 
-    func deleteItem(_ item: NoteItem) async {
-        #if QURAN_SYNC
-        logger.info("Quran Sync: deleting note spanning \(item.note.verses.count) ayah(s)")
-        do {
-            try await noteService.removeNote(item.note)
-        } catch {
-            logger.error("Quran Sync: failed to delete note: \(error)")
-            self.error = error
+    func deleteItem(_ item: NoteItem) -> AsyncAction? {
+        guard pendingDeletionIDs.insert(item.id).inserted else {
+            return nil
         }
-        #else
-        logger.info("Notes: delete note at \(item.note.startAyah)")
-        do {
-            try await noteService.removeNotes(with: Array(item.note.verses))
-        } catch {
-            self.error = error
+        guard let index = notes.firstIndex(where: { $0.id == item.id }) else {
+            pendingDeletionIDs.remove(item.id)
+            return nil
         }
-        #endif
+
+        notes.remove(at: index)
+
+        return { [weak self] in
+            guard let self else { return }
+            #if QURAN_SYNC
+            logger.info("Quran Sync: deleting note spanning \(item.note.verses.count) ayah(s)")
+            do {
+                try await noteService.removeNote(item.note)
+            } catch {
+                logger.error("Quran Sync: failed to delete note: \(error)")
+                restore(item, at: index)
+                self.error = error
+            }
+            #else
+            logger.info("Notes: delete note at \(item.note.startAyah)")
+            do {
+                try await noteService.removeNotes(with: Array(item.note.verses))
+            } catch {
+                restore(item, at: index)
+                self.error = error
+            }
+            #endif
+            pendingDeletionIDs.remove(item.id)
+        }
     }
 
     func prepareNotesForSharing() async throws -> String {
@@ -237,6 +256,12 @@ final class NotesViewModel: ObservableObject {
     private let navigateTo: (AyahNumber) -> Void
     private let editNoteAction: (Note) -> Void
     private let readingPreferences = ReadingPreferences.shared
+    private var pendingDeletionIDs: Set<NoteItem.ID> = []
+
+    private func restore(_ item: NoteItem, at index: Int) {
+        notes.removeAll { $0.id == item.id }
+        notes.insert(item, at: min(index, notes.endIndex))
+    }
 
     private nonisolated func noteItems(with notes: [Note]) async -> [NoteItem] {
         #if QURAN_SYNC

@@ -13,6 +13,7 @@ import Foundation
 import QuranText
 import SwiftUI
 import TranslationService
+import UIx
 import Utilities
 import VLogging
 
@@ -54,20 +55,25 @@ final class TranslationsListViewModel: ObservableObject {
 
     var selectedTranslations: [TranslationItem] {
         selectedTranslationIds
+            .filter { !pendingDeletionIDs.contains($0) }
             .map { id in translations.first { $0.id == id } }
             .compactMap { $0.map(translationItem) }
     }
 
     var downloadedTranslations: [TranslationItem] {
         translations
-            .filter { $0.isDownloaded && !selectedTranslationIds.contains($0.id) }
+            .filter {
+                $0.isDownloaded &&
+                    !selectedTranslationIds.contains($0.id) &&
+                    !pendingDeletionIDs.contains($0.id)
+            }
             .sorted()
             .map(translationItem)
     }
 
     var availableTranslations: [TranslationItem] {
         translations
-            .filter { !$0.isDownloaded }
+            .filter { !$0.isDownloaded && !pendingDeletionIDs.contains($0.id) }
             .map(translationItem)
     }
 
@@ -124,20 +130,32 @@ final class TranslationsListViewModel: ObservableObject {
         await download?.cancel()
     }
 
-    func deleteTranslation(_ item: TranslationItem) async {
+    func deleteTranslation(_ item: TranslationItem) -> AsyncAction? {
+        guard pendingDeletionIDs.insert(item.id).inserted else {
+            return nil
+        }
+        guard let index = translations.firstIndex(of: item.info) else {
+            pendingDeletionIDs.remove(item.id)
+            return nil
+        }
+
         logger.info("Translations: deleting translation \(item.id)")
         analytics.deleting(translation: item.info)
-        await cancelDownloading(item)
+        let translation = translations.remove(at: index)
 
-        do {
-            let updatedTranslation = try await deleter.deleteTranslation(item.info)
-            // replace existing translation
-            if let index = translations.firstIndex(of: item.info) {
-                translations[index] = updatedTranslation
+        return { [weak self] in
+            guard let self else { return }
+            await cancelDownloading(item)
+
+            do {
+                let updatedTranslation = try await deleter.deleteTranslation(item.info)
+                replaceTranslation(updatedTranslation, at: index)
+            } catch {
+                replaceTranslation(translation, at: index)
+                crasher.recordError(error, reason: "Failed to delete translation \(item.id)")
+                self.error = error
             }
-        } catch {
-            crasher.recordError(error, reason: "Failed to delete translation \(item.id)")
-            self.error = error
+            pendingDeletionIDs.remove(item.id)
         }
     }
 
@@ -151,10 +169,16 @@ final class TranslationsListViewModel: ObservableObject {
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     private var downloadsObserver: DownloadsObserver<Translation>?
     private var cancellables = Set<AnyCancellable>()
+    private var pendingDeletionIDs: Set<Translation.ID> = []
 
     @Published private var translations: [Translation] = []
     @Published private var selectedTranslationIds: [Translation.ID] = []
     @Published private var progress: [Translation: Double] = [:]
+
+    private func replaceTranslation(_ translation: Translation, at index: Int) {
+        translations.removeAll { $0.id == translation.id }
+        translations.insert(translation, at: min(index, translations.endIndex))
+    }
 
     private func translationItem(_ translation: Translation) -> TranslationItem {
         TranslationItem(

@@ -108,6 +108,18 @@ public struct SelfIdentifiable<T: Hashable>: Identifiable {
     public var id: T { value }
 }
 
+struct ItemDeletionTracker<ID: Hashable> {
+    private var deletingIDs: Set<ID> = []
+
+    mutating func beginDeleting(_ id: ID) -> Bool {
+        deletingIDs.insert(id).inserted
+    }
+
+    mutating func finishDeleting(_ id: ID) {
+        deletingIDs.remove(id)
+    }
+}
+
 public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     // MARK: Lifecycle
 
@@ -116,7 +128,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
         isExpanded: Binding<Bool>? = nil,
         _ items: [Item],
         @ViewBuilder listItem: @escaping (Item) -> ListItem,
-        onDelete: AsyncItemAction<Item>? = nil,
+        onDelete: ItemDeletionAction<Item>? = nil,
         onMove: ((IndexSet, Int) -> Void)? = nil
     ) {
         self.title = title
@@ -124,7 +136,6 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
         self.items = items
         self.listItem = listItem
         self.onDelete = onDelete
-        onDeleteImmediately = nil
         self.onMove = onMove
     }
 
@@ -144,9 +155,10 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     let isExpanded: Binding<Bool>?
     let items: [Item]
     let listItem: (Item) -> ListItem
-    var onDelete: AsyncItemAction<Item>?
-    var onDeleteImmediately: ItemAction<Item>?
+    var onDelete: ItemDeletionAction<Item>?
     var onMove: ((IndexSet, Int) -> Void)?
+
+    @State private var deletionTracker = ItemDeletionTracker<Item.ID>()
 
     // MARK: Private
 
@@ -160,39 +172,36 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     }
 
     private var deleteAction: ((IndexSet) -> Void)? {
-        if let onDeleteImmediately {
-            return { indexSet in
-                for itemToDelete in indexSet.map({ items[$0] }) {
-                    onDeleteImmediately(itemToDelete)
+        onDelete.map { _ in
+            { indexSet in
+                let itemsToDelete = indexSet.map { items[$0] }
+                for itemToDelete in itemsToDelete {
+                    delete(itemToDelete)
                 }
             }
         }
+    }
 
-        if let onDelete {
-            return { indexSet in
-                Task {
-                    let itemsToDelete = indexSet.map { items[$0] }
-                    for itemToDelete in itemsToDelete {
-                        await onDelete(itemToDelete)
-                    }
-                }
-            }
+    private func delete(_ item: Item) {
+        guard deletionTracker.beginDeleting(item.id) else {
+            return
+        }
+        guard let operation = onDelete?(item) else {
+            deletionTracker.finishDeleting(item.id)
+            return
         }
 
-        return nil
+        Task { @MainActor in
+            await operation()
+            deletionTracker.finishDeleting(item.id)
+        }
     }
 }
 
 extension NoorSection {
-    public func onDelete(action: AsyncItemAction<Item>?) -> Self {
+    public func onDelete(action: ItemDeletionAction<Item>?) -> Self {
         var mutableSelf = self
         mutableSelf.onDelete = action
-        return mutableSelf
-    }
-
-    public func onDeleteImmediately(action: ItemAction<Item>?) -> Self {
-        var mutableSelf = self
-        mutableSelf.onDeleteImmediately = action
         return mutableSelf
     }
 

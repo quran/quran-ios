@@ -16,7 +16,7 @@ public struct ReadingBookmarkListItem: View {
 
     public init(
         bookmark: ReadingPositionBookmark,
-        action: @escaping AsyncAction
+        action: @escaping Action
     ) {
         self.bookmark = bookmark
         self.action = action
@@ -36,14 +36,14 @@ public struct ReadingBookmarkListItem: View {
                 location: .bottom
             ),
             accessory: .disclosureIndicator,
-            action: action
+            action: .sync { action() }
         )
     }
 
     // MARK: Private
 
     private let bookmark: ReadingPositionBookmark
-    private let action: AsyncAction
+    private let action: Action
 
     private var locationTitle: String {
         switch bookmark.location {

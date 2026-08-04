@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+public typealias Action = @MainActor @Sendable () -> Void
 public typealias AsyncAction = @MainActor @Sendable () async -> Void
 
 public typealias ItemAction<Item> = @MainActor @Sendable (Item) -> Void

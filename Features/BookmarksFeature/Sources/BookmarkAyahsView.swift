@@ -36,7 +36,7 @@ struct BookmarkAyahsView: View {
                     image: .init(.plusCircle, color: .appIdentity),
                     title: .text(l("bookmarks.collections.new")),
                     titleColor: .appIdentity,
-                    action: { viewModel.presentAddCollection() }
+                    action: .sync { viewModel.presentAddCollection() }
                 )
             }
         }
@@ -51,7 +51,7 @@ struct BookmarkAyahsView: View {
             image: .init(collection.displayImage, color: collection.displayImageColor),
             title: .text(collection.displayName),
             accessory: collectionAccessory(selection),
-            action: { await viewModel.toggleCollection(collection) }
+            action: .async { await viewModel.toggleCollection(collection) }
         )
         .disabled(viewModel.isUpdatingCollection(collection))
         .accessibilityValue(collectionAccessibilityValue(selection))

@@ -94,7 +94,7 @@ private struct AyahSetContentView: View {
             rightPretitle: quranText(ayah),
             title: "\(ayah: ayah) · \(ayah.page.localizedName)",
             titleColor: .secondaryLabel,
-            action: { viewModel.navigateTo(ayah) }
+            action: .sync { viewModel.navigateTo(ayah) }
         )
         .accessibilityHint(l("bookmarks.collections.ayahs.open-hint"))
     }

@@ -81,10 +81,9 @@ private struct BookmarksViewUI: View {
             image: .init(.bookmark, color: .red),
             title: "\(sura: ayah.sura)",
             subtitle: .init(text: .text(bookmark.creationDate.timeAgo()), location: .bottom),
-            accessory: .text(bookmark.page.localizedNumber, accessibilityLabel: bookmark.page.localizedName)
-        ) {
-            selectAction(bookmark)
-        }
+            accessory: .text(bookmark.page.localizedNumber, accessibilityLabel: bookmark.page.localizedName),
+            action: .sync { selectAction(bookmark) }
+        )
     }
 }
 

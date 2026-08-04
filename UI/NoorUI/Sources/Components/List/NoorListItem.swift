@@ -61,7 +61,7 @@ public struct NoorListItem: View {
         rightSubtitle: MultipartText? = nil,
         subtitle: Subtitle? = nil,
         accessory: Accessory? = nil,
-        action: AsyncAction? = nil
+        action: TapAction? = nil
     ) {
         self.leadingEdgeLineColor = leadingEdgeLineColor
         self.image = image
@@ -74,7 +74,7 @@ public struct NoorListItem: View {
         self.rightSubtitle = rightSubtitle
         self.subtitle = subtitle
         self.accessory = accessory
-        _action = action
+        self.action = action
     }
 
     // MARK: Public
@@ -82,6 +82,11 @@ public struct NoorListItem: View {
     public enum SubtitleLocation {
         case trailing
         case bottom
+    }
+
+    public enum TapAction {
+        case sync(Action)
+        case async(AsyncAction)
     }
 
     public enum Accessory {
@@ -111,13 +116,13 @@ public struct NoorListItem: View {
     }
 
     public var body: some View {
-        if let action {
+        if action != nil {
             if hasActionableAccessory {
                 // Use Tap gesture since tapping accessory button will also trigger the whole cell selection.
                 content
-                    .onAsyncTapGesture(asyncAction: action)
+                    .onTapGesture(perform: performAction)
             } else {
-                AsyncButton(action: action) {
+                Button(action: performAction) {
                     content
                 }
             }
@@ -139,7 +144,7 @@ public struct NoorListItem: View {
     let rightSubtitle: MultipartText?
     let subtitle: Subtitle?
     let accessory: Accessory?
-    let _action: AsyncAction?
+    let action: TapAction?
 
     // MARK: Private
 
@@ -147,24 +152,40 @@ public struct NoorListItem: View {
         headerAccessory?.actionable == true || accessory?.actionable == true
     }
 
-    private var action: AsyncAction? {
-        guard let _action else {
-            return nil
+    @MainActor
+    private func performAction() {
+        guard let action else {
+            return
         }
-        return {
-            let properties: [(String, String?)] = [
-                ("heading", heading),
-                ("subheading", subheading?.rawValue),
-                ("rightPretitle", rightPretitle?.rawValue),
-                ("title", title.rawValue),
-                ("rightSubtitle", rightSubtitle?.rawValue),
-                ("subtitle", subtitle?.label?.rawValue),
-            ]
-            let description = properties.compactMap { p in p.1.map { "\(p.0)=\($0)" } }.joined()
-            logger.info("NoorListItem tapped. {\(description)}")
-            await _action()
+
+        logTap()
+        currentTask?.cancel()
+
+        switch action {
+        case .sync(let action):
+            currentTask = nil
+            action()
+        case .async(let action):
+            currentTask = Task {
+                await action()
+            }
         }
     }
+
+    private func logTap() {
+        let properties: [(String, String?)] = [
+            ("heading", heading),
+            ("subheading", subheading?.rawValue),
+            ("rightPretitle", rightPretitle?.rawValue),
+            ("title", title.rawValue),
+            ("rightSubtitle", rightSubtitle?.rawValue),
+            ("subtitle", subtitle?.label?.rawValue),
+        ]
+        let description = properties.compactMap { p in p.1.map { "\(p.0)=\($0)" } }.joined()
+        logger.info("NoorListItem tapped. {\(description)}")
+    }
+
+    @State private var currentTask: Task<Void, Never>? = nil
 
     private var content: some View {
         HStack {
@@ -327,48 +348,48 @@ struct NoorListItem_Previews: PreviewProvider {
                         image: .init(.share),
                         heading: "English",
                         title: "An English title",
-                        subtitle: .init(label: "Translator: ", text: "An English subtitle", location: .bottom)
-                    ) {
-                    }
+                        subtitle: .init(label: "Translator: ", text: "An English subtitle", location: .bottom),
+                        action: .sync {}
+                    )
 
                     NoorListItem(
                         leadingEdgeLineColor: .purple,
                         subheading: "\(ayah: quran.suras[0].verses[1])",
                         rightPretitle: "\(quran: ayahText, color: .purple, lineLimit: 2)",
                         title: "An English title",
-                        subtitle: .init(text: "6 days ago", location: .bottom)
-                    ) {
-                    }
+                        subtitle: .init(text: "6 days ago", location: .bottom),
+                        action: .sync {}
+                    )
 
                     NoorListItem(
                         image: .init(.mail),
                         title: "Title",
                         subtitle: .init(text: "Subtitle", location: .trailing),
-                        accessory: .disclosureIndicator
-                    ) {
-                    }
+                        accessory: .disclosureIndicator,
+                        action: .sync {}
+                    )
 
                     NoorListItem(
                         title: "Reciter name",
                         subtitle: .init(text: "1.25GB – 14 suras downloaded", location: .bottom),
-                        accessory: .none
-                    ) {
-                    }
+                        accessory: .none,
+                        action: .sync {}
+                    )
 
                     NoorListItem(
                         image: .init(.bookmark, color: .red),
                         title: "\(quran.suras[0].localizedSuraNumber). \(sura: quran.suras[0])",
                         subtitle: .init(text: "Just now", location: .bottom),
-                        accessory: .text("44")
-                    ) {
-                    }
+                        accessory: .text("44"),
+                        action: .sync {}
+                    )
 
                     NoorListItem(
                         title: "Reciter name",
                         subtitle: .init(text: "1.25GB – 14 suras downloaded", location: .bottom),
-                        accessory: .download(.downloading(progress: 0.9), action: {})
-                    ) {
-                    }
+                        accessory: .download(.downloading(progress: 0.9), action: {}),
+                        action: .sync {}
+                    )
 
                     NoorListItem(
                         title: "Reciter name",

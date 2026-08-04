@@ -65,15 +65,15 @@ private struct SettingsRootViewUI: View {
     @Binding var error: Error?
 
     let audioEnd: String
-    let navigateToAudioEndSelector: AsyncAction
-    let navigateToAudioManager: AsyncAction
-    let navigateToTranslationsList: AsyncAction
-    let navigateToReadingSelector: AsyncAction
-    let donate: AsyncAction
-    let shareApp: AsyncAction
-    let writeReview: AsyncAction
-    let contactUs: AsyncAction
-    let navigateToDiagnotics: AsyncAction
+    let navigateToAudioEndSelector: Action
+    let navigateToAudioManager: Action
+    let navigateToTranslationsList: Action
+    let navigateToReadingSelector: Action
+    let donate: Action
+    let shareApp: Action
+    let writeReview: Action
+    let contactUs: Action
+    let navigateToDiagnotics: Action
 
     #if QURAN_SYNC
     let isAuthenticated: Bool
@@ -111,7 +111,7 @@ private struct SettingsRootViewUI: View {
                     image: .init(.mushafs),
                     title: .text(l("reading.selector.title")),
                     accessory: .disclosureIndicator,
-                    action: navigateToReadingSelector
+                    action: .sync { navigateToReadingSelector() }
                 )
             }
 
@@ -121,7 +121,7 @@ private struct SettingsRootViewUI: View {
                     title: .text(l("audio.download-play-amount")),
                     subtitle: .init(text: .text(audioEnd), location: .trailing),
                     accessory: .disclosureIndicator,
-                    action: navigateToAudioEndSelector
+                    action: .sync { navigateToAudioEndSelector() }
                 )
 
                 HStack {
@@ -142,7 +142,7 @@ private struct SettingsRootViewUI: View {
                     image: .init(.downloads),
                     title: .text(lAndroid("audio_manager")),
                     accessory: .disclosureIndicator,
-                    action: navigateToAudioManager
+                    action: .sync { navigateToAudioManager() }
                 )
             }
 
@@ -151,7 +151,7 @@ private struct SettingsRootViewUI: View {
                     image: .init(.translation),
                     title: .text(lAndroid("prefs_translations")),
                     accessory: .disclosureIndicator,
-                    action: navigateToTranslationsList
+                    action: .sync { navigateToTranslationsList() }
                 )
             }
 
@@ -160,28 +160,28 @@ private struct SettingsRootViewUI: View {
                     image: .init(.heart),
                     title: .text(l("setting.donate")),
                     accessory: .disclosureIndicator,
-                    action: donate
+                    action: .sync { donate() }
                 )
 
                 NoorListItem(
                     image: .init(.share),
                     title: .text(l("setting.share_app")),
                     accessory: .disclosureIndicator,
-                    action: shareApp
+                    action: .sync { shareApp() }
                 )
 
                 NoorListItem(
                     image: .init(.star),
                     title: .text(l("setting.write_review")),
                     accessory: .disclosureIndicator,
-                    action: writeReview
+                    action: .sync { writeReview() }
                 )
 
                 NoorListItem(
                     image: .init(.mail),
                     title: .text(l("setting.contact_us")),
                     accessory: .disclosureIndicator,
-                    action: contactUs
+                    action: .sync { contactUs() }
                 )
             }
 
@@ -190,7 +190,7 @@ private struct SettingsRootViewUI: View {
                     image: .init(.debug),
                     title: .text(l("diagnostics.title")),
                     accessory: .disclosureIndicator,
-                    action: navigateToDiagnotics
+                    action: .sync { navigateToDiagnotics() }
                 )
             }
         }

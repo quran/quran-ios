@@ -7,27 +7,57 @@
 
 import SwiftUI
 
+@MainActor
+final class QuranScrollScheduler: ObservableObject {
+    private var task: Task<Void, Never>?
+
+    func schedule(_ action: @escaping @MainActor () -> Void) {
+        task?.cancel()
+        task = Task { @MainActor in
+            await Task.yield()
+            guard !Task.isCancelled else { return }
+            action()
+        }
+    }
+
+    func cancel() {
+        task?.cancel()
+        task = nil
+    }
+}
+
+@MainActor
 struct QuranScrollingViewModifier<Value: Equatable, ID: Hashable>: ViewModifier {
     let scrollToValue: Value?
     let anchor: UnitPoint
     let transform: (Value) -> ID?
-    @State private var scrollToValueRequest: Value?
+    @StateObject private var scheduler = QuranScrollScheduler()
 
     func body(content: Content) -> some View {
         ScrollViewReader { scrollView in
             content
-                .onChange(of: scrollToValue) { scrollToValueRequest = $0 }
-                .onChange(of: scrollToValueRequest) { scrollToValue in
-                    if let scrollToValue, let id = transform(scrollToValue) {
-                        withAnimation {
-                            scrollView.scrollTo(id, anchor: anchor)
-                        }
-                        scrollToValueRequest = nil
-                    }
+                .onAppear {
+                    scheduleScroll(to: scrollToValue, using: scrollView)
+                }
+                .onChange(of: scrollToValue) {
+                    scheduleScroll(to: $0, using: scrollView)
+                }
+                .onSizeChange { _ in
+                    scheduleScroll(to: scrollToValue, using: scrollView)
+                }
+                .onDisappear {
+                    scheduler.cancel()
                 }
         }
-        .onSizeChange { _ in
-            scrollToValueRequest = scrollToValue
+    }
+
+    private func scheduleScroll(to value: Value?, using scrollView: ScrollViewProxy) {
+        guard let value else { return }
+        scheduler.schedule {
+            guard let id = transform(value) else { return }
+            withAnimation(.easeInOut(duration: 0.25)) {
+                scrollView.scrollTo(id, anchor: anchor)
+            }
         }
     }
 }

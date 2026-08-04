@@ -108,18 +108,6 @@ public struct SelfIdentifiable<T: Hashable>: Identifiable {
     public var id: T { value }
 }
 
-struct ItemDeletionTracker<ID: Hashable> {
-    private var deletingIDs: Set<ID> = []
-
-    mutating func beginDeleting(_ id: ID) -> Bool {
-        deletingIDs.insert(id).inserted
-    }
-
-    mutating func finishDeleting(_ id: ID) {
-        deletingIDs.remove(id)
-    }
-}
-
 public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     // MARK: Lifecycle
 
@@ -158,7 +146,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     var onDelete: ItemDeletionAction<Item>?
     var onMove: ((IndexSet, Int) -> Void)?
 
-    @State private var deletionTracker = ItemDeletionTracker<Item.ID>()
+    @State private var deletingItemIDs: Set<Item.ID> = []
 
     // MARK: Private
 
@@ -183,17 +171,17 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     }
 
     private func delete(_ item: Item) {
-        guard deletionTracker.beginDeleting(item.id) else {
+        guard deletingItemIDs.insert(item.id).inserted else {
             return
         }
         guard let operation = onDelete?(item) else {
-            deletionTracker.finishDeleting(item.id)
+            deletingItemIDs.remove(item.id)
             return
         }
 
         Task { @MainActor in
             await operation()
-            deletionTracker.finishDeleting(item.id)
+            deletingItemIDs.remove(item.id)
         }
     }
 }

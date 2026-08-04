@@ -51,7 +51,7 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
     let listItem: (Item) -> ListItem
     var onDelete: ItemDeletionAction<Item>?
 
-    @State private var deletionTracker = ItemDeletionTracker<Item.ID>()
+    @State private var deletingItemIDs: Set<Item.ID> = []
 
     // MARK: Private
 
@@ -104,17 +104,17 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
     }
 
     private func delete(_ item: Item, action: ItemDeletionAction<Item>) {
-        guard deletionTracker.beginDeleting(item.id) else {
+        guard deletingItemIDs.insert(item.id).inserted else {
             return
         }
         guard let operation = action(item) else {
-            deletionTracker.finishDeleting(item.id)
+            deletingItemIDs.remove(item.id)
             return
         }
 
         Task { @MainActor in
             await operation()
-            deletionTracker.finishDeleting(item.id)
+            deletingItemIDs.remove(item.id)
         }
     }
 }

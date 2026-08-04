@@ -71,6 +71,23 @@ class ImageDataServiceTests: XCTestCase {
         XCTAssertNil(wordFrames.wordAtLocation(.zero, imageScale: verticalScaling))
     }
 
+    func testGettingMissingImageThrows() async throws {
+        let imagesURL = TestResources.testDataURL.appendingPathComponent("missing-images")
+        let page = quran.pages[0]
+        service = ImageDataService(
+            ayahInfoDatabase: TestResources.resourceURL("hafs_1405_ayahinfo.db"),
+            imagesURL: imagesURL
+        )
+
+        do {
+            _ = try await service.imageForPage(page)
+            XCTFail("Expected a missing image error")
+        } catch let ImageDataServiceError.imageNotFound(errorPage, url) {
+            XCTAssertEqual(errorPage, page)
+            XCTAssertEqual(url, imagesURL.appendingPathComponent("page001.png"))
+        }
+    }
+
     @MainActor
     func testGettingImageAtPage1() async throws {
         let page = quran.pages[0]

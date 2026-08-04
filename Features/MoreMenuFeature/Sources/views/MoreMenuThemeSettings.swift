@@ -36,12 +36,6 @@ private class ThemeSettingsController<V: View>: UIHostingController<V> {
     override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
         super.preferredContentSizeDidChange(forChildContentContainer: container)
         preferredContentSize = container.preferredContentSize
-
-        if #available(iOS 16.0, *) {
-            let height = preferredContentSize.height
-            sheetPresentationController?.detents = [.custom(resolver: { _ in height })]
-            sheetPresentationController?.invalidateDetents()
-        }
     }
 }
 

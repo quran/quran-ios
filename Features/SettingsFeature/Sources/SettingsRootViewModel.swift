@@ -138,17 +138,20 @@ final class SettingsRootViewModel: ObservableObject {
 
     func navigateToAudioManager() {
         logger.info("Settings: presentAudioDownloads")
-        pushViewController { _ in audioDownloadsBuilder.build() }
+        let viewController = audioDownloadsBuilder.build()
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
     func navigateToTranslationsList() {
         logger.info("Settings: presentTranslationsList")
-        pushViewController { _ in translationsListBuilder.build() }
+        let viewController = translationsListBuilder.build()
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
     func navigateToReadingSelectors() {
         logger.info("Settings: navigateToReadingSelectors")
-        pushViewController { _ in readingSelectorBuilder.build() }
+        let viewController = readingSelectorBuilder.build()
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
     func shareApp() {
@@ -191,9 +194,8 @@ final class SettingsRootViewModel: ObservableObject {
 
     func navigateToDiagnotics() {
         logger.info("Settings: navigateToDiagnotics")
-        pushViewController { navigationController in
-            diagnosticsBuilder.build(navigationController: navigationController)
-        }
+        let viewController = diagnosticsBuilder.build(navigationController: navigationController)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
     #if QURAN_SYNC
@@ -245,8 +247,6 @@ final class SettingsRootViewModel: ObservableObject {
     private let quranProfileURL: URL
     private var authenticationClient: any AuthenticationClient
     #endif
-    private var isNavigationInProgress = false
-
     private func showSingleChoiceSelector<T: Hashable>(
         title: String,
         sections: [SingleChoiceSection<T>],
@@ -254,43 +254,16 @@ final class SettingsRootViewModel: ObservableObject {
         itemText: @escaping (T) -> String,
         onSelection: @escaping (T) -> Void
     ) {
-        pushViewController { [weak self] _ in
-            let viewController = singleChoiceSelector(
-                sections: sections,
-                selected: selected,
-                itemText: itemText,
-                onSelection: { [weak self] item in
-                    onSelection(item)
-                    self?.navigationController?.popViewController(animated: true)
-                }
-            )
-            viewController.title = title
-            return viewController
-        }
-    }
-
-    private func pushViewController(_ makeViewController: (UINavigationController) -> UIViewController) {
-        guard let navigationController,
-              !isNavigationInProgress,
-              navigationController.transitionCoordinator == nil,
-              navigationController.presentedViewController == nil
-        else {
-            logger.info("Settings: ignore navigation while a transition is in progress")
-            return
-        }
-
-        isNavigationInProgress = true
-        navigationController.pushViewController(makeViewController(navigationController), animated: true)
-
-        if let transitionCoordinator = navigationController.transitionCoordinator {
-            transitionCoordinator.animate(alongsideTransition: nil) { [weak self] _ in
-                self?.isNavigationInProgress = false
+        let viewController = singleChoiceSelector(
+            sections: sections,
+            selected: selected,
+            itemText: itemText,
+            onSelection: { [weak self] item in
+                onSelection(item)
+                self?.navigationController?.popViewController(animated: true)
             }
-        } else {
-            Task { @MainActor [weak self] in
-                await Task.yield()
-                self?.isNavigationInProgress = false
-            }
-        }
+        )
+        viewController.title = title
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }

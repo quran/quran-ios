@@ -296,7 +296,7 @@ private struct RunsPicker: View {
 
 private struct ReciterRow: View {
     let name: String
-    let action: AsyncAction
+    let action: Action
 
     var body: some View {
         NoorListItem(

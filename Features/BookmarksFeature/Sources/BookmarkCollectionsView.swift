@@ -117,7 +117,7 @@ private struct BookmarkCollectionsContent: View {
         image: NoorSystemImage,
         imageColor: Color,
         count: Int,
-        action: @escaping AsyncAction
+        action: @escaping Action
     ) -> some View {
         NoorListItem(
             image: .init(image, color: imageColor),

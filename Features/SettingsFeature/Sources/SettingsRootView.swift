@@ -65,15 +65,15 @@ private struct SettingsRootViewUI: View {
     @Binding var error: Error?
 
     let audioEnd: String
-    let navigateToAudioEndSelector: AsyncAction
-    let navigateToAudioManager: AsyncAction
-    let navigateToTranslationsList: AsyncAction
-    let navigateToReadingSelector: AsyncAction
-    let donate: AsyncAction
-    let shareApp: AsyncAction
-    let writeReview: AsyncAction
-    let contactUs: AsyncAction
-    let navigateToDiagnotics: AsyncAction
+    let navigateToAudioEndSelector: Action
+    let navigateToAudioManager: Action
+    let navigateToTranslationsList: Action
+    let navigateToReadingSelector: Action
+    let donate: Action
+    let shareApp: Action
+    let writeReview: Action
+    let contactUs: Action
+    let navigateToDiagnotics: Action
 
     #if QURAN_SYNC
     let isAuthenticated: Bool

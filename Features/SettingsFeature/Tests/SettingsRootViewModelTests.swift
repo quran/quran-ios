@@ -142,16 +142,6 @@ final class SettingsRootViewModelTests: XCTestCase {
         assertClientIsNotAuthenticated(sut.error)
     }
 
-    func test_navigationIgnoresCompetingPushWhileTransitionIsStarting() {
-        let navigationController = UINavigationController(rootViewController: UIViewController())
-        let sut = makeSUT(authenticationClient: nil, navigationController: navigationController)
-
-        sut.navigateToAudioEndSelector()
-        sut.navigateToDiagnotics()
-
-        XCTAssertEqual(navigationController.viewControllers.count, 2)
-    }
-
     // MARK: Private
 
     private func makeSUT(

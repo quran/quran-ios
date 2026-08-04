@@ -117,10 +117,9 @@ private struct HomeViewUI: View {
             image: .init(.lastPage, color: .secondaryLabel),
             title: "\(sura: ayah.sura)",
             subtitle: .init(text: .text(lastPage.modifiedOn.timeAgo()), location: .bottom),
-            accessory: .text(lastPage.page.localizedNumber, accessibilityLabel: lastPage.page.localizedName)
-        ) {
-            selectLastPage(lastPage)
-        }
+            accessory: .text(lastPage.page.localizedNumber, accessibilityLabel: lastPage.page.localizedName),
+            action: { selectLastPage(lastPage) }
+        )
     }
 
     func suraView(_ sura: Sura) -> some View {
@@ -130,10 +129,9 @@ private struct HomeViewUI: View {
         return NoorListItem(
             title: "\(sura.localizedSuraNumber). \(sura: sura)",
             subtitle: .init(text: "\(suraType) - \(ayahsString)", location: .bottom),
-            accessory: .text(sura.page.localizedNumber, accessibilityLabel: sura.page.localizedName)
-        ) {
-            selectSura(sura)
-        }
+            accessory: .text(sura.page.localizedNumber, accessibilityLabel: sura.page.localizedName),
+            action: { selectSura(sura) }
+        )
     }
 
     func quarterView(_ item: QuarterItem) -> some View {
@@ -145,10 +143,9 @@ private struct HomeViewUI: View {
             subheading: .text(quarter.localizedName),
             title: "\(ayah: ayah)",
             rightSubtitle: "\(quran: item.ayahText, lineLimit: 1)",
-            accessory: .text(page.localizedNumber, accessibilityLabel: page.localizedName)
-        ) {
-            selectQuarter(item)
-        }
+            accessory: .text(page.localizedNumber, accessibilityLabel: page.localizedName),
+            action: { selectQuarter(item) }
+        )
     }
 
     @ViewBuilder

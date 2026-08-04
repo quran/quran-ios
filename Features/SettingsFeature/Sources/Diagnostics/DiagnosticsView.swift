@@ -25,7 +25,7 @@ struct DiagnosticsView: View {
 private struct DiagnosticsViewUI: View {
     @Binding var error: Error?
     @Binding var enableDebugLogging: Bool
-    let shareLog: AsyncAction
+    let shareLog: Action
 
     var body: some View {
         NoorList {

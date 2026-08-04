@@ -51,7 +51,7 @@ struct BookmarkAyahsView: View {
             image: .init(collection.displayImage, color: collection.displayImageColor),
             title: .text(collection.displayName),
             accessory: collectionAccessory(selection),
-            action: { await viewModel.toggleCollection(collection) }
+            asyncAction: { await viewModel.toggleCollection(collection) }
         )
         .disabled(viewModel.isUpdatingCollection(collection))
         .accessibilityValue(collectionAccessibilityValue(selection))

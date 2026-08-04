@@ -44,7 +44,7 @@ private struct SearchViewUI: View {
     let autocompletions: [SearchText]
 
     let start: AsyncAction
-    let search: AsyncItemAction<String>
+    let search: ItemAction<String>
     let selectSearchResult: ItemAction<(result: SearchResult, source: SearchResults.Source)>
 
     var body: some View {
@@ -85,10 +85,9 @@ private struct SearchViewUI: View {
             NoorSection(autocompletions.map(SelfIdentifiable.init)) { item in
                 NoorListItem(
                     image: .init(.search),
-                    title: autocompletionText(of: item.value)
-                ) {
-                    await search(item.value.text)
-                }
+                    title: autocompletionText(of: item.value),
+                    action: { search(item.value.text) }
+                )
             }
         }
     }
@@ -99,19 +98,17 @@ private struct SearchViewUI: View {
             NoorSection(title: l("search.recents.title"), recents.map(SelfIdentifiable.init)) { item in
                 NoorListItem(
                     image: .init(.search),
-                    title: .text(item.value)
-                ) {
-                    await search(item.value)
-                }
+                    title: .text(item.value),
+                    action: { search(item.value) }
+                )
             }
 
             NoorSection(title: l("search.popular.title"), populars.map(SelfIdentifiable.init)) { item in
                 NoorListItem(
                     image: .init(.search),
-                    title: .text(item.value)
-                ) {
-                    await search(item.value)
-                }
+                    title: .text(item.value),
+                    action: { search(item.value) }
+                )
             }
         }
     }
@@ -130,10 +127,9 @@ private struct SearchViewUI: View {
                             accessory: .text(
                                 item.ayah.page.localizedNumber,
                                 accessibilityLabel: item.ayah.page.localizedName
-                            )
-                        ) {
-                            selectSearchResult((item, result.source))
-                        }
+                            ),
+                            action: { selectSearchResult((item, result.source)) }
+                        )
                     }
                 }
             }

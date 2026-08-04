@@ -12,6 +12,19 @@ import VLogging
 import WordFramePersistence
 import WordFrameService
 
+public enum ImageDataServiceError: Error {
+    case imageNotFound(page: Page, url: URL)
+}
+
+extension ImageDataServiceError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .imageNotFound(let page, let url):
+            return "No image found for page '\(page)' at '\(url.path)'"
+        }
+    }
+}
+
 public struct ImageDataService {
     // MARK: Lifecycle
 
@@ -31,12 +44,13 @@ public struct ImageDataService {
     }
 
     public func imageForPage(_ page: Page) async throws -> ImagePage {
+        try Task.checkCancellation()
         let imageURL = imageURLForPage(page)
         guard let image = UIImage(contentsOfFile: imageURL.path) else {
             logFiles(directory: imagesURL) // <reading>/images/width/
             logFiles(directory: imagesURL.deletingLastPathComponent()) // <reading>/images/
             logFiles(directory: imagesURL.deletingLastPathComponent().deletingLastPathComponent()) // <reading>/
-            fatalError("No image found for page '\(page)'")
+            throw ImageDataServiceError.imageNotFound(page: page, url: imageURL)
         }
 
         // preload the image

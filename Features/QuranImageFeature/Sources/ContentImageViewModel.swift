@@ -13,6 +13,7 @@ import NoorUI
 import QuranAnnotations
 import QuranGeometry
 import QuranKit
+import ReadingService
 import SwiftUI
 import VLogging
 
@@ -78,8 +79,17 @@ class ContentImageViewModel: ObservableObject {
     }
 
     func loadImagePage() async {
+        guard ReadingPreferences.shared.reading == reading else {
+            return
+        }
+
         do {
-            imagePage = try await imageDataService.imageForPage(page)
+            let imagePage = try await imageDataService.imageForPage(page)
+            try Task.checkCancellation()
+            guard ReadingPreferences.shared.reading == reading else {
+                return
+            }
+            self.imagePage = imagePage
 
             if reading == .hafs_1421 {
                 suraHeaderLocations = try await imageDataService.suraHeaders(page)
@@ -87,7 +97,12 @@ class ContentImageViewModel: ObservableObject {
             }
 
             scrollToVerseIfNeeded()
+        } catch is CancellationError {
+            return
         } catch {
+            guard ReadingPreferences.shared.reading == reading else {
+                return
+            }
             // TODO: should show error to the user
             crasher.recordError(error, reason: "Failed to retrieve quran image details")
         }

@@ -29,6 +29,7 @@ public struct BookmarkAyahsBuilder {
             verses: verses,
             collections: collections,
             highlights: highlights,
+            analytics: container.analytics,
             ayahBookmarkCollectionService: container.ayahBookmarkCollectionService(),
             ayahHighlightService: container.ayahHighlightService()
         )

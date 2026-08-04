@@ -3,9 +3,11 @@
 //  BookmarkCollectionsViewModel.swift
 //
 
+import Analytics
 import AnnotationsService
 import AuthenticationClient
 import Combine
+import FeaturesSupport
 import Foundation
 import QuranAnnotations
 import QuranKit
@@ -19,6 +21,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init(
+        analytics: AnalyticsLibrary,
         authenticationClient: any AuthenticationClient,
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
         ayahHighlightService: MobileSyncAyahHighlightService,
@@ -28,6 +31,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         navigateToPage: @escaping (Page) -> Void,
         navigateToAyah: @escaping (AyahNumber) -> Void
     ) {
+        self.analytics = analytics
         self.authenticationClient = authenticationClient
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
         self.ayahHighlightService = ayahHighlightService
@@ -104,6 +108,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         async let observeHighlights: Void = observeHighlights()
         async let observeReadingBookmark: Void = observeReadingBookmark()
         isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
+        logger.info("Quran Sync: restored authentication from Bookmarks. Authenticated: \(isAuthenticated)")
         _ = await (observeCollections, observeHighlights, observeReadingBookmark)
     }
 
@@ -112,10 +117,14 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             return
         }
 
+        analytics.quranSyncSignIn(from: .bookmarks)
+        logger.info("Quran Sync: starting sign in from Bookmarks")
         do {
             try await authenticationClient.login(on: navigationController)
             isAuthenticated = await authenticationClient.authenticationState == .authenticated
+            logger.info("Quran Sync: sign in completed from Bookmarks. Authenticated: \(isAuthenticated)")
         } catch AuthenticationClientError.cancelled {
+            logger.info("Quran Sync: sign in cancelled from Bookmarks")
             return
         } catch {
             logger.error("Failed to login to Quran.com from bookmarks: \(error)")
@@ -124,6 +133,8 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     }
 
     func dismissSyncBanner() {
+        analytics.quranSyncSignInBannerDismissed(from: .bookmarks)
+        logger.info("Quran Sync: sign-in banner dismissed from Bookmarks")
         isSyncBannerDismissed = true
         preferences.isCollectionsSyncBannerDismissed = true
     }
@@ -142,6 +153,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         do {
             try await ayahBookmarkCollectionService.createCollection(named: name)
         } catch {
+            logger.error("Quran Sync: failed to create bookmark collection: \(error)")
             self.error = error
         }
     }
@@ -164,6 +176,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         do {
             try await ayahBookmarkCollectionService.removeCollection(id: collection.collection.id)
         } catch {
+            logger.error("Quran Sync: failed to remove bookmark collection: \(error)")
             self.error = error
         }
     }
@@ -201,6 +214,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     // MARK: Private
 
+    private let analytics: AnalyticsLibrary
     private let authenticationClient: any AuthenticationClient
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let ayahHighlightService: MobileSyncAyahHighlightService
@@ -229,6 +243,8 @@ final class BookmarkCollectionsViewModel: ObservableObject {
                 self.highlights = highlights
             }
         } catch {
+            guard !Task.isCancelled else { return }
+            logger.error("Quran Sync: failed to observe highlights in Bookmarks: \(error)")
             self.error = error
         }
     }
@@ -243,6 +259,8 @@ final class BookmarkCollectionsViewModel: ObservableObject {
                 }
             }
         } catch {
+            guard !Task.isCancelled else { return }
+            logger.error("Quran Sync: failed to observe collections in Bookmarks: \(error)")
             self.error = error
         }
     }
@@ -267,6 +285,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
                     return
                 } catch {
                     guard !Task.isCancelled else { return }
+                    logger.error("Quran Sync: failed to observe reading bookmark in Bookmarks: \(error)")
                     self?.error = error
                 }
             }

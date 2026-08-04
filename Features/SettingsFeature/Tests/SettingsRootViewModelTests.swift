@@ -63,15 +63,21 @@ final class SettingsRootViewModelTests: XCTestCase {
     func test_login_updatesAuthenticationStateAndEmail() async {
         let client = AuthenticationClientFake()
         client.authenticationStateValue = .authenticated
+        let analytics = AnalyticsRecorder()
         client.loggedInUserValue = makeUser(email: "user@example.com")
         let navigationController = UINavigationController()
-        let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
+        let sut = makeSUT(
+            analytics: analytics,
+            authenticationClient: client,
+            navigationController: navigationController
+        )
 
         await sut.loginToQuranCom()
 
         XCTAssertTrue(sut.isAuthenticated)
         XCTAssertEqual(sut.currentUserEmail, "user@example.com")
         XCTAssertEqual(client.events, [.login, .readAuthenticationState, .readLoggedInUser])
+        XCTAssertEqual(analytics.events, [.init(name: "QuranSyncSignIn", value: "settings")])
         XCTAssertNil(sut.error)
     }
 
@@ -113,8 +119,9 @@ final class SettingsRootViewModelTests: XCTestCase {
 
     func test_logout_clearsAuthenticationStateAndEmail() async {
         let client = AuthenticationClientFake()
+        let analytics = AnalyticsRecorder()
         client.loggedInUserValue = makeUser(email: "user@example.com")
-        let sut = makeSUT(authenticationClient: client)
+        let sut = makeSUT(analytics: analytics, authenticationClient: client)
         sut.isAuthenticated = true
         sut.loggedInUser = makeUser(email: "user@example.com")
 
@@ -123,6 +130,7 @@ final class SettingsRootViewModelTests: XCTestCase {
         XCTAssertFalse(sut.isAuthenticated)
         XCTAssertNil(sut.currentUserEmail)
         XCTAssertEqual(client.events, [.logout])
+        XCTAssertEqual(analytics.events, [.init(name: "QuranSyncSignOut", value: "settings")])
         XCTAssertNil(sut.error)
     }
 
@@ -137,13 +145,14 @@ final class SettingsRootViewModelTests: XCTestCase {
     // MARK: Private
 
     private func makeSUT(
+        analytics: AnalyticsLibrary = AnalyticsRecorder(),
         authenticationClient: (any AuthenticationClient)?,
         navigationController: UINavigationController? = nil
     ) -> SettingsRootViewModel {
         let navigationController = navigationController ?? UINavigationController()
         let container = AppDependenciesStub(authenticationClient: authenticationClient ?? UnavailableAuthenticationClient())
         return SettingsRootViewModel(
-            analytics: AnalyticsSpy(),
+            analytics: analytics,
             reviewService: ReviewService(analytics: AnalyticsSpy()),
             authenticationClient: authenticationClient ?? UnavailableAuthenticationClient(),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
@@ -159,6 +168,19 @@ final class SettingsRootViewModelTests: XCTestCase {
         guard case .notAuthenticated = error as? AuthenticationClientError else {
             return XCTFail("Expected notAuthenticated, got \(String(describing: error))", file: file, line: line)
         }
+    }
+}
+
+private struct AnalyticsEvent: Equatable {
+    let name: String
+    let value: String
+}
+
+private final class AnalyticsRecorder: AnalyticsLibrary, @unchecked Sendable {
+    private(set) var events: [AnalyticsEvent] = []
+
+    func logEvent(_ name: String, value: String) {
+        events.append(.init(name: name, value: value))
     }
 }
 

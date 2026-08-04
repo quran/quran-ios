@@ -41,6 +41,7 @@ public struct NotesBuilder {
         #if QURAN_SYNC
         let noteService = container.mobileSyncNoteService()
         let viewModel = NotesViewModel(
+            analytics: container.analytics,
             authenticationClient: container.authenticationClient,
             navigationController: navigationController,
             noteService: noteService,

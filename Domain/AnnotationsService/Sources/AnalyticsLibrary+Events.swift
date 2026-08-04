@@ -16,15 +16,15 @@ extension AnalyticsLibrary {
         logEvent(name, value: verses.count.description)
     }
 
-    func highlight(verses: [AyahNumber]) {
+    public func highlight(verses: [AyahNumber]) {
         logVersesEvent("HighlightVersesNum", verses: verses)
     }
 
-    func unhighlight(verses: some Collection<AyahNumber>) {
+    public func unhighlight(verses: some Collection<AyahNumber>) {
         logVersesEvent("UnhighlightVersesNum", verses: verses)
     }
 
-    func updateNote(verses: Set<AyahNumber>) {
+    public func updateNote(verses: Set<AyahNumber>) {
         logVersesEvent("UpdateNoteVersesNum", verses: verses)
     }
 }

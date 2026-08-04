@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import Analytics
 import AnnotationsService
 import AuthenticationClient
 import AuthenticationClientFake
@@ -42,6 +43,7 @@ final class NotesViewModelTests: XCTestCase {
         let item = NoteItem(note: note, quranText: "Verse")
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         let sut = NotesViewModel(
+            analytics: AnalyticsRecorder(),
             authenticationClient: UnavailableAuthenticationClient(),
             navigationController: UINavigationController(),
             noteService: noteService,
@@ -69,6 +71,7 @@ final class NotesViewModelTests: XCTestCase {
         try await noteService.createNote(body: "Observed note", startAyah: ayah, endAyah: ayah)
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         let sut = NotesViewModel(
+            analytics: AnalyticsRecorder(),
             authenticationClient: UnavailableAuthenticationClient(),
             navigationController: UINavigationController(),
             noteService: noteService,
@@ -115,12 +118,14 @@ final class NotesViewModelTests: XCTestCase {
     func test_login_setsAuthenticated_whenLoginSucceeds() async {
         let client = AuthenticationClientFake()
         client.authenticationStateValue = .authenticated
-        let sut = makeSUT(authenticationClient: client)
+        let analytics = AnalyticsRecorder()
+        let sut = makeSUT(analytics: analytics, authenticationClient: client)
 
         await sut.loginToQuranCom()
 
         XCTAssertTrue(sut.isAuthenticated)
         XCTAssertEqual(client.events, [.login, .readAuthenticationState])
+        XCTAssertEqual(analytics.events, [.init(name: "QuranSyncSignIn", value: "notes")])
         XCTAssertNil(sut.error)
     }
 
@@ -150,13 +155,18 @@ final class NotesViewModelTests: XCTestCase {
     }
 
     func test_dismissSyncBanner_persistsDismissal() {
-        let sut = makeSUT()
+        let analytics = AnalyticsRecorder()
+        let sut = makeSUT(analytics: analytics)
 
         sut.dismissSyncBanner()
 
         XCTAssertTrue(sut.isSyncBannerDismissed)
         XCTAssertTrue(AuthenticationPreferences.shared.isNotesSyncBannerDismissed)
         XCTAssertFalse(sut.shouldShowSyncBanner)
+        XCTAssertEqual(
+            analytics.events,
+            [.init(name: "QuranSyncSignInBannerDismissed", value: "notes")]
+        )
     }
 
     func test_prepareNotesForSharing_usesShareableVerseText() async throws {
@@ -170,6 +180,7 @@ final class NotesViewModelTests: XCTestCase {
         )
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-translations-database")
         let sut = NotesViewModel(
+            analytics: AnalyticsRecorder(),
             authenticationClient: UnavailableAuthenticationClient(),
             navigationController: UINavigationController(),
             noteService: noteService,
@@ -207,6 +218,7 @@ final class NotesViewModelTests: XCTestCase {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         var navigatedAyah: AyahNumber?
         let sut = NotesViewModel(
+            analytics: AnalyticsRecorder(),
             authenticationClient: UnavailableAuthenticationClient(),
             navigationController: UINavigationController(),
             noteService: noteService,
@@ -233,10 +245,12 @@ final class NotesViewModelTests: XCTestCase {
     }
 
     private func makeSUT(
+        analytics: AnalyticsLibrary = AnalyticsRecorder(),
         authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient()
     ) -> NotesViewModel {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         return NotesViewModel(
+            analytics: analytics,
             authenticationClient: authenticationClient,
             navigationController: navigationController,
             noteService: noteService,
@@ -271,5 +285,18 @@ final class NotesViewModelTests: XCTestCase {
 
 private enum TestError: Error {
     case loginFailed
+}
+
+private struct AnalyticsEvent: Equatable {
+    let name: String
+    let value: String
+}
+
+private final class AnalyticsRecorder: AnalyticsLibrary, @unchecked Sendable {
+    private(set) var events: [AnalyticsEvent] = []
+
+    func logEvent(_ name: String, value: String) {
+        events.append(.init(name: name, value: value))
+    }
 }
 #endif

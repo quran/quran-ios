@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import Analytics
 import MobileSync
 import MobileSyncTestSupport
 import NoorUI
@@ -24,10 +25,12 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
 
     func test_selectingHighlightImmediatelyPersistsAcrossSuras() async throws {
         let fixture = try await makeFixture()
+        let analytics = AnalyticsRecorder()
         let sut = BookmarkAyahsViewModel(
             verses: verses,
             collections: fixture.collections,
             highlights: fixture.highlights,
+            analytics: analytics,
             ayahBookmarkCollectionService: fixture.collectionService,
             ayahHighlightService: fixture.highlightService
         )
@@ -38,6 +41,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         XCTAssertEqual(stored[verses[0]], .green)
         XCTAssertEqual(stored[verses[1]], .green)
         XCTAssertEqual(sut.highlightSelection, .color(.green))
+        XCTAssertEqual(analytics.events, [.init(name: "HighlightVersesNum", value: "2")])
     }
 
     func test_togglingMixedCollectionImmediatelyAddsAllSelectedAyahs() async throws {
@@ -46,6 +50,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             verses: verses,
             collections: fixture.collections,
             highlights: fixture.highlights,
+            analytics: AnalyticsRecorder(),
             ayahBookmarkCollectionService: fixture.collectionService,
             ayahHighlightService: fixture.highlightService
         )
@@ -61,10 +66,12 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
 
     func test_removingHighlightImmediatelyRemovesSelectedAyahs() async throws {
         let fixture = try await makeFixture()
+        let analytics = AnalyticsRecorder()
         let sut = BookmarkAyahsViewModel(
             verses: verses,
             collections: fixture.collections,
             highlights: fixture.highlights,
+            analytics: analytics,
             ayahBookmarkCollectionService: fixture.collectionService,
             ayahHighlightService: fixture.highlightService
         )
@@ -74,6 +81,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         XCTAssertNil(stored[verses[0]])
         XCTAssertNil(stored[verses[1]])
         XCTAssertEqual(sut.highlightSelection, .none)
+        XCTAssertEqual(analytics.events, [.init(name: "UnhighlightVersesNum", value: "2")])
     }
 
     func test_mixedHighlightSelectionCanBeRemoved() async throws {
@@ -83,6 +91,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             verses: verses,
             collections: fixture.collections,
             highlights: try await storedHighlights(),
+            analytics: AnalyticsRecorder(),
             ayahBookmarkCollectionService: fixture.collectionService,
             ayahHighlightService: fixture.highlightService
         )
@@ -103,6 +112,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             verses: verses,
             collections: fixture.collections,
             highlights: try await storedHighlights(),
+            analytics: AnalyticsRecorder(),
             ayahBookmarkCollectionService: fixture.collectionService,
             ayahHighlightService: fixture.highlightService
         )
@@ -189,6 +199,19 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             $0.collection.name.caseInsensitiveCompare(name) == .orderedSame
         }
         return Set(collection?.bookmarks.map { "\($0.sura):\($0.ayah)" } ?? [])
+    }
+}
+
+private struct AnalyticsEvent: Equatable {
+    let name: String
+    let value: String
+}
+
+private final class AnalyticsRecorder: AnalyticsLibrary, @unchecked Sendable {
+    private(set) var events: [AnalyticsEvent] = []
+
+    func logEvent(_ name: String, value: String) {
+        events.append(.init(name: name, value: value))
     }
 }
 #endif

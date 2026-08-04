@@ -9,7 +9,9 @@
 import Analytics
 import Combine
 #else
+import Analytics
 import AuthenticationClient
+import FeaturesSupport
 #endif
 import AnnotationsService
 import Crashing
@@ -31,6 +33,7 @@ final class NotesViewModel: ObservableObject {
 
     #if QURAN_SYNC
     init(
+        analytics: AnalyticsLibrary,
         authenticationClient: any AuthenticationClient,
         navigationController: UINavigationController,
         noteService: MobileSyncNoteService,
@@ -39,6 +42,7 @@ final class NotesViewModel: ObservableObject {
         navigateTo: @escaping (AyahNumber) -> Void,
         editNote: @escaping (Note) -> Void
     ) {
+        self.analytics = analytics
         self.authenticationClient = authenticationClient
         self.navigationController = navigationController
         self.noteService = noteService
@@ -100,12 +104,15 @@ final class NotesViewModel: ObservableObject {
     func start() async {
         #if QURAN_SYNC
         isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
+        logger.info("Quran Sync: restored authentication from Notes. Authenticated: \(isAuthenticated)")
         do {
             let sequence = noteService.notesSequence(quran: readingPreferences.reading.quran)
             for try await notes in sequence {
                 self.notes = await noteItems(with: notes)
             }
         } catch {
+            guard !Task.isCancelled else { return }
+            logger.error("Quran Sync: failed to observe notes: \(error)")
             self.error = error
         }
         #else
@@ -130,10 +137,14 @@ final class NotesViewModel: ObservableObject {
             return
         }
 
+        analytics.quranSyncSignIn(from: .notes)
+        logger.info("Quran Sync: starting sign in from Notes")
         do {
             try await authenticationClient.login(on: navigationController)
             isAuthenticated = await authenticationClient.authenticationState == .authenticated
+            logger.info("Quran Sync: sign in completed from Notes. Authenticated: \(isAuthenticated)")
         } catch AuthenticationClientError.cancelled {
+            logger.info("Quran Sync: sign in cancelled from Notes")
             return
         } catch {
             logger.error("Failed to login to Quran.com from notes: \(error)")
@@ -142,6 +153,8 @@ final class NotesViewModel: ObservableObject {
     }
 
     func dismissSyncBanner() {
+        analytics.quranSyncSignInBannerDismissed(from: .notes)
+        logger.info("Quran Sync: sign-in banner dismissed from Notes")
         isSyncBannerDismissed = true
         preferences.isNotesSyncBannerDismissed = true
     }
@@ -159,9 +172,11 @@ final class NotesViewModel: ObservableObject {
 
     func deleteItem(_ item: NoteItem) async {
         #if QURAN_SYNC
+        logger.info("Quran Sync: deleting note spanning \(item.note.verses.count) ayah(s)")
         do {
             try await noteService.removeNote(item.note)
         } catch {
+            logger.error("Quran Sync: failed to delete note: \(error)")
             self.error = error
         }
         #else
@@ -208,13 +223,13 @@ final class NotesViewModel: ObservableObject {
 
     // MARK: Private
 
+    private let analytics: AnalyticsLibrary
     #if QURAN_SYNC
     private let authenticationClient: any AuthenticationClient
     private let noteService: MobileSyncNoteService
     private weak var navigationController: UINavigationController?
     private let preferences = AuthenticationPreferences.shared
     #else
-    private let analytics: AnalyticsLibrary
     private let noteService: NoteService
     #endif
     private let textService: QuranTextDataService

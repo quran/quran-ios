@@ -3,6 +3,7 @@
 //  BookmarkAyahsViewModel.swift
 //
 
+import Analytics
 import AnnotationsService
 import Combine
 import Foundation
@@ -30,10 +31,12 @@ final class BookmarkAyahsViewModel: ObservableObject {
         verses: [AyahNumber],
         collections: [AyahBookmarkCollection],
         highlights: [AyahNumber: HighlightColor] = [:],
+        analytics: AnalyticsLibrary,
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
         ayahHighlightService: MobileSyncAyahHighlightService
     ) {
         self.verses = Self.unique(verses)
+        self.analytics = analytics
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
         self.ayahHighlightService = ayahHighlightService
         updateCollections(collections)
@@ -91,9 +94,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
         do {
             if let color {
                 try await ayahHighlightService.setHighlight(color, for: verses)
+                analytics.highlight(verses: verses)
                 HighlightPreferences.shared.lastUsedHighlightColor = color
             } else {
                 try await ayahHighlightService.removeHighlight(for: verses)
+                analytics.unhighlight(verses: verses)
             }
         } catch is CancellationError {
             highlightSelection = previousSelection
@@ -134,6 +139,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
             case .unselected:
                 try await ayahBookmarkCollectionService.removeAyahs(verses, fromCollectionWithID: id)
             }
+            logger.info("Quran Sync: updated bookmark collection membership for \(verses.count) ayah(s)")
         } catch is CancellationError {
             collectionSelections[id] = previousSelection
         } catch {
@@ -163,6 +169,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
             newCollectionName = ""
             isPresentingAddCollection = false
         } catch {
+            logger.error("Quran Sync: failed to create bookmark collection: \(error)")
             self.error = error
         }
     }
@@ -171,6 +178,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
 
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let ayahHighlightService: MobileSyncAyahHighlightService
+    private let analytics: AnalyticsLibrary
 
     private func updateCollections(_ collections: [AyahBookmarkCollection]) {
         let collections = BookmarkCollectionsViewModel.sorted(collections)
@@ -213,6 +221,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
             }
         } catch {
             guard !Task.isCancelled else { return }
+            logger.error("Quran Sync: failed to observe collections in bookmark editor: \(error)")
             self.error = error
         }
     }
@@ -225,6 +234,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
             }
         } catch {
             guard !Task.isCancelled else { return }
+            logger.error("Quran Sync: failed to observe highlights in bookmark editor: \(error)")
             self.error = error
         }
     }

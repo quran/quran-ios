@@ -8,6 +8,7 @@
 import Analytics
 import AudioDownloadsFeature
 import Combine
+import FeaturesSupport
 import Localization
 #if QURAN_SYNC
 import AuthenticationClient
@@ -201,6 +202,7 @@ final class SettingsRootViewModel: ObservableObject {
     func refreshAuthenticationState() async {
         isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
         loggedInUser = isAuthenticated ? await authenticationClient.loggedInUser : nil
+        logger.info("Quran Sync: restored authentication from Settings. Authenticated: \(isAuthenticated)")
     }
 
     func loginToQuranCom() async {
@@ -208,11 +210,15 @@ final class SettingsRootViewModel: ObservableObject {
             return
         }
 
+        analytics.quranSyncSignIn(from: .settings)
+        logger.info("Quran Sync: starting sign in from Settings")
         do {
             try await authenticationClient.login(on: viewController)
             isAuthenticated = await authenticationClient.authenticationState == .authenticated
             loggedInUser = isAuthenticated ? await authenticationClient.loggedInUser : nil
+            logger.info("Quran Sync: sign in completed from Settings. Authenticated: \(isAuthenticated)")
         } catch AuthenticationClientError.cancelled {
+            logger.info("Quran Sync: sign in cancelled from Settings")
             return
         } catch {
             logger.error("Failed to login to Quran.com: \(error)")
@@ -221,10 +227,13 @@ final class SettingsRootViewModel: ObservableObject {
     }
 
     func logoutFromQuranCom() async {
+        analytics.quranSyncSignOut(from: .settings)
+        logger.info("Quran Sync: starting sign out from Settings")
         do {
             try await authenticationClient.logout()
             isAuthenticated = false
             loggedInUser = nil
+            logger.info("Quran Sync: sign out succeeded from Settings")
         } catch {
             logger.error("Failed to logout from Quran.com: \(error)")
             self.error = error

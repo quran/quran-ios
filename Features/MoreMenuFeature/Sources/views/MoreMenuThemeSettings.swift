@@ -21,11 +21,7 @@ private class ThemeSettingsController<V: View>: UIHostingController<V> {
         sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
         sheetPresentationController?.widthFollowsPreferredContentSizeWhenEdgeAttached = true
 
-        if #available(iOS 16.0, *) {
-            sheetPresentationController?.detents = [.custom(resolver: { _ in 400 })]
-        } else {
-            sheetPresentationController?.detents = [.medium()]
-        }
+        sheetPresentationController?.detents = [.medium()]
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -36,12 +32,6 @@ private class ThemeSettingsController<V: View>: UIHostingController<V> {
     override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
         super.preferredContentSizeDidChange(forChildContentContainer: container)
         preferredContentSize = container.preferredContentSize
-
-        if #available(iOS 16.0, *) {
-            let height = preferredContentSize.height
-            sheetPresentationController?.detents = [.custom(resolver: { _ in height })]
-            sheetPresentationController?.invalidateDetents()
-        }
     }
 }
 

@@ -12,6 +12,7 @@ import UIx
 
 struct AudioBannerView: View {
     @StateObject var viewModel: AudioBannerViewModel
+    @StateObject private var modalCoordinator = AudioBannerModalCoordinator()
     @Environment(\.showToast) private var showToast
     @Environment(\.uikitNavigator) private var navigator
     @ScaledMetric private var toastOffset = 100
@@ -37,17 +38,10 @@ struct AudioBannerView: View {
             viewModel.toast = nil
             showToast?(Toast(toast.message, action: toast.action, bottomOffset: toastOffset))
         }
-        .onChange(of: viewModel.viewControllerToPresent) { _ in
-            if let presentingVC = viewModel.viewControllerToPresent {
-                viewModel.viewControllerToPresent = nil
-                navigator?.viewController?.present(presentingVC, animated: true)
-            }
-        }
-        .onChange(of: viewModel.dismissPresentedViewController) { _ in
-            if viewModel.dismissPresentedViewController {
-                viewModel.dismissPresentedViewController = false
-                navigator?.viewController?.dismiss(animated: true)
-            }
+        .onReceive(viewModel.$modalRequest.compactMap { $0 }) { request in
+            viewModel.modalRequest = nil
+            guard let presentingViewController = navigator?.viewController else { return }
+            modalCoordinator.handle(request, from: presentingViewController)
         }
         .errorAlert(error: $viewModel.error)
         .taskOnce {

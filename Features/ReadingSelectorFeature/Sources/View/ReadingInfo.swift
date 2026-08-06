@@ -57,7 +57,7 @@ enum ReadingInfoTestData {
         [
             ReadingGroup(id: "a", title: "Uthmani", readings: Array(readings.prefix(3))),
             ReadingGroup(id: "b", title: "Tajweed", readings: [readings[3]]),
-            ReadingGroup(id: "c", title: "Naskh", readings: [readings[4]]),
+            ReadingGroup(id: "c", title: "IndoPak", readings: [readings[4]]),
         ]
     }
 }

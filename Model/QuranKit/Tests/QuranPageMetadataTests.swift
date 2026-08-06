@@ -61,8 +61,8 @@ final class QuranPageMetadataTests: XCTestCase {
         }
     }
 
-    func testNaskhReadingUsesSkippedPageMetadata() {
-        let quran = Quran.hafsNaskh
+    func testIndoPakReadingUsesSkippedPageMetadata() {
+        let quran = Quran.hafsIndoPak
 
         XCTAssertEqual(quran.numberOfPages, 611)
         XCTAssertEqual(quran.pagesToSkip, 1)
@@ -87,8 +87,8 @@ final class QuranPageMetadataTests: XCTestCase {
         XCTAssertFalse(quran.pages[1].isRightSide)
     }
 
-    func testNaskhJuzPagesUseFirstVersePages() {
-        let juzs = Quran.hafsNaskh.juzs
+    func testIndoPakJuzPagesUseFirstVersePages() {
+        let juzs = Quran.hafsIndoPak.juzs
 
         XCTAssertEqual(juzs.map(\.page), juzs.map(\.firstVerse.page))
         XCTAssertEqual(
@@ -101,25 +101,25 @@ final class QuranPageMetadataTests: XCTestCase {
         )
     }
 
-    func testNaskhReadingConfiguration() {
-        XCTAssertTrue(Reading.allReadings.contains(.naskh))
-        XCTAssertEqual(Reading.naskh.quran, .hafsNaskh)
-        XCTAssertEqual(Reading.naskh.linePageMetrics, .naskhLinePages)
-        XCTAssertEqual(Reading.naskh.linePageAssetWidth, 1342)
-        XCTAssertEqual(Reading.naskh.imageAssetWidth, 1342)
-        XCTAssertTrue(Reading.naskh.usesLinePageDividers)
-        XCTAssertTrue(Reading.naskh.usesLinePageSidelines)
-        XCTAssertTrue(Reading.naskh.usesInvertedQuranImageRenderingInDarkMode)
+    func testIndoPakReadingConfiguration() {
+        XCTAssertTrue(Reading.allReadings.contains(.indoPak))
+        XCTAssertEqual(Reading.indoPak.quran, .hafsIndoPak)
+        XCTAssertEqual(Reading.indoPak.linePageMetrics, .indoPakLinePages)
+        XCTAssertEqual(Reading.indoPak.linePageAssetWidth, 1342)
+        XCTAssertEqual(Reading.indoPak.imageAssetWidth, 1342)
+        XCTAssertTrue(Reading.indoPak.usesLinePageDividers)
+        XCTAssertTrue(Reading.indoPak.usesLinePageSidelines)
+        XCTAssertTrue(Reading.indoPak.usesInvertedQuranImageRenderingInDarkMode)
     }
 
-    func testOnlyNaskhEnablesOptionalLinePageOverlays() {
-        for reading in Reading.allReadings where reading != .naskh {
+    func testOnlyIndoPakEnablesOptionalLinePageOverlays() {
+        for reading in Reading.allReadings where reading != .indoPak {
             XCTAssertFalse(reading.usesLinePageDividers, "\(reading)")
             XCTAssertFalse(reading.usesLinePageSidelines, "\(reading)")
         }
 
-        XCTAssertTrue(Reading.naskh.usesLinePageDividers)
-        XCTAssertTrue(Reading.naskh.usesLinePageSidelines)
+        XCTAssertTrue(Reading.indoPak.usesLinePageDividers)
+        XCTAssertTrue(Reading.indoPak.usesLinePageSidelines)
     }
 
     func testSkippedPageReadingExcludesSkippedPagesFromVisiblePages() {
@@ -192,11 +192,11 @@ final class QuranPageMetadataTests: XCTestCase {
         XCTAssertEqual(mapper.mapPage(sourceQuran.pages[1])?.pageNumber, 2)
     }
 
-    func testPageMapperMapsNaskhPageBackToCanonicalPage() {
+    func testPageMapperMapsIndoPakPageBackToCanonicalPage() {
         let mapper = QuranPageMapper(destination: .hafsMadani1405)
 
-        XCTAssertEqual(mapper.mapPage(Quran.hafsNaskh.pages[0])?.pageNumber, 1)
-        XCTAssertEqual(mapper.mapPage(Quran.hafsNaskh.pages[1])?.pageNumber, 2)
+        XCTAssertEqual(mapper.mapPage(Quran.hafsIndoPak.pages[0])?.pageNumber, 1)
+        XCTAssertEqual(mapper.mapPage(Quran.hafsIndoPak.pages[1])?.pageNumber, 2)
     }
 
     func testPageMapperMapsAyahBackedStateToDestinationAyah() {

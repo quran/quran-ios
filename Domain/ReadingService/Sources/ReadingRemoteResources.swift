@@ -101,7 +101,7 @@ extension Reading {
         case .hafs_1439: return "hafs_1439"
         case .hafs_1441: return "hafs_1441"
         case .tajweed: return "tajweed"
-        case .naskh: return "naskh"
+        case .indoPak: return "naskh"
         }
     }
 

@@ -234,7 +234,7 @@
 "reading.selector.title" = "انتخاب مشاف";
 "reading.selector.group.uthmani" = "عثمانی";
 "reading.selector.group.tajweed" = "تجوید";
-"reading.selector.group.naskh" = "نسخ";
+"reading.selector.group.indopak" = "هندی-پاکستانی";
 "reading.selector.badge.experimental" = "آزمایشی";
 "reading.selector.badge.large-screen-optimized" = "بهینه‌شده برای صفحه‌نمایش‌های بزرگ‌تر";
 // Metadata: Translated by ChatGPT; human review required.
@@ -326,11 +326,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts.details" = "* مصحف‌های مدینه ۱۴۳۹ و ۱۴۴۱ اضافه شدند؛ برای پر کردن تمام صفحه بهینه‌سازی شده‌اند — با تشکر از @ahmedre.";
 
-// Experimental Naskh
+// Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh" = "خط نسخ آزمایشی";
+"new.experimental_indopak" = "هندی-پاکستانی ۱۵ سطری";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh.details" = "* چیدمان مطالعهٔ آزمایشی با خط نسخ را امتحان کنید - با تشکر از @ahmedre.\n* چند قابلیت هنوز در دسترس نیست و در به‌روزرسانی‌های آینده اضافه خواهد شد.";
+"new.experimental_indopak.details" = "* چیدمان جدید ۱۵ سطری هندی-پاکستانی با سبک نسخ را امتحان کنید - با تشکر از @ahmedre.\n* چند قابلیت هنوز در دسترس نیست و در به‌روزرسانی‌های آینده اضافه خواهد شد.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.
@@ -510,9 +510,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1441.title" = "مصحف مدنی (۱۴۴۱)";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.description" = "این تصاویر از مجتمع چاپ قرآن ملک فهد گرفته شده‌اند.";
+"reading.indopak.description" = "مصحف حفص با سبک نسخ هندی-پاکستانی که در جنوب آسیا رواج دارد. تصاویر صفحات از مجتمع چاپ قرآن ملک فهد گرفته شده‌اند.";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.title" = "خط نسخ";
+"reading.indopak.title" = "هندی-پاکستانی ۱۵ سطری";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.611" = "۶۱۱ صفحه";
 

@@ -231,7 +231,7 @@
 "reading.selector.title" = "Choose Mushaf";
 "reading.selector.group.uthmani" = "Uthmani";
 "reading.selector.group.tajweed" = "Tajweed";
-"reading.selector.group.naskh" = "Naskh";
+"reading.selector.group.indopak" = "IndoPak";
 "reading.selector.badge.experimental" = "Experimental";
 "reading.selector.badge.large-screen-optimized" = "Large-screen optimized";
 "reading.selector.selection-description" = "Tap on a Mushaf for more information.";
@@ -271,9 +271,9 @@
 "reading.tajweed.title" = "Hafs, Tajweed";
 "reading.tajweed.description" = "The tajweed hafs Mushaf. Al-Quran Al-Kareem - Dar al-Marefa Edition.";
 
-// Hafs Naskh
-"reading.naskh.title" = "Naskh Script";
-"reading.naskh.description" = "These images were taken from the King Fahd Quran Complex.";
+// Hafs IndoPak
+"reading.indopak.title" = "IndoPak 15-Line";
+"reading.indopak.description" = "A Hafs Mushaf in the IndoPak Naskh style, commonly used across South Asia. Page images are from the King Fahd Quran Printing Complex.";
 
 // MARK: - Diagnostics
 
@@ -304,9 +304,9 @@
 "new.reading_layouts" = "New Madani Mushafs";
 "new.reading_layouts.details" = "* Added Madani Mushaf 1439 and 1441, optimized to fill the entire screen — thanks to @ahmedre.";
 
-// Experimental Naskh
-"new.experimental_naskh" = "Experimental Naskh Script";
-"new.experimental_naskh.details" = "* Try the experimental Naskh Script reading layout - thanks to @ahmedre.\n* A few features are still missing and will be added in future updates.";
+// Experimental IndoPak
+"new.experimental_indopak" = "IndoPak 15-Line";
+"new.experimental_indopak.details" = "* Try the new IndoPak 15-line reading layout in the Naskh style - thanks to @ahmedre.\n* A few features are still missing and will be added in future updates.";
 
 // Audio controls
 "new.audio_controls" = "Advanced Audio Options";

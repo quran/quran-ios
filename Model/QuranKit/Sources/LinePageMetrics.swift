@@ -40,7 +40,7 @@ public struct LinePageMetrics: Equatable, Sendable {
         )
     }
 
-    public static let naskhLinePages = LinePageMetrics(
+    public static let indoPakLinePages = LinePageMetrics(
         widthParameter: 1342,
         lineCount: 15,
         lineHeightRatio: 148 / 1342,

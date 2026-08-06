@@ -160,7 +160,7 @@
 "reading.selector.title" = "Chọn Mushaf";
 "reading.selector.group.uthmani" = "Uthmani";
 "reading.selector.group.tajweed" = "Tajweed";
-"reading.selector.group.naskh" = "Naskh";
+"reading.selector.group.indopak" = "Ấn Độ–Pakistan";
 "reading.selector.badge.experimental" = "Thử nghiệm";
 "reading.selector.badge.large-screen-optimized" = "Tối ưu cho màn hình lớn hơn";
 "reading.selector.selection-description" = "Chạm vào Mushaf để biết thêm thông tin.";
@@ -233,11 +233,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts.details" = "* Đã thêm Mushaf Madani 1439 và 1441, được tối ưu hóa để hiển thị toàn màn hình — cảm ơn @ahmedre.";
 
-// Experimental Naskh
+// Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh" = "Chữ Naskh thử nghiệm";
+"new.experimental_indopak" = "Ấn Độ–Pakistan – 15 dòng";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh.details" = "* Hãy thử bố cục đọc dùng chữ Naskh thử nghiệm — cảm ơn @ahmedre.\n* Một số tính năng vẫn còn thiếu và sẽ được bổ sung trong các bản cập nhật sau.";
+"new.experimental_indopak.details" = "* Hãy thử bố cục đọc Ấn Độ–Pakistan 15 dòng mới theo phong cách Naskh — cảm ơn @ahmedre.\n* Một số tính năng vẫn còn thiếu và sẽ được bổ sung trong các bản cập nhật sau.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.
@@ -417,9 +417,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1441.title" = "Mushaf Madani (1441)";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.description" = "Những hình ảnh này được lấy từ Khu liên hợp In ấn Quran Vua Fahd.";
+"reading.indopak.description" = "Một Mushaf Hafs theo phong cách Naskh Ấn Độ–Pakistan, được sử dụng rộng rãi khắp Nam Á. Hình ảnh trang được lấy từ Khu liên hợp In ấn Quran Vua Fahd.";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.title" = "Chữ Naskh";
+"reading.indopak.title" = "Ấn Độ–Pakistan – 15 dòng";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.611" = "611 trang";
 

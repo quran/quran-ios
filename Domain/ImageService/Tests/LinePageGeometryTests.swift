@@ -201,7 +201,7 @@ final class LinePageGeometryTests: XCTestCase {
     }
 
     func testNonOverlappingMetricsPlaceLinesInEvenSlots() {
-        let metrics = LinePageMetrics.naskhLinePages
+        let metrics = LinePageMetrics.indoPakLinePages
         let layout = makeEngine().layout(
             LinePageGeometryInput(
                 availableSize: CGSize(width: 400, height: 800),
@@ -239,7 +239,7 @@ final class LinePageGeometryTests: XCTestCase {
                 orientation: .portrait,
                 pageParity: .odd,
                 displaySettings: LinePageDisplaySettings(showHeaderFooter: true, showSidelines: false),
-                data: makeData(metrics: .naskhLinePages),
+                data: makeData(metrics: .indoPakLinePages),
                 suraHeaderAspectRatio: 0.25
             )
         )
@@ -255,7 +255,7 @@ final class LinePageGeometryTests: XCTestCase {
                     showSidelines: false,
                     showLineDividers: true
                 ),
-                data: makeData(metrics: .naskhLinePages),
+                data: makeData(metrics: .indoPakLinePages),
                 suraHeaderAspectRatio: 0.25
             )
         )
@@ -295,7 +295,7 @@ final class LinePageGeometryTests: XCTestCase {
     }
 
     func testSidelineSizingScalesSourcePixelsToRenderedPageWidth() throws {
-        let metrics = LinePageMetrics.naskhLinePages
+        let metrics = LinePageMetrics.indoPakLinePages
         let rawSidelineSize = CGSize(width: 80, height: 600)
         let layout = makeEngine().layout(
             LinePageGeometryInput(

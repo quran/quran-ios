@@ -233,7 +233,7 @@
 "reading.selector.title" = "选择Mushaf";
 "reading.selector.group.uthmani" = "奥斯曼体";
 "reading.selector.group.tajweed" = "泰吉威德";
-"reading.selector.group.naskh" = "纳斯赫体";
+"reading.selector.group.indopak" = "印巴版";
 "reading.selector.badge.experimental" = "实验性";
 "reading.selector.badge.large-screen-optimized" = "针对更大屏幕优化";
 // Metadata: Translated by ChatGPT; human review required.
@@ -325,11 +325,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts.details" = "* 新增麦地那穆沙夫 1439 和 1441，已优化为全屏显示 — 感谢 @ahmedre。";
 
-// Experimental Naskh
+// Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh" = "实验性纳斯赫字体";
+"new.experimental_indopak" = "印巴版（15 行）";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh.details" = "* 试用采用纳斯赫字体的实验性阅读布局 — 感谢 @ahmedre。\n* 目前仍缺少部分功能，未来更新将陆续补充。";
+"new.experimental_indopak.details" = "* 试用采用纳斯赫风格的全新 15 行印巴版阅读布局 — 感谢 @ahmedre。\n* 目前仍缺少部分功能，未来更新将陆续补充。";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.
@@ -509,9 +509,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1441.title" = "麦地那穆沙夫（1441）";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.description" = "这些图像取自法赫德国王《古兰经》印刷中心。";
+"reading.indopak.description" = "一部采用印巴纳斯赫体的哈夫斯《古兰经》，广泛用于南亚。页面图像取自法赫德国王《古兰经》印刷中心。";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.title" = "纳斯赫体";
+"reading.indopak.title" = "印巴版（15 行）";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.611" = "611 页";
 

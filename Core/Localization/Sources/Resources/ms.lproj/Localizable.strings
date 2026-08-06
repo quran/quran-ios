@@ -215,7 +215,7 @@
 "reading.selector.title" = "Pilih Mushaf";
 "reading.selector.group.uthmani" = "Uthmani";
 "reading.selector.group.tajweed" = "Tajwid";
-"reading.selector.group.naskh" = "Naskh";
+"reading.selector.group.indopak" = "India-Pakistan";
 "reading.selector.badge.experimental" = "Eksperimen";
 "reading.selector.badge.large-screen-optimized" = "Dioptimumkan untuk skrin yang lebih besar";
 // Metadata: Translated by ChatGPT; human review required.
@@ -307,11 +307,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts.details" = "* Mushaf Madani 1439 dan 1441 ditambah, dioptimumkan untuk memenuhi seluruh skrin — terima kasih kepada @ahmedre.";
 
-// Experimental Naskh
+// Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh" = "Tulisan Naskh Eksperimen";
+"new.experimental_indopak" = "India-Pakistan 15 Baris";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh.details" = "* Cuba susun atur bacaan eksperimen dengan tulisan Naskh — terima kasih kepada @ahmedre.\n* Beberapa ciri masih belum tersedia dan akan ditambah dalam kemas kini akan datang.";
+"new.experimental_indopak.details" = "* Cuba susun atur bacaan India-Pakistan 15 baris yang baharu dalam gaya Naskh — terima kasih kepada @ahmedre.\n* Beberapa ciri masih belum tersedia dan akan ditambah dalam kemas kini akan datang.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.
@@ -491,9 +491,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1441.title" = "Mushaf Madani (1441)";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.description" = "Imej ini diambil daripada Kompleks Percetakan Quran Raja Fahd.";
+"reading.indopak.description" = "Mushaf Hafs dalam gaya Naskh India-Pakistan, yang digunakan secara meluas di Asia Selatan. Imej halaman diambil daripada Kompleks Percetakan Quran Raja Fahd.";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.title" = "Tulisan Naskh";
+"reading.indopak.title" = "India-Pakistan 15 Baris";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.611" = "611 halaman";
 

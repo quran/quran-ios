@@ -1,11 +1,11 @@
 //
-//  NaskhQuranReadingInfoRawData.swift
+//  IndoPakQuranReadingInfoRawData.swift
 //
 //
 //  Created by OpenAI on 2026-04-26.
 //
 
-struct NaskhQuranReadingInfoRawData: QuranReadingInfoRawData {
+struct IndoPakQuranReadingInfoRawData: QuranReadingInfoRawData {
     // MARK: Internal
 
     var arabicBesmAllah: String { base.arabicBesmAllah }

@@ -234,7 +234,7 @@
 "reading.selector.title" = "Mushaf tanlash";
 "reading.selector.group.uthmani" = "Usmoniy";
 "reading.selector.group.tajweed" = "Tajvid";
-"reading.selector.group.naskh" = "Nasx";
+"reading.selector.group.indopak" = "Hind-Pokiston";
 "reading.selector.badge.experimental" = "Tajribaviy";
 "reading.selector.badge.large-screen-optimized" = "Kattaroq ekranlar uchun moslashtirilgan";
 // Metadata: Translated by ChatGPT; human review required.
@@ -326,11 +326,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts.details" = "* Madina mushafi 1439 va 1441 qo‘shildi, butun ekranni to‘ldirish uchun optimallashtirildi — @ahmedre ga rahmat.";
 
-// Experimental Naskh
+// Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh" = "Sinovdagi Naskh yozuvi";
+"new.experimental_indopak" = "Hind-Pokiston — 15 qator";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh.details" = "* Naskh yozuvidagi sinov o‘qish ko‘rinishini sinab ko‘ring — @ahmedre ga rahmat.\n* Ayrim imkoniyatlar hali mavjud emas va kelgusi yangilanishlarda qo‘shiladi.";
+"new.experimental_indopak.details" = "* Nasx uslubidagi yangi 15 qatorli Hind-Pokiston o‘qish ko‘rinishini sinab ko‘ring — @ahmedre ga rahmat.\n* Ayrim imkoniyatlar hali mavjud emas va kelgusi yangilanishlarda qo‘shiladi.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.
@@ -510,9 +510,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1441.title" = "Madina mushafi (1441)";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.description" = "Bu tasvirlar Qirol Fahd Qur’on bosma majmuasidan olingan.";
+"reading.indopak.description" = "Janubiy Osiyoda keng qo‘llaniladigan Hind-Pokiston nasx uslubidagi Hafs Mushafi. Sahifa tasvirlari Qirol Fahd Qur’on bosma majmuasidan olingan.";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.title" = "Nasx yozuvi";
+"reading.indopak.title" = "Hind-Pokiston — 15 qator";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.611" = "611 sahifa";
 

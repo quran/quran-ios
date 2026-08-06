@@ -21,6 +21,7 @@ import ReciterListFeature
 import ReciterService
 import SwiftUI
 import UIKit
+import UIx
 import Utilities
 import VLogging
 
@@ -89,8 +90,7 @@ public final class AudioBannerViewModel: ObservableObject {
 
     @Published var error: Error?
     @Published var toast: (message: MultipartText, action: ToastAction?)?
-    @Published var viewControllerToPresent: UIViewController?
-    @Published var dismissPresentedViewController = false
+    @Published var modalRequest: ModalPresentationRequest?
     @Published var playbackRate: Float
 
     var audioBannerState: AudioBannerState {
@@ -531,7 +531,7 @@ extension AudioBannerViewModel {
 extension AudioBannerViewModel: ReciterListListener {
     func presentReciterList() {
         logger.info("AudioBanner: reciters button tapped. State: \(playingState)")
-        viewControllerToPresent = reciterListBuilder.build(withListener: self, standalone: true)
+        modalRequest = .present(reciterListBuilder.build(withListener: self, standalone: true))
     }
 
     public func onSelectedReciterChanged(to reciter: Reciter) {
@@ -567,7 +567,7 @@ extension AudioBannerViewModel: AdvancedAudioOptionsListener {
             logger.info("AudioBanner: showAdvancedAudioOptions couldn't construct advanced audio options")
             return
         }
-        viewControllerToPresent = advancedAudioOptionsBuilder.build(withListener: self, options: options)
+        modalRequest = .present(advancedAudioOptionsBuilder.build(withListener: self, options: options))
     }
 
     public func updateAudioOptions(to newOptions: AdvancedAudioOptions) {
@@ -588,7 +588,7 @@ extension AudioBannerViewModel: AdvancedAudioOptionsListener {
 
     public func dismissAudioOptions() {
         logger.info("AudioBanner: dismiss advanced audio options")
-        dismissPresentedViewController = true
+        modalRequest = .dismiss
     }
 }
 

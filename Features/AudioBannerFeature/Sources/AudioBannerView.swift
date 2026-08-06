@@ -13,7 +13,6 @@ import UIx
 struct AudioBannerView: View {
     @StateObject var viewModel: AudioBannerViewModel
     @Environment(\.showToast) private var showToast
-    @Environment(\.uikitNavigator) private var navigator
     @ScaledMetric private var toastOffset = 100
 
     var body: some View {
@@ -37,18 +36,7 @@ struct AudioBannerView: View {
             viewModel.toast = nil
             showToast?(Toast(toast.message, action: toast.action, bottomOffset: toastOffset))
         }
-        .onChange(of: viewModel.viewControllerToPresent) { _ in
-            if let presentingVC = viewModel.viewControllerToPresent {
-                viewModel.viewControllerToPresent = nil
-                navigator?.viewController?.present(presentingVC, animated: true)
-            }
-        }
-        .onChange(of: viewModel.dismissPresentedViewController) { _ in
-            if viewModel.dismissPresentedViewController {
-                viewModel.dismissPresentedViewController = false
-                navigator?.viewController?.dismiss(animated: true)
-            }
-        }
+        .serializedModalPresentation(request: $viewModel.modalRequest)
         .errorAlert(error: $viewModel.error)
         .taskOnce {
             await viewModel.start()

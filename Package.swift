@@ -180,7 +180,7 @@ private func uiTargets() -> [[Target]] {
     let type = TargetType.ui
     return [
         target(type, name: "ViewConstrainer", hasTests: false),
-        target(type, name: "UIx", hasTests: false, dependencies: [
+        target(type, name: "UIx", dependencies: [
             "ViewConstrainer",
             "VLogging",
         ]),
@@ -623,6 +623,7 @@ private func featuresTargets() -> [[Target]] {
             "Caching",
             "AppDependencies",
             "NoorUI",
+            "UIx",
             "ReciterListFeature",
             "AdvancedAudioOptionsFeature",
         ]),

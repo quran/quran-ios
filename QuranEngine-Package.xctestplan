@@ -255,6 +255,13 @@
         "identifier" : "NoorUITests",
         "name" : "NoorUITests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "UIxTests",
+        "name" : "UIxTests"
+      }
     }
   ],
   "version" : 1

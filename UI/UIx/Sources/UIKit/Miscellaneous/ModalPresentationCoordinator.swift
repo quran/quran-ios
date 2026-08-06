@@ -1,24 +1,47 @@
 //
-//  AudioBannerModalCoordinator.swift
+//  ModalPresentationCoordinator.swift
 //
 //
 
-import Combine
 import UIKit
 
-enum AudioBannerModalRequest {
-    case present(UIViewController)
-    case dismiss
+public struct ModalPresentationRequest: Identifiable {
+    // MARK: Lifecycle
+
+    private init(action: Action) {
+        self.action = action
+    }
+
+    // MARK: Public
+
+    public let id = UUID()
+
+    public static func present(_ viewController: UIViewController) -> Self {
+        Self(action: .present(viewController))
+    }
+
+    public static var dismiss: Self {
+        Self(action: .dismiss)
+    }
+
+    // MARK: Internal
+
+    enum Action {
+        case present(UIViewController)
+        case dismiss
+    }
+
+    let action: Action
 }
 
 @MainActor
-final class AudioBannerModalCoordinator: NSObject, ObservableObject, UIAdaptivePresentationControllerDelegate {
-    // MARK: Internal
+public final class ModalPresentationCoordinator: NSObject, ObservableObject, UIAdaptivePresentationControllerDelegate {
+    // MARK: Public
 
-    func handle(_ request: AudioBannerModalRequest, from presentingViewController: UIViewController) {
+    public func handle(_ request: ModalPresentationRequest, from presentingViewController: UIViewController) {
         self.presentingViewController = presentingViewController
 
-        switch request {
+        switch request.action {
         case .present(let viewController):
             perform(stateMachine.requestPresentation(viewController))
         case .dismiss:
@@ -26,7 +49,7 @@ final class AudioBannerModalCoordinator: NSObject, ObservableObject, UIAdaptiveP
         }
     }
 
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         didDismiss(presentationController.presentedViewController)
     }
 
@@ -49,16 +72,16 @@ final class AudioBannerModalCoordinator: NSObject, ObservableObject, UIAdaptiveP
 
     private func present(_ viewController: UIViewController) {
         guard let presentingViewController else {
-            perform(stateMachine.didDismiss())
+            stateMachine.cancel()
             return
         }
 
         presentedViewController = viewController
-        viewController.presentationController?.delegate = self
         presentingViewController.present(viewController, animated: true) { [weak self, weak viewController] in
             guard let self, presentedViewController === viewController else { return }
             perform(stateMachine.didPresent())
         }
+        viewController.presentationController?.delegate = self
     }
 
     private func dismiss() {
@@ -153,6 +176,12 @@ struct ModalPresentationStateMachine<Item> {
 
         phase = .idle
         return nil
+    }
+
+    mutating func cancel() {
+        pendingItem = nil
+        dismissAfterPresentation = false
+        phase = .idle
     }
 }
 

@@ -40,7 +40,6 @@ public struct AudioBannerBuilder {
         )
         let view = AudioBannerView(viewModel: viewModel)
             .enableToastPresenter()
-            .enableUIKitNavigator()
         let viewController = UIHostingController(rootView: view)
         viewController.view.backgroundColor = nil
         viewModel.listener = listener

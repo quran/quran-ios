@@ -21,6 +21,7 @@ import ReciterListFeature
 import ReciterService
 import SwiftUI
 import UIKit
+import UIx
 import Utilities
 import VLogging
 
@@ -89,7 +90,7 @@ public final class AudioBannerViewModel: ObservableObject {
 
     @Published var error: Error?
     @Published var toast: (message: MultipartText, action: ToastAction?)?
-    @Published var modalRequest: AudioBannerModalRequest?
+    @Published var modalRequest: ModalPresentationRequest?
     @Published var playbackRate: Float
 
     var audioBannerState: AudioBannerState {

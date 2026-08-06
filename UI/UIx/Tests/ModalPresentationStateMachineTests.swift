@@ -4,7 +4,7 @@
 //
 
 import XCTest
-@testable import AudioBannerFeature
+@testable import UIx
 
 final class ModalPresentationStateMachineTests: XCTestCase {
     func test_dismissalDuringPresentation_waitsForPresentationToFinish() {

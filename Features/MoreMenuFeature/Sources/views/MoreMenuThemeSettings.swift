@@ -21,7 +21,7 @@ private class ThemeSettingsController<V: View>: UIHostingController<V> {
         sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
         sheetPresentationController?.widthFollowsPreferredContentSizeWhenEdgeAttached = true
 
-        sheetPresentationController?.detents = [.medium()]
+        sheetPresentationController?.detents = [.medium(), .large()]
     }
 
     override func viewWillAppear(_ animated: Bool) {

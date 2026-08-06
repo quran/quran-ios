@@ -45,9 +45,9 @@ class ReadingSelectorViewModel: ObservableObject {
                 readings: [Reading.tajweed].map(ReadingInfo.init)
             ),
             ReadingGroup(
-                id: "naskh",
-                title: l("reading.selector.group.naskh"),
-                readings: [Reading.naskh].map(ReadingInfo.init)
+                id: "indopak",
+                title: l("reading.selector.group.indopak"),
+                readings: [Reading.indoPak].map(ReadingInfo.init)
             ),
         ]
     }
@@ -102,7 +102,7 @@ private extension ReadingInfo where Value == Reading {
                 title: l("reading.selector.badge.large-screen-optimized"),
                 tone: .accent
             )]
-        case .naskh:
+        case .indoPak:
             [NoorTag(
                 title: l("reading.selector.badge.experimental"),
                 tone: .red

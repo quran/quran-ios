@@ -28,9 +28,9 @@
 				</dict>
 				<dict>
 					<key>title</key>
-					<string>new.experimental_naskh</string>
+					<string>new.experimental_indopak</string>
 					<key>subtitle</key>
-					<string>new.experimental_naskh.details</string>
+					<string>new.experimental_indopak.details</string>
 					<key>image</key>
 					<string>flask</string>
 					<key>tags</key>

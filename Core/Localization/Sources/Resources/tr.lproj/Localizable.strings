@@ -176,7 +176,7 @@
 "reading.selector.title" = "Mushaf Seç";
 "reading.selector.group.uthmani" = "Osmanî";
 "reading.selector.group.tajweed" = "Tecvid";
-"reading.selector.group.naskh" = "Nesih";
+"reading.selector.group.indopak" = "Hint-Pakistan";
 "reading.selector.badge.experimental" = "Deneysel";
 "reading.selector.badge.large-screen-optimized" = "Daha büyük ekranlar için optimize edildi";
 // Metadata: Translated by ChatGPT; human review required.
@@ -266,11 +266,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts.details" = "* Medine Mushafı 1439 ve 1441 eklendi; ekranın tamamını dolduracak şekilde optimize edildi — @ahmedre sayesinde.";
 
-// Experimental Naskh
+// Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh" = "Deneysel Nesih Yazısı";
+"new.experimental_indopak" = "Hint-Pakistan — 15 Satır";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh.details" = "* Deneysel Nesih yazılı okuma düzenini deneyin — @ahmedre sayesinde.\n* Bazı özellikler henüz eksik ve gelecekteki güncellemelerde eklenecek.";
+"new.experimental_indopak.details" = "* Nesih stilindeki yeni 15 satırlık Hint-Pakistan okuma düzenini deneyin — @ahmedre sayesinde.\n* Bazı özellikler henüz eksik ve gelecekteki güncellemelerde eklenecek.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.
@@ -450,9 +450,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1441.title" = "Medine Mushafı (1441)";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.description" = "Bu görüntüler Kral Fahd Kur’an Basım Kompleksi’nden alınmıştır.";
+"reading.indopak.description" = "Güney Asya’da yaygın olarak kullanılan Hint-Pakistan Nesih stilinde bir Hafs Mushafı. Sayfa görüntüleri Kral Fahd Kur’an Basım Kompleksi’nden alınmıştır.";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.title" = "Nesih yazısı";
+"reading.indopak.title" = "Hint-Pakistan — 15 Satır";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.611" = "611 sayfa";
 

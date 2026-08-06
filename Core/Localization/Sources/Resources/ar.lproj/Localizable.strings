@@ -210,7 +210,7 @@
 "reading.selector.title" = "اختر المصحف";
 "reading.selector.group.uthmani" = "العثماني";
 "reading.selector.group.tajweed" = "التجويد";
-"reading.selector.group.naskh" = "النسخ";
+"reading.selector.group.indopak" = "الهندي الباكستاني";
 "reading.selector.badge.experimental" = "تجريبي";
 "reading.selector.badge.large-screen-optimized" = "مهيأ للشاشات الأكبر";
 "reading.selector.selection-description" = "اضغط على المصحف للمزيد من المعلومات.";
@@ -278,9 +278,9 @@
 "new.reading_layouts" = "مصاحف مدنية جديدة";
 "new.reading_layouts.details" = "* تمت إضافة مصحفي المدينة ١٤٣٩ و١٤٤١، وقد حُسِّنا لملء الشاشة بالكامل — بفضل @ahmedre.";
 
-// Experimental Naskh
-"new.experimental_naskh" = "خط النسخ التجريبي";
-"new.experimental_naskh.details" = "* جرّب تخطيط القراءة التجريبي بخط النسخ - بفضل @ahmedre.\n* ما زالت بعض الميزات غير متاحة وستُضاف في تحديثات مستقبلية.";
+// Experimental IndoPak
+"new.experimental_indopak" = "الهندي الباكستاني – ١٥ سطرًا";
+"new.experimental_indopak.details" = "* جرّب المصحف الهندي الباكستاني الجديد المكوّن من ١٥ سطرًا بخط النسخ - بفضل @ahmedre.\n* ما زالت بعض الميزات غير متاحة وستُضاف في تحديثات مستقبلية.";
 
 // Audio controls
 "new.audio_controls" = "خيارات الصوت المتقدمة";
@@ -322,8 +322,8 @@
 "bookmarks.delete-all.confirmation" = "هل أنت متأكد من رغبتك في حذف جميع الإشارات المرجعية؟";
 
 // Reading selector
-"reading.naskh.description" = "هذه الصور مأخوذة من مجمع الملك فهد لطباعة المصحف الشريف.";
-"reading.naskh.title" = "خط النسخ";
+"reading.indopak.description" = "مصحف برواية حفص بخط النسخ الهندي الباكستاني، الشائع في جنوب آسيا. صور الصفحات من مجمع الملك فهد لطباعة المصحف الشريف.";
+"reading.indopak.title" = "الهندي الباكستاني – ١٥ سطرًا";
 "reading.selector.property.pages.611" = "٦١١ صفحة";
 
 // Translation

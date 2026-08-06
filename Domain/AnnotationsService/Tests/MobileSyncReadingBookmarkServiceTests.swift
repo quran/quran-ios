@@ -55,7 +55,7 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     func test_readingBookmarkSequence_mapsPageIntoRequestedQuran() async throws {
         let storedPage = Quran.hafsMadani1405.pages[254]
         _ = try await database.quranDataService.addPageReadingBookmark(page: Int32(storedPage.pageNumber))
-        let quran = Quran.hafsNaskh
+        let quran = Quran.hafsIndoPak
         let expectedPage = try XCTUnwrap(QuranPageMapper(destination: quran).mapPage(storedPage))
 
         let bookmark = try await storedBookmark(quran: quran)

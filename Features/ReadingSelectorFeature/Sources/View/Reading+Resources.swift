@@ -37,8 +37,8 @@ extension Reading {
             return l("reading.hafs-1441.title")
         case .tajweed:
             return l("reading.tajweed.title")
-        case .naskh:
-            return l("reading.naskh.title")
+        case .indoPak:
+            return l("reading.indopak.title")
         }
     }
 
@@ -56,8 +56,8 @@ extension Reading {
             return l("reading.hafs-1441.description")
         case .tajweed:
             return l("reading.tajweed.description")
-        case .naskh:
-            return l("reading.naskh.description")
+        case .indoPak:
+            return l("reading.indopak.description")
         }
     }
 
@@ -110,7 +110,7 @@ extension Reading {
                 Property(type: .supports, property: l("reading.selector.property.lines.15")),
                 Property(type: .lacks, property: l("reading.selector.property.word-translation.not-supported")),
             ]
-        case .naskh:
+        case .indoPak:
             return [
                 Property(type: .supports, property: l("reading.selector.property.hafs")),
                 Property(type: .supports, property: l("reading.selector.property.pages.611")),
@@ -134,8 +134,8 @@ extension Reading {
             return "hafs_1441"
         case .tajweed:
             return "tajweed"
-        case .naskh:
-            return "naskh"
+        case .indoPak:
+            return "indopak"
         }
     }
 

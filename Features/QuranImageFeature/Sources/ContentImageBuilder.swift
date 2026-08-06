@@ -106,7 +106,7 @@ private extension Reading {
             return .zero
         case .tajweed:
             return .zero
-        case .naskh:
+        case .indoPak:
             return .zero
         }
     }

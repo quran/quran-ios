@@ -232,7 +232,7 @@
 "reading.selector.title" = "Choisir le Mushaf";
 "reading.selector.group.uthmani" = "Uthmani";
 "reading.selector.group.tajweed" = "Tajwid";
-"reading.selector.group.naskh" = "Naskh";
+"reading.selector.group.indopak" = "Indo-pakistanais";
 "reading.selector.badge.experimental" = "Expérimental";
 "reading.selector.badge.large-screen-optimized" = "Optimisé pour les écrans plus grands";
 // Metadata: Translated by ChatGPT; human review required.
@@ -324,11 +324,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts.details" = "* Ajout des Mushafs de Médine 1439 et 1441, optimisés pour occuper tout l’écran — grâce à @ahmedre.";
 
-// Experimental Naskh
+// Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh" = "Écriture Naskh expérimentale";
+"new.experimental_indopak" = "Indo-pakistanais – 15 lignes";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh.details" = "* Essayez la mise en page de lecture expérimentale en écriture Naskh, grâce à @ahmedre.\n* Certaines fonctionnalités manquent encore et seront ajoutées lors de futures mises à jour.";
+"new.experimental_indopak.details" = "* Essayez la nouvelle mise en page de lecture indo-pakistanaise à 15 lignes dans le style naskh, grâce à @ahmedre.\n* Certaines fonctionnalités manquent encore et seront ajoutées lors de futures mises à jour.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.
@@ -508,9 +508,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1441.title" = "Mushaf de Médine (1441)";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.description" = "Ces images proviennent du Complexe du roi Fahd pour l’impression du Saint Coran.";
+"reading.indopak.description" = "Un Mushaf Hafs dans le style naskh indo-pakistanais, couramment utilisé en Asie du Sud. Les images des pages proviennent du Complexe du roi Fahd pour l’impression du Saint Coran.";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.title" = "Écriture naskh";
+"reading.indopak.title" = "Indo-pakistanais – 15 lignes";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.611" = "611 pages";
 

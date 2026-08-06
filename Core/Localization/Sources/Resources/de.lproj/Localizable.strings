@@ -232,7 +232,7 @@
 "reading.selector.title" = "Mushaf auswählen";
 "reading.selector.group.uthmani" = "Uthmani";
 "reading.selector.group.tajweed" = "Tajweed";
-"reading.selector.group.naskh" = "Naskh";
+"reading.selector.group.indopak" = "Indisch-pakistanisch";
 "reading.selector.badge.experimental" = "Experimentell";
 "reading.selector.badge.large-screen-optimized" = "Für größere Bildschirme optimiert";
 // Metadata: Translated by ChatGPT; human review required.
@@ -324,11 +324,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts.details" = "* Madani Mushaf 1439 und 1441 hinzugefügt, optimiert, um den gesamten Bildschirm auszufüllen – dank @ahmedre.";
 
-// Experimental Naskh
+// Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh" = "Experimentelle Naskh-Schrift";
+"new.experimental_indopak" = "Indisch-pakistanisch – 15 Zeilen";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh.details" = "* Probiere das experimentelle Leselayout mit Naskh-Schrift aus – dank @ahmedre.\n* Einige Funktionen fehlen noch und werden in zukünftigen Updates ergänzt.";
+"new.experimental_indopak.details" = "* Probiere das neue 15-zeilige indisch-pakistanische Leselayout im Naskh-Stil aus – dank @ahmedre.\n* Einige Funktionen fehlen noch und werden in zukünftigen Updates ergänzt.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.
@@ -508,9 +508,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1441.title" = "Madani-Mushaf (1441)";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.description" = "Diese Bilder stammen aus dem König-Fahd-Komplex zum Druck des Qurans.";
+"reading.indopak.description" = "Ein Hafs-Mushaf im indisch-pakistanischen Naskh-Stil, der in Südasien weit verbreitet ist. Die Seitenbilder stammen aus dem König-Fahd-Komplex zum Druck des Qurans.";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.title" = "Naskh-Schrift";
+"reading.indopak.title" = "Indisch-pakistanisch – 15 Zeilen";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.611" = "611 Seiten";
 

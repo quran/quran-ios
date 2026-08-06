@@ -190,7 +190,7 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
             timestamp: Date(timeIntervalSince1970: 1)
         )
 
-        for quran in [Quran.hafsMadani1405, .hafsMadani1440, .hafsNaskh] {
+        for quran in [Quran.hafsMadani1405, .hafsMadani1440, .hafsIndoPak] {
             var iterator = service.lastPages(quran: quran).makeAsyncIterator()
 
             let lastPages = try await iterator.next()

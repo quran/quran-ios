@@ -673,7 +673,7 @@ private extension Reading {
             // TODO: Enable word-by-word translation.
             // Tajweed ayah info contains words dimensions, but they don't match the word-by-word database.
             return false
-        case .naskh:
+        case .indoPak:
             return false
         }
     }

@@ -235,7 +235,7 @@
 "reading.selector.title" = "مۇشاف تاللاش";
 "reading.selector.group.uthmani" = "ئوسمانى";
 "reading.selector.group.tajweed" = "تەجۋىد";
-"reading.selector.group.naskh" = "نەسخ";
+"reading.selector.group.indopak" = "ھىندى-پاكىستان";
 "reading.selector.badge.experimental" = "تەجرىبە";
 "reading.selector.badge.large-screen-optimized" = "چوڭ ئېكرانلارغا ماسلاشتۇرۇلغان";
 // Metadata: Translated by ChatGPT; human review required.
@@ -327,11 +327,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts.details" = "* مەدىنە مۇشاپى 1439 ۋە 1441 قوشۇلدى، پۈتۈن ئېكراننى تولدۇرۇش ئۈچۈن ئەلالاشتۇرۇلدى — @ahmedre غا رەھمەت.";
 
-// Experimental Naskh
+// Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh" = "تەجرىبە خاراكتېرلىك نەسخ خېتى";
+"new.experimental_indopak" = "ھىندى-پاكىستان — 15 قۇر";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh.details" = "* تەجرىبە خاراكتېرلىك نەسخ خېتى ئوقۇش كۆرۈنۈشىنى سىناپ بېقىڭ — @ahmedre غا رەھمەت.\n* بەزى ئىقتىدارلار تېخى يوق، كېيىنكى يېڭىلانمىلاردا قوشۇلىدۇ.";
+"new.experimental_indopak.details" = "* يېڭى 15 قۇرلۇق ھىندى-پاكىستان نەسخ ئۇسلۇبىدىكى ئوقۇش كۆرۈنۈشىنى سىناپ بېقىڭ — @ahmedre غا رەھمەت.\n* بەزى ئىقتىدارلار تېخى يوق، كېيىنكى يېڭىلانمىلاردا قوشۇلىدۇ.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.
@@ -511,9 +511,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1441.title" = "مەدىنە مۇسھەفى (1441)";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.description" = "بۇ سۈرەتلەر پادىشاھ فەھد قۇرئان بېسىش مەجمۇئەسىدىن ئېلىنغان.";
+"reading.indopak.description" = "جەنۇبىي ئاسىيادا كەڭ قوللىنىلىدىغان ھىندى-پاكىستان نەسخ ئۇسلۇبىدىكى ھەفس مۇسھەفى. بەت سۈرەتلىرى پادىشاھ فەھد قۇرئان بېسىش مەجمۇئەسىدىن ئېلىنغان.";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.title" = "نەسخ خېتى";
+"reading.indopak.title" = "ھىندى-پاكىستان — 15 قۇر";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.611" = "611 بەت";
 

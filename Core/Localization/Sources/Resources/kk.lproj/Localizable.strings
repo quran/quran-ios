@@ -216,7 +216,7 @@
 "reading.selector.title" = "Мусхафты таңдау";
 "reading.selector.group.uthmani" = "Османи";
 "reading.selector.group.tajweed" = "Тәжуид";
-"reading.selector.group.naskh" = "Насх";
+"reading.selector.group.indopak" = "Үнді-пәкістандық";
 "reading.selector.badge.experimental" = "Эксперименттік";
 "reading.selector.badge.large-screen-optimized" = "Үлкен экрандарға бейімделген";
 // Metadata: Translated by ChatGPT; human review required.
@@ -308,11 +308,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts.details" = "* Мәдина мұсхафы 1439 және 1441 қосылды, бүкіл экранды толтыру үшін оңтайландырылған — @ahmedre-ға рақмет.";
 
-// Experimental Naskh
+// Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh" = "Эксперименттік насх жазуы";
+"new.experimental_indopak" = "Үнді-пәкістандық — 15 жол";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh.details" = "* Насх жазуы бар эксперименттік оқу үлгісін қолданып көріңіз — @ahmedre-ға рақмет.\n* Кейбір мүмкіндіктер әлі жоқ және болашақ жаңартуларда қосылады.";
+"new.experimental_indopak.details" = "* Насх стиліндегі жаңа 15 жолдық үнді-пәкістандық оқу үлгісін қолданып көріңіз — @ahmedre-ға рақмет.\n* Кейбір мүмкіндіктер әлі жоқ және болашақ жаңартуларда қосылады.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.
@@ -492,9 +492,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1441.title" = "Мадина мұсхафы (1441)";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.description" = "Бұл суреттер Король Фахд Құран басу кешенінен алынған.";
+"reading.indopak.description" = "Оңтүстік Азияда кең қолданылатын үнді-пәкістандық насх стиліндегі Хафс мұсхафы. Бет суреттері Король Фахд Құран басу кешенінен алынған.";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.title" = "Насх жазуы";
+"reading.indopak.title" = "Үнді-пәкістандық — 15 жол";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.611" = "611 бет";
 

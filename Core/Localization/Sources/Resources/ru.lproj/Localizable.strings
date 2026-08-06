@@ -232,7 +232,7 @@
 "reading.selector.title" = "Выбрать Мусхаф";
 "reading.selector.group.uthmani" = "Усмани";
 "reading.selector.group.tajweed" = "Таджвид";
-"reading.selector.group.naskh" = "Насх";
+"reading.selector.group.indopak" = "Индо-пакистанский";
 "reading.selector.badge.experimental" = "Экспериментальный";
 "reading.selector.badge.large-screen-optimized" = "Оптимизирован для больших экранов";
 // Metadata: Translated by ChatGPT; human review required.
@@ -324,11 +324,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts.details" = "* Добавлены «Мединский мусхаф 1439» и «Мединский мусхаф 1441», оптимизированные для отображения во весь экран — благодаря @ahmedre.";
 
-// Experimental Naskh
+// Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh" = "Экспериментальный шрифт насх";
+"new.experimental_indopak" = "Индо-пакистанский — 15 строк";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh.details" = "* Попробуйте экспериментальный вариант чтения со шрифтом насх — благодаря @ahmedre.\n* Некоторые функции пока отсутствуют и будут добавлены в будущих обновлениях.";
+"new.experimental_indopak.details" = "* Попробуйте новый 15-строчный индо-пакистанский вариант чтения в стиле насх — благодаря @ahmedre.\n* Некоторые функции пока отсутствуют и будут добавлены в будущих обновлениях.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.
@@ -508,9 +508,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1441.title" = "Мединский мусхаф (1441)";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.description" = "Эти изображения взяты из Комплекса имени короля Фахда по печати Корана.";
+"reading.indopak.description" = "Мусхаф Хафс в индо-пакистанском стиле насх, широко используемый в Южной Азии. Изображения страниц взяты из Комплекса имени короля Фахда по печати Корана.";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.title" = "Шрифт насх";
+"reading.indopak.title" = "Индо-пакистанский — 15 строк";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.611" = "611 страниц";
 

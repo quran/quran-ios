@@ -160,7 +160,7 @@
 "reading.selector.title" = "Kies Musaf";
 "reading.selector.group.uthmani" = "Uthmani";
 "reading.selector.group.tajweed" = "Tajweed";
-"reading.selector.group.naskh" = "Naskh";
+"reading.selector.group.indopak" = "Indo-Pakistaans";
 "reading.selector.badge.experimental" = "Experimenteel";
 "reading.selector.badge.large-screen-optimized" = "Geoptimaliseerd voor grotere schermen";
 "reading.selector.selection-description" = "Tik op een Mushaf voor meer informatie.";
@@ -236,11 +236,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts.details" = "* Madani Mushaf 1439 en 1441 toegevoegd, geoptimaliseerd om het volledige scherm te vullen — met dank aan @ahmedre.";
 
-// Experimental Naskh
+// Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh" = "Experimenteel Naskh-schrift";
+"new.experimental_indopak" = "Indo-Pakistaans – 15 regels";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_naskh.details" = "* Probeer de experimentele leesindeling met Naskh-schrift — met dank aan @ahmedre.\n* Enkele functies ontbreken nog en worden in toekomstige updates toegevoegd.";
+"new.experimental_indopak.details" = "* Probeer de nieuwe 15-regelige Indo-Pakistaanse leesindeling in Naskh-stijl — met dank aan @ahmedre.\n* Enkele functies ontbreken nog en worden in toekomstige updates toegevoegd.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.
@@ -420,9 +420,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "reading.hafs-1441.title" = "Madani Mushaf (1441)";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.description" = "Deze afbeeldingen zijn afkomstig van het Koning Fahd-complex voor het drukken van de Quran.";
+"reading.indopak.description" = "Een Hafs-Mushaf in de Indo-Pakistaanse Naskh-stijl, die veel wordt gebruikt in Zuid-Azië. De pagina-afbeeldingen zijn afkomstig van het Koning Fahd-complex voor het drukken van de Quran.";
 // Metadata: Translated by ChatGPT; human review required.
-"reading.naskh.title" = "Naskh-schrift";
+"reading.indopak.title" = "Indo-Pakistaans – 15 regels";
 // Metadata: Translated by ChatGPT; human review required.
 "reading.selector.property.pages.611" = "611 pagina’s";
 

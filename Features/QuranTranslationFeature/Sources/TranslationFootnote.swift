@@ -38,7 +38,7 @@ struct TranslationFootnote: View, Identifiable {
         NavigationView {
             ScrollView {
                 Text(text)
-                    .font(translation.textFont)
+                    .font(translation.textFont(for: translationFontSize))
                     .dynamicTypeSize(translationFontSize.dynamicTypeSize)
                     .padding()
             }

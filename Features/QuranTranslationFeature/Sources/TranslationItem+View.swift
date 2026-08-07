@@ -66,7 +66,7 @@ extension TranslationTextChunk: View {
                     footnoteIndex: index
                 ).url
             },
-            font: translation.textFont,
+            font: translation.textFont(for: translationFontSize),
             fontSize: translationFontSize,
             characterDirection: translation.characterDirection
         )

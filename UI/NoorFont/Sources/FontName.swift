@@ -18,6 +18,10 @@ public enum FontName: CaseIterable {
     /// Used in arabic suras in Uthmanic font
     case suraNames
 
+    /// Used in Dhivehi translations. Thaana has no coverage in the system font,
+    /// and the iOS fallback does not follow the Faruma style Dhivehi readers expect.
+    case dhivehi
+
     struct FontDetails {
         let name: String
         let family: String
@@ -45,6 +49,12 @@ public enum FontName: CaseIterable {
                 name: "icomoon",
                 family: "icomoon",
                 fileName: "surah_names.ttf"
+            )
+        case .dhivehi:
+            return FontDetails(
+                name: "Faruma",
+                family: "Faruma",
+                fileName: "Faruma.ttf"
             )
         }
     }

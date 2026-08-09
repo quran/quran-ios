@@ -20,6 +20,21 @@ final class QuranScrollScheduler: ObservableObject {
         }
     }
 
+    func scheduleScroll<Value, ID>(
+        to value: Value?,
+        transform: @escaping @MainActor (Value) -> ID?,
+        action: @escaping @MainActor (ID) -> Void
+    ) {
+        guard let value else {
+            cancel()
+            return
+        }
+        schedule {
+            guard let id = transform(value) else { return }
+            action(id)
+        }
+    }
+
     func cancel() {
         task?.cancel()
         task = nil
@@ -52,9 +67,7 @@ struct QuranScrollingViewModifier<Value: Equatable, ID: Hashable>: ViewModifier 
     }
 
     private func scheduleScroll(to value: Value?, using scrollView: ScrollViewProxy) {
-        guard let value else { return }
-        scheduler.schedule {
-            guard let id = transform(value) else { return }
+        scheduler.scheduleScroll(to: value, transform: transform) { id in
             withAnimation(.easeInOut(duration: 0.25)) {
                 scrollView.scrollTo(id, anchor: anchor)
             }

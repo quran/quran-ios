@@ -69,6 +69,8 @@ private struct ContentTranslationViewBody: View {
         .openTranslationURL(openURL)
         .trackCollection(with: tracker)
         .sheet(item: $footnote) { $0 }
-        .quranScrolling(scrollToValue: scrollToItem)
+        .quranScrolling(scrollToValue: scrollToItem) { item in
+            items.contains { $0.id == item } ? item : nil
+        }
     }
 }

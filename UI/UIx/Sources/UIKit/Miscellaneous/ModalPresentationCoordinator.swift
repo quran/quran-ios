@@ -3,13 +3,17 @@
 //
 //
 
+import Crashing
 import UIKit
+import VLogging
 
 public struct ModalPresentationRequest: Identifiable {
     // MARK: Lifecycle
 
-    private init(action: Action) {
+    private init(action: Action, owner: String, kind: String) {
         self.action = action
+        self.owner = owner
+        self.kind = kind
     }
 
     // MARK: Public
@@ -17,11 +21,19 @@ public struct ModalPresentationRequest: Identifiable {
     public let id = UUID()
 
     public static func present(_ viewController: UIViewController) -> Self {
-        Self(action: .present(viewController))
+        present(viewController, owner: "unspecified", kind: "modal")
+    }
+
+    public static func present(_ viewController: UIViewController, owner: String, kind: String) -> Self {
+        Self(action: .present(viewController), owner: owner, kind: kind)
     }
 
     public static var dismiss: Self {
-        Self(action: .dismiss)
+        dismiss(owner: "unspecified")
+    }
+
+    public static func dismiss(owner: String) -> Self {
+        Self(action: .dismiss, owner: owner, kind: "modal")
     }
 
     // MARK: Internal
@@ -32,6 +44,8 @@ public struct ModalPresentationRequest: Identifiable {
     }
 
     let action: Action
+    let owner: String
+    let kind: String
 }
 
 @MainActor
@@ -43,10 +57,24 @@ public final class ModalPresentationCoordinator: NSObject, ObservableObject, UIA
 
         switch request.action {
         case .present(let viewController):
+            presentationMetadata[ObjectIdentifier(viewController)] = (request.owner, request.kind)
+            crashContext.setPresentation(owner: request.owner, kind: request.kind, phase: "requested", interactive: false)
+            logger.info("Modal presentation requested: \(request.owner), kind: \(request.kind)")
             perform(stateMachine.requestPresentation(viewController))
         case .dismiss:
+            let owner = currentOwner ?? request.owner
+            crashContext.setPresentation(owner: owner, kind: currentKind ?? request.kind, phase: "dismiss_requested", interactive: false)
+            logger.info("Modal dismissal requested: \(owner)")
             perform(stateMachine.requestDismissal())
         }
+    }
+
+    public func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
+        recordCurrentPresentation(phase: "interactive_dismissing", interactive: true)
+    }
+
+    public func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        recordCurrentPresentation(phase: "interactive_dismissal_blocked", interactive: false)
     }
 
     public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
@@ -58,6 +86,9 @@ public final class ModalPresentationCoordinator: NSObject, ObservableObject, UIA
     private weak var presentingViewController: UIViewController?
     private weak var presentedViewController: UIViewController?
     private var stateMachine = ModalPresentationStateMachine<UIViewController>()
+    private var presentationMetadata: [ObjectIdentifier: (owner: String, kind: String)] = [:]
+    private var currentOwner: String?
+    private var currentKind: String?
 
     private func perform(_ action: ModalPresentationStateMachine<UIViewController>.Action?) {
         guard let action else { return }
@@ -72,21 +103,37 @@ public final class ModalPresentationCoordinator: NSObject, ObservableObject, UIA
 
     private func present(_ viewController: UIViewController) {
         guard let presentingViewController else {
+            if let metadata = presentationMetadata.removeValue(forKey: ObjectIdentifier(viewController)) {
+                crashContext.clearPresentation(owner: metadata.owner)
+            }
             stateMachine.cancel()
             return
         }
 
+        let metadata = presentationMetadata.removeValue(forKey: ObjectIdentifier(viewController)) ?? ("unspecified", "modal")
+        currentOwner = metadata.owner
+        currentKind = metadata.kind
+        recordCurrentPresentation(phase: "presenting", interactive: false)
         presentedViewController = viewController
         presentingViewController.present(viewController, animated: true) { [weak self, weak viewController] in
             guard let self, presentedViewController === viewController else { return }
+            recordCurrentPresentation(phase: "presented", interactive: false)
             perform(stateMachine.didPresent())
         }
         viewController.presentationController?.delegate = self
     }
 
     private func dismiss() {
+        recordCurrentPresentation(phase: "dismissing", interactive: false)
         guard let presentedViewController else {
-            perform(stateMachine.didDismiss())
+            let dismissedOwner = currentOwner
+            currentOwner = nil
+            currentKind = nil
+            let action = stateMachine.didDismiss()
+            if let dismissedOwner {
+                crashContext.clearPresentation(owner: dismissedOwner)
+            }
+            perform(action)
             return
         }
         presentedViewController.dismiss(animated: true) { [weak self, weak presentedViewController] in
@@ -98,7 +145,20 @@ public final class ModalPresentationCoordinator: NSObject, ObservableObject, UIA
     private func didDismiss(_ viewController: UIViewController) {
         guard presentedViewController === viewController else { return }
         presentedViewController = nil
-        perform(stateMachine.didDismiss())
+        let dismissedOwner = currentOwner
+        currentOwner = nil
+        currentKind = nil
+        let action = stateMachine.didDismiss()
+        if let dismissedOwner {
+            crashContext.clearPresentation(owner: dismissedOwner)
+            logger.info("Modal presentation dismissed: \(dismissedOwner)")
+        }
+        perform(action)
+    }
+
+    private func recordCurrentPresentation(phase: String, interactive: Bool) {
+        guard let currentOwner, let currentKind else { return }
+        crashContext.setPresentation(owner: currentOwner, kind: currentKind, phase: phase, interactive: interactive)
     }
 }
 

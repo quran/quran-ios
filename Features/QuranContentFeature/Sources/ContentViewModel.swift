@@ -74,6 +74,8 @@ public final class ContentViewModel: ObservableObject {
             .sink { [weak self] in self?.quranMode = $0 }
             .store(in: &cancellables)
 
+        updateQuranModeCrashContext()
+
         #if !QURAN_SYNC
         loadNotes()
         #endif
@@ -110,7 +112,12 @@ public final class ContentViewModel: ObservableObject {
     let deps: Deps
     weak var listener: ContentListener?
 
-    @Published var quranMode: QuranMode
+    @Published var quranMode: QuranMode {
+        didSet {
+            updateQuranModeCrashContext()
+        }
+    }
+
     @Published var twoPagesEnabled: Bool
     @Published var geometryActions: [PageGeometryActions] = []
 
@@ -206,7 +213,8 @@ public final class ContentViewModel: ObservableObject {
 
         let pages = visiblePages
         let isTranslationView = deps.quranContentStatePreferences.quranMode == .translation
-        crasher.setValue(pages.map(\.pageNumber), forKey: .pages)
+        updateQuranModeCrashContext()
+        crashContext.setVisiblePages(pages.map(\.pageNumber))
         deps.analytics.showing(
             pages: pages,
             isTranslation: isTranslationView,
@@ -219,6 +227,25 @@ public final class ContentViewModel: ObservableObject {
         }
 
         updateLastPageTo(pages)
+    }
+
+    private func updateQuranModeCrashContext() {
+        let mode = quranMode == .translation ? "translation" : "arabic"
+        crashContext.setQuranMode(
+            mode,
+            selectedTranslationCount: deps.selectedTranslationsPreferences.selectedTranslationIds.count
+        )
+        if quranMode == .translation {
+            crashContext.setActiveList(
+                owner: "quran_translation",
+                mode: "translations",
+                generation: 0,
+                sectionCount: visiblePages.count,
+                rowCount: 0
+            )
+        } else {
+            crashContext.clearActiveList(owner: "quran_translation")
+        }
     }
 
     private func updateLastPageTo(_ pages: [Page]) {
@@ -234,10 +261,6 @@ public final class ContentViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     #endif
-}
-
-private extension CrasherKeyBase {
-    static let pages = CrasherKey<[Int]>(key: "VisiblePages")
 }
 
 private extension AnalyticsLibrary {

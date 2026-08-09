@@ -3,10 +3,24 @@
 //
 //
 
+import UIKit
 import XCTest
 @testable import UIx
 
 final class ModalPresentationStateMachineTests: XCTestCase {
+    func testPresentationRequestPreservesDiagnosticMetadata() {
+        let viewController = UIViewController()
+
+        let request = ModalPresentationRequest.present(
+            viewController,
+            owner: "advanced_audio_options",
+            kind: "sheet"
+        )
+
+        XCTAssertEqual(request.owner, "advanced_audio_options")
+        XCTAssertEqual(request.kind, "sheet")
+    }
+
     func test_dismissalDuringPresentation_waitsForPresentationToFinish() {
         var sut = ModalPresentationStateMachine<Int>()
 

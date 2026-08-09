@@ -21,28 +21,28 @@
 import Foundation
 import Locking
 
-public class CrasherKeyBase {}
+class CrasherKeyBase {}
 
-public final class CrasherKey<Type>: CrasherKeyBase {
+final class CrasherKey<Type>: CrasherKeyBase {
     // MARK: Lifecycle
 
-    public init(key: String) {
+    init(key: String) {
         self.key = key
     }
 
-    // MARK: Public
+    // MARK: Internal
 
-    public let key: String
+    let key: String
 }
 
 public protocol CrashInfoHandler {
-    func setValue<T>(_ value: T?, forKey key: CrasherKey<T>)
+    func setCustomValue(_ value: Any, forKey key: String)
     func recordError(_ error: Error, reason: String, file: StaticString, line: UInt)
 }
 
 private struct NoOpCrashInfoHandler: CrashInfoHandler {
-    func setValue<T>(_ value: T?, forKey key: CrasherKey<T>) {
-        print("[NoOpCrashInfoHandler] setValue called. Don't use NoOpCrashInfoHandler in production")
+    func setCustomValue(_ value: Any, forKey key: String) {
+        print("[NoOpCrashInfoHandler] setCustomValue called. Don't use NoOpCrashInfoHandler in production")
     }
 
     func recordError(_ error: Error, reason: String, file: StaticString, line: UInt) {
@@ -74,21 +74,29 @@ public enum CrashInfoSystem {
 public struct Crasher {
     // MARK: Lifecycle
 
-    public init() {
+    init() {
         handler = CrashInfoSystem.factory()
     }
 
-    // MARK: Public
+    init(handler: CrashInfoHandler) {
+        self.handler = handler
+    }
 
-    public let handler: CrashInfoHandler
+    // MARK: Public
 
     public func recordError(_ error: Error, reason: String, file: StaticString = #file, line: UInt = #line) {
         handler.recordError(error, reason: reason, file: file, line: line)
     }
 
-    public func setValue<T>(_ value: T?, forKey key: CrasherKey<T>) {
-        handler.setValue(value, forKey: key)
+    // MARK: Internal
+
+    func setValue<T>(_ value: T, forKey key: CrasherKey<T>) {
+        handler.setCustomValue(value, forKey: key.key)
     }
+
+    // MARK: Private
+
+    private let handler: CrashInfoHandler
 }
 
 extension Crasher {

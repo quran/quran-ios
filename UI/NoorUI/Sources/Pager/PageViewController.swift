@@ -7,6 +7,7 @@
 
 // Most of the code is copied from https://github.com/benjaminsage/iPages
 
+import Crashing
 import SwiftUI
 import UIKit
 import VLogging
@@ -107,6 +108,15 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
         }
 
         if !context.coordinator.transitionState.shouldApply(selection) {
+            context.coordinator.recordPager(
+                generation: context.coordinator.transitionGeneration,
+                phase: "manual_transition",
+                source: "external_selection_deferred",
+                visibleElement: visibleElement,
+                targetElement: selection,
+                pendingElement: selection,
+                gestureState: "dragging"
+            )
             logger.info("Cannot change page while user dragging in progress")
             return
         }
@@ -123,7 +133,32 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
             .forward
         }
 
-        pageViewController.setViewControllers([viewController], direction: direction, animated: animated)
+        let transitionSource = visibleElement == nil ? "initial" : "external_selection"
+        let transitionGeneration = context.coordinator.beginPagerTransition(
+            phase: "programmatic_transition",
+            source: transitionSource,
+            visibleElement: visibleElement,
+            targetElement: selection,
+            pendingElement: nil,
+            gestureState: "none"
+        )
+        logger.info("Pager programmatic transition started")
+        pageViewController.setViewControllers(
+            [viewController],
+            direction: direction,
+            animated: animated
+        ) { [weak coordinator = context.coordinator] completed in
+            coordinator?.finishProgrammaticTransition(
+                generation: transitionGeneration,
+                phase: completed ? "idle" : "programmatic_incomplete",
+                source: transitionSource,
+                visibleElement: selection,
+                targetElement: selection,
+                pendingElement: nil,
+                gestureState: "none"
+            )
+            logger.info("Pager programmatic transition completed: \(completed)")
+        }
     }
 
     func makeController(_ element: Element) -> UIViewController {
@@ -146,6 +181,7 @@ extension _PageViewController {
 
         var parent: _PageViewController
         var transitionState = PageTransitionState<Element>()
+        private(set) var transitionGeneration = 0
 
         func pageViewController(
             _ pageViewController: UIPageViewController,
@@ -193,6 +229,19 @@ extension _PageViewController {
             willTransitionTo pendingViewControllers: [UIViewController]
         ) {
             transitionState.userTransitionWillBegin()
+            transitionGeneration += 1
+            let visibleElement = (pageViewController.viewControllers?.first as? PageContentController)?.element
+            let pendingElement = (pendingViewControllers.first as? PageContentController)?.element
+            recordPager(
+                generation: transitionGeneration,
+                phase: "manual_transition",
+                source: "user_gesture",
+                visibleElement: visibleElement,
+                targetElement: pendingElement,
+                pendingElement: pendingElement,
+                gestureState: "dragging"
+            )
+            logger.info("Pager manual transition started")
         }
 
         func pageViewController(
@@ -214,6 +263,91 @@ extension _PageViewController {
                     self?.parent.selection = pendingSelection
                 }
             }
+
+            recordPager(
+                generation: transitionGeneration,
+                phase: completed ? "idle" : "manual_cancelled",
+                source: "user_gesture",
+                visibleElement: visibleElement,
+                targetElement: visibleElement,
+                pendingElement: pendingSelection,
+                gestureState: "none"
+            )
+            logger.info("Pager manual transition finished: \(completed)")
+        }
+
+        func beginPagerTransition(
+            phase: String,
+            source: String,
+            visibleElement: Element?,
+            targetElement: Element?,
+            pendingElement: Element?,
+            gestureState: String
+        ) -> Int {
+            transitionGeneration += 1
+            recordPager(
+                generation: transitionGeneration,
+                phase: phase,
+                source: source,
+                visibleElement: visibleElement,
+                targetElement: targetElement,
+                pendingElement: pendingElement,
+                gestureState: gestureState
+            )
+            return transitionGeneration
+        }
+
+        func finishProgrammaticTransition(
+            generation: Int,
+            phase: String,
+            source: String,
+            visibleElement: Element?,
+            targetElement: Element?,
+            pendingElement: Element?,
+            gestureState: String
+        ) {
+            guard generation == transitionGeneration else {
+                logger.info("Ignoring stale pager completion: \(generation), current: \(transitionGeneration)")
+                return
+            }
+            recordPager(
+                generation: generation,
+                phase: phase,
+                source: source,
+                visibleElement: visibleElement,
+                targetElement: targetElement,
+                pendingElement: pendingElement,
+                gestureState: gestureState
+            )
+        }
+
+        func recordPager(
+            generation: Int,
+            phase: String,
+            source: String,
+            visibleElement: Element?,
+            targetElement: Element?,
+            pendingElement: Element?,
+            gestureState: String
+        ) {
+            crashContext.setPager(
+                generation: generation,
+                phase: phase,
+                source: source,
+                visibleItem: indexDescription(for: visibleElement),
+                targetItem: indexDescription(for: targetElement),
+                pendingItem: indexDescription(for: pendingElement),
+                gestureState: gestureState
+            )
+        }
+
+        private func indexDescription(for element: Element?) -> String {
+            guard let element,
+                  let index = parent.forEach.data.firstIndex(of: element)
+            else {
+                return "none"
+            }
+            return String(index)
         }
     }
 }

@@ -36,6 +36,15 @@ private enum PlaybackState {
     case paused
     case stopped
     case downloading(progress: Double)
+
+    var crashContextValue: String {
+        switch self {
+        case .playing: "playing"
+        case .paused: "paused"
+        case .stopped: "stopped"
+        case .downloading: "downloading"
+        }
+    }
 }
 
 @MainActor
@@ -61,6 +70,10 @@ public final class AudioBannerViewModel: ObservableObject {
         self.reciterListBuilder = reciterListBuilder
         self.advancedAudioOptionsBuilder = advancedAudioOptionsBuilder
         playbackRate = AudioPreferences.shared.playbackRate
+        crashContext.setAudioState(playingState.crashContextValue)
+        crashContext.setAudioReciter(id: nil)
+        crashContext.clearPlayingAyah()
+        crashContext.setAdvancedAudioOptionsPhase("idle")
 
         setUpAudioPlayerActions()
         setUpRemoteCommandHandler()
@@ -157,6 +170,7 @@ public final class AudioBannerViewModel: ObservableObject {
 
     @Published private var playingState: PlaybackState = .stopped {
         didSet {
+            crashContext.setAudioState(playingState.crashContextValue)
             logger.info("AudioBanner: playingState updated to \(playingState) - reciter: \(String(describing: selectedReciter?.id))")
             if case .stopped = playingState {
                 onPlayingStateStopped()
@@ -177,7 +191,9 @@ public final class AudioBannerViewModel: ObservableObject {
 
     private func onPlayingStateStopped() {
         if let selectedReciter {
-            crasher.setValue(selectedReciter.id, forKey: .reciterId)
+            crashContext.setAudioReciter(id: selectedReciter.id)
+        } else {
+            crashContext.setAudioReciter(id: nil)
         }
         listener?.highlightReadingAyah(nil)
 
@@ -382,7 +398,7 @@ public final class AudioBannerViewModel: ObservableObject {
 
     private func playing(ayah: AyahNumber) {
         logger.info("AudioBanner: playing verse \(ayah)")
-        crasher.setValue(ayah, forKey: .playingAyah)
+        crashContext.setPlayingAyah(sura: ayah.sura.suraNumber, ayah: ayah.ayah)
         listener?.highlightReadingAyah(ayah)
     }
 
@@ -395,14 +411,12 @@ public final class AudioBannerViewModel: ObservableObject {
     private func playbackEnded() {
         logger.info("AudioBanner: onPlaybackOrDownloadingCompleted")
 
-        crasher.setValue(nil, forKey: .playingAyah)
-        crasher.setValue(false, forKey: .downloadingQuran)
+        crashContext.clearPlayingAyah()
         playingState = .stopped
     }
 
     private func startDownloading() {
         logger.info("AudioBanner: will start downloading")
-        crasher.setValue(true, forKey: .downloadingQuran)
         playingState = .downloading(progress: 0)
 
         guard let audioRange else {
@@ -421,7 +435,6 @@ public final class AudioBannerViewModel: ObservableObject {
     private func playingStarted() {
         logger.info("AudioBanner: playing started")
         cancellableTasks = []
-        crasher.setValue(false, forKey: .downloadingQuran)
         remoteCommandsHandler?.startListening()
         playingState = .playing
 
@@ -531,7 +544,11 @@ extension AudioBannerViewModel {
 extension AudioBannerViewModel: ReciterListListener {
     func presentReciterList() {
         logger.info("AudioBanner: reciters button tapped. State: \(playingState)")
-        modalRequest = .present(reciterListBuilder.build(withListener: self, standalone: true))
+        modalRequest = .present(
+            reciterListBuilder.build(withListener: self, standalone: true),
+            owner: "reciter_list",
+            kind: "sheet"
+        )
     }
 
     public func onSelectedReciterChanged(to reciter: Reciter) {
@@ -564,13 +581,20 @@ extension AudioBannerViewModel: AdvancedAudioOptionsListener {
         }
 
         guard let options = advancedAudioOptions else {
+            crashContext.setAdvancedAudioOptionsPhase("unavailable")
             logger.info("AudioBanner: showAdvancedAudioOptions couldn't construct advanced audio options")
             return
         }
-        modalRequest = .present(advancedAudioOptionsBuilder.build(withListener: self, options: options))
+        crashContext.setAdvancedAudioOptionsPhase("presentation_requested")
+        modalRequest = .present(
+            advancedAudioOptionsBuilder.build(withListener: self, options: options),
+            owner: "advanced_audio_options",
+            kind: "sheet"
+        )
     }
 
     public func updateAudioOptions(to newOptions: AdvancedAudioOptions) {
+        crashContext.setAdvancedAudioOptionsPhase("applying")
         logger.info("AudioBanner: playing advanced audio options \(newOptions)")
         selectReciter(newOptions.reciter)
         AudioPreferences.shared.verseDelay = newOptions.verseDelay
@@ -584,11 +608,13 @@ extension AudioBannerViewModel: AdvancedAudioOptionsListener {
             verseDelay: newOptions.verseDelay,
             repetitionDelay: newOptions.repetitionDelay
         )
+        crashContext.setAdvancedAudioOptionsPhase("applied")
     }
 
     public func dismissAudioOptions() {
         logger.info("AudioBanner: dismiss advanced audio options")
-        modalRequest = .dismiss
+        crashContext.setAdvancedAudioOptionsPhase("dismiss_requested")
+        modalRequest = .dismiss(owner: "advanced_audio_options")
     }
 }
 
@@ -596,10 +622,4 @@ private extension AnalyticsLibrary {
     func playFrom(menu: Bool) {
         logEvent("PlayAudioFrom", value: menu ? "Menu" : "AudioBar")
     }
-}
-
-private extension CrasherKeyBase {
-    static let reciterId = CrasherKey<Int>(key: "ReciterId")
-    static let downloadingQuran = CrasherKey<Bool>(key: "DownloadingQuran")
-    static let playingAyah = CrasherKey<AyahNumber>(key: "PlayingAyah")
 }

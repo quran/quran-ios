@@ -7,6 +7,7 @@
 //
 
 import CoreData
+import Crashing
 import Foundation
 import Utilities
 import VLogging
@@ -43,18 +44,25 @@ public class CoreDataStack {
 
     /// A persistent container that can load cloud-backed and non-cloud stores.
     lazy var persistentContainer: NSPersistentContainer = {
+        crashContext.setPersistence(store: name, operation: "load_store", phase: "starting")
+        logger.info("Core Data store load starting: \(name)")
         let container = newPersistenceContainer()
 
         // Enable history tracking and remote notifications
         guard let description = container.persistentStoreDescriptions.first else {
+            crashContext.setPersistence(store: name, operation: "load_store", phase: "missing_description")
             fatalError("###\(#function): Failed to retrieve a persistent store description.")
         }
         description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
 
         container.loadPersistentStores(completionHandler: { _, error in
-            guard let error = error as NSError? else { return }
-            fatalError("###\(#function): Failed to load persistent store: \(error)")
+            if let error = error as NSError? {
+                crashContext.setPersistence(store: self.name, operation: "load_store", phase: "failed")
+                fatalError("###\(#function): Failed to load persistent store: \(error)")
+            }
+            crashContext.setPersistence(store: self.name, operation: "load_store", phase: "ready")
+            logger.info("Core Data store loaded: \(self.name)")
         })
 
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
@@ -65,6 +73,7 @@ public class CoreDataStack {
         do {
             try container.viewContext.setQueryGenerationFrom(.current)
         } catch {
+            crashContext.setPersistence(store: name, operation: "pin_generation", phase: "failed")
             fatalError("###\(#function): Failed to pin viewContext to the current generation:\(error)")
         }
 
@@ -108,13 +117,16 @@ public class CoreDataStack {
     /// Handle remote store change notifications (.NSPersistentStoreRemoteChange).
     @objc
     private func storeRemoteChange(_ notification: Notification) {
+        crashContext.setPersistence(store: name, operation: "merge_remote_change", phase: "queued")
         logger.info("Merging changes from the other persistent store coordinator.")
 
         // Process persistent history to merge changes from other coordinators.
         historyQueue.addOperation {
             let taskContext = self.newBackgroundContext()
             taskContext.performAndWait {
+                crashContext.setPersistence(store: self.name, operation: "merge_remote_change", phase: "executing")
                 self.historyProcessor.processNewHistory(using: taskContext)
+                crashContext.setPersistence(store: self.name, operation: "merge_remote_change", phase: "ready")
             }
         }
     }

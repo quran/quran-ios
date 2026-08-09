@@ -19,6 +19,7 @@
 //
 
 import Combine
+import Crashing
 import Localization
 import NoorUI
 import QuranKit
@@ -103,12 +104,14 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        crashContext.setScreen("quran")
         UIApplication.shared.isIdleTimerDisabled = true
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        crashContext.clearActiveList(owner: "quran_translation")
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 

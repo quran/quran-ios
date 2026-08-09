@@ -108,17 +108,17 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
             return
         }
 
-        if !context.coordinator.transitionState.shouldApply(selection) {
+        guard context.coordinator.transitionState.requestProgrammaticTransition(to: selection) == .started else {
             context.coordinator.recordPager(
                 generation: context.coordinator.transitionGeneration,
-                phase: "manual_transition",
+                phase: "selection_deferred",
                 source: "external_selection_deferred",
                 visibleElement: visibleElement,
                 targetElement: selection,
                 pendingElement: selection,
-                gestureState: "dragging"
+                gestureState: context.coordinator.transitionState.isUserTransitionInProgress ? "dragging" : "none"
             )
-            logger.info("Cannot change page while user dragging in progress")
+            logger.info("Cannot change page while another pager transition is active")
             return
         }
 
@@ -143,7 +143,6 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
             pendingElement: nil,
             gestureState: "none"
         )
-        context.coordinator.transitionState.programmaticTransitionWillBegin()
         logger.info("Pager programmatic transition started")
         pageViewController.setViewControllers(
             [viewController],
@@ -236,8 +235,14 @@ extension _PageViewController {
             _ pageViewController: UIPageViewController,
             willTransitionTo pendingViewControllers: [UIViewController]
         ) {
-            if transitionState.userTransitionWillBegin() {
+            switch transitionState.userTransitionWillBegin() {
+            case .started:
                 transitionGeneration += 1
+            case .continuedGesture:
+                break
+            case .ignored:
+                logger.info("Ignoring pager user transition while another transition is active")
+                return
             }
             let visibleElement = (pageViewController.viewControllers?.first as? PageContentController)?.element
             let pendingElement = (pendingViewControllers.first as? PageContentController)?.element
@@ -404,6 +409,17 @@ extension _PageViewController {
 struct PageTransitionState<Element: Equatable> {
     // MARK: Internal
 
+    enum UserTransitionStart: Equatable {
+        case started
+        case continuedGesture
+        case ignored
+    }
+
+    enum ProgrammaticTransitionRequest: Equatable {
+        case started
+        case deferred
+    }
+
     var isUserTransitionInProgress: Bool {
         phase == .userGesture || phase == .userTransition
     }
@@ -419,33 +435,29 @@ struct PageTransitionState<Element: Equatable> {
         return true
     }
 
-    mutating func userTransitionWillBegin() -> Bool {
+    mutating func userTransitionWillBegin() -> UserTransitionStart {
         switch phase {
         case .idle:
             phase = .userTransition
             pendingSelection = nil
-            return true
+            return .started
         case .userGesture:
             phase = .userTransition
-            return false
+            return .continuedGesture
         case .userTransition, .programmatic:
-            return false
+            return .ignored
         }
     }
 
-    mutating func programmaticTransitionWillBegin() {
-        precondition(phase == .idle)
+    mutating func requestProgrammaticTransition(to selection: Element) -> ProgrammaticTransitionRequest {
+        guard phase == .idle else {
+            pendingSelection = selection
+            return .deferred
+        }
+
         phase = .programmatic
         pendingSelection = nil
-    }
-
-    mutating func shouldApply(_ selection: Element) -> Bool {
-        guard phase != .idle else {
-            return true
-        }
-
-        pendingSelection = selection
-        return false
+        return .started
     }
 
     mutating func userGestureDidFinish(visibleElement: Element?) -> Element? {

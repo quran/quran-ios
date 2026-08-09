@@ -64,7 +64,7 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
                 title: l("bookmarks.delete-all"),
                 style: .plain,
                 target: self,
-                action: #selector(confirmDeleteAll)
+                action: #selector(confirmDeleteAll(_:))
             )
             navigationItem.leftBarButtonItem?.tintColor = .systemRed
         } else {
@@ -73,17 +73,30 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
     }
 
     @objc
-    private func confirmDeleteAll() {
+    private func confirmDeleteAll(_ sourceBarButtonItem: UIBarButtonItem) {
+        let alert = Self.makeDeleteAllConfirmation(
+            sourceBarButtonItem: sourceBarButtonItem
+        ) { [weak self] in
+            Task { await self?.viewModel.deleteAll() }
+        }
+        present(alert, animated: true)
+    }
+
+    static func makeDeleteAllConfirmation(
+        sourceBarButtonItem: UIBarButtonItem,
+        deleteAll: @escaping () -> Void
+    ) -> UIAlertController {
         let alert = UIAlertController(
             title: l("bookmarks.delete-all"),
             message: l("bookmarks.delete-all.confirmation"),
             preferredStyle: .actionSheet
         )
-        alert.addAction(UIAlertAction(title: l("bookmarks.delete-all"), style: .destructive) { [weak self] _ in
-            Task { await self?.viewModel.deleteAll() }
+        alert.addAction(UIAlertAction(title: l("bookmarks.delete-all"), style: .destructive) { _ in
+            deleteAll()
         })
         alert.addAction(UIAlertAction(title: lAndroid("cancel"), style: .cancel))
-        present(alert, animated: true)
+        alert.popoverPresentationController?.barButtonItem = sourceBarButtonItem
+        return alert
     }
 }
 #endif

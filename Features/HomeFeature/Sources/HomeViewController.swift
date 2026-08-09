@@ -27,6 +27,18 @@ final class HomeViewController: UIHostingController<HomeView> {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Internal
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.setListVisible(true)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.setListVisible(false)
+    }
+
     // MARK: Private
 
     private let viewModel: HomeViewModel

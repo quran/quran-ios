@@ -19,7 +19,9 @@
 //
 
 import Analytics
+import Crashing
 import UIKit
+import VLogging
 import WhatsNewFeature
 
 protocol AppPresenter: UITabBarController {
@@ -56,9 +58,13 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
+        updateCrashContext(selectedIndex: selectedIndex)
     }
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        crashContext.setNavigationPhase("tab_switching")
+        updateCrashContext(selectedIndex: tabBarController.selectedIndex)
+        crashContext.setNavigationPhase("idle")
         let targetMask = tabBarController.supportedInterfaceOrientations
         if let currentMask = tabBarController.view.window?.windowScene?.interfaceOrientation.asMask {
             if !targetMask.contains(currentMask) {
@@ -84,8 +90,17 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     private let whatsNewController: AppWhatsNewController
     private var hasStartedPostLaunchPresentation = false
 
+    private let tabNames = ["home", "notes", "bookmarks", "search", "settings"]
+
     private var visibleViewController: UIViewController? {
         presentedViewController ?? selectedViewController
+    }
+
+    private func updateCrashContext(selectedIndex: Int) {
+        let tab = tabNames.indices.contains(selectedIndex) ? tabNames[selectedIndex] : "unknown"
+        crashContext.setSelectedTab(tab)
+        crashContext.setScreen(tab)
+        logger.info("Crash context: selected tab \(tab)")
     }
 }
 

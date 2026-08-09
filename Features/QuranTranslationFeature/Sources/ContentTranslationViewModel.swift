@@ -59,17 +59,36 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     // MARK: Public
 
-    @Published public var showHeaderAndFooter = true
-    @Published public var verses: [AyahNumber] = []
+    @Published public var showHeaderAndFooter = true {
+        didSet { recordListUpdate(reason: "header_footer_changed") }
+    }
+
+    @Published public var verses: [AyahNumber] = [] {
+        didSet { recordListUpdate(reason: "verses_changed") }
+    }
 
     // MARK: Internal
 
     let tracker = CollectionTracker<TranslationItemId>()
 
-    @Published var selectedTranslations: [Translation.ID]
-    @Published var translations: [Translation] = []
-    @Published var verseTexts: [AyahNumber: VerseText] = [:]
-    @Published var expandedTranslations: [AyahNumber: [Translation: [Range<String.Index>]]] = [:]
+    @Published var selectedTranslations: [Translation.ID] {
+        didSet {
+            crashContext.setQuranMode("translation", selectedTranslationCount: selectedTranslations.count)
+            recordListUpdate(reason: "selection_changed")
+        }
+    }
+
+    @Published var translations: [Translation] = [] {
+        didSet { recordListUpdate(reason: "translations_loaded") }
+    }
+
+    @Published var verseTexts: [AyahNumber: VerseText] = [:] {
+        didSet { recordListUpdate(reason: "verse_texts_loaded") }
+    }
+
+    @Published var expandedTranslations: [AyahNumber: [Translation: [Range<String.Index>]]] = [:] {
+        didSet { recordListUpdate(reason: "translation_expanded") }
+    }
 
     @Published var translationFontSize: FontSize
     @Published var arabicFontSize: FontSize
@@ -214,11 +233,30 @@ public final class ContentTranslationViewModel: ObservableObject {
     private static let maxChunkSize = 800
 
     private var cancellables: Set<AnyCancellable> = []
+    private var listGeneration = 0
+    private var recordedRowCount = 0
     private let highlightsService: QuranHighlightsService
     private let dataService: QuranTextDataService
     private let localTranslationsRetriever: LocalTranslationsRetriever
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     private let fontSizePreferences = FontSizePreferences.shared
+
+    private func recordListUpdate(reason: String) {
+        let rowsBefore = recordedRowCount
+        let rowsAfter = items.count
+        listGeneration += 1
+        recordedRowCount = rowsAfter
+        crashContext.recordListUpdate(
+            owner: "quran_translation",
+            reason: reason,
+            rowsBefore: rowsBefore,
+            rowsAfter: rowsAfter,
+            generation: listGeneration
+        )
+        logger.info(
+            "Quran Translation list update: \(reason), rows: \(rowsBefore)->\(rowsAfter), generation: \(listGeneration)"
+        )
+    }
 
     private func cutoffChunkIfTruncationNeeded(_ string: String) -> Range<String.Index>? {
         guard let maxUntruncatedIndex = string.index(string.startIndex, offsetBy: Self.maxChunkSize, limitedBy: string.endIndex) else {

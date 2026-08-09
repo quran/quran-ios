@@ -9,6 +9,7 @@
 import AppMigrationFeature
 import AppMigrator
 import AudioUpdater
+import Crashing
 import SettingsService
 import UIKit
 import VLogging
@@ -34,6 +35,14 @@ public final class LaunchStartup {
     // MARK: Public
 
     public func launch(from window: UIWindow) {
+        crashApplicationObserver.start()
+        crashContext.setStartupPhase("launching")
+        #if QURAN_SYNC
+        crashContext.setSyncState("initializing")
+        #else
+        crashContext.setSyncState("disabled")
+        #endif
+        logger.info("Crash context: startup phase launching")
         upgradeIfNeeded(window: window)
     }
 
@@ -44,6 +53,7 @@ public final class LaunchStartup {
     private let appBuilder: AppBuilder
     private let audioUpdater: AudioUpdater
     private let reviewService: ReviewService
+    private let crashApplicationObserver = CrashApplicationObserver()
 
     private let appMigrator = AppMigrator()
     private var appViewController: UIViewController?
@@ -54,6 +64,8 @@ public final class LaunchStartup {
         case .noMigration:
             showApp(window: window)
         case let .migrate(blocksUI, titles):
+            crashContext.setStartupPhase("migrating")
+            logger.info("Crash context: startup phase migrating")
             if blocksUI {
                 logger.notice("Performing long upgrade task: \(titles)")
                 let migrationVC = MigrationViewController()
@@ -74,6 +86,8 @@ public final class LaunchStartup {
         }
 
         updateAudioIfNeeded()
+        crashContext.setStartupPhase("building_ui")
+        logger.info("Crash context: startup phase building_ui")
 
         let wasUpdated = window.rootViewController != nil
 
@@ -86,6 +100,8 @@ public final class LaunchStartup {
             appViewController.launch(from: window)
             reviewService.checkForReview(in: window)
         }
+        crashContext.setStartupPhase("ready")
+        logger.info("Crash context: startup phase ready")
     }
 
     private func registerMigrators() {

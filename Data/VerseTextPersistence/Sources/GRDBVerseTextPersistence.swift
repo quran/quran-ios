@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-05-23.
 //
 
+import Crashing
 import Foundation
 import GRDB
 import QuranKit
@@ -138,11 +139,13 @@ private struct GRDBVerseTextPersistence {
     let db: DatabaseConnection
 
     func textForVerse<T>(_ verse: AyahNumber, transform: @escaping (Row, Quran) throws -> T) async throws -> T {
-        try await db.read { db in
-            if let text = try textForVerse(using: db, verse: verse, transform: transform) {
-                return text
+        try await perform(operation: "text_for_verse") {
+            try await db.read { db in
+                if let text = try textForVerse(using: db, verse: verse, transform: transform) {
+                    return text
+                }
+                throw PersistenceError.general("Cannot find any records for verse '\(verse)'")
             }
-            throw PersistenceError.general("Cannot find any records for verse '\(verse)'")
         }
     }
 
@@ -150,41 +153,47 @@ private struct GRDBVerseTextPersistence {
         _ verses: [AyahNumber],
         transform: @escaping (Row, Quran) throws -> T
     ) async throws -> [AyahNumber: T] {
-        try await db.read { db in
-            var dictionary: [AyahNumber: T] = [:]
-            for verse in verses {
-                dictionary[verse] = try textForVerse(using: db, verse: verse, transform: transform)
+        try await perform(operation: "text_for_verses") {
+            try await db.read { db in
+                var dictionary: [AyahNumber: T] = [:]
+                for verse in verses {
+                    dictionary[verse] = try textForVerse(using: db, verse: verse, transform: transform)
+                }
+                return dictionary
             }
-            return dictionary
         }
     }
 
     // MARK: - Search
 
     func autocomplete(term: String) async throws -> [String] {
-        try await db.read { db in
-            let request = SQLRequest<String>("""
-            SELECT text
-            FROM \(sql: searchTable)
-            WHERE text match \(term) || '*'
-            LIMIT 100
-            """)
-            let rows = try request.fetchAll(db)
-            return rows
+        try await perform(operation: "autocomplete") {
+            try await db.read { db in
+                let request = SQLRequest<String>("""
+                SELECT text
+                FROM \(sql: searchTable)
+                WHERE text match \(term) || '*'
+                LIMIT 100
+                """)
+                let rows = try request.fetchAll(db)
+                return rows
+            }
         }
     }
 
     func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
-        try await db.read { db in
-            // TODO: Use match for FTS.
-            // Use like to match "_" in the Arabic regex as `match` treats "_" as a regular character.
-            let request = SQLRequest<Row>("""
-            SELECT text, sura, ayah
-            FROM \(sql: searchTable)
-            WHERE text like '%' || \(term) || '%'
-            """)
-            let rows = try request.fetchAll(db)
-            return rowsToResults(rows, quran: quran)
+        try await perform(operation: "search") {
+            try await db.read { db in
+                // TODO: Use match for FTS.
+                // Use like to match "_" in the Arabic regex as `match` treats "_" as a regular character.
+                let request = SQLRequest<Row>("""
+                SELECT text, sura, ayah
+                FROM \(sql: searchTable)
+                WHERE text like '%' || \(term) || '%'
+                """)
+                let rows = try request.fetchAll(db)
+                return rowsToResults(rows, quran: quran)
+            }
         }
     }
 
@@ -192,6 +201,19 @@ private struct GRDBVerseTextPersistence {
 
     private let textTable: String
     private let searchTable = "verses"
+
+    private func perform<T>(operation: String, body: () async throws -> T) async throws -> T {
+        let store = "verse_text_\(textTable)"
+        crashContext.setPersistence(store: store, operation: operation, phase: "executing")
+        do {
+            let result = try await body()
+            crashContext.setPersistence(store: store, operation: operation, phase: "ready")
+            return result
+        } catch {
+            crashContext.setPersistence(store: store, operation: operation, phase: "failed")
+            throw error
+        }
+    }
 
     private func textForVerse<T>(
         using db: Database,

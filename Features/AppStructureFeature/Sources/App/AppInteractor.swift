@@ -33,8 +33,11 @@ final class AppInteractor {
         presenter?.setViewControllers(viewControllers, animated: false)
 
         guard supportsCloudKit else {
+            crashContext.setSyncState("unavailable")
             return
         }
+
+        crashContext.setSyncState("checking_account")
 
         // log cloud kit logged in status
         DispatchQueue.global().asyncAfter(deadline: .now() + 10) {
@@ -52,9 +55,11 @@ final class AppInteractor {
     private nonisolated func logIsLoggedIntoCloudKit() {
         CKContainer.default().accountStatus { [analytics] status, error in
             if let error {
+                crashContext.setSyncState("account_check_failed")
                 logger.error("Error while checking account status \(error)")
                 analytics.cloudkitLoggedIn(.error)
             } else {
+                crashContext.setSyncState(status == .available ? "account_available" : "account_unavailable")
                 analytics.cloudkitLoggedIn(status == .available ? .ok : .fail)
                 if status == .available {
                     self.logLastPagesMatch()
@@ -70,6 +75,7 @@ final class AppInteractor {
         db.fetch(withQuery: query, inZoneWith: zone.zoneID, desiredKeys: nil, resultsLimit: CKQueryOperation.maximumResults) { [analytics] result in
             switch result {
             case let .failure(error):
+                crashContext.setSyncState("verification_failed")
                 logger.error("Error while accessing CloudKit \(error)")
                 analytics.cloudkitLastPagesMatch(.error)
             case let .success(output):
@@ -79,8 +85,10 @@ final class AppInteractor {
                     do {
                         let cdLastPages = try await self.lastPagePersistence.retrieveAll()
                         let inSync = Set(cdLastPages.map(\.page)).isSubset(of: ckLastPages)
+                        crashContext.setSyncState(inSync ? "verified" : "verification_mismatch")
                         analytics.cloudkitLastPagesMatch(inSync ? .ok : .fail)
                     } catch {
+                        crashContext.setSyncState("verification_failed")
                         crasher.recordError(error, reason: "Failed to retrieve last pages from persistence.")
                     }
                 }

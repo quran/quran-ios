@@ -119,7 +119,7 @@ private func coreTargets() -> [[Target]] {
             "Locking",
         ]),
 
-        target(type, name: "Crashing", hasTests: false, dependencies: [
+        target(type, name: "Crashing", dependencies: [
             "Locking",
         ]),
 
@@ -181,6 +181,7 @@ private func uiTargets() -> [[Target]] {
     return [
         target(type, name: "ViewConstrainer", hasTests: false),
         target(type, name: "UIx", dependencies: [
+            "Crashing",
             "ViewConstrainer",
             "VLogging",
         ]),
@@ -313,6 +314,7 @@ private func dataTargets() -> [[Target]] {
         ]),
 
         target(type, name: "VerseTextPersistence", hasTests: false, dependencies: [
+            "Crashing",
             "SQLitePersistence",
             "QuranKit",
             "QuranText",
@@ -772,6 +774,7 @@ private func featuresTargets() -> [[Target]] {
         ]),
 
         target(type, name: "QuranViewFeature", dependencies: [
+            "Crashing",
             "AudioBannerFeature",
             "QuranContentFeature",
             "AyahMenuFeature",
@@ -819,6 +822,7 @@ private func featuresTargets() -> [[Target]] {
         ] + mobileSyncTargetDependencies),
 
         target(type, name: "AppStructureFeature", hasTests: false, dependencies: [
+            "Crashing",
             "HomeFeature",
             "BookmarksFeature",
             "NotesFeature",

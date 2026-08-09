@@ -16,10 +16,25 @@ import VLogging
 public class CoreDataStack {
     // MARK: Lifecycle
 
-    public init(name: String, modelUrl: URL, lazyUniquifiers: @escaping () -> [CoreDataEntityUniquifier]) {
+    public convenience init(name: String, modelUrl: URL, lazyUniquifiers: @escaping () -> [CoreDataEntityUniquifier]) {
+        self.init(
+            name: name,
+            modelUrl: modelUrl,
+            lazyUniquifiers: lazyUniquifiers,
+            persistentStoreLoader: Self.loadPersistentStores
+        )
+    }
+
+    init(
+        name: String,
+        modelUrl: URL,
+        lazyUniquifiers: @escaping () -> [CoreDataEntityUniquifier],
+        persistentStoreLoader: @escaping (NSPersistentContainer) -> NSError?
+    ) {
         self.name = name
         self.modelUrl = modelUrl
         self.lazyUniquifiers = lazyUniquifiers
+        self.persistentStoreLoader = persistentStoreLoader
     }
 
     // MARK: Public
@@ -46,24 +61,9 @@ public class CoreDataStack {
     lazy var persistentContainer: NSPersistentContainer = {
         crashContext.setPersistence(store: name, operation: "load_store", phase: "starting")
         logger.info("Core Data store load starting: \(name)")
-        let container = newPersistenceContainer()
-
-        // Enable history tracking and remote notifications
-        guard let description = container.persistentStoreDescriptions.first else {
-            crashContext.setPersistence(store: name, operation: "load_store", phase: "missing_description")
-            fatalError("###\(#function): Failed to retrieve a persistent store description.")
-        }
-        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-        description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
-
-        container.loadPersistentStores(completionHandler: { _, error in
-            if let error = error as NSError? {
-                crashContext.setPersistence(store: self.name, operation: "load_store", phase: "failed")
-                fatalError("###\(#function): Failed to load persistent store: \(error)")
-            }
-            crashContext.setPersistence(store: self.name, operation: "load_store", phase: "ready")
-            logger.info("Core Data store loaded: \(self.name)")
-        })
+        let container = loadPersistentContainer()
+        crashContext.setPersistence(store: name, operation: "load_store", phase: "ready")
+        logger.info("Core Data store loaded: \(name)")
 
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.viewContext.transactionAuthor = appTransactionAuthorName
@@ -92,6 +92,7 @@ public class CoreDataStack {
 
     private let name: String
     private let modelUrl: URL
+    private let persistentStoreLoader: (NSPersistentContainer) -> NSError?
 
     private let lazyUniquifiers: () -> [CoreDataEntityUniquifier]
     private lazy var uniquifiers: [CoreDataEntityUniquifier] = lazyUniquifiers()
@@ -114,6 +115,59 @@ public class CoreDataStack {
         return NSPersistentCloudKitContainer(name: name, managedObjectModel: model)
     }
 
+    private func loadPersistentContainer() -> NSPersistentContainer {
+        var attempt = 1
+        while true {
+            let container = newPersistenceContainer()
+            configurePersistentStores(in: container)
+
+            guard let error = persistentStoreLoader(container) else {
+                return container
+            }
+            guard PersistentStoreLoadRecovery.shouldRetry(error, attempt: attempt) else {
+                crashContext.setPersistence(store: name, operation: "load_store", phase: "failed")
+                fatalError("###\(#function): Failed to load persistent store: \(error)")
+            }
+
+            crashContext.setPersistence(store: name, operation: "load_store", phase: "retrying_sqlite_misuse")
+            crasher.recordError(error, reason: "Retrying Core Data store after SQLite misuse during initialization")
+            logger.error("Core Data store returned SQLite misuse during initialization; retrying with a fresh container.")
+            attempt += 1
+        }
+    }
+
+    func configurePersistentStores(in container: NSPersistentContainer) {
+        let descriptions = container.persistentStoreDescriptions
+        guard !descriptions.isEmpty else {
+            crashContext.setPersistence(store: name, operation: "load_store", phase: "missing_description")
+            fatalError("###\(#function): Failed to retrieve a persistent store description.")
+        }
+        for description in descriptions {
+            description.shouldAddStoreAsynchronously = false
+            description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+            description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        }
+    }
+
+    private static func loadPersistentStores(in container: NSPersistentContainer) -> NSError? {
+        // The completion is escaping because Core Data also supports asynchronous
+        // descriptions. Capturing its result here is valid only while every store
+        // is explicitly configured to finish loading before this method returns.
+        precondition(
+            !container.persistentStoreDescriptions.isEmpty &&
+                container.persistentStoreDescriptions.allSatisfy { !$0.shouldAddStoreAsynchronously },
+            "Persistent stores must be configured for synchronous loading."
+        )
+
+        var loadError: NSError?
+        container.loadPersistentStores { _, error in
+            if loadError == nil {
+                loadError = error as NSError?
+            }
+        }
+        return loadError
+    }
+
     /// Handle remote store change notifications (.NSPersistentStoreRemoteChange).
     @objc
     private func storeRemoteChange(_ notification: Notification) {
@@ -129,5 +183,11 @@ public class CoreDataStack {
                 crashContext.setPersistence(store: self.name, operation: "merge_remote_change", phase: "ready")
             }
         }
+    }
+}
+
+enum PersistentStoreLoadRecovery {
+    static func shouldRetry(_ error: NSError, attempt: Int) -> Bool {
+        attempt == 1 && error.domain == "NSSQLiteErrorDomain" && error.code == 21
     }
 }

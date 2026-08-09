@@ -17,6 +17,12 @@ import TranslationService
 import UIx
 import VLogging
 
+struct LoadedTranslationContent {
+    var verses: [AyahNumber] = []
+    var translations: [Translation] = []
+    var verseTexts: [AyahNumber: VerseText] = [:]
+}
+
 @MainActor
 public final class ContentTranslationViewModel: ObservableObject {
     // MARK: Lifecycle
@@ -78,12 +84,8 @@ public final class ContentTranslationViewModel: ObservableObject {
         }
     }
 
-    @Published var translations: [Translation] = [] {
-        didSet { recordListUpdate(reason: "translations_loaded") }
-    }
-
-    @Published var verseTexts: [AyahNumber: VerseText] = [:] {
-        didSet { recordListUpdate(reason: "verse_texts_loaded") }
+    @Published private(set) var loadedContent = LoadedTranslationContent() {
+        didSet { recordListUpdate(reason: "content_loaded") }
     }
 
     @Published var expandedTranslations: [AyahNumber: [Translation: [Range<String.Index>]]] = [:] {
@@ -98,6 +100,14 @@ public final class ContentTranslationViewModel: ObservableObject {
     @Published var footnote: TranslationFootnote?
 
     @Published var scrollToItem: TranslationItemId?
+
+    var translations: [Translation] {
+        loadedContent.translations
+    }
+
+    var verseTexts: [AyahNumber: VerseText] {
+        loadedContent.verseTexts
+    }
 
     var items: [TranslationItem] {
         guard let page = verseTexts.first?.key.page else {
@@ -184,7 +194,7 @@ public final class ContentTranslationViewModel: ObservableObject {
                 }
             }
 
-            let isLastVerseInTheView = verses.last == verse
+            let isLastVerseInTheView = loadedContent.verses.last == verse
             if !isLastVerseInTheView {
                 items.append(.verseSeparator(TranslationVerseSeparator(verse: verse), color))
             }
@@ -200,14 +210,34 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     func load() async {
         do {
-            logger.info("Loading translations data; selectedTranslations='\(selectedTranslations)'; verses='\(verses)'")
+            let requestedVerses = verses
+            let requestedTranslationIds = selectedTranslations
+            logger.info("Loading translations data; selectedTranslations='\(requestedTranslationIds)'; verses='\(requestedVerses)'")
+
             let localTranslations = try await localTranslationsRetriever.getLocalTranslations()
-            translations = selectedTranslationsPreferences.selectedTranslations(from: localTranslations)
+            try Task.checkCancellation()
 
-            let verses = verses
-            verseTexts = try await dataService.textForVerses(verses, translations: translations)
+            let translationsById = Dictionary(uniqueKeysWithValues: localTranslations.map { ($0.id, $0) })
+            let requestedTranslations = requestedTranslationIds.compactMap { translationsById[$0] }
+            let requestedVerseTexts = try await dataService.textForVerses(
+                requestedVerses,
+                translations: requestedTranslations
+            )
+            try Task.checkCancellation()
 
+            guard requestedVerses == verses, requestedTranslationIds == selectedTranslations else {
+                logger.info("Discarding stale translations data")
+                return
+            }
+
+            commitLoadedContent(
+                verses: requestedVerses,
+                translations: requestedTranslations,
+                verseTexts: requestedVerseTexts
+            )
             scrollToVerseIfNeeded()
+        } catch is CancellationError {
+            logger.info("Cancelled translations data load")
         } catch {
             // TODO: should show error to the user
             crasher.recordError(error, reason: "Failed to retrieve quran page details")
@@ -226,6 +256,18 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     func ayahAtPoint(_ point: CGPoint) -> AyahNumber? {
         tracker.itemAtPoint(point)?.ayah
+    }
+
+    func commitLoadedContent(
+        verses: [AyahNumber],
+        translations: [Translation],
+        verseTexts: [AyahNumber: VerseText]
+    ) {
+        loadedContent = LoadedTranslationContent(
+            verses: verses,
+            translations: translations,
+            verseTexts: verseTexts
+        )
     }
 
     // MARK: Private
@@ -291,7 +333,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     }
 
     private func performOnTranslationText(translationId: Translation.ID, sura: Int, ayah: Int, _ body: (AyahNumber, Translation, TranslationString) -> Void) {
-        guard let quran = verses.first?.quran else {
+        guard let quran = loadedContent.verses.first?.quran else {
             return
         }
         let ayah = AyahNumber(quran: quran, sura: sura, ayah: ayah)

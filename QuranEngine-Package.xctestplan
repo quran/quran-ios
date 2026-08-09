@@ -245,6 +245,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "QuranTranslationFeatureTests",
+        "name" : "QuranTranslationFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "SettingsFeatureTests",
         "name" : "SettingsFeatureTests"
       }

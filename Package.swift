@@ -637,7 +637,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
         ]),
 
-        target(type, name: "MoreMenuFeature", hasTests: false, dependencies: [
+        target(type, name: "MoreMenuFeature", dependencies: [
             "NoorUI",
             "QuranTextKit",
             "WordTextService",

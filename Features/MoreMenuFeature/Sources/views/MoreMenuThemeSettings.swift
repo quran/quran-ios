@@ -12,16 +12,22 @@ import QuranText
 import SwiftUI
 import UIx
 
-private class ThemeSettingsController<V: View>: UIHostingController<V> {
+final class ThemeSettingsController<V: View>: UIHostingController<V> {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = nil
 
-        sheetPresentationController?.prefersGrabberVisible = true
-        sheetPresentationController?.prefersEdgeAttachedInCompactHeight = true
-        sheetPresentationController?.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        if let sheetPresentationController {
+            sheetPresentationController.prefersGrabberVisible = true
+            sheetPresentationController.prefersEdgeAttachedInCompactHeight = true
+            sheetPresentationController.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+            sheetPresentationController.detents = [.medium(), .large()]
 
-        sheetPresentationController?.detents = [.medium(), .large()]
+            // Keep the SwiftUI scroll view and the sheet's detent gesture independent.
+            // UIKit otherwise adjusts the scroll view from _UISheetInteraction while
+            // live theme changes are relaying out that same scroll view.
+            sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = false
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

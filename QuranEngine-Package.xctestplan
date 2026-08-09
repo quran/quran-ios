@@ -21,6 +21,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "MoreMenuFeatureTests",
+        "name" : "MoreMenuFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "CrashingTests",
         "name" : "CrashingTests"
       }

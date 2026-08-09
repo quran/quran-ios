@@ -827,7 +827,7 @@ private func featuresTargets() -> [[Target]] {
             "TranslationsFeature",
         ] + mobileSyncTargetDependencies),
 
-        target(type, name: "AppStructureFeature", hasTests: false, dependencies: [
+        target(type, name: "AppStructureFeature", dependencies: [
             "Crashing",
             "HomeFeature",
             "BookmarksFeature",

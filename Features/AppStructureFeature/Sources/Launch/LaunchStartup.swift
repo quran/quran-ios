@@ -32,6 +32,12 @@ public final class LaunchStartup {
         self.reviewService = reviewService
     }
 
+    deinit {
+        if let protectedDataObserver {
+            notificationCenter.removeObserver(protectedDataObserver)
+        }
+    }
+
     // MARK: Public
 
     public func launch(from window: UIWindow) {
@@ -43,7 +49,12 @@ public final class LaunchStartup {
         crashContext.setSyncState("disabled")
         #endif
         logger.info("Crash context: startup phase launching")
-        upgradeIfNeeded(window: window)
+        perform(
+            protectedDataStartupState.launch(
+                isProtectedDataAvailable: UIApplication.shared.isProtectedDataAvailable
+            ),
+            window: window
+        )
     }
 
     // MARK: Private
@@ -54,9 +65,56 @@ public final class LaunchStartup {
     private let audioUpdater: AudioUpdater
     private let reviewService: ReviewService
     private let crashApplicationObserver = CrashApplicationObserver()
+    private let notificationCenter = NotificationCenter.default
 
     private let appMigrator = AppMigrator()
     private var appViewController: UIViewController?
+    private var protectedDataObserver: NSObjectProtocol?
+    private var protectedDataStartupState = ProtectedDataStartupState()
+
+    private func perform(_ action: ProtectedDataStartupState.Action, window: UIWindow) {
+        switch action {
+        case .start:
+            stopObservingProtectedData()
+            crashContext.setProtectedDataAvailable(UIApplication.shared.isProtectedDataAvailable)
+            upgradeIfNeeded(window: window)
+        case .wait:
+            waitForProtectedData(window: window)
+        case .none:
+            break
+        }
+    }
+
+    private func waitForProtectedData(window: UIWindow) {
+        crashContext.setStartupPhase("waiting_for_protected_data")
+        logger.info("Crash context: startup waiting for protected data")
+
+        protectedDataObserver = notificationCenter.addObserver(
+            forName: UIApplication.protectedDataDidBecomeAvailableNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self, weak window] _ in
+            Task { @MainActor in
+                guard let self, let window else { return }
+                self.perform(
+                    self.protectedDataStartupState.protectedDataDidBecomeAvailable(),
+                    window: window
+                )
+            }
+        }
+
+        // Close the race where protected data becomes available between the
+        // initial check and observer registration.
+        if UIApplication.shared.isProtectedDataAvailable {
+            perform(protectedDataStartupState.protectedDataDidBecomeAvailable(), window: window)
+        }
+    }
+
+    private func stopObservingProtectedData() {
+        guard let protectedDataObserver else { return }
+        notificationCenter.removeObserver(protectedDataObserver)
+        self.protectedDataObserver = nil
+    }
 
     private func upgradeIfNeeded(window: UIWindow) {
         registerMigrators()
@@ -117,6 +175,38 @@ public final class LaunchStartup {
             }
         }
     }
+}
+
+struct ProtectedDataStartupState {
+    enum Action: Equatable {
+        case start
+        case wait
+        case none
+    }
+
+    mutating func launch(isProtectedDataAvailable: Bool) -> Action {
+        guard phase == .idle else { return .none }
+        if isProtectedDataAvailable {
+            phase = .started
+            return .start
+        }
+        phase = .waiting
+        return .wait
+    }
+
+    mutating func protectedDataDidBecomeAvailable() -> Action {
+        guard phase == .waiting else { return .none }
+        phase = .started
+        return .start
+    }
+
+    private enum Phase {
+        case idle
+        case waiting
+        case started
+    }
+
+    private var phase = Phase.idle
 }
 
 private extension UIViewController {

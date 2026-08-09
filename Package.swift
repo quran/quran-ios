@@ -313,11 +313,14 @@ private func dataTargets() -> [[Target]] {
             "QuranKit",
         ]),
 
-        target(type, name: "VerseTextPersistence", hasTests: false, dependencies: [
+        target(type, name: "VerseTextPersistence", dependencies: [
             "Crashing",
             "SQLitePersistence",
             "QuranKit",
             "QuranText",
+        ], testDependencies: [
+            .product(name: "GRDB", package: "GRDB.swift"),
+            "QuranKit",
         ]),
 
         target(type, name: "TranslationPersistence", hasTests: false, dependencies: [

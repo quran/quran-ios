@@ -62,18 +62,19 @@ public struct Navigator {
         animated: Bool = true,
         @ViewBuilder _ view: () -> some View
     ) {
+        guard let navigationController else { return }
         let view = view()
-            .environment(\.navigator, Navigator(navigationController: navigationController))
+            .environment(\.navigator, self)
         let viewController = ElementController(rootView: view, configuration: configuration)
         navigationController.pushViewController(viewController, animated: animated)
     }
 
     public func pop(animated: Bool = true) {
-        navigationController.popViewController(animated: animated)
+        navigationController?.popViewController(animated: animated)
     }
 
     public func popToRoot(animated: Bool = true) {
-        navigationController.popToRootViewController(animated: animated)
+        navigationController?.popToRootViewController(animated: animated)
     }
 
     public func present(
@@ -81,19 +82,42 @@ public struct Navigator {
         animated: Bool = true,
         @ViewBuilder _ view: () -> some View
     ) {
+        guard let navigationController else { return }
         let view = view()
-            .environment(\.navigator, Navigator(navigationController: navigationController))
+            .environment(\.navigator, self)
         let viewController = ElementController(rootView: view, configuration: configuration)
         navigationController.present(viewController, animated: animated)
     }
 
     public func dismiss(animated: Bool = true, completion: (() -> Void)? = nil) {
+        guard let navigationController else {
+            completion?()
+            return
+        }
         navigationController.dismiss(animated: animated, completion: completion)
     }
 
     // MARK: Internal
 
-    let navigationController: UINavigationController
+    init(navigationController: UINavigationController) {
+        navigationControllerReference = WeakNavigationControllerReference(navigationController)
+    }
+
+    var navigationController: UINavigationController? {
+        navigationControllerReference.value
+    }
+
+    // MARK: Private
+
+    private let navigationControllerReference: WeakNavigationControllerReference
+}
+
+private final class WeakNavigationControllerReference {
+    init(_ value: UINavigationController) {
+        self.value = value
+    }
+
+    weak var value: UINavigationController?
 }
 
 extension EnvironmentValues {
@@ -148,9 +172,11 @@ private struct NavigationViewBody<Root: View>: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> CocoaNavigationController {
         let navigationController = CocoaNavigationController()
-        let navigatorRoot = root
-            .environment(\.navigator, Navigator(navigationController: navigationController))
-        let controller = ElementController(rootView: AnyView(navigatorRoot), configuration: rootConfiguration)
+        let controller = makeNavigationRootController(
+            root: root,
+            navigator: Navigator(navigationController: navigationController),
+            configuration: rootConfiguration
+        )
         navigationController.setViewControllers([controller], animated: false)
         navigationController.delegate = context.coordinator
         navigationController.configuration = rootConfiguration
@@ -158,10 +184,11 @@ private struct NavigationViewBody<Root: View>: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ navigationController: CocoaNavigationController, context: Context) {
-        if let rootViewController = navigationController.viewControllers.first as? ElementController<AnyView> {
-            let navigatorRoot = root
-                .environment(\.navigator, Navigator(navigationController: navigationController))
-            rootViewController.rootView = AnyView(navigatorRoot)
+        if let rootViewController = navigationController.viewControllers.first as? ElementController<NavigationRootView<Root>> {
+            rootViewController.rootView = NavigationRootView(
+                root: root,
+                navigator: Navigator(navigationController: navigationController)
+            )
             rootViewController.configuration = rootConfiguration
         }
         navigationController.navigationBar.prefersLargeTitles = prefersLargeTitles
@@ -176,6 +203,27 @@ private struct NavigationViewBody<Root: View>: UIViewControllerRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator()
     }
+}
+
+private struct NavigationRootView<Root: View>: View {
+    let root: Root
+    let navigator: Navigator
+
+    var body: some View {
+        root.environment(\.navigator, navigator)
+    }
+}
+
+@MainActor
+func makeNavigationRootController(
+    root: some View,
+    navigator: Navigator,
+    configuration: NavigationConfiguration?
+) -> UIViewController {
+    ElementController(
+        rootView: NavigationRootView(root: root, navigator: navigator),
+        configuration: configuration
+    )
 }
 
 private class CocoaNavigationController: UINavigationController {

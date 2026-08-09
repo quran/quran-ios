@@ -21,6 +21,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "VerseTextPersistenceTests",
+        "name" : "VerseTextPersistenceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "MoreMenuFeatureTests",
         "name" : "MoreMenuFeatureTests"
       }

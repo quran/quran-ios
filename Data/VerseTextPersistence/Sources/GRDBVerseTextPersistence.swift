@@ -237,12 +237,40 @@ private struct GRDBVerseTextPersistence {
     }
 
     private func rowsToResults(_ rows: [Row], quran: Quran) -> [(verse: AyahNumber, text: String)] {
-        rows.map { row in
+        var invalidCoordinates: [(sura: Int, ayah: Int)] = []
+        let results = rows.compactMap { row -> (verse: AyahNumber, text: String)? in
             let text: String = row["text"]
             let sura: Int = row["sura"]
             let ayah: Int = row["ayah"]
-            let verse = AyahNumber(quran: quran, sura: sura, ayah: ayah)!
+
+            guard let verse = AyahNumber(quran: quran, sura: sura, ayah: ayah) else {
+                invalidCoordinates.append((sura: sura, ayah: ayah))
+                return nil
+            }
             return (verse: verse, text: text)
         }
+
+        if let firstInvalidCoordinate = invalidCoordinates.first {
+            crasher.recordError(
+                InvalidVerseSearchRowsError(
+                    count: invalidCoordinates.count,
+                    firstSura: firstInvalidCoordinate.sura,
+                    firstAyah: firstInvalidCoordinate.ayah
+                ),
+                reason: "Skipped invalid verse search rows in \(textTable)"
+            )
+        }
+
+        return results
+    }
+}
+
+private struct InvalidVerseSearchRowsError: LocalizedError {
+    let count: Int
+    let firstSura: Int
+    let firstAyah: Int
+
+    var errorDescription: String? {
+        "Found \(count) search row(s) with invalid Quran coordinates; first=\(firstSura):\(firstAyah)"
     }
 }

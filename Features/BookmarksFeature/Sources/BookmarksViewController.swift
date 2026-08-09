@@ -64,7 +64,7 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
                 title: l("bookmarks.delete-all"),
                 style: .plain,
                 target: self,
-                action: #selector(confirmDeleteAll)
+                action: #selector(confirmDeleteAll(_:))
             )
             navigationItem.leftBarButtonItem?.tintColor = .systemRed
         } else {
@@ -73,9 +73,9 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
     }
 
     @objc
-    private func confirmDeleteAll() {
+    private func confirmDeleteAll(_ sourceBarButtonItem: UIBarButtonItem) {
         let alert = Self.makeDeleteAllConfirmation(
-            sourceBarButtonItem: navigationItem.leftBarButtonItem
+            sourceBarButtonItem: sourceBarButtonItem
         ) { [weak self] in
             Task { await self?.viewModel.deleteAll() }
         }
@@ -83,7 +83,7 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
     }
 
     static func makeDeleteAllConfirmation(
-        sourceBarButtonItem: UIBarButtonItem?,
+        sourceBarButtonItem: UIBarButtonItem,
         deleteAll: @escaping () -> Void
     ) -> UIAlertController {
         let alert = UIAlertController(

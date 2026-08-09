@@ -119,7 +119,7 @@ public class CoreDataStack {
         var attempt = 1
         while true {
             let container = newPersistenceContainer()
-            configurePersistentStore(in: container)
+            configurePersistentStores(in: container)
 
             guard let error = persistentStoreLoader(container) else {
                 return container
@@ -136,20 +136,34 @@ public class CoreDataStack {
         }
     }
 
-    private func configurePersistentStore(in container: NSPersistentContainer) {
-        guard let description = container.persistentStoreDescriptions.first else {
+    func configurePersistentStores(in container: NSPersistentContainer) {
+        let descriptions = container.persistentStoreDescriptions
+        guard !descriptions.isEmpty else {
             crashContext.setPersistence(store: name, operation: "load_store", phase: "missing_description")
             fatalError("###\(#function): Failed to retrieve a persistent store description.")
         }
-        description.shouldAddStoreAsynchronously = false
-        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-        description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        for description in descriptions {
+            description.shouldAddStoreAsynchronously = false
+            description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+            description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+        }
     }
 
     private static func loadPersistentStores(in container: NSPersistentContainer) -> NSError? {
+        // The completion is escaping because Core Data also supports asynchronous
+        // descriptions. Capturing its result here is valid only while every store
+        // is explicitly configured to finish loading before this method returns.
+        precondition(
+            !container.persistentStoreDescriptions.isEmpty &&
+                container.persistentStoreDescriptions.allSatisfy { !$0.shouldAddStoreAsynchronously },
+            "Persistent stores must be configured for synchronous loading."
+        )
+
         var loadError: NSError?
         container.loadPersistentStores { _, error in
-            loadError = error as NSError?
+            if loadError == nil {
+                loadError = error as NSError?
+            }
         }
         return loadError
     }

@@ -33,11 +33,33 @@ class CoreDataStackTests: XCTestCase {
         let context = stack.newBackgroundContext()
         XCTAssertEqual(context.transactionAuthor, "app")
 
-        let description = stack.persistentContainer.persistentStoreDescriptions.first
-        XCTAssertNotNil(description)
-        XCTAssertEqual(description?.options[NSPersistentHistoryTrackingKey] as? NSNumber, NSNumber(value: true))
-        XCTAssertEqual(description?.options[NSPersistentStoreRemoteChangeNotificationPostOptionKey] as? NSNumber, NSNumber(value: true))
-        XCTAssertEqual(description?.shouldAddStoreAsynchronously, false)
+        let descriptions = stack.persistentContainer.persistentStoreDescriptions
+        XCTAssertFalse(descriptions.isEmpty)
+        for description in descriptions {
+            XCTAssertEqual(description.options[NSPersistentHistoryTrackingKey] as? NSNumber, NSNumber(value: true))
+            XCTAssertEqual(description.options[NSPersistentStoreRemoteChangeNotificationPostOptionKey] as? NSNumber, NSNumber(value: true))
+            XCTAssertFalse(description.shouldAddStoreAsynchronously)
+        }
+    }
+
+    func test_configurePersistentStoresConfiguresEveryDescriptionSynchronously() throws {
+        let container = NSPersistentContainer(
+            name: "ConfigurationTests",
+            managedObjectModel: try XCTUnwrap(NSManagedObjectModel(contentsOf: CoreDataModelResources.quranModel))
+        )
+        container.persistentStoreDescriptions = [
+            NSPersistentStoreDescription(),
+            NSPersistentStoreDescription(),
+        ]
+        container.persistentStoreDescriptions.forEach { $0.shouldAddStoreAsynchronously = true }
+
+        stack.configurePersistentStores(in: container)
+
+        XCTAssertTrue(container.persistentStoreDescriptions.allSatisfy { description in
+            !description.shouldAddStoreAsynchronously &&
+                description.options[NSPersistentHistoryTrackingKey] as? NSNumber == NSNumber(value: true) &&
+                description.options[NSPersistentStoreRemoteChangeNotificationPostOptionKey] as? NSNumber == NSNumber(value: true)
+        })
     }
 
     func test_sqliteMisuseReloadsStoreWithFreshContainer() {

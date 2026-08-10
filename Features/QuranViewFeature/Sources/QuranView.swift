@@ -50,6 +50,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     override func layoutSubviews() {
         navigationItem.titleView?.setNeedsLayout()
         super.layoutSubviews()
+        configureAudioBarScrollEdgeEffectIfNeeded()
     }
 
     func position(for bar: UIBarPositioning) -> UIBarPosition {
@@ -99,6 +100,34 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
 
     private let tapGesture = UITapGestureRecognizer()
     private var audioView: UIView?
+    private var audioBarScrollEdgeInteraction: (any UIInteraction)?
+
+    private func configureAudioBarScrollEdgeEffectIfNeeded() {
+        guard #available(iOS 26.0, *) else { return }
+        if let interaction = audioBarScrollEdgeInteraction as? UIScrollEdgeElementContainerInteraction,
+           interaction.scrollView != nil
+        {
+            return
+        }
+
+        guard let audioView,
+              let scrollView = contentView?.findSubview(ofType: UIScrollView.self)
+        else {
+            return
+        }
+
+        let interaction: UIScrollEdgeElementContainerInteraction
+        if let existingInteraction = audioBarScrollEdgeInteraction as? UIScrollEdgeElementContainerInteraction {
+            guard existingInteraction.scrollView == nil else { return }
+            interaction = existingInteraction
+        } else {
+            interaction = UIScrollEdgeElementContainerInteraction()
+            interaction.edge = .bottom
+            audioBarScrollEdgeInteraction = interaction
+            audioView.addInteraction(interaction)
+        }
+        interaction.scrollView = scrollView
+    }
 
     private func setUp() {
         clipsToBounds = true

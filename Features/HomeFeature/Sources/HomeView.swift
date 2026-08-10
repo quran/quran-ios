@@ -75,29 +75,34 @@ private struct HomeViewUI: View {
     let setJuzExpanded: (Juz, Bool) -> Void
 
     var body: some View {
-        NoorList {
-            #if QURAN_SYNC
-            if let readingBookmark {
-                NoorBasicSection(title: l("ayah.menu.reading-bookmark.title")) {
-                    readingBookmarkView(readingBookmark)
+        ZStack {
+            NoorList {
+                #if QURAN_SYNC
+                if let readingBookmark {
+                    NoorBasicSection(title: l("ayah.menu.reading-bookmark.title")) {
+                        readingBookmarkView(readingBookmark)
+                    }
                 }
-            }
-            #endif
+                #endif
 
-            NoorSection(title: lAndroid("recent_pages"), lastPages) { lastPage in
-                lastPageView(lastPage)
-            }
+                NoorSection(title: lAndroid("recent_pages"), lastPages) { lastPage in
+                    lastPageView(lastPage)
+                }
 
-            switch type {
-            case .suras:
-                sectionsView(items: suras, groupBy: \.page.startJuz) { sura in
-                    suraView(sura)
-                }
-            case .juzs:
-                sectionsView(items: quarters, groupBy: \.quarter.juz) { quarter in
-                    quarterView(quarter)
+                switch type {
+                case .suras:
+                    sectionsView(items: suras, groupBy: \.page.startJuz) { sura in
+                        suraView(sura)
+                    }
+                case .juzs:
+                    sectionsView(items: quarters, groupBy: \.quarter.juz) { quarter in
+                        quarterView(quarter)
+                    }
                 }
             }
+            // iOS 15's SwiftUI List produces invalid UITableView batch updates when
+            // every section and row moves at once. Replace the list snapshot instead.
+            .id(surahSortOrder.rawValue)
         }
         .task { await start() }
     }

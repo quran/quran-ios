@@ -150,6 +150,29 @@ class QuranAudioPlayerTests: XCTestCase {
     }
 
     @MainActor
+    func testStreamingGappedReciterFullAlBaqaraUsesRemoteFiles() async throws {
+        let alBaqara = suras[1]
+
+        try await player.play(
+            reciter: gappedReciter,
+            rate: 1,
+            from: alBaqara.firstVerse,
+            to: alBaqara.lastVerse,
+            verseRuns: .finite(1),
+            listRuns: .finite(1),
+            streaming: true
+        )
+
+        guard case .playing(let request) = queuePlayer.state else {
+            return XCTFail("Expected a playing request")
+        }
+        XCTAssertEqual(request.files.count, alBaqara.verses.count + 1)
+        XCTAssertEqual(request.files.first?.url, gappedReciter.remoteURL(ayah: quran.firstVerse))
+        XCTAssertEqual(request.files.last?.url, gappedReciter.remoteURL(ayah: alBaqara.lastVerse))
+        XCTAssertTrue(request.files.allSatisfy { !$0.url.isFileURL })
+    }
+
+    @MainActor
     func testAudioPlaybackControls() async throws {
         for i in 0 ..< 2 {
             // play

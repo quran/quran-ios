@@ -66,7 +66,11 @@ public struct QuranPaginationView<Content: View>: View {
     private var singlePageSelection: Binding<Page> {
         Binding(
             get: { selection[0] },
-            set: { selection = [$0] }
+            set: {
+                let newSelection = [$0]
+                guard newSelection != selection else { return }
+                selection = newSelection
+            }
         )
     }
 
@@ -119,7 +123,11 @@ private struct QuranDoublePaginationView<Content: View>: View {
                 let pageIndex = selection.first.flatMap { pages.firstIndex(of: $0) } ?? 0
                 return doublePages[pageIndex / 2]
             },
-            set: { selection = [$0.first, $0.second] }
+            set: {
+                let newSelection = [$0.first, $0.second]
+                guard newSelection != selection else { return }
+                selection = newSelection
+            }
         )
     }
 

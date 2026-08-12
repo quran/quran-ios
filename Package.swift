@@ -724,6 +724,7 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "QuranContentFeature", hasTests: false, dependencies: [
             "QuranImageFeature",
             "QuranTranslationFeature",
+            "Utilities",
         ]),
 
         target(type, name: "TranslationsFeature", hasTests: false, dependencies: [

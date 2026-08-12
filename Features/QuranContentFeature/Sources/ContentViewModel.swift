@@ -19,6 +19,7 @@ import QuranTextKit
 import QuranTranslationFeature
 import TranslationService
 import UIKit
+import Utilities
 import VLogging
 
 @MainActor
@@ -60,18 +61,36 @@ public final class ContentViewModel: ObservableObject {
 
         visiblePages = [input.initialPage]
 
-        highlights = deps.highlightsService.highlights
-        twoPagesEnabled = deps.quranContentStatePreferences.twoPagesEnabled
-        quranMode = deps.quranContentStatePreferences.quranMode
+        let highlightsService = deps.highlightsService
+        _highlights = PublishedBinding(
+            wrappedValue: highlightsService.highlights,
+            updates: highlightsService.$highlights,
+            set: { highlightsService.highlights = $0 }
+        )
 
-        deps.highlightsService.$highlights
-            .sink { [weak self] in self?.highlights = $0 }
+        let contentStatePreferences = deps.quranContentStatePreferences
+        _twoPagesEnabled = PublishedBinding(
+            wrappedValue: contentStatePreferences.twoPagesEnabled,
+            updates: contentStatePreferences.$twoPagesEnabled,
+            set: { contentStatePreferences.twoPagesEnabled = $0 }
+        )
+        _quranMode = PublishedBinding(
+            wrappedValue: contentStatePreferences.quranMode,
+            updates: contentStatePreferences.$quranMode,
+            set: { contentStatePreferences.quranMode = $0 }
+        )
+
+        $highlights
+            .zip($highlights.dropFirst())
+            .sink { [weak self] oldValue, newValue in
+                if let ayah = newValue.verseToScrollTo(comparingTo: oldValue) {
+                    self?.visiblePages = [ayah.page]
+                }
+            }
             .store(in: &cancellables)
-        deps.quranContentStatePreferences.$twoPagesEnabled
-            .sink { [weak self] in self?.twoPagesEnabled = $0 }
-            .store(in: &cancellables)
-        deps.quranContentStatePreferences.$quranMode
-            .sink { [weak self] in self?.quranMode = $0 }
+        $quranMode
+            .dropFirst()
+            .sink { [weak self] _ in self?.updateQuranModeCrashContext() }
             .store(in: &cancellables)
 
         updateQuranModeCrashContext()
@@ -112,26 +131,12 @@ public final class ContentViewModel: ObservableObject {
     let deps: Deps
     weak var listener: ContentListener?
 
-    @Published var quranMode: QuranMode {
-        didSet {
-            updateQuranModeCrashContext()
-        }
-    }
+    @PublishedBinding var quranMode: QuranMode
 
-    @Published var twoPagesEnabled: Bool
+    @PublishedBinding var twoPagesEnabled: Bool
     @Published var geometryActions: [PageGeometryActions] = []
 
-    @Published var highlights: QuranHighlights {
-        didSet {
-            if oldValue != highlights {
-                deps.highlightsService.highlights = highlights
-
-                if let ayah = highlights.verseToScrollTo(comparingTo: oldValue) {
-                    visiblePages = [ayah.page]
-                }
-            }
-        }
-    }
+    @PublishedBinding var highlights: QuranHighlights
 
     var pagingStrategy: PagingStrategy {
         twoPagesEnabled ? .doublePage : .singlePage

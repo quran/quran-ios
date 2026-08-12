@@ -85,7 +85,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     }
 
     static func deletableCollections(from collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
-        let deletableCollections = collections.filter(\.kind.canDelete)
+        let deletableCollections = collections.filter(\.canDelete)
         let oldPageBookmarks = deletableCollections.filter(\.kind.isOldPageBookmarks)
         let remainingCollections = deletableCollections.filter { !$0.kind.isOldPageBookmarks }
         return oldPageBookmarks + remainingCollections
@@ -159,7 +159,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     }
 
     func requestDeleteCollection(_ collection: AyahBookmarkCollection) async {
-        guard collection.kind.canDelete else {
+        guard collection.canDelete else {
             return
         }
         guard !collection.bookmarks.isEmpty else {
@@ -170,7 +170,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     }
 
     func deleteCollection(_ collection: AyahBookmarkCollection) async {
-        guard collection.kind.canDelete else {
+        guard collection.canDelete else {
             return
         }
         do {

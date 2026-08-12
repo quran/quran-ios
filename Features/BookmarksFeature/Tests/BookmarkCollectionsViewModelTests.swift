@@ -99,7 +99,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertEqual(collection(name: "Personal").kind, .user)
     }
 
-    func test_collectionCapabilities_protectDefaultCollection() {
+    func test_collectionCapabilities_protectSystemCollections() {
         let defaultBookmarks = collection(
             name: "Default",
             id: "__default__",
@@ -109,12 +109,16 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let oldPageBookmarks = collection(name: oldPageBookmarksCollectionName)
         let user = collection(name: "Personal")
 
-        XCTAssertFalse(defaultBookmarks.kind.canRename)
-        XCTAssertFalse(defaultBookmarks.kind.canDelete)
-        XCTAssertTrue(oldPageBookmarks.kind.canRename)
-        XCTAssertTrue(oldPageBookmarks.kind.canDelete)
-        XCTAssertTrue(user.kind.canRename)
-        XCTAssertTrue(user.kind.canDelete)
+        let system = collection(name: "Managed", isSystem: true)
+
+        XCTAssertFalse(defaultBookmarks.canRename)
+        XCTAssertFalse(defaultBookmarks.canDelete)
+        XCTAssertFalse(system.canRename)
+        XCTAssertFalse(system.canDelete)
+        XCTAssertTrue(oldPageBookmarks.canRename)
+        XCTAssertTrue(oldPageBookmarks.canDelete)
+        XCTAssertTrue(user.canRename)
+        XCTAssertTrue(user.canDelete)
     }
 
     func test_defaultCollectionPresentation_usesLocalizedFavoritesNameAndFilledStarIcon() {

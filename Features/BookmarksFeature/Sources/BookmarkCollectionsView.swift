@@ -76,7 +76,7 @@ private struct BookmarkCollectionsContent: View {
 
                 NoorListRows(
                     viewModel.displayedCollections,
-                    canDelete: { $0.kind.canDelete },
+                    canDelete: { $0.canDelete },
                     onDelete: { collection in
                         { await viewModel.requestDeleteCollection(collection) }
                     }

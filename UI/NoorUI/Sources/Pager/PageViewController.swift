@@ -363,7 +363,7 @@ extension _PageViewController {
         }
 
         private func reconcileSelection(visibleElement: Element?, pendingSelection: Element?) {
-            if let visibleElement {
+            if let visibleElement, visibleElement != parent.selection {
                 parent.selection = visibleElement
             }
 

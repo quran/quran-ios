@@ -103,8 +103,7 @@ private struct AudioPlaying: View {
     let actions: AudioBannerActions
 
     @Environment(\.layoutDirection) private var layoutDirection
-    @ScaledMetric private var minimumMiddleSpacing = 4.0
-    @ScaledMetric private var maximumMiddleSpacing = 16.0
+    @ScaledMetric private var minimumRateSpacing = 4.0
     @State private var controlSizes: [Control: CGSize] = [:]
 
     private let minimumTapLength = 44.0
@@ -217,48 +216,34 @@ private struct AudioPlaying: View {
         let rateSize = size(for: .rate)
         let backwardSize = size(for: .backward)
         let playPauseSize = size(for: .playPause)
-        let forwardSize = size(for: .forward)
         let moreSize = size(for: .more)
 
-        let middleButtonsWidth = backwardSize.width + playPauseSize.width + forwardSize.width
-        let edgeOnlySideWidth = max(stopSize.width, moreSize.width)
-        let rateSideWidth = max(
-            stopSize.width + rateSize.width + minimumMiddleSpacing * 2,
-            moreSize.width
-        )
-        let minimumWidthWithRate = middleButtonsWidth
-            + minimumMiddleSpacing * 2
-            + rateSideWidth * 2
-        let showsRate = controlSizes[.rate] != nil && availableWidth >= minimumWidthWithRate
-        let reservedSideWidth = showsRate ? rateSideWidth : edgeOnlySideWidth
-        let availableMiddleSpacing = (
-            availableWidth - reservedSideWidth * 2 - middleButtonsWidth
-        ) / 2
-        let middleSpacing = min(maximumMiddleSpacing, max(0, availableMiddleSpacing))
-        let middleWidth = middleButtonsWidth + middleSpacing * 2
-        let middleLeading = (availableWidth - middleWidth) / 2
         let centerY = measuredHeight / 2
+        let playPauseX = availableWidth / 2 - playPauseSize.width / 2
+        let backwardX = playPauseX - backwardSize.width
 
         var logicalXPositions: [Control: CGFloat] = [
-            .stop: stopSize.width / 2,
-            .backward: middleLeading + backwardSize.width / 2,
-            .playPause: middleLeading + backwardSize.width + middleSpacing + playPauseSize.width / 2,
-            .forward: middleLeading
-                + backwardSize.width
-                + middleSpacing
-                + playPauseSize.width
-                + middleSpacing
-                + forwardSize.width / 2,
-            .more: availableWidth - moreSize.width / 2,
+            .stop: 0,
+            .more: availableWidth - moreSize.width,
+            .playPause: playPauseX,
+            .backward: backwardX,
+            .forward: playPauseX + playPauseSize.width,
         ]
+
+        let rateXAvailableSpace = backwardX - stopSize.width - 2 * minimumRateSpacing
+        let rateX = stopSize.width + minimumRateSpacing + rateXAvailableSpace / 2 - rateSize.width / 2
+        let showsRate = controlSizes[.rate] != nil && rateXAvailableSpace >= rateSize.width
         if showsRate {
-            logicalXPositions[.rate] = (stopSize.width + middleLeading) / 2
+            logicalXPositions[.rate] = rateX
         }
 
-        let positions = logicalXPositions.mapValues { logicalX in
-            let x = layoutDirection == .leftToRight ? logicalX : availableWidth - logicalX
-            return CGPoint(x: x, y: centerY)
-        }
+        let positions = Dictionary(
+            uniqueKeysWithValues: logicalXPositions.map { control, logicalX in
+                let centerX = logicalX + size(for: control).width / 2
+                let x = layoutDirection == .leftToRight ? centerX : availableWidth - centerX
+                return (control, CGPoint(x: x, y: centerY))
+            }
+        )
         return Layout(showsRate: showsRate, positions: positions)
     }
 
@@ -440,6 +425,7 @@ private extension View {
                     AudioBannerViewUI(state: state, actions: actions)
                 }
             }
+            .frame(maxWidth: .infinity)
             .background(Color.systemGroupedBackground)
         }
     }

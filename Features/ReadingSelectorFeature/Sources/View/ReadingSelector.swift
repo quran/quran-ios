@@ -25,11 +25,8 @@ struct ReadingSelector: View {
             selectedValue: viewModel.selectedReading,
             groups: viewModel.readingGroups,
             imageView: imageView,
-            selectItem: { [weak viewModel] in viewModel?.showReading($0) },
-            start: { [weak viewModel] in
-                guard let viewModel else { return }
-                await viewModel.start()
-            },
+            selectItem: { viewModel.showReading($0) },
+            start: { await viewModel.start() },
             retry: { }
         )
         .populateThemeStyle()

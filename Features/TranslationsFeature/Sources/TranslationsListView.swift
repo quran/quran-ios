@@ -25,14 +25,14 @@ struct TranslationsListView: View {
             selectedTranslations: viewModel.selectedTranslations,
             downloadedTranslations: viewModel.downloadedTranslations,
             availableTranslations: viewModel.availableTranslations,
-            selectAction: { [weak viewModel] item in await viewModel?.selectTranslation(item) },
-            deselectAction: { [weak viewModel] item in await viewModel?.deselectTranslation(item) },
-            downloadAction: { [weak viewModel] item in await viewModel?.startDownloading(item) },
-            cancelAction: { [weak viewModel] item in await viewModel?.cancelDownloading(item) },
-            deleteAction: { [weak viewModel] item in viewModel?.deleteTranslation(item) },
-            moveSelectedItemsAction: { [weak viewModel] in viewModel?.moveSelectedTranslations(at: $0, to: $1) },
-            start: { [weak viewModel] in await viewModel?.start() },
-            refresh: { [weak viewModel] in await viewModel?.refresh() }
+            selectAction: { await viewModel.selectTranslation($0) },
+            deselectAction: { await viewModel.deselectTranslation($0) },
+            downloadAction: { await viewModel.startDownloading($0) },
+            cancelAction: { await viewModel.cancelDownloading($0) },
+            deleteAction: { viewModel.deleteTranslation($0) },
+            moveSelectedItemsAction: { viewModel.moveSelectedTranslations(at: $0, to: $1) },
+            start: { await viewModel.start() },
+            refresh: { await viewModel.refresh() }
         )
     }
 }

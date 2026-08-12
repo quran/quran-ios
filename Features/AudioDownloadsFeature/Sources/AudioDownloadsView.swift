@@ -21,19 +21,10 @@ struct AudioDownloadsView: View {
             editMode: $viewModel.editMode,
             error: $viewModel.error,
             items: viewModel.items.sorted(),
-            start: { [weak viewModel] in
-                guard let viewModel else { return }
-                await viewModel.start()
-            },
-            downloadAction: { [weak viewModel] item in
-                guard let viewModel else { return }
-                await viewModel.startDownloading(item.reciter)
-            },
-            cancelAction: { [weak viewModel] item in
-                guard let viewModel else { return }
-                await viewModel.cancelDownloading(item.reciter)
-            },
-            deleteAction: { @Sendable [weak viewModel] item in viewModel?.deleteReciterFiles(item.reciter) }
+            start: { await viewModel.start() },
+            downloadAction: { await viewModel.startDownloading($0.reciter) },
+            cancelAction: { await viewModel.cancelDownloading($0.reciter) },
+            deleteAction: { @Sendable item in viewModel.deleteReciterFiles(item.reciter) }
         )
     }
 }

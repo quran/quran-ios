@@ -108,7 +108,7 @@ private final class AyahSetMenuController {
             actions.append(
                 UIAction(
                     title: l("button.delete"),
-                    image: UIImage(systemName: "trash"),
+                    image: nil,
                     attributes: .destructive
                 ) { [weak self] _ in
                     guard let self else {

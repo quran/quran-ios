@@ -5,6 +5,7 @@
 //  Created by Ahmed Nabil on 2026-05-13.
 //
 
+import Localization
 import SwiftUI
 import UIx
 
@@ -79,7 +80,7 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
                         await headerDeleteAction()
                     }
                 } label: {
-                    Image(systemName: "trash")
+                    Text(l("button.delete"))
                         .foregroundStyle(Color.red)
                 }
                 .buttonStyle(.borderless)

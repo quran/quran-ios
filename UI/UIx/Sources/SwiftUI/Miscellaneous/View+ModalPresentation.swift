@@ -18,49 +18,68 @@ extension View {
 private struct SerializedModalPresentationModifier: ViewModifier {
     @Binding var request: ModalPresentationRequest?
     @StateObject private var coordinator = ModalPresentationCoordinator()
-    @State private var presentingViewController: UIViewController?
+    @StateObject private var presentingViewController = WeakViewControllerReference()
 
     func body(content: Content) -> some View {
         content
             .background(
                 ModalPresentationViewControllerReader(
-                    viewController: $presentingViewController
+                    viewController: presentingViewController
                 )
             )
             .onChange(of: request?.id) { _ in
                 handleRequestIfPossible()
             }
-            .onChange(of: presentingViewController == nil) { _ in
+            .onChange(of: presentingViewController.resolutionRevision) { _ in
                 handleRequestIfPossible()
             }
     }
 
     private func handleRequestIfPossible() {
-        guard let request, let presentingViewController else { return }
+        guard let request, let presentingViewController = presentingViewController.value else { return }
         self.request = nil
         coordinator.handle(request, from: presentingViewController)
     }
 }
 
+@MainActor
+final class WeakViewControllerReference: ObservableObject {
+    @Published private(set) var resolutionRevision: UInt = 0
+    weak var value: UIViewController?
+
+    func set(_ viewController: UIViewController?) {
+        value = viewController
+        if viewController != nil {
+            resolutionRevision &+= 1
+        }
+    }
+
+    func clear() {
+        value = nil
+    }
+}
+
 private struct ModalPresentationViewControllerReader: UIViewControllerRepresentable {
-    @Binding var viewController: UIViewController?
+    let viewController: WeakViewControllerReference
 
     func makeUIViewController(context: Context) -> ReaderViewController {
-        ReaderViewController(viewController: $viewController)
+        ReaderViewController(viewController: viewController)
     }
 
     func updateUIViewController(_ uiViewController: ReaderViewController, context: Context) {
-        uiViewController.viewController = $viewController
+        uiViewController.viewController = viewController
     }
 
     static func dismantleUIViewController(_ uiViewController: ReaderViewController, coordinator: ()) {
-        uiViewController.viewController.wrappedValue = nil
+        // SwiftUI is invalidating its graph here. Clearing the weak pointer must not
+        // publish another graph update while that invalidation is in progress.
+        uiViewController.viewController.clear()
     }
 
     final class ReaderViewController: UIViewController {
-        var viewController: Binding<UIViewController?>
+        var viewController: WeakViewControllerReference
 
-        init(viewController: Binding<UIViewController?>) {
+        init(viewController: WeakViewControllerReference) {
             self.viewController = viewController
             super.init(nibName: nil, bundle: nil)
         }
@@ -72,7 +91,7 @@ private struct ModalPresentationViewControllerReader: UIViewControllerRepresenta
 
         override func didMove(toParent parent: UIViewController?) {
             super.didMove(toParent: parent)
-            viewController.wrappedValue = parent
+            viewController.set(parent)
         }
     }
 }

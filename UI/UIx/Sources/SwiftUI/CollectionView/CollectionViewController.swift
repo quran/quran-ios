@@ -18,15 +18,16 @@ final class CollectionViewController<
 
     init(
         collectionViewLayout: UICollectionViewLayout,
-        content: @escaping (SectionId, Item) -> ItemContent
+        contentByItem: [Item: ItemContent]
     ) {
+        self.contentByItem = contentByItem
         collectionView = .init(frame: .zero, collectionViewLayout: collectionViewLayout)
         collectionView.backgroundColor = .clear
 
         super.init(nibName: nil, bundle: nil)
         collectionView.delegate = self
 
-        setUpDataSource(content: content)
+        setUpDataSource()
     }
 
     @available(*, unavailable)
@@ -52,6 +53,8 @@ final class CollectionViewController<
             scroller.dataSource = dataSource
         }
     }
+
+    var contentByItem: [Item: ItemContent]
 
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
@@ -134,7 +137,7 @@ final class CollectionViewController<
 
     // MARK: Private
 
-    private func setUpDataSource(content: @escaping (SectionId, Item) -> ItemContent) {
+    private func setUpDataSource() {
         collectionView.register(CellType.self, forCellWithReuseIdentifier: CellType.reuseId)
 
         dataSource = CollectionViewDataSource(collectionView: collectionView) {
@@ -143,7 +146,7 @@ final class CollectionViewController<
                 return nil
             }
 
-            guard let section = dataSource.section(from: indexPath), let item = dataSource.item(at: indexPath) else {
+            guard let item = dataSource.item(at: indexPath), let content = contentByItem[item] else {
                 return nil
             }
 
@@ -151,7 +154,7 @@ final class CollectionViewController<
 
             // Get & configure the cell.
             let cell = collectionView.dequeueReusableCell(CellType.self, for: indexPath)
-            cell.configure(content: content(section.id, item), dataId: itemId)
+            cell.configure(content: content, dataId: itemId)
 
             cell.updateLayoutMargins(
                 usesCollectionViewSafeAreaForCellLayoutMargins: usesCollectionViewSafeAreaForCellLayoutMargins,

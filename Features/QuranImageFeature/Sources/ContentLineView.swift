@@ -19,23 +19,25 @@ struct ContentLineView: View {
     @StateObject var viewModel: ContentLineViewModel
 
     var body: some View {
+        let viewModel = viewModel
+
         ContentLineViewBody(
             page: viewModel.page,
-            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false) },
+            layoutForSize: { [weak viewModel] in viewModel?.layout(for: $0, showHeaderFooter: false) },
             scrollToVerse: viewModel.scrollToVerse,
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
             chromeStyle: viewModel.chromeStyle,
             imageRenderingMode: viewModel.imageRenderingMode,
-            imageForLine: viewModel.lineImage(for:),
-            imageForSideline: viewModel.sidelineImage(for:),
-            onGlobalFrameChange: viewModel.updateContentFrame
+            imageForLine: { [weak viewModel] in viewModel?.lineImage(for: $0) },
+            imageForSideline: { [weak viewModel] in viewModel?.sidelineImage(for: $0) },
+            onGlobalFrameChange: { [weak viewModel] in viewModel?.updateContentFrame($0) }
         )
         .geometryActions(
             PageGeometryActions(
                 id: ObjectIdentifier(viewModel),
                 word: { _ in nil },
-                verse: { point in viewModel.verseAtGlobalPoint(point) }
+                verse: { [weak viewModel] point in viewModel?.verseAtGlobalPoint(point) }
             )
         )
         .task {

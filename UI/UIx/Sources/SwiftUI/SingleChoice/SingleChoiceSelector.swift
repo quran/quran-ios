@@ -31,12 +31,15 @@ public class SingleChoiceSelector<Item: Equatable, Content: View>: UITableViewCo
         style: UITableView.Style,
         sections: [SingleChoiceSection<Item>],
         selected: Item?,
-        configure: @escaping (Item, Item?) -> Content,
+        configure: (Item, Item?) -> Content,
         onSelection: @escaping (Item) -> Void
     ) {
-        self.sections = sections
-        self.selected = selected
-        self.configure = configure
+        self.sections = sections.map { section in
+            Section(
+                header: section.header,
+                rows: section.items.map { Row(item: $0, content: configure($0, selected)) }
+            )
+        }
         self.onSelection = onSelection
         super.init(style: style)
     }
@@ -63,20 +66,20 @@ public class SingleChoiceSelector<Item: Equatable, Content: View>: UITableViewCo
     }
 
     override public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        sections[section].items.count
+        sections[section].rows.count
     }
 
     override public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseId, for: indexPath) as? Cell else {
             fatalError("Cell not of type \(Cell.self)")
         }
-        let view = configure(sections[indexPath.section].items[indexPath.item], selected)
+        let view = sections[indexPath.section].rows[indexPath.item].content
         cell.set(rootView: view, parentController: self)
         return cell
     }
 
     override public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = sections[indexPath.section].items[indexPath.item]
+        let item = sections[indexPath.section].rows[indexPath.item].item
         onSelection(item)
     }
 
@@ -86,10 +89,18 @@ public class SingleChoiceSelector<Item: Equatable, Content: View>: UITableViewCo
 
     // MARK: Private
 
-    private let sections: [SingleChoiceSection<Item>]
-    private let selected: Item?
+    private let sections: [Section]
     private let onSelection: (Item) -> Void
-    private let configure: (Item, Item?) -> Content
+
+    private struct Section {
+        let header: String?
+        let rows: [Row]
+    }
+
+    private struct Row {
+        let item: Item
+        let content: Content
+    }
 
     private var cellReuseId: String {
         String(describing: Cell.self)
@@ -101,7 +112,7 @@ public func singleChoiceSelector<Item: Hashable>(
     style: UITableView.Style = .insetGrouped,
     sections: [SingleChoiceSection<Item>],
     selected: Item?,
-    itemText: @escaping (Item) -> String,
+    itemText: (Item) -> String,
     onSelection: @escaping (Item) -> Void
 ) -> SingleChoiceSelector<Item, SingleChoiceRow> {
     SingleChoiceSelector(
@@ -118,24 +129,31 @@ public func singleChoiceSelector<Item: Hashable>(
 public struct SingleChoiceSelectorView<Item: Hashable>: View {
     // MARK: Lifecycle
 
-    public init(sections: [SingleChoiceSection<Item>], selected: Binding<Item?>, itemText: @escaping (Item) -> String) {
-        self.sections = sections
+    public init(sections: [SingleChoiceSection<Item>], selected: Binding<Item?>, itemText: (Item) -> String) {
+        self.sections = sections.enumerated().map { index, section in
+            ChoiceSection(
+                id: index,
+                header: section.header,
+                choices: section.items.map { Choice(item: $0, text: itemText($0)) }
+            )
+        }
         _selected = selected
-        self.itemText = itemText
     }
 
     // MARK: Public
 
     public var body: some View {
+        let selected = $selected
+
         PreferredContentSizeMatchesScrollView {
             List {
-                ForEach(sections, id: \.header) { section in
+                ForEach(sections) { section in
                     if let header = section.header {
                         Section(header: Text(header)) {
-                            itemsView(section.items)
+                            itemsView(section.choices, selected: selected)
                         }
                     } else {
-                        itemsView(section.items)
+                        itemsView(section.choices, selected: selected)
                     }
                 }
             }
@@ -145,17 +163,29 @@ public struct SingleChoiceSelectorView<Item: Hashable>: View {
 
     // MARK: Private
 
-    private let sections: [SingleChoiceSection<Item>]
+    private let sections: [ChoiceSection]
     @Binding private var selected: Item?
-    private let itemText: (Item) -> String
 
-    private func itemsView(_ items: [Item]) -> some View {
-        ForEach(items, id: \.self) { item in
+    private func itemsView(_ choices: [Choice], selected: Binding<Item?>) -> some View {
+        ForEach(choices) { choice in
             Button {
-                selected = item
+                selected.wrappedValue = choice.item
             } label: {
-                SingleChoiceRow(text: itemText(item), selected: item == selected)
+                SingleChoiceRow(text: choice.text, selected: choice.item == selected.wrappedValue)
             }
         }
+    }
+
+    private struct ChoiceSection: Identifiable {
+        let id: Int
+        let header: String?
+        let choices: [Choice]
+    }
+
+    private struct Choice: Identifiable {
+        let item: Item
+        let text: String
+
+        var id: Item { item }
     }
 }

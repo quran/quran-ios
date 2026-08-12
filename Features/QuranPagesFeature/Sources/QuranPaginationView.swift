@@ -17,11 +17,11 @@ public enum PagingStrategy {
 public struct QuranPaginationView<Content: View>: View {
     // MARK: Lifecycle
 
-    public init(pagingStrategy: PagingStrategy, selection: Binding<[Page]>, pages: [Page], content: @escaping (Page) -> Content) {
+    public init(pagingStrategy: PagingStrategy, selection: Binding<[Page]>, pages: [Page], content: (Page) -> Content) {
         self.pagingStrategy = pagingStrategy
         _selection = selection
         self.pages = pages
-        self.content = content
+        contentByPage = Dictionary(uniqueKeysWithValues: pages.map { ($0, content($0)) })
     }
 
     // MARK: Public
@@ -33,13 +33,13 @@ public struct QuranPaginationView<Content: View>: View {
                 QuranSinglePaginationView(
                     selection: singlePageSelection,
                     pages: pages,
-                    content: contentView
+                    contentByPage: contentByPage
                 )
             case .doublePage:
                 QuranDoublePaginationView(
                     selection: $selection,
                     pages: pages,
-                    content: contentView
+                    contentByPage: contentByPage
                 )
             }
         }
@@ -54,14 +54,11 @@ public struct QuranPaginationView<Content: View>: View {
 
     // MARK: Private
 
-    @Environment(\.layoutDirection) private var layoutDirection
-
     private let pagingStrategy: PagingStrategy
 
     @Binding private var selection: [Page]
     private let pages: [Page]
-
-    @ViewBuilder private let content: (Page) -> Content
+    private let contentByPage: [Page: Content]
 
     private var singlePageSelection: Binding<Page> {
         Binding(
@@ -72,12 +69,6 @@ public struct QuranPaginationView<Content: View>: View {
                 selection = newSelection
             }
         )
-    }
-
-    @ViewBuilder
-    private func contentView(for page: Page) -> some View {
-        content(page)
-            .environment(\.layoutDirection, layoutDirection)
     }
 }
 
@@ -93,9 +84,12 @@ private struct QuranDoublePaginationView<Content: View>: View {
 
     @Binding var selection: [Page]
     let pages: [Page]
-    @ViewBuilder let content: (Page) -> Content
+    let contentByPage: [Page: Content]
 
     var body: some View {
+        let contentByPage = contentByPage
+        let layoutDirection = layoutDirection
+
         PageViewController(
             transitionStyle: .scroll,
             navigationOrientation: .horizontal,
@@ -106,9 +100,11 @@ private struct QuranDoublePaginationView<Content: View>: View {
             ForEach(doublePages) { doublePage in
                 HStack(spacing: 0) {
                     QuranSeparators.PageSideSeparator(leading: true)
-                    content(doublePage.first)
+                    contentByPage[doublePage.first]
+                        .environment(\.layoutDirection, layoutDirection)
                     QuranSeparators.PageMiddleSeparator()
-                    content(doublePage.second)
+                    contentByPage[doublePage.second]
+                        .environment(\.layoutDirection, layoutDirection)
                     QuranSeparators.PageSideSeparator(leading: false)
                 }
             }
@@ -116,6 +112,8 @@ private struct QuranDoublePaginationView<Content: View>: View {
     }
 
     // MARK: Private
+
+    @Environment(\.layoutDirection) private var layoutDirection
 
     private var doublePageSelection: Binding<DoublePage> {
         Binding(
@@ -143,9 +141,12 @@ private struct QuranSinglePaginationView<Content: View>: View {
 
     @Binding var selection: Page
     let pages: [Page]
-    @ViewBuilder let content: (Page) -> Content
+    let contentByPage: [Page: Content]
 
     var body: some View {
+        let contentByPage = contentByPage
+        let layoutDirection = layoutDirection
+
         PageViewController(
             transitionStyle: .scroll,
             navigationOrientation: .horizontal,
@@ -158,14 +159,16 @@ private struct QuranSinglePaginationView<Content: View>: View {
                     if isRightSide(page) {
                         HStack(spacing: 0) {
                             QuranSeparators.PageSideSeparator(leading: true)
-                            content(page)
+                            contentByPage[page]
+                                .environment(\.layoutDirection, layoutDirection)
                             QuranSeparators.PageMiddleSeparator()
                                 .offset(x: middleOffset)
                                 .padding(.leading, -middleOffset)
                         }
                     } else {
                         HStack(spacing: 0) {
-                            content(page)
+                            contentByPage[page]
+                                .environment(\.layoutDirection, layoutDirection)
                             QuranSeparators.PageSideSeparator(leading: false)
                         }
                     }
@@ -175,6 +178,8 @@ private struct QuranSinglePaginationView<Content: View>: View {
     }
 
     // MARK: Private
+
+    @Environment(\.layoutDirection) private var layoutDirection
 
     private var middleOffset: CGFloat {
         QuranSeparators.middleWidth

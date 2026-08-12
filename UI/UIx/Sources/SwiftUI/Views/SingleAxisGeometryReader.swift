@@ -33,7 +33,12 @@ public struct SingleAxisGeometryReader<Content: View>: View {
     // MARK: Public
 
     public var body: some View {
-        content(size)
+        let alignment = alignment
+        let axis = axis
+        let content = content
+        let size = $size
+
+        content(size.wrappedValue)
             .frame(
                 maxWidth: axis == .horizontal ? .infinity : nil,
                 maxHeight: axis == .vertical ? .infinity : nil,
@@ -42,7 +47,7 @@ public struct SingleAxisGeometryReader<Content: View>: View {
             .background(GeometryReader { proxy in
                 Color.clear.preference(key: SizeKey.self, value: axis == .horizontal ? proxy.size.width : proxy.size.height)
             })
-            .onPreferenceChange(SizeKey.self) { size = $0 }
+            .onPreferenceChange(SizeKey.self) { size.wrappedValue = $0 }
     }
 
     // MARK: Private

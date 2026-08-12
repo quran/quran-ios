@@ -341,20 +341,33 @@ private struct EndAtRow: View {
 // MARK: - Pills
 
 private struct PillChoicesRow<Item: Hashable>: View {
-    let items: [Item]
     @Binding var selection: Item
-    let label: (Item) -> String
+    let choices: [Choice]
+
+    init(items: [Item], selection: Binding<Item>, label: (Item) -> String) {
+        _selection = selection
+        choices = items.map { Choice(item: $0, label: label($0)) }
+    }
 
     var body: some View {
+        let selection = $selection
+
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ForEach(items, id: \.self) { item in
-                    ChoicePill(label: label(item), isSelected: item == selection) {
-                        selection = item
+                ForEach(choices) { choice in
+                    ChoicePill(label: choice.label, isSelected: choice.item == selection.wrappedValue) {
+                        selection.wrappedValue = choice.item
                     }
                 }
             }
         }
+    }
+
+    struct Choice: Identifiable {
+        let item: Item
+        let label: String
+
+        var id: Item { item }
     }
 }
 

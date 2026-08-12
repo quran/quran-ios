@@ -21,11 +21,13 @@ public struct CollectionView<
     public init(
         layout: UICollectionViewLayout,
         sections: [ListSection<SectionId, Item>],
-        @ViewBuilder content: @escaping (SectionId, Item) -> ItemContent
+        @ViewBuilder content: (SectionId, Item) -> ItemContent
     ) {
         self.layout = layout
         self.sections = sections
-        self.content = content
+        contentByItem = Dictionary(uniqueKeysWithValues: sections.flatMap { section in
+            section.items.map { item in (item, content(section.id, item)) }
+        })
     }
 
     // MARK: Public
@@ -35,7 +37,7 @@ public struct CollectionView<
             layout: layout,
             sections: sections,
             configure: configure,
-            content: content,
+            contentByItem: contentByItem,
             isPagingEnabled: isPagingEnabled,
             usesCollectionViewSafeAreaForCellLayoutMargins: usesCollectionViewSafeAreaForCellLayoutMargins,
             scrollAnchorId: scrollAnchorId,
@@ -75,7 +77,7 @@ public struct CollectionView<
 
     private let layout: UICollectionViewLayout
     private let sections: [ListSection<SectionId, Item>]
-    private let content: (SectionId, Item) -> ItemContent
+    private let contentByItem: [Item: ItemContent]
     private var configure: ((UICollectionView) -> Void)?
 
     private var isPagingEnabled: Bool = false
@@ -97,7 +99,7 @@ private struct CollectionViewBody<
     let layout: UICollectionViewLayout
     let sections: [ListSection<SectionId, Item>]
     let configure: ((UICollectionView) -> Void)?
-    let content: (SectionId, Item) -> ItemContent
+    let contentByItem: [Item: ItemContent]
 
     let isPagingEnabled: Bool
     let usesCollectionViewSafeAreaForCellLayoutMargins: Bool
@@ -106,7 +108,7 @@ private struct CollectionViewBody<
     let scrollAnchor: ScrollAnchor
 
     func makeUIViewController(context: Context) -> UIViewControllerType {
-        let viewController = UIViewControllerType(collectionViewLayout: layout, content: content)
+        let viewController = UIViewControllerType(collectionViewLayout: layout, contentByItem: contentByItem)
         configure?(viewController.collectionView)
 
         context.coordinator.viewController = viewController
@@ -130,6 +132,7 @@ private struct CollectionViewBody<
             viewController.collectionView.collectionViewLayout = layout
         }
 
+        viewController.contentByItem = contentByItem
         viewController.dataSource?.sections = sections
 
         viewController.usesCollectionViewSafeAreaForCellLayoutMargins = usesCollectionViewSafeAreaForCellLayoutMargins

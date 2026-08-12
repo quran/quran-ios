@@ -17,15 +17,14 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
         _ items: [Item],
         showsHeaderDeleteAction: Bool = false,
         headerDeleteAction: AsyncAction? = nil,
-        @ViewBuilder listItem: @escaping (Item) -> ListItem,
+        @ViewBuilder listItem: (Item) -> ListItem,
         onDelete: ItemDeletionAction<Item>? = nil
     ) {
         self.title = title
         _isExpanded = isExpanded
-        self.items = items
+        entries = items.map { Entry(item: $0, content: listItem($0)) }
         self.showsHeaderDeleteAction = showsHeaderDeleteAction
         self.headerDeleteAction = headerDeleteAction
-        self.listItem = listItem
         self.onDelete = onDelete
     }
 
@@ -45,10 +44,9 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
 
     let title: String
     @Binding var isExpanded: Bool
-    let items: [Item]
+    let entries: [Entry]
     let showsHeaderDeleteAction: Bool
     let headerDeleteAction: AsyncAction?
-    let listItem: (Item) -> ListItem
     var onDelete: ItemDeletionAction<Item>?
 
     @State private var deletingItemIDs: Set<Item.ID> = []
@@ -90,12 +88,12 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
 
     @ViewBuilder
     private var rows: some View {
-        ForEach(items) { item in
-            listItem(item)
+        ForEach(entries) { entry in
+            entry.content
         }
         .onDelete(perform: onDelete.map { onDelete in
             { indexSet in
-                let itemsToDelete = indexSet.map { items[$0] }
+                let itemsToDelete = indexSet.map { entries[$0].item }
                 for itemToDelete in itemsToDelete {
                     delete(itemToDelete, action: onDelete)
                 }
@@ -116,6 +114,13 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
             await operation()
             deletingItemIDs.remove(item.id)
         }
+    }
+
+    struct Entry: Identifiable {
+        let item: Item
+        let content: ListItem
+
+        var id: Item.ID { item.id }
     }
 }
 

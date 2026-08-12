@@ -21,6 +21,10 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
     @ScaledMetric var cornerRadius = Dimensions.cornerRadius
 
     var body: some View {
+        let imageView = imageView
+        let progress = progress
+        let reading = reading
+
         Button(action: action) {
             ZStack(alignment: .topTrailing) {
                 SingleAxisGeometryReader { width in
@@ -30,10 +34,18 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
                                 ProgressView(value: progress, total: 1)
                             }
                             if !reading.tags.isEmpty {
-                                tagsView
+                                VStack(alignment: .leading, spacing: 4) {
+                                    ForEach(reading.tags, id: \.self) { tag in
+                                        NoorTagView(tag)
+                                    }
+                                }
+                                .padding(.bottom, 4)
                             }
-                            titleView
-                            descriptionView
+                            Text(reading.title)
+                                .font(.headline)
+                                .padding(.bottom)
+                            Text(reading.description)
+                                .font(.footnote)
                         }
                         .frame(width: width * 0.65)
 
@@ -52,26 +64,6 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
     }
 
     // MARK: Private
-
-    private var titleView: some View {
-        Text(reading.title)
-            .font(.headline)
-            .padding(.bottom)
-    }
-
-    private var descriptionView: some View {
-        Text(reading.description)
-            .font(.footnote)
-    }
-
-    private var tagsView: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            ForEach(reading.tags, id: \.self) { tag in
-                NoorTagView(tag)
-            }
-        }
-        .padding(.bottom, 4)
-    }
 
     private var backgroundRectangle: some InsettableShape {
         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)

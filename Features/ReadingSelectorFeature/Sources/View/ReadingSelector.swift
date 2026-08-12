@@ -17,14 +17,19 @@ struct ReadingSelector: View {
     @StateObject var viewModel: ReadingSelectorViewModel
 
     var body: some View {
+        let viewModel = viewModel
+
         ReadingSelectorUI(
             error: $viewModel.error,
             progress: viewModel.progress,
             selectedValue: viewModel.selectedReading,
             groups: viewModel.readingGroups,
             imageView: imageView,
-            selectItem: { viewModel.showReading($0) },
-            start: { await viewModel.start() },
+            selectItem: { [weak viewModel] in viewModel?.showReading($0) },
+            start: { [weak viewModel] in
+                guard let viewModel else { return }
+                await viewModel.start()
+            },
             retry: { }
         )
         .populateThemeStyle()
@@ -54,12 +59,23 @@ private struct ReadingSelectorUI<Value: Hashable, ImageView: View>: View {
     let progress: Double?
     let selectedValue: Value?
     let groups: [ReadingGroup<Value>]
-    let imageView: (ReadingInfo<Value>) -> ImageView
+    let imageViews: [Value: ImageView]
     let selectItem: (Value) -> Void
     let start: AsyncAction
     let retry: AsyncAction
 
     var body: some View {
+        let error = $error
+        let imageViews = imageViews
+        let readingInfoDetails = $readingInfoDetails
+        let retry = retry
+        let selectItem = selectItem
+        let selectedGroupID = $selectedGroupID
+        let selectedReadings = selectedReadings
+        let selectedValue = selectedValue
+        let start = start
+        let groups = groups
+
         ScrollViewReader { proxy in
             ScrollView {
                 VStack {
@@ -70,38 +86,42 @@ private struct ReadingSelectorUI<Value: Hashable, ImageView: View>: View {
                     SegmentedChoicesPicker(
                         title: l("reading.selector.title"),
                         items: groups.map(\.id),
-                        selection: $selectedGroupID,
+                        selection: selectedGroupID,
                         label: groupTitle
                     )
                     .padding()
 
                     ForEach(selectedReadings) { reading in
                         let selected = selectedValue == reading.value
-                        ReadingItem(
-                            reading: reading,
-                            imageView: imageView(reading),
-                            selected: selected,
-                            progress: selected ? progress : nil
-                        ) {
-                            readingInfoDetails = reading
+                        if let imageView = imageViews[reading.value] {
+                            ReadingItem(
+                                reading: reading,
+                                imageView: imageView,
+                                selected: selected,
+                                progress: selected ? progress : nil
+                            ) {
+                                readingInfoDetails.wrappedValue = reading
+                            }
                         }
                     }
                 }
             }
-            .onChange(of: selectedGroupID) { _ in
+            .onChange(of: selectedGroupID.wrappedValue) { _ in
                 proxy.scrollTo(ReadingSelectorScrollPosition.top, anchor: .top)
             }
         }
-        .sheet(item: $readingInfoDetails) { reading in
-            ReadingDetails(
-                reading: reading,
-                imageView: imageView(reading),
-                useAction: {
-                    readingInfoDetails = nil
-                    selectItem(reading.value)
-                },
-                closeAction: { readingInfoDetails = nil }
-            )
+        .sheet(item: readingInfoDetails) { reading in
+            if let imageView = imageViews[reading.value] {
+                ReadingDetails(
+                    reading: reading,
+                    imageView: imageView,
+                    useAction: {
+                        readingInfoDetails.wrappedValue = nil
+                        selectItem(reading.value)
+                    },
+                    closeAction: { readingInfoDetails.wrappedValue = nil }
+                )
+            }
         }
         .background(
             Color.systemGroupedBackground
@@ -115,9 +135,9 @@ private struct ReadingSelectorUI<Value: Hashable, ImageView: View>: View {
                     group.readings.contains(where: { $0.value == selectedValue })
                 })
             else { return }
-            selectedGroupID = group.id
+            selectedGroupID.wrappedValue = group.id
         }
-        .errorAlert(error: $error, retry: retry)
+        .errorAlert(error: error, retry: retry)
     }
 
     // MARK: Private
@@ -134,7 +154,7 @@ private struct ReadingSelectorUI<Value: Hashable, ImageView: View>: View {
         progress: Double?,
         selectedValue: Value?,
         groups: [ReadingGroup<Value>],
-        imageView: @escaping (ReadingInfo<Value>) -> ImageView,
+        imageView: (ReadingInfo<Value>) -> ImageView,
         selectItem: @escaping (Value) -> Void,
         start: @escaping AsyncAction,
         retry: @escaping AsyncAction
@@ -143,7 +163,11 @@ private struct ReadingSelectorUI<Value: Hashable, ImageView: View>: View {
         self.progress = progress
         self.selectedValue = selectedValue
         self.groups = groups
-        self.imageView = imageView
+        var imageViews: [Value: ImageView] = [:]
+        for reading in groups.flatMap(\.readings) {
+            imageViews[reading.value] = imageView(reading)
+        }
+        self.imageViews = imageViews
         self.selectItem = selectItem
         self.start = start
         self.retry = retry

@@ -15,14 +15,25 @@ struct AudioDownloadsView: View {
     @StateObject var viewModel: AudioDownloadsViewModel
 
     var body: some View {
+        let viewModel = viewModel
+
         AudioDownloadsViewUI(
             editMode: $viewModel.editMode,
             error: $viewModel.error,
             items: viewModel.items.sorted(),
-            start: { await viewModel.start() },
-            downloadAction: { await viewModel.startDownloading($0.reciter) },
-            cancelAction: { await viewModel.cancelDownloading($0.reciter) },
-            deleteAction: { @Sendable item in viewModel.deleteReciterFiles(item.reciter) }
+            start: { [weak viewModel] in
+                guard let viewModel else { return }
+                await viewModel.start()
+            },
+            downloadAction: { [weak viewModel] item in
+                guard let viewModel else { return }
+                await viewModel.startDownloading(item.reciter)
+            },
+            cancelAction: { [weak viewModel] item in
+                guard let viewModel else { return }
+                await viewModel.cancelDownloading(item.reciter)
+            },
+            deleteAction: { @Sendable [weak viewModel] item in viewModel?.deleteReciterFiles(item.reciter) }
         )
     }
 }
@@ -37,6 +48,11 @@ private struct AudioDownloadsViewUI: View {
     let deleteAction: ItemDeletionAction<AudioDownloadItem>
 
     var body: some View {
+        let cancelAction = cancelAction
+        let deleteAction = deleteAction
+        let downloadAction = downloadAction
+        let editMode = editMode
+
         NoorList {
             AudioDownloadsSection(
                 title: l("reciters.downloaded"),
@@ -45,7 +61,12 @@ private struct AudioDownloadsViewUI: View {
                     NoorListItem(
                         title: .text(item.reciter.localizedName),
                         subtitle: .init(text: .text(item.size.formattedString()), location: .bottom),
-                        accessory: accessory(item)
+                        accessory: Self.accessory(
+                            item,
+                            editMode: editMode,
+                            downloadAction: downloadAction,
+                            cancelAction: cancelAction
+                        )
                     )
                 },
                 onDelete: { item in deleteAction(item) }
@@ -57,7 +78,12 @@ private struct AudioDownloadsViewUI: View {
                 listItem: { item in
                     NoorListItem(
                         title: .text(item.reciter.localizedName),
-                        accessory: accessory(item)
+                        accessory: Self.accessory(
+                            item,
+                            editMode: editMode,
+                            downloadAction: downloadAction,
+                            cancelAction: cancelAction
+                        )
                     )
                 },
                 onDelete: nil
@@ -68,7 +94,12 @@ private struct AudioDownloadsViewUI: View {
         .environment(\.editMode, $editMode)
     }
 
-    func accessory(_ item: AudioDownloadItem) -> NoorListItem.Accessory? {
+    static func accessory(
+        _ item: AudioDownloadItem,
+        editMode: EditMode,
+        downloadAction: @escaping AsyncItemAction<AudioDownloadItem>,
+        cancelAction: @escaping AsyncItemAction<AudioDownloadItem>
+    ) -> NoorListItem.Accessory? {
         if editMode == .active {
             return nil
         }
@@ -91,12 +122,26 @@ private struct AudioDownloadsViewUI: View {
 private struct AudioDownloadsSection<ListItem: View>: View {
     let title: String
     let items: [AudioDownloadItem]
-    let listItem: (AudioDownloadItem) -> ListItem
+    let listItemsByID: [AudioDownloadItem.ID: ListItem]
     let onDelete: ItemDeletionAction<AudioDownloadItem>?
 
+    init(
+        title: String,
+        items: [AudioDownloadItem],
+        listItem: (AudioDownloadItem) -> ListItem,
+        onDelete: ItemDeletionAction<AudioDownloadItem>?
+    ) {
+        self.title = title
+        self.items = items
+        listItemsByID = Dictionary(uniqueKeysWithValues: items.map { ($0.id, listItem($0)) })
+        self.onDelete = onDelete
+    }
+
     var body: some View {
+        let listItemsByID = listItemsByID
+
         NoorSection(title: title, items) { item in
-            listItem(item)
+            listItemsByID[item.id]
         }
         .onDelete(action: onDelete)
     }

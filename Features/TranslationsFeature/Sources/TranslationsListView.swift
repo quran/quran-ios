@@ -16,6 +16,8 @@ struct TranslationsListView: View {
     @StateObject var viewModel: TranslationsListViewModel
 
     var body: some View {
+        let viewModel = viewModel
+
         TranslationsListViewUI(
             editMode: $viewModel.editMode,
             error: $viewModel.error,
@@ -23,14 +25,14 @@ struct TranslationsListView: View {
             selectedTranslations: viewModel.selectedTranslations,
             downloadedTranslations: viewModel.downloadedTranslations,
             availableTranslations: viewModel.availableTranslations,
-            selectAction: { await viewModel.selectTranslation($0) },
-            deselectAction: { await viewModel.deselectTranslation($0) },
-            downloadAction: { await viewModel.startDownloading($0) },
-            cancelAction: { await viewModel.cancelDownloading($0) },
-            deleteAction: { viewModel.deleteTranslation($0) },
-            moveSelectedItemsAction: viewModel.moveSelectedTranslations,
-            start: { await viewModel.start() },
-            refresh: { await viewModel.refresh() }
+            selectAction: { [weak viewModel] item in await viewModel?.selectTranslation(item) },
+            deselectAction: { [weak viewModel] item in await viewModel?.deselectTranslation(item) },
+            downloadAction: { [weak viewModel] item in await viewModel?.startDownloading(item) },
+            cancelAction: { [weak viewModel] item in await viewModel?.cancelDownloading(item) },
+            deleteAction: { [weak viewModel] item in viewModel?.deleteTranslation(item) },
+            moveSelectedItemsAction: { [weak viewModel] in viewModel?.moveSelectedTranslations(at: $0, to: $1) },
+            start: { [weak viewModel] in await viewModel?.start() },
+            refresh: { [weak viewModel] in await viewModel?.refresh() }
         )
     }
 }
@@ -182,13 +184,29 @@ private struct TranslationsListViewUI: View {
 private struct TranslationsListSection<ListItem: View>: View {
     let title: String?
     let items: [TranslationItem]
-    let listItem: (TranslationItem) -> ListItem
+    let listItemsByID: [TranslationItem.ID: ListItem]
     let onDelete: ItemDeletionAction<TranslationItem>?
     let onMove: ((IndexSet, Int) -> Void)?
 
+    init(
+        title: String?,
+        items: [TranslationItem],
+        listItem: (TranslationItem) -> ListItem,
+        onDelete: ItemDeletionAction<TranslationItem>?,
+        onMove: ((IndexSet, Int) -> Void)?
+    ) {
+        self.title = title
+        self.items = items
+        listItemsByID = Dictionary(uniqueKeysWithValues: items.map { ($0.id, listItem($0)) })
+        self.onDelete = onDelete
+        self.onMove = onMove
+    }
+
     var body: some View {
+        let listItemsByID = listItemsByID
+
         NoorSection(title: title, items) { item in
-            listItem(item)
+            listItemsByID[item.id]
         }
         .onDelete(action: onDelete)
         .onMove(action: onMove)

@@ -28,8 +28,12 @@ public struct CollectionViewReader<Content: View>: View {
     // MARK: Public
 
     public var body: some View {
-        content(_environmentCollectionView?.wrappedValue ?? _collectionView)
-            .environment(\._collectionView, $_collectionView)
+        let collectionView = $_collectionView
+        let content = content
+        let environmentCollectionView = _environmentCollectionView
+
+        content(environmentCollectionView?.wrappedValue ?? collectionView.wrappedValue)
+            .environment(\._collectionView, collectionView)
     }
 
     // MARK: Internal

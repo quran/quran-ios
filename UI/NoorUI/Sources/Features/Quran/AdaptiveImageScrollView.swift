@@ -35,6 +35,14 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     // MARK: Public
 
     public var body: some View {
+        let decorations = decorations
+        let footer = footer
+        let header = header
+        let image = image
+        let onGlobalFrameChange = onGlobalFrameChange
+        let onScaleChange = onScaleChange
+        let renderingMode = renderingMode
+
         AdaptiveQuranScrollView {
             header
         } footer: {
@@ -55,7 +63,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                     Color.clear
                 }
             }
-            .frame(height: imageHeight(for: availableContentSize))
+            .frame(height: Self.imageHeight(image: image, availableContentSize: availableContentSize))
         }
     }
 
@@ -69,7 +77,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     private let onScaleChange: (WordFrameScale) -> Void
     private let onGlobalFrameChange: (CGRect) -> Void
 
-    private func imageHeight(for availableContentSize: CGSize) -> CGFloat {
+    private static func imageHeight(image: UIImage?, availableContentSize: CGSize) -> CGFloat {
         if let imageSize = image?.size, availableContentSize.width > availableContentSize.height {
             return availableContentSize.width * (imageSize.height / imageSize.width)
         } else {

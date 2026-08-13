@@ -197,14 +197,26 @@ public extension View {
         action: @escaping Action
     ) -> some View {
         if isEnabled {
-            swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            modifier(NoorDeleteSwipeActionModifier(action: action))
+        } else {
+            self
+        }
+    }
+}
+
+private struct NoorDeleteSwipeActionModifier: ViewModifier {
+    let action: Action
+
+    @ScaledMetric(relativeTo: .body) private var minimumContentHeight = 36
+
+    func body(content: Content) -> some View {
+        content
+            .frame(minHeight: minimumContentHeight)
+            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                 Button(role: .destructive, action: action) {
                     Label(l("button.delete"), systemImage: "xmark")
                 }
             }
-        } else {
-            self
-        }
     }
 }
 

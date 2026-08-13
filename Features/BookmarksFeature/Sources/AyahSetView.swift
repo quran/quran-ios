@@ -48,6 +48,9 @@ private struct AyahSetContentView: View {
             Section {
                 ForEach(viewModel.content.ayahs, id: \.self) { ayah in
                     ayahRow(ayah)
+                        .noorDeleteSwipeAction {
+                            Task { await viewModel.removeAyah(ayah) }
+                        }
                 }
                 .onDelete { offsets in
                     let ayahs = offsets.map { viewModel.content.ayahs[$0] }

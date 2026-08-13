@@ -80,7 +80,7 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
                         await headerDeleteAction()
                     }
                 } label: {
-                    Text(l("button.delete"))
+                    Label(l("button.delete"), systemImage: "xmark")
                         .foregroundStyle(Color.red)
                 }
                 .buttonStyle(.borderless)
@@ -93,6 +93,9 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
     private var rows: some View {
         ForEach(items) { item in
             listItem(item)
+                .noorDeleteSwipeAction(isEnabled: onDelete != nil) {
+                    delete(item)
+                }
         }
         .onDelete(perform: onDelete.map { onDelete in
             { indexSet in
@@ -102,6 +105,13 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
                 }
             }
         })
+    }
+
+    private func delete(_ item: Item) {
+        guard let onDelete else {
+            return
+        }
+        delete(item, action: onDelete)
     }
 
     private func delete(_ item: Item, action: ItemDeletionAction<Item>) {

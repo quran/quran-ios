@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-07-04.
 //
 
+import Localization
 import SwiftUI
 import UIx
 
@@ -154,6 +155,9 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     private var rows: some View {
         ForEach(items) { item in
             listItem(item)
+                .noorDeleteSwipeAction(isEnabled: onDelete != nil) {
+                    delete(item)
+                }
         }
         .onDelete(perform: deleteAction)
         .onMove(perform: onMove)
@@ -182,6 +186,24 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
         Task { @MainActor in
             await operation()
             deletingItemIDs.remove(item.id)
+        }
+    }
+}
+
+public extension View {
+    @ViewBuilder
+    func noorDeleteSwipeAction(
+        isEnabled: Bool = true,
+        action: @escaping Action
+    ) -> some View {
+        if isEnabled {
+            swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                Button(role: .destructive, action: action) {
+                    Label(l("button.delete"), systemImage: "xmark")
+                }
+            }
+        } else {
+            self
         }
     }
 }

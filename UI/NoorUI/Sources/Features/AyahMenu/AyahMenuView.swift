@@ -195,10 +195,9 @@ private struct AyahMenuViewList: View {
                     Row(
                         title: noteDeleteText,
                         isDestructive: true,
-                        showsSymbol: false,
                         action: dataObject.actions.deleteNote
                     ) {
-                        EmptyView()
+                        Image(systemName: "xmark")
                     }
                 }
                 #endif
@@ -315,7 +314,6 @@ private struct Row<Symbol: View, Accessory: View>: View {
         subtitlePlacement: SubtitlePlacement = .inline,
         isEnabled: Bool = true,
         isDestructive: Bool = false,
-        showsSymbol: Bool = true,
         action: @Sendable @escaping () async -> Void,
         @ViewBuilder symbol: () -> Symbol
     ) where Accessory == EmptyView {
@@ -326,7 +324,6 @@ private struct Row<Symbol: View, Accessory: View>: View {
         self.subtitlePlacement = subtitlePlacement
         self.isEnabled = isEnabled
         self.isDestructive = isDestructive
-        self.showsSymbol = showsSymbol
         self.action = action
         hasAccessory = false
     }
@@ -347,7 +344,6 @@ private struct Row<Symbol: View, Accessory: View>: View {
         self.subtitlePlacement = subtitlePlacement
         self.isEnabled = isEnabled
         isDestructive = false
-        showsSymbol = true
         self.action = action
         hasAccessory = true
     }
@@ -361,7 +357,6 @@ private struct Row<Symbol: View, Accessory: View>: View {
     let subtitlePlacement: SubtitlePlacement
     let isEnabled: Bool
     let isDestructive: Bool
-    let showsSymbol: Bool
     let action: @Sendable () async -> Void
     let hasAccessory: Bool
     @ScaledMetric var verticalPadding = 12
@@ -369,13 +364,11 @@ private struct Row<Symbol: View, Accessory: View>: View {
     var body: some View {
         AsyncButton(action: action) {
             HStack {
-                if showsSymbol {
-                    ZStack {
-                        HighlightPaletteIcon()
-                            .hidden()
-                        symbol
-                            .foregroundColor(primaryColor)
-                    }
+                ZStack {
+                    HighlightPaletteIcon()
+                        .hidden()
+                    symbol
+                        .foregroundColor(primaryColor)
                 }
                 label
                 if hasAccessory {

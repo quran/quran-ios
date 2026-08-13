@@ -82,6 +82,9 @@ private struct BookmarkCollectionsContent: View {
                         count: collection.bookmarks.count,
                         action: { viewModel.showCollection(collection) }
                     )
+                    .noorDeleteSwipeAction(isEnabled: collection.kind.canDelete) {
+                        Task { await viewModel.requestDeleteCollection(collection) }
+                    }
                     .deleteDisabled(!collection.kind.canDelete)
                 }
                 .onDelete { offsets in

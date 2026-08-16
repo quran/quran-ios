@@ -51,10 +51,9 @@ private struct BookmarksViewUI: View {
                 noData
             } else {
                 NoorList {
-                    NoorSection(bookmarks) { bookmark in
+                    NoorSection(bookmarks, onDelete: deleteAction) { bookmark in
                         listItem(bookmark)
                     }
-                    .onDelete(action: deleteAction)
                 }
             }
         }

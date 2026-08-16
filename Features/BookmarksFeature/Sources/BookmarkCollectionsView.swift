@@ -74,7 +74,13 @@ private struct BookmarkCollectionsContent: View {
                     )
                 }
 
-                ForEach(viewModel.displayedCollections) { collection in
+                NoorListRows(
+                    viewModel.displayedCollections,
+                    canDelete: { $0.kind.canDelete },
+                    onDelete: { collection in
+                        { await viewModel.requestDeleteCollection(collection) }
+                    }
+                ) { collection in
                     collectionRow(
                         title: collection.displayName,
                         image: collection.displayImage,
@@ -82,15 +88,6 @@ private struct BookmarkCollectionsContent: View {
                         count: collection.bookmarks.count,
                         action: { viewModel.showCollection(collection) }
                     )
-                    .deleteDisabled(!collection.kind.canDelete)
-                }
-                .onDelete { offsets in
-                    let collections = offsets.map { viewModel.displayedCollections[$0] }
-                    Task {
-                        for collection in collections {
-                            await viewModel.requestDeleteCollection(collection)
-                        }
-                    }
                 }
 
                 NoorListItem(

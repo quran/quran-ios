@@ -192,9 +192,12 @@ private struct AyahMenuViewList: View {
                     Divider()
                         .padding(.leading)
 
-                    Row(title: noteDeleteText, action: dataObject.actions.deleteNote) {
-                        Image(systemName: "trash")
-                            .foregroundColor(Color.red)
+                    Row(
+                        title: noteDeleteText,
+                        isDestructive: true,
+                        action: dataObject.actions.deleteNote
+                    ) {
+                        Image(systemName: "xmark")
                     }
                 }
                 #endif
@@ -310,6 +313,7 @@ private struct Row<Symbol: View, Accessory: View>: View {
         subtitle: MultipartText? = nil,
         subtitlePlacement: SubtitlePlacement = .inline,
         isEnabled: Bool = true,
+        isDestructive: Bool = false,
         action: @Sendable @escaping () async -> Void,
         @ViewBuilder symbol: () -> Symbol
     ) where Accessory == EmptyView {
@@ -319,6 +323,7 @@ private struct Row<Symbol: View, Accessory: View>: View {
         self.subtitle = subtitle
         self.subtitlePlacement = subtitlePlacement
         self.isEnabled = isEnabled
+        self.isDestructive = isDestructive
         self.action = action
         hasAccessory = false
     }
@@ -338,6 +343,7 @@ private struct Row<Symbol: View, Accessory: View>: View {
         self.subtitle = subtitle
         self.subtitlePlacement = subtitlePlacement
         self.isEnabled = isEnabled
+        isDestructive = false
         self.action = action
         hasAccessory = true
     }
@@ -350,6 +356,7 @@ private struct Row<Symbol: View, Accessory: View>: View {
     let subtitle: MultipartText?
     let subtitlePlacement: SubtitlePlacement
     let isEnabled: Bool
+    let isDestructive: Bool
     let action: @Sendable () async -> Void
     let hasAccessory: Bool
     @ScaledMetric var verticalPadding = 12
@@ -381,7 +388,10 @@ private struct Row<Symbol: View, Accessory: View>: View {
     // MARK: Private
 
     private var primaryColor: Color {
-        isEnabled ? .label : .tertiaryLabel
+        if !isEnabled {
+            return .tertiaryLabel
+        }
+        return isDestructive ? .red : .label
     }
 
     private var secondaryColor: Color {

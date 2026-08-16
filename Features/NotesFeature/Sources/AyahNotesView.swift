@@ -59,10 +59,9 @@ private struct AyahNotesContent: View {
     var body: some View {
         VStack {
             NoorList {
-                NoorSection(notes) { note in
+                NoorSection(notes, onDelete: deleteAction) { note in
                     NoteItemView(note: note, editAction: editAction)
                 }
-                .onDelete(action: deleteAction)
             }
 
             ProminentRoundedButton(label: l("notes.new"), image: .plus) {

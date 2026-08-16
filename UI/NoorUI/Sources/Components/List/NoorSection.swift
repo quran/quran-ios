@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-07-04.
 //
 
+import Localization
 import SwiftUI
 import UIx
 
@@ -108,56 +109,45 @@ public struct SelfIdentifiable<T: Hashable>: Identifiable {
     public var id: T { value }
 }
 
-public struct NoorSection<Item: Identifiable, ListItem: View>: View {
+public struct NoorListRows<Item: Identifiable, Row: View>: View {
     // MARK: Lifecycle
 
     public init(
-        title: String? = nil,
-        isExpanded: Binding<Bool>? = nil,
         _ items: [Item],
-        @ViewBuilder listItem: @escaping (Item) -> ListItem,
+        canDelete: @escaping @MainActor @Sendable (Item) -> Bool = { _ in true },
         onDelete: ItemDeletionAction<Item>? = nil,
-        onMove: ((IndexSet, Int) -> Void)? = nil
+        onMove: ((IndexSet, Int) -> Void)? = nil,
+        @ViewBuilder row: @escaping (Item) -> Row
     ) {
-        self.title = title
-        self.isExpanded = isExpanded
         self.items = items
-        self.listItem = listItem
         self.onDelete = onDelete
         self.onMove = onMove
+        rows = ForEach(items) { item in
+            NoorDeletableRow(
+                item: item,
+                content: row(item),
+                isDeleteEnabled: onDelete != nil && canDelete(item),
+                onDelete: onDelete
+            )
+        }
     }
 
     // MARK: Public
 
     public var body: some View {
-        if !items.isEmpty {
-            NoorBasicSection(title: title, isExpanded: isExpanded) {
-                rows
-            }
-        }
+        rows
+            .onDelete(perform: deleteAction)
+            .onMove(perform: onMove)
     }
-
-    // MARK: Internal
-
-    let title: String?
-    let isExpanded: Binding<Bool>?
-    let items: [Item]
-    let listItem: (Item) -> ListItem
-    var onDelete: ItemDeletionAction<Item>?
-    var onMove: ((IndexSet, Int) -> Void)?
-
-    @State private var deletingItemIDs: Set<Item.ID> = []
 
     // MARK: Private
 
-    @ViewBuilder
-    private var rows: some View {
-        ForEach(items) { item in
-            listItem(item)
-        }
-        .onDelete(perform: deleteAction)
-        .onMove(perform: onMove)
-    }
+    private let items: [Item]
+    private let onDelete: ItemDeletionAction<Item>?
+    private let onMove: ((IndexSet, Int) -> Void)?
+    private let rows: ForEach<[Item], Item.ID, NoorDeletableRow<Item, Row>>
+
+    @State private var deletingItemIDs: Set<Item.ID> = []
 
     private var deleteAction: ((IndexSet) -> Void)? {
         onDelete.map { _ in
@@ -186,16 +176,101 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     }
 }
 
-extension NoorSection {
-    public func onDelete(action: ItemDeletionAction<Item>?) -> Self {
-        var mutableSelf = self
-        mutableSelf.onDelete = action
-        return mutableSelf
+public struct NoorSection<Item: Identifiable, ListItem: View>: View {
+    // MARK: Lifecycle
+
+    public init(
+        title: String? = nil,
+        isExpanded: Binding<Bool>? = nil,
+        _ items: [Item],
+        onDelete: ItemDeletionAction<Item>? = nil,
+        onMove: ((IndexSet, Int) -> Void)? = nil,
+        @ViewBuilder listItem: @escaping (Item) -> ListItem
+    ) {
+        self.title = title
+        self.isExpanded = isExpanded
+        isEmpty = items.isEmpty
+        rows = NoorListRows(
+            items,
+            onDelete: onDelete,
+            onMove: onMove,
+            row: listItem
+        )
     }
 
-    public func onMove(action: ((IndexSet, Int) -> Void)?) -> Self {
-        var mutableSelf = self
-        mutableSelf.onMove = action
-        return mutableSelf
+    // MARK: Public
+
+    public var body: some View {
+        if !isEmpty {
+            NoorBasicSection(title: title, isExpanded: isExpanded) {
+                rows
+            }
+        }
+    }
+
+    // MARK: Internal
+
+    let title: String?
+    let isExpanded: Binding<Bool>?
+    let isEmpty: Bool
+    let rows: NoorListRows<Item, ListItem>
+}
+
+public extension View {
+    @ViewBuilder
+    func noorDeleteSwipeAction(
+        isEnabled: Bool = true,
+        action: @escaping Action
+    ) -> some View {
+        if isEnabled {
+            modifier(NoorDeleteSwipeActionModifier(action: action))
+                .deleteDisabled(false)
+        } else {
+            deleteDisabled(true)
+        }
+    }
+}
+
+private struct NoorDeleteSwipeActionModifier: ViewModifier {
+    let action: Action
+
+    @ScaledMetric(relativeTo: .body) private var minimumContentHeight = 36
+
+    func body(content: Content) -> some View {
+        content
+            .frame(minHeight: minimumContentHeight)
+            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                Button(role: .destructive, action: action) {
+                    Label(l("button.delete"), systemImage: "xmark")
+                }
+            }
+    }
+}
+
+private struct NoorDeletableRow<Item, Content: View>: View {
+    let item: Item
+    let content: Content
+    let isDeleteEnabled: Bool
+    let onDelete: ItemDeletionAction<Item>?
+
+    @State private var isDeleting = false
+
+    var body: some View {
+        content
+            .noorDeleteSwipeAction(isEnabled: isDeleteEnabled && !isDeleting) {
+                delete()
+            }
+    }
+
+    private func delete() {
+        guard !isDeleting, let operation = onDelete?(item) else {
+            return
+        }
+        isDeleting = true
+
+        Task { @MainActor in
+            await operation()
+            isDeleting = false
+        }
     }
 }

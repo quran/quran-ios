@@ -102,13 +102,12 @@ private struct NotesViewUI: View {
                 }
             } else {
                 NoorList {
-                    NoorSection(notes) { note in
+                    NoorSection(notes, onDelete: deleteAction) { note in
                         listItem(note)
                             .listRowInsets(.init(top: 6, leading: 0, bottom: 6, trailing: 0))
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
                     }
-                    .onDelete(action: deleteAction)
                 }
             }
         }

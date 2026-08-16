@@ -22,12 +22,10 @@ class AsyncPublisherTests: XCTestCase {
 
     let numbers = [1, 2, 3]
     var subject: PassthroughSubject<Int, Never>!
-    var channel: AsyncChannel<Void>!
     var values: Values!
 
     override func setUp() {
         subject = PassthroughSubject()
-        channel = AsyncChannel()
         values = Values()
     }
 
@@ -35,7 +33,7 @@ class AsyncPublisherTests: XCTestCase {
         let prefix = 2
         let asyncPublisher = subject.values(bufferingPolicy: .unbounded)
 
-        Task { [iterator = asyncPublisher.makeAsyncIterator()] in
+        let task = Task { [iterator = asyncPublisher.makeAsyncIterator()] in
             var iterator = iterator
             while let number = await iterator.next() {
                 await values.append(number)
@@ -43,15 +41,13 @@ class AsyncPublisherTests: XCTestCase {
                     break
                 }
             }
-            await channel.send(())
         }
 
         for number in numbers {
             subject.send(number)
         }
 
-        // Wait until the break
-        await channel.next()
+        await task.value
 
         await AsyncAssertEqual(await values.results, Array(numbers.prefix(2)))
     }
@@ -67,7 +63,6 @@ class AsyncPublisherTests: XCTestCase {
                 await received.send(number)
             }
             await values.append(1945)
-            await channel.send(())
         }
 
         for number in numbers {
@@ -76,7 +71,7 @@ class AsyncPublisherTests: XCTestCase {
         }
 
         task.cancel()
-        await channel.next()
+        await task.value
 
         await AsyncAssertEqual(await values.results, numbers + [1945])
     }
@@ -97,25 +92,23 @@ class AsyncPublisherTests: XCTestCase {
         let numbersPublisher = numbers.publisher
         let asyncPublisher = numbersPublisher.values(bufferingPolicy: .bufferingNewest(2))
 
-        var results = [Int]()
-        for await number in asyncPublisher {
-            results.append(number)
-        }
+        var iterator = asyncPublisher.makeAsyncIterator()
+        let first = await iterator.next()
+        let second = await iterator.next()
 
         // Only the last 2 values should be preserved
-        XCTAssertEqual(results, [2, 3])
+        XCTAssertEqual([first, second].compactMap { $0 }, [2, 3])
     }
 
     func test_bufferingOldest() async {
         let numbersPublisher = numbers.publisher
         let asyncPublisher = numbersPublisher.values(bufferingPolicy: .bufferingOldest(2))
 
-        var results = [Int]()
-        for await number in asyncPublisher {
-            results.append(number)
-        }
+        var iterator = asyncPublisher.makeAsyncIterator()
+        let first = await iterator.next()
+        let second = await iterator.next()
 
         // Only the first 2 values should be preserved
-        XCTAssertEqual(results, [1, 2])
+        XCTAssertEqual([first, second].compactMap { $0 }, [1, 2])
     }
 }

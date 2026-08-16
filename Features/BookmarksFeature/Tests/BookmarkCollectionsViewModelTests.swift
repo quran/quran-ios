@@ -49,13 +49,13 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
     func test_deletableCollections_includesOldPageBookmarksAndUserCollections() {
         let collections = BookmarkCollectionsViewModel.deletableCollections(from: [
-            collection(name: "Favorites"),
+            collection(name: "Personal"),
             collection(name: oldPageBookmarksCollectionName),
         ])
 
         XCTAssertEqual(collections.map(\.collection.name), [
             oldPageBookmarksCollectionName,
-            "Favorites",
+            "Personal",
         ])
     }
 
@@ -64,7 +64,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             collection(name: "Z Collection"),
             collection(name: oldPageBookmarksCollectionName),
             collection(name: "A Collection"),
-            collection(name: "Default", id: "__default__"),
+            collection(name: "Default", id: "__default__", isDefault: true, isSystem: true),
         ])
 
         XCTAssertEqual(collections.map(\.collection.name), [
@@ -92,14 +92,22 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             collection(name: oldPageBookmarksCollectionName.uppercased()).kind,
             .oldPageBookmarks
         )
-        XCTAssertEqual(collection(name: "Default", id: "__default__").kind, .defaultBookmarks)
-        XCTAssertEqual(collection(name: "Favorites").kind, .user)
+        XCTAssertEqual(
+            collection(name: "Default", id: "__default__", isDefault: true, isSystem: true).kind,
+            .defaultBookmarks
+        )
+        XCTAssertEqual(collection(name: "Personal").kind, .user)
     }
 
     func test_collectionCapabilities_protectDefaultCollection() {
-        let defaultBookmarks = collection(name: "Default", id: "__default__")
+        let defaultBookmarks = collection(
+            name: "Default",
+            id: "__default__",
+            isDefault: true,
+            isSystem: true
+        )
         let oldPageBookmarks = collection(name: oldPageBookmarksCollectionName)
-        let user = collection(name: "Favorites")
+        let user = collection(name: "Personal")
 
         XCTAssertFalse(defaultBookmarks.kind.canRename)
         XCTAssertFalse(defaultBookmarks.kind.canDelete)
@@ -110,7 +118,12 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     }
 
     func test_defaultCollectionPresentation_usesLocalizedFavoritesNameAndFilledStarIcon() {
-        let collection = collection(name: "Default", id: "__default__")
+        let collection = collection(
+            name: "Default",
+            id: "__default__",
+            isDefault: true,
+            isSystem: true
+        )
 
         XCTAssertEqual(collection.displayName, l("bookmarks.collections.favorites"))
         XCTAssertEqual(collection.displayImage, .starFilled)
@@ -152,7 +165,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     }
 
     func test_collectionDetailsMenu_showsAllActionsForUserCollection() {
-        let collection = collection(name: "Favorites")
+        let collection = collection(name: "Personal")
         let viewModel = makeCollectionDetailsViewModel(collection: collection)
         let viewController = AyahSetViewController(viewModel: viewModel)
 
@@ -168,7 +181,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     }
 
     func test_collectionDetailsController_showsDoneButtonInEditMode() {
-        let collection = collection(name: "Favorites")
+        let collection = collection(name: "Personal")
         let viewModel = makeCollectionDetailsViewModel(collection: collection)
         let viewController = AyahSetViewController(viewModel: viewModel)
 
@@ -303,20 +316,22 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
     func test_createPendingCollection_persistsThroughRealMobileSyncDatabase() async throws {
         let sut = makeSUT()
-        sut.newCollectionName = " Favorites "
+        sut.newCollectionName = " Personal "
 
         await sut.createPendingCollection()
 
         let collections = try await storedCollections {
-            $0.contains { $0.collection.name == "Favorites" }
+            $0.contains { $0.collection.name == "Personal" }
         }
-        XCTAssertEqual(collections.map(\.collection.name), ["Default", "Favorites"])
+        XCTAssertEqual(collections.count, 2)
+        XCTAssertTrue(collections.contains { $0.collection.isDefault })
+        XCTAssertTrue(collections.contains { $0.collection.name == "Personal" })
         XCTAssertNil(sut.error)
     }
 
     func test_requestDeleteCollection_deletesEmptyCollectionWithoutConfirmation() async throws {
         let service = makeService()
-        try await service.createCollection(named: "Favorites")
+        try await service.createCollection(named: "Personal")
         let stored = try await storedCollections()
         let collection = try XCTUnwrap(
             AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
@@ -329,7 +344,6 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let collections = try await storedCollections {
             $0.count == 1 && $0[0].collection.isDefault
         }
-        XCTAssertEqual(collections.map(\.collection.name), ["Default"])
         XCTAssertTrue(collections[0].collection.isDefault)
         XCTAssertNil(sut.collectionPendingDeletion)
         XCTAssertNil(sut.error)
@@ -337,23 +351,23 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
     func test_requestDeleteCollection_requiresConfirmationBeforeDeletingNonEmptyCollection() async throws {
         let service = makeService()
-        try await service.createCollection(named: "Favorites")
+        try await service.createCollection(named: "Personal")
         var stored = try await storedCollections {
-            $0.contains { $0.collection.name == "Favorites" }
+            $0.contains { $0.collection.name == "Personal" }
         }
         let storedCollection = try XCTUnwrap(
-            stored.first { $0.collection.name == "Favorites" }
+            stored.first { $0.collection.name == "Personal" }
         )
         try await service.addAyahBookmarkToCollection(
             collectionId: storedCollection.collection.id,
             ayah: AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
         )
         stored = try await storedCollections {
-            $0.first { $0.collection.name == "Favorites" }?.bookmarks.count == 1
+            $0.first { $0.collection.name == "Personal" }?.bookmarks.count == 1
         }
         let collection = try XCTUnwrap(
             AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
-                .first { $0.collection.name == "Favorites" }
+                .first { $0.collection.name == "Personal" }
         )
         let sut = makeSUT(collectionService: service)
 
@@ -451,7 +465,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
     func test_showCollection_pushesCollectionViewController() async throws {
         let service = makeService()
-        try await service.createCollection(named: "Favorites")
+        try await service.createCollection(named: "Personal")
         let stored = try await storedCollections()
         let collection = try XCTUnwrap(
             AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
@@ -570,12 +584,19 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         throw TestError.collectionNotFound
     }
 
-    private func collection(name: String, id: String? = nil) -> AyahBookmarkCollection {
+    private func collection(
+        name: String,
+        id: String? = nil,
+        isDefault: Bool = false,
+        isSystem: Bool = false
+    ) -> AyahBookmarkCollection {
         AyahBookmarkCollection(
             collection: Collection_(
                 name: name,
                 lastUpdated: .distantPast,
-                id: id ?? name
+                id: id ?? name,
+                isDefault: isDefault,
+                isSystem: isSystem
             ),
             bookmarks: []
         )

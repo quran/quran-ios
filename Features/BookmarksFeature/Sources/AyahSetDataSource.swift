@@ -69,8 +69,8 @@ struct BookmarkCollectionAyahSetDataSource: ManageableAyahSetDataSource {
             title: collection.displayName,
             ayahs: collection.bookmarks.map(\.ayah),
             highlightColor: nil,
-            canRename: collection.kind.canRename,
-            canDelete: collection.kind.canDelete
+            canRename: collection.canRename,
+            canDelete: collection.canDelete
         )
     }
 }

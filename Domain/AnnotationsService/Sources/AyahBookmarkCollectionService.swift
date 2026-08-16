@@ -21,6 +21,8 @@ public struct AyahBookmarkCollection: Identifiable {
     public let bookmarks: [AyahCollectionBookmark]
 
     public var id: String { collection.id }
+    public var canDelete: Bool { !collection.isSystem }
+    public var canRename: Bool { !collection.isSystem }
 }
 
 public struct AyahCollectionBookmark: Identifiable {
@@ -51,14 +53,6 @@ public enum AyahBookmarkCollectionKind: Equatable {
 
     public var isOldPageBookmarks: Bool {
         self == .oldPageBookmarks
-    }
-
-    public var canDelete: Bool {
-        self != .defaultBookmarks
-    }
-
-    public var canRename: Bool {
-        self != .defaultBookmarks
     }
 }
 
@@ -136,7 +130,7 @@ public struct AyahBookmarkCollectionService {
 
     static func collections(from collections: [CollectionWithAyahBookmarks], quran: Quran) -> [AyahBookmarkCollection] {
         collections.compactMap { collection in
-            guard !collection.collection.isSystemHighlight else {
+            guard collection.collection.isDefault || !collection.collection.isSystem else {
                 return nil
             }
             return AyahBookmarkCollection(

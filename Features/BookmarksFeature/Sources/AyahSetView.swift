@@ -46,19 +46,13 @@ private struct AyahSetContentView: View {
     private var ayahList: some View {
         NoorList {
             Section {
-                ForEach(viewModel.content.ayahs, id: \.self) { ayah in
-                    ayahRow(ayah)
-                        .noorDeleteSwipeAction {
-                            Task { await viewModel.removeAyah(ayah) }
-                        }
-                }
-                .onDelete { offsets in
-                    let ayahs = offsets.map { viewModel.content.ayahs[$0] }
-                    Task {
-                        for ayah in ayahs {
-                            await viewModel.removeAyah(ayah)
-                        }
+                NoorListRows(
+                    viewModel.content.ayahs.map(SelfIdentifiable.init),
+                    onDelete: { item in
+                        { await viewModel.removeAyah(item.value) }
                     }
+                ) { item in
+                    ayahRow(item.value)
                 }
             } footer: {
                 Text(l("bookmarks.collections.ayahs.delete-hint"))

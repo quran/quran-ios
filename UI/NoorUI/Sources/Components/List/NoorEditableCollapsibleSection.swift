@@ -18,16 +18,14 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
         _ items: [Item],
         showsHeaderDeleteAction: Bool = false,
         headerDeleteAction: AsyncAction? = nil,
-        @ViewBuilder listItem: @escaping (Item) -> ListItem,
-        onDelete: ItemDeletionAction<Item>? = nil
+        onDelete: ItemDeletionAction<Item>? = nil,
+        @ViewBuilder listItem: @escaping (Item) -> ListItem
     ) {
         self.title = title
         _isExpanded = isExpanded
-        self.items = items
         self.showsHeaderDeleteAction = showsHeaderDeleteAction
         self.headerDeleteAction = headerDeleteAction
-        self.listItem = listItem
-        self.onDelete = onDelete
+        rows = NoorListRows(items, onDelete: onDelete, row: listItem)
     }
 
     // MARK: Public
@@ -46,13 +44,9 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
 
     let title: String
     @Binding var isExpanded: Bool
-    let items: [Item]
     let showsHeaderDeleteAction: Bool
     let headerDeleteAction: AsyncAction?
-    let listItem: (Item) -> ListItem
-    var onDelete: ItemDeletionAction<Item>?
-
-    @State private var deletingItemIDs: Set<Item.ID> = []
+    let rows: NoorListRows<Item, ListItem>
 
     // MARK: Private
 
@@ -87,53 +81,5 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
             }
         }
         .accessibilityLabel(title)
-    }
-
-    @ViewBuilder
-    private var rows: some View {
-        ForEach(items) { item in
-            listItem(item)
-                .noorDeleteSwipeAction(isEnabled: onDelete != nil) {
-                    delete(item)
-                }
-        }
-        .onDelete(perform: onDelete.map { onDelete in
-            { indexSet in
-                let itemsToDelete = indexSet.map { items[$0] }
-                for itemToDelete in itemsToDelete {
-                    delete(itemToDelete, action: onDelete)
-                }
-            }
-        })
-    }
-
-    private func delete(_ item: Item) {
-        guard let onDelete else {
-            return
-        }
-        delete(item, action: onDelete)
-    }
-
-    private func delete(_ item: Item, action: ItemDeletionAction<Item>) {
-        guard deletingItemIDs.insert(item.id).inserted else {
-            return
-        }
-        guard let operation = action(item) else {
-            deletingItemIDs.remove(item.id)
-            return
-        }
-
-        Task { @MainActor in
-            await operation()
-            deletingItemIDs.remove(item.id)
-        }
-    }
-}
-
-extension NoorEditableCollapsibleSection {
-    public func onDelete(action: ItemDeletionAction<Item>?) -> Self {
-        var mutableSelf = self
-        mutableSelf.onDelete = action
-        return mutableSelf
     }
 }

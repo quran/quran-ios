@@ -187,11 +187,9 @@ private struct TranslationsListSection<ListItem: View>: View {
     let onMove: ((IndexSet, Int) -> Void)?
 
     var body: some View {
-        NoorSection(title: title, items) { item in
+        NoorSection(title: title, items, onDelete: onDelete, onMove: onMove) { item in
             listItem(item)
         }
-        .onDelete(action: onDelete)
-        .onMove(action: onMove)
     }
 }
 

@@ -95,10 +95,9 @@ private struct AudioDownloadsSection<ListItem: View>: View {
     let onDelete: ItemDeletionAction<AudioDownloadItem>?
 
     var body: some View {
-        NoorSection(title: title, items) { item in
+        NoorSection(title: title, items, onDelete: onDelete) { item in
             listItem(item)
         }
-        .onDelete(action: onDelete)
     }
 }
 

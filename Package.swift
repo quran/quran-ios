@@ -24,7 +24,7 @@ let mobileSyncPackageDependency: Package.Dependency = {
     if let localMobileSyncPackagePath, !localMobileSyncPackagePath.isEmpty {
         return .package(path: localMobileSyncPackagePath)
     }
-    return .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.1.19")
+    return .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.1.20")
 }()
 
 let mobileSyncPackageDependencies: [Package.Dependency] =

@@ -71,6 +71,11 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
             .store(in: &cancellables)
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        searchController.isActive = false
+    }
+
     // MARK: - Search delegate methods
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

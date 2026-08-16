@@ -35,7 +35,10 @@ public struct NoteService {
         analytics.highlight(verses: verses)
         let verses = verses.map(VersePersistenceModel.init)
         let persistenceModel = try await persistence.setNote(nil, verses: verses, color: color.rawValue)
-        return Note(quran: quran, persistenceModel)
+        guard let note = Note(quran: quran, persistenceModel) else {
+            throw NoteServiceError.invalidPersistenceModel
+        }
+        return note
     }
 
     public func setNote(_ note: String, verses: [AyahNumber], color: HighlightColor) async throws {
@@ -55,7 +58,7 @@ public struct NoteService {
 
     public func notes(quran: Quran) -> AnyPublisher<[Note], Never> {
         persistence.notes()
-            .map { notes in notes.map { Note(quran: quran, $0) } }
+            .map { notes in notes.compactMap { Note(quran: quran, $0) } }
             .eraseToAnyPublisher()
     }
     #endif
@@ -67,20 +70,25 @@ public struct NoteService {
 }
 
 #if !QURAN_SYNC
+private enum NoteServiceError: Error {
+    case invalidPersistenceModel
+}
+
 private extension Note {
-    init(quran: Quran, _ note: NotePersistenceModel) {
+    init?(quran: Quran, _ note: NotePersistenceModel) {
+        let verses = note.verses.compactMap {
+            AyahNumber(quran: quran, sura: $0.sura, ayah: $0.ayah)
+        }
+        guard verses.count == note.verses.count, !verses.isEmpty else {
+            return nil
+        }
+
         self.init(
-            verses: Set(note.verses.map { AyahNumber(quran: quran, $0) }),
+            verses: Set(verses),
             modifiedDate: note.modifiedDate,
             text: note.note,
             color: HighlightColor(rawValue: note.color) ?? .red
         )
-    }
-}
-
-private extension AyahNumber {
-    init(quran: Quran, _ other: VersePersistenceModel) {
-        self.init(quran: quran, sura: other.sura, ayah: other.ayah)!
     }
 }
 

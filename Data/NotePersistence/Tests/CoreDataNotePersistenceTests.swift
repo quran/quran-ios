@@ -7,6 +7,7 @@
 
 import AsyncUtilitiesForTesting
 import CoreDataPersistence
+import CoreDataPersistenceTestSupport
 import SystemDependenciesFake
 import XCTest
 @testable import NotePersistence
@@ -95,6 +96,18 @@ class CoreDataNotePersistenceTests: XCTestCase {
         // 10. Assert no change to database
         XCTAssertEqual(updatedNote2, returnedNote2)
         XCTAssertEqual(numberOfUpdates, collector.items.count)
+    }
+
+    func test_notesExcludesNotesWithNoVerses() throws {
+        let context = stack.newBackgroundContext()
+        try context.performAndWait {
+            _ = context.newNote("Incomplete note", modifiedOn: 100)
+            try context.save()
+        }
+
+        let collector = PublisherCollector(sut.notes())
+
+        XCTAssertEqual(collector.items, [[]])
     }
 }
 

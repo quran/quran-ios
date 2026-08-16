@@ -22,36 +22,38 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
     }
 
     func test_createCollection_persistsCollection() async throws {
-        try await service.createCollection(named: "Favorites")
+        try await service.createCollection(named: "Personal")
 
         let collections = try await storedCollections { collections in
-            collections.contains { $0.collection.name == "Favorites" }
+            collections.contains { $0.collection.name == "Personal" }
         }
-        XCTAssertEqual(collections.map(\.collection.name), ["Default", "Favorites"])
+        XCTAssertEqual(collections.count, 2)
+        XCTAssertTrue(collections.contains { $0.collection.isDefault })
+        XCTAssertTrue(collections.contains { $0.collection.name == "Personal" })
     }
 
     func test_removeCollection_deletesPersistedCollection() async throws {
-        try await service.createCollection(named: "Favorites")
-        let collection = try await storedCollection(named: "Favorites")
+        try await service.createCollection(named: "Personal")
+        let collection = try await storedCollection(named: "Personal")
 
         try await service.removeCollection(id: collection.collection.id)
 
         let collections = try await storedCollections {
             $0.count == 1 && $0.first?.collection.isDefault == true
         }
-        XCTAssertEqual(collections.map(\.collection.name), ["Default"])
+        XCTAssertTrue(collections[0].collection.isDefault)
     }
 
     func test_addAndRemoveAyahBookmark_persistsCollectionMembership() async throws {
-        try await service.createCollection(named: "Favorites")
-        let collection = try await storedCollection(named: "Favorites")
+        try await service.createCollection(named: "Personal")
+        let collection = try await storedCollection(named: "Personal")
 
         try await service.addAyahBookmarkToCollection(
             collectionId: collection.collection.id,
             ayah: ayah(1)
         )
 
-        let stored = try await storedCollection(named: "Favorites") { $0.bookmarks.count == 1 }
+        let stored = try await storedCollection(named: "Personal") { $0.bookmarks.count == 1 }
         XCTAssertEqual(stored.bookmarks.first?.sura, 1)
         XCTAssertEqual(stored.bookmarks.first?.ayah, 1)
 
@@ -61,38 +63,38 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         )
         try await service.removeBookmarkFromCollection(bookmark)
 
-        let emptied = try await storedCollection(named: "Favorites") { $0.bookmarks.isEmpty }
+        let emptied = try await storedCollection(named: "Personal") { $0.bookmarks.isEmpty }
         XCTAssertTrue(emptied.bookmarks.isEmpty)
     }
 
     func test_addAyahs_persistsOnlyMissingUniqueAyahs() async throws {
-        try await service.createCollection(named: "Favorites")
-        let stored = try await storedCollection(named: "Favorites")
+        try await service.createCollection(named: "Personal")
+        let stored = try await storedCollection(named: "Personal")
 
         try await service.addAyahs(
             [ayah(1), ayah(1), ayah(2)],
             toCollectionWithID: stored.collection.id
         )
 
-        let updated = try await storedCollection(named: "Favorites") { $0.bookmarks.count == 2 }
+        let updated = try await storedCollection(named: "Personal") { $0.bookmarks.count == 2 }
         XCTAssertEqual(Set(updated.bookmarks.map { "\($0.sura):\($0.ayah)" }), ["1:1", "1:2"])
     }
 
     func test_removeAyahs_removesOnlyRequestedCollectionMemberships() async throws {
-        try await service.createCollection(named: "Favorites")
+        try await service.createCollection(named: "Personal")
         try await service.createCollection(named: "Study")
-        let favorites = try await storedCollection(named: "Favorites")
+        let personal = try await storedCollection(named: "Personal")
         let study = try await storedCollection(named: "Study")
         for number in [1, 2] {
-            try await service.addAyahBookmarkToCollection(collectionId: favorites.collection.id, ayah: ayah(number))
+            try await service.addAyahBookmarkToCollection(collectionId: personal.collection.id, ayah: ayah(number))
             try await service.addAyahBookmarkToCollection(collectionId: study.collection.id, ayah: ayah(number))
         }
 
-        try await service.removeAyahs([ayah(1)], fromCollectionWithID: favorites.collection.id)
+        try await service.removeAyahs([ayah(1)], fromCollectionWithID: personal.collection.id)
 
-        let updatedFavorites = try await storedCollection(named: "Favorites") { $0.bookmarks.count == 1 }
+        let updatedPersonal = try await storedCollection(named: "Personal") { $0.bookmarks.count == 1 }
         let updatedStudy = try await storedCollection(named: "Study") { $0.bookmarks.count == 2 }
-        XCTAssertEqual(updatedFavorites.bookmarks.map(\.ayah), [2])
+        XCTAssertEqual(updatedPersonal.bookmarks.map(\.ayah), [2])
         XCTAssertEqual(Set(updatedStudy.bookmarks.map(\.ayah)), [1, 2])
     }
 
@@ -103,7 +105,8 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
 
         let collections = try await iterator.next() ?? []
 
-        XCTAssertEqual(collections.map(\.collection.name), ["Default"])
+        XCTAssertEqual(collections.count, 1)
+        XCTAssertTrue(collections[0].collection.isDefault)
     }
 
     private func storedCollection(

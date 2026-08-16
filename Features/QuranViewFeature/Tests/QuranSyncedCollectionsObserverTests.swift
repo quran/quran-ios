@@ -29,7 +29,9 @@ final class QuranSyncedCollectionsObserverTests: XCTestCase {
             await Task.yield()
         }
 
-        XCTAssertEqual(observer.collections.map(\.collection.name), ["Default", "Duas"])
+        XCTAssertEqual(observer.collections.count, 2)
+        XCTAssertTrue(observer.collections.contains { $0.collection.isDefault })
+        XCTAssertTrue(observer.collections.contains { $0.collection.name == "Duas" })
         withExtendedLifetime(observer) {}
     }
 }

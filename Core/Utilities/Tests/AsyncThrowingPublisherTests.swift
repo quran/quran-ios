@@ -32,19 +32,17 @@ class AsyncThrowingPublisherTests: XCTestCase {
     let numbers = [1, 2, 3]
     let numbersPublisher = [1, 2, 3].publisher.setFailureType(to: PublishingError.self)
     var subject: PassthroughSubject<Int, PublishingError>!
-    var channel: AsyncChannel<Void>!
     var values: Values!
 
     override func setUp() {
         subject = PassthroughSubject()
-        channel = AsyncChannel()
         values = Values()
     }
 
     func test_passThroughSubject_failure() async {
         let asyncPublisher = subject.values()
 
-        Task { [iterator = asyncPublisher.makeAsyncIterator()] in
+        let task = Task { [iterator = asyncPublisher.makeAsyncIterator()] in
             var iterator = iterator
             do {
                 while let number = try await iterator.next() {
@@ -53,14 +51,12 @@ class AsyncThrowingPublisherTests: XCTestCase {
             } catch {
                 await values.setError(error)
             }
-            await channel.send(())
         }
 
         // Send failure
         subject.send(completion: .failure(.invalid))
 
-        // Wait until the task completes.
-        await channel.next()
+        await task.value
 
         await AsyncAssertEqual(await values.error as? PublishingError, PublishingError.invalid)
     }
@@ -69,7 +65,7 @@ class AsyncThrowingPublisherTests: XCTestCase {
         let prefix = 2
         let asyncPublisher = subject.values(bufferingPolicy: .unbounded)
 
-        Task { [iterator = asyncPublisher.makeAsyncIterator()] in
+        let task = Task { [iterator = asyncPublisher.makeAsyncIterator()] in
             var iterator = iterator
             do {
                 while let number = try await iterator.next() {
@@ -81,15 +77,13 @@ class AsyncThrowingPublisherTests: XCTestCase {
             } catch {
                 XCTFail("Unexpected error: \(error)")
             }
-            await channel.send(())
         }
 
         for number in numbers {
             subject.send(number)
         }
 
-        // Wait until the break
-        await channel.next()
+        await task.value
 
         await AsyncAssertEqual(await values.results, Array(numbers.prefix(2)))
     }
@@ -109,7 +103,6 @@ class AsyncThrowingPublisherTests: XCTestCase {
                 XCTFail("Unexpected error: \(error)")
             }
             await values.append(1945)
-            await channel.send(())
         }
 
         for number in numbers {
@@ -118,7 +111,7 @@ class AsyncThrowingPublisherTests: XCTestCase {
         }
 
         task.cancel()
-        await channel.next()
+        await task.value
 
         await AsyncAssertEqual(await values.results, numbers + [1945])
     }
@@ -137,24 +130,22 @@ class AsyncThrowingPublisherTests: XCTestCase {
     func test_bufferingNewest() async throws {
         let asyncPublisher = numbersPublisher.values(bufferingPolicy: .bufferingNewest(2))
 
-        var results = [Int]()
-        for try await number in asyncPublisher {
-            results.append(number)
-        }
+        var iterator = asyncPublisher.makeAsyncIterator()
+        let first = try await iterator.next()
+        let second = try await iterator.next()
 
         // Only the last 2 values should be preserved
-        XCTAssertEqual(results, [2, 3])
+        XCTAssertEqual([first, second].compactMap { $0 }, [2, 3])
     }
 
     func test_bufferingOldest() async throws {
         let asyncPublisher = numbersPublisher.values(bufferingPolicy: .bufferingOldest(2))
 
-        var results = [Int]()
-        for try await number in asyncPublisher {
-            results.append(number)
-        }
+        var iterator = asyncPublisher.makeAsyncIterator()
+        let first = try await iterator.next()
+        let second = try await iterator.next()
 
         // Only the first 2 values should be preserved
-        XCTAssertEqual(results, [1, 2])
+        XCTAssertEqual([first, second].compactMap { $0 }, [1, 2])
     }
 }

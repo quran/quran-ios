@@ -157,9 +157,13 @@ private struct HomeViewUI: View {
     func sectionsView<Item: Identifiable>(
         items: [Item],
         groupBy: (Item) -> Juz,
-        @ViewBuilder listItem: @escaping (Item) -> some View
+        @ViewBuilder listItem: (Item) -> some View
     ) -> some View {
+        let isJuzExpanded = isJuzExpanded
         let itemsByJuz = Dictionary(grouping: items, by: groupBy)
+        let listItemsByID = Dictionary(uniqueKeysWithValues: items.map { ($0.id, listItem($0)) })
+        let setJuzExpanded = setJuzExpanded
+        let surahSortOrder = surahSortOrder
         let juzs = itemsByJuz.keys.sorted {
             surahSortOrder.rawValue * ($0.juzNumber - $1.juzNumber) < 0
         }
@@ -180,7 +184,7 @@ private struct HomeViewUI: View {
                 set: { setJuzExpanded(juz, $0) }
             )
             NoorSection(title: juz.localizedName, isExpanded: isExpanded, items) { item in
-                listItem(item)
+                listItemsByID[item.id]
             }
         }
     }

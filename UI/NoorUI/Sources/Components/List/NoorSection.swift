@@ -115,14 +115,13 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
         title: String? = nil,
         isExpanded: Binding<Bool>? = nil,
         _ items: [Item],
-        @ViewBuilder listItem: @escaping (Item) -> ListItem,
+        @ViewBuilder listItem: (Item) -> ListItem,
         onDelete: ItemDeletionAction<Item>? = nil,
         onMove: ((IndexSet, Int) -> Void)? = nil
     ) {
         self.title = title
         self.isExpanded = isExpanded
-        self.items = items
-        self.listItem = listItem
+        entries = items.map { Entry(item: $0, content: listItem($0)) }
         self.onDelete = onDelete
         self.onMove = onMove
     }
@@ -130,7 +129,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     // MARK: Public
 
     public var body: some View {
-        if !items.isEmpty {
+        if !entries.isEmpty {
             NoorBasicSection(title: title, isExpanded: isExpanded) {
                 rows
             }
@@ -141,8 +140,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
 
     let title: String?
     let isExpanded: Binding<Bool>?
-    let items: [Item]
-    let listItem: (Item) -> ListItem
+    let entries: [Entry]
     var onDelete: ItemDeletionAction<Item>?
     var onMove: ((IndexSet, Int) -> Void)?
 
@@ -152,8 +150,8 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
 
     @ViewBuilder
     private var rows: some View {
-        ForEach(items) { item in
-            listItem(item)
+        ForEach(entries) { entry in
+            entry.content
         }
         .onDelete(perform: deleteAction)
         .onMove(perform: onMove)
@@ -162,7 +160,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     private var deleteAction: ((IndexSet) -> Void)? {
         onDelete.map { _ in
             { indexSet in
-                let itemsToDelete = indexSet.map { items[$0] }
+                let itemsToDelete = indexSet.map { entries[$0].item }
                 for itemToDelete in itemsToDelete {
                     delete(itemToDelete)
                 }
@@ -183,6 +181,13 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
             await operation()
             deletingItemIDs.remove(item.id)
         }
+    }
+
+    struct Entry: Identifiable {
+        let item: Item
+        let content: ListItem
+
+        var id: Item.ID { item.id }
     }
 }
 

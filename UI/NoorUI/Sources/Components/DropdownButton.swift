@@ -8,33 +8,38 @@
 import SwiftUI
 
 public struct DropdownButton<Item: Hashable, Content: View>: View {
-    private let items: [Item]
+    private let choices: [Choice]
     @Binding private var selectedItem: Item
-    private let content: (Item) -> Content
 
     @ScaledMetric private var horizontalPadding = 12.0
     @ScaledMetric private var verticalPadding = 6.0
     @ScaledMetric private var cornerRadius = Dimensions.cornerRadius
 
-    public init(items: [Item], selectedItem: Binding<Item>, @ViewBuilder content: @escaping (Item) -> Content) {
-        self.items = items
+    public init(items: [Item], selectedItem: Binding<Item>, @ViewBuilder content: (Item) -> Content) {
+        choices = items.map { Choice(item: $0, content: content($0)) }
         _selectedItem = selectedItem
-        self.content = content
     }
 
     public var body: some View {
+        let choices = choices
+        let selectedItem = $selectedItem
+        let selectedContent = choices.first { $0.item == selectedItem.wrappedValue }?.content
+        let horizontalPadding = horizontalPadding
+        let verticalPadding = verticalPadding
+        let cornerRadius = cornerRadius
+
         Menu {
-            ForEach(items, id: \.self) { item in
+            ForEach(choices) { choice in
                 Button {
-                    selectedItem = item
+                    selectedItem.wrappedValue = choice.item
                 } label: {
-                    content(item)
+                    choice.content
                 }
             }
         } label: {
             VStack {
                 HStack {
-                    content(selectedItem)
+                    selectedContent
                     Image(systemName: "chevron.down")
                         .font(.caption)
                 }
@@ -47,5 +52,12 @@ public struct DropdownButton<Item: Hashable, Content: View>: View {
             )
             .foregroundStyle(Color.label)
         }
+    }
+
+    private struct Choice: Identifiable {
+        let item: Item
+        let content: Content
+
+        var id: Item { item }
     }
 }

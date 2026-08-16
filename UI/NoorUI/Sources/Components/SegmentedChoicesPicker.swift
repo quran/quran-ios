@@ -14,24 +14,19 @@ public struct SegmentedChoicesPicker<Item: Hashable>: View {
         title: String,
         items: [Item],
         selection: Binding<Item>,
-        label: @escaping (Item) -> String
+        label: (Item) -> String
     ) {
         self.title = title
-        self.items = items
+        choices = items.map { Choice(item: $0, title: label($0)) }
         _selection = selection
-        self.label = label
     }
 
     // MARK: Public
 
     public var body: some View {
-        // Capture only the label closure. Capturing self here also retains the
-        // selection binding through SwiftUI's tag projection cache.
-        let itemLabel = label
-
         Picker(title, selection: $selection) {
-            ForEach(items, id: \.self) { item in
-                Text(itemLabel(item)).tag(item)
+            ForEach(choices) { choice in
+                Text(choice.title).tag(choice.item)
             }
         }
         .pickerStyle(.segmented)
@@ -40,7 +35,13 @@ public struct SegmentedChoicesPicker<Item: Hashable>: View {
     // MARK: Private
 
     private let title: String
-    private let items: [Item]
+    private let choices: [Choice]
     @Binding private var selection: Item
-    private let label: (Item) -> String
+
+    private struct Choice: Identifiable {
+        let item: Item
+        let title: String
+
+        var id: Item { item }
+    }
 }

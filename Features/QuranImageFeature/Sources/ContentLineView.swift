@@ -19,6 +19,8 @@ struct ContentLineView: View {
     @StateObject var viewModel: ContentLineViewModel
 
     var body: some View {
+        let viewModel = viewModel
+
         ContentLineViewBody(
             page: viewModel.page,
             layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false) },
@@ -27,9 +29,9 @@ struct ContentLineView: View {
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
             chromeStyle: viewModel.chromeStyle,
             imageRenderingMode: viewModel.imageRenderingMode,
-            imageForLine: viewModel.lineImage(for:),
-            imageForSideline: viewModel.sidelineImage(for:),
-            onGlobalFrameChange: viewModel.updateContentFrame
+            imageForLine: { viewModel.lineImage(for: $0) },
+            imageForSideline: { viewModel.sidelineImage(for: $0) },
+            onGlobalFrameChange: { viewModel.updateContentFrame($0) }
         )
         .geometryActions(
             PageGeometryActions(

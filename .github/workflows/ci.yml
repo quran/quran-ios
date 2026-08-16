@@ -6,12 +6,20 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   Package:
     runs-on: macos-26
+    timeout-minutes: 45
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: Setting up Xcode
       run: sudo xcode-select -s "/Applications/Xcode_26.2.app"
@@ -22,15 +30,16 @@ jobs:
     - name: Run tests
       run: make test-no-sync
 
-    - uses: codecov/codecov-action@v4
+    - uses: codecov/codecov-action@a99c28d3f0da835de33ff2feb2e15691c7b9641f # v7.0.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
 
   PackageSync:
     runs-on: macos-26
+    timeout-minutes: 45
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: Setting up Xcode
       run: sudo xcode-select -s "/Applications/Xcode_26.2.app"
@@ -43,9 +52,10 @@ jobs:
 
   ExampleApp:
     runs-on: macos-26
+    timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setting up Xcode
         run: sudo xcode-select -s "/Applications/Xcode_26.2.app"
@@ -58,9 +68,10 @@ jobs:
 
   ExampleAppSync:
     runs-on: macos-26
+    timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setting up Xcode
         run: sudo xcode-select -s "/Applications/Xcode_26.2.app"
@@ -73,9 +84,10 @@ jobs:
 
   SwiftFormat:
     runs-on: macos-26
+    timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Setting up Xcode
         run: sudo xcode-select -s "/Applications/Xcode_26.2.app"

@@ -302,11 +302,11 @@
 
 // Reading layouts
 "new.reading_layouts" = "New Madani Mushafs";
-"new.reading_layouts.details" = "* Added Madani Mushaf 1439 and 1441, optimized to fill the entire screen — thanks to @ahmedre.";
+"new.reading_layouts.details" = "* Added Madani Mushaf 1439 and 1441, optimized to fill the entire screen.";
 
 // Experimental IndoPak
 "new.experimental_indopak" = "IndoPak 15-Line";
-"new.experimental_indopak.details" = "* Try the new IndoPak 15-line reading layout in the Naskh style - thanks to @ahmedre.\n* A few features are still missing and will be added in future updates.";
+"new.experimental_indopak.details" = "* Try the new IndoPak 15-line reading layout in the Naskh style.\n* A few features are still missing and will be added in future updates.";
 
 // Audio controls
 "new.audio_controls" = "Advanced Audio Options";

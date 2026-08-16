@@ -322,13 +322,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "Новые мединские мусхафы";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* Добавлены «Мединский мусхаф 1439» и «Мединский мусхаф 1441», оптимизированные для отображения во весь экран — благодаря @ahmedre.";
+"new.reading_layouts.details" = "* Добавлены «Мединский мусхаф 1439» и «Мединский мусхаф 1441», оптимизированные для отображения во весь экран.";
 
 // Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
 "new.experimental_indopak" = "Индо-пакистанский — 15 строк";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_indopak.details" = "* Попробуйте новый 15-строчный индо-пакистанский вариант чтения в стиле насх — благодаря @ahmedre.\n* Некоторые функции пока отсутствуют и будут добавлены в будущих обновлениях.";
+"new.experimental_indopak.details" = "* Попробуйте новый 15-строчный индо-пакистанский вариант чтения в стиле насх.\n* Некоторые функции пока отсутствуют и будут добавлены в будущих обновлениях.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.

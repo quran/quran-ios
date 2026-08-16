@@ -276,11 +276,11 @@
 
 // Reading layouts
 "new.reading_layouts" = "مصاحف مدنية جديدة";
-"new.reading_layouts.details" = "* تمت إضافة مصحفي المدينة ١٤٣٩ و١٤٤١، وقد حُسِّنا لملء الشاشة بالكامل — بفضل @ahmedre.";
+"new.reading_layouts.details" = "* تمت إضافة مصحفي المدينة ١٤٣٩ و١٤٤١، وقد حُسِّنا لملء الشاشة بالكامل.";
 
 // Experimental IndoPak
 "new.experimental_indopak" = "الهندي الباكستاني – ١٥ سطرًا";
-"new.experimental_indopak.details" = "* جرّب المصحف الهندي الباكستاني الجديد المكوّن من ١٥ سطرًا بخط النسخ - بفضل @ahmedre.\n* ما زالت بعض الميزات غير متاحة وستُضاف في تحديثات مستقبلية.";
+"new.experimental_indopak.details" = "* جرّب المصحف الهندي الباكستاني الجديد المكوّن من ١٥ سطرًا بخط النسخ.\n* ما زالت بعض الميزات غير متاحة وستُضاف في تحديثات مستقبلية.";
 
 // Audio controls
 "new.audio_controls" = "خيارات الصوت المتقدمة";

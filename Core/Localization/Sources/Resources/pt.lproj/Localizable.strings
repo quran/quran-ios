@@ -323,13 +323,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "Novos mushafs de Medina";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* Adicionados os Mushafs de Medina 1439 e 1441, otimizados para preencher toda a tela — graças a @ahmedre.";
+"new.reading_layouts.details" = "* Adicionados os Mushafs de Medina 1439 e 1441, otimizados para preencher toda a tela.";
 
 // Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
 "new.experimental_indopak" = "Indo-paquistanês — 15 linhas";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_indopak.details" = "* Experimente o novo layout de leitura indo-paquistanês de 15 linhas no estilo Naskh, graças a @ahmedre.\n* Alguns recursos ainda não estão disponíveis e serão adicionados em futuras atualizações.";
+"new.experimental_indopak.details" = "* Experimente o novo layout de leitura indo-paquistanês de 15 linhas no estilo Naskh.\n* Alguns recursos ainda não estão disponíveis e serão adicionados em futuras atualizações.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.

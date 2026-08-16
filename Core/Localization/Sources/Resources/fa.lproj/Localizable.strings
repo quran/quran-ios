@@ -324,13 +324,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "مصحف‌های جدید مدینه";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* مصحف‌های مدینه ۱۴۳۹ و ۱۴۴۱ اضافه شدند؛ برای پر کردن تمام صفحه بهینه‌سازی شده‌اند — با تشکر از @ahmedre.";
+"new.reading_layouts.details" = "* مصحف‌های مدینه ۱۴۳۹ و ۱۴۴۱ اضافه شدند؛ برای پر کردن تمام صفحه بهینه‌سازی شده‌اند.";
 
 // Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
 "new.experimental_indopak" = "هندی-پاکستانی ۱۵ سطری";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_indopak.details" = "* چیدمان جدید ۱۵ سطری هندی-پاکستانی با سبک نسخ را امتحان کنید - با تشکر از @ahmedre.\n* چند قابلیت هنوز در دسترس نیست و در به‌روزرسانی‌های آینده اضافه خواهد شد.";
+"new.experimental_indopak.details" = "* چیدمان جدید ۱۵ سطری هندی-پاکستانی با سبک نسخ را امتحان کنید.\n* چند قابلیت هنوز در دسترس نیست و در به‌روزرسانی‌های آینده اضافه خواهد شد.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.

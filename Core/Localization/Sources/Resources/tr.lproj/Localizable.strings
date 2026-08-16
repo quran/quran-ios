@@ -264,13 +264,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "Yeni Medine Mushafları";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* Medine Mushafı 1439 ve 1441 eklendi; ekranın tamamını dolduracak şekilde optimize edildi — @ahmedre sayesinde.";
+"new.reading_layouts.details" = "* Medine Mushafı 1439 ve 1441 eklendi; ekranın tamamını dolduracak şekilde optimize edildi.";
 
 // Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
 "new.experimental_indopak" = "Hint-Pakistan — 15 Satır";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_indopak.details" = "* Nesih stilindeki yeni 15 satırlık Hint-Pakistan okuma düzenini deneyin — @ahmedre sayesinde.\n* Bazı özellikler henüz eksik ve gelecekteki güncellemelerde eklenecek.";
+"new.experimental_indopak.details" = "* Nesih stilindeki yeni 15 satırlık Hint-Pakistan okuma düzenini deneyin.\n* Bazı özellikler henüz eksik ve gelecekteki güncellemelerde eklenecek.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.

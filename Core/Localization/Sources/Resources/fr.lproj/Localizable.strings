@@ -322,13 +322,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "Nouveaux mushafs de Médine";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* Ajout des Mushafs de Médine 1439 et 1441, optimisés pour occuper tout l’écran — grâce à @ahmedre.";
+"new.reading_layouts.details" = "* Ajout des Mushafs de Médine 1439 et 1441, optimisés pour occuper tout l’écran.";
 
 // Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
 "new.experimental_indopak" = "Indo-pakistanais – 15 lignes";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_indopak.details" = "* Essayez la nouvelle mise en page de lecture indo-pakistanaise à 15 lignes dans le style naskh, grâce à @ahmedre.\n* Certaines fonctionnalités manquent encore et seront ajoutées lors de futures mises à jour.";
+"new.experimental_indopak.details" = "* Essayez la nouvelle mise en page de lecture indo-pakistanaise à 15 lignes dans le style naskh.\n* Certaines fonctionnalités manquent encore et seront ajoutées lors de futures mises à jour.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.

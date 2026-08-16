@@ -231,13 +231,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "Các Mushaf Madani mới";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* Đã thêm Mushaf Madani 1439 và 1441, được tối ưu hóa để hiển thị toàn màn hình — cảm ơn @ahmedre.";
+"new.reading_layouts.details" = "* Đã thêm Mushaf Madani 1439 và 1441, được tối ưu hóa để hiển thị toàn màn hình.";
 
 // Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
 "new.experimental_indopak" = "Ấn Độ–Pakistan – 15 dòng";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_indopak.details" = "* Hãy thử bố cục đọc Ấn Độ–Pakistan 15 dòng mới theo phong cách Naskh — cảm ơn @ahmedre.\n* Một số tính năng vẫn còn thiếu và sẽ được bổ sung trong các bản cập nhật sau.";
+"new.experimental_indopak.details" = "* Hãy thử bố cục đọc Ấn Độ–Pakistan 15 dòng mới theo phong cách Naskh.\n* Một số tính năng vẫn còn thiếu và sẽ được bổ sung trong các bản cập nhật sau.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.

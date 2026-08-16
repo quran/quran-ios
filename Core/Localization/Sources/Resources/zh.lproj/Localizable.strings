@@ -323,13 +323,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "全新麦地那穆沙夫";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* 新增麦地那穆沙夫 1439 和 1441，已优化为全屏显示 — 感谢 @ahmedre。";
+"new.reading_layouts.details" = "* 新增麦地那穆沙夫 1439 和 1441，已优化为全屏显示。";
 
 // Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
 "new.experimental_indopak" = "印巴版（15 行）";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_indopak.details" = "* 试用采用纳斯赫风格的全新 15 行印巴版阅读布局 — 感谢 @ahmedre。\n* 目前仍缺少部分功能，未来更新将陆续补充。";
+"new.experimental_indopak.details" = "* 试用采用纳斯赫风格的全新 15 行印巴版阅读布局。\n* 目前仍缺少部分功能，未来更新将陆续补充。";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.

@@ -4,14 +4,14 @@ BUILD_TOOLS_DIR=./BuildTools
 
 PACKAGE_SCHEME ?= QuranEngine-Package
 PACKAGE_SDK ?= iphonesimulator
-PACKAGE_DESTINATION ?= name=iPhone 17,OS=26.2
+PACKAGE_DESTINATION ?= name=iPhone 17e,OS=26.5
 EXAMPLE_PROJECT ?= Example/QuranEngineApp.xcodeproj
 EXAMPLE_SCHEME ?= QuranEngineApp
 EXAMPLE_SDK ?= iphonesimulator
 EXAMPLE_DESTINATION ?= generic/platform=iOS
 EXAMPLE_BUNDLE_IDENTIFIER ?= com.quran.QuranEngineApp
-EXAMPLE_NO_SYNC_SIMULATOR ?= iPhone 17,26.2
-EXAMPLE_SYNC_SIMULATOR ?= iPhone 17 Pro,26.1
+EXAMPLE_NO_SYNC_SIMULATOR ?= iPhone 17e,26.5
+EXAMPLE_SYNC_SIMULATOR ?= iPhone 17 Pro Max,26.5
 DERIVED_DATA_DIR ?= .build/DerivedData
 GIT_COMMON_DIR := $(shell git rev-parse --path-format=absolute --git-common-dir)
 QURAN_WORKSPACE_DIR := $(abspath $(GIT_COMMON_DIR)/../..)

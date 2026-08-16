@@ -72,4 +72,31 @@ class SimpleCoreDataEntityUniquifierTests: XCTestCase {
 
         XCTAssertEqual([45, 500], try stack.newBackgroundContext().allPageBookmarks().map(\.page))
     }
+
+    func test_merge_skipsInsertedEntityWithMissingUniquenessValue() throws {
+        let entity = MO_PageBookmark(context: context)
+        entity.modifiedOn = Date()
+        try context.save()
+        XCTAssertNil(entity.value(forKey: Schema.PageBookmark.page.rawValue))
+        let transactions = [
+            PersistentHistoryTransactionFake(historyChanges: [
+                PersistentHistoryChangeFake(object: entity, changeType: .insert),
+            ]),
+        ]
+
+        XCTAssertNoThrow(try sut.merge(transactions: transactions, using: context))
+    }
+
+    func test_merge_skipsInsertedEntityThatNoLongerExists() throws {
+        let objectID = entity2.objectID
+        context.delete(entity2)
+        try context.save()
+        let transactions = [
+            PersistentHistoryTransactionFake(historyChanges: [
+                PersistentHistoryChangeFake(changedObjectID: objectID, changeType: .insert),
+            ]),
+        ]
+
+        XCTAssertNoThrow(try sut.merge(transactions: transactions, using: context))
+    }
 }

@@ -46,44 +46,22 @@ class CoreDataPersistentHistoryProcessor {
     private let name: String
     private let trasactionsMerger: CoreDataPersistentHistoryTransactionsMerger
 
-    /// The file URL for persisting the persistent history token.
-    private lazy var tokenFile: URL = {
+    private lazy var tokenStore = CoreDataPersistentHistoryTokenStore(fileURL: {
         let url = NSPersistentContainer.defaultDirectoryURL().appendingPathComponent(name, isDirectory: true)
-        if !FileManager.default.fileExists(atPath: url.path) {
-            do {
-                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                logger.error("###\(#function): Failed to create persistent container URL. Error = \(error)")
-            }
-        }
         return url.appendingPathComponent("token.data", isDirectory: false)
-    }()
+    }())
 
     /// Track the last history token processed for a store, and write its value to file.
     ///
     /// The historyQueue reads the token when executing operations, and updates it after processing is complete.
     private lazy var lastHistoryToken: NSPersistentHistoryToken? = initialLastHistoryToken() {
         didSet {
-            guard let token = lastHistoryToken,
-                  let data = try? NSKeyedArchiver.archivedData(withRootObject: token, requiringSecureCoding: true) else { return }
-
-            do {
-                try data.write(to: tokenFile)
-            } catch {
-                logger.error("###\(#function): Failed to write token data. Error = \(error)")
-            }
+            guard let token = lastHistoryToken else { return }
+            tokenStore.save(token)
         }
     }
 
     private func initialLastHistoryToken() -> NSPersistentHistoryToken? {
-        // Load the last token from the token file.
-        if let tokenData = try? Data(contentsOf: tokenFile) {
-            do {
-                return try NSKeyedUnarchiver.unarchivedObject(ofClass: NSPersistentHistoryToken.self, from: tokenData)
-            } catch {
-                logger.error("###\(#function): Failed to unarchive NSPersistentHistoryToken. Error = \(error)")
-            }
-        }
-        return nil
+        tokenStore.load()
     }
 }

@@ -15,12 +15,12 @@ public struct SimpleCoreDataEntityUniquifier<T: NSManagedObject>: CoreDataEntity
 
     public init<Key: CoreDataKey>(sortBy: Key, ascending: Bool, key: Key) {
         sortDescriptors = [NSSortDescriptor(key: sortBy, ascending: ascending)]
-        predicate = { $0.predicate(equals: key) }
+        predicate = { $0.predicateIfValuesExist(equals: key) }
     }
 
     public init(sortDescriptors: [NSSortDescriptor], predicate: @escaping (T) -> NSPredicate) {
         self.sortDescriptors = sortDescriptors
-        self.predicate = predicate
+        self.predicate = { predicate($0) }
     }
 
     // MARK: Public
@@ -45,13 +45,23 @@ public struct SimpleCoreDataEntityUniquifier<T: NSManagedObject>: CoreDataEntity
     // MARK: Private
 
     private let sortDescriptors: [NSSortDescriptor]
-    private let predicate: (T) -> NSPredicate
+    private let predicate: (T) -> NSPredicate?
 
     private func findDuplicates(of objectID: NSManagedObjectID, using context: NSManagedObjectContext) throws -> [NSManagedObject]? {
-        guard let managedObject = context.object(with: objectID) as? T else {
+        let existingObject: NSManagedObject
+        do {
+            existingObject = try context.existingObject(with: objectID)
+        } catch {
+            logger.notice("[CoreData] Skipping missing \(T.self) with object ID \(objectID).")
             return nil
         }
-        let fetchRequest = fetchRequestDuplicating(managedObject)
+        guard let managedObject = existingObject as? T, !managedObject.isDeleted else {
+            return nil
+        }
+        guard let fetchRequest = fetchRequestDuplicating(managedObject) else {
+            logger.error("[CoreData] Skipping \(T.self) with missing uniqueness values.")
+            return nil
+        }
         let duplicatedEntities = try context.fetch(fetchRequest)
         guard duplicatedEntities.count > 1 else {
             return nil
@@ -60,10 +70,11 @@ public struct SimpleCoreDataEntityUniquifier<T: NSManagedObject>: CoreDataEntity
         return duplicatesToDelete
     }
 
-    private func fetchRequestDuplicating(_ managedObject: T) -> NSFetchRequest<T> {
+    private func fetchRequestDuplicating(_ managedObject: T) -> NSFetchRequest<T>? {
+        guard let predicate = predicate(managedObject) else { return nil }
         let fetchRequest = NSFetchRequest<T>(entityName: T.entity().name!)
         fetchRequest.sortDescriptors = sortDescriptors
-        fetchRequest.predicate = predicate(managedObject)
+        fetchRequest.predicate = predicate
         return fetchRequest
     }
 

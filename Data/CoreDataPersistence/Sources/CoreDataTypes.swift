@@ -21,9 +21,21 @@ public extension NSSortDescriptor {
 
 public extension NSManagedObject {
     func predicate<Key: CoreDataKey>(equals keys: Key...) -> NSPredicate {
-        let keysAndValues = keys.map {
-            ($0, self.value(forKey: $0.rawValue)!)
+        predicateIfValuesExist(equals: keys) ?? NSPredicate(value: false)
+    }
+}
+
+extension NSManagedObject {
+    func predicateIfValuesExist<Key: CoreDataKey>(equals keys: Key...) -> NSPredicate? {
+        predicateIfValuesExist(equals: keys)
+    }
+
+    private func predicateIfValuesExist<Key: CoreDataKey>(equals keys: [Key]) -> NSPredicate? {
+        let keysAndValues = keys.compactMap { key -> (Key, Any)? in
+            guard let value = value(forKey: key.rawValue) else { return nil }
+            return (key, value)
         }
+        guard keysAndValues.count == keys.count else { return nil }
         return .init(equals: keysAndValues)
     }
 }

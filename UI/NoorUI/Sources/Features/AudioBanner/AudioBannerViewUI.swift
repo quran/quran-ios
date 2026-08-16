@@ -354,7 +354,7 @@ private extension View {
 
     @ViewBuilder
     func audioBannerBackground() -> some View {
-        if #available(iOS 26.0, *) {
+        if #available(iOS 26.1, *) {
             glassEffect(in: .capsule)
                 .padding(.horizontal)
         } else {

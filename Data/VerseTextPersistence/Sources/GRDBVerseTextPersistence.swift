@@ -54,16 +54,18 @@ public struct GRDBQuranVerseTextPersistence: VerseTextPersistence {
     }
 
     public func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: QuranText)] {
-        try await persistence.search(for: term, quran: quran)
-            .map { (verse: $0.verse, text: QuranText($0.text)) }
+        try await persistence.search(for: term, quran: quran, transform: textFromRow)
     }
 
     // MARK: Private
 
     private let persistence: GRDBVerseTextPersistence
 
-    private func textFromRow(_ row: Row, quran: Quran) -> QuranText {
-        QuranText(row["text"])
+    private func textFromRow(_ row: Row, quran: Quran) throws -> QuranText {
+        guard let text = row["text"] as? String else {
+            throw PersistenceError.general("Quran text is not a String")
+        }
+        return QuranText(text)
     }
 }
 
@@ -90,7 +92,14 @@ public struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersisten
     }
 
     public func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
-        try await persistence.search(for: term, quran: quran)
+        try await persistence.search(for: term, quran: quran) { row, quran in
+            switch try textFromRow(row, quran: quran) {
+            case .string(let text):
+                return text
+            case .reference:
+                return nil
+            }
+        }
     }
 
     // MARK: Private
@@ -107,7 +116,10 @@ public struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersisten
             } else {
                 return .string(stringText)
             }
-        } else if let verseId = value as? Int64 {
+        } else if let verseId = value as? Int64,
+                  verseId > 0,
+                  verseId <= Int64(quran.verses.count)
+        {
             return referenceVerse(Int(verseId), quran: quran)
         }
         throw PersistenceError.general("Text for verse is neither Int nor String. File: \(fileURL.lastPathComponent)")
@@ -181,7 +193,11 @@ private struct GRDBVerseTextPersistence {
         }
     }
 
-    func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
+    func search<Text>(
+        for term: String,
+        quran: Quran,
+        transform: @escaping (Row, Quran) throws -> Text?
+    ) async throws -> [(verse: AyahNumber, text: Text)] {
         try await perform(operation: "search") {
             try await db.read { db in
                 // TODO: Use match for FTS.
@@ -192,7 +208,7 @@ private struct GRDBVerseTextPersistence {
                 WHERE text like '%' || \(term) || '%'
                 """)
                 let rows = try request.fetchAll(db)
-                return rowsToResults(rows, quran: quran)
+                return try rowsToResults(rows, quran: quran, transform: transform)
             }
         }
     }
@@ -236,18 +252,25 @@ private struct GRDBVerseTextPersistence {
         return try transform(row, verse.quran)
     }
 
-    private func rowsToResults(_ rows: [Row], quran: Quran) -> [(verse: AyahNumber, text: String)] {
+    private func rowsToResults<Text>(
+        _ rows: [Row],
+        quran: Quran,
+        transform: (Row, Quran) throws -> Text?
+    ) throws -> [(verse: AyahNumber, text: Text)] {
         var invalidCoordinates: [(sura: Int, ayah: Int)] = []
-        let results = rows.compactMap { row -> (verse: AyahNumber, text: String)? in
-            let text: String = row["text"]
-            let sura: Int = row["sura"]
-            let ayah: Int = row["ayah"]
+        var results: [(verse: AyahNumber, text: Text)] = []
+        for row in rows {
+            let sura = try integerValue(in: row, column: "sura")
+            let ayah = try integerValue(in: row, column: "ayah")
 
             guard let verse = AyahNumber(quran: quran, sura: sura, ayah: ayah) else {
                 invalidCoordinates.append((sura: sura, ayah: ayah))
-                return nil
+                continue
             }
-            return (verse: verse, text: text)
+            guard let text = try transform(row, quran) else {
+                continue
+            }
+            results.append((verse: verse, text: text))
         }
 
         if let firstInvalidCoordinate = invalidCoordinates.first {
@@ -262,6 +285,17 @@ private struct GRDBVerseTextPersistence {
         }
 
         return results
+    }
+
+    private func integerValue(in row: Row, column: String) throws -> Int {
+        let value = row[column]
+        if let integer = value as? Int64 {
+            return Int(integer)
+        }
+        if let string = value as? String, let integer = Int(string) {
+            return integer
+        }
+        throw PersistenceError.general("\(column) is neither Int nor numeric String in \(textTable)")
     }
 }
 

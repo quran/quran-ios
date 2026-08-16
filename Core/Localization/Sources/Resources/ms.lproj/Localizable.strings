@@ -305,13 +305,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "Mushaf Madani Baharu";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* Mushaf Madani 1439 dan 1441 ditambah, dioptimumkan untuk memenuhi seluruh skrin — terima kasih kepada @ahmedre.";
+"new.reading_layouts.details" = "* Mushaf Madani 1439 dan 1441 ditambah, dioptimumkan untuk memenuhi seluruh skrin.";
 
 // Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
 "new.experimental_indopak" = "India-Pakistan 15 Baris";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_indopak.details" = "* Cuba susun atur bacaan India-Pakistan 15 baris yang baharu dalam gaya Naskh — terima kasih kepada @ahmedre.\n* Beberapa ciri masih belum tersedia dan akan ditambah dalam kemas kini akan datang.";
+"new.experimental_indopak.details" = "* Cuba susun atur bacaan India-Pakistan 15 baris yang baharu dalam gaya Naskh.\n* Beberapa ciri masih belum tersedia dan akan ditambah dalam kemas kini akan datang.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.

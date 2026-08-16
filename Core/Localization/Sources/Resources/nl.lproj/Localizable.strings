@@ -234,13 +234,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "Nieuwe Madani-mushafs";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* Madani Mushaf 1439 en 1441 toegevoegd, geoptimaliseerd om het volledige scherm te vullen — met dank aan @ahmedre.";
+"new.reading_layouts.details" = "* Madani Mushaf 1439 en 1441 toegevoegd, geoptimaliseerd om het volledige scherm te vullen.";
 
 // Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
 "new.experimental_indopak" = "Indo-Pakistaans – 15 regels";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_indopak.details" = "* Probeer de nieuwe 15-regelige Indo-Pakistaanse leesindeling in Naskh-stijl — met dank aan @ahmedre.\n* Enkele functies ontbreken nog en worden in toekomstige updates toegevoegd.";
+"new.experimental_indopak.details" = "* Probeer de nieuwe 15-regelige Indo-Pakistaanse leesindeling in Naskh-stijl.\n* Enkele functies ontbreken nog en worden in toekomstige updates toegevoegd.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.

@@ -324,13 +324,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.reading_layouts" = "Yangi Madina mushaflari";
 // Metadata: Translated by ChatGPT; human review required.
-"new.reading_layouts.details" = "* Madina mushafi 1439 va 1441 qo‘shildi, butun ekranni to‘ldirish uchun optimallashtirildi — @ahmedre ga rahmat.";
+"new.reading_layouts.details" = "* Madina mushafi 1439 va 1441 qo‘shildi, butun ekranni to‘ldirish uchun optimallashtirildi.";
 
 // Experimental IndoPak
 // Metadata: Translated by ChatGPT; human review required.
 "new.experimental_indopak" = "Hind-Pokiston — 15 qator";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_indopak.details" = "* Nasx uslubidagi yangi 15 qatorli Hind-Pokiston o‘qish ko‘rinishini sinab ko‘ring — @ahmedre ga rahmat.\n* Ayrim imkoniyatlar hali mavjud emas va kelgusi yangilanishlarda qo‘shiladi.";
+"new.experimental_indopak.details" = "* Nasx uslubidagi yangi 15 qatorli Hind-Pokiston o‘qish ko‘rinishini sinab ko‘ring.\n* Ayrim imkoniyatlar hali mavjud emas va kelgusi yangilanishlarda qo‘shiladi.";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.

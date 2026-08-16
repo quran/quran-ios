@@ -25,6 +25,7 @@ public struct CoreDataNotePersistence: NotePersistence {
 
     public func notes() -> AnyPublisher<[NotePersistenceModel], Never> {
         let request: NSFetchRequest<MO_Note> = MO_Note.fetchRequest()
+        request.predicate = NSPredicate(format: "verses.@count > 0")
         request.relationshipKeyPathsForPrefetching = ["verses"]
         request.sortDescriptors = [NSSortDescriptor(key: Schema.Note.modifiedOn, ascending: false)]
 

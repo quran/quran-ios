@@ -123,7 +123,9 @@ private struct NoteEditorContent: View {
                 .font(.footnote)
                 .tracking(locale.isArabicLanguage ? 0 : 3)
                 .foregroundColor(Color(themeStyle.secondaryTextColor))
-                .lineLimit(1)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .layoutPriority(1)
         }
     }
 
@@ -145,14 +147,13 @@ private struct NoteEditorContent: View {
     private var footer: some View {
         HStack(alignment: .firstTextBaseline) {
             metadata
-                .lineLimit(1)
-                .minimumScaleFactor(0.75)
-
-            Spacer()
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             AsyncButton(action: delete) {
                 Text(l("notes.editor.delete"))
                     .foregroundColor(.red)
+                    .fixedSize(horizontal: true, vertical: false)
             }
         }
         .font(.footnote)
@@ -164,16 +165,29 @@ private struct NoteEditorContent: View {
     }
 
     private var metadata: some View {
-        HStack(spacing: 4) {
-            if !note.modifiedSince.isEmpty {
-                Text(lFormat("notes.editor.created", note.modifiedSince))
-                Text("·")
-                    .accessibilityHidden(true)
-            }
-            Text(lFormat("notes.editor.words-count", note.wordCount))
+        metadataText
+            .foregroundColor(Color(themeStyle.secondaryTextColor))
+            .accessibilityLabel(Text(metadataAccessibilityLabel))
+    }
+
+    private var metadataText: Text {
+        let wordsCount = Text(lFormat("notes.editor.words-count", note.wordCount))
+        if note.modifiedSince.isEmpty {
+            return wordsCount
         }
-        .foregroundColor(Color(themeStyle.secondaryTextColor))
-        .accessibilityElement(children: .combine)
+
+        return Text(lFormat("notes.editor.created", note.modifiedSince)) + Text(" · ") + wordsCount
+    }
+
+    private var metadataAccessibilityLabel: String {
+        if note.modifiedSince.isEmpty {
+            return lFormat("notes.editor.words-count", note.wordCount)
+        }
+
+        return [
+            lFormat("notes.editor.created", note.modifiedSince),
+            lFormat("notes.editor.words-count", note.wordCount),
+        ].joined(separator: ", ")
     }
 
     private var thinDivider: some View {
@@ -209,7 +223,7 @@ private struct NoteEditorPreview: View {
             note: EditableNote(
                 ayahRange: verses[34] ... verses[35],
                 ayahText: "وَقَالَ ٱلَّذِينَ أَشْرَكُوا۟ لَوْ شَآءَ ٱللَّهُ مَا عَبَدْنَا مِن دُونِهِۦ مِن شَىْءٍ نَّحْنُ وَلَآ ءَابَآؤُنَا",
-                modifiedSince: "2 hours ago",
+                modifiedSince: Date(timeIntervalSince1970: 1).timeAgo(),
                 selectedColor: .blue,
                 note: "The “if Allah willed” excuse — the same argument every nation made. Cross-ref 6:148."
             ),

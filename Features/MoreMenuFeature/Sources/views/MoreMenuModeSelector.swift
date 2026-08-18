@@ -20,7 +20,8 @@ struct MoreMenuModeSelector: View {
                 .tag(QuranMode.translation)
         }
         .pickerStyle(SegmentedPickerStyle())
-        .padding(.bottom, 1)
+        .controlSize(.large)
+        .padding(8)
     }
 }
 

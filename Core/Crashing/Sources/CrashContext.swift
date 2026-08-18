@@ -57,24 +57,6 @@ public final class CrashContext {
         set(state, forKey: .syncState)
     }
 
-    public func setPager(
-        generation: Int,
-        phase: String,
-        source: String,
-        visibleItem: String,
-        targetItem: String,
-        pendingItem: String,
-        gestureState: String
-    ) {
-        set(generation, forKey: .pagerTransitionGeneration)
-        set(phase, forKey: .pagerPhase)
-        set(source, forKey: .pagerTransitionSource)
-        set(visibleItem, forKey: .pagerVisibleItem)
-        set(targetItem, forKey: .pagerTargetItem)
-        set(pendingItem, forKey: .pagerPendingItem)
-        set(gestureState, forKey: .pagerGestureState)
-    }
-
     public func setActiveList(
         owner: String,
         mode: String,
@@ -201,14 +183,6 @@ private extension CrasherKeyBase {
     static let quranMode = CrasherKey<String>(key: "quran_mode")
     static let selectedTranslationCount = CrasherKey<Int>(key: "selected_translation_count")
     static let syncState = CrasherKey<String>(key: "sync_state")
-
-    static let pagerPhase = CrasherKey<String>(key: "pager_phase")
-    static let pagerTransitionGeneration = CrasherKey<Int>(key: "pager_transition_generation")
-    static let pagerTransitionSource = CrasherKey<String>(key: "pager_transition_source")
-    static let pagerVisibleItem = CrasherKey<String>(key: "pager_visible_item")
-    static let pagerTargetItem = CrasherKey<String>(key: "pager_target_item")
-    static let pagerPendingItem = CrasherKey<String>(key: "pager_pending_item")
-    static let pagerGestureState = CrasherKey<String>(key: "pager_gesture_state")
 
     static let activeListOwner = CrasherKey<String>(key: "active_list_owner")
     static let activeListMode = CrasherKey<String>(key: "active_list_mode")

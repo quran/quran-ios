@@ -108,17 +108,21 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
             return
         }
 
-        guard context.coordinator.transitionState.requestProgrammaticTransition(to: selection) == .started else {
+        let transitionRequest = context.coordinator.transitionState.requestProgrammaticTransition(to: selection)
+        guard transitionRequest == .started else {
+            let isDeferred = transitionRequest == .deferred
             context.coordinator.recordPager(
                 generation: context.coordinator.transitionGeneration,
-                phase: "selection_deferred",
-                source: "external_selection_deferred",
+                phase: isDeferred ? "selection_deferred" : "selection_unchanged",
+                source: isDeferred ? "external_selection_deferred" : "user_transition_source",
                 visibleElement: visibleElement,
                 targetElement: selection,
-                pendingElement: selection,
+                pendingElement: isDeferred ? selection : nil,
                 gestureState: context.coordinator.transitionState.isUserTransitionInProgress ? "dragging" : "none"
             )
-            logger.info("Cannot change page while another pager transition is active")
+            logger.info(isDeferred
+                ? "Cannot change page while another pager transition is active"
+                : "Ignoring unchanged selection during user pager transition")
             return
         }
 
@@ -235,7 +239,7 @@ extension _PageViewController {
             _ pageViewController: UIPageViewController,
             willTransitionTo pendingViewControllers: [UIViewController]
         ) {
-            switch transitionState.userTransitionWillBegin() {
+            switch transitionState.userTransitionWillBegin(from: parent.selection) {
             case .started:
                 transitionGeneration += 1
             case .continuedGesture:
@@ -331,7 +335,7 @@ extension _PageViewController {
         private func pagingPanGestureChanged(_ gestureRecognizer: UIPanGestureRecognizer) {
             switch gestureRecognizer.state {
             case .began:
-                guard transitionState.userGestureWillBegin() else { return }
+                guard transitionState.userGestureWillBegin(from: parent.selection) else { return }
                 transitionGeneration += 1
                 let visibleElement = (pageViewController?.viewControllers?.first as? PageContentController)?.element
                 recordPager(
@@ -418,6 +422,7 @@ struct PageTransitionState<Element: Equatable> {
     enum ProgrammaticTransitionRequest: Equatable {
         case started
         case deferred
+        case ignored
     }
 
     var isUserTransitionInProgress: Bool {
@@ -428,18 +433,20 @@ struct PageTransitionState<Element: Equatable> {
         phase == .userGesture
     }
 
-    mutating func userGestureWillBegin() -> Bool {
+    mutating func userGestureWillBegin(from selection: Element) -> Bool {
         guard phase == .idle else { return false }
         phase = .userGesture
         pendingSelection = nil
+        userTransitionSourceSelection = selection
         return true
     }
 
-    mutating func userTransitionWillBegin() -> UserTransitionStart {
+    mutating func userTransitionWillBegin(from selection: Element) -> UserTransitionStart {
         switch phase {
         case .idle:
             phase = .userTransition
             pendingSelection = nil
+            userTransitionSourceSelection = selection
             return .started
         case .userGesture:
             phase = .userTransition
@@ -451,12 +458,16 @@ struct PageTransitionState<Element: Equatable> {
 
     mutating func requestProgrammaticTransition(to selection: Element) -> ProgrammaticTransitionRequest {
         guard phase == .idle else {
+            if isUserTransitionInProgress, selection == userTransitionSourceSelection {
+                return .ignored
+            }
             pendingSelection = selection
             return .deferred
         }
 
         phase = .programmatic
         pendingSelection = nil
+        userTransitionSourceSelection = nil
         return .started
     }
 
@@ -486,10 +497,14 @@ struct PageTransitionState<Element: Equatable> {
 
     private var phase = Phase.idle
     private var pendingSelection: Element?
+    private var userTransitionSourceSelection: Element?
 
     private mutating func finishTransition(visibleElement: Element?) -> Element? {
         phase = .idle
-        defer { pendingSelection = nil }
+        defer {
+            pendingSelection = nil
+            userTransitionSourceSelection = nil
+        }
         return pendingSelection == visibleElement ? nil : pendingSelection
     }
 }

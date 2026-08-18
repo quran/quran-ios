@@ -10,7 +10,7 @@ final class PageTransitionStateTests: XCTestCase {
 
     func testSelectionIsDeferredDuringUserTransition() {
         var sut = PageTransitionState<Int>()
-        XCTAssertEqual(sut.userTransitionWillBegin(), .started)
+        XCTAssertEqual(sut.userTransitionWillBegin(from: 1), .started)
 
         XCTAssertEqual(sut.requestProgrammaticTransition(to: 2), .deferred)
         XCTAssertTrue(sut.isUserTransitionInProgress)
@@ -18,7 +18,7 @@ final class PageTransitionStateTests: XCTestCase {
 
     func testLatestDeferredSelectionAppliesAfterUserTransition() {
         var sut = PageTransitionState<Int>()
-        _ = sut.userTransitionWillBegin()
+        _ = sut.userTransitionWillBegin(from: 1)
         _ = sut.requestProgrammaticTransition(to: 2)
         _ = sut.requestProgrammaticTransition(to: 3)
 
@@ -30,7 +30,7 @@ final class PageTransitionStateTests: XCTestCase {
 
     func testVisibleDeferredSelectionIsDiscardedAfterUserTransition() {
         var sut = PageTransitionState<Int>()
-        _ = sut.userTransitionWillBegin()
+        _ = sut.userTransitionWillBegin(from: 1)
         _ = sut.requestProgrammaticTransition(to: 2)
 
         XCTAssertNil(sut.userTransitionDidFinish(visibleElement: 2))
@@ -38,7 +38,7 @@ final class PageTransitionStateTests: XCTestCase {
 
     func testSelectionIsDeferredAsSoonAsPagingGestureBegins() {
         var sut = PageTransitionState<Int>()
-        XCTAssertTrue(sut.userGestureWillBegin())
+        XCTAssertTrue(sut.userGestureWillBegin(from: 1))
 
         XCTAssertEqual(sut.requestProgrammaticTransition(to: 2), .deferred)
         XCTAssertTrue(sut.isGestureAwaitingPageTransition)
@@ -46,16 +46,16 @@ final class PageTransitionStateTests: XCTestCase {
 
     func testPageTransitionPreservesSelectionDeferredDuringEarlyGesture() {
         var sut = PageTransitionState<Int>()
-        _ = sut.userGestureWillBegin()
+        _ = sut.userGestureWillBegin(from: 1)
         _ = sut.requestProgrammaticTransition(to: 2)
 
-        XCTAssertEqual(sut.userTransitionWillBegin(), .continuedGesture)
+        XCTAssertEqual(sut.userTransitionWillBegin(from: 1), .continuedGesture)
         XCTAssertEqual(sut.userTransitionDidFinish(visibleElement: 1), 2)
     }
 
     func testGestureWithoutPageTransitionReplaysDeferredSelection() {
         var sut = PageTransitionState<Int>()
-        _ = sut.userGestureWillBegin()
+        _ = sut.userGestureWillBegin(from: 1)
         _ = sut.requestProgrammaticTransition(to: 2)
 
         XCTAssertEqual(sut.userGestureDidFinish(visibleElement: 1), 2)
@@ -75,6 +75,15 @@ final class PageTransitionStateTests: XCTestCase {
         var sut = PageTransitionState<Int>()
         _ = sut.requestProgrammaticTransition(to: 2)
 
-        XCTAssertEqual(sut.userTransitionWillBegin(), .ignored)
+        XCTAssertEqual(sut.userTransitionWillBegin(from: 1), .ignored)
+    }
+
+    func testCurrentSelectionIsNotDeferredDuringUserTransition() {
+        var sut = PageTransitionState<Int>()
+        _ = sut.userGestureWillBegin(from: 1)
+        _ = sut.userTransitionWillBegin(from: 1)
+
+        XCTAssertEqual(sut.requestProgrammaticTransition(to: 1), .ignored)
+        XCTAssertNil(sut.userTransitionDidFinish(visibleElement: 2))
     }
 }

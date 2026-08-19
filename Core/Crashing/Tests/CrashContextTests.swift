@@ -38,28 +38,6 @@ final class CrashContextTests: XCTestCase {
         XCTAssertEqual(handler.writeCount(for: "app_state"), 1)
     }
 
-    func testPagerContextUsesLatestTransitionSnapshot() {
-        let handler = RecordingCrashInfoHandler()
-        let sut = CrashContext(crasher: Crasher(handler: handler))
-
-        sut.setPager(
-            generation: 4,
-            phase: "manual_transition",
-            source: "user_gesture",
-            visibleItem: "10",
-            targetItem: "11",
-            pendingItem: "11",
-            gestureState: "dragging"
-        )
-
-        XCTAssertEqual(handler.value(for: "pager_phase") as? String, "manual_transition")
-        XCTAssertEqual(handler.value(for: "pager_transition_generation") as? Int, 4)
-        XCTAssertEqual(handler.value(for: "pager_transition_source") as? String, "user_gesture")
-        XCTAssertEqual(handler.value(for: "pager_visible_item") as? String, "10")
-        XCTAssertEqual(handler.value(for: "pager_target_item") as? String, "11")
-        XCTAssertEqual(handler.value(for: "pager_gesture_state") as? String, "dragging")
-    }
-
     func testClearingStalePresentationOwnerDoesNotClearNewPresentation() {
         let handler = RecordingCrashInfoHandler()
         let sut = CrashContext(crasher: Crasher(handler: handler))

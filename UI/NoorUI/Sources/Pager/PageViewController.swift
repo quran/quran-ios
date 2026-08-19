@@ -7,7 +7,6 @@
 
 // Most of the code is copied from https://github.com/benjaminsage/iPages
 
-import Crashing
 import SwiftUI
 import UIKit
 import VLogging
@@ -73,6 +72,8 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
     let forEach: ForEach<[Element], Element.ID, Content>
     @Binding var selection: Element
 
+    @State var userDraggingStartedTransitionInProgress = false
+
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
@@ -89,9 +90,15 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
 
         pageViewController.dataSource = context.coordinator
         pageViewController.delegate = context.coordinator
-        context.coordinator.observePagingInteraction(in: pageViewController)
 
         pageViewController.view.backgroundColor = .clear
+
+        for view in pageViewController.view.subviews {
+            if let scrollView = view as? UIScrollView {
+                scrollView.delegate = context.coordinator
+                break
+            }
+        }
 
         // Trigger an update.
         updateUIViewController(pageViewController, context: context)
@@ -100,33 +107,37 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
     }
 
     func updateUIViewController(_ pageViewController: UIPageViewController, context: Context) {
-        let visibleElement = (pageViewController.viewControllers?.first as? PageContentController)?.element
-        context.coordinator.parent = self
-
         // Early return if showing selection's view controller.
-        if visibleElement == selection {
+        if let visibleController = pageViewController.viewControllers?.first as? PageContentController {
+            if visibleController.element == selection {
+                return
+            }
+        }
+
+        if userDraggingStartedTransitionInProgress {
+            logger.info("Cannot change page while user dragging in progress")
+
+            // when user dragging initiated transition is still in progress,
+            // prevent the app from starting simultaneous transitions to avoid assertion failure and crash
+            // reference: https://github.com/hons82/THSegmentedPager/blob/master/THSegmentedPager/THSegmentedPager.m#L233
+
+            // failure type 1: Assertion failure in
+            // -[UIPageViewController queuingScrollView:didEndManualScroll:toRevealView:direction:animated:didFinish:didComplete:],
+            // /SourceCache/UIKit_Sim/UIKit-2935.137/UIPageViewController.m:1866
+            // Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'No view controller managing visible view
+
+            // failure type 2: Assertion failure in -[_UIQueuingScrollView _enqueueCompletionState:],
+            // /SourceCache/UIKit_Sim/UIKit-2935.137/_UIQueuingScrollView.m:499
+            // Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'Duplicate states in queue'
             return
         }
 
-        guard context.coordinator.transitionState.requestProgrammaticTransition(to: selection) == .started else {
-            context.coordinator.recordPager(
-                generation: context.coordinator.transitionGeneration,
-                phase: "selection_deferred",
-                source: "external_selection_deferred",
-                visibleElement: visibleElement,
-                targetElement: selection,
-                pendingElement: selection,
-                gestureState: context.coordinator.transitionState.isUserTransitionInProgress ? "dragging" : "none"
-            )
-            logger.info("Cannot change page while another pager transition is active")
-            return
-        }
+        let previousSelection = context.coordinator.parent.selection
+        context.coordinator.parent = self
 
         let viewController = makeController(selection)
 
-        let previousIndex = visibleElement.flatMap { visibleElement in
-            forEach.data.firstIndex { $0 == visibleElement }
-        }
+        let previousIndex = forEach.data.firstIndex { $0 == previousSelection }
         let currentIndex = forEach.data.firstIndex { $0 == selection }
         let direction: UIPageViewController.NavigationDirection = if let previousIndex, let currentIndex {
             currentIndex < previousIndex ? .forward : .reverse
@@ -134,31 +145,7 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
             .forward
         }
 
-        let transitionSource = visibleElement == nil ? "initial" : "external_selection"
-        let transitionGeneration = context.coordinator.beginPagerTransition(
-            phase: "programmatic_transition",
-            source: transitionSource,
-            visibleElement: visibleElement,
-            targetElement: selection,
-            pendingElement: nil,
-            gestureState: "none"
-        )
-        logger.info("Pager programmatic transition started")
-        pageViewController.setViewControllers(
-            [viewController],
-            direction: direction,
-            animated: animated
-        ) { [weak pageViewController, weak coordinator = context.coordinator] completed in
-            coordinator?.finishProgrammaticTransition(
-                pageViewController: pageViewController,
-                generation: transitionGeneration,
-                phase: completed ? "idle" : "programmatic_incomplete",
-                source: transitionSource,
-                targetElement: selection,
-                gestureState: "none"
-            )
-            logger.info("Pager programmatic transition completed: \(completed)")
-        }
+        pageViewController.setViewControllers([viewController], direction: direction, animated: animated)
     }
 
     func makeController(_ element: Element) -> UIViewController {
@@ -170,7 +157,7 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
 // MARK: - Coordinator
 
 extension _PageViewController {
-    class Coordinator: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    class Coordinator: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
         // MARK: Lifecycle
 
         init(_ pageViewController: _PageViewController) {
@@ -180,15 +167,6 @@ extension _PageViewController {
         // MARK: Internal
 
         var parent: _PageViewController
-        var transitionState = PageTransitionState<Element>()
-        private(set) var transitionGeneration = 0
-        private weak var pageViewController: UIPageViewController?
-
-        func observePagingInteraction(in pageViewController: UIPageViewController) {
-            self.pageViewController = pageViewController
-            let scrollView = pageViewController.view.subviews.first { $0 is UIScrollView } as? UIScrollView
-            scrollView?.panGestureRecognizer.addTarget(self, action: #selector(pagingPanGestureChanged(_:)))
-        }
 
         func pageViewController(
             _ pageViewController: UIPageViewController,
@@ -233,264 +211,29 @@ extension _PageViewController {
 
         func pageViewController(
             _ pageViewController: UIPageViewController,
-            willTransitionTo pendingViewControllers: [UIViewController]
-        ) {
-            switch transitionState.userTransitionWillBegin() {
-            case .started:
-                transitionGeneration += 1
-            case .continuedGesture:
-                break
-            case .ignored:
-                logger.info("Ignoring pager user transition while another transition is active")
-                return
-            }
-            let visibleElement = (pageViewController.viewControllers?.first as? PageContentController)?.element
-            let pendingElement = (pendingViewControllers.first as? PageContentController)?.element
-            recordPager(
-                generation: transitionGeneration,
-                phase: "manual_transition",
-                source: "user_gesture",
-                visibleElement: visibleElement,
-                targetElement: pendingElement,
-                pendingElement: pendingElement,
-                gestureState: "dragging"
-            )
-            logger.info("Pager manual transition started")
-        }
-
-        func pageViewController(
-            _ pageViewController: UIPageViewController,
             didFinishAnimating finished: Bool,
             previousViewControllers: [UIViewController],
             transitionCompleted completed: Bool
         ) {
-            let visibleElement = (pageViewController.viewControllers?.first as? PageContentController)?.element
-            let pendingSelection = transitionState.userTransitionDidFinish(visibleElement: visibleElement)
-            reconcileSelection(visibleElement: visibleElement, pendingSelection: pendingSelection)
-
-            recordPager(
-                generation: transitionGeneration,
-                phase: completed ? "idle" : "manual_cancelled",
-                source: "user_gesture",
-                visibleElement: visibleElement,
-                targetElement: visibleElement,
-                pendingElement: pendingSelection,
-                gestureState: "none"
-            )
-            logger.info("Pager manual transition finished: \(completed)")
-        }
-
-        func beginPagerTransition(
-            phase: String,
-            source: String,
-            visibleElement: Element?,
-            targetElement: Element?,
-            pendingElement: Element?,
-            gestureState: String
-        ) -> Int {
-            transitionGeneration += 1
-            recordPager(
-                generation: transitionGeneration,
-                phase: phase,
-                source: source,
-                visibleElement: visibleElement,
-                targetElement: targetElement,
-                pendingElement: pendingElement,
-                gestureState: gestureState
-            )
-            return transitionGeneration
-        }
-
-        func finishProgrammaticTransition(
-            pageViewController: UIPageViewController?,
-            generation: Int,
-            phase: String,
-            source: String,
-            targetElement: Element?,
-            gestureState: String
-        ) {
-            guard generation == transitionGeneration else {
-                logger.info("Ignoring stale pager completion: \(generation), current: \(transitionGeneration)")
-                return
-            }
-            let visibleElement = (pageViewController?.viewControllers?.first as? PageContentController)?.element
-            let pendingSelection = transitionState.programmaticTransitionDidFinish(visibleElement: visibleElement)
-            reconcileSelection(visibleElement: visibleElement, pendingSelection: pendingSelection)
-            recordPager(
-                generation: generation,
-                phase: phase,
-                source: source,
-                visibleElement: visibleElement,
-                targetElement: targetElement,
-                pendingElement: pendingSelection,
-                gestureState: gestureState
-            )
-        }
-
-        @objc
-        private func pagingPanGestureChanged(_ gestureRecognizer: UIPanGestureRecognizer) {
-            switch gestureRecognizer.state {
-            case .began:
-                guard transitionState.userGestureWillBegin() else { return }
-                transitionGeneration += 1
-                let visibleElement = (pageViewController?.viewControllers?.first as? PageContentController)?.element
-                recordPager(
-                    generation: transitionGeneration,
-                    phase: "manual_interaction",
-                    source: "pan_gesture",
-                    visibleElement: visibleElement,
-                    targetElement: nil,
-                    pendingElement: nil,
-                    gestureState: "dragging"
-                )
-            case .ended, .cancelled, .failed:
-                guard transitionState.isGestureAwaitingPageTransition else { return }
-                let visibleElement = (pageViewController?.viewControllers?.first as? PageContentController)?.element
-                let pendingSelection = transitionState.userGestureDidFinish(visibleElement: visibleElement)
-                reconcileSelection(visibleElement: visibleElement, pendingSelection: pendingSelection)
-                recordPager(
-                    generation: transitionGeneration,
-                    phase: "idle",
-                    source: "pan_gesture",
-                    visibleElement: visibleElement,
-                    targetElement: visibleElement,
-                    pendingElement: pendingSelection,
-                    gestureState: "none"
-                )
-            default:
-                break
+            if completed,
+               let visibleViewController = pageViewController.viewControllers?.first,
+               let contentController = visibleViewController as? PageContentController
+            {
+                parent.selection = contentController.element
             }
         }
 
-        private func reconcileSelection(visibleElement: Element?, pendingSelection: Element?) {
-            if let visibleElement, visibleElement != parent.selection {
-                parent.selection = visibleElement
-            }
+        // MARK: - UIScrollViewDelegate
 
-            if let pendingSelection {
-                Task { @MainActor [weak self] in
-                    await Task.yield()
-                    self?.parent.selection = pendingSelection
-                }
+        func scrollViewDidScroll(_ scrollView: UIScrollView) {
+            if scrollView.isTracking || scrollView.isDecelerating {
+                parent.userDraggingStartedTransitionInProgress = true
             }
         }
 
-        func recordPager(
-            generation: Int,
-            phase: String,
-            source: String,
-            visibleElement: Element?,
-            targetElement: Element?,
-            pendingElement: Element?,
-            gestureState: String
-        ) {
-            crashContext.setPager(
-                generation: generation,
-                phase: phase,
-                source: source,
-                visibleItem: indexDescription(for: visibleElement),
-                targetItem: indexDescription(for: targetElement),
-                pendingItem: indexDescription(for: pendingElement),
-                gestureState: gestureState
-            )
+        func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+            parent.userDraggingStartedTransitionInProgress = false
         }
-
-        private func indexDescription(for element: Element?) -> String {
-            guard let element,
-                  let index = parent.forEach.data.firstIndex(of: element)
-            else {
-                return "none"
-            }
-            return String(index)
-        }
-    }
-}
-
-struct PageTransitionState<Element: Equatable> {
-    // MARK: Internal
-
-    enum UserTransitionStart: Equatable {
-        case started
-        case continuedGesture
-        case ignored
-    }
-
-    enum ProgrammaticTransitionRequest: Equatable {
-        case started
-        case deferred
-    }
-
-    var isUserTransitionInProgress: Bool {
-        phase == .userGesture || phase == .userTransition
-    }
-
-    var isGestureAwaitingPageTransition: Bool {
-        phase == .userGesture
-    }
-
-    mutating func userGestureWillBegin() -> Bool {
-        guard phase == .idle else { return false }
-        phase = .userGesture
-        pendingSelection = nil
-        return true
-    }
-
-    mutating func userTransitionWillBegin() -> UserTransitionStart {
-        switch phase {
-        case .idle:
-            phase = .userTransition
-            pendingSelection = nil
-            return .started
-        case .userGesture:
-            phase = .userTransition
-            return .continuedGesture
-        case .userTransition, .programmatic:
-            return .ignored
-        }
-    }
-
-    mutating func requestProgrammaticTransition(to selection: Element) -> ProgrammaticTransitionRequest {
-        guard phase == .idle else {
-            pendingSelection = selection
-            return .deferred
-        }
-
-        phase = .programmatic
-        pendingSelection = nil
-        return .started
-    }
-
-    mutating func userGestureDidFinish(visibleElement: Element?) -> Element? {
-        guard phase == .userGesture else { return nil }
-        return finishTransition(visibleElement: visibleElement)
-    }
-
-    mutating func userTransitionDidFinish(visibleElement: Element?) -> Element? {
-        guard phase == .userTransition else { return nil }
-        return finishTransition(visibleElement: visibleElement)
-    }
-
-    mutating func programmaticTransitionDidFinish(visibleElement: Element?) -> Element? {
-        guard phase == .programmatic else { return nil }
-        return finishTransition(visibleElement: visibleElement)
-    }
-
-    // MARK: Private
-
-    private enum Phase {
-        case idle
-        case userGesture
-        case userTransition
-        case programmatic
-    }
-
-    private var phase = Phase.idle
-    private var pendingSelection: Element?
-
-    private mutating func finishTransition(visibleElement: Element?) -> Element? {
-        phase = .idle
-        defer { pendingSelection = nil }
-        return pendingSelection == visibleElement ? nil : pendingSelection
     }
 }
 

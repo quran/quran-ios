@@ -50,6 +50,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     override func layoutSubviews() {
         navigationItem.titleView?.setNeedsLayout()
         super.layoutSubviews()
+        configureNavigationBarScrollEdgeEffectIfNeeded()
         configureAudioBarScrollEdgeEffectIfNeeded()
     }
 
@@ -100,7 +101,28 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
 
     private let tapGesture = UITapGestureRecognizer()
     private var audioView: UIView?
+    private var navigationBarScrollEdgeInteraction: (any UIInteraction)?
     private var audioBarScrollEdgeInteraction: (any UIInteraction)?
+
+    private func configureNavigationBarScrollEdgeEffectIfNeeded() {
+        guard #available(iOS 26.0, *) else { return }
+        guard let scrollView = contentView?.findSubview(ofType: UIScrollView.self) else {
+            return
+        }
+
+        if let interaction = navigationBarScrollEdgeInteraction as? UIScrollEdgeElementContainerInteraction {
+            if interaction.scrollView !== scrollView {
+                interaction.scrollView = scrollView
+            }
+            return
+        }
+
+        let interaction = UIScrollEdgeElementContainerInteraction()
+        interaction.edge = .top
+        interaction.scrollView = scrollView
+        navigationBarScrollEdgeInteraction = interaction
+        navigationBar.addInteraction(interaction)
+    }
 
     private func configureAudioBarScrollEdgeEffectIfNeeded() {
         guard #available(iOS 26.0, *) else { return }

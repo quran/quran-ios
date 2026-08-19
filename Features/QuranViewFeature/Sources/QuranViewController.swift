@@ -83,11 +83,12 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         quranView?.navigationItem.largeTitleDisplayMode = .never
         quranView?.delegate = self
 
-        // set the custom title view
-        quranView?.navigationItem.titleView = TwoLineNavigationTitleView(
-            firstLineFont: .boldSystemFont(ofSize: 15),
-            secondLineFont: .systemFont(ofSize: 15, weight: .light)
-        )
+        if #unavailable(iOS 26.0) {
+            quranView?.navigationItem.titleView = TwoLineNavigationTitleView(
+                firstLineFont: .boldSystemFont(ofSize: 15),
+                secondLineFont: .systemFont(ofSize: 15, weight: .light)
+            )
+        }
 
         let backImage: UIImage?
         backImage = UIImage(systemName: "chevron.backward")
@@ -368,9 +369,14 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     private func updateTitle(_ pages: [Page]) {
         if pages.isEmpty {
-            titleView?.firstLine = ""
-            titleView?.secondLine = ""
-            titleView?.isAccessibilityElement = false
+            if #available(iOS 26.0, *) {
+                quranView?.navigationItem.attributedTitle = nil
+                quranView?.navigationItem.subtitle = nil
+            } else {
+                titleView?.firstLine = ""
+                titleView?.secondLine = ""
+                titleView?.isAccessibilityElement = false
+            }
             return
         }
         let suras = pages.map(\.startSura)
@@ -384,10 +390,17 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         )
         let sura = suras.min()!
         let suraReference: MultipartText = "\(sura: sura)"
-        titleView?.firstLineAttributedText = suraReference.attributedString(ofSize: .subheadline)
-        titleView?.secondLine = pageDescription
-        titleView?.isAccessibilityElement = true
-        titleView?.accessibilityLabel = "\(suraReference.accessibilityText), \(pageDescription)"
+        if #available(iOS 26.0, *) {
+            quranView?.navigationItem.attributedTitle = AttributedString(
+                suraReference.attributedString(ofSize: .subheadline)
+            )
+            quranView?.navigationItem.subtitle = pageDescription
+        } else {
+            titleView?.firstLineAttributedText = suraReference.attributedString(ofSize: .subheadline)
+            titleView?.secondLine = pageDescription
+            titleView?.isAccessibilityElement = true
+            titleView?.accessibilityLabel = "\(suraReference.accessibilityText), \(pageDescription)"
+        }
     }
 
     private func updateRightBarItems(animated: Bool, isBookmarked: Bool) {

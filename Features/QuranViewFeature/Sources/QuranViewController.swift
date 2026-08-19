@@ -83,6 +83,13 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         quranView?.navigationItem.largeTitleDisplayMode = .never
         quranView?.delegate = self
 
+        if #unavailable(iOS 26.0) {
+            quranView?.navigationItem.titleView = TwoLineNavigationTitleView(
+                firstLineFont: .boldSystemFont(ofSize: 15),
+                secondLineFont: .systemFont(ofSize: 15, weight: .light)
+            )
+        }
+
         let backImage: UIImage?
         backImage = UIImage(systemName: "chevron.backward")
 
@@ -288,6 +295,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         return UIBarButtonItem(image: moreImage, style: .plain, target: self, action: #selector(onMoreBarButtonTapped(_:)))
     }()
 
+    private var titleView: TwoLineNavigationTitleView? { quranView?.navigationItem.titleView as? TwoLineNavigationTitleView }
     private var quranView: QuranView? {
         view as? QuranView
     }
@@ -365,7 +373,9 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
                 quranView?.navigationItem.attributedTitle = nil
                 quranView?.navigationItem.subtitle = nil
             } else {
-                quranView?.navigationItem.title = nil
+                titleView?.firstLine = ""
+                titleView?.secondLine = ""
+                titleView?.isAccessibilityElement = false
             }
             return
         }
@@ -386,7 +396,10 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             )
             quranView?.navigationItem.subtitle = pageDescription
         } else {
-            quranView?.navigationItem.title = "\(suraReference.accessibilityText) (\(pageDescription))"
+            titleView?.firstLineAttributedText = suraReference.attributedString(ofSize: .subheadline)
+            titleView?.secondLine = pageDescription
+            titleView?.isAccessibilityElement = true
+            titleView?.accessibilityLabel = "\(suraReference.accessibilityText), \(pageDescription)"
         }
     }
 

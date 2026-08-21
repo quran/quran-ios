@@ -5,6 +5,7 @@ import AuthenticationClient
 import AuthenticationClientFake
 import Combine
 import MobileSyncTestSupport
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import QuranResources
@@ -55,6 +56,7 @@ final class NotesViewModelTests: XCTestCase {
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
             ),
+            quranFontSource: QuranFontSource(.uthmanicHafs),
             navigateTo: { _ in },
             editNote: { _ in }
         )
@@ -86,6 +88,7 @@ final class NotesViewModelTests: XCTestCase {
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
             ),
+            quranFontSource: QuranFontSource(.uthmanicHafs),
             navigateTo: { _ in },
             editNote: { _ in }
         )
@@ -172,6 +175,15 @@ final class NotesViewModelTests: XCTestCase {
         )
     }
 
+    func test_quranFont_updatesFromSource() {
+        let updates = PassthroughSubject<QuranFont, Never>()
+        let sut = makeSUT(quranFontSource: QuranFontSource(current: { .uthmanicHafs }, updates: updates))
+
+        updates.send(.indoPak)
+
+        XCTAssertEqual(sut.quranFont, .indoPak)
+    }
+
     func test_prepareNotesForSharing_usesShareableVerseText() async throws {
         let ayah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
         let note = QuranAnnotations.Note(
@@ -195,6 +207,7 @@ final class NotesViewModelTests: XCTestCase {
                 databasesURL: unavailableDatabase,
                 quranFileURL: QuranResources.quranUthmaniV2Database
             ),
+            quranFontSource: QuranFontSource(.uthmanicHafs),
             navigateTo: { _ in },
             editNote: { _ in }
         )
@@ -233,6 +246,7 @@ final class NotesViewModelTests: XCTestCase {
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
             ),
+            quranFontSource: QuranFontSource(.uthmanicHafs),
             navigateTo: { navigatedAyah = $0 },
             editNote: { _ in }
         )
@@ -249,7 +263,8 @@ final class NotesViewModelTests: XCTestCase {
 
     private func makeSUT(
         analytics: AnalyticsLibrary = AnalyticsRecorder(),
-        authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient()
+        authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient(),
+        quranFontSource: QuranFontSource = QuranFontSource(.uthmanicHafs)
     ) -> NotesViewModel {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         return NotesViewModel(
@@ -265,6 +280,7 @@ final class NotesViewModelTests: XCTestCase {
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
             ),
+            quranFontSource: quranFontSource,
             navigateTo: { _ in },
             editNote: { _ in }
         )

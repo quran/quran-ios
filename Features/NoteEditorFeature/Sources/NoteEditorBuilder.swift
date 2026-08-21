@@ -19,9 +19,9 @@ import UIKit
 public struct NoteEditorBuilder {
     // MARK: Lifecycle
 
-    public init(container: AppDependencies, quranFont: QuranFont) {
+    public init(container: AppDependencies, quranFontSource: QuranFontSource) {
         self.container = container
-        self.quranFont = quranFont
+        self.quranFontSource = quranFontSource
     }
 
     // MARK: Public
@@ -33,7 +33,7 @@ public struct NoteEditorBuilder {
             analytics: container.analytics,
             mode: mode,
             textService: container.textDataService(),
-            quranFont: quranFont
+            quranFontSource: quranFontSource
         )
         let viewController = NoteEditorViewController(viewModel: viewModel)
         viewModel.listener = listener
@@ -45,7 +45,7 @@ public struct NoteEditorBuilder {
             noteService: container.noteService(),
             note: note,
             textService: container.textDataService(),
-            quranFont: quranFont
+            quranFontSource: quranFontSource
         )
         let viewController = NoteEditorViewController(viewModel: viewModel)
         viewModel.listener = listener
@@ -56,5 +56,5 @@ public struct NoteEditorBuilder {
     // MARK: Internal
 
     let container: AppDependencies
-    let quranFont: QuranFont
+    let quranFontSource: QuranFontSource
 }

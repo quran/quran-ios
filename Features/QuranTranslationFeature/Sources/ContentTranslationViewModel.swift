@@ -32,12 +32,12 @@ public final class ContentTranslationViewModel: ObservableObject {
         localTranslationsRetriever: LocalTranslationsRetriever,
         dataService: QuranTextDataService,
         highlightsService: QuranHighlightsService,
-        quranFont: QuranFont
+        quranFontSource: QuranFontSource
     ) {
         self.dataService = dataService
         self.highlightsService = highlightsService
         self.localTranslationsRetriever = localTranslationsRetriever
-        self.quranFont = quranFont
+        quranFont = quranFontSource.current
         arabicFontSize = fontSizePreferences.arabicFontSize
         translationFontSize = fontSizePreferences.translationFontSize
         selectedTranslations = selectedTranslationsPreferences.selectedTranslationIds
@@ -64,6 +64,9 @@ public final class ContentTranslationViewModel: ObservableObject {
         selectedTranslationsPreferences.$selectedTranslationIds
             .sink { [weak self] in self?.selectedTranslations = $0 }
             .store(in: &cancellables)
+
+        quranFontSource.updates
+            .assign(to: &$quranFont)
     }
 
     // MARK: Public
@@ -79,7 +82,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     // MARK: Internal
 
     let tracker = CollectionTracker<TranslationItemId>()
-    let quranFont: QuranFont
+    @Published private(set) var quranFont: QuranFont
 
     @Published var selectedTranslations: [Translation.ID] {
         didSet {

@@ -8,6 +8,7 @@
 
 import AnnotationsService
 import AppDependencies
+import Combine
 import NoorUI
 import QuranKit
 import QuranPagesFeature
@@ -27,6 +28,7 @@ public struct ContentTranslationBuilder {
 
     @MainActor
     public func build(at page: Page) -> some View {
+        let readingPreferences = ReadingPreferences.shared
         let dataService = QuranTextDataService(
             databasesURL: container.databasesURL,
             quranFileURL: container.quranUthmaniV2Database
@@ -37,7 +39,10 @@ public struct ContentTranslationBuilder {
             localTranslationsRetriever: localTranslationsRetriever,
             dataService: dataService,
             highlightsService: highlightsService,
-            quranFont: ReadingPreferences.shared.reading.quranFont
+            quranFontSource: QuranFontSource(
+                current: { readingPreferences.reading.quranFont },
+                updates: readingPreferences.$reading.map(\.quranFont)
+            )
         )
         viewModel.verses = page.verses
         return ContentTranslationView(viewModel: viewModel)

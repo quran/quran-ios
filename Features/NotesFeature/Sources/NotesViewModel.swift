@@ -41,6 +41,7 @@ final class NotesViewModel: ObservableObject {
         noteService: MobileSyncNoteService,
         textService: QuranTextDataService,
         textRetriever: ShareableVerseTextRetriever,
+        quranFontSource: QuranFontSource,
         navigateTo: @escaping (AyahNumber) -> Void,
         editNote: @escaping (Note) -> Void
     ) {
@@ -50,9 +51,12 @@ final class NotesViewModel: ObservableObject {
         self.noteService = noteService
         self.textService = textService
         self.textRetriever = textRetriever
+        quranFont = quranFontSource.current
         self.navigateTo = navigateTo
         editNoteAction = editNote
         isSyncBannerDismissed = preferences.isNotesSyncBannerDismissed
+        quranFontSource.updates
+            .assign(to: &$quranFont)
     }
     #else
     init(
@@ -60,6 +64,7 @@ final class NotesViewModel: ObservableObject {
         noteService: NoteService,
         textRetriever: ShareableVerseTextRetriever,
         textService: QuranTextDataService,
+        quranFontSource: QuranFontSource,
         navigateTo: @escaping (AyahNumber) -> Void,
         editNote: @escaping (Note) -> Void
     ) {
@@ -67,8 +72,11 @@ final class NotesViewModel: ObservableObject {
         self.noteService = noteService
         self.textRetriever = textRetriever
         self.textService = textService
+        quranFont = quranFontSource.current
         self.navigateTo = navigateTo
         editNoteAction = editNote
+        quranFontSource.updates
+            .assign(to: &$quranFont)
     }
     #endif
 
@@ -82,6 +90,7 @@ final class NotesViewModel: ObservableObject {
     #endif
     @Published var notes: [NoteItem] = []
     @Published var searchTerm: String = ""
+    @Published var quranFont: QuranFont
 
     #if QURAN_SYNC
     var shouldShowSyncBanner: Bool {
@@ -102,8 +111,6 @@ final class NotesViewModel: ObservableObject {
             return suraName.range(of: term, options: .caseInsensitive) != nil
         }
     }
-
-    var quranFont: QuranFont { readingPreferences.reading.quranFont }
 
     func start() async {
         #if QURAN_SYNC

@@ -3,6 +3,7 @@
 //
 
 import Combine
+import NoorUI
 import QuranKit
 import QuranText
 import XCTest
@@ -40,13 +41,24 @@ final class ContentTranslationViewModelTests: XCTestCase {
         withExtendedLifetime(cancellable) { }
     }
 
-    private func makeSUT() -> ContentTranslationViewModel {
+    func testQuranFontUpdatesFromSource() {
+        let updates = PassthroughSubject<QuranFont, Never>()
+        let sut = makeSUT(quranFontSource: QuranFontSource(current: { .uthmanicHafs }, updates: updates))
+
+        updates.send(.indoPak)
+
+        XCTAssertEqual(sut.quranFont, .indoPak)
+    }
+
+    private func makeSUT(
+        quranFontSource: QuranFontSource = QuranFontSource(.uthmanicHafs)
+    ) -> ContentTranslationViewModel {
         let unavailableURL = URL(fileURLWithPath: "/tmp/unavailable-quran-translation-test")
         return ContentTranslationViewModel(
             localTranslationsRetriever: .init(databasesURL: unavailableURL),
             dataService: .init(databasesURL: unavailableURL, quranFileURL: unavailableURL),
             highlightsService: .init(),
-            quranFont: .uthmanicHafs
+            quranFontSource: quranFontSource
         )
     }
 

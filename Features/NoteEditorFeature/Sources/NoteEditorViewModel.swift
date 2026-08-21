@@ -32,25 +32,25 @@ final class NoteEditorViewModel {
         analytics: AnalyticsLibrary,
         mode: NoteEditorMode,
         textService: QuranTextDataService,
-        quranFont: QuranFont
+        quranFontSource: QuranFontSource
     ) {
         self.noteService = noteService
         self.analytics = analytics
         self.mode = mode
         self.textService = textService
-        self.quranFont = quranFont
+        self.quranFontSource = quranFontSource
     }
     #else
     init(
         noteService: NoteEditorLegacyServicing,
         note: Note,
         textService: QuranTextDataService,
-        quranFont: QuranFont
+        quranFontSource: QuranFontSource
     ) {
         self.note = note
         self.noteService = noteService
         self.textService = textService
-        self.quranFont = quranFont
+        self.quranFontSource = quranFontSource
     }
     #endif
 
@@ -109,7 +109,7 @@ final class NoteEditorViewModel {
             let editableNote = EditableNote(
                 ayahRange: versesRange.start ... versesRange.end,
                 ayahText: versesText,
-                quranFont: quranFont,
+                quranFontSource: quranFontSource,
                 modifiedSince: modifiedSince,
                 selectedColor: selectedColor,
                 note: body
@@ -212,7 +212,7 @@ final class NoteEditorViewModel {
     private let note: Note
     #endif
     private let textService: QuranTextDataService
-    private let quranFont: QuranFont
+    private let quranFontSource: QuranFontSource
 
     private var editableNote: EditableNote?
 

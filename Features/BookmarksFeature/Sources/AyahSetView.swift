@@ -3,7 +3,6 @@ import Localization
 import NoorUI
 import QuranKit
 import QuranLocalization
-import ReadingService
 import SwiftUI
 import UIx
 
@@ -101,7 +100,7 @@ private struct AyahSetContentView: View {
         guard let text = viewModel.ayahTexts[ayah] else {
             return nil
         }
-        return "\(quran: text, font: ReadingPreferences.shared.reading.quranFont, lineLimit: 2)"
+        return "\(quran: text, font: viewModel.quranFont, lineLimit: 2)"
     }
 }
 

@@ -223,7 +223,7 @@ private struct NoteEditorPreview: View {
             note: EditableNote(
                 ayahRange: verses[34] ... verses[35],
                 ayahText: "وَقَالَ ٱلَّذِينَ أَشْرَكُوا۟ لَوْ شَآءَ ٱللَّهُ مَا عَبَدْنَا مِن دُونِهِۦ مِن شَىْءٍ نَّحْنُ وَلَآ ءَابَآؤُنَا",
-                quranFont: .uthmanicHafs,
+                quranFontSource: QuranFontSource(.uthmanicHafs),
                 modifiedSince: Date(timeIntervalSince1970: 1).timeAgo(),
                 selectedColor: .blue,
                 note: "The “if Allah willed” excuse — the same argument every nation made. Cross-ref 6:148."

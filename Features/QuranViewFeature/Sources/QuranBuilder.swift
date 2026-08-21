@@ -13,6 +13,7 @@ import AyahMenuFeature
 #if QURAN_SYNC
 import BookmarksFeature
 #endif
+import Combine
 import MoreMenuFeature
 import NoorUI
 import NoteEditorFeature
@@ -40,8 +41,13 @@ public struct QuranBuilder {
     public func build(input: QuranInput) -> UIViewController {
         let highlightsService = QuranHighlightsService()
 
-        let reading = ReadingPreferences.shared.reading
+        let readingPreferences = ReadingPreferences.shared
+        let reading = readingPreferences.reading
         let quran = reading.quran
+        let quranFontSource = QuranFontSource(
+            current: { readingPreferences.reading.quranFont },
+            updates: readingPreferences.$reading.map(\.quranFont)
+        )
         #if QURAN_SYNC
         let notesObserver = QuranNotesObserver(noteService: container.mobileSyncNoteService(), quran: quran)
         let syncedHighlightsObserver = QuranSyncedHighlightsObserver(
@@ -67,7 +73,7 @@ public struct QuranBuilder {
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources,
             notesObserver: notesObserver,
-            ayahNotesBuilder: AyahNotesBuilder(container: container, quranFont: reading.quranFont),
+            ayahNotesBuilder: AyahNotesBuilder(container: container, quranFontSource: quranFontSource),
             bookmarkAyahsBuilder: BookmarkAyahsBuilder(container: container),
             syncedHighlightsObserver: syncedHighlightsObserver,
             syncedCollectionsObserver: syncedCollectionsObserver,
@@ -89,7 +95,7 @@ public struct QuranBuilder {
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources,
             notesObserver: notesObserver,
-            noteEditorBuilder: NoteEditorBuilder(container: container, quranFont: reading.quranFont),
+            noteEditorBuilder: NoteEditorBuilder(container: container, quranFontSource: quranFontSource),
             analytics: container.analytics,
             pageBookmarkService: pageBookmarkService,
             noteService: noteService

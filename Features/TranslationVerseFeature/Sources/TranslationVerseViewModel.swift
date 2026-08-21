@@ -38,11 +38,15 @@ class TranslationVerseViewModel: ObservableObject {
         self.actions = actions
 
         let noOpHighlightingService = QuranHighlightsService()
+        let readingPreferences = ReadingPreferences.shared
         translationViewModel = ContentTranslationViewModel(
             localTranslationsRetriever: localTranslationsRetriever,
             dataService: dataService,
             highlightsService: noOpHighlightingService,
-            quranFont: ReadingPreferences.shared.reading.quranFont
+            quranFontSource: QuranFontSource(
+                current: { readingPreferences.reading.quranFont },
+                updates: readingPreferences.$reading.map(\.quranFont)
+            )
         )
         translationViewModel.showHeaderAndFooter = false
         translationViewModel.verses = [startingVerse]

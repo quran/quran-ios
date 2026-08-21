@@ -7,6 +7,7 @@
 //
 
 import AppDependencies
+import Combine
 import FeaturesSupport
 import NoorUI
 import NoteEditorFeature
@@ -39,6 +40,11 @@ public struct NotesBuilder {
             databasesURL: container.databasesURL,
             quranFileURL: container.quranUthmaniV2Database
         )
+        let readingPreferences = ReadingPreferences.shared
+        let quranFontSource = QuranFontSource(
+            current: { readingPreferences.reading.quranFont },
+            updates: readingPreferences.$reading.map(\.quranFont)
+        )
 
         #if QURAN_SYNC
         let noteService = container.mobileSyncNoteService()
@@ -49,6 +55,7 @@ public struct NotesBuilder {
             noteService: noteService,
             textService: textService,
             textRetriever: textRetriever,
+            quranFontSource: quranFontSource,
             navigateTo: { [weak listener] verse in
                 listener?.navigateTo(ayah: verse, lastPage: nil)
             },
@@ -60,6 +67,7 @@ public struct NotesBuilder {
             noteService: container.noteService(),
             textRetriever: textRetriever,
             textService: textService,
+            quranFontSource: quranFontSource,
             navigateTo: { [weak listener] verse in
                 listener?.navigateTo(ayah: verse, lastPage: nil)
             },
@@ -69,10 +77,7 @@ public struct NotesBuilder {
 
         let viewController = NotesViewController(
             viewModel: viewModel,
-            noteEditorBuilder: NoteEditorBuilder(
-                container: container,
-                quranFont: ReadingPreferences.shared.reading.quranFont
-            )
+            noteEditorBuilder: NoteEditorBuilder(container: container, quranFontSource: quranFontSource)
         )
         viewControllerReference.value = viewController
         return viewController

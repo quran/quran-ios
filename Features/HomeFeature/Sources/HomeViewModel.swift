@@ -37,32 +37,40 @@ final class HomeViewModel: ObservableObject {
         lastPageService: any LastPageService,
         textRetriever: QuranTextDataService,
         readingBookmarkService: MobileSyncReadingBookmarkService,
+        quranFontSource: QuranFontSource,
         navigateToPage: @escaping (Page, LastPage?) -> Void,
         navigateToAyah: @escaping (AyahNumber) -> Void
     ) {
         self.lastPageService = lastPageService
         self.textRetriever = textRetriever
         self.readingBookmarkService = readingBookmarkService
+        quranFont = quranFontSource.current
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
 
         HomePreferences.shared.$surahSortOrder
             .assign(to: &$surahSortOrder)
+        quranFontSource.updates
+            .assign(to: &$quranFont)
     }
     #else
     init(
         lastPageService: any LastPageService,
         textRetriever: QuranTextDataService,
+        quranFontSource: QuranFontSource,
         navigateToPage: @escaping (Page, LastPage?) -> Void,
         navigateToAyah: @escaping (AyahNumber) -> Void
     ) {
         self.lastPageService = lastPageService
         self.textRetriever = textRetriever
+        quranFont = quranFontSource.current
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
 
         HomePreferences.shared.$surahSortOrder
             .assign(to: &$surahSortOrder)
+        quranFontSource.updates
+            .assign(to: &$quranFont)
     }
     #endif
 
@@ -99,7 +107,7 @@ final class HomeViewModel: ObservableObject {
         }
     }
 
-    var quranFont: QuranFont { readingPreferences.reading.quranFont }
+    @Published var quranFont: QuranFont
 
     func setListVisible(_ visible: Bool) {
         isListVisible = visible

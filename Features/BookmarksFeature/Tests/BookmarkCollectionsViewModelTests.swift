@@ -6,6 +6,7 @@ import Combine
 import Localization
 import MobileSync
 import MobileSyncTestSupport
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import QuranResources
@@ -552,6 +553,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
                 service: service
             ),
             quranTextDataService: makeQuranTextDataService(),
+            quranFontSource: QuranFontSource(.uthmanicHafs),
             navigateToAyah: { _ in },
             dataSourceDeleted: {}
         )

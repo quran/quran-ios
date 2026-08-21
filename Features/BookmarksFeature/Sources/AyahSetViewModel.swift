@@ -1,5 +1,6 @@
 #if QURAN_SYNC
 import Combine
+import NoorUI
 import QuranKit
 import QuranText
 import QuranTextKit
@@ -13,20 +14,25 @@ final class AyahSetViewModel: ObservableObject {
     init(
         dataSource: any AyahSetDataSource,
         quranTextDataService: QuranTextDataService,
+        quranFontSource: QuranFontSource,
         navigateToAyah: @escaping (AyahNumber) -> Void,
         dataSourceDeleted: @escaping () -> Void
     ) {
         self.dataSource = dataSource
         content = dataSource.initialContent
         self.quranTextDataService = quranTextDataService
+        quranFont = quranFontSource.current
         self.navigateToAyah = navigateToAyah
         self.dataSourceDeleted = dataSourceDeleted
+        quranFontSource.updates
+            .assign(to: &$quranFont)
     }
 
     // MARK: Internal
 
     @Published private(set) var content: AyahSetContent
     @Published private(set) var ayahTexts: [AyahNumber: QuranText] = [:]
+    @Published private(set) var quranFont: QuranFont
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
     @Published var isPresentingDeleteConfirmation = false

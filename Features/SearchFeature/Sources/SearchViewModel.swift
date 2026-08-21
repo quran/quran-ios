@@ -20,10 +20,18 @@ import VLogging
 final class SearchViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(analytics: AnalyticsLibrary, searchService: CompositeSearcher, navigateTo: @escaping (AyahNumber) -> Void) {
+    init(
+        analytics: AnalyticsLibrary,
+        searchService: CompositeSearcher,
+        quranFontSource: QuranFontSource,
+        navigateTo: @escaping (AyahNumber) -> Void
+    ) {
         self.analytics = analytics
         self.searchService = searchService
+        quranFont = quranFontSource.current
         self.navigateTo = navigateTo
+        quranFontSource.updates
+            .assign(to: &$quranFont)
     }
 
     // MARK: Internal
@@ -37,6 +45,7 @@ final class SearchViewModel: ObservableObject {
     @Published var recents: [String] = []
 
     @Published var keyboardState: KeyboardState = .closed
+    @Published var quranFont: QuranFont
 
     @Published var uiState = SearchUIState.entry {
         didSet {
@@ -45,7 +54,6 @@ final class SearchViewModel: ObservableObject {
     }
 
     var populars: [String] { recentsService.popularTerms }
-    var quranFont: QuranFont { readingPreferences.reading.quranFont }
 
     func start() async {
         async let reading: () = observeReadingChanges()

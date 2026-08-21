@@ -34,6 +34,8 @@ final class MoreMenuViewModel: ObservableObject {
         arabicFontSize = fontSizePreferences.arabicFontSize
         twoPagesEnabled = preferences.twoPagesEnabled
         verticalScrollingEnabled = preferences.verticalScrollingEnabled
+        showLinePageDividers = preferences.showLinePageDividers
+        showLinePageSidelines = preferences.showLinePageSidelines
         appearanceMode = themeService.appearanceMode
 
         state.twoPages = (model.state.twoPages == .conditional && TwoPagesUtils.hasEnoughHorizontalSpace()) ? .conditional : .alwaysOff
@@ -94,6 +96,22 @@ final class MoreMenuViewModel: ObservableObject {
             }
             .store(in: &cancellables)
 
+        $showLinePageDividers
+            .dropFirst()
+            .sink { [weak self] newValue in
+                logger.info("More Menu: set line page dividers visible \(newValue)")
+                self?.preferences.showLinePageDividers = newValue
+            }
+            .store(in: &cancellables)
+
+        $showLinePageSidelines
+            .dropFirst()
+            .sink { [weak self] newValue in
+                logger.info("More Menu: set line page sidelines visible \(newValue)")
+                self?.preferences.showLinePageSidelines = newValue
+            }
+            .store(in: &cancellables)
+
         $appearanceMode
             .dropFirst()
             .sink { [weak self] newValue in
@@ -126,6 +144,8 @@ final class MoreMenuViewModel: ObservableObject {
 
     @Published var twoPagesEnabled: Bool
     @Published var verticalScrollingEnabled: Bool
+    @Published var showLinePageDividers: Bool
+    @Published var showLinePageSidelines: Bool
 
     @Published var appearanceMode: AppearanceMode
 

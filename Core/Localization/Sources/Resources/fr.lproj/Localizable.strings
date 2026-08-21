@@ -96,6 +96,8 @@
 "menu.twoPages" = "2 pages côte à côte (en paysage)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Défilement vertical";
+"menu.linePageDividers" = "Séparateurs de lignes";
+"menu.linePageSidelines" = "Lignes latérales";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Thèmes et paramètres";
 

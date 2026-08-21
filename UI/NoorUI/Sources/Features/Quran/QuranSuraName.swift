@@ -33,7 +33,7 @@ public struct QuranSuraName: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.3)
                 }
-            QuranTextView(besmAllah)
+            QuranTextView(besmAllah, fontName: sura.quran.translationQuranFontName)
                 .dynamicTypeSize(besmAllahFontSize.dynamicTypeSize)
         }
         .padding(.bottom, bottomPadding)

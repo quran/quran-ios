@@ -261,11 +261,11 @@ public struct MultipartText: ExpressibleByStringInterpolation {
 
         var quranFont: Font {
             switch self {
-            case .title3: return .custom(.quran, size: 24, relativeTo: .title3)
-            case .body: return .custom(.quran, size: 20, relativeTo: .body)
-            case .subheadline: return .custom(.quran, size: 18, relativeTo: .subheadline)
-            case .footnote: return .custom(.quran, size: 16, relativeTo: .footnote)
-            case .caption: return .custom(.quran, size: 15, relativeTo: .caption)
+            case .title3: return .custom(.uthmanicHafs, size: 24, relativeTo: .title3)
+            case .body: return .custom(.uthmanicHafs, size: 20, relativeTo: .body)
+            case .subheadline: return .custom(.uthmanicHafs, size: 18, relativeTo: .subheadline)
+            case .footnote: return .custom(.uthmanicHafs, size: 16, relativeTo: .footnote)
+            case .caption: return .custom(.uthmanicHafs, size: 15, relativeTo: .caption)
             }
         }
     }

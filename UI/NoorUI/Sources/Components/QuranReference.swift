@@ -181,7 +181,7 @@ extension MultipartText.FontSize {
 
     var quranUIFont: UIFont {
         UIFontMetrics(forTextStyle: uiTextStyle).scaledFont(
-            for: UIFont(.quran, size: quranPointSize)
+            for: UIFont(.uthmanicHafs, size: quranPointSize)
         )
     }
 

@@ -6,6 +6,7 @@
 //
 
 import Localization
+import NoorFont
 import QuranKit
 import QuranText
 import SwiftUI
@@ -33,12 +34,29 @@ public struct QuranArabicText: View {
                 .themedSecondaryBackground()
                 .cornerRadius(cornerRadius)
 
-            QuranTextView(text)
-                .dynamicTypeSize(fontSize.dynamicTypeSize)
-                .textAlignment(follows: .rightToLeft)
+            QuranTextView(
+                text,
+                fontName: verse.quran.translationQuranFontName,
+                fontOverrides: ayahMarkerFontOverrides
+            )
+            .dynamicTypeSize(fontSize.dynamicTypeSize)
+            .textAlignment(follows: .rightToLeft)
         }
         .padding(.bottom, bottomPadding)
         .padding(.top, topPadding)
         .readableInsetsPadding(.horizontal)
+    }
+
+    var ayahMarkerFontOverrides: [QuranTextFontOverride] {
+        guard verse.quran == .hafsIndoPak else {
+            return []
+        }
+        let marker = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
+        guard let range = text.text.range(of: marker, options: .backwards),
+              range.upperBound == text.text.endIndex
+        else {
+            return []
+        }
+        return [QuranTextFontOverride(range: range, fontName: .uthmanicHafs)]
     }
 }

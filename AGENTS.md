@@ -82,6 +82,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 ## Pull requests
 
 - Do not add PR screenshots to git. Upload them directly to GitHub and reference the attachment URLs in the PR description.
+- Use the Codex in-app browser to upload PR screenshots to GitHub.
 - When uploading a screenshot to a PR description, edit its width to around 300 px and remove the height.
 
 ## Dependencies

@@ -134,7 +134,7 @@ private struct NoteCardPreview: View {
     var body: some View {
         let ayah = Quran.hafsMadani1405.suras[15].verses[26]
         let reference: MultipartText = "\(ayah: ayah)"
-        let quranText: MultipartText = "\(quran: "ثُمَّ يَوْمَ الْقِيَامَةِ يُخْزِيهِمْ وَيَقُولُ أَيْنَ شُرَكَائِيَ الَّذِينَ كُنتُمْ تُشَاقُّونَ فِيهِمْ", color: .clear, lineLimit: 2)"
+        let quranText: MultipartText = "\(quran: "ثُمَّ يَوْمَ الْقِيَامَةِ يُخْزِيهِمْ وَيَقُولُ أَيْنَ شُرَكَائِيَ الَّذِينَ كُنتُمْ تُشَاقُّونَ فِيهِمْ", font: .uthmanicHafs, color: .clear, lineLimit: 2)"
 
         NoteCard(
             reference: reference,

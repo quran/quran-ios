@@ -17,12 +17,14 @@ public class EditableNote: ObservableObject {
     public init(
         ayahRange: ClosedRange<AyahNumber>,
         ayahText: QuranText,
+        quranFont: QuranFont,
         modifiedSince: String,
         selectedColor: HighlightColor,
         note: String
     ) {
         self.ayahRange = ayahRange
         self.ayahText = ayahText
+        self.quranFont = quranFont
         self.modifiedSince = modifiedSince
         self.selectedColor = selectedColor
         self.note = note
@@ -33,6 +35,7 @@ public class EditableNote: ObservableObject {
 
     public let ayahRange: ClosedRange<AyahNumber>
     public let ayahText: QuranText
+    public let quranFont: QuranFont
     public let modifiedSince: String
     @Published public internal(set) var selectedColor: HighlightColor
     @Published public internal(set) var note: String

@@ -14,6 +14,7 @@ import AyahMenuFeature
 import BookmarksFeature
 #endif
 import MoreMenuFeature
+import NoorUI
 import NoteEditorFeature
 #if QURAN_SYNC
 import NotesFeature
@@ -39,7 +40,8 @@ public struct QuranBuilder {
     public func build(input: QuranInput) -> UIViewController {
         let highlightsService = QuranHighlightsService()
 
-        let quran = ReadingPreferences.shared.reading.quran
+        let reading = ReadingPreferences.shared.reading
+        let quran = reading.quran
         #if QURAN_SYNC
         let notesObserver = QuranNotesObserver(noteService: container.mobileSyncNoteService(), quran: quran)
         let syncedHighlightsObserver = QuranSyncedHighlightsObserver(
@@ -65,7 +67,7 @@ public struct QuranBuilder {
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources,
             notesObserver: notesObserver,
-            ayahNotesBuilder: AyahNotesBuilder(container: container),
+            ayahNotesBuilder: AyahNotesBuilder(container: container, quranFont: reading.quranFont),
             bookmarkAyahsBuilder: BookmarkAyahsBuilder(container: container),
             syncedHighlightsObserver: syncedHighlightsObserver,
             syncedCollectionsObserver: syncedCollectionsObserver,
@@ -87,7 +89,7 @@ public struct QuranBuilder {
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources,
             notesObserver: notesObserver,
-            noteEditorBuilder: NoteEditorBuilder(container: container),
+            noteEditorBuilder: NoteEditorBuilder(container: container, quranFont: reading.quranFont),
             analytics: container.analytics,
             pageBookmarkService: pageBookmarkService,
             noteService: noteService

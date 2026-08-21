@@ -355,7 +355,7 @@ struct NoorListItem_Previews: PreviewProvider {
                     NoorListItem(
                         leadingEdgeLineColor: .purple,
                         subheading: "\(ayah: quran.suras[0].verses[1])",
-                        rightPretitle: "\(quran: ayahText, color: .purple, lineLimit: 2)",
+                        rightPretitle: "\(quran: ayahText, font: .uthmanicHafs, color: .purple, lineLimit: 2)",
                         title: "An English title",
                         subtitle: .init(text: "6 days ago", location: .bottom),
                         action: .sync {}

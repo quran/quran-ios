@@ -31,22 +31,26 @@ final class NoteEditorViewModel {
         noteService: MobileSyncNoteService,
         analytics: AnalyticsLibrary,
         mode: NoteEditorMode,
-        textService: QuranTextDataService
+        textService: QuranTextDataService,
+        quranFont: QuranFont
     ) {
         self.noteService = noteService
         self.analytics = analytics
         self.mode = mode
         self.textService = textService
+        self.quranFont = quranFont
     }
     #else
     init(
         noteService: NoteEditorLegacyServicing,
         note: Note,
-        textService: QuranTextDataService
+        textService: QuranTextDataService,
+        quranFont: QuranFont
     ) {
         self.note = note
         self.noteService = noteService
         self.textService = textService
+        self.quranFont = quranFont
     }
     #endif
 
@@ -105,6 +109,7 @@ final class NoteEditorViewModel {
             let editableNote = EditableNote(
                 ayahRange: versesRange.start ... versesRange.end,
                 ayahText: versesText,
+                quranFont: quranFont,
                 modifiedSince: modifiedSince,
                 selectedColor: selectedColor,
                 note: body
@@ -207,6 +212,7 @@ final class NoteEditorViewModel {
     private let note: Note
     #endif
     private let textService: QuranTextDataService
+    private let quranFont: QuranFont
 
     private var editableNote: EditableNote?
 

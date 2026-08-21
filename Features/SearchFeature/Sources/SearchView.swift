@@ -25,6 +25,7 @@ struct SearchView: View {
             recents: viewModel.recents,
             populars: viewModel.populars,
             autocompletions: viewModel.autocompletions,
+            quranFont: viewModel.quranFont,
             start: { await viewModel.start() },
             search: { viewModel.search(for: $0) },
             selectSearchResult: { viewModel.select(searchResult: $0.result, source: $0.source) }
@@ -42,6 +43,7 @@ private struct SearchViewUI: View {
     let recents: [String]
     let populars: [String]
     let autocompletions: [SearchText]
+    let quranFont: QuranFont
 
     let start: AsyncAction
     let search: ItemAction<String>
@@ -154,7 +156,7 @@ private struct SearchViewUI: View {
         case .plain(let text):
             return "\(text, lineLimit: 1, highlighting: highlightRanges)"
         case .quran(let text):
-            return "\(quran: text, lineLimit: 1, highlighting: highlightRanges)"
+            return "\(quran: text, font: quranFont, lineLimit: 1, highlighting: highlightRanges)"
         }
     }
 
@@ -164,7 +166,7 @@ private struct SearchViewUI: View {
         case .plain(let text):
             return "\(text, highlighting: highlightRanges)"
         case .quran(let text):
-            return "\(quran: text, highlighting: highlightRanges)"
+            return "\(quran: text, font: quranFont, highlighting: highlightRanges)"
         }
     }
 }
@@ -213,6 +215,7 @@ struct SearchView_Previews: PreviewProvider {
                     recents: ["Recent 1", "Recent 2"],
                     populars: ["Popular 1", "Popular 2"],
                     autocompletions: autocompletions,
+                    quranFont: .uthmanicHafs,
                     start: { },
                     search: { _ in },
                     selectSearchResult: { _ in }

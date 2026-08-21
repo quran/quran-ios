@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2023-12-29.
 //
 
+import NoorUI
 import QuranKit
 import QuranText
 import SwiftUI
@@ -55,6 +56,7 @@ struct TranslationVerseSeparator: Identifiable & Hashable {
 
 struct TranslationSuraName: Identifiable & Hashable {
     let sura: Sura
+    let quranFont: QuranFont
     let arabicFontSize: FontSize
 
     var id: TranslationItemId { .suraName(sura) }
@@ -63,6 +65,7 @@ struct TranslationSuraName: Identifiable & Hashable {
 struct TranslationArabicText: Identifiable & Hashable {
     let verse: AyahNumber
     let text: QuranText
+    let quranFont: QuranFont
     let arabicFontSize: FontSize
 
     var id: TranslationItemId { .arabic(verse) }

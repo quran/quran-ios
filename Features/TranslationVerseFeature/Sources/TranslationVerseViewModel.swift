@@ -8,9 +8,11 @@
 
 import AnnotationsService
 import Combine
+import NoorUI
 import QuranKit
 import QuranTextKit
 import QuranTranslationFeature
+import ReadingService
 import TranslationService
 import VLogging
 
@@ -36,7 +38,12 @@ class TranslationVerseViewModel: ObservableObject {
         self.actions = actions
 
         let noOpHighlightingService = QuranHighlightsService()
-        translationViewModel = ContentTranslationViewModel(localTranslationsRetriever: localTranslationsRetriever, dataService: dataService, highlightsService: noOpHighlightingService)
+        translationViewModel = ContentTranslationViewModel(
+            localTranslationsRetriever: localTranslationsRetriever,
+            dataService: dataService,
+            highlightsService: noOpHighlightingService,
+            quranFont: ReadingPreferences.shared.reading.quranFont
+        )
         translationViewModel.showHeaderAndFooter = false
         translationViewModel.verses = [startingVerse]
     }

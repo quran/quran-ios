@@ -8,9 +8,11 @@
 
 import AnnotationsService
 import AppDependencies
+import NoorUI
 import QuranKit
 import QuranPagesFeature
 import QuranTextKit
+import ReadingService
 import SwiftUI
 import TranslationService
 
@@ -34,7 +36,8 @@ public struct ContentTranslationBuilder {
         let viewModel = ContentTranslationViewModel(
             localTranslationsRetriever: localTranslationsRetriever,
             dataService: dataService,
-            highlightsService: highlightsService
+            highlightsService: highlightsService,
+            quranFont: ReadingPreferences.shared.reading.quranFont
         )
         viewModel.verses = page.verses
         return ContentTranslationView(viewModel: viewModel)

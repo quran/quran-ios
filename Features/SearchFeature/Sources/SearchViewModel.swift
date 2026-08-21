@@ -8,6 +8,7 @@
 import Analytics
 import Combine
 import Dispatch
+import NoorUI
 import QuranKit
 import QuranText
 import QuranTextKit
@@ -44,6 +45,7 @@ final class SearchViewModel: ObservableObject {
     }
 
     var populars: [String] { recentsService.popularTerms }
+    var quranFont: QuranFont { readingPreferences.reading.quranFont }
 
     func start() async {
         async let reading: () = observeReadingChanges()

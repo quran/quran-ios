@@ -9,6 +9,7 @@ import AnnotationsService
 import Combine
 import Crashing
 import Foundation
+import NoorUI
 import QuranKit
 import QuranText
 import QuranTextKit
@@ -30,11 +31,13 @@ public final class ContentTranslationViewModel: ObservableObject {
     public init(
         localTranslationsRetriever: LocalTranslationsRetriever,
         dataService: QuranTextDataService,
-        highlightsService: QuranHighlightsService
+        highlightsService: QuranHighlightsService,
+        quranFont: QuranFont
     ) {
         self.dataService = dataService
         self.highlightsService = highlightsService
         self.localTranslationsRetriever = localTranslationsRetriever
+        self.quranFont = quranFont
         arabicFontSize = fontSizePreferences.arabicFontSize
         translationFontSize = fontSizePreferences.translationFontSize
         selectedTranslations = selectedTranslationsPreferences.selectedTranslationIds
@@ -76,6 +79,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     // MARK: Internal
 
     let tracker = CollectionTracker<TranslationItemId>()
+    let quranFont: QuranFont
 
     @Published var selectedTranslations: [Translation.ID] {
         didSet {
@@ -124,13 +128,32 @@ public final class ContentTranslationViewModel: ObservableObject {
 
             // Add sura name, if a new sura
             if verse.sura.firstVerse == verse {
-                items.append(.suraName(TranslationSuraName(sura: verse.sura, arabicFontSize: arabicFontSize), color))
+                items.append(
+                    .suraName(
+                        TranslationSuraName(
+                            sura: verse.sura,
+                            quranFont: quranFont,
+                            arabicFontSize: arabicFontSize
+                        ),
+                        color
+                    )
+                )
             }
 
             // Add arabic quran text
             let arabicVerseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
             let arabicText = QuranText(verseText.arabicText.text + " " + arabicVerseNumber)
-            items.append(.arabicText(TranslationArabicText(verse: verse, text: arabicText, arabicFontSize: arabicFontSize), color))
+            items.append(
+                .arabicText(
+                    TranslationArabicText(
+                        verse: verse,
+                        text: arabicText,
+                        quranFont: quranFont,
+                        arabicFontSize: arabicFontSize
+                    ),
+                    color
+                )
+            )
 
             for (index, translation) in translations.enumerated() {
                 let text = verseText.translations[index]

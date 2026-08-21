@@ -179,9 +179,9 @@ extension MultipartText.FontSize {
         )
     }
 
-    var quranUIFont: UIFont {
+    func quranUIFont(_ quranFont: QuranFont) -> UIFont {
         UIFontMetrics(forTextStyle: uiTextStyle).scaledFont(
-            for: UIFont(.uthmanicHafs, size: quranPointSize)
+            for: UIFont(quranFont.fontName, size: quranPointSize)
         )
     }
 
@@ -190,13 +190,13 @@ extension MultipartText.FontSize {
         return UIFont.systemFont(ofSize: plainUIFont.pointSize, weight: .heavy)
     }
 
-    func quranUIFont(emphasized: Bool) -> UIFont {
+    func quranUIFont(_ quranFont: QuranFont, emphasized: Bool) -> UIFont {
         guard emphasized,
-              let descriptor = quranUIFont.fontDescriptor.withSymbolicTraits(.traitBold)
+              let descriptor = quranUIFont(quranFont).fontDescriptor.withSymbolicTraits(.traitBold)
         else {
-            return quranUIFont
+            return quranUIFont(quranFont)
         }
-        return UIFont(descriptor: descriptor, size: quranUIFont.pointSize)
+        return UIFont(descriptor: descriptor, size: quranUIFont(quranFont).pointSize)
     }
 
     private var uiTextStyle: UIFont.TextStyle {

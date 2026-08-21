@@ -6,7 +6,6 @@
 //
 
 import NoorFont
-import QuranKit
 import QuranText
 import SwiftUI
 
@@ -14,7 +13,14 @@ private let quranFontSize: CGFloat = 21
 
 struct QuranTextFontOverride {
     let range: Range<String.Index>
-    let fontName: FontName
+    let quranFont: QuranFont
+    let font: Font
+
+    init(range: Range<String.Index>, quranFont: QuranFont, font: Font? = nil) {
+        self.range = range
+        self.quranFont = quranFont
+        self.font = font ?? .custom(quranFont.fontName, size: quranFontSize)
+    }
 }
 
 /// Quran text rendered with the required Quran font.
@@ -22,13 +28,17 @@ public struct QuranTextView: View {
     // MARK: Lifecycle
 
     public init(_ text: QuranText) {
-        self.init(text, fontName: .uthmanicHafs)
+        self.init(text, quranFont: .uthmanicHafs)
     }
 
-    init(_ text: QuranText, fontName: FontName, fontOverrides: [QuranTextFontOverride] = []) {
+    public init(_ text: QuranText, quranFont: QuranFont) {
+        self.init(text, quranFont: quranFont, fontOverrides: [])
+    }
+
+    init(_ text: QuranText, quranFont: QuranFont, fontOverrides: [QuranTextFontOverride]) {
         self.init(
             text,
-            font: .custom(fontName, size: quranFontSize),
+            font: .custom(quranFont.fontName, size: quranFontSize),
             highlighting: [],
             fontOverrides: fontOverrides
         )
@@ -81,14 +91,8 @@ public struct QuranTextView: View {
             else {
                 continue
             }
-            attributedText[start ..< end].font = .custom(override.fontName, size: quranFontSize)
+            attributedText[start ..< end].font = override.font
         }
         return attributedText
-    }
-}
-
-extension Quran {
-    var translationQuranFontName: FontName {
-        self == .hafsIndoPak ? .indoPak : .uthmanicHafs
     }
 }

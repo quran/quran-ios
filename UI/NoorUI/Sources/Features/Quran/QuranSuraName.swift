@@ -15,11 +15,13 @@ public struct QuranSuraName: View {
 
     let sura: Sura
     let besmAllah: QuranText
+    let quranFont: QuranFont
     let besmAllahFontSize: FontSize
 
-    public init(sura: Sura, besmAllah: QuranText, besmAllahFontSize: FontSize) {
+    public init(sura: Sura, besmAllah: QuranText, quranFont: QuranFont, besmAllahFontSize: FontSize) {
         self.sura = sura
         self.besmAllah = besmAllah
+        self.quranFont = quranFont
         self.besmAllahFontSize = besmAllahFontSize
     }
 
@@ -33,7 +35,7 @@ public struct QuranSuraName: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.3)
                 }
-            QuranTextView(besmAllah, fontName: sura.quran.translationQuranFontName)
+            QuranTextView(besmAllah, quranFont: quranFont)
                 .dynamicTypeSize(besmAllahFontSize.dynamicTypeSize)
         }
         .padding(.bottom, bottomPadding)

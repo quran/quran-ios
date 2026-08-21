@@ -81,9 +81,27 @@ final class MultipartTextQuranTests: XCTestCase {
 
     func test_quranText_preservesText() {
         let quranText = QuranText("Quran text")
-        let text: MultipartText = "\(quran: quranText)"
+        let text: MultipartText = "\(quran: quranText, font: .indoPak)"
 
         XCTAssertEqual(text.rawValue, "Quran text")
+    }
+
+    func test_quranText_storesFontAndFindsEveryAyahMarker() throws {
+        let quranText = QuranText("First ١ second ٢٣")
+        let text: MultipartText = "\(quran: quranText, font: .indoPak)"
+
+        let quranPart = text.parts.first {
+            if case .quran = $0 {
+                return true
+            }
+            return false
+        }
+        guard case .quran(_, let font, _, _, _) = try XCTUnwrap(quranPart) else {
+            return XCTFail("Expected Quran text part")
+        }
+
+        XCTAssertEqual(font, .indoPak)
+        XCTAssertEqual(quranText.ayahMarkerRanges.map { String(quranText.text[$0]) }, ["١", "٢٣"])
     }
 
     func test_highlighting_preservesText() {

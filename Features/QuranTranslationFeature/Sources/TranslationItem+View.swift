@@ -28,6 +28,7 @@ extension TranslationSuraName: View {
         QuranSuraName(
             sura: sura,
             besmAllah: QuranText(sura.startsWithBesmAllah ? sura.quran.arabicBesmAllah : ""),
+            quranFont: quranFont,
             besmAllahFontSize: arabicFontSize
         )
     }
@@ -35,7 +36,7 @@ extension TranslationSuraName: View {
 
 extension TranslationArabicText: View {
     var body: some View {
-        QuranArabicText(verse: verse, text: text, fontSize: arabicFontSize)
+        QuranArabicText(verse: verse, text: text, quranFont: quranFont, fontSize: arabicFontSize)
     }
 }
 
@@ -157,9 +158,15 @@ private struct ContentTranslationPreview: View {
         ZStack(alignment: .bottomTrailing) {
             List {
                 TranslationItem.pageHeader(.init(page: quran.pages[0]))
-                TranslationItem.suraName(.init(sura: quran.firstSura, arabicFontSize: fontSize), nil)
+                TranslationItem.suraName(
+                    .init(sura: quran.firstSura, quranFont: .uthmanicHafs, arabicFontSize: fontSize),
+                    nil
+                )
                 TranslationItem.arabicText(.init(
-                    verse: quran.firstVerse, text: QuranText(quran.arabicBesmAllah), arabicFontSize: fontSize
+                    verse: quran.firstVerse,
+                    text: QuranText(quran.arabicBesmAllah),
+                    quranFont: .uthmanicHafs,
+                    arabicFontSize: fontSize
                 ), nil)
                 ForEach(0 ..< (readMore ? 1 : chunks.count), id: \.self) { chunkIndex in
                     TranslationItem.translationTextChunk(

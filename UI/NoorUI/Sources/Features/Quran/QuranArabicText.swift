@@ -18,11 +18,13 @@ public struct QuranArabicText: View {
 
     let verse: AyahNumber
     let text: QuranText
+    let quranFont: QuranFont
     let fontSize: FontSize
 
-    public init(verse: AyahNumber, text: QuranText, fontSize: FontSize) {
+    public init(verse: AyahNumber, text: QuranText, quranFont: QuranFont, fontSize: FontSize) {
         self.verse = verse
         self.text = text
+        self.quranFont = quranFont
         self.fontSize = fontSize
     }
 
@@ -36,7 +38,7 @@ public struct QuranArabicText: View {
 
             QuranTextView(
                 text,
-                fontName: verse.quran.translationQuranFontName,
+                quranFont: quranFont,
                 fontOverrides: ayahMarkerFontOverrides
             )
             .dynamicTypeSize(fontSize.dynamicTypeSize)
@@ -48,7 +50,7 @@ public struct QuranArabicText: View {
     }
 
     var ayahMarkerFontOverrides: [QuranTextFontOverride] {
-        guard verse.quran == .hafsIndoPak else {
+        guard quranFont == .indoPak else {
             return []
         }
         let marker = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
@@ -57,6 +59,6 @@ public struct QuranArabicText: View {
         else {
             return []
         }
-        return [QuranTextFontOverride(range: range, fontName: .uthmanicHafs)]
+        return [QuranTextFontOverride(range: range, quranFont: .uthmanicHafs)]
     }
 }

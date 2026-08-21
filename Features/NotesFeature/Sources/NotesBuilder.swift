@@ -8,10 +8,12 @@
 
 import AppDependencies
 import FeaturesSupport
+import NoorUI
 import NoteEditorFeature
 import QuranAnnotations
 import QuranKit
 import QuranTextKit
+import ReadingService
 import UIKit
 
 @MainActor
@@ -67,7 +69,10 @@ public struct NotesBuilder {
 
         let viewController = NotesViewController(
             viewModel: viewModel,
-            noteEditorBuilder: NoteEditorBuilder(container: container)
+            noteEditorBuilder: NoteEditorBuilder(
+                container: container,
+                quranFont: ReadingPreferences.shared.reading.quranFont
+            )
         )
         viewControllerReference.value = viewController
         return viewController

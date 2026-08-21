@@ -9,6 +9,7 @@
 import AnnotationsService
 import AppDependencies
 import Foundation
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import QuranTextKit
@@ -18,8 +19,9 @@ import UIKit
 public struct NoteEditorBuilder {
     // MARK: Lifecycle
 
-    public init(container: AppDependencies) {
+    public init(container: AppDependencies, quranFont: QuranFont) {
         self.container = container
+        self.quranFont = quranFont
     }
 
     // MARK: Public
@@ -30,7 +32,8 @@ public struct NoteEditorBuilder {
             noteService: container.mobileSyncNoteService(),
             analytics: container.analytics,
             mode: mode,
-            textService: container.textDataService()
+            textService: container.textDataService(),
+            quranFont: quranFont
         )
         let viewController = NoteEditorViewController(viewModel: viewModel)
         viewModel.listener = listener
@@ -41,7 +44,8 @@ public struct NoteEditorBuilder {
         let viewModel = NoteEditorViewModel(
             noteService: container.noteService(),
             note: note,
-            textService: container.textDataService()
+            textService: container.textDataService(),
+            quranFont: quranFont
         )
         let viewController = NoteEditorViewController(viewModel: viewModel)
         viewModel.listener = listener
@@ -52,4 +56,5 @@ public struct NoteEditorBuilder {
     // MARK: Internal
 
     let container: AppDependencies
+    let quranFont: QuranFont
 }

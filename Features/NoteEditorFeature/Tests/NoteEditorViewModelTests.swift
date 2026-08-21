@@ -327,7 +327,8 @@ final class NoteEditorViewModelTests: XCTestCase {
             noteService: noteService,
             analytics: analytics,
             mode: mode,
-            textService: textService
+            textService: textService,
+            quranFont: .uthmanicHafs
         )
         viewModel.listener = listener
         return (viewModel, noteService, analytics, listener)
@@ -384,7 +385,8 @@ final class NoteEditorViewModelTests: XCTestCase {
         let viewModel = NoteEditorViewModel(
             noteService: noteService,
             note: note,
-            textService: textService
+            textService: textService,
+            quranFont: .uthmanicHafs
         )
         viewModel.listener = listener
         return (viewModel, noteService, listener)

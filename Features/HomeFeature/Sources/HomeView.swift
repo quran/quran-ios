@@ -26,6 +26,7 @@ struct HomeView: View {
             lastPages: viewModel.lastPages,
             suras: viewModel.suras,
             quarters: viewModel.quarters,
+            quranFont: viewModel.quranFont,
             start: { await viewModel.start() },
             selectReadingBookmark: { viewModel.navigateTo($0) },
             selectLastPage: { viewModel.navigateTo($0) },
@@ -41,6 +42,7 @@ struct HomeView: View {
             lastPages: viewModel.lastPages,
             suras: viewModel.suras,
             quarters: viewModel.quarters,
+            quranFont: viewModel.quranFont,
             start: { await viewModel.start() },
             selectLastPage: { viewModel.navigateTo($0) },
             selectSura: { viewModel.navigateTo($0) },
@@ -61,6 +63,7 @@ private struct HomeViewUI: View {
     let lastPages: [LastPage]
     let suras: [Sura]
     let quarters: [QuarterItem]
+    let quranFont: QuranFont
 
     let start: AsyncAction
 
@@ -147,7 +150,7 @@ private struct HomeViewUI: View {
         return NoorListItem(
             subheading: .text(quarter.localizedName),
             title: "\(ayah: ayah)",
-            rightSubtitle: "\(quran: item.ayahText, lineLimit: 1)",
+            rightSubtitle: "\(quran: item.ayahText, font: quranFont, lineLimit: 1)",
             accessory: .text(page.localizedNumber, accessibilityLabel: page.localizedName),
             action: .sync { selectQuarter(item) }
         )
@@ -232,6 +235,7 @@ struct HomeView_Previews: PreviewProvider {
                         lastPages: lastPages,
                         suras: quran.suras,
                         quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
+                        quranFont: .uthmanicHafs,
                         start: {},
                         selectReadingBookmark: { _ in },
                         selectLastPage: { _ in },
@@ -249,6 +253,7 @@ struct HomeView_Previews: PreviewProvider {
                         lastPages: lastPages,
                         suras: quran.suras,
                         quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
+                        quranFont: .uthmanicHafs,
                         start: {},
                         selectLastPage: { _ in },
                         selectSura: { _ in },

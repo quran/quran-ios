@@ -45,7 +45,8 @@ final class ContentTranslationViewModelTests: XCTestCase {
         return ContentTranslationViewModel(
             localTranslationsRetriever: .init(databasesURL: unavailableURL),
             dataService: .init(databasesURL: unavailableURL, quranFileURL: unavailableURL),
-            highlightsService: .init()
+            highlightsService: .init(),
+            quranFont: .uthmanicHafs
         )
     }
 

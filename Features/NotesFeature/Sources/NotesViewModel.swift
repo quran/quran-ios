@@ -17,6 +17,7 @@ import AnnotationsService
 import Crashing
 import Foundation
 import Localization
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import QuranLocalization
@@ -101,6 +102,8 @@ final class NotesViewModel: ObservableObject {
             return suraName.range(of: term, options: .caseInsensitive) != nil
         }
     }
+
+    var quranFont: QuranFont { readingPreferences.reading.quranFont }
 
     func start() async {
         #if QURAN_SYNC

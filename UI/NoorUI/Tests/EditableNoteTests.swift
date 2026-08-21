@@ -19,6 +19,7 @@ final class EditableNoteTests: XCTestCase {
         return EditableNote(
             ayahRange: ayah ... ayah,
             ayahText: "بِسْمِ اللَّهِ",
+            quranFont: .uthmanicHafs,
             modifiedSince: "2 hours ago",
             selectedColor: .blue,
             note: note

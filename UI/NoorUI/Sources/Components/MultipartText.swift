@@ -58,11 +58,22 @@ private struct TextPartView: View {
             Text(ayah.localizedCoordinate(locale: locale))
                 .font(size.plainFont)
                 .environment(\.layoutDirection, .leftToRight)
-        case .quran(let text, let color, let lineLimit, let highlighting):
-            QuranTextView(text, font: size.quranFont, highlighting: highlighting)
-                .optionalLineLimit(lineLimit)
-                .padding(quranTextPadding)
-                .background(color)
+        case .quran(let text, let quranFont, let color, let lineLimit, let highlighting):
+            QuranTextView(
+                text,
+                font: size.quranFont(quranFont),
+                highlighting: highlighting,
+                fontOverrides: quranFont == .indoPak ? text.ayahMarkerRanges.map {
+                    QuranTextFontOverride(
+                        range: $0,
+                        quranFont: .uthmanicHafs,
+                        font: size.quranFont(.uthmanicHafs)
+                    )
+                } : []
+            )
+            .optionalLineLimit(lineLimit)
+            .padding(quranTextPadding)
+            .background(color)
         }
     }
 
@@ -113,7 +124,13 @@ enum TextPart {
     case sura(Sura)
     case ayah(AyahNumber, emphasizesSura: Bool)
     case ayahCoordinate(AyahNumber)
-    case quran(text: QuranText, color: Color, lineLimit: Int?, highlighting: [HighlightingRange])
+    case quran(
+        text: QuranText,
+        font: QuranFont,
+        color: Color,
+        lineLimit: Int?,
+        highlighting: [HighlightingRange]
+    )
 
     // MARK: Internal
 
@@ -127,7 +144,7 @@ enum TextPart {
             QuranReference.ayah(ayah).rawValue(locale: locale)
         case .ayahCoordinate(let ayah):
             ayah.localizedCoordinate(locale: locale)
-        case .quran(let text, _, _, _):
+        case .quran(let text, _, _, _, _):
             text.text
         }
     }
@@ -142,7 +159,7 @@ enum TextPart {
             QuranReference.ayah(ayah).accessibilityText
         case .ayahCoordinate(let ayah):
             ayah.localizedCoordinate()
-        case .quran(let text, _, _, _):
+        case .quran(let text, _, _, _, _):
             text.text
         }
     }
@@ -190,11 +207,20 @@ public struct MultipartText: ExpressibleByStringInterpolation {
 
         public mutating func appendInterpolation(
             quran text: QuranText,
+            font: QuranFont,
             color: Color = .clear,
             lineLimit: Int? = nil,
             highlighting: [HighlightingRange] = []
         ) {
-            parts.append(.quran(text: text, color: color, lineLimit: lineLimit, highlighting: highlighting))
+            parts.append(
+                .quran(
+                    text: text,
+                    font: font,
+                    color: color,
+                    lineLimit: lineLimit,
+                    highlighting: highlighting
+                )
+            )
         }
 
         public mutating func appendInterpolation(
@@ -259,13 +285,13 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             }
         }
 
-        var quranFont: Font {
+        func quranFont(_ quranFont: QuranFont) -> Font {
             switch self {
-            case .title3: return .custom(.uthmanicHafs, size: 24, relativeTo: .title3)
-            case .body: return .custom(.uthmanicHafs, size: 20, relativeTo: .body)
-            case .subheadline: return .custom(.uthmanicHafs, size: 18, relativeTo: .subheadline)
-            case .footnote: return .custom(.uthmanicHafs, size: 16, relativeTo: .footnote)
-            case .caption: return .custom(.uthmanicHafs, size: 15, relativeTo: .caption)
+            case .title3: return .custom(quranFont.fontName, size: 24, relativeTo: .title3)
+            case .body: return .custom(quranFont.fontName, size: 20, relativeTo: .body)
+            case .subheadline: return .custom(quranFont.fontName, size: 18, relativeTo: .subheadline)
+            case .footnote: return .custom(quranFont.fontName, size: 16, relativeTo: .footnote)
+            case .caption: return .custom(quranFont.fontName, size: 15, relativeTo: .caption)
             }
         }
     }

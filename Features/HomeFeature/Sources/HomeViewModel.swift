@@ -9,6 +9,7 @@ import AnnotationsService
 import Combine
 import Crashing
 import Foundation
+import NoorUI
 import Preferences
 import QuranAnnotations
 import QuranKit
@@ -97,6 +98,8 @@ final class HomeViewModel: ObservableObject {
             recordListUpdate(reason: "mode_changed")
         }
     }
+
+    var quranFont: QuranFont { readingPreferences.reading.quranFont }
 
     func setListVisible(_ visible: Bool) {
         isListVisible = visible

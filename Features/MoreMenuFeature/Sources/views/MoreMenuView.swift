@@ -70,6 +70,15 @@ private struct MoreMenuRootView: View {
                         empty
                     }
 
+                    viewBasedOn(state.linePageDisplay, customCondition: store.mode == .arabic) {
+                        MoreMenuLinePageDisplay(
+                            showDividers: $store.showLinePageDividers,
+                            showSidelines: $store.showLinePageSidelines
+                        )
+                        .background(Color.systemBackground)
+                        empty
+                    }
+
                     viewBasedOn(state.orientation, customCondition: store.mode == .arabic) {
                         MoreMenuDeviceRotation()
                             .background(Color.systemBackground)

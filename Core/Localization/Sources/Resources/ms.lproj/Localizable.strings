@@ -79,6 +79,8 @@
 "menu.twoPages" = "2 halaman bersebelahan (dalam landskap)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Skrol menegak";
+"menu.linePageDividers" = "Pemisah baris";
+"menu.linePageSidelines" = "Garis sisi";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Tema & Tetapan";
 

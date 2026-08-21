@@ -66,6 +66,8 @@
 "menu.arabicFontSize" = "Koran Grootte";
 "menu.twoPages" = "2 pagina's naast elkaar (liggend)";
 "menu.verticalScrolling" = "Verticaal scrollen";
+"menu.linePageDividers" = "Regelscheiding";
+"menu.linePageSidelines" = "Zijlijnen";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Thema's en instellingen";
 

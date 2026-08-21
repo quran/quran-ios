@@ -26,11 +26,19 @@ public struct QuranContentStatePreferences {
     @Preference(verticalScrollingEnabled)
     public var verticalScrollingEnabled: Bool
 
+    @Preference(showLinePageDividers)
+    public var showLinePageDividers: Bool
+
+    @Preference(showLinePageSidelines)
+    public var showLinePageSidelines: Bool
+
     // MARK: Private
 
     private static let showQuranTranslationView = PreferenceKey<Bool>(key: "showQuranTranslationView", defaultValue: false)
     private static let twoPagesEnabled = PreferenceKey<Bool>(key: "twoPagesEnabled", defaultValue: TwoPagesUtils.settingDefaultValue)
     private static let verticalScrollingEnabled = PreferenceKey<Bool>(key: "verticalScrollingEnabled", defaultValue: false)
+    private static let showLinePageDividers = PreferenceKey<Bool>(key: "showLinePageDividers", defaultValue: true)
+    private static let showLinePageSidelines = PreferenceKey<Bool>(key: "showLinePageSidelines", defaultValue: true)
 
     private static let quranModeTransfomer = PreferenceTransformer<Bool, QuranMode>(
         rawToValue: { $0 ? .translation : .arabic },

@@ -66,6 +66,8 @@
 "menu.arabicFontSize" = "حجم خط القرآن";
 "menu.twoPages" = "عرض صفحتين في الوضع الأفقي";
 "menu.verticalScrolling" = "تمرير رأسي";
+"menu.linePageDividers" = "فواصل الأسطر";
+"menu.linePageSidelines" = "الخطوط الجانبية";
 "menu.theme_settings" = "المظهر والإعدادات";
 
 // MARK: - Theme

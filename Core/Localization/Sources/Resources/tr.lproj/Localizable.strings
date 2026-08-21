@@ -71,6 +71,8 @@
 "menu.twoPages" = "Yan yana 2 sayfa (yatayda)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Dikey kaydırma";
+"menu.linePageDividers" = "Satır ayırıcıları";
+"menu.linePageSidelines" = "Yan çizgiler";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Temalar ve ayarlar";
 

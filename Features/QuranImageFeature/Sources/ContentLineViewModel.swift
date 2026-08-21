@@ -13,6 +13,7 @@ import NoorUI
 import QuranAnnotations
 import QuranGeometry
 import QuranKit
+import QuranTextKit
 import SwiftUI
 import VLogging
 
@@ -24,15 +25,14 @@ final class ContentLineViewModel: ObservableObject {
         reading: Reading,
         page: Page,
         linePageAssetService: LinePageAssetService,
-        highlightsService: QuranHighlightsService,
-        showSidelines: Bool = false,
-        showLineDividers: Bool = false
+        highlightsService: QuranHighlightsService
     ) {
         self.reading = reading
         self.page = page
         self.linePageAssetService = linePageAssetService
-        self.showSidelines = showSidelines
-        self.showLineDividers = showLineDividers
+        let contentStatePreferences = QuranContentStatePreferences.shared
+        showSidelines = reading.usesLinePageSidelines && contentStatePreferences.showLinePageSidelines
+        showLineDividers = reading.usesLinePageDividers && contentStatePreferences.showLinePageDividers
         linePageMetrics = reading.linePageMetrics ?? .madaniLinePages(widthParameter: 1080)
         highlights = highlightsService.highlights
 
@@ -46,6 +46,18 @@ final class ContentLineViewModel: ObservableObject {
 
         highlightsService.$highlights
             .sink { [weak self] in self?.highlights = $0 }
+            .store(in: &cancellables)
+
+        contentStatePreferences.$showLinePageSidelines
+            .sink { [weak self] showSidelines in
+                self?.showSidelines = reading.usesLinePageSidelines && showSidelines
+            }
+            .store(in: &cancellables)
+
+        contentStatePreferences.$showLinePageDividers
+            .sink { [weak self] showLineDividers in
+                self?.showLineDividers = reading.usesLinePageDividers && showLineDividers
+            }
             .store(in: &cancellables)
 
         highlightsService.scrolling
@@ -193,8 +205,8 @@ final class ContentLineViewModel: ObservableObject {
     private let reading: Reading
     private let linePageAssetService: LinePageAssetService
     private let linePageMetrics: LinePageMetrics
-    private let showSidelines: Bool
-    private let showLineDividers: Bool
+    @Published private var showSidelines: Bool
+    @Published private var showLineDividers: Bool
     private let wordFrameAdapter = LinePageWordFrameAdapter()
     private let geometryEngine = LinePageGeometryEngine()
     private var cancellables: Set<AnyCancellable> = []

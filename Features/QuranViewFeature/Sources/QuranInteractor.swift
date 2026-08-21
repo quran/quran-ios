@@ -175,6 +175,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         logger.info("Quran: more bar button tapped")
         var state = MoreMenuControlsState()
         state.wordPointer = readingPreferences.reading.supportsWordPositions ? .conditional : .alwaysOff
+        state.linePageDisplay = readingPreferences.reading == .indoPak ? .conditional : .alwaysOff
         // TODO: Enable vertical scrolling.
         state.verticalScrolling = .alwaysOff
         let model = MoreMenuModel(isWordPointerActive: isWordPointerActive, state: state)

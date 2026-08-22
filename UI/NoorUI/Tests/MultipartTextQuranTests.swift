@@ -27,6 +27,25 @@ final class MultipartTextQuranTests: XCTestCase {
         XCTAssertEqual(text.rawValue(locale: Locale(identifier: "fa-IR")), "\(sura.localizedName()) \u{E905}")
     }
 
+    func test_indoPakSuraReference_usesArabicTextInsteadOfDecoratedGlyph() {
+        let sura = Quran.hafsIndoPak.suras[1]
+        let text: MultipartText = "\(sura: sura)"
+
+        XCTAssertEqual(
+            text.rawValue(locale: english),
+            "\(sura.localizedName()) \(sura.localizedName(language: .arabic))"
+        )
+        XCTAssertEqual(text.rawValue(locale: arabic), sura.localizedName(language: .arabic))
+    }
+
+    func test_indoPakSuraReference_usesReadingSpecificArabicName() {
+        let sura = Quran.hafsIndoPak.suras[16]
+        let text: MultipartText = "\(sura: sura)"
+
+        XCTAssertEqual(text.rawValue(locale: english), "Banī Isrā’īl بَنِي إِسْرَائِيل")
+        XCTAssertEqual(text.rawValue(locale: arabic), "بَنِي إِسْرَائِيل")
+    }
+
     func test_ayahReference_inNonArabicLocale_usesCanonicalReference() {
         let text: MultipartText = "\(ayah: ayah)"
 

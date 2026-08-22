@@ -189,6 +189,7 @@ struct QuranReferenceView: View {
             case .indoPakText(let text):
                 Text(text)
                     .font(size.quranFont(.indoPak))
+                    .padding(.vertical, size.indoPakReferenceVerticalPadding(glyphTopPadding: glyphTopPadding))
             }
 
             if let coordinate = reference.coordinate(locale: locale) {
@@ -233,6 +234,20 @@ extension MultipartText.FontSize {
             return quranUIFont(quranFont)
         }
         return UIFont(descriptor: descriptor, size: quranUIFont(quranFont).pointSize)
+    }
+
+    func quranTextVerticalPadding(_ quranFont: QuranFont) -> CGFloat {
+        guard quranFont == .indoPak else {
+            return 0
+        }
+        let excessLineHeight = quranUIFont(.indoPak).lineHeight - quranUIFont(.uthmanicHafs).lineHeight
+        return -max(0, excessLineHeight / 2)
+    }
+
+    func indoPakReferenceVerticalPadding(glyphTopPadding: CGFloat) -> CGFloat {
+        let madaniReferenceHeight = max(plainUIFont.lineHeight, suraUIFont.lineHeight + glyphTopPadding)
+        let excessLineHeight = quranUIFont(.indoPak).lineHeight - madaniReferenceHeight
+        return -max(0, excessLineHeight / 2)
     }
 
     private var uiTextStyle: UIFont.TextStyle {

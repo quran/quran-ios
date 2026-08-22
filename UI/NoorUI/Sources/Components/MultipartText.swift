@@ -72,6 +72,7 @@ private struct TextPartView: View {
                 } : []
             )
             .optionalLineLimit(lineLimit)
+            .padding(.vertical, size.quranTextVerticalPadding(quranFont))
             .padding(quranTextPadding)
             .background(color)
         }

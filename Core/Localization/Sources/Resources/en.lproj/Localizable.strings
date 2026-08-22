@@ -24,6 +24,13 @@
 // Metadata: Translated by AI; human review required.
 "quran_alquran" = "Quran";
 
+// IndoPak sura names
+"quran.sura-name.indopak.17" = "Banī Isrā’īl";
+"quran.sura-name.indopak.40" = "Al-Mu’min";
+"quran.sura-name.indopak.41" = "Ḥā-Mīm al-Sajdah";
+"quran.sura-name.indopak.76" = "Al-Dahr";
+"quran.sura-name.indopak.111" = "Al-Lahab";
+
 // MARK: - Translation
 
 "translation.text-type.translation" = "Translation";

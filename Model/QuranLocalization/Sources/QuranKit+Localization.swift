@@ -79,10 +79,25 @@ extension Sura {
     }
 
     public func localizedName(withPrefix: Bool = false, language: Language? = nil) -> String {
-        var suraName = l("sura_names[\(suraNumber - 1)]", table: .suras, language: language)
+        var suraName = if quran == .hafsIndoPak, let localizationKey = indoPakNameLocalizationKey {
+            l(localizationKey, language: language)
+        } else {
+            l("sura_names[\(suraNumber - 1)]", table: .suras, language: language)
+        }
         if withPrefix {
             suraName = lFormat("quran_sura_title", table: .android, language: language, suraName)
         }
         return suraName
+    }
+
+    private var indoPakNameLocalizationKey: String? {
+        switch suraNumber {
+        case 17: "quran.sura-name.indopak.17"
+        case 40: "quran.sura-name.indopak.40"
+        case 41: "quran.sura-name.indopak.41"
+        case 76: "quran.sura-name.indopak.76"
+        case 111: "quran.sura-name.indopak.111"
+        default: nil
+        }
     }
 }

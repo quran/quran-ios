@@ -20,6 +20,13 @@ enum QuranReference {
             case .decoratedGlyph(let text), .indoPakText(let text): text
             }
         }
+
+        var isIndoPakText: Bool {
+            if case .indoPakText = self {
+                return true
+            }
+            return false
+        }
     }
 
     case sura(Sura)
@@ -93,10 +100,10 @@ enum QuranReference {
         case .decoratedGlyph: size.suraUIFont
         case .indoPakText: size.quranUIFont(.indoPak)
         }
-        let arabicNameAttributes: [NSAttributedString.Key: Any] = [
-            .font: arabicNameFont,
-            .baselineOffset: -2,
-        ]
+        var arabicNameAttributes: [NSAttributedString.Key: Any] = [.font: arabicNameFont]
+        if !arabicName.isIndoPakText {
+            arabicNameAttributes[.baselineOffset] = -2
+        }
         result.append(NSAttributedString(string: arabicName.text, attributes: arabicNameAttributes))
 
         if let coordinate = coordinate(locale: locale) {
@@ -166,14 +173,15 @@ struct QuranReferenceView: View {
     @ScaledMetric private var glyphTopPadding = 5
 
     var body: some View {
-        HStack(spacing: spacing) {
+        let arabicName = reference.arabicName
+        HStack(alignment: arabicName.isIndoPakText ? .firstTextBaseline : .center, spacing: spacing) {
             if let localizedName = reference.localizedName(locale: locale) {
                 Text(localizedName)
                     .font(size.plainFont)
                     .fontWeight(emphasizesSura ? .heavy : nil)
             }
 
-            switch reference.arabicName {
+            switch arabicName {
             case .decoratedGlyph(let text):
                 Text(text)
                     .font(size.suraFont)
@@ -181,7 +189,6 @@ struct QuranReferenceView: View {
             case .indoPakText(let text):
                 Text(text)
                     .font(size.quranFont(.indoPak))
-                    .padding(.top, glyphTopPadding)
             }
 
             if let coordinate = reference.coordinate(locale: locale) {

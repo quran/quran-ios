@@ -20,6 +20,13 @@
 "surah" = "السورة";
 "quran_alquran" = "القرآن";
 
+// IndoPak sura names
+"quran.sura-name.indopak.17" = "بَنِي إِسْرَائِيل";
+"quran.sura-name.indopak.40" = "الْمُؤْمِن";
+"quran.sura-name.indopak.41" = "حمٓ السَّجْدَة";
+"quran.sura-name.indopak.76" = "الدَّهْر";
+"quran.sura-name.indopak.111" = "اللَّهَب";
+
 // MARK: - Translation
 
 "translation.text-type.translation" = "الترجمة إلى الإنجليزية";

@@ -44,6 +44,64 @@ final class QuranKitLocalizationTests: XCTestCase {
         XCTAssertEqual("Juz' 30", quran.pages[599].localizedQuarterName)
     }
 
+    func testIndoPakSuraNamesUseReadingSpecificEnglishNames() {
+        let names = [
+            17: "Banī Isrā’īl",
+            40: "Al-Mu’min",
+            41: "Ḥā-Mīm al-Sajdah",
+            76: "Al-Dahr",
+            111: "Al-Lahab",
+        ]
+
+        for (suraNumber, name) in names {
+            XCTAssertEqual(
+                name,
+                Quran.hafsIndoPak.suras[suraNumber - 1].localizedName(language: .english)
+            )
+        }
+    }
+
+    func testIndoPakSuraNamesUseReadingSpecificArabicNames() {
+        let names = [
+            17: "بَنِي إِسْرَائِيل",
+            40: "الْمُؤْمِن",
+            41: "حمٓ السَّجْدَة",
+            76: "الدَّهْر",
+            111: "اللَّهَب",
+        ]
+
+        for (suraNumber, name) in names {
+            XCTAssertEqual(
+                name,
+                Quran.hafsIndoPak.suras[suraNumber - 1].localizedName(language: .arabic)
+            )
+        }
+    }
+
+    func testMadaniSuraNamesRemainUnchanged() {
+        let names = [
+            17: "Al-Isrāʾ",
+            40: "Ghāfir",
+            41: "Fuṣṣilat",
+            76: "Al-Insān",
+            111: "Al-Masad",
+        ]
+
+        for (suraNumber, name) in names {
+            XCTAssertEqual(
+                name,
+                Quran.hafsMadani1405.suras[suraNumber - 1].localizedName(language: .english)
+            )
+        }
+    }
+
+    func testOtherIndoPakSuraNamesContinueUsingSurasCatalog() {
+        XCTAssertEqual(
+            Quran.hafsMadani1405.firstSura.localizedName(language: .english),
+            Quran.hafsIndoPak.firstSura.localizedName(language: .english)
+        )
+    }
+
     // MARK: Private
 
     private let quran = Quran.hafsMadani1405

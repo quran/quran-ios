@@ -8,9 +8,13 @@ final class LocalizationCatalogTests: XCTestCase {
 
         for localization in supportedLocalizations where localization != "en" {
             let localized = try strings(for: localization)
+            let englishKeys = Set(english.keys)
+            let expectedKeys = localization == "ar"
+                ? englishKeys
+                : englishKeys.subtracting(englishFallbackKeys)
             XCTAssertEqual(
                 Set(localized.keys),
-                Set(english.keys),
+                expectedKeys,
                 "\(localization) Localizable.strings keys differ from English."
             )
 
@@ -68,6 +72,14 @@ final class LocalizationCatalogTests: XCTestCase {
         "uz",
         "vi",
         "zh",
+    ]
+
+    private let englishFallbackKeys: Set<String> = [
+        "quran.sura-name.indopak.17",
+        "quran.sura-name.indopak.40",
+        "quran.sura-name.indopak.41",
+        "quran.sura-name.indopak.76",
+        "quran.sura-name.indopak.111",
     ]
 
     private func strings(for localization: String) throws -> [String: String] {

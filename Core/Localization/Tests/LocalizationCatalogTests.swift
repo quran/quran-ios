@@ -9,9 +9,10 @@ final class LocalizationCatalogTests: XCTestCase {
         for localization in supportedLocalizations where localization != "en" {
             let localized = try strings(for: localization)
             let englishKeys = Set(english.keys)
-            let expectedKeys = localization == "ar"
-                ? englishKeys
-                : englishKeys.subtracting(englishFallbackKeys)
+            let fallbackKeys = localization == "ar"
+                ? englishOnlyFallbackKeys
+                : englishFallbackKeys
+            let expectedKeys = englishKeys.subtracting(fallbackKeys)
             XCTAssertEqual(
                 Set(localized.keys),
                 expectedKeys,
@@ -80,6 +81,19 @@ final class LocalizationCatalogTests: XCTestCase {
         "quran.sura-name.indopak.41",
         "quran.sura-name.indopak.76",
         "quran.sura-name.indopak.111",
+        "quran.sura-name-translation.indopak.17",
+        "quran.sura-name-translation.indopak.40",
+        "quran.sura-name-translation.indopak.41",
+        "quran.sura-name-translation.indopak.76",
+        "quran.sura-name-translation.indopak.111",
+    ]
+
+    private let englishOnlyFallbackKeys: Set<String> = [
+        "quran.sura-name-translation.indopak.17",
+        "quran.sura-name-translation.indopak.40",
+        "quran.sura-name-translation.indopak.41",
+        "quran.sura-name-translation.indopak.76",
+        "quran.sura-name-translation.indopak.111",
     ]
 
     private func strings(for localization: String) throws -> [String: String] {

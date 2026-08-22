@@ -102,6 +102,47 @@ final class QuranKitLocalizationTests: XCTestCase {
         )
     }
 
+    func testIndoPakTranslatedSuraNamesUseReadingSpecificEnglishNames() {
+        let names = [
+            17: "Children of Israel",
+            40: "The Believer",
+            41: "Ḥā-Mīm The Prostration",
+            76: "The Time",
+            111: "The Flame",
+        ]
+
+        for (suraNumber, name) in names {
+            XCTAssertEqual(
+                name,
+                Quran.hafsIndoPak.suras[suraNumber - 1].localizedTranslatedName(language: .english)
+            )
+        }
+    }
+
+    func testMadaniTranslatedSuraNamesRemainUnchanged() {
+        let names = [
+            17: "The Journey by Night",
+            40: "The Forgiver",
+            41: "They are explained in detail",
+            76: "Man",
+            111: "The Palm Fibre",
+        ]
+
+        for (suraNumber, name) in names {
+            XCTAssertEqual(
+                name,
+                Quran.hafsMadani1405.suras[suraNumber - 1].localizedTranslatedName(language: .english)
+            )
+        }
+    }
+
+    func testOtherIndoPakTranslatedSuraNamesContinueUsingSurasCatalog() {
+        XCTAssertEqual(
+            Quran.hafsMadani1405.firstSura.localizedTranslatedName(language: .english),
+            Quran.hafsIndoPak.firstSura.localizedTranslatedName(language: .english)
+        )
+    }
+
     // MARK: Private
 
     private let quran = Quran.hafsMadani1405

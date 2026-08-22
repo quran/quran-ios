@@ -90,6 +90,13 @@ extension Sura {
         return suraName
     }
 
+    public func localizedTranslatedName(language: Language? = nil) -> String {
+        if quran == .hafsIndoPak, let localizationKey = indoPakTranslatedNameLocalizationKey {
+            return l(localizationKey, language: language)
+        }
+        return l("sura_names_translation[\(suraNumber - 1)]", table: .suras, language: language)
+    }
+
     private var indoPakNameLocalizationKey: String? {
         switch suraNumber {
         case 17: "quran.sura-name.indopak.17"
@@ -97,6 +104,17 @@ extension Sura {
         case 41: "quran.sura-name.indopak.41"
         case 76: "quran.sura-name.indopak.76"
         case 111: "quran.sura-name.indopak.111"
+        default: nil
+        }
+    }
+
+    private var indoPakTranslatedNameLocalizationKey: String? {
+        switch suraNumber {
+        case 17: "quran.sura-name-translation.indopak.17"
+        case 40: "quran.sura-name-translation.indopak.40"
+        case 41: "quran.sura-name-translation.indopak.41"
+        case 76: "quran.sura-name-translation.indopak.76"
+        case 111: "quran.sura-name-translation.indopak.111"
         default: nil
         }
     }

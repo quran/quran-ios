@@ -9,11 +9,8 @@
 //
 
 import AppDependencies
-import Combine
 import FeaturesSupport
-import NoorUI
 import QuranTextKit
-import ReadingService
 import UIKit
 
 @MainActor
@@ -27,16 +24,11 @@ public struct SearchBuilder {
     // MARK: Public
 
     public func build(withListener listener: QuranNavigator) -> UIViewController {
-        let readingPreferences = ReadingPreferences.shared
         let viewModel = SearchViewModel(
             analytics: container.analytics,
             searchService: CompositeSearcher(
                 databasesURL: container.databasesURL,
                 quranFileURL: container.quranUthmaniV2Database
-            ),
-            quranFontSource: QuranFontSource(
-                current: { readingPreferences.reading.quranFont },
-                updates: readingPreferences.$reading.map(\.quranFont)
             ),
             navigateTo: { [weak listener] verse in
                 listener?.navigateTo(ayah: verse, lastPage: nil)

@@ -8,6 +8,7 @@
 
 import Analytics
 import AnnotationsService
+import Combine
 import Crashing
 import Foundation
 import NoorUI
@@ -15,6 +16,7 @@ import QuranAnnotations
 import QuranKit
 import QuranText
 import QuranTextKit
+import ReadingService
 import VLogging
 
 @MainActor
@@ -31,26 +33,26 @@ final class NoteEditorViewModel {
         noteService: MobileSyncNoteService,
         analytics: AnalyticsLibrary,
         mode: NoteEditorMode,
-        textService: QuranTextDataService,
-        quranFontSource: QuranFontSource
+        textService: QuranTextDataService
     ) {
         self.noteService = noteService
         self.analytics = analytics
         self.mode = mode
         self.textService = textService
-        self.quranFontSource = quranFontSource
+        reading = ReadingPreferences.shared.reading
+        observeReadingChanges()
     }
     #else
     init(
         noteService: NoteEditorLegacyServicing,
         note: Note,
-        textService: QuranTextDataService,
-        quranFontSource: QuranFontSource
+        textService: QuranTextDataService
     ) {
         self.note = note
         self.noteService = noteService
         self.textService = textService
-        self.quranFontSource = quranFontSource
+        reading = ReadingPreferences.shared.reading
+        observeReadingChanges()
     }
     #endif
 
@@ -64,6 +66,7 @@ final class NoteEditorViewModel {
     static let minimumNoteBodyLength = 6
 
     weak var listener: NoteEditorListener?
+    @Published private(set) var reading: Reading
 
     var minimumNoteBodyLength: Int { Self.minimumNoteBodyLength }
 
@@ -109,7 +112,7 @@ final class NoteEditorViewModel {
             let editableNote = EditableNote(
                 ayahRange: versesRange.start ... versesRange.end,
                 ayahText: versesText,
-                quranFontSource: quranFontSource,
+                reading: reading,
                 modifiedSince: modifiedSince,
                 selectedColor: selectedColor,
                 note: body
@@ -212,9 +215,19 @@ final class NoteEditorViewModel {
     private let note: Note
     #endif
     private let textService: QuranTextDataService
-    private let quranFontSource: QuranFontSource
+    private let readingPreferences = ReadingPreferences.shared
 
     private var editableNote: EditableNote?
+    private var cancellables: Set<AnyCancellable> = []
+
+    private func observeReadingChanges() {
+        readingPreferences.$reading
+            .sink { [weak self] reading in
+                self?.reading = reading
+                self?.editableNote?.updateReading(reading)
+            }
+            .store(in: &cancellables)
+    }
 
     private var noteText: String {
         editableNote?.note ?? body

@@ -2,7 +2,6 @@
 import Combine
 import MobileSync
 import MobileSyncTestSupport
-import NoorUI
 import QuranAnnotations
 import QuranKit
 import QuranResources
@@ -24,18 +23,6 @@ final class AyahSetViewModelTests: XCTestCase {
     override func tearDown() async throws {
         try await database.reset()
         try await super.tearDown()
-    }
-
-    func test_quranFont_updatesFromSource() {
-        let updates = PassthroughSubject<QuranFont, Never>()
-        let sut = makeHighlightSUT(
-            color: .red,
-            quranFontSource: QuranFontSource(current: { .uthmanicHafs }, updates: updates)
-        )
-
-        updates.send(.indoPak)
-
-        XCTAssertEqual(sut.quranFont, .indoPak)
     }
 
     func test_start_observesCollectionsFromMobileSyncDatabase() async throws {
@@ -272,7 +259,6 @@ final class AyahSetViewModelTests: XCTestCase {
                 service: service
             ),
             quranTextDataService: quranTextDataService ?? makeQuranTextDataService(),
-            quranFontSource: QuranFontSource(.uthmanicHafs),
             navigateToAyah: navigateToAyah,
             dataSourceDeleted: collectionDeleted
         )
@@ -285,7 +271,6 @@ final class AyahSetViewModelTests: XCTestCase {
     private func makeHighlightSUT(
         color: HighlightColor,
         service: MobileSyncAyahHighlightService? = nil,
-        quranFontSource: QuranFontSource = QuranFontSource(.uthmanicHafs),
         navigateToAyah: @escaping (AyahNumber) -> Void = { _ in }
     ) -> AyahSetViewModel {
         let service = service ?? makeHighlightService()
@@ -296,7 +281,6 @@ final class AyahSetViewModelTests: XCTestCase {
                 service: service
             ),
             quranTextDataService: makeQuranTextDataService(),
-            quranFontSource: quranFontSource,
             navigateToAyah: navigateToAyah,
             dataSourceDeleted: {}
         )

@@ -41,7 +41,6 @@ final class NotesViewModel: ObservableObject {
         noteService: MobileSyncNoteService,
         textService: QuranTextDataService,
         textRetriever: ShareableVerseTextRetriever,
-        quranFontSource: QuranFontSource,
         navigateTo: @escaping (AyahNumber) -> Void,
         editNote: @escaping (Note) -> Void
     ) {
@@ -51,12 +50,12 @@ final class NotesViewModel: ObservableObject {
         self.noteService = noteService
         self.textService = textService
         self.textRetriever = textRetriever
-        quranFont = quranFontSource.current
+        reading = ReadingPreferences.shared.reading
         self.navigateTo = navigateTo
         editNoteAction = editNote
         isSyncBannerDismissed = preferences.isNotesSyncBannerDismissed
-        quranFontSource.updates
-            .assign(to: &$quranFont)
+        readingPreferences.$reading
+            .assign(to: &$reading)
     }
     #else
     init(
@@ -64,7 +63,6 @@ final class NotesViewModel: ObservableObject {
         noteService: NoteService,
         textRetriever: ShareableVerseTextRetriever,
         textService: QuranTextDataService,
-        quranFontSource: QuranFontSource,
         navigateTo: @escaping (AyahNumber) -> Void,
         editNote: @escaping (Note) -> Void
     ) {
@@ -72,11 +70,11 @@ final class NotesViewModel: ObservableObject {
         self.noteService = noteService
         self.textRetriever = textRetriever
         self.textService = textService
-        quranFont = quranFontSource.current
+        reading = ReadingPreferences.shared.reading
         self.navigateTo = navigateTo
         editNoteAction = editNote
-        quranFontSource.updates
-            .assign(to: &$quranFont)
+        readingPreferences.$reading
+            .assign(to: &$reading)
     }
     #endif
 
@@ -90,7 +88,7 @@ final class NotesViewModel: ObservableObject {
     #endif
     @Published var notes: [NoteItem] = []
     @Published var searchTerm: String = ""
-    @Published var quranFont: QuranFont
+    @Published var reading: Reading
 
     #if QURAN_SYNC
     var shouldShowSyncBanner: Bool {
@@ -117,7 +115,7 @@ final class NotesViewModel: ObservableObject {
         isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
         logger.info("Quran Sync: restored authentication from Notes. Authenticated: \(isAuthenticated)")
         do {
-            let sequence = noteService.notesSequence(quran: readingPreferences.reading.quran)
+            let sequence = noteService.notesSequence(quran: reading.quran)
             for try await notes in sequence {
                 self.notes = await noteItems(with: notes)
                     .filter { !pendingDeletionIDs.contains($0.id) }
@@ -128,8 +126,7 @@ final class NotesViewModel: ObservableObject {
             self.error = error
         }
         #else
-        let notesSequence = readingPreferences.$reading
-            .prepend(readingPreferences.reading)
+        let notesSequence = $reading
             .map { [noteService] reading in
                 noteService.notes(quran: reading.quran)
             }

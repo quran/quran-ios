@@ -1,4 +1,3 @@
-import Combine
 import QuranAnnotations
 import QuranKit
 import XCTest
@@ -15,27 +14,20 @@ final class EditableNoteTests: XCTestCase {
         XCTAssertEqual(sut.wordCount, 1)
     }
 
-    func test_quranFont_updatesFromSource() {
-        let updates = PassthroughSubject<QuranFont, Never>()
-        let sut = makeEditableNote(
-            note: "Note",
-            quranFontSource: QuranFontSource(current: { .uthmanicHafs }, updates: updates)
-        )
+    func test_updateReading_updatesReading() {
+        let sut = makeEditableNote(note: "Note")
 
-        updates.send(.indoPak)
+        sut.updateReading(.indoPak)
 
-        XCTAssertEqual(sut.quranFont, .indoPak)
+        XCTAssertEqual(sut.reading, .indoPak)
     }
 
-    private func makeEditableNote(
-        note: String,
-        quranFontSource: QuranFontSource = QuranFontSource(.uthmanicHafs)
-    ) -> EditableNote {
+    private func makeEditableNote(note: String) -> EditableNote {
         let ayah = Quran.hafsMadani1405.suras[0].verses[0]
         return EditableNote(
             ayahRange: ayah ... ayah,
             ayahText: "بِسْمِ اللَّهِ",
-            quranFontSource: quranFontSource,
+            reading: .hafs_1405,
             modifiedSince: "2 hours ago",
             selectedColor: .blue,
             note: note

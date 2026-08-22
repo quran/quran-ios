@@ -37,40 +37,38 @@ final class HomeViewModel: ObservableObject {
         lastPageService: any LastPageService,
         textRetriever: QuranTextDataService,
         readingBookmarkService: MobileSyncReadingBookmarkService,
-        quranFontSource: QuranFontSource,
         navigateToPage: @escaping (Page, LastPage?) -> Void,
         navigateToAyah: @escaping (AyahNumber) -> Void
     ) {
         self.lastPageService = lastPageService
         self.textRetriever = textRetriever
         self.readingBookmarkService = readingBookmarkService
-        quranFont = quranFontSource.current
+        reading = ReadingPreferences.shared.reading
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
 
         HomePreferences.shared.$surahSortOrder
             .assign(to: &$surahSortOrder)
-        quranFontSource.updates
-            .assign(to: &$quranFont)
+        readingPreferences.$reading
+            .assign(to: &$reading)
     }
     #else
     init(
         lastPageService: any LastPageService,
         textRetriever: QuranTextDataService,
-        quranFontSource: QuranFontSource,
         navigateToPage: @escaping (Page, LastPage?) -> Void,
         navigateToAyah: @escaping (AyahNumber) -> Void
     ) {
         self.lastPageService = lastPageService
         self.textRetriever = textRetriever
-        quranFont = quranFontSource.current
+        reading = ReadingPreferences.shared.reading
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
 
         HomePreferences.shared.$surahSortOrder
             .assign(to: &$surahSortOrder)
-        quranFontSource.updates
-            .assign(to: &$quranFont)
+        readingPreferences.$reading
+            .assign(to: &$reading)
     }
     #endif
 
@@ -107,7 +105,7 @@ final class HomeViewModel: ObservableObject {
         }
     }
 
-    @Published var quranFont: QuranFont
+    @Published var reading: Reading
 
     func setListVisible(_ visible: Bool) {
         isListVisible = visible

@@ -1,9 +1,9 @@
 #if QURAN_SYNC
 import Combine
-import NoorUI
 import QuranKit
 import QuranText
 import QuranTextKit
+import ReadingService
 import SwiftUI
 import VLogging
 
@@ -14,25 +14,24 @@ final class AyahSetViewModel: ObservableObject {
     init(
         dataSource: any AyahSetDataSource,
         quranTextDataService: QuranTextDataService,
-        quranFontSource: QuranFontSource,
         navigateToAyah: @escaping (AyahNumber) -> Void,
         dataSourceDeleted: @escaping () -> Void
     ) {
         self.dataSource = dataSource
         content = dataSource.initialContent
         self.quranTextDataService = quranTextDataService
-        quranFont = quranFontSource.current
+        reading = ReadingPreferences.shared.reading
         self.navigateToAyah = navigateToAyah
         self.dataSourceDeleted = dataSourceDeleted
-        quranFontSource.updates
-            .assign(to: &$quranFont)
+        readingPreferences.$reading
+            .assign(to: &$reading)
     }
 
     // MARK: Internal
 
     @Published private(set) var content: AyahSetContent
     @Published private(set) var ayahTexts: [AyahNumber: QuranText] = [:]
-    @Published private(set) var quranFont: QuranFont
+    @Published private(set) var reading: Reading
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
     @Published var isPresentingDeleteConfirmation = false
@@ -121,6 +120,7 @@ final class AyahSetViewModel: ObservableObject {
 
     private let dataSource: any AyahSetDataSource
     private let quranTextDataService: QuranTextDataService
+    private let readingPreferences = ReadingPreferences.shared
     private let navigateToAyah: (AyahNumber) -> Void
     private let dataSourceDeleted: () -> Void
 

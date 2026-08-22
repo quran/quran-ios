@@ -1,11 +1,8 @@
 #if QURAN_SYNC
 import AnnotationsService
-import Combine
-import NoorUI
 import QuranAnnotations
 import QuranKit
 import QuranTextKit
-import ReadingService
 import UIKit
 
 @MainActor
@@ -55,14 +52,9 @@ struct AyahSetBuilder {
         dataSource: any AyahSetDataSource,
         dataSourceDeleted: @escaping () -> Void
     ) -> UIViewController {
-        let readingPreferences = ReadingPreferences.shared
         let viewModel = AyahSetViewModel(
             dataSource: dataSource,
             quranTextDataService: quranTextDataService,
-            quranFontSource: QuranFontSource(
-                current: { readingPreferences.reading.quranFont },
-                updates: readingPreferences.$reading.map(\.quranFont)
-            ),
             navigateToAyah: navigateToAyah,
             dataSourceDeleted: dataSourceDeleted
         )

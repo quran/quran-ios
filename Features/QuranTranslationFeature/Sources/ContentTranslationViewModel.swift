@@ -13,6 +13,7 @@ import NoorUI
 import QuranKit
 import QuranText
 import QuranTextKit
+import ReadingService
 import SwiftUI
 import TranslationService
 import UIx
@@ -31,13 +32,12 @@ public final class ContentTranslationViewModel: ObservableObject {
     public init(
         localTranslationsRetriever: LocalTranslationsRetriever,
         dataService: QuranTextDataService,
-        highlightsService: QuranHighlightsService,
-        quranFontSource: QuranFontSource
+        highlightsService: QuranHighlightsService
     ) {
         self.dataService = dataService
         self.highlightsService = highlightsService
         self.localTranslationsRetriever = localTranslationsRetriever
-        quranFont = quranFontSource.current
+        reading = ReadingPreferences.shared.reading
         arabicFontSize = fontSizePreferences.arabicFontSize
         translationFontSize = fontSizePreferences.translationFontSize
         selectedTranslations = selectedTranslationsPreferences.selectedTranslationIds
@@ -65,8 +65,8 @@ public final class ContentTranslationViewModel: ObservableObject {
             .sink { [weak self] in self?.selectedTranslations = $0 }
             .store(in: &cancellables)
 
-        quranFontSource.updates
-            .assign(to: &$quranFont)
+        readingPreferences.$reading
+            .assign(to: &$reading)
     }
 
     // MARK: Public
@@ -82,7 +82,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     // MARK: Internal
 
     let tracker = CollectionTracker<TranslationItemId>()
-    @Published private(set) var quranFont: QuranFont
+    @Published private(set) var reading: Reading
 
     @Published var selectedTranslations: [Translation.ID] {
         didSet {
@@ -116,7 +116,7 @@ public final class ContentTranslationViewModel: ObservableObject {
         loadedContent.verseTexts
     }
 
-    var items: [TranslationItem] {
+    func items(quranFont: QuranFont) -> [TranslationItem] {
         guard let page = verseTexts.first?.key.page else {
             return []
         }
@@ -306,12 +306,13 @@ public final class ContentTranslationViewModel: ObservableObject {
     private let highlightsService: QuranHighlightsService
     private let dataService: QuranTextDataService
     private let localTranslationsRetriever: LocalTranslationsRetriever
+    private let readingPreferences = ReadingPreferences.shared
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     private let fontSizePreferences = FontSizePreferences.shared
 
     private func recordListUpdate(reason: String) {
         let rowsBefore = recordedRowCount
-        let rowsAfter = items.count
+        let rowsAfter = items(quranFont: reading.quranFont).count
         listGeneration += 1
         recordedRowCount = rowsAfter
         crashContext.recordListUpdate(
@@ -377,7 +378,7 @@ public final class ContentTranslationViewModel: ObservableObject {
         guard let ayah = highlightsService.highlights.firstScrollingVerse() else {
             return
         }
-        for item in items {
+        for item in items(quranFont: reading.quranFont) {
             if item.id.ayah == ayah {
                 logger.info("Quran Translation: scrollToVerseIfNeeded \(ayah)")
                 scrollToItem = item.id

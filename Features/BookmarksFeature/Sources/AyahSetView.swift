@@ -100,7 +100,7 @@ private struct AyahSetContentView: View {
         guard let text = viewModel.ayahTexts[ayah] else {
             return nil
         }
-        return "\(quran: text, font: viewModel.quranFont, lineLimit: 2)"
+        return "\(quran: text, font: viewModel.reading.quranFont, lineLimit: 2)"
     }
 }
 

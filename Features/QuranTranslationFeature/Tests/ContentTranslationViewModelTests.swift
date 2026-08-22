@@ -3,14 +3,26 @@
 //
 
 import Combine
-import NoorUI
 import QuranKit
 import QuranText
+import ReadingService
 import XCTest
 @testable import QuranTranslationFeature
 
 @MainActor
 final class ContentTranslationViewModelTests: XCTestCase {
+    func testReadingUpdatesFromPreferences() {
+        let preferences = ReadingPreferences.shared
+        let originalReading = preferences.reading
+        defer { preferences.reading = originalReading }
+        preferences.reading = .hafs_1405
+        let sut = makeSUT()
+
+        preferences.reading = .indoPak
+
+        XCTAssertEqual(sut.reading, .indoPak)
+    }
+
     func testCommitLoadedContentPublishesOneCoherentSnapshot() {
         let sut = makeSUT()
         let verse = Quran.hafsMadani1405.firstVerse
@@ -41,24 +53,12 @@ final class ContentTranslationViewModelTests: XCTestCase {
         withExtendedLifetime(cancellable) { }
     }
 
-    func testQuranFontUpdatesFromSource() {
-        let updates = PassthroughSubject<QuranFont, Never>()
-        let sut = makeSUT(quranFontSource: QuranFontSource(current: { .uthmanicHafs }, updates: updates))
-
-        updates.send(.indoPak)
-
-        XCTAssertEqual(sut.quranFont, .indoPak)
-    }
-
-    private func makeSUT(
-        quranFontSource: QuranFontSource = QuranFontSource(.uthmanicHafs)
-    ) -> ContentTranslationViewModel {
+    private func makeSUT() -> ContentTranslationViewModel {
         let unavailableURL = URL(fileURLWithPath: "/tmp/unavailable-quran-translation-test")
         return ContentTranslationViewModel(
             localTranslationsRetriever: .init(databasesURL: unavailableURL),
             dataService: .init(databasesURL: unavailableURL, quranFileURL: unavailableURL),
-            highlightsService: .init(),
-            quranFontSource: quranFontSource
+            highlightsService: .init()
         )
     }
 

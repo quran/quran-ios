@@ -27,7 +27,7 @@ struct NotesView: View {
             signInAction: { await signIn() },
             notes: viewModel.filteredNotes,
             searchTerm: viewModel.searchTerm,
-            quranFont: viewModel.quranFont,
+            quranFont: viewModel.reading.quranFont,
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
             editAction: { viewModel.editNote($0) },

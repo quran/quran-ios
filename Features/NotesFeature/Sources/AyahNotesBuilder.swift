@@ -13,9 +13,8 @@ import UIKit
 public struct AyahNotesBuilder {
     // MARK: Lifecycle
 
-    public init(container: AppDependencies, quranFontSource: QuranFontSource) {
+    public init(container: AppDependencies) {
         self.container = container
-        self.quranFontSource = quranFontSource
     }
 
     // MARK: Public
@@ -28,7 +27,7 @@ public struct AyahNotesBuilder {
         )
         let viewController = AyahNotesViewController(
             viewModel: viewModel,
-            noteEditorBuilder: .init(container: container, quranFontSource: quranFontSource),
+            noteEditorBuilder: .init(container: container),
             presentsNewNote: presentsNewNote,
             addAction: { [viewControllerReference] in
                 viewControllerReference.value?.addNote()
@@ -47,7 +46,6 @@ public struct AyahNotesBuilder {
     // MARK: Private
 
     private let container: AppDependencies
-    private let quranFontSource: QuranFontSource
 }
 
 @MainActor

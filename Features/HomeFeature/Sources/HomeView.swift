@@ -133,10 +133,15 @@ private struct HomeViewUI: View {
     func suraView(_ sura: Sura) -> some View {
         let ayahsString = lFormat("verses", table: .android, sura.verses.count)
         let suraType = sura.isMakki ? lAndroid("makki") : lAndroid("madani")
+        var subtitleComponents = [suraType, ayahsString]
+        if !Locale.preferredLanguageLocale.isArabicLanguage {
+            subtitleComponents.insert(sura.localizedTranslatedName(), at: 0)
+        }
+        let subtitle = subtitleComponents.joined(separator: " · ")
 
         return NoorListItem(
             title: "\(sura.localizedSuraNumber). \(sura: sura)",
-            subtitle: .init(text: "\(suraType) - \(ayahsString)", location: .bottom),
+            subtitle: .init(text: .text(subtitle), location: .bottom),
             accessory: .text(sura.page.localizedNumber, accessibilityLabel: sura.page.localizedName),
             action: .sync { selectSura(sura) }
         )

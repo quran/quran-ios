@@ -5,11 +5,24 @@
 import Combine
 import QuranKit
 import QuranText
+import ReadingService
 import XCTest
 @testable import QuranTranslationFeature
 
 @MainActor
 final class ContentTranslationViewModelTests: XCTestCase {
+    func testReadingUpdatesFromPreferences() {
+        let preferences = ReadingPreferences.shared
+        let originalReading = preferences.reading
+        defer { preferences.reading = originalReading }
+        preferences.reading = .hafs_1405
+        let sut = makeSUT()
+
+        preferences.reading = .indoPak
+
+        XCTAssertEqual(sut.reading, .indoPak)
+    }
+
     func testCommitLoadedContentPublishesOneCoherentSnapshot() {
         let sut = makeSUT()
         let verse = Quran.hafsMadani1405.firstVerse

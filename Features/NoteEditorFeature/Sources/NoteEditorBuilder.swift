@@ -9,6 +9,7 @@
 import AnnotationsService
 import AppDependencies
 import Foundation
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import QuranTextKit

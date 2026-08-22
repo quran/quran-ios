@@ -11,18 +11,49 @@ import SwiftUI
 
 private let quranFontSize: CGFloat = 21
 
+struct QuranTextFontOverride {
+    let range: Range<String.Index>
+    let quranFont: QuranFont
+    let font: Font
+
+    init(range: Range<String.Index>, quranFont: QuranFont, font: Font? = nil) {
+        self.range = range
+        self.quranFont = quranFont
+        self.font = font ?? .custom(quranFont.fontName, size: quranFontSize)
+    }
+}
+
 /// Quran text rendered with the required Quran font.
 public struct QuranTextView: View {
     // MARK: Lifecycle
 
     public init(_ text: QuranText) {
-        self.init(text, font: .custom(.quran, size: quranFontSize), highlighting: [])
+        self.init(text, quranFont: .uthmanicHafs)
     }
 
-    init(_ text: QuranText, font: Font, highlighting: [HighlightingRange] = []) {
+    public init(_ text: QuranText, quranFont: QuranFont) {
+        self.init(text, quranFont: quranFont, fontOverrides: [])
+    }
+
+    init(_ text: QuranText, quranFont: QuranFont, fontOverrides: [QuranTextFontOverride]) {
+        self.init(
+            text,
+            font: .custom(quranFont.fontName, size: quranFontSize),
+            highlighting: [],
+            fontOverrides: fontOverrides
+        )
+    }
+
+    init(
+        _ text: QuranText,
+        font: Font,
+        highlighting: [HighlightingRange] = [],
+        fontOverrides: [QuranTextFontOverride] = []
+    ) {
         self.text = text
         self.font = font
         self.highlighting = highlighting
+        self.fontOverrides = fontOverrides
     }
 
     // MARK: Public
@@ -37,6 +68,7 @@ public struct QuranTextView: View {
     private let text: QuranText
     private let font: Font
     private let highlighting: [HighlightingRange]
+    private let fontOverrides: [QuranTextFontOverride]
 
     private var attributedText: AttributedString {
         var attributedText = AttributedString(text.text)
@@ -52,6 +84,14 @@ public struct QuranTextView: View {
             if let fontWeight = highlight.fontWeight {
                 attributedText[start ..< end].font = font.weight(fontWeight)
             }
+        }
+        for override in fontOverrides {
+            guard let start = AttributedString.Index(override.range.lowerBound, within: attributedText),
+                  let end = AttributedString.Index(override.range.upperBound, within: attributedText)
+            else {
+                continue
+            }
+            attributedText[start ..< end].font = override.font
         }
         return attributedText
     }

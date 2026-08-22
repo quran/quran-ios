@@ -3,6 +3,7 @@ import Combine
 import QuranKit
 import QuranText
 import QuranTextKit
+import ReadingService
 import SwiftUI
 import VLogging
 
@@ -19,14 +20,18 @@ final class AyahSetViewModel: ObservableObject {
         self.dataSource = dataSource
         content = dataSource.initialContent
         self.quranTextDataService = quranTextDataService
+        reading = ReadingPreferences.shared.reading
         self.navigateToAyah = navigateToAyah
         self.dataSourceDeleted = dataSourceDeleted
+        readingPreferences.$reading
+            .assign(to: &$reading)
     }
 
     // MARK: Internal
 
     @Published private(set) var content: AyahSetContent
     @Published private(set) var ayahTexts: [AyahNumber: QuranText] = [:]
+    @Published private(set) var reading: Reading
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
     @Published var isPresentingDeleteConfirmation = false
@@ -115,6 +120,7 @@ final class AyahSetViewModel: ObservableObject {
 
     private let dataSource: any AyahSetDataSource
     private let quranTextDataService: QuranTextDataService
+    private let readingPreferences = ReadingPreferences.shared
     private let navigateToAyah: (AyahNumber) -> Void
     private let dataSourceDeleted: () -> Void
 

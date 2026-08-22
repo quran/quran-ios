@@ -99,7 +99,7 @@ private struct NoteEditorContent: View {
     }
 
     private var quranText: some View {
-        let text: MultipartText = "\(quran: note.ayahText, color: .clear, lineLimit: 2)"
+        let text: MultipartText = "\(quran: note.ayahText, font: note.reading.quranFont, color: .clear, lineLimit: 2)"
         return text
             .view(ofSize: .footnote, alignment: .trailing)
             .foregroundColor(.secondaryLabel)
@@ -223,6 +223,7 @@ private struct NoteEditorPreview: View {
             note: EditableNote(
                 ayahRange: verses[34] ... verses[35],
                 ayahText: "وَقَالَ ٱلَّذِينَ أَشْرَكُوا۟ لَوْ شَآءَ ٱللَّهُ مَا عَبَدْنَا مِن دُونِهِۦ مِن شَىْءٍ نَّحْنُ وَلَآ ءَابَآؤُنَا",
+                reading: .hafs_1405,
                 modifiedSince: Date(timeIntervalSince1970: 1).timeAgo(),
                 selectedColor: .blue,
                 note: "The “if Allah willed” excuse — the same argument every nation made. Cross-ref 6:148."

@@ -36,7 +36,11 @@ class TranslationVerseViewModel: ObservableObject {
         self.actions = actions
 
         let noOpHighlightingService = QuranHighlightsService()
-        translationViewModel = ContentTranslationViewModel(localTranslationsRetriever: localTranslationsRetriever, dataService: dataService, highlightsService: noOpHighlightingService)
+        translationViewModel = ContentTranslationViewModel(
+            localTranslationsRetriever: localTranslationsRetriever,
+            dataService: dataService,
+            highlightsService: noOpHighlightingService
+        )
         translationViewModel.showHeaderAndFooter = false
         translationViewModel.verses = [startingVerse]
     }

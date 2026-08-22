@@ -8,12 +8,15 @@
 import Foundation
 import SwiftUI
 
-public enum FontName: CaseIterable {
+public enum FontName: CaseIterable, Equatable {
     /// Used in Arabic tafseer
     case arabic
 
     /// Used in quran text in translation view
-    case quran
+    case uthmanicHafs
+
+    /// Used in IndoPak quran text in translation view
+    case indoPak
 
     /// Used in arabic suras in Uthmanic font
     case suraNames
@@ -34,11 +37,17 @@ public enum FontName: CaseIterable {
                 family: "Kitab",
                 fileName: "Kitab-Regular.ttf"
             )
-        case .quran:
+        case .uthmanicHafs:
             return FontDetails(
                 name: "KFGQPCHAFSUthmanicScript-Bold",
                 family: "KFGQPC HAFS Uthmanic Script",
                 fileName: "UthmanicHafs1B Ver13.ttf"
+            )
+        case .indoPak:
+            return FontDetails(
+                name: "noorehira",
+                family: "noorehira",
+                fileName: "noorehira.ttf"
             )
         case .suraNames:
             return FontDetails(

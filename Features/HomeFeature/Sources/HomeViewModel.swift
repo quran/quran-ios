@@ -9,6 +9,7 @@ import AnnotationsService
 import Combine
 import Crashing
 import Foundation
+import NoorUI
 import Preferences
 import QuranAnnotations
 import QuranKit
@@ -42,11 +43,14 @@ final class HomeViewModel: ObservableObject {
         self.lastPageService = lastPageService
         self.textRetriever = textRetriever
         self.readingBookmarkService = readingBookmarkService
+        reading = ReadingPreferences.shared.reading
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
 
         HomePreferences.shared.$surahSortOrder
             .assign(to: &$surahSortOrder)
+        readingPreferences.$reading
+            .assign(to: &$reading)
     }
     #else
     init(
@@ -57,11 +61,14 @@ final class HomeViewModel: ObservableObject {
     ) {
         self.lastPageService = lastPageService
         self.textRetriever = textRetriever
+        reading = ReadingPreferences.shared.reading
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
 
         HomePreferences.shared.$surahSortOrder
             .assign(to: &$surahSortOrder)
+        readingPreferences.$reading
+            .assign(to: &$reading)
     }
     #endif
 
@@ -97,6 +104,8 @@ final class HomeViewModel: ObservableObject {
             recordListUpdate(reason: "mode_changed")
         }
     }
+
+    @Published var reading: Reading
 
     func setListVisible(_ visible: Bool) {
         isListVisible = visible

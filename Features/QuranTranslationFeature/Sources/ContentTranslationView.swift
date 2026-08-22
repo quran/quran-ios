@@ -22,7 +22,7 @@ public struct ContentTranslationView: View {
 
     public var body: some View {
         ContentTranslationViewBody(
-            items: viewModel.items,
+            items: viewModel.items(quranFont: viewModel.reading.quranFont),
             arabicFontSize: viewModel.arabicFontSize,
             translationFontSize: viewModel.translationFontSize,
             highlights: viewModel.highlights,

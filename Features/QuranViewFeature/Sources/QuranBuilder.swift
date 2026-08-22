@@ -39,7 +39,8 @@ public struct QuranBuilder {
     public func build(input: QuranInput) -> UIViewController {
         let highlightsService = QuranHighlightsService()
 
-        let quran = ReadingPreferences.shared.reading.quran
+        let reading = ReadingPreferences.shared.reading
+        let quran = reading.quran
         #if QURAN_SYNC
         let notesObserver = QuranNotesObserver(noteService: container.mobileSyncNoteService(), quran: quran)
         let syncedHighlightsObserver = QuranSyncedHighlightsObserver(

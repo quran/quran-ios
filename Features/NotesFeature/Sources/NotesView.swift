@@ -27,6 +27,7 @@ struct NotesView: View {
             signInAction: { await signIn() },
             notes: viewModel.filteredNotes,
             searchTerm: viewModel.searchTerm,
+            quranFont: viewModel.reading.quranFont,
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
             editAction: { viewModel.editNote($0) },
@@ -67,6 +68,7 @@ private struct NotesViewUI: View {
     let signInAction: AsyncAction
     let notes: [NoteItem]
     let searchTerm: String
+    let quranFont: QuranFont
 
     let start: AsyncAction
     let selectAction: ItemAction<NoteItem>
@@ -211,7 +213,7 @@ private struct NotesViewUI: View {
         guard let text = item.quranText else {
             return nil
         }
-        return "\(quran: text, color: .clear, lineLimit: 2)"
+        return "\(quran: text, font: quranFont, color: .clear, lineLimit: 2)"
     }
 }
 
@@ -259,6 +261,7 @@ struct NotesView_Previews: PreviewProvider {
                     signInAction: {},
                     notes: items,
                     searchTerm: searchTerm,
+                    quranFont: .uthmanicHafs,
                     start: {},
                     selectAction: { _ in },
                     editAction: { _ in },
@@ -311,6 +314,7 @@ private struct NotesEmptyPreview: View {
                 signInAction: {},
                 notes: [],
                 searchTerm: "",
+                quranFont: .uthmanicHafs,
                 start: {},
                 selectAction: { _ in },
                 editAction: { _ in },

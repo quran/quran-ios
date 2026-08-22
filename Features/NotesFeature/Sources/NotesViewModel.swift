@@ -17,6 +17,7 @@ import AnnotationsService
 import Crashing
 import Foundation
 import Localization
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import QuranLocalization
@@ -49,9 +50,12 @@ final class NotesViewModel: ObservableObject {
         self.noteService = noteService
         self.textService = textService
         self.textRetriever = textRetriever
+        reading = ReadingPreferences.shared.reading
         self.navigateTo = navigateTo
         editNoteAction = editNote
         isSyncBannerDismissed = preferences.isNotesSyncBannerDismissed
+        readingPreferences.$reading
+            .assign(to: &$reading)
     }
     #else
     init(
@@ -66,8 +70,11 @@ final class NotesViewModel: ObservableObject {
         self.noteService = noteService
         self.textRetriever = textRetriever
         self.textService = textService
+        reading = ReadingPreferences.shared.reading
         self.navigateTo = navigateTo
         editNoteAction = editNote
+        readingPreferences.$reading
+            .assign(to: &$reading)
     }
     #endif
 
@@ -81,6 +88,7 @@ final class NotesViewModel: ObservableObject {
     #endif
     @Published var notes: [NoteItem] = []
     @Published var searchTerm: String = ""
+    @Published var reading: Reading
 
     #if QURAN_SYNC
     var shouldShowSyncBanner: Bool {
@@ -107,7 +115,7 @@ final class NotesViewModel: ObservableObject {
         isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
         logger.info("Quran Sync: restored authentication from Notes. Authenticated: \(isAuthenticated)")
         do {
-            let sequence = noteService.notesSequence(quran: readingPreferences.reading.quran)
+            let sequence = noteService.notesSequence(quran: reading.quran)
             for try await notes in sequence {
                 self.notes = await noteItems(with: notes)
                     .filter { !pendingDeletionIDs.contains($0.id) }
@@ -118,8 +126,7 @@ final class NotesViewModel: ObservableObject {
             self.error = error
         }
         #else
-        let notesSequence = readingPreferences.$reading
-            .prepend(readingPreferences.reading)
+        let notesSequence = $reading
             .map { [noteService] reading in
                 noteService.notes(quran: reading.quran)
             }

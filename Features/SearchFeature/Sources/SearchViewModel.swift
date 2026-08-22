@@ -8,6 +8,7 @@
 import Analytics
 import Combine
 import Dispatch
+import NoorUI
 import QuranKit
 import QuranText
 import QuranTextKit
@@ -19,10 +20,17 @@ import VLogging
 final class SearchViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(analytics: AnalyticsLibrary, searchService: CompositeSearcher, navigateTo: @escaping (AyahNumber) -> Void) {
+    init(
+        analytics: AnalyticsLibrary,
+        searchService: CompositeSearcher,
+        navigateTo: @escaping (AyahNumber) -> Void
+    ) {
         self.analytics = analytics
         self.searchService = searchService
+        reading = ReadingPreferences.shared.reading
         self.navigateTo = navigateTo
+        readingPreferences.$reading
+            .assign(to: &$reading)
     }
 
     // MARK: Internal
@@ -36,6 +44,7 @@ final class SearchViewModel: ObservableObject {
     @Published var recents: [String] = []
 
     @Published var keyboardState: KeyboardState = .closed
+    @Published var reading: Reading
 
     @Published var uiState = SearchUIState.entry {
         didSet {
@@ -108,7 +117,7 @@ final class SearchViewModel: ObservableObject {
 
     private func search(for term: String) async throws -> [SearchResults] {
         searchState = .searching
-        let quran = readingPreferences.reading.quran
+        let quran = reading.quran
         let results = try await searchService.search(for: term, quran: quran)
 
         analytics.searching(for: term, results: results)
@@ -149,7 +158,7 @@ final class SearchViewModel: ObservableObject {
     }
 
     private func observeReadingChanges() async {
-        let readings = readingPreferences.$reading
+        let readings = $reading
             .values()
         for await _ in readings {
             searchTerm = ""
@@ -171,7 +180,7 @@ final class SearchViewModel: ObservableObject {
     }
 
     private func autocomplete(_ term: String) async -> [SearchText] {
-        let quran = readingPreferences.reading.quran
+        let quran = reading.quran
         return await searchService.autocomplete(term: term, quran: quran)
     }
 }

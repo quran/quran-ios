@@ -38,8 +38,14 @@ private extension TextPart {
                 string: ayah.localizedCoordinate(locale: locale),
                 attributes: [.font: size.plainUIFont]
             )
-        case .quran(let text, let color, _, let highlighting):
-            highlightedQuranAttributedString(text: text, ranges: highlighting, color: color, size: size)
+        case .quran(let text, let quranFont, let color, _, let highlighting):
+            highlightedQuranAttributedString(
+                text: text,
+                quranFont: quranFont,
+                ranges: highlighting,
+                color: color,
+                size: size
+            )
         }
     }
 
@@ -63,13 +69,14 @@ private extension TextPart {
 
     func highlightedQuranAttributedString(
         text: QuranText,
+        quranFont: QuranFont,
         ranges: [HighlightingRange],
         color: Color,
         size: MultipartText.FontSize
     ) -> NSAttributedString {
         let result = NSMutableAttributedString(string: text.text, attributes: [
             .backgroundColor: UIColor(color),
-            .font: size.quranUIFont,
+            .font: size.quranUIFont(quranFont),
         ])
         for highlight in ranges {
             let range = NSRange(highlight.range, in: text.text)
@@ -77,7 +84,16 @@ private extension TextPart {
                 result.addAttribute(.foregroundColor, value: UIColor(foregroundColor), range: range)
             }
             if highlight.fontWeight != nil {
-                result.addAttribute(.font, value: size.quranUIFont(emphasized: true), range: range)
+                result.addAttribute(.font, value: size.quranUIFont(quranFont, emphasized: true), range: range)
+            }
+        }
+        if quranFont == .indoPak {
+            for markerRange in text.ayahMarkerRanges {
+                result.addAttribute(
+                    .font,
+                    value: size.quranUIFont(.uthmanicHafs),
+                    range: NSRange(markerRange, in: text.text)
+                )
             }
         }
         return result

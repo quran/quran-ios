@@ -63,6 +63,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "QueuePlayerTests",
+        "name" : "QueuePlayerTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "QuranKitTests",
         "name" : "QuranKitTests"
       }

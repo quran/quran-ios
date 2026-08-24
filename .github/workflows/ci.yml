@@ -24,6 +24,14 @@ jobs:
     - name: Setting up Xcode
       run: sudo xcode-select -s "/Applications/Xcode_26.2.app"
 
+    - name: Restore Xcode build cache
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: .build/DerivedData/no-sync
+        key: ${{ runner.os }}-xcode-26.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift') }}-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-xcode-26.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift') }}-
+
     - name: Install xcbeautify
       run: brew install xcbeautify
 
@@ -44,6 +52,14 @@ jobs:
     - name: Setting up Xcode
       run: sudo xcode-select -s "/Applications/Xcode_26.2.app"
 
+    - name: Restore Xcode build cache
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: .build/DerivedData/sync
+        key: ${{ runner.os }}-xcode-26.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift') }}-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-xcode-26.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift') }}-
+
     - name: Install xcbeautify
       run: brew install xcbeautify
 
@@ -60,6 +76,14 @@ jobs:
       - name: Setting up Xcode
         run: sudo xcode-select -s "/Applications/Xcode_26.2.app"
 
+      - name: Restore Xcode build cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .build/DerivedData/no-sync
+          key: ${{ runner.os }}-xcode-26.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift', 'Example/QuranEngineApp.xcodeproj/project.pbxproj') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-xcode-26.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift', 'Example/QuranEngineApp.xcodeproj/project.pbxproj') }}-
+
       - name: Install xcbeautify
         run: brew install xcbeautify
       
@@ -75,6 +99,14 @@ jobs:
 
       - name: Setting up Xcode
         run: sudo xcode-select -s "/Applications/Xcode_26.2.app"
+
+      - name: Restore Xcode build cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .build/DerivedData/sync
+          key: ${{ runner.os }}-xcode-26.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift', 'Example/QuranEngineApp.xcodeproj/project.pbxproj') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-xcode-26.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift', 'Example/QuranEngineApp.xcodeproj/project.pbxproj') }}-
 
       - name: Install xcbeautify
         run: brew install xcbeautify

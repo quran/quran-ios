@@ -82,6 +82,28 @@ final class QuranViewTests: XCTestCase {
         XCTAssertIdentical(interaction.scrollView, context.contentScrollView)
     }
 
+    func test_refreshingScrollEdgeInteractionsReconnectsBarsToNewVisiblePage() throws {
+        guard #available(iOS 26.0, *) else {
+            throw XCTSkip("UIScrollEdgeElementContainerInteraction requires iOS 26.")
+        }
+        let context = makeSut()
+        let newPageViewController = UIViewController()
+        let newContentScrollView = UIScrollView(frame: context.sut.bounds)
+        newPageViewController.view.addSubview(newContentScrollView)
+        context.pageViewController.setViewControllers(
+            [newPageViewController],
+            direction: .forward,
+            animated: false
+        )
+
+        context.sut.refreshScrollEdgeInteractions()
+
+        let navigationInteraction = try scrollEdgeInteraction(in: context.sut.navigationBar)
+        let audioInteraction = try audioBarInteraction(in: context.audioView)
+        XCTAssertIdentical(navigationInteraction.scrollView, newContentScrollView)
+        XCTAssertIdentical(audioInteraction.scrollView, newContentScrollView)
+    }
+
     func test_hidingBarsImmediatelyHidesBarsWithoutChangingTheirAlpha() {
         let context = makeSut()
 
@@ -164,6 +186,7 @@ final class QuranViewTests: XCTestCase {
     private struct TestContext {
         let retainedHostViewController: UIViewController
         let sut: QuranView
+        let pageViewController: UIPageViewController
         let contentScrollView: UIScrollView
         let audioView: UIView
     }
@@ -205,6 +228,7 @@ final class QuranViewTests: XCTestCase {
         return TestContext(
             retainedHostViewController: hostViewController,
             sut: sut,
+            pageViewController: pageViewController,
             contentScrollView: contentScrollView,
             audioView: audioView
         )

@@ -42,6 +42,7 @@ protocol QuranPresentable: UIViewController {
 
     func startHiddenBarsTimer()
     func hideBars()
+    func refreshBarScrollEdgeInteractions()
 
     func setVisiblePages(_ pages: [Page])
     func updateBookmark(_ isBookmarked: Bool)
@@ -466,6 +467,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     func userWillBeginDragScroll() {
         logger.info("Quran: userWillBeginDragScroll")
         presenter?.hideBars()
+    }
+
+    func contentViewDidChangeVisiblePage() {
+        presenter?.refreshBarScrollEdgeInteractions()
     }
 
     func toogleBookmark() async {

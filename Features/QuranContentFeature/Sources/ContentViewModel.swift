@@ -25,6 +25,7 @@ import VLogging
 @MainActor
 public protocol ContentListener: AnyObject {
     func userWillBeginDragScroll()
+    func contentViewDidChangeVisiblePage()
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber])
 }
 
@@ -173,6 +174,10 @@ public final class ContentViewModel: ObservableObject {
 
     func onViewLongPressCancelled() {
         longPressData = nil
+    }
+
+    func onVisiblePageChanged() {
+        listener?.contentViewDidChangeVisiblePage()
     }
 
     // MARK: Private

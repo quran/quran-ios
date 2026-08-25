@@ -25,12 +25,14 @@ public struct PageViewController<Element, Content>: View
         interPageSpacing: CGFloat,
         animated: Bool,
         selection: Binding<Element>,
+        onVisiblePageChanged: @escaping () -> Void = {},
         @ViewBuilder forEach: () -> ForEach<[Element], Element.ID, Content>
     ) {
         self.transitionStyle = transitionStyle
         self.navigationOrientation = navigationOrientation
         self.interPageSpacing = interPageSpacing
         self.animated = animated
+        self.onVisiblePageChanged = onVisiblePageChanged
         _selection = selection
         self.forEach = forEach()
     }
@@ -44,6 +46,7 @@ public struct PageViewController<Element, Content>: View
             interPageSpacing: interPageSpacing,
             animated: animated,
             forEach: forEach,
+            onVisiblePageChanged: onVisiblePageChanged,
             selection: $selection
         )
     }
@@ -54,6 +57,7 @@ public struct PageViewController<Element, Content>: View
     let navigationOrientation: UIPageViewController.NavigationOrientation
     let interPageSpacing: CGFloat
     let animated: Bool
+    let onVisiblePageChanged: () -> Void
 
     @Binding var selection: Element
     let forEach: ForEach<[Element], Element.ID, Content>
@@ -71,6 +75,7 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
     let animated: Bool
 
     let forEach: ForEach<[Element], Element.ID, Content>
+    let onVisiblePageChanged: () -> Void
     @Binding var selection: Element
 
     @State var userDraggingStartedTransitionInProgress = false
@@ -108,6 +113,9 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
     }
 
     func updateUIViewController(_ pageViewController: UIPageViewController, context: Context) {
+        let previousSelection = context.coordinator.parent.selection
+        context.coordinator.parent = self
+
         // Early return if showing selection's view controller.
         if let visibleController = pageViewController.mostVisibleViewController as? PageContentController {
             if visibleController.element == selection {
@@ -133,9 +141,6 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
             return
         }
 
-        let previousSelection = context.coordinator.parent.selection
-        context.coordinator.parent = self
-
         let viewController = makeController(selection)
 
         let previousIndex = forEach.data.firstIndex { $0 == previousSelection }
@@ -146,7 +151,12 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
             .forward
         }
 
-        pageViewController.setViewControllers([viewController], direction: direction, animated: animated)
+        pageViewController.setViewControllers([viewController], direction: direction, animated: animated) {
+            [weak coordinator = context.coordinator] completed in
+            if completed {
+                coordinator?.visiblePageDidChange()
+            }
+        }
     }
 
     func makeController(_ element: Element) -> UIViewController {
@@ -221,6 +231,13 @@ extension _PageViewController {
                let contentController = visibleViewController as? PageContentController
             {
                 parent.selection = contentController.element
+                visiblePageDidChange()
+            }
+        }
+
+        func visiblePageDidChange() {
+            DispatchQueue.main.async { [weak self] in
+                self?.parent.onVisiblePageChanged()
             }
         }
 

@@ -18,7 +18,8 @@ struct PagesView: View {
             QuranPaginationView(
                 pagingStrategy: pagingStrategy(with: geometry),
                 selection: $viewModel.visiblePages,
-                pages: viewModel.deps.quran.pages
+                pages: viewModel.deps.quran.pages,
+                onVisiblePageChanged: viewModel.onVisiblePageChanged
             ) { page in
                 Group {
                     switch viewModel.quranMode {

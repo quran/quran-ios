@@ -81,18 +81,62 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
         updateAudioBarVisibility()
     }
 
-    func setBarsHidden(_ hidden: Bool) {
+    func setBarsHidden(_ hidden: Bool, animated: Bool = false, completion: (() -> Void)? = nil) {
+        let navigationBarStateChanged = navigationBarHidden != hidden
+        let audioBarStateChanged = audioBarHidden != hidden
         navigationBarHidden = hidden
         audioBarHidden = hidden
         configureNavigationBarScrollEdgeEffectIfNeeded()
         configureAudioBarScrollEdgeEffectIfNeeded()
-        updateNavigationBarVisibility()
-        updateAudioBarVisibility()
+
+        barsVisibilityAnimationID &+= 1
+        let animationID = barsVisibilityAnimationID
+        let animateNavigationBar = prepareBarForVisibilityTransition(
+            navigationBar,
+            hidden: hidden,
+            animated: animated,
+            stateChanged: navigationBarStateChanged
+        )
+        let animateAudioBar = prepareBarForVisibilityTransition(
+            audioView,
+            hidden: hidden,
+            animated: animated,
+            stateChanged: audioBarStateChanged
+        )
+        guard animateNavigationBar || animateAudioBar else {
+            completion?()
+            return
+        }
+
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 0,
+            usingSpringWithDamping: 1,
+            initialSpringVelocity: 0,
+            options: .beginFromCurrentState
+        ) {
+            if animateNavigationBar {
+                self.navigationBar.alpha = hidden ? 0 : 1
+            }
+            if animateAudioBar {
+                self.audioView?.alpha = hidden ? 0 : 1
+            }
+        } completion: { [weak self] _ in
+            guard let self, barsVisibilityAnimationID == animationID else { return }
+            if animateNavigationBar, navigationBarHidden == hidden {
+                updateNavigationBarVisibility()
+            }
+            if animateAudioBar, audioBarHidden == hidden {
+                updateAudioBarVisibility()
+            }
+            completion?()
+        }
     }
 
     func setAudioBarHidden(_ hidden: Bool) {
         audioBarHidden = hidden
         configureAudioBarScrollEdgeEffectIfNeeded()
+        audioView?.layer.removeAllAnimations()
         updateAudioBarVisibility()
     }
 
@@ -114,6 +158,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     private var audioView: UIView?
     private var navigationBarHidden = false
     private var audioBarHidden = false
+    // Prevent an interrupted animation from finalizing a newer visibility request.
+    private var barsVisibilityAnimationID = 0
     private var navigationBarScrollEdgeInteraction: (any UIInteraction)?
     private var audioBarScrollEdgeInteraction: (any UIInteraction)?
 
@@ -202,12 +248,38 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     }
 
     private func updateNavigationBarVisibility() {
-        navigationBar.isHidden = navigationBarHidden
+        updateBarVisibility(navigationBar, hidden: navigationBarHidden)
     }
 
     private func updateAudioBarVisibility() {
-        audioView?.isHidden = audioBarHidden
-        audioView?.isUserInteractionEnabled = !audioBarHidden
+        updateBarVisibility(audioView, hidden: audioBarHidden)
+    }
+
+    private func prepareBarForVisibilityTransition(
+        _ view: UIView?,
+        hidden: Bool,
+        animated: Bool,
+        stateChanged: Bool
+    ) -> Bool {
+        guard let view else { return false }
+        guard animated, stateChanged else {
+            view.layer.removeAllAnimations()
+            updateBarVisibility(view, hidden: hidden)
+            return false
+        }
+
+        if !hidden, view.isHidden {
+            view.alpha = 0
+        }
+        view.isHidden = false
+        view.isUserInteractionEnabled = !hidden
+        return true
+    }
+
+    private func updateBarVisibility(_ view: UIView?, hidden: Bool) {
+        view?.isHidden = hidden
+        view?.isUserInteractionEnabled = !hidden
+        view?.alpha = 1
     }
 
     private func setUp() {

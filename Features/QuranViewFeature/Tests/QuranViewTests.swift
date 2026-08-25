@@ -103,6 +103,37 @@ final class QuranViewTests: XCTestCase {
         XCTAssertFalse(context.sut.navigationBar.isHidden)
     }
 
+    func test_animatedHidingEndsWithHiddenBarsAtFullAlpha() {
+        let context = makeSut()
+        let animationCompleted = expectation(description: "Animation completed")
+
+        context.sut.setBarsHidden(true, animated: true) {
+            animationCompleted.fulfill()
+        }
+        wait(for: [animationCompleted], timeout: 1)
+
+        XCTAssertTrue(context.audioView.isHidden)
+        XCTAssertTrue(context.sut.navigationBar.isHidden)
+        XCTAssertEqual(context.audioView.alpha, 1)
+        XCTAssertEqual(context.sut.navigationBar.alpha, 1)
+    }
+
+    func test_animatedShowingEndsWithVisibleBarsAtFullAlpha() {
+        let context = makeSut()
+        context.sut.setBarsHidden(true)
+        let animationCompleted = expectation(description: "Animation completed")
+
+        context.sut.setBarsHidden(false, animated: true) {
+            animationCompleted.fulfill()
+        }
+        wait(for: [animationCompleted], timeout: 1)
+
+        XCTAssertFalse(context.audioView.isHidden)
+        XCTAssertFalse(context.sut.navigationBar.isHidden)
+        XCTAssertEqual(context.audioView.alpha, 1)
+        XCTAssertEqual(context.sut.navigationBar.alpha, 1)
+    }
+
     func test_showingOnlyAudioBarKeepsNavigationBarHiddenWithoutScrollEdgeInteraction() throws {
         guard #available(iOS 26.0, *) else {
             throw XCTSkip("UIScrollEdgeElementContainerInteraction requires iOS 26.")

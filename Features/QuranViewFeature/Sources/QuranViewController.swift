@@ -337,7 +337,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         // remove the timer
         stopBarHiddenTimer()
 
-        quranView?.setBarsHidden(hidden)
+        quranView?.setBarsHidden(hidden, animated: true)
 
         UIView.animate(withDuration: 0.3) {
             self.statusBarHidden = hidden

@@ -58,15 +58,7 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
-        tabBarVisibilityObservation = tabBar.observe(\.isHidden, options: [.initial, .new]) { [weak self] _, _ in
-            self?.synchronizeTabBarContainerVisibility()
-        }
         updateCrashContext(selectedIndex: selectedIndex)
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        synchronizeTabBarContainerVisibility()
     }
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
@@ -97,7 +89,6 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     private let interactor: AppInteractor
     private let whatsNewController: AppWhatsNewController
     private var hasStartedPostLaunchPresentation = false
-    private var tabBarVisibilityObservation: NSKeyValueObservation?
 
     private let tabNames = ["home", "notes", "bookmarks", "search", "settings"]
 
@@ -110,18 +101,6 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         crashContext.setSelectedTab(tab)
         crashContext.setScreen(tab)
         logger.info("Crash context: selected tab \(tab)")
-    }
-}
-
-extension UITabBarController {
-    func synchronizeTabBarContainerVisibility() {
-        guard #available(iOS 26.0, *) else { return }
-        guard let containerView = tabBar.superview?.superview,
-              containerView.bounds.size == tabBar.bounds.size
-        else {
-            return
-        }
-        containerView.isHidden = tabBar.isHidden
     }
 }
 

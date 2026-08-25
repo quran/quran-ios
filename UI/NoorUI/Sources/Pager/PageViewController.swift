@@ -9,6 +9,7 @@
 
 import SwiftUI
 import UIKit
+import UIx
 import VLogging
 
 public struct PageViewController<Element, Content>: View
@@ -108,7 +109,7 @@ private struct _PageViewController<Element, Content>: UIViewControllerRepresenta
 
     func updateUIViewController(_ pageViewController: UIPageViewController, context: Context) {
         // Early return if showing selection's view controller.
-        if let visibleController = pageViewController.viewControllers?.first as? PageContentController {
+        if let visibleController = pageViewController.mostVisibleViewController as? PageContentController {
             if visibleController.element == selection {
                 return
             }
@@ -216,7 +217,7 @@ extension _PageViewController {
             transitionCompleted completed: Bool
         ) {
             if completed,
-               let visibleViewController = pageViewController.viewControllers?.first,
+               let visibleViewController = pageViewController.mostVisibleViewController,
                let contentController = visibleViewController as? PageContentController
             {
                 parent.selection = contentController.element

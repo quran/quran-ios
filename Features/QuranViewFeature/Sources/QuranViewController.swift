@@ -191,7 +191,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         addChild(audioBanner)
         quranView?.addAudioBannerView(audioBanner.view)
         audioBanner.didMove(toParent: self)
-        setAudioBarHidden(false)
+        quranView?.setAudioBarHidden(false)
     }
 
     func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint) {
@@ -337,23 +337,11 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         // remove the timer
         stopBarHiddenTimer()
 
-        // make it visible
-        if quranView?.navigationBar.isHidden ?? true, !hidden {
-            quranView?.navigationBar.isHidden = false
-        }
+        quranView?.setBarsHidden(hidden, animated: true)
 
-        // animate the change
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, animations: {
+        UIView.animate(withDuration: 0.3) {
             self.statusBarHidden = hidden
-            self.setAudioBarHidden(hidden)
-            self.quranView?.navigationBar.alpha = hidden ? 0 : 1
-        }, completion: { _ in
-            self.quranView?.navigationBar.isHidden = hidden
-        })
-    }
-
-    private func setAudioBarHidden(_ hidden: Bool) {
-        quranView?.setBarsHidden(hidden)
+        }
     }
 
     private func addContent(_ viewController: UIViewController) {

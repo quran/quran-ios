@@ -784,6 +784,7 @@ private func featuresTargets() -> [[Target]] {
 
         target(type, name: "QuranViewFeature", dependencies: [
             "Crashing",
+            "UIx",
             "AudioBannerFeature",
             "QuranContentFeature",
             "AyahMenuFeature",

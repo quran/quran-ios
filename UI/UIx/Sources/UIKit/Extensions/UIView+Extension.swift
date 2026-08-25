@@ -21,6 +21,18 @@
 import UIKit
 
 extension UIView {
+    /// Returns the first view controller found while walking up the responder chain.
+    public var nearestViewController: UIViewController? {
+        var responder: UIResponder? = self
+        while let currentResponder = responder {
+            if let viewController = currentResponder as? UIViewController {
+                return viewController
+            }
+            responder = currentResponder.next
+        }
+        return nil
+    }
+
     public func findFirstResponder() -> UIView? {
         if isFirstResponder { return self }
         for subView in subviews {
@@ -104,6 +116,22 @@ extension UIView {
         findSubviews(ofType: T.self) { subview in
             subview.isHidden == false && subview.alpha > 0 && subview.frame.size != .zero
         }
+    }
+
+    /// Returns the visible subview of the requested type with the largest area inside the receiver.
+    public func mostVisibleSubview<T: UIView>(ofType type: T.Type) -> T? {
+        findVisibleSubviews(ofType: type)
+            .max { lhs, rhs in
+                lhs.visibleArea(in: self) < rhs.visibleArea(in: self)
+            }
+    }
+
+    /// Returns the area of the receiver that intersects the supplied view's bounds.
+    public func visibleArea(in view: UIView) -> CGFloat {
+        let frame = convert(bounds, to: view)
+        let intersection = frame.intersection(view.bounds)
+        guard !intersection.isNull else { return 0 }
+        return intersection.width * intersection.height
     }
 
     private func findSubviews<T: UIView>(ofType type: T.Type, include: (UIView) -> Bool) -> [T] {

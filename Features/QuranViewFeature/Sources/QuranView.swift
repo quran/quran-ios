@@ -18,6 +18,7 @@
 //  GNU General Public License for more details.
 //
 import UIKit
+import UIx
 import ViewConstrainer
 
 @MainActor
@@ -215,36 +216,14 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     }
 
     private func contentScrollView() -> UIScrollView? {
-        guard let contentViewController = contentView?.next as? UIViewController,
-              let pageViewController = findPageViewController(in: contentViewController),
-              let pageView = pageViewController.viewControllers?.first?.view
+        guard let contentViewController = contentView?.nearestViewController,
+              let pageViewController = contentViewController.findViewController(ofType: UIPageViewController.self),
+              let pageView = pageViewController.mostVisibleViewController?.viewIfLoaded
         else {
             return nil
         }
 
-        return pageView.findVisibleSubviews(ofType: UIScrollView.self)
-            .max { lhs, rhs in
-                visibleArea(of: lhs) < visibleArea(of: rhs)
-            }
-    }
-
-    private func findPageViewController(in viewController: UIViewController) -> UIPageViewController? {
-        if let pageViewController = viewController as? UIPageViewController {
-            return pageViewController
-        }
-        for child in viewController.children {
-            if let pageViewController = findPageViewController(in: child) {
-                return pageViewController
-            }
-        }
-        return nil
-    }
-
-    private func visibleArea(of view: UIView) -> CGFloat {
-        let frame = view.convert(view.bounds, to: self)
-        let intersection = frame.intersection(bounds)
-        guard !intersection.isNull else { return 0 }
-        return intersection.width * intersection.height
+        return pageView.mostVisibleSubview(ofType: UIScrollView.self)
     }
 
     private func updateNavigationBarVisibility() {

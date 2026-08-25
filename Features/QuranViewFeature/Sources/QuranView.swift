@@ -78,11 +78,22 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
         audioBannerView.vc
             .horizontalEdges()
             .bottom()
+        updateAudioBarVisibility()
     }
 
     func setBarsHidden(_ hidden: Bool) {
-        audioView?.alpha = hidden ? 0 : 1
-        audioView?.isUserInteractionEnabled = !hidden
+        navigationBarHidden = hidden
+        audioBarHidden = hidden
+        configureNavigationBarScrollEdgeEffectIfNeeded()
+        configureAudioBarScrollEdgeEffectIfNeeded()
+        updateNavigationBarVisibility()
+        updateAudioBarVisibility()
+    }
+
+    func setAudioBarHidden(_ hidden: Bool) {
+        audioBarHidden = hidden
+        configureAudioBarScrollEdgeEffectIfNeeded()
+        updateAudioBarVisibility()
     }
 
     @objc
@@ -101,46 +112,52 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
 
     private let tapGesture = UITapGestureRecognizer()
     private var audioView: UIView?
+    private var navigationBarHidden = false
+    private var audioBarHidden = false
     private var navigationBarScrollEdgeInteraction: (any UIInteraction)?
     private var audioBarScrollEdgeInteraction: (any UIInteraction)?
 
     private func configureNavigationBarScrollEdgeEffectIfNeeded() {
         guard #available(iOS 26.0, *) else { return }
-        guard let scrollView = contentView?.findSubview(ofType: UIScrollView.self) else {
-            return
-        }
 
-        if let interaction = navigationBarScrollEdgeInteraction as? UIScrollEdgeElementContainerInteraction {
-            if interaction.scrollView !== scrollView {
-                interaction.scrollView = scrollView
+        guard !navigationBarHidden,
+              let scrollView = contentScrollView()
+        else {
+            if let interaction = navigationBarScrollEdgeInteraction {
+                navigationBar.removeInteraction(interaction)
+                navigationBarScrollEdgeInteraction = nil
             }
             return
         }
 
-        let interaction = UIScrollEdgeElementContainerInteraction()
-        interaction.edge = .top
+        let interaction: UIScrollEdgeElementContainerInteraction
+        if let existingInteraction = navigationBarScrollEdgeInteraction as? UIScrollEdgeElementContainerInteraction {
+            interaction = existingInteraction
+        } else {
+            interaction = UIScrollEdgeElementContainerInteraction()
+            interaction.edge = .top
+            navigationBarScrollEdgeInteraction = interaction
+            navigationBar.addInteraction(interaction)
+        }
         interaction.scrollView = scrollView
-        navigationBarScrollEdgeInteraction = interaction
-        navigationBar.addInteraction(interaction)
     }
 
     private func configureAudioBarScrollEdgeEffectIfNeeded() {
         guard #available(iOS 26.0, *) else { return }
-        if let interaction = audioBarScrollEdgeInteraction as? UIScrollEdgeElementContainerInteraction,
-           interaction.scrollView != nil
-        {
-            return
-        }
+        guard let audioView else { return }
 
-        guard let audioView,
-              let scrollView = contentView?.findSubview(ofType: UIScrollView.self)
+        guard !audioBarHidden,
+              let scrollView = contentScrollView()
         else {
+            if let interaction = audioBarScrollEdgeInteraction {
+                audioView.removeInteraction(interaction)
+                audioBarScrollEdgeInteraction = nil
+            }
             return
         }
 
         let interaction: UIScrollEdgeElementContainerInteraction
         if let existingInteraction = audioBarScrollEdgeInteraction as? UIScrollEdgeElementContainerInteraction {
-            guard existingInteraction.scrollView == nil else { return }
             interaction = existingInteraction
         } else {
             interaction = UIScrollEdgeElementContainerInteraction()
@@ -149,6 +166,48 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
             audioView.addInteraction(interaction)
         }
         interaction.scrollView = scrollView
+    }
+
+    private func contentScrollView() -> UIScrollView? {
+        guard let contentViewController = contentView?.next as? UIViewController,
+              let pageViewController = findPageViewController(in: contentViewController),
+              let pageView = pageViewController.viewControllers?.first?.view
+        else {
+            return nil
+        }
+
+        return pageView.findVisibleSubviews(ofType: UIScrollView.self)
+            .max { lhs, rhs in
+                visibleArea(of: lhs) < visibleArea(of: rhs)
+            }
+    }
+
+    private func findPageViewController(in viewController: UIViewController) -> UIPageViewController? {
+        if let pageViewController = viewController as? UIPageViewController {
+            return pageViewController
+        }
+        for child in viewController.children {
+            if let pageViewController = findPageViewController(in: child) {
+                return pageViewController
+            }
+        }
+        return nil
+    }
+
+    private func visibleArea(of view: UIView) -> CGFloat {
+        let frame = view.convert(view.bounds, to: self)
+        let intersection = frame.intersection(bounds)
+        guard !intersection.isNull else { return 0 }
+        return intersection.width * intersection.height
+    }
+
+    private func updateNavigationBarVisibility() {
+        navigationBar.isHidden = navigationBarHidden
+    }
+
+    private func updateAudioBarVisibility() {
+        audioView?.isHidden = audioBarHidden
+        audioView?.isUserInteractionEnabled = !audioBarHidden
     }
 
     private func setUp() {

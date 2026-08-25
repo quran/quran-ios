@@ -141,6 +141,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
         updateAudioBarVisibility()
     }
 
+    func refreshScrollEdgeInteractions() {
+        configureNavigationBarScrollEdgeEffectIfNeeded()
+        configureAudioBarScrollEdgeEffectIfNeeded()
+    }
+
     @objc
     func onViewTapped(_ sender: UITapGestureRecognizer) {
         if let audioView, audioView.bounds.contains(sender.location(in: audioView)), audioView.isUserInteractionEnabled {

@@ -17,10 +17,17 @@ public enum PagingStrategy {
 public struct QuranPaginationView<Content: View>: View {
     // MARK: Lifecycle
 
-    public init(pagingStrategy: PagingStrategy, selection: Binding<[Page]>, pages: [Page], content: @escaping (Page) -> Content) {
+    public init(
+        pagingStrategy: PagingStrategy,
+        selection: Binding<[Page]>,
+        pages: [Page],
+        onVisiblePageChanged: @escaping () -> Void = {},
+        content: @escaping (Page) -> Content
+    ) {
         self.pagingStrategy = pagingStrategy
         _selection = selection
         self.pages = pages
+        self.onVisiblePageChanged = onVisiblePageChanged
         self.content = content
     }
 
@@ -33,12 +40,14 @@ public struct QuranPaginationView<Content: View>: View {
                 QuranSinglePaginationView(
                     selection: singlePageSelection,
                     pages: pages,
+                    onVisiblePageChanged: onVisiblePageChanged,
                     content: contentView
                 )
             case .doublePage:
                 QuranDoublePaginationView(
                     selection: $selection,
                     pages: pages,
+                    onVisiblePageChanged: onVisiblePageChanged,
                     content: contentView
                 )
             }
@@ -60,6 +69,7 @@ public struct QuranPaginationView<Content: View>: View {
 
     @Binding private var selection: [Page]
     private let pages: [Page]
+    private let onVisiblePageChanged: () -> Void
 
     @ViewBuilder private let content: (Page) -> Content
 
@@ -93,6 +103,7 @@ private struct QuranDoublePaginationView<Content: View>: View {
 
     @Binding var selection: [Page]
     let pages: [Page]
+    let onVisiblePageChanged: () -> Void
     @ViewBuilder let content: (Page) -> Content
 
     var body: some View {
@@ -101,7 +112,8 @@ private struct QuranDoublePaginationView<Content: View>: View {
             navigationOrientation: .horizontal,
             interPageSpacing: ContentDimension.interPageSpacing,
             animated: true,
-            selection: doublePageSelection
+            selection: doublePageSelection,
+            onVisiblePageChanged: onVisiblePageChanged
         ) {
             ForEach(doublePages) { doublePage in
                 HStack(spacing: 0) {
@@ -143,6 +155,7 @@ private struct QuranSinglePaginationView<Content: View>: View {
 
     @Binding var selection: Page
     let pages: [Page]
+    let onVisiblePageChanged: () -> Void
     @ViewBuilder let content: (Page) -> Content
 
     var body: some View {
@@ -151,7 +164,8 @@ private struct QuranSinglePaginationView<Content: View>: View {
             navigationOrientation: .horizontal,
             interPageSpacing: ContentDimension.interPageSpacing,
             animated: true,
-            selection: $selection
+            selection: $selection,
+            onVisiblePageChanged: onVisiblePageChanged
         ) {
             ForEach(pages) { page in
                 Group {

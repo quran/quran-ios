@@ -113,7 +113,7 @@ extension Reading {
         case .indoPak:
             return [
                 Property(type: .supports, property: l("reading.selector.property.hafs")),
-                Property(type: .supports, property: l("reading.selector.property.pages.611")),
+                Property(type: .supports, property: l("reading.selector.property.pages.610")),
                 Property(type: .supports, property: l("reading.selector.property.lines.15")),
                 Property(type: .lacks, property: l("reading.selector.property.word-translation.not-supported")),
             ]

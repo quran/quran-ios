@@ -333,7 +333,7 @@
 // Reading selector
 "reading.indopak.description" = "مصحف برواية حفص بخط النسخ الهندي الباكستاني، الشائع في جنوب آسيا. صور الصفحات من مجمع الملك فهد لطباعة المصحف الشريف.";
 "reading.indopak.title" = "الهندي الباكستاني – ١٥ سطرًا";
-"reading.selector.property.pages.611" = "٦١١ صفحة";
+"reading.selector.property.pages.610" = "٦١٠ صفحة";
 
 // Translation
 "translation.text.ayah-number" = "%d:%d";

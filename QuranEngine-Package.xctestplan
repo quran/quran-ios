@@ -388,6 +388,27 @@
         "identifier" : "QueuePlayerTests",
         "name" : "QueuePlayerTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AudioTimingPersistenceTests",
+        "name" : "AudioTimingPersistenceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AudioTimingServiceTests",
+        "name" : "AudioTimingServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "QuranAudioTests",
+        "name" : "QuranAudioTests"
+      }
     }
   ],
   "version" : 1

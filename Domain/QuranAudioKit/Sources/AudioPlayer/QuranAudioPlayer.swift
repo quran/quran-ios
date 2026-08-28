@@ -20,12 +20,14 @@ public struct QuranAudioPlayerActions: Sendable {
         playbackEnded: @Sendable @MainActor @escaping () -> Void,
         playbackPaused: @Sendable @MainActor @escaping () -> Void,
         playbackResumed: @Sendable @MainActor @escaping () -> Void,
-        playing: @Sendable @MainActor @escaping (AyahNumber) -> Void
+        playing: @Sendable @MainActor @escaping (AyahNumber) -> Void,
+        playbackTimeChanged: @Sendable @MainActor @escaping (TimeInterval) -> Void
     ) {
         self.playbackEnded = playbackEnded
         self.playbackPaused = playbackPaused
         self.playbackResumed = playbackResumed
         self.playing = playing
+        self.playbackTimeChanged = playbackTimeChanged
     }
 
     // MARK: Internal
@@ -34,6 +36,10 @@ public struct QuranAudioPlayerActions: Sendable {
     let playbackPaused: @Sendable @MainActor () -> Void
     let playbackResumed: @Sendable @MainActor () -> Void
     let playing: @Sendable @MainActor (AyahNumber) -> Void
+
+    /// Position within the file being played. For a gapless reciter each file is one sura,
+    /// so this is the position in that sura's own timeline.
+    let playbackTimeChanged: @Sendable @MainActor (TimeInterval) -> Void
 }
 
 @MainActor
@@ -52,6 +58,12 @@ public class QuranAudioPlayer {
     // MARK: Public
 
     public var actions: QuranAudioPlayerActions?
+
+    /// Whether to report the playhead through `QuranAudioPlayerActions.playbackTimeChanged`.
+    public var observesPlaybackTime: Bool {
+        get { player.observesPlaybackTime }
+        set { player.observesPlaybackTime = newValue }
+    }
 
     public func setActions(_ actions: QuranAudioPlayerActions) {
         self.actions = actions
@@ -197,6 +209,9 @@ public class QuranAudioPlayer {
             },
             durationLoaded: { [weak self] in
                 self?.durationLoaded($0)
+            },
+            playbackTimeChanged: { [weak self] in
+                self?.actions?.playbackTimeChanged($0)
             }
         )
     }

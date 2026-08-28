@@ -22,6 +22,13 @@ extension Color {
     static var recitation: Color {
         Color(UIColor.recitation)
     }
+
+    /// Highlights the word being recited inside its `recitation`-tinted verse. Teal against
+    /// that orange, so the moving word reads as separate from the verse around it. It stays
+    /// the same whatever the app icon, like `recitation`.
+    static var recitedWord: Color {
+        Color(UIColor.recitedWord)
+    }
 }
 
 public extension UIColor {
@@ -29,11 +36,22 @@ public extension UIColor {
     @MainActor static var onAccent: UIColor {
         AppIconAccent.current.onColor
     }
+
+    /// Background for the popover naming the word being recited. Neutral, so it competes
+    /// with neither the ayah highlight nor the word highlight drawn under it. Fixed rather
+    /// than dynamic, because the popover draws a light label in both appearances.
+    static var recitedWordPopoverBackground: UIColor {
+        UIColor(red: 38 / 255, green: 38 / 255, blue: 40 / 255, alpha: 1)
+    }
 }
 
 extension UIColor {
     static var recitation: UIColor {
         UIColor(light: UIColor(rgb: 0xDC7702), dark: UIColor(rgb: 0xEF911D))
+    }
+
+    static var recitedWord: UIColor {
+        UIColor(light: UIColor(rgb: 0x1B6B71), dark: UIColor(rgb: 0x2FA4AC))
     }
 
     static var themeCalmText: UIColor {

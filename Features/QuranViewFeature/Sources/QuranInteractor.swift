@@ -209,6 +209,34 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         contentViewModel?.highlightReadingAyah(ayah)
     }
 
+    /// The word pointer switch in the More menu is what turns follow-along on and off.
+    var followsRecitedWord: Bool {
+        isWordPointerActive
+    }
+
+    /// Highlights the recited word and shows its translation.
+    func highlightRecitedWord(_ word: Word?) {
+        // The banner checks `followsRecitedWord` first; the switch can still go off while
+        // an emission is in flight.
+        guard isWordPointerActive else {
+            return
+        }
+        contentViewModel?.highlightRecitedWord(word)
+
+        recitedWordTask?.cancel()
+        recitedWordTask = nil
+
+        guard let word else {
+            wordPointer?.hideRecitedWord()
+            return
+        }
+        recitedWordTask = Task { [weak self] in
+            await self?.wordPointer?.showRecitedWord(word, rectProvider: { [weak self] in
+                self?.visibleRect(for: word)
+            })
+        }
+    }
+
     // MARK: - Ayah Menu
 
     func playAudio(_ from: AyahNumber, to: AyahNumber?, repeatVerses: Bool) {
@@ -405,6 +433,12 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                 showWordPointer(referenceView: presenter.pagesView)
             }
         } else {
+            // Clear what follow-along left on screen before the pointer goes away;
+            // highlightRecitedWord ignores calls once the switch is off.
+            recitedWordTask?.cancel()
+            recitedWordTask = nil
+            contentViewModel?.highlightRecitedWord(nil)
+            wordPointer?.hideRecitedWord()
             hideWordPointer()
         }
     }
@@ -480,6 +514,17 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private var cancellables: Set<AnyCancellable> = []
     private var isWordPointerActive: Bool
     private var wordPointer: WordPointerViewController?
+
+    private var recitedWordTask: Task<Void, Never>?
+
+    /// Where the word is drawn, or nil when its page is not on screen. The pager keeps
+    /// neighbouring pages mounted, and their geometry answers for words nobody can see.
+    private func visibleRect(for word: Word) -> CGRect? {
+        guard visiblePages.contains(word.verse.page) else {
+            return nil
+        }
+        return contentViewController?.rect(for: word)
+    }
 
     private var visiblePageCancellable: AnyCancellable?
 

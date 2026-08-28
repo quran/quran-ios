@@ -8,6 +8,7 @@
 
 import AdvancedAudioOptionsFeature
 import Analytics
+import AudioTimingService
 import BatchDownloader
 import Crashing
 import Foundation
@@ -29,6 +30,12 @@ import VLogging
 public protocol AudioBannerListener: AnyObject {
     var visiblePages: [Page] { get }
     func highlightReadingAyah(_ ayah: AyahNumber?)
+    /// The word currently being recited, or nil to clear it.
+    func highlightRecitedWord(_ word: Word?)
+
+    /// Whether the listener will draw `highlightRecitedWord(_:)`. Checked before any word
+    /// timings are read, so a reader who cannot see the highlight pays nothing for it.
+    var followsRecitedWord: Bool { get }
 }
 
 private enum PlaybackState {
@@ -59,6 +66,7 @@ public final class AudioBannerViewModel: ObservableObject {
         recentRecitersService: RecentRecitersService,
         audioPlayer: QuranAudioPlayer,
         downloader: QuranAudioDownloader,
+        wordSegmentRetriever: ReciterWordSegmentRetriever,
         reciterListBuilder: ReciterListBuilder,
         advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder
     ) {
@@ -67,6 +75,7 @@ public final class AudioBannerViewModel: ObservableObject {
         self.recentRecitersService = recentRecitersService
         self.audioPlayer = audioPlayer
         self.downloader = downloader
+        wordFollower = RecitationWordFollower(retriever: wordSegmentRetriever)
         self.reciterListBuilder = reciterListBuilder
         self.advancedAudioOptionsBuilder = advancedAudioOptionsBuilder
         playbackRate = AudioPreferences.shared.playbackRate
@@ -77,6 +86,7 @@ public final class AudioBannerViewModel: ObservableObject {
 
         setUpAudioPlayerActions()
         setUpRemoteCommandHandler()
+        setUpWordFollower()
 
         AudioPreferences.shared.$playbackRate.assign(to: &$playbackRate)
     }
@@ -134,6 +144,12 @@ public final class AudioBannerViewModel: ObservableObject {
             name: UIApplication.willEnterForegroundNotification,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(applicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
 
         reciters = await reciterRetreiver.getReciters()
         logger.info("AudioBanner: reciters loaded")
@@ -168,6 +184,8 @@ public final class AudioBannerViewModel: ObservableObject {
     private let lastAyahFinder: LastAyahFinder = PreferencesLastAyahFinder.shared
     private let audioPlayer: QuranAudioPlayer
     private let downloader: QuranAudioDownloader
+    private let wordFollower: RecitationWordFollower
+
     private var remoteCommandsHandler: RemoteCommandsHandler?
     private let reciterListBuilder: ReciterListBuilder
     private let advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder
@@ -207,6 +225,7 @@ public final class AudioBannerViewModel: ObservableObject {
             crashContext.setAudioReciter(id: nil)
         }
         listener?.highlightReadingAyah(nil)
+        wordFollower.stop()
 
         remoteCommandsHandler?.stopListening()
         remoteCommandsHandler?.startListeningToPlayCommand()
@@ -217,6 +236,14 @@ public final class AudioBannerViewModel: ObservableObject {
         // re-assign playingState to update UI
         let tempPlayingState = playingState
         playingState = tempPlayingState
+
+        wordFollower.resume()
+    }
+
+    @objc
+    private func applicationDidEnterBackground() {
+        // Recitation continues with the screen off, where nothing can see the highlight.
+        wordFollower.suspend()
     }
 
     private func selectReciter(_ reciter: Reciter) {
@@ -392,9 +419,23 @@ public final class AudioBannerViewModel: ObservableObject {
             playbackEnded: { [weak self] in self?.playbackEnded() },
             playbackPaused: { [weak self] in self?.playbackPaused() },
             playbackResumed: { [weak self] in self?.playbackResumed() },
-            playing: { [weak self] in self?.playing(ayah: $0) }
+            playing: { [weak self] in self?.playing(ayah: $0) },
+            playbackTimeChanged: { [weak self] in self?.playbackTimeChanged($0) }
         )
         audioPlayer.setActions(actions)
+    }
+
+    private func setUpWordFollower() {
+        wordFollower.onWordChanged = { [weak self] word in
+            self?.listener?.highlightRecitedWord(word)
+        }
+        wordFollower.onFollowingChanged = { [weak self] isFollowing in
+            self?.audioPlayer.observesPlaybackTime = isFollowing
+        }
+    }
+
+    private func playbackTimeChanged(_ seconds: TimeInterval) {
+        wordFollower.playbackTime(seconds)
     }
 
     private func playbackPaused() {
@@ -411,6 +452,15 @@ public final class AudioBannerViewModel: ObservableObject {
         logger.info("AudioBanner: playing verse \(ayah.nonLocalizedDescription)")
         crashContext.setPlayingAyah(sura: ayah.sura.suraNumber, ayah: ayah.ayah)
         listener?.highlightReadingAyah(ayah)
+        let follows = listener?.followsRecitedWord == true
+        if follows {
+            wordFollower.playing(ayah: ayah, reciter: selectedReciter)
+        } else {
+            wordFollower.stop()
+        }
+        // The follower is the only thing that turns observation on: a sura still loading
+        // reads as false here, and reports in once it knows whether it has any timings.
+        audioPlayer.observesPlaybackTime = follows && wordFollower.isFollowing
     }
 
     // MARK: - State changes
@@ -423,6 +473,7 @@ public final class AudioBannerViewModel: ObservableObject {
         logger.info("AudioBanner: onPlaybackOrDownloadingCompleted")
 
         crashContext.clearPlayingAyah()
+        wordFollower.stop()
         playingState = .stopped
     }
 

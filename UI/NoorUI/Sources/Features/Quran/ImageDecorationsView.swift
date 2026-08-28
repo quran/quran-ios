@@ -30,6 +30,11 @@ struct ImageDecorationsView: View {
                 QuranHighlightShape.word(word.frame)
                     .fill(word.color)
             }
+            // Drawn last, so it wins where the pointer is dragged onto the recited word.
+            if let word = layout.recitedWordHighlight {
+                QuranHighlightShape.word(word.frame)
+                    .fill(word.color)
+            }
         }
     }
 

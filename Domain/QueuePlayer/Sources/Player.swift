@@ -18,6 +18,9 @@ final class Player {
             NotificationCenter.default.removeObserver(endObservation)
         }
         durationTask?.cancel()
+        if let timeObservation {
+            player.removeTimeObserver(timeObservation)
+        }
         // Releasing `asset` stops its remote load once no other player shares it.
     }
 
@@ -71,6 +74,12 @@ final class Player {
     var onRateChanged: (@Sendable @MainActor (Float) -> Void)?
     var onDurationLoaded: (@Sendable @MainActor (TimeInterval) -> Void)?
     var onPlayedToEnd: (@Sendable @MainActor () -> Void)?
+
+    /// Fires while playing, on the media clock, at `timeObservationInterval`. Setting it
+    /// installs the observation; clearing it removes it, so nothing is observed by default.
+    var onTimeChanged: (@Sendable @MainActor (TimeInterval) -> Void)? {
+        didSet { updateTimeObservation() }
+    }
 
     let asset: PlayerAsset
     let playerItem: AVPlayerItem
@@ -130,6 +139,34 @@ final class Player {
     private var endObservation: NSObjectProtocol?
 
     private var durationTask: Task<Void, Never>?
+
+    /// Roughly a third of the shortest recited word, so a highlight lands within a frame
+    /// or two of the voice without observing more often than anything can be drawn.
+    private static let timeObservationInterval = CMTime(value: 50, timescale: 1000)
+
+    private var timeObservation: Any?
+}
+
+private extension Player {
+    func updateTimeObservation() {
+        if let timeObservation {
+            player.removeTimeObserver(timeObservation)
+            self.timeObservation = nil
+        }
+        guard let onTimeChanged else {
+            return
+        }
+        timeObservation = player.addPeriodicTimeObserver(
+            forInterval: Self.timeObservationInterval,
+            queue: .main
+        ) { time in
+            // Safe because the observer is queued on .main, as the end-of-item
+            // observation above is. Revisit both together if that queue changes.
+            MainActor.assumeIsolated {
+                onTimeChanged(time.seconds)
+            }
+        }
+    }
 }
 
 private extension AVPlayer {

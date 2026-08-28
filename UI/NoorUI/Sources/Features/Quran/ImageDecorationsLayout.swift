@@ -11,6 +11,7 @@ import SwiftUI
 struct ImageDecorationsLayout {
     let verseHighlights: [VerseHighlightPlacement]
     let wordHighlight: WordHighlightPlacement?
+    let recitedWordHighlight: WordHighlightPlacement?
     let suraHeaders: [SuraHeaderPlacement]
     let ayahMarkers: [AyahMarkerPlacement]
 
@@ -37,6 +38,9 @@ struct ImageDecorationsLayout {
         wordHighlight = decorations.wordHighlight
             .flatMap { decorations.wordFrames.wordFrameForWord($0) }
             .map { WordHighlightPlacement(frame: $0.rect.scaled(by: scale), color: VerseOverlays.wordHighlightColor) }
+        recitedWordHighlight = decorations.recitedWord
+            .flatMap { decorations.wordFrames.wordFrameForWord($0) }
+            .map { WordHighlightPlacement(frame: $0.rect.scaled(by: scale), color: VerseOverlays.recitedWordHighlightColor) }
     }
 
     struct VerseHighlightPlacement: Identifiable {

@@ -28,7 +28,14 @@ public struct VerseOverlays: Equatable {
     public var ayahIndicators = AyahIndicators.all
     #endif
 
+    /// The word under the drag pointer.
     public var pointedWord: Word?
+
+    /// The word the reciter is currently on.
+    ///
+    /// Kept apart from `pointedWord` so following the recitation and dragging the pointer
+    /// cannot overwrite each other, and so each can be drawn in its own colour.
+    public var recitedWord: Word?
 }
 
 extension VerseOverlays {
@@ -41,6 +48,7 @@ extension VerseOverlays {
         overlays.colorHighlights = colorHighlights.filter { $0.key.page == page }
         overlays.notedVerses = notedVerses.filter { $0.page == page }
         overlays.pointedWord = pointedWord.flatMap { $0.verse.page == page ? $0 : nil }
+        overlays.recitedWord = recitedWord.flatMap { $0.verse.page == page ? $0 : nil }
         #if QURAN_SYNC
         overlays.collectionVerses = collectionVerses.filter { $0.page == page }
         overlays.readingBookmarks = readingBookmarks.filter { bookmark in

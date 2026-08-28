@@ -206,6 +206,10 @@ class QuranAudioPlayerTests: XCTestCase {
             queuePlayer.actions?.audioFrameChanged(frameChange.file, frameChange.frame, playerItem, nil)
             XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaying(AyahNumber(quran: quran, sura: 1, ayah: 3)!)])
 
+            // playhead
+            queuePlayer.actions?.playbackTimeChanged(12.5)
+            XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaybackTime(12.5)])
+
             // end playback
             queuePlayer.actions?.playbackEnded()
             XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaybackEnded])

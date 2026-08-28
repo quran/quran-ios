@@ -409,6 +409,13 @@
         "identifier" : "QuranAudioTests",
         "name" : "QuranAudioTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AudioBannerFeatureTests",
+        "name" : "AudioBannerFeatureTests"
+      }
     }
   ],
   "version" : 1

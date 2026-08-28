@@ -8,6 +8,7 @@
 
 import NoorUI
 import Popover_OC
+import QuranKit
 import UIKit
 import UIx
 import VLogging
@@ -76,6 +77,39 @@ public final class WordPointerViewController: UIViewController {
         animateIn(referenceView: referenceView)
     }
 
+    // MARK: - Recited word
+
+    /// Shows the translation of the word the reciter is on, pinned to where it is drawn.
+    ///
+    /// `rectProvider` is read after the translation lookup, so a page that scrolled during
+    /// the lookup, or out of view entirely, is accounted for.
+    public func showRecitedWord(_ word: Word, rectProvider: @MainActor () -> CGRect?) async {
+        let text = await viewModel.text(for: word)
+        // Checked before the hide below, so a superseded lookup cannot blank the popover
+        // the next word just put up.
+        guard !Task.isCancelled else {
+            return
+        }
+        guard let text, !text.isEmpty, !isPanning, let globalRect = rectProvider() else {
+            hideRecitedWord()
+            return
+        }
+
+        let rect = view.convert(globalRect, from: nil)
+        let isUpward = rect.minY < container.bounds.height * Self.recitedPopoverFlipThreshold
+        let gap = isUpward ? Self.recitedPopoverGap : -Self.recitedPopoverGap
+        let anchor = CGPoint(x: rect.midX, y: (isUpward ? rect.maxY : rect.minY) + gap)
+
+        let action = PopoverAction(image: nil, title: text, handler: nil)
+        recitedPopover.show(to: anchor, isUpward: isUpward, with: [action])
+        // Applied after show, which is what sets the style's own background colour.
+        recitedPopover.backgroundColor = .recitedWordPopoverBackground
+    }
+
+    public func hideRecitedWord() {
+        recitedPopover.hideNoAnimation()
+    }
+
     // MARK: - Layout
 
     override public func viewDidLayoutSubviews() {
@@ -121,6 +155,13 @@ public final class WordPointerViewController: UIViewController {
 
     // MARK: Private
 
+    /// Distance between the word and the recited popover's arrow tip.
+    private static let recitedPopoverGap: CGFloat = 4
+
+    /// Below this fraction of the page, a word is too close to the top for the popover to
+    /// open upwards.
+    private static let recitedPopoverFlipThreshold: CGFloat = 0.2
+
     private enum GestureState {
         case began
         case changed(translation: CGPoint)
@@ -137,11 +178,23 @@ public final class WordPointerViewController: UIViewController {
         return popover
     }()
 
+    // For the word the reciter is currently on
+    private lazy var recitedPopover: PopoverView = {
+        let popover = PopoverView(view: container)
+        // Dark style draws the label light; the background is overridden after show.
+        popover.style = .dark
+        popover.hideAfterTouchOutside = false
+        return popover
+    }()
+
     private var pointerTop: NSLayoutConstraint!
     private var pointerLeft: NSLayoutConstraint!
     private var pointer: UIView!
 
     private var pointerParentSize: CGSize = .zero
+
+    /// True between pan begin and end, while the drag owns the popover.
+    private var isPanning = false
 
     private var startPointerPosition: CGPoint = .zero
 
@@ -207,6 +260,9 @@ public final class WordPointerViewController: UIViewController {
     private func asyncOnPanned(state: GestureState) async {
         switch state {
         case .began:
+            // The two popovers must not be on screen together while audio plays.
+            isPanning = true
+            hideRecitedWord()
             viewModel.viewPanBegan()
             startPointerPosition = CGPoint(x: pointer.frame.minX, y: pointer.frame.minY)
 
@@ -231,6 +287,7 @@ public final class WordPointerViewController: UIViewController {
             }
 
         case .ended(let velocity):
+            isPanning = false
             hideMangifyingGlass()
             hideWordPopover()
             viewModel.unhighlightWord()

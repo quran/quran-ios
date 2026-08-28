@@ -119,6 +119,11 @@ public final class ContentViewModel: ObservableObject {
         overlays.pointedWord = word
     }
 
+    /// The word the reciter is on, tracked separately from the drag pointer's word.
+    public func highlightRecitedWord(_ word: Word?) {
+        overlays.recitedWord = word
+    }
+
     public func highlightReadingAyah(_ ayah: AyahNumber?) {
         overlays.playingVerses = [ayah].compactMap { $0 }
     }

@@ -18,7 +18,13 @@ public final class VerseOverlayService {
 
     @Published public var overlays = VerseOverlays() {
         didSet {
-            logger.info("Verse overlays updated")
+            // A heuristic, not a precise test: following a recitation rewrites the
+            // recited word a few times a second and nothing else, and logging those would
+            // bury every other overlay change. A write that changes the recited word
+            // alongside something else, as `reset()` can, is skipped too.
+            if overlays.recitedWord == oldValue.recitedWord {
+                logger.info("Verse overlays updated")
+            }
         }
     }
 

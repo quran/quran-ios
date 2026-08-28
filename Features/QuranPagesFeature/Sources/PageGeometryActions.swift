@@ -13,11 +13,20 @@ public struct PageGeometryActions: Equatable {
     let id: AnyHashable
     public var word: @MainActor (CGPoint) -> Word?
     public var verse: @MainActor (CGPoint) -> AyahNumber?
+    /// The inverse of `word`: where a given word sits on screen, in global coordinates.
+    /// Only the mushaf image draws individual words, so other pages return nil.
+    public var wordRect: @MainActor (Word) -> CGRect?
 
-    public init(id: some Hashable, word: @escaping (CGPoint) -> Word?, verse: @escaping (CGPoint) -> AyahNumber?) {
+    public init(
+        id: some Hashable,
+        word: @escaping (CGPoint) -> Word?,
+        verse: @escaping (CGPoint) -> AyahNumber?,
+        wordRect: @escaping (Word) -> CGRect? = { _ in nil }
+    ) {
         self.id = id
         self.word = word
         self.verse = verse
+        self.wordRect = wordRect
     }
 
     public nonisolated static func == (lhs: PageGeometryActions, rhs: PageGeometryActions) -> Bool {

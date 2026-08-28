@@ -8,6 +8,7 @@
 
 import AdvancedAudioOptionsFeature
 import AppDependencies
+import AudioTimingService
 import NoorUI
 import QuranAudioKit
 import ReciterListFeature
@@ -35,6 +36,7 @@ public struct AudioBannerBuilder {
                 baseURL: container.filesAppHost,
                 downloader: container.downloadManager
             ),
+            wordSegmentRetriever: ReciterWordSegmentRetriever(),
             reciterListBuilder: ReciterListBuilder(),
             advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder()
         )

@@ -47,6 +47,7 @@ class QueuePlayerFake: QueuingPlayer {
     }
 
     var actions: QueuePlayerActions?
+    var observesPlaybackTime = false
 
     var state: PlayingState = .stopped
     var location = 0

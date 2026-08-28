@@ -10,6 +10,7 @@ import QueuePlayer
 @MainActor
 protocol QueuingPlayer: AnyObject {
     var actions: QueuePlayerActions? { get set }
+    var observesPlaybackTime: Bool { get set }
 
     func play(request: AudioRequest, rate: Float)
     func pause()

@@ -442,7 +442,8 @@ private final class QueuePlayerActionsSpy {
                 if self?.durationsLoaded.count == 1 {
                     self?.firstDurationLoaded.fulfill()
                 }
-            }
+            },
+            playbackTimeChanged: { _ in }
         )
     }
 }

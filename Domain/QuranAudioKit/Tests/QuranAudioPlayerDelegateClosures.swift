@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2022-02-08.
 //
 
+import Foundation
 import Locking
 import QuranKit
 @testable import QuranAudioKit
@@ -23,6 +24,7 @@ class QuranAudioPlayerDelegateClosures {
         case onPlaybackResumed
         case onPlaying(AyahNumber)
         case onPlaybackEnded
+        case onPlaybackTime(TimeInterval)
     }
 
     var onPlaybackPausedBlock: (() -> Void)?
@@ -44,8 +46,13 @@ class QuranAudioPlayerDelegateClosures {
             playbackEnded: { [weak self] in self?.onPlaybackEnded() },
             playbackPaused: { [weak self] in self?.onPlaybackPaused() },
             playbackResumed: { [weak self] in self?.onPlaybackResumed() },
-            playing: { [weak self] in self?.onPlaying(ayah: $0) }
+            playing: { [weak self] in self?.onPlaying(ayah: $0) },
+            playbackTimeChanged: { [weak self] in self?.onPlaybackTime($0) }
         )
+    }
+
+    func onPlaybackTime(_ seconds: TimeInterval) {
+        events.sync { $0.append(.onPlaybackTime(seconds)) }
     }
 
     func onPlaybackPaused() {

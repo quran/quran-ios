@@ -64,7 +64,8 @@ class ContentImageViewModel: ObservableObject {
             drawsAyahNumbersAndSuraHeaders: reading.drawsAyahNumbersAndSuraHeaders,
             wordFrames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
             verseHighlights: overlays.versesByHighlights().mapValues { Color($0) },
-            wordHighlight: overlays.pointedWord
+            wordHighlight: overlays.pointedWord,
+            recitedWord: overlays.recitedWord
         )
     }
 
@@ -112,6 +113,16 @@ class ContentImageViewModel: ObservableObject {
             y: point.y - imageFrame.minY
         )
         return imagePage?.wordFrames.wordAtLocation(localPoint, imageScale: scale)
+    }
+
+    /// The inverse of `wordAtGlobalPoint`.
+    func globalRectForWord(_ word: Word) -> CGRect? {
+        guard let frame = imagePage?.wordFrames.wordFrameForWord(word) else {
+            return nil
+        }
+        return frame.rect
+            .scaled(by: scale)
+            .offsetBy(dx: imageFrame.minX, dy: imageFrame.minY)
     }
 
     // MARK: Private

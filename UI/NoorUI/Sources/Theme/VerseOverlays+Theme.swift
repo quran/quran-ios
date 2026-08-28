@@ -29,6 +29,11 @@ extension VerseOverlays {
 
     public static let wordHighlightColor = Color.recitation.opacity(opacity)
 
+    /// The recited word sits on top of its ayah's playing highlight, which is already
+    /// `recitation` at `opacity`. A different hue, rather than a darker shade of the
+    /// same one, is what makes the moving word readable against the static verse.
+    public static let recitedWordHighlightColor = Color.recitedWord.opacity(0.55)
+
     static let playingColor = UIColor.recitation.withAlphaComponent(opacity)
     static let selectionColor = UIColor.systemBlue.withAlphaComponent(opacity)
     static let navigationColor = UIColor.systemGray.withAlphaComponent(opacity)

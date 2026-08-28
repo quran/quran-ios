@@ -30,6 +30,17 @@ class AudioPlayer {
 
     var actions: QueuePlayerActions?
 
+    /// Whether to report the playhead. Off by default; observing costs a main-queue
+    /// callback many times a second, which only the word follower has any use for.
+    var observesPlaybackTime = false {
+        didSet {
+            guard observesPlaybackTime != oldValue, hasMadePlayer else {
+                return
+            }
+            observeTime(of: player)
+        }
+    }
+
     // MARK: - Interruption
 
     func onAudioInterruption(type: AudioInterruptionType) {
@@ -144,6 +155,9 @@ class AudioPlayer {
     // `startPlaying()` replaces it before anything reads it, so the initial value is never built.
     private lazy var player = makePlayer(fileIndex: 0)
 
+    // Whether `player` has been built, so changing `observesPlaybackTime` early doesn't build it.
+    private var hasMadePlayer = false
+
     private var timer: Timing.Timer? {
         didSet { oldValue?.cancel() }
     }
@@ -176,7 +190,22 @@ class AudioPlayer {
             }
             playedToEnd()
         }
+        observeTime(of: player)
+        hasMadePlayer = true
         return player
+    }
+
+    private func observeTime(of player: Player) {
+        guard observesPlaybackTime else {
+            player.onTimeChanged = nil
+            return
+        }
+        player.onTimeChanged = { [weak self, weak player] seconds in
+            guard let self, let player, player === self.player else {
+                return
+            }
+            actions?.playbackTimeChanged(seconds)
+        }
     }
 
     // MARK: - Repeat Logic

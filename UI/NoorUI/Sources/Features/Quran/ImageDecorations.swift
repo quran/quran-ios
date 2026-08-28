@@ -13,6 +13,8 @@ public struct ImageDecorations {
     public var wordFrames: WordFrameCollection
     public var verseHighlights: [AyahNumber: Color]
     public var wordHighlight: Word?
+    /// The word being recited, drawn over `wordHighlight` in its own colour.
+    public var recitedWord: Word?
 
     public init(
         suraHeaders: [SuraHeaderLocation],
@@ -20,7 +22,8 @@ public struct ImageDecorations {
         drawsAyahNumbersAndSuraHeaders: Bool,
         wordFrames: WordFrameCollection,
         verseHighlights: [AyahNumber: Color] = [:],
-        wordHighlight: Word? = nil
+        wordHighlight: Word? = nil,
+        recitedWord: Word? = nil
     ) {
         self.suraHeaders = suraHeaders
         self.ayahNumbers = ayahNumbers
@@ -28,5 +31,6 @@ public struct ImageDecorations {
         self.wordFrames = wordFrames
         self.verseHighlights = verseHighlights
         self.wordHighlight = wordHighlight
+        self.recitedWord = recitedWord
     }
 }

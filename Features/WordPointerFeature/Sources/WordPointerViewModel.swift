@@ -78,6 +78,18 @@ final class WordPointerViewModel {
         }
     }
 
+    /// The word's translation, or nil when the words database has nothing for it.
+    ///
+    /// Unlike `viewPanned(to:)` this touches no selection state.
+    func text(for word: Word) async -> String? {
+        do {
+            return try await service.textForWord(word)
+        } catch {
+            crasher.recordError(error, reason: "Error calling WordTextService")
+            return nil
+        }
+    }
+
     func unhighlightWord() {
         listener?.highlightWord(nil)
         selectedWord = nil

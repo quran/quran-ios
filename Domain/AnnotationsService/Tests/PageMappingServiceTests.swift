@@ -59,8 +59,8 @@ final class PageMappingServiceTests: XCTestCase {
     }
 
     func testPageBookmarksDeduplicatePagesAfterMapping() throws {
-        let sourceQuran = Quran.hafsMadani1405
-        let destinationQuran = Quran.hafsMadani1440
+        let sourceQuran = Quran.hafsIndoPak
+        let destinationQuran = Quran.hafsMadani1405
         let mapper = QuranPageMapper(destination: destinationQuran)
         let sourcePagesByDestination = Dictionary(grouping: sourceQuran.pages) { mapper.mapPage($0) }
         let duplicateSourcePages = try XCTUnwrap(
@@ -72,7 +72,7 @@ final class PageMappingServiceTests: XCTestCase {
             PageBookmarkPersistenceModel(page: olderPage.pageNumber, creationDate: date),
             PageBookmarkPersistenceModel(page: newerPage.pageNumber, creationDate: laterDate),
         ])
-        let service = PageBookmarkService(persistence: persistence)
+        let service = PageBookmarkService(persistence: persistence, storedPageQuran: sourceQuran)
 
         let bookmarks = value(from: service.pageBookmarks(quran: destinationQuran))
 
@@ -97,6 +97,49 @@ final class PageMappingServiceTests: XCTestCase {
         try await service.removePageBookmark(skippedPageQuran().pages[0])
 
         XCTAssertEqual(persistence.removedPages, [1])
+    }
+
+    func testInsertPageBookmarkPreservesExactPageAcrossDifferentPageLayouts() async throws {
+        let persistence = PageBookmarkPersistenceFake()
+        let service = PageBookmarkService(persistence: persistence)
+        let quran = Quran.hafsMadani1440
+        let page = try XCTUnwrap(Page(quran: quran, pageNumber: 534))
+
+        try await service.insertPageBookmark(page)
+        let bookmarks = value(from: service.pageBookmarks(quran: quran))
+
+        XCTAssertEqual(bookmarks.map(\.page), [page])
+    }
+
+    func testRemovePageBookmarkRemovesLegacyStoredPageThatMapsToDisplayedPage() async throws {
+        let persistence = PageBookmarkPersistenceFake(bookmarks: [
+            PageBookmarkPersistenceModel(page: 534, creationDate: date),
+        ])
+        let service = PageBookmarkService(persistence: persistence)
+        let quran = Quran.hafsMadani1440
+        let displayedBookmark = try XCTUnwrap(value(from: service.pageBookmarks(quran: quran)).first)
+
+        try await service.removePageBookmark(displayedBookmark.page)
+        let bookmarks = value(from: service.pageBookmarks(quran: quran))
+
+        XCTAssertTrue(bookmarks.isEmpty)
+    }
+
+    func testAdjacentCanonicalBookmarksRemainDistinctAfterMapping() async throws {
+        let persistence = PageBookmarkPersistenceFake(bookmarks: [
+            PageBookmarkPersistenceModel(page: 531, creationDate: date),
+            PageBookmarkPersistenceModel(page: 532, creationDate: laterDate),
+        ])
+        let service = PageBookmarkService(persistence: persistence)
+        let quran = Quran.hafsMadani1440
+        let displayedBookmarks = value(from: service.pageBookmarks(quran: quran))
+
+        XCTAssertEqual(displayedBookmarks.map(\.page.pageNumber), [532, 531])
+
+        try await service.removePageBookmark(try XCTUnwrap(displayedBookmarks.first).page)
+        let bookmarks = value(from: service.pageBookmarks(quran: quran))
+
+        XCTAssertEqual(bookmarks.map(\.page.pageNumber), [531])
     }
 
     func testPageBookmarksIgnoreInvalidStoredPages() {
@@ -197,10 +240,12 @@ private final class PageBookmarkPersistenceFake: PageBookmarkPersistence {
 
     func insertPageBookmark(_ page: Int) async throws {
         insertedPages.append(page)
+        bookmarks.append(PageBookmarkPersistenceModel(page: page, creationDate: Date()))
     }
 
     func removePageBookmark(_ page: Int) async throws {
         removedPages.append(page)
+        bookmarks.removeAll { $0.page == page }
     }
 
     func removeAllPageBookmarks() async throws {

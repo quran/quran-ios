@@ -9,6 +9,11 @@ import XCTest
 @testable import QuranKit
 
 final class QuranPageMetadataTests: XCTestCase {
+    private struct SupportedQuran {
+        let name: String
+        let quran: Quran
+    }
+
     private struct SkippedFirstPageReadingInfoRawData: QuranReadingInfoRawData {
         // MARK: Internal
 
@@ -161,13 +166,61 @@ final class QuranPageMetadataTests: XCTestCase {
         XCTAssertFalse(skippedQuran.pages[1].isRightSide)
     }
 
-    func testPageMapperKeepsSameQuranPageNumber() {
-        let quran = Quran.hafsMadani1405
-        let mapper = QuranPageMapper(destination: quran)
+    func testPageMapperKeepsEveryPageInTheSameSupportedLayout() {
+        for supportedQuran in supportedQurans {
+            let mapper = QuranPageMapper(destination: supportedQuran.quran)
 
-        XCTAssertEqual(mapper.mapPage(quran.pages[0])?.pageNumber, 1)
-        XCTAssertEqual(mapper.mapPage(quran.pages[1])?.pageNumber, 2)
-        XCTAssertEqual(mapper.mapPage(quran.pages[603])?.pageNumber, 604)
+            for page in supportedQuran.quran.pages {
+                XCTAssertEqual(
+                    mapper.mapPage(page),
+                    page,
+                    "\(supportedQuran.name) page \(page.pageNumber)"
+                )
+            }
+        }
+    }
+
+    func testPageMapperMapsEveryPageBetweenEverySupportedLayout() throws {
+        for source in supportedQurans {
+            for destination in supportedQurans {
+                let mapper = QuranPageMapper(destination: destination.quran)
+
+                for sourcePage in source.quran.pages {
+                    let context = "\(source.name) page \(sourcePage.pageNumber) → \(destination.name)"
+                    let mappedPage = try XCTUnwrap(mapper.mapPage(sourcePage), context)
+
+                    XCTAssertEqual(mappedPage.quran, destination.quran, context)
+                    XCTAssertTrue(pagesOverlap(sourcePage, mappedPage), context)
+                }
+            }
+        }
+    }
+
+    func testPageMapperUsesRoundTripCandidateForEveryPageBetweenEverySupportedLayout() throws {
+        for source in supportedQurans {
+            for destination in supportedQurans {
+                let destinationMapper = QuranPageMapper(destination: destination.quran)
+                let sourceMapper = QuranPageMapper(destination: source.quran)
+
+                for sourcePage in source.quran.pages {
+                    let context = "\(source.name) page \(sourcePage.pageNumber) → \(destination.name)"
+                    let mappedPage = try XCTUnwrap(destinationMapper.mapPage(sourcePage), context)
+                    let candidates = try candidatePages(
+                        for: sourcePage,
+                        mapper: destinationMapper,
+                        destination: destination.quran,
+                        context: context
+                    )
+                    let roundTripCandidates = candidates.filter { candidate in
+                        sourceMapper.mapAyah(representativeAyah(on: candidate))?.page == sourcePage
+                    }
+
+                    if !roundTripCandidates.isEmpty {
+                        XCTAssertTrue(roundTripCandidates.contains(mappedPage), context)
+                    }
+                }
+            }
+        }
     }
 
     func testPageMapperMapsSourcePageFirstVerseToDestinationPage() {
@@ -182,6 +235,37 @@ final class QuranPageMetadataTests: XCTestCase {
         XCTAssertEqual(sourcePage.pageNumber, 2)
         XCTAssertEqual(mappedPage?.pageNumber, 3)
         XCTAssertEqual(mappedPage, mappedAyah?.page)
+    }
+
+    func testPageMapperPreservesMadani1440PageAcrossCanonicalRoundTrip() throws {
+        let sourceQuran = Quran.hafsMadani1440
+        let canonicalQuran = Quran.hafsMadani1405
+        let sourcePage = try XCTUnwrap(Page(quran: sourceQuran, pageNumber: 534))
+
+        let canonicalPage = try XCTUnwrap(QuranPageMapper(destination: canonicalQuran).mapPage(sourcePage))
+        let restoredPage = QuranPageMapper(destination: sourceQuran).mapPage(canonicalPage)
+
+        XCTAssertEqual(canonicalPage.pageNumber, 534)
+        XCTAssertEqual(restoredPage, sourcePage)
+    }
+
+    func testPageMapperRoundTripsEveryPageBetweenEqualSizedSupportedLayouts() throws {
+        for source in supportedQurans {
+            for destination in supportedQurans {
+                guard destination.quran.pages.count == source.quran.pages.count else {
+                    continue
+                }
+
+                let destinationMapper = QuranPageMapper(destination: destination.quran)
+                let sourceMapper = QuranPageMapper(destination: source.quran)
+
+                for sourcePage in source.quran.pages {
+                    let context = "\(source.name) page \(sourcePage.pageNumber) → \(destination.name)"
+                    let destinationPage = try XCTUnwrap(destinationMapper.mapPage(sourcePage), context)
+                    XCTAssertEqual(sourceMapper.mapPage(destinationPage), sourcePage, context)
+                }
+            }
+        }
     }
 
     func testPageMapperMapsSkippedPageBackToCanonicalPage() {
@@ -209,5 +293,54 @@ final class QuranPageMetadataTests: XCTestCase {
 
         XCTAssertEqual(mapper.mapAyah(firstAyah)?.page.pageNumber, 2)
         XCTAssertEqual(mapper.mapAyah(secondSuraFirstAyah)?.page.pageNumber, 3)
+    }
+
+    // MARK: Private
+
+    private var supportedQurans: [SupportedQuran] {
+        var seenQurans = Set<Quran>()
+        return Reading.allReadings.compactMap { reading in
+            guard seenQurans.insert(reading.quran).inserted else {
+                return nil
+            }
+            return SupportedQuran(name: String(describing: reading), quran: reading.quran)
+        }
+    }
+
+    private func candidatePages(
+        for sourcePage: Page,
+        mapper: QuranPageMapper,
+        destination: Quran,
+        context: String
+    ) throws -> [Page] {
+        let firstPage = try XCTUnwrap(mapper.mapAyah(sourcePage.firstVerse)?.page, context)
+        let lastPage = try XCTUnwrap(mapper.mapAyah(sourcePage.lastVerse)?.page, context)
+        let pageNumbers = min(firstPage.pageNumber, lastPage.pageNumber) ...
+            max(firstPage.pageNumber, lastPage.pageNumber)
+        return pageNumbers.compactMap { Page(quran: destination, pageNumber: $0) }
+    }
+
+    private func representativeAyah(on page: Page) -> AyahNumber {
+        let verses = page.verses
+        return verses[(verses.count - 1) / 2]
+    }
+
+    private func pagesOverlap(_ sourcePage: Page, _ destinationPage: Page) -> Bool {
+        guard let destinationFirstAyah = AyahNumber(
+            quran: sourcePage.quran,
+            sura: destinationPage.firstVerse.sura.suraNumber,
+            ayah: destinationPage.firstVerse.ayah
+        ),
+            let destinationLastAyah = AyahNumber(
+                quran: sourcePage.quran,
+                sura: destinationPage.lastVerse.sura.suraNumber,
+                ayah: destinationPage.lastVerse.ayah
+            )
+        else {
+            return false
+        }
+
+        return destinationFirstAyah <= sourcePage.lastVerse &&
+            sourcePage.firstVerse <= destinationLastAyah
     }
 }

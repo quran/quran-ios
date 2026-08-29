@@ -289,7 +289,7 @@
 
 // Experimental IndoPak
 "new.experimental_indopak" = "الهندي الباكستاني – ١٥ سطرًا";
-"new.experimental_indopak.details" = "* جرّب المصحف الهندي الباكستاني الجديد المكوّن من ١٥ سطرًا بخط النسخ.\n* ما زالت بعض الميزات غير متاحة وستُضاف في تحديثات مستقبلية.";
+"new.experimental_indopak.details" = "* جرّب المصحف الهندي الباكستاني الجديد المكوّن من ١٥ سطرًا بخط النسخ.";
 
 // Audio controls
 "new.audio_controls" = "خيارات الصوت المتقدمة";

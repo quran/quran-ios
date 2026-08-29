@@ -320,7 +320,7 @@
 
 // Experimental IndoPak
 "new.experimental_indopak" = "IndoPak 15-Line";
-"new.experimental_indopak.details" = "* Try the new IndoPak 15-line reading layout in the Naskh style.\n* A few features are still missing and will be added in future updates.";
+"new.experimental_indopak.details" = "* Try the new IndoPak 15-line reading layout in the Naskh style.";
 
 // Audio controls
 "new.audio_controls" = "Advanced Audio Options";

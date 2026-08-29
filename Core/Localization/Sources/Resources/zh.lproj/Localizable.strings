@@ -331,7 +331,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.experimental_indopak" = "印巴版（15 行）";
 // Metadata: Translated by ChatGPT; human review required.
-"new.experimental_indopak.details" = "* 试用采用纳斯赫风格的全新 15 行印巴版阅读布局。\n* 目前仍缺少部分功能，未来更新将陆续补充。";
+"new.experimental_indopak.details" = "* 试用采用纳斯赫风格的全新 15 行印巴版阅读布局。";
 
 // Audio controls
 // Metadata: Translated by ChatGPT; human review required.

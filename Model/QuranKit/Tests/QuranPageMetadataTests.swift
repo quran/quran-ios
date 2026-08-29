@@ -127,8 +127,45 @@ final class QuranPageMetadataTests: XCTestCase {
         XCTAssertTrue(Reading.indoPak.usesLinePageSidelines)
     }
 
+    func testPageMushafMatchesEveryReadingPageLayout() {
+        XCTAssertEqual(QuranPageMushaf.madani1405.rawValue, 0)
+        XCTAssertEqual(QuranPageMushaf.madani1440.rawValue, 1)
+        XCTAssertEqual(QuranPageMushaf.indoPak.rawValue, 2)
+
+        for reading in Reading.allReadings {
+            let expectedMushaf: QuranPageMushaf = switch reading {
+            case .hafs_1405, .tajweed:
+                .madani1405
+            case .hafs_1421, .hafs_1439, .hafs_1440, .hafs_1441:
+                .madani1440
+            case .indoPak:
+                .indoPak
+            }
+            XCTAssertEqual(reading.quran.pageMushaf, expectedMushaf)
+        }
+    }
+
+    func testPageMapperPreservesTheSourceMadaniLayout() throws {
+        let mapper = QuranPageMapper(destination: .hafsIndoPak)
+
+        let madani1405Page = try XCTUnwrap(mapper.mapPage(Page(
+            quran: .hafsMadani1405,
+            pageNumber: 585
+        )!))
+        let madani1440Page = try XCTUnwrap(mapper.mapPage(Page(
+            quran: .hafsMadani1440,
+            pageNumber: 585
+        )!))
+
+        XCTAssertEqual(madani1405Page.pageNumber, 591)
+        XCTAssertEqual(madani1440Page.pageNumber, 590)
+    }
+
     func testSkippedPageReadingExcludesSkippedPagesFromVisiblePages() {
-        let quran = Quran(raw: SkippedFirstPageReadingInfoRawData())
+        let quran = Quran(
+            raw: SkippedFirstPageReadingInfoRawData(),
+            pageMushaf: .madani1405
+        )
 
         XCTAssertEqual(quran.numberOfPages, 605)
         XCTAssertEqual(quran.pagesToSkip, 1)
@@ -144,7 +181,10 @@ final class QuranPageMetadataTests: XCTestCase {
     }
 
     func testSkippedPageReadingKeepsQuranNavigationOnFirstVisiblePage() {
-        let quran = Quran(raw: SkippedFirstPageReadingInfoRawData())
+        let quran = Quran(
+            raw: SkippedFirstPageReadingInfoRawData(),
+            pageMushaf: .madani1405
+        )
 
         XCTAssertEqual(quran.pages.first?.firstVerse.sura.suraNumber, 1)
         XCTAssertEqual(quran.pages.first?.firstVerse.ayah, 1)
@@ -160,7 +200,10 @@ final class QuranPageMetadataTests: XCTestCase {
         XCTAssertTrue(madaniQuran.pages[0].isRightSide)
         XCTAssertFalse(madaniQuran.pages[1].isRightSide)
 
-        let skippedQuran = Quran(raw: SkippedFirstPageReadingInfoRawData())
+        let skippedQuran = Quran(
+            raw: SkippedFirstPageReadingInfoRawData(),
+            pageMushaf: .madani1405
+        )
         XCTAssertEqual(skippedQuran.pages[0].pageNumber, 2)
         XCTAssertTrue(skippedQuran.pages[0].isRightSide)
         XCTAssertFalse(skippedQuran.pages[1].isRightSide)
@@ -225,7 +268,10 @@ final class QuranPageMetadataTests: XCTestCase {
 
     func testPageMapperMapsSourcePageFirstVerseToDestinationPage() {
         let sourceQuran = Quran.hafsMadani1405
-        let destinationQuran = Quran(raw: SkippedFirstPageReadingInfoRawData())
+        let destinationQuran = Quran(
+            raw: SkippedFirstPageReadingInfoRawData(),
+            pageMushaf: .madani1405
+        )
         let mapper = QuranPageMapper(destination: destinationQuran)
 
         let sourcePage = sourceQuran.pages[1]
@@ -269,7 +315,10 @@ final class QuranPageMetadataTests: XCTestCase {
     }
 
     func testPageMapperMapsSkippedPageBackToCanonicalPage() {
-        let sourceQuran = Quran(raw: SkippedFirstPageReadingInfoRawData())
+        let sourceQuran = Quran(
+            raw: SkippedFirstPageReadingInfoRawData(),
+            pageMushaf: .madani1405
+        )
         let mapper = QuranPageMapper(destination: .hafsMadani1405)
 
         XCTAssertEqual(mapper.mapPage(sourceQuran.pages[0])?.pageNumber, 1)
@@ -285,7 +334,10 @@ final class QuranPageMetadataTests: XCTestCase {
 
     func testPageMapperMapsAyahBackedStateToDestinationAyah() {
         let sourceQuran = Quran.hafsMadani1405
-        let destinationQuran = Quran(raw: SkippedFirstPageReadingInfoRawData())
+        let destinationQuran = Quran(
+            raw: SkippedFirstPageReadingInfoRawData(),
+            pageMushaf: .madani1405
+        )
         let mapper = QuranPageMapper(destination: destinationQuran)
 
         let firstAyah = AyahNumber(quran: sourceQuran, sura: 1, ayah: 1)!

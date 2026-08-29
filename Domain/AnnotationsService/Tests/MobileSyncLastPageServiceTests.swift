@@ -27,7 +27,9 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
         let published = expectation(description: "Publishes the persisted last page")
         let observation = Task {
             do {
-                for try await lastPages in service.lastPages(quran: quran) where lastPages.first?.page == page {
+                for try await lastPages in service.lastPages(quran: quran)
+                    where lastPages.first?.page == page
+                {
                     published.fulfill()
                     return
                 }
@@ -130,7 +132,9 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
             var publishedFirstPage = false
             do {
                 for try await lastPages in service.lastPages(quran: quran) {
-                    if !publishedFirstPage, lastPages.contains(where: { $0.page == firstPage }) {
+                    if !publishedFirstPage,
+                       lastPages.contains(where: { $0.page == firstPage })
+                    {
                         publishedFirstPage = true
                         secondObserverPublishedFirstPage.fulfill()
                     }

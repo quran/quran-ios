@@ -245,6 +245,7 @@ private func dataTargets() -> [[Target]] {
         target(type, name: "LastPagePersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",
+            "QuranKit",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "CoreDataPersistenceTestSupport",

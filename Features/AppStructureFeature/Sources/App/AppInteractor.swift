@@ -84,7 +84,7 @@ final class AppInteractor {
                 Task {
                     do {
                         let cdLastPages = try await self.lastPagePersistence.retrieveAll()
-                        let inSync = Set(cdLastPages.map(\.page)).isSubset(of: ckLastPages)
+                        let inSync = Set(cdLastPages.map(\.page.pageNumber)).isSubset(of: ckLastPages)
                         crashContext.setSyncState(inSync ? "verified" : "verification_mismatch")
                         analytics.cloudkitLastPagesMatch(inSync ? .ok : .fail)
                     } catch {

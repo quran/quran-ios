@@ -7,6 +7,7 @@
 //
 
 import Combine
+import Foundation
 import PageBookmarkPersistence
 import QuranAnnotations
 import QuranKit
@@ -14,9 +15,8 @@ import QuranKit
 public struct PageBookmarkService {
     // MARK: Lifecycle
 
-    public init(persistence: PageBookmarkPersistence, storedPageQuran: Quran = .hafsMadani1405) {
+    public init(persistence: PageBookmarkPersistence) {
         self.persistence = persistence
-        self.storedPageQuran = storedPageQuran
     }
 
     // MARK: Public
@@ -25,30 +25,42 @@ public struct PageBookmarkService {
         let mapper = QuranPageMapper(destination: quran)
         return persistence.pageBookmarks()
             .map { bookmarks in
-                let mappedBookmarks = bookmarks.compactMap { bookmark in
-                    Page(quran: storedPageQuran, pageNumber: bookmark.page)
-                        .flatMap(mapper.mapPage)
-                        .map {
-                            PageBookmark(page: $0, creationDate: bookmark.creationDate)
-                        }
+                let mappedBookmarks = bookmarks.compactMap { bookmark -> MappedBookmark? in
+                    guard let presentationPage = mapper.mapPage(bookmark.page) else {
+                        return nil
+                    }
+                    return MappedBookmark(
+                        presentationPage: presentationPage,
+                        storedPage: bookmark.page,
+                        creationDate: bookmark.creationDate
+                    )
                 }
 
-                return Dictionary(grouping: mappedBookmarks, by: \PageBookmark.page)
+                return Dictionary(grouping: mappedBookmarks, by: \.presentationPage)
                     .values
-                    .compactMap { $0.max(by: { $0.creationDate < $1.creationDate }) }
+                    .compactMap { groupedBookmarks -> PageBookmark? in
+                        guard let newestBookmark = groupedBookmarks.max(by: {
+                            $0.creationDate < $1.creationDate
+                        }) else {
+                            return nil
+                        }
+                        return PageBookmark(
+                            page: newestBookmark.presentationPage,
+                            storedPages: Set(groupedBookmarks.map(\.storedPage)),
+                            creationDate: newestBookmark.creationDate
+                        )
+                    }
                     .sorted { $0.creationDate > $1.creationDate }
             }
             .eraseToAnyPublisher()
     }
 
     public func insertPageBookmark(_ page: Page) async throws {
-        let storedPage = try storedPage(for: page)
-        try await persistence.insertPageBookmark(storedPage.pageNumber)
+        try await persistence.insertPageBookmark(at: page)
     }
 
-    public func removePageBookmark(_ page: Page) async throws {
-        let storedPage = try storedPage(for: page)
-        try await persistence.removePageBookmark(storedPage.pageNumber)
+    public func removePageBookmark(_ bookmark: PageBookmark) async throws {
+        try await persistence.removePageBookmarks(at: bookmark.storedPages)
     }
 
     public func removeAllPageBookmarks() async throws {
@@ -58,19 +70,10 @@ public struct PageBookmarkService {
     // MARK: Internal
 
     let persistence: PageBookmarkPersistence
-    let storedPageQuran: Quran
+}
 
-    // MARK: Private
-
-    private func storedPage(for page: Page) throws -> Page {
-        guard let storedPage = QuranPageMapper(destination: storedPageQuran).mapPage(page) else {
-            throw PageMappingError.unableToMapPage(
-                pageNumber: page.pageNumber,
-                source: page.quran,
-                destination: storedPageQuran
-            )
-        }
-
-        return storedPage
-    }
+private struct MappedBookmark {
+    let presentationPage: Page
+    let storedPage: Page
+    let creationDate: Date
 }

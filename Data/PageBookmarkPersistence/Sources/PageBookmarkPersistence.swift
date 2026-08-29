@@ -7,10 +7,11 @@
 //
 
 import Combine
+import QuranKit
 
 public protocol PageBookmarkPersistence {
     func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never>
-    func insertPageBookmark(_ page: Int) async throws
-    func removePageBookmark(_ page: Int) async throws
+    func insertPageBookmark(at page: Page) async throws
+    func removePageBookmarks(at pages: Set<Page>) async throws
     func removeAllPageBookmarks() async throws
 }

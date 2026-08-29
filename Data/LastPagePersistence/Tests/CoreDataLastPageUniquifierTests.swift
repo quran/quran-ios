@@ -99,6 +99,20 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
         assertDatabaseContains([entity5, entity4])
     }
 
+    func test_merge_keepsSamePageFromDifferentMushafs() throws {
+        let indoPakPage = context.newLastPage(page: 190, mushafID: 2, modifiedOn: 6)
+        try context.save()
+        let transactions = [
+            PersistentHistoryTransactionFake(historyChanges: [
+                PersistentHistoryChangeFake(object: indoPakPage, changeType: .insert),
+            ]),
+        ]
+
+        XCTAssertNoThrow(try sut.merge(transactions: transactions, using: context))
+
+        XCTAssertEqual(try context.allLastPages().filter { $0.page == 190 }.count, 2)
+    }
+
     // MARK: Private
 
     private func assertDatabaseContains(

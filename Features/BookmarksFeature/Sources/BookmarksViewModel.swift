@@ -47,7 +47,7 @@ final class BookmarksViewModel: ObservableObject {
 
         for await bookmarks in bookmarksSequence {
             self.bookmarks = bookmarks
-                .filter { !pendingDeletionPages.contains($0.page) }
+                .filter { !pendingDeletionBookmarks.contains($0.id) }
                 .sorted { $0.creationDate > $1.creationDate }
         }
     }
@@ -59,24 +59,24 @@ final class BookmarksViewModel: ObservableObject {
     }
 
     func deleteItem(_ pageBookmark: PageBookmark) -> AsyncAction? {
-        guard pendingDeletionPages.insert(pageBookmark.page).inserted else {
+        guard pendingDeletionBookmarks.insert(pageBookmark.id).inserted else {
             return nil
         }
 
         logger.info("Bookmarks: delete bookmark at \(pageBookmark.page)")
         analytics.removeBookmarkPage(pageBookmark.page)
-        bookmarks.removeAll { $0.page == pageBookmark.page }
+        bookmarks.removeAll { $0.id == pageBookmark.id }
 
         return { [weak self] in
             guard let self else { return }
             do {
-                try await service.removePageBookmark(pageBookmark.page)
+                try await service.removePageBookmark(pageBookmark)
             } catch {
                 bookmarks.append(pageBookmark)
                 bookmarks.sort { $0.creationDate > $1.creationDate }
                 self.error = error
             }
-            pendingDeletionPages.remove(pageBookmark.page)
+            pendingDeletionBookmarks.remove(pageBookmark.id)
         }
     }
 
@@ -95,6 +95,6 @@ final class BookmarksViewModel: ObservableObject {
     private let analytics: AnalyticsLibrary
     private let service: PageBookmarkService
     private let readingPreferences = ReadingPreferences.shared
-    private var pendingDeletionPages: Set<Page> = []
+    private var pendingDeletionBookmarks: Set<Page> = []
 }
 #endif

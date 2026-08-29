@@ -19,10 +19,14 @@
 //
 
 import Combine
+import QuranKit
 
 public protocol LastPagePersistence: Sendable {
     func lastPages() -> AnyPublisher<[LastPagePersistenceModel], Never>
     func retrieveAll() async throws -> [LastPagePersistenceModel]
-    func add(page: Int) async throws -> LastPagePersistenceModel
-    func update(page: Int, toPage: Int) async throws -> LastPagePersistenceModel
+    func add(at page: Page) async throws -> LastPagePersistenceModel
+    func update(
+        pages: Set<Page>,
+        to destination: Page
+    ) async throws -> LastPagePersistenceModel
 }

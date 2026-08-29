@@ -23,7 +23,7 @@ final class BookmarksViewModelTests: XCTestCase {
 
         XCTAssertTrue(sut.bookmarks.isEmpty)
         await operation()
-        XCTAssertEqual(persistence.removedPages, [bookmark.page.pageNumber])
+        XCTAssertEqual(persistence.removedPages, [bookmark.page])
         XCTAssertNil(sut.error)
     }
 
@@ -40,7 +40,7 @@ final class BookmarksViewModelTests: XCTestCase {
         await fulfillment(of: [persistence.removeExpectation])
 
         XCTAssertNil(duplicateOperation)
-        XCTAssertEqual(persistence.removedPages, [bookmark.page.pageNumber])
+        XCTAssertEqual(persistence.removedPages, [bookmark.page])
         persistence.resumeRemoval()
         await task.value
     }
@@ -93,7 +93,7 @@ private struct AnalyticsSpy: AnalyticsLibrary {
 
 private final class PageBookmarkPersistenceSpy: PageBookmarkPersistence {
     let removeExpectation = XCTestExpectation(description: "Remove bookmark")
-    var removedPages: [Int] = []
+    var removedPages: [Page] = []
     var removeError: Error?
     var suspendRemoval = false
 
@@ -103,9 +103,9 @@ private final class PageBookmarkPersistenceSpy: PageBookmarkPersistence {
         Just([]).eraseToAnyPublisher()
     }
 
-    func insertPageBookmark(_: Int) async throws {}
-    func removePageBookmark(_ page: Int) async throws {
-        removedPages.append(page)
+    func insertPageBookmark(at _: Page) async throws {}
+    func removePageBookmarks(at pages: Set<Page>) async throws {
+        removedPages.append(contentsOf: pages)
         removeExpectation.fulfill()
         if let removeError {
             throw removeError

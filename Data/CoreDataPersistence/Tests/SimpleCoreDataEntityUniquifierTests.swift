@@ -50,9 +50,8 @@ class SimpleCoreDataEntityUniquifierTests: XCTestCase {
         transactions = [transaction1, transaction2]
 
         sut = SimpleCoreDataEntityUniquifier(
-            sortBy: Schema.PageBookmark.modifiedOn,
-            ascending: false,
-            key: .page
+            sortDescriptors: [NSSortDescriptor(key: Schema.PageBookmark.modifiedOn, ascending: false)],
+            predicate: { $0.predicate(equals: Schema.PageBookmark.page, .mushafID) }
         )
     }
 
@@ -71,6 +70,19 @@ class SimpleCoreDataEntityUniquifierTests: XCTestCase {
         XCTAssertNoThrow(try sut.merge(transactions: transactions, using: context))
 
         XCTAssertEqual([45, 500], try stack.newBackgroundContext().allPageBookmarks().map(\.page))
+    }
+
+    func test_merge_keepsSamePageFromDifferentMushafs() throws {
+        try sut.merge(transactions: transactions, using: context)
+        let indoPakEntity = context.newPageBookmark(page: 45, mushafID: 2, modifiedOn: 200)
+        try context.save()
+        let indoPakTransaction = PersistentHistoryTransactionFake(historyChanges: [
+            PersistentHistoryChangeFake(object: indoPakEntity, changeType: .insert),
+        ])
+
+        XCTAssertNoThrow(try sut.merge(transactions: [indoPakTransaction], using: context))
+
+        XCTAssertEqual(try context.allPageBookmarks().filter { $0.page == 45 }.count, 2)
     }
 
     func test_merge_skipsInsertedEntityWithMissingUniquenessValue() throws {

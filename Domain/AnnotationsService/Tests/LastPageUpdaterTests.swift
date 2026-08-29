@@ -169,7 +169,7 @@ final class LastPageUpdaterTests: XCTestCase {
         XCTAssertEqual(service.cancellationCount, 1)
     }
 
-    private let quran = Quran(raw: Madani1405QuranReadingInfoRawData())
+    private let quran = Quran.hafsMadani1405
 
     private func makeLastPage(page: Page, id: String = "last-page") -> LastPage {
         makeTestLastPage(page: page, syncID: id)

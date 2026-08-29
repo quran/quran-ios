@@ -34,9 +34,8 @@ public struct CoreDataLastPageUniquifier: CoreDataEntityUniquifier {
     private let overflowHandler = CoreDataLastPageOverflowHandler()
 
     private let simpleUniquifier = SimpleCoreDataEntityUniquifier<MO_LastPage>(
-        sortBy: Schema.LastPage.modifiedOn,
-        ascending: false,
-        key: .page
+        sortDescriptors: [NSSortDescriptor(key: Schema.LastPage.modifiedOn, ascending: false)],
+        predicate: { $0.predicate(equals: Schema.LastPage.page, .mushafID) }
     )
 
     private func hasLastPageChanges(_ transactions: [PersistentHistoryTransaction]) -> Bool {

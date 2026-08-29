@@ -9,9 +9,14 @@ import CoreData
 import CoreDataModel
 
 extension NSManagedObjectContext {
-    public func newLastPage(page: Int32, modifiedOn: TimeInterval) -> MO_LastPage {
+    public func newLastPage(
+        page: Int32,
+        mushafID: Int16 = 0,
+        modifiedOn: TimeInterval
+    ) -> MO_LastPage {
         let object = MO_LastPage(context: self)
         object.page = page
+        object.mushafID = mushafID
         object.modifiedOn = Date(timeIntervalSince1970: modifiedOn)
         return object
     }

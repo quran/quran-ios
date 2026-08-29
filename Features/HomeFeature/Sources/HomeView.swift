@@ -125,7 +125,10 @@ private struct HomeViewUI: View {
             image: .init(.lastPage, color: .secondaryLabel),
             title: "\(sura: ayah.sura)",
             subtitle: .init(text: .text(lastPage.modifiedOn.timeAgo()), location: .bottom),
-            accessory: .text(lastPage.page.localizedNumber, accessibilityLabel: lastPage.page.localizedName),
+            accessory: .text(
+                lastPage.page.localizedNumber,
+                accessibilityLabel: lastPage.page.localizedName
+            ),
             action: .sync { selectLastPage(lastPage) }
         )
     }

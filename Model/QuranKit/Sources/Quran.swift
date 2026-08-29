@@ -10,8 +10,9 @@ import Foundation
 public final class Quran: Hashable, @unchecked Sendable {
     // MARK: Lifecycle
 
-    init(raw: QuranReadingInfoRawData) {
+    init(raw: QuranReadingInfoRawData, pageMushaf: QuranPageMushaf) {
         self.raw = raw
+        self.pageMushaf = pageMushaf
         lazySuras = { self.surasRange.map { Sura(quran: self, suraNumber: $0)! } }
         lazyPages = { self.pagesRange.map { Page(quran: self, pageNumber: $0)! } }
         lazyJuzs = { (1 ... self.numberOfJuzs).map { Juz(quran: self, juzNumber: $0) } }
@@ -22,9 +23,20 @@ public final class Quran: Hashable, @unchecked Sendable {
 
     // MARK: Public
 
-    public static let hafsMadani1405 = Quran(raw: Madani1405QuranReadingInfoRawData())
-    public static let hafsMadani1440 = Quran(raw: Madani1440QuranReadingInfoRawData())
-    public static let hafsIndoPak = Quran(raw: IndoPakQuranReadingInfoRawData())
+    public static let hafsMadani1405 = Quran(
+        raw: Madani1405QuranReadingInfoRawData(),
+        pageMushaf: .madani1405
+    )
+    public static let hafsMadani1440 = Quran(
+        raw: Madani1440QuranReadingInfoRawData(),
+        pageMushaf: .madani1440
+    )
+    public static let hafsIndoPak = Quran(
+        raw: IndoPakQuranReadingInfoRawData(),
+        pageMushaf: .indoPak
+    )
+
+    public let pageMushaf: QuranPageMushaf
 
     public var arabicBesmAllah: String {
         raw.arabicBesmAllah

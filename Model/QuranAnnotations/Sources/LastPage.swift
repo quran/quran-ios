@@ -19,7 +19,22 @@ public struct LastPage: Equatable, Identifiable, Sendable {
     }
     #else
     public init(page: Page, createdOn: Date, modifiedOn: Date) {
+        self.init(
+            page: page,
+            storedPages: [page],
+            createdOn: createdOn,
+            modifiedOn: modifiedOn
+        )
+    }
+
+    public init(
+        page: Page,
+        storedPages: Set<Page>,
+        createdOn: Date,
+        modifiedOn: Date
+    ) {
         self.page = page
+        self.storedPages = storedPages
         self.createdOn = createdOn
         self.modifiedOn = modifiedOn
     }
@@ -31,6 +46,7 @@ public struct LastPage: Equatable, Identifiable, Sendable {
     public let id: String
     #else
     public var id: Page { page }
+    public let storedPages: Set<Page>
     public var createdOn: Date
     #endif
 

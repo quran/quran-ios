@@ -7,9 +7,24 @@
 //
 
 import Foundation
+import QuranKit
 
 public struct LastPagePersistenceModel {
-    public let page: Int
+    // MARK: Lifecycle
+
+    public init(
+        page: Page,
+        createdOn: Date,
+        modifiedOn: Date
+    ) {
+        self.page = page
+        self.createdOn = createdOn
+        self.modifiedOn = modifiedOn
+    }
+
+    // MARK: Public
+
+    public let page: Page
     public let createdOn: Date
     public let modifiedOn: Date
 }

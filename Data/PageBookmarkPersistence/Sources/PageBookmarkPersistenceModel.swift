@@ -7,8 +7,18 @@
 //
 
 import Foundation
+import QuranKit
 
 public struct PageBookmarkPersistenceModel {
-    public let page: Int
+    // MARK: Lifecycle
+
+    public init(page: Page, creationDate: Date) {
+        self.page = page
+        self.creationDate = creationDate
+    }
+
+    // MARK: Public
+
+    public let page: Page
     public let creationDate: Date
 }

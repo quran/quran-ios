@@ -6,12 +6,16 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
+import CoreData
 import CoreDataModel
 import CoreDataPersistence
 
 public typealias CoreDataPageBookmarkUniquifier = SimpleCoreDataEntityUniquifier<MO_PageBookmark>
 extension CoreDataPageBookmarkUniquifier {
     public init() {
-        self.init(sortBy: Schema.PageBookmark.modifiedOn, ascending: false, key: .page)
+        self.init(
+            sortDescriptors: [NSSortDescriptor(key: Schema.PageBookmark.modifiedOn, ascending: false)],
+            predicate: { $0.predicate(equals: Schema.PageBookmark.page, .mushafID) }
+        )
     }
 }

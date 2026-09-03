@@ -19,13 +19,20 @@ public struct ReadingBookmarkPin: View {
         case filled
     }
 
-    public static func image(style: Style) -> UIImage {
+    public enum Badge {
+        case ellipsis
+    }
+
+    public static func image(style: Style, badge: Badge? = nil) -> UIImage {
         let size = CGSize(width: defaultSize, height: defaultSize)
         let bounds = CGRect(origin: .zero, size: size)
         let renderer = UIGraphicsImageRenderer(size: size)
         let image = renderer.image { context in
             let context = context.cgContext
-            context.addPath(ReadingBookmarkPinShape().path(in: bounds).cgPath)
+            let pinBounds = badge == nil
+                ? bounds
+                : bounds.offsetBy(dx: -2, dy: -1)
+            context.addPath(ReadingBookmarkPinShape().path(in: pinBounds).cgPath)
             context.setFillColor(UIColor.black.cgColor)
             context.setStrokeColor(UIColor.black.cgColor)
 
@@ -37,6 +44,13 @@ public struct ReadingBookmarkPin: View {
                 context.strokePath()
             case .filled:
                 context.drawPath(using: .eoFill)
+            }
+
+            switch badge {
+            case .ellipsis:
+                drawEllipsisBadge(in: context)
+            case nil:
+                break
             }
         }
         return image.withRenderingMode(.alwaysTemplate)
@@ -61,8 +75,25 @@ public struct ReadingBookmarkPin: View {
     private let style: Style
     private static let defaultLineWidth: CGFloat = 1.8
     private static let defaultSize: CGFloat = 24
+    private static let badgeBounds = CGRect(x: 13, y: 13, width: 11, height: 11)
     @ScaledMetric private var lineWidth = defaultLineWidth
     @ScaledMetric private var size = defaultSize
+
+    private static func drawEllipsisBadge(in context: CGContext) {
+        context.saveGState()
+        context.setBlendMode(.clear)
+        context.fillEllipse(in: badgeBounds.insetBy(dx: -1, dy: -1))
+        context.restoreGState()
+
+        context.saveGState()
+        context.setFillColor(UIColor.black.cgColor)
+        context.fillEllipse(in: badgeBounds)
+        context.setBlendMode(.clear)
+        for centerX in [16.25, 18.5, 20.75] {
+            context.fillEllipse(in: CGRect(x: centerX - 0.7, y: 17.8, width: 1.4, height: 1.4))
+        }
+        context.restoreGState()
+    }
 }
 
 private struct ReadingBookmarkPinShape: Shape {

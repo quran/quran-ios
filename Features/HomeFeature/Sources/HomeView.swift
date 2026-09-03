@@ -22,7 +22,7 @@ struct HomeView: View {
         #if QURAN_SYNC
         HomeViewUI(
             type: viewModel.type,
-            readingBookmark: viewModel.readingBookmark,
+            readingBookmarks: viewModel.readingBookmarks,
             lastPages: viewModel.lastPages,
             suras: viewModel.suras,
             quarters: viewModel.quarters,
@@ -58,7 +58,7 @@ struct HomeView: View {
 private struct HomeViewUI: View {
     let type: HomeViewType
     #if QURAN_SYNC
-    let readingBookmark: ReadingPositionBookmark?
+    let readingBookmarks: [ReadingPositionBookmark]
     #endif
     let lastPages: [LastPage]
     let suras: [Sura]
@@ -81,9 +81,11 @@ private struct HomeViewUI: View {
         ZStack {
             NoorList {
                 #if QURAN_SYNC
-                if let readingBookmark {
+                if !readingBookmarks.isEmpty {
                     NoorBasicSection(title: l("ayah.menu.reading-bookmark.title")) {
-                        readingBookmarkView(readingBookmark)
+                        ForEach(readingBookmarks, id: \.slot) { readingBookmark in
+                            readingBookmarkView(readingBookmark)
+                        }
                     }
                 }
                 #endif
@@ -224,11 +226,14 @@ struct HomeView_Previews: PreviewProvider {
 
         @State var lastPages: [LastPage] = staticLastPages
         #if QURAN_SYNC
-        @State var readingBookmark = ReadingPositionBookmark(
-            id: "preview-reading-bookmark",
-            location: .page(Quran.hafsMadani1405.pages[269]),
-            modifiedOn: Date(timeIntervalSinceNow: -180)
-        )
+        @State var readingBookmarks = ReadingBookmarkSlot.allCases.enumerated().map { index, slot in
+            ReadingPositionBookmark(
+                id: "preview-reading-bookmark-\(slot)",
+                slot: slot,
+                location: .page(Quran.hafsMadani1405.pages[269 + index]),
+                modifiedOn: Date(timeIntervalSinceNow: Double(index + 1) * -180)
+            )
+        }
         #endif
         @State var type: HomeViewType = .juzs
         @State var collapsedJuzs: Set<Juz> = []
@@ -239,7 +244,7 @@ struct HomeView_Previews: PreviewProvider {
                     #if QURAN_SYNC
                     HomeViewUI(
                         type: type,
-                        readingBookmark: readingBookmark,
+                        readingBookmarks: readingBookmarks,
                         lastPages: lastPages,
                         suras: quran.suras,
                         quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },

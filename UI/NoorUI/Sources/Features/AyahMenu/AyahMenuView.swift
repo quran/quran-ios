@@ -251,37 +251,22 @@ private struct AyahMenuViewList: View {
                 subtitle: .text(message),
                 subtitlePlacement: .below,
                 isEnabled: false,
-                action: dataObject.actions.setReadingBookmark
+                action: dataObject.actions.showReadingBookmarkMenu
             ) {
-                ReadingBookmarkPin(style: .outline)
+                Image(uiImage: ReadingBookmarkPin.image(style: .outline, badge: .ellipsis))
             }
-        case .unset:
+        case .available(let slot):
             Row(
                 title: l("ayah.menu.reading-bookmark.title"),
-                subtitle: .text(l("ayah.menu.reading-bookmark.save-here")),
+                subtitle: .text(slot?.displayName ?? "Choose a bookmark"),
                 subtitlePlacement: .below,
-                action: dataObject.actions.setReadingBookmark
+                action: dataObject.actions.showReadingBookmarkMenu
             ) {
-                ReadingBookmarkPin(style: .outline)
-            }
-        case .elsewhere(let location):
-            Row(
-                title: l("ayah.menu.reading-bookmark.title"),
-                subtitle: location,
-                subtitlePlacement: .below,
-                action: dataObject.actions.setReadingBookmark
-            ) {
-                ReadingBookmarkPin(style: .outline)
-            }
-        case .current:
-            Row(
-                title: l("ayah.menu.reading-bookmark.title"),
-                subtitle: .text(l("ayah.menu.reading-bookmark.saved-here")),
-                subtitlePlacement: .below,
-                action: dataObject.actions.removeReadingBookmark
-            ) {
-                ReadingBookmarkPin(style: .filled)
-                    .foregroundColor(.red)
+                Image(uiImage: ReadingBookmarkPin.image(
+                    style: slot == nil ? .outline : .filled,
+                    badge: .ellipsis
+                ))
+                .foregroundColor(slot?.swiftUIColor ?? .label)
             }
         }
     }
@@ -482,8 +467,7 @@ private let previewActions = AyahMenuUI.Actions(
     showTranslation: {},
     copy: {},
     share: {},
-    setReadingBookmark: {},
-    removeReadingBookmark: {}
+    showReadingBookmarkMenu: {}
 )
 #else
 private let previewActions = AyahMenuUI.Actions(
@@ -579,7 +563,7 @@ private func previewDataObject(
         repeatSubtitle: "selected verses",
         actions: previewActions,
         isTranslationView: isTranslationView,
-        readingBookmarkState: .unset
+        readingBookmarkState: .available(slot: nil)
     )
     #else
     return AyahMenuUI.DataObject(

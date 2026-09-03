@@ -22,6 +22,9 @@ import Combine
 import Crashing
 import Localization
 import NoorUI
+#if QURAN_SYNC
+import QuranAnnotations
+#endif
 import QuranKit
 import QuranLocalization
 import QuranTextKit
@@ -209,6 +212,10 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
 
     #if QURAN_SYNC
+    func presentReadingBookmarkMenu(_ viewController: UIViewController) {
+        presentPopover(viewController, pointingTo: readingBookmarkMenuNavigationButton)
+    }
+
     func presentBookmarkAyahs(_ viewController: UIViewController) {
         presentPageSheet(viewController)
     }
@@ -257,14 +264,6 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         dismiss(animated: true, completion: completion)
     }
 
-    func showToast(_ toast: Toast) {
-        guard let windowScene = view.window?.windowScene else {
-            logger.error("Unable to show toast without a window scene")
-            return
-        }
-        ToastPresenter.shared.showToast(toast, in: windowScene)
-    }
-
     func didDismissPopover() {
         interactor.didDismissPopover()
     }
@@ -274,9 +273,25 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         updateTitle(pages)
     }
 
+    #if QURAN_SYNC
+    func updateReadingBookmark(_ slot: ReadingBookmarkSlot?) {
+        let style: ReadingBookmarkPin.Style = slot == nil ? .outline : .filled
+        readingBookmarkMenuNavigationButton.image = ReadingBookmarkPin.image(
+            style: style,
+            badge: .ellipsis
+        )
+        readingBookmarkMenuNavigationButton.tintColor = slot?.color
+        readingBookmarkMenuNavigationButton.accessibilityValue = slot?.displayName
+        quranView?.navigationItem.setRightBarButtonItems(
+            [moreNavigationButton, readingBookmarkMenuNavigationButton],
+            animated: false
+        )
+    }
+    #else
     func updateBookmark(_ isBookmarked: Bool) {
         updateRightBarItems(animated: false, isBookmarked: isBookmarked)
     }
+    #endif
 
     // MARK: Private
 
@@ -298,6 +313,19 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         let moreImage = UIImage.symbol("ellipsis.circle")
         return UIBarButtonItem(image: moreImage, style: .plain, target: self, action: #selector(onMoreBarButtonTapped(_:)))
     }()
+
+    #if QURAN_SYNC
+    private lazy var readingBookmarkMenuNavigationButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: ReadingBookmarkPin.image(style: .outline, badge: .ellipsis),
+            style: .plain,
+            target: self,
+            action: #selector(onReadingBookmarkMenuButtonTapped)
+        )
+        button.accessibilityLabel = "Choose reading bookmark"
+        return button
+    }()
+    #endif
 
     private var titleView: TwoLineNavigationTitleView? { quranView?.navigationItem.titleView as? TwoLineNavigationTitleView }
     private var quranView: QuranView? {
@@ -395,33 +423,34 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         }
     }
 
+    #if !QURAN_SYNC
     private func updateRightBarItems(animated: Bool, isBookmarked: Bool) {
-        #if QURAN_SYNC
-        let style: ReadingBookmarkPin.Style = isBookmarked ? .filled : .outline
-        let bookmarkImage = ReadingBookmarkPin.image(style: style)
-        let bookmark = UIBarButtonItem(image: bookmarkImage, style: .plain, target: self, action: #selector(onBookmarkButtonTapped))
-        bookmark.tintColor = isBookmarked ? .systemRed : nil
-        bookmark.accessibilityLabel = l("ayah.menu.reading-bookmark.title")
-        bookmark.accessibilityValue = l(isBookmarked
-            ? "ayah.menu.reading-bookmark.saved-here"
-            : "ayah.menu.reading-bookmark.save-here")
-        #else
         let bookmarkImage = UIImage.symbol(isBookmarked ? "bookmark.fill" : "bookmark")
         let bookmark = UIBarButtonItem(image: bookmarkImage, style: .plain, target: self, action: #selector(onBookmarkButtonTapped))
         if isBookmarked {
             bookmark.tintColor = .systemRed
         }
-        #endif
+        let items = [moreNavigationButton, bookmark]
 
-        quranView?.navigationItem.setRightBarButtonItems([moreNavigationButton, bookmark], animated: animated)
+        quranView?.navigationItem.setRightBarButtonItems(items, animated: animated)
     }
+    #endif
 
+    #if !QURAN_SYNC
     @objc
     private func onBookmarkButtonTapped() {
         Task {
             await interactor.toogleBookmark()
         }
     }
+    #endif
+
+    #if QURAN_SYNC
+    @objc
+    private func onReadingBookmarkMenuButtonTapped() {
+        interactor.onReadingBookmarkMenuTapped()
+    }
+    #endif
 
     @objc
     private func onMoreBarButtonTapped(_ barButton: UIBarButtonItem) {

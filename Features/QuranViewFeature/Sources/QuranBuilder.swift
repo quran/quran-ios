@@ -21,6 +21,9 @@ import NotesFeature
 import QuranContentFeature
 import QuranKit
 import ReadingService
+#if QURAN_SYNC
+import ReadingBookmarkMenuFeature
+#endif
 import TranslationsFeature
 import TranslationVerseFeature
 import UIKit
@@ -50,7 +53,7 @@ public struct QuranBuilder {
         let syncedCollectionsObserver = QuranSyncedCollectionsObserver(
             service: container.ayahBookmarkCollectionService()
         )
-        let readingBookmarkObserver = QuranReadingBookmarkObserver(
+        let readingBookmarksObserver = QuranReadingBookmarksObserver(
             service: container.readingBookmarkService(),
             quran: quran
         )
@@ -70,7 +73,8 @@ public struct QuranBuilder {
             bookmarkAyahsBuilder: BookmarkAyahsBuilder(container: container),
             syncedHighlightsObserver: syncedHighlightsObserver,
             syncedCollectionsObserver: syncedCollectionsObserver,
-            readingBookmarkObserver: readingBookmarkObserver
+            readingBookmarksObserver: readingBookmarksObserver,
+            readingBookmarkMenuBuilder: ReadingBookmarkMenuBuilder(container: container)
         )
         #else
         let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)

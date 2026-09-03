@@ -1,8 +1,4 @@
 #if QURAN_SYNC
-//
-//  ReadingBookmarkUndoToast.swift
-//
-
 import Localization
 import NoorUI
 import QuranAnnotations

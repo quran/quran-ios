@@ -266,6 +266,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "ReadingBookmarkMenuFeatureTests",
+        "name" : "ReadingBookmarkMenuFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "QuranTranslationFeatureTests",
         "name" : "QuranTranslationFeatureTests"
       }

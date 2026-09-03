@@ -7,16 +7,30 @@
 //
 
 import NoorUI
+#if QURAN_SYNC
+import ReadingBookmarkMenuFeature
+#endif
 import UIKit
 import UIx
 
 final class AyahMenuViewController: UIViewController {
     // MARK: Lifecycle
 
+    #if QURAN_SYNC
+    init(
+        viewModel: AyahMenuViewModel,
+        readingBookmarkMenuBuilder: ReadingBookmarkMenuBuilder
+    ) {
+        self.readingBookmarkMenuBuilder = readingBookmarkMenuBuilder
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    #else
     init(viewModel: AyahMenuViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
+    #endif
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
@@ -45,8 +59,7 @@ final class AyahMenuViewController: UIViewController {
             showTranslation: { [weak self] in self?.viewModel.showTranslation() },
             copy: { [weak self] in self?.viewModel.copy() },
             share: { [weak self] in self?.viewModel.share() },
-            setReadingBookmark: { [weak self] in await self?.viewModel.setReadingBookmark() },
-            removeReadingBookmark: { [weak self] in await self?.viewModel.removeReadingBookmark() }
+            showReadingBookmarkMenu: { [weak self] in self?.showReadingBookmarkMenu() }
         )
         #else
         let actions = AyahMenuUI.Actions(
@@ -92,6 +105,19 @@ final class AyahMenuViewController: UIViewController {
     // MARK: Private
 
     private let viewModel: AyahMenuViewModel
+    #if QURAN_SYNC
+    private let readingBookmarkMenuBuilder: ReadingBookmarkMenuBuilder
+    #endif
+
+    #if QURAN_SYNC
+    private func showReadingBookmarkMenu() {
+        guard let ayah = viewModel.selectedAyah else {
+            return
+        }
+        let viewController = readingBookmarkMenuBuilder.build(ayah: ayah)
+        viewModel.showReadingBookmarkMenu(viewController)
+    }
+    #endif
 
     private func showAyahMenu(_ dataObject: AyahMenuUI.DataObject) {
         let view = AyahMenuView(dataObject: dataObject)

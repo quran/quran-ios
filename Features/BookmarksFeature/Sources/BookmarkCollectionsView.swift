@@ -44,12 +44,14 @@ private struct BookmarkCollectionsContent: View {
                 }
             }
 
-            if let readingBookmark = viewModel.readingBookmark {
+            if !viewModel.readingBookmarks.isEmpty {
                 NoorBasicSection(title: l("ayah.menu.reading-bookmark.title")) {
-                    ReadingBookmarkListItem(
-                        bookmark: readingBookmark,
-                        action: { viewModel.navigateTo(readingBookmark) }
-                    )
+                    ForEach(viewModel.readingBookmarks, id: \.slot) { readingBookmark in
+                        ReadingBookmarkListItem(
+                            bookmark: readingBookmark,
+                            action: { viewModel.navigateTo(readingBookmark) }
+                        )
+                    }
                 }
             }
 

@@ -54,7 +54,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     @Published var isPresentingAddCollection = false
     @Published var isSyncBannerDismissed: Bool
     @Published var newCollectionName = ""
-    @Published var readingBookmark: ReadingPositionBookmark?
+    @Published var readingBookmarks: [ReadingPositionBookmark] = []
 
     var shouldShowSyncBanner: Bool {
         !isAuthenticated && !isSyncBannerDismissed
@@ -274,12 +274,12 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
         for await reading in readings {
             observationTask?.cancel()
-            let sequence = readingBookmarkService.readingBookmarkSequence(quran: reading.quran)
+            let sequence = readingBookmarkService.readingBookmarksSequence(quran: reading.quran)
             observationTask = Task { [weak self] in
                 do {
-                    for try await bookmark in sequence {
+                    for try await bookmarks in sequence {
                         guard !Task.isCancelled else { return }
-                        self?.readingBookmark = bookmark
+                        self?.readingBookmarks = bookmarks
                     }
                 } catch is CancellationError {
                     return

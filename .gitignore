@@ -34,5 +34,6 @@ xcuserdata/
 DerivedData/
 .swiftpm/configuration/registries.json
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+/Example/QuranEngineApp.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 .netrc
 /BuildTools/

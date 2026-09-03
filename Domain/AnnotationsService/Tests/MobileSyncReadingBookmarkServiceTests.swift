@@ -24,37 +24,37 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     func test_addReadingBookmark_persistsAyahLocation() async throws {
         let ayah = ayah(255)
 
-        let created = try await service.addReadingBookmark(at: .ayah(ayah))
+        let created = try await service.addReadingBookmark(at: .ayah(ayah), slot: .coral)
         let stored = try await storedBookmark()
 
         XCTAssertEqual(created.location, .ayah(ayah))
+        XCTAssertEqual(created.slot, .coral)
         XCTAssertEqual(stored?.location, .ayah(ayah))
     }
 
     func test_addReadingBookmark_replacesExistingBookmark() async throws {
         let original = ayah(254)
         let destination = ayah(255)
-        try await service.addReadingBookmark(at: .ayah(original))
+        try await service.addReadingBookmark(at: .ayah(original), slot: .teal)
 
-        try await service.addReadingBookmark(at: .ayah(destination))
-        let stored = try await storedBookmark()
+        try await service.addReadingBookmark(at: .ayah(destination), slot: .teal)
+        let stored = try await storedBookmark(in: .teal)
 
         XCTAssertEqual(stored?.location, .ayah(destination))
     }
 
     func test_removeReadingBookmark_deletesCurrentBookmark() async throws {
-        try await service.addReadingBookmark(at: .ayah(ayah(255)))
+        try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .indigo)
 
-        let removed = try await service.removeReadingBookmark()
-        let stored = try await storedBookmark()
+        try await service.removeReadingBookmark(in: .indigo)
+        let stored = try await storedBookmark(in: .indigo)
 
-        XCTAssertTrue(removed)
         XCTAssertNil(stored)
     }
 
     func test_readingBookmarkSequence_mapsPageIntoRequestedQuran() async throws {
         let storedPage = Quran.hafsMadani1405.pages[254]
-        _ = try await database.quranDataService.addPageReadingBookmark(page: Int32(storedPage.pageNumber))
+        _ = try await service.addReadingBookmark(at: .page(storedPage), slot: .coral)
         let quran = Quran.hafsIndoPak
         let expectedPage = try XCTUnwrap(QuranPageMapper(destination: quran).mapPage(storedPage))
 
@@ -66,20 +66,46 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     func test_addReadingBookmark_persistsPageLocation() async throws {
         let storedPage = Quran.hafsMadani1405.pages[254]
 
-        let created = try await service.addReadingBookmark(at: .page(storedPage))
+        let created = try await service.addReadingBookmark(at: .page(storedPage), slot: .coral)
         let stored = try await storedBookmark()
 
         XCTAssertEqual(created.location, .page(storedPage))
         XCTAssertEqual(stored?.location, .page(storedPage))
     }
 
-    private func storedBookmark(quran: Quran = .hafsMadani1405) async throws -> ReadingPositionBookmark? {
-        var iterator = service.readingBookmarkSequence(quran: quran).makeAsyncIterator()
-        guard let bookmark = try await iterator.next() else {
+    func test_addReadingBookmarks_preservesEachSlot() async throws {
+        try await service.addReadingBookmark(at: .ayah(ayah(254)), slot: .coral)
+        try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .teal)
+
+        let bookmarks = try await storedBookmarks()
+
+        XCTAssertEqual(Set(bookmarks.map(\.slot)), [.coral, .teal])
+    }
+
+    func test_readingBookmarksSequence_ordersBookmarksBySlot() async throws {
+        try await service.addReadingBookmark(at: .ayah(ayah(256)), slot: .indigo)
+        try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .teal)
+        try await service.addReadingBookmark(at: .ayah(ayah(254)), slot: .coral)
+
+        let bookmarks = try await storedBookmarks()
+
+        XCTAssertEqual(bookmarks.map(\.slot), [.coral, .teal, .indigo])
+    }
+
+    private func storedBookmark(
+        in slot: ReadingBookmarkSlot = .coral,
+        quran: Quran = .hafsMadani1405
+    ) async throws -> ReadingPositionBookmark? {
+        try await storedBookmarks(quran: quran).first { $0.slot == slot }
+    }
+
+    private func storedBookmarks(quran: Quran = .hafsMadani1405) async throws -> [ReadingPositionBookmark] {
+        var iterator = service.readingBookmarksSequence(quran: quran).makeAsyncIterator()
+        guard let bookmarks = try await iterator.next() else {
             XCTFail("Reading bookmark sequence ended unexpectedly")
-            return nil
+            return []
         }
-        return bookmark
+        return bookmarks
     }
 
     private func ayah(_ number: Int) -> AyahNumber {

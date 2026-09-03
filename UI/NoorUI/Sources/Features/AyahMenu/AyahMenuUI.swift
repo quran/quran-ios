@@ -22,8 +22,7 @@ public enum AyahMenuUI {
             showTranslation: @escaping AsyncAction,
             copy: @escaping AsyncAction,
             share: @escaping AsyncAction,
-            setReadingBookmark: @escaping AsyncAction,
-            removeReadingBookmark: @escaping AsyncAction
+            showReadingBookmarkMenu: @escaping AsyncAction
         ) {
             self.play = play
             self.repeatVerses = repeatVerses
@@ -33,8 +32,7 @@ public enum AyahMenuUI {
             self.showTranslation = showTranslation
             self.copy = copy
             self.share = share
-            self.setReadingBookmark = setReadingBookmark
-            self.removeReadingBookmark = removeReadingBookmark
+            self.showReadingBookmarkMenu = showReadingBookmarkMenu
         }
         #else
         public init(
@@ -73,8 +71,7 @@ public enum AyahMenuUI {
         let copy: AsyncAction
         let share: AsyncAction
         #if QURAN_SYNC
-        let setReadingBookmark: AsyncAction
-        let removeReadingBookmark: AsyncAction
+        let showReadingBookmarkMenu: AsyncAction
         #endif
     }
 
@@ -136,14 +133,12 @@ public enum AyahMenuUI {
         let bookmarkTitle: String
         let notesTitle: String
         let bookmarkState: BookmarkState
+        let readingBookmarkState: ReadingBookmarkState
         #endif
         let playSubtitle: String
         let repeatSubtitle: String
         let isTranslationView: Bool
         let usesSyncedNotesIcon: Bool
-        #if QURAN_SYNC
-        let readingBookmarkState: ReadingBookmarkState
-        #endif
     }
 
     // MARK: Public
@@ -161,14 +156,10 @@ public enum AyahMenuUI {
         case partiallyHighlighted
         case highlighted(HighlightColor)
     }
-    #endif
 
-    #if QURAN_SYNC
-    public enum ReadingBookmarkState {
+    public enum ReadingBookmarkState: Equatable {
         case disabled(message: String)
-        case unset
-        case elsewhere(location: MultipartText)
-        case current
+        case available(slot: ReadingBookmarkSlot?)
     }
     #endif
 }

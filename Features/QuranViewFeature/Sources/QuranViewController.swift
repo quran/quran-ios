@@ -111,12 +111,14 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         crashContext.setScreen("quran")
         UIApplication.shared.isIdleTimerDisabled = true
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        setOuterTabBarHiddenForIOS26(true, animated: animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         crashContext.clearActiveList(owner: "quran_translation")
         navigationController?.setNavigationBarHidden(false, animated: animated)
+        setOuterTabBarHiddenForIOS26(false, animated: animated)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -342,6 +344,13 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     private func stopBarHiddenTimer() {
         barsTimer?.cancel()
         barsTimer = nil
+    }
+
+    private func setOuterTabBarHiddenForIOS26(_ hidden: Bool, animated: Bool) {
+        // On iPadOS 26, UIKit can leave the top tab bar visible despite hidesBottomBarWhenPushed.
+        // Explicitly hiding the active tab bar works around that UIKit regression.
+        guard #available(iOS 26.0, *) else { return }
+        tabBarController?.setTabBarHidden(hidden, animated: animated)
     }
 
     @objc

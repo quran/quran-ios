@@ -6,11 +6,18 @@
 import Foundation
 import QuranKit
 
+public enum ReadingBookmarkSlot: CaseIterable, Sendable {
+    case coral
+    case teal
+    case indigo
+}
+
 public struct ReadingPositionBookmark: Equatable {
     // MARK: Lifecycle
 
-    public init(id: String, location: Location, modifiedOn: Date) {
+    public init(id: String, slot: ReadingBookmarkSlot, location: Location, modifiedOn: Date) {
         self.id = id
+        self.slot = slot
         self.location = location
         self.modifiedOn = modifiedOn
     }
@@ -23,6 +30,7 @@ public struct ReadingPositionBookmark: Equatable {
     }
 
     public let id: String
+    public let slot: ReadingBookmarkSlot
     public let location: Location
     public let modifiedOn: Date
 

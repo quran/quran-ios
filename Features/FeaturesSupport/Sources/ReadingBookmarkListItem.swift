@@ -28,9 +28,9 @@ public struct ReadingBookmarkListItem: View {
         NoorListItem(
             image: .init(
                 Image(uiImage: ReadingBookmarkPin.image(style: .filled)),
-                color: .red
+                color: bookmark.slot.swiftUIColor
             ),
-            title: "\(sura: bookmark.sura)",
+            title: "\(bookmark.slot.displayName) · \(sura: bookmark.sura)",
             subtitle: .init(
                 text: "\(locationTitle) · \(bookmark.modifiedOn.timeAgo())",
                 location: .bottom

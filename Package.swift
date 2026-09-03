@@ -24,7 +24,7 @@ let mobileSyncPackageDependency: Package.Dependency = {
     if let localMobileSyncPackagePath, !localMobileSyncPackagePath.isEmpty {
         return .package(path: localMobileSyncPackagePath)
     }
-    return .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.1.20")
+    return .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.1.21")
 }()
 
 let mobileSyncPackageDependencies: [Package.Dependency] =
@@ -592,9 +592,24 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
             "NoorUI",
             "QuranLocalization",
+            "ReadingBookmarkMenuFeature",
         ], testDependencies: [
             "Analytics",
             "NotePersistence",
+        ]),
+
+        target(type, name: "ReadingBookmarkMenuFeature", dependencies: [
+            "AnnotationsService",
+            "AppDependencies",
+            "Crashing",
+            "Localization",
+            "NoorUI",
+            "QuranAnnotations",
+            "QuranKit",
+            "QuranLocalization",
+            "UIx",
+        ], testDependencies: [
+            "MobileSyncTestSupport",
         ]),
 
         target(type, name: "WhatsNewFeature", hasTests: false, dependencies: [
@@ -800,6 +815,7 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "ReadingService",
             "QuranLocalization",
+            "ReadingBookmarkMenuFeature",
         ], testDependencies: [
             "MobileSyncTestSupport",
         ] + mobileSyncTargetDependencies),

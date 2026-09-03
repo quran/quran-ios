@@ -11,6 +11,9 @@ import AppDependencies
 import QuranAnnotations
 import QuranKit
 import QuranTextKit
+#if QURAN_SYNC
+import ReadingBookmarkMenuFeature
+#endif
 import UIKit
 
 public struct AyahMenuInput {
@@ -67,6 +70,9 @@ public struct AyahMenuBuilder {
 
     public init(container: AppDependencies) {
         self.container = container
+        #if QURAN_SYNC
+        readingBookmarkMenuBuilder = ReadingBookmarkMenuBuilder(container: container)
+        #endif
     }
 
     // MARK: Public
@@ -99,10 +105,20 @@ public struct AyahMenuBuilder {
         #endif
         let viewModel = AyahMenuViewModel(deps: deps)
         viewModel.listener = listener
+        #if QURAN_SYNC
+        return AyahMenuViewController(
+            viewModel: viewModel,
+            readingBookmarkMenuBuilder: readingBookmarkMenuBuilder
+        )
+        #else
         return AyahMenuViewController(viewModel: viewModel)
+        #endif
     }
 
     // MARK: Private
 
     private let container: AppDependencies
+    #if QURAN_SYNC
+    private let readingBookmarkMenuBuilder: ReadingBookmarkMenuBuilder
+    #endif
 }

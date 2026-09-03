@@ -87,8 +87,8 @@ final class HomeViewModel: ObservableObject {
     }
 
     #if QURAN_SYNC
-    @Published var readingBookmark: ReadingPositionBookmark? {
-        didSet { recordListUpdate(reason: "reading_bookmark_changed") }
+    @Published var readingBookmarks: [ReadingPositionBookmark] = [] {
+        didSet { recordListUpdate(reason: "reading_bookmarks_changed") }
     }
     #endif
 
@@ -136,8 +136,8 @@ final class HomeViewModel: ObservableObject {
         async let suras: () = loadSuras()
         async let quarters: () = loadQuarters()
         #if QURAN_SYNC
-        async let readingBookmark: () = loadReadingBookmark()
-        _ = await [lastPages, suras, quarters, readingBookmark]
+        async let readingBookmarks: () = loadReadingBookmarks()
+        _ = await [lastPages, suras, quarters, readingBookmarks]
         #else
         _ = await [lastPages, suras, quarters]
         #endif
@@ -208,7 +208,7 @@ final class HomeViewModel: ObservableObject {
     }
 
     #if QURAN_SYNC
-    private func loadReadingBookmark() async {
+    private func loadReadingBookmarks() async {
         let readings = readingPreferences.$reading
             .prepend(readingPreferences.reading)
             .values()
@@ -217,12 +217,12 @@ final class HomeViewModel: ObservableObject {
 
         for await reading in readings {
             observationTask?.cancel()
-            let sequence = readingBookmarkService.readingBookmarkSequence(quran: reading.quran)
+            let sequence = readingBookmarkService.readingBookmarksSequence(quran: reading.quran)
             observationTask = Task { [weak self] in
                 do {
-                    for try await bookmark in sequence {
+                    for try await bookmarks in sequence {
                         guard !Task.isCancelled else { return }
-                        self?.readingBookmark = bookmark
+                        self?.readingBookmarks = bookmarks
                     }
                 } catch is CancellationError {
                     return
@@ -297,9 +297,7 @@ final class HomeViewModel: ObservableObject {
     private var listRowCount: Int {
         var count = lastPages.count
         #if QURAN_SYNC
-        if readingBookmark != nil {
-            count += 1
-        }
+        count += readingBookmarks.count
         #endif
         switch type {
         case .suras:
@@ -313,7 +311,7 @@ final class HomeViewModel: ObservableObject {
     private var listSectionCount: Int {
         var count = lastPages.isEmpty ? 0 : 1
         #if QURAN_SYNC
-        if readingBookmark != nil {
+        if !readingBookmarks.isEmpty {
             count += 1
         }
         #endif

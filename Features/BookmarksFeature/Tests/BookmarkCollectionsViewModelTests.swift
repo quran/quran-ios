@@ -430,10 +430,10 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let sut = makeSUT(readingBookmarkService: service)
         let task = Task { await sut.start() }
 
-        try await service.addReadingBookmark(at: .page(page))
-        await waitUntil { sut.readingBookmark?.location == .page(page) }
+        try await service.addReadingBookmark(at: .page(page), slot: .teal)
+        await waitUntil { sut.readingBookmarks.first { $0.slot == .teal }?.location == .page(page) }
 
-        XCTAssertEqual(sut.readingBookmark?.sura, page.firstVerse.sura)
+        XCTAssertEqual(sut.readingBookmarks.first { $0.slot == .teal }?.sura, page.firstVerse.sura)
         task.cancel()
     }
 
@@ -441,6 +441,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let page = Quran.hafsMadani1405.pages[269]
         let bookmark = ReadingPositionBookmark(
             id: "reading-bookmark",
+            slot: .coral,
             location: .page(page),
             modifiedOn: .distantPast
         )
@@ -456,6 +457,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let ayah = Quran.hafsMadani1405.pages[269].firstVerse
         let bookmark = ReadingPositionBookmark(
             id: "reading-bookmark",
+            slot: .coral,
             location: .ayah(ayah),
             modifiedOn: .distantPast
         )

@@ -27,8 +27,8 @@ private extension TextPart {
             highlightedAttributedString(text: text, ranges: ranges, size: size)
         case .sura(let sura):
             QuranReference.sura(sura).attributedString(size: size, locale: locale)
-        case .ayah(let ayah, let emphasizesSura):
-            QuranReference.ayah(ayah).attributedString(
+        case .ayah(let ayah, let emphasizesSura, let decorationHidden):
+            QuranReference.ayah(ayah, decorationHidden: decorationHidden).attributedString(
                 size: size,
                 locale: locale,
                 emphasizesSura: emphasizesSura

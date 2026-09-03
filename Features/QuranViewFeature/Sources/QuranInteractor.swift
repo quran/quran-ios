@@ -417,7 +417,11 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     #if QURAN_SYNC
     func onReadingBookmarkMenuTapped() {
-        let viewController = deps.readingBookmarkMenuBuilder.build(pages: visiblePages)
+        guard let firstPage = visiblePages.min() else {
+            logger.info("Quran: ignore reading bookmarks tap when no visible pages")
+            return
+        }
+        let viewController = deps.readingBookmarkMenuBuilder.build(page: firstPage, pages: visiblePages)
         presenter?.presentReadingBookmarkMenu(viewController)
     }
     #else

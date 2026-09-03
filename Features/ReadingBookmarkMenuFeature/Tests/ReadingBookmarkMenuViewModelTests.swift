@@ -31,10 +31,30 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
 
         XCTAssertEqual(sut.items.map(\.slot), ReadingBookmarkSlot.allCases)
         XCTAssertTrue(sut.items.allSatisfy {
-            $0.subtitle.accessibilityText == "Not placed — tap to set here"
+            $0.subtitle.accessibilityText == "Not placed yet"
+                && $0.action == .setHere
                 && !$0.isCurrent
                 && $0.isEnabled
         })
+    }
+
+    func test_start_describesCurrentAndPlacedElsewhereSlots() async throws {
+        let selectedAyah = ayah(2)
+        try await service.addReadingBookmark(at: .ayah(selectedAyah), slot: .coral)
+        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .teal)
+        let sut = makeSUT(target: .ayah(selectedAyah))
+        let startTask = await start(sut)
+        defer { startTask.cancel() }
+
+        let current = sut.items.first { $0.slot == .coral }
+        XCTAssertEqual(current?.subtitle.accessibilityText, "Saved here")
+        XCTAssertEqual(current?.action, .remove)
+        XCTAssertEqual(current?.isCurrent, true)
+
+        let elsewhere = sut.items.first { $0.slot == .teal }
+        XCTAssertEqual(elsewhere?.subtitle.accessibilityText, "at Al-Fātihah, Ayah 3")
+        XCTAssertEqual(elsewhere?.action, .moveHere)
+        XCTAssertEqual(elsewhere?.isCurrent, false)
     }
 
     func test_selectUnsetSlot_persistsBookmarkAtTarget() async throws {
@@ -145,7 +165,7 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
     func test_pageTarget_usesFirstVisiblePage() async throws {
         let firstPage = Quran.hafsMadani1405.pages[40]
         let secondPage = Quran.hafsMadani1405.pages[41]
-        let sut = makeSUT(target: .pages([secondPage, firstPage]))
+        let sut = makeSUT(target: .pages(firstPage, [secondPage, firstPage]))
         let startTask = await start(sut)
         defer { startTask.cancel() }
 
@@ -153,6 +173,18 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let storedBookmark = try await storedBookmark(in: .teal)
 
         XCTAssertEqual(storedBookmark?.location, .page(firstPage))
+    }
+
+    func test_pageTarget_describesBookmarkOnCurrentPage() async throws {
+        let page = Quran.hafsMadani1405.pages[40]
+        try await service.addReadingBookmark(at: .page(page), slot: .coral)
+        let sut = makeSUT(target: .pages(page, [page]))
+        let startTask = await start(sut)
+        defer { startTask.cancel() }
+
+        let current = sut.items.first { $0.slot == .coral }
+        XCTAssertEqual(current?.subtitle.accessibilityText, "Saved here")
+        XCTAssertEqual(current?.action, .remove)
     }
 
     private func makeSUT(target: ReadingBookmarkMenuViewModel.Target) -> ReadingBookmarkMenuViewModel {
@@ -163,7 +195,7 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let observed = expectation(description: "Loads reading bookmarks")
         var didFulfill = false
         let observation = sut.$items.sink { items in
-            guard !didFulfill, items.allSatisfy(\.isEnabled) else {
+            guard !didFulfill, !items.isEmpty, items.allSatisfy(\.isEnabled) else {
                 return
             }
             didFulfill = true

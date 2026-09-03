@@ -30,7 +30,7 @@ enum QuranReference {
     }
 
     case sura(Sura)
-    case ayah(AyahNumber)
+    case ayah(AyahNumber, decorationHidden: Bool = false)
 
     // MARK: Internal
 
@@ -38,7 +38,7 @@ enum QuranReference {
         switch self {
         case .sura(let sura):
             sura.localizedName()
-        case .ayah(let ayah):
+        case .ayah(let ayah, _):
             ayah.localizedName
         }
     }
@@ -56,14 +56,17 @@ enum QuranReference {
     }
 
     fileprivate func localizedName(locale: Locale) -> String? {
-        locale.isArabicLanguage ? nil : sura.localizedName()
+        if decorationHidden, locale.isArabicLanguage {
+            return sura.localizedName(language: .arabic)
+        }
+        return locale.isArabicLanguage ? nil : sura.localizedName()
     }
 
     fileprivate func coordinate(locale: Locale) -> String? {
         switch self {
         case .sura:
             nil
-        case .ayah(let ayah):
+        case .ayah(let ayah, _):
             ayah.localizedCoordinate(locale: locale)
         }
     }
@@ -73,7 +76,9 @@ enum QuranReference {
         if let localizedName = localizedName(locale: locale) {
             components.append(localizedName)
         }
-        components.append(arabicName.text)
+        if !decorationHidden {
+            components.append(arabicName.text)
+        }
 
         let suraReference = components.joined(separator: " ")
         if let coordinate = coordinate(locale: locale) {
@@ -93,18 +98,22 @@ enum QuranReference {
                 string: localizedName,
                 attributes: [.font: size.plainUIFont(emphasized: emphasizesSura)]
             ))
-            result.append(NSAttributedString(string: " "))
         }
 
-        let arabicNameFont: UIFont = switch arabicName {
-        case .decoratedGlyph: size.suraUIFont
-        case .indoPakText: size.quranUIFont(.indoPak)
+        if !decorationHidden {
+            if result.length > 0 {
+                result.append(NSAttributedString(string: " "))
+            }
+            let arabicNameFont: UIFont = switch arabicName {
+            case .decoratedGlyph: size.suraUIFont
+            case .indoPakText: size.quranUIFont(.indoPak)
+            }
+            var arabicNameAttributes: [NSAttributedString.Key: Any] = [.font: arabicNameFont]
+            if !arabicName.isIndoPakText {
+                arabicNameAttributes[.baselineOffset] = -2
+            }
+            result.append(NSAttributedString(string: arabicName.text, attributes: arabicNameAttributes))
         }
-        var arabicNameAttributes: [NSAttributedString.Key: Any] = [.font: arabicNameFont]
-        if !arabicName.isIndoPakText {
-            arabicNameAttributes[.baselineOffset] = -2
-        }
-        result.append(NSAttributedString(string: arabicName.text, attributes: arabicNameAttributes))
 
         if let coordinate = coordinate(locale: locale) {
             result.append(NSAttributedString(
@@ -115,13 +124,22 @@ enum QuranReference {
         return result
     }
 
+    fileprivate var decorationHidden: Bool {
+        switch self {
+        case .sura:
+            false
+        case .ayah(_, let decorationHidden):
+            decorationHidden
+        }
+    }
+
     // MARK: Private
 
     private var sura: Sura {
         switch self {
         case .sura(let sura):
             sura
-        case .ayah(let ayah):
+        case .ayah(let ayah, _):
             ayah.sura
         }
     }
@@ -181,15 +199,17 @@ struct QuranReferenceView: View {
                     .fontWeight(emphasizesSura ? .heavy : nil)
             }
 
-            switch arabicName {
-            case .decoratedGlyph(let text):
-                Text(text)
-                    .font(size.suraFont)
-                    .padding(.top, glyphTopPadding)
-            case .indoPakText(let text):
-                Text(text)
-                    .font(size.quranFont(.indoPak))
-                    .padding(.vertical, size.indoPakReferenceVerticalPadding(glyphTopPadding: glyphTopPadding))
+            if !reference.decorationHidden {
+                switch arabicName {
+                case .decoratedGlyph(let text):
+                    Text(text)
+                        .font(size.suraFont)
+                        .padding(.top, glyphTopPadding)
+                case .indoPakText(let text):
+                    Text(text)
+                        .font(size.quranFont(.indoPak))
+                        .padding(.vertical, size.indoPakReferenceVerticalPadding(glyphTopPadding: glyphTopPadding))
+                }
             }
 
             if let coordinate = reference.coordinate(locale: locale) {
@@ -202,6 +222,7 @@ struct QuranReferenceView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(reference.accessibilityText)
+        .fixedSize()
     }
 }
 

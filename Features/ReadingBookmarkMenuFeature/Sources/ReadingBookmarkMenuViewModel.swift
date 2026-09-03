@@ -9,35 +9,38 @@ import QuranKit
 @MainActor
 final class ReadingBookmarkMenuViewModel: ObservableObject {
     enum Target {
-        case pages([Page])
+        case pages(Page, [Page])
         case ayah(AyahNumber)
 
-        var location: ReadingPositionBookmark.Location? {
+        var location: ReadingPositionBookmark.Location {
             switch self {
-            case .pages(let pages):
-                pages.min().map(ReadingPositionBookmark.Location.page)
+            case .pages(let page, _):
+                .page(page)
             case .ayah(let ayah):
                 .ayah(ayah)
             }
         }
 
-        var quran: Quran? {
+        var quran: Quran {
             switch self {
-            case .pages(let pages):
-                pages.first?.quran
+            case .pages(let page, _):
+                page.quran
             case .ayah(let ayah):
                 ayah.quran
             }
         }
-
-        var unavailableSubtitle: MultipartText {
-            .text("Reading position unavailable")
-        }
     }
 
     struct Item: Identifiable {
+        enum Action: Equatable {
+            case remove
+            case moveHere
+            case setHere
+        }
+
         let slot: ReadingBookmarkSlot
         let subtitle: MultipartText
+        let action: Action
         let isCurrent: Bool
         let isEnabled: Bool
 
@@ -63,14 +66,8 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
     @Published var error: Error?
 
     func start() async {
-        guard target.location != nil, let quran = target.quran else {
-            isLoading = false
-            refreshItems()
-            return
-        }
-
         do {
-            for try await bookmarks in service.readingBookmarksSequence(quran: quran) {
+            for try await bookmarks in service.readingBookmarksSequence(quran: target.quran) {
                 self.bookmarks = bookmarks
                 isLoading = false
                 refreshItems()
@@ -84,11 +81,12 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
     }
 
     func select(_ slot: ReadingBookmarkSlot) async -> Toast? {
-        guard !isMutating, let location = target.location else {
+        guard !isMutating else {
             return nil
         }
 
         isMutating = true
+        let location = target.location
         refreshItems()
         defer {
             isMutating = false
@@ -162,27 +160,16 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
         isLoading: Bool,
         isMutating: Bool
     ) -> [Item] {
-        ReadingBookmarkSlot.allCases.map { slot in
-            guard let location = target.location else {
-                return Item(
-                    slot: slot,
-                    subtitle: target.unavailableSubtitle,
-                    isCurrent: false,
-                    isEnabled: false
-                )
-            }
-            guard !isLoading else {
-                return Item(
-                    slot: slot,
-                    subtitle: .text("Loading…"),
-                    isCurrent: false,
-                    isEnabled: false
-                )
-            }
+        if isLoading {
+            return []
+        }
+        return ReadingBookmarkSlot.allCases.map { slot in
+            let location = target.location
             guard let bookmark = bookmarks.first(where: { $0.slot == slot }) else {
                 return Item(
                     slot: slot,
-                    subtitle: .text("Not placed — tap to set here"),
+                    subtitle: .text("Not placed yet"),
+                    action: .setHere,
                     isCurrent: false,
                     isEnabled: !isMutating
                 )
@@ -190,14 +177,16 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
             if bookmark.location == location {
                 return Item(
                     slot: slot,
-                    subtitle: .text("Saved here • Tap to remove"),
+                    subtitle: .text("Saved here"),
+                    action: .remove,
                     isCurrent: true,
                     isEnabled: !isMutating
                 )
             }
             return Item(
                 slot: slot,
-                subtitle: "Move here from \(Self.location(of: bookmark))",
+                subtitle: "at \(Self.location(of: bookmark))",
+                action: .moveHere,
                 isCurrent: false,
                 isEnabled: !isMutating
             )
@@ -207,20 +196,18 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
     private static func location(of bookmark: ReadingPositionBookmark) -> MultipartText {
         switch bookmark.location {
         case .ayah(let ayah):
-            "\(ayah: ayah)"
+            "\(ayah: ayah, decorationHidden: true)"
         case .page(let page):
             .text(page.localizedName)
         }
     }
 
+    // TODO: Fix
     private static func currentBookmarks(
         service: MobileSyncReadingBookmarkService,
         target: Target
     ) async throws -> [ReadingPositionBookmark] {
-        guard let quran = target.quran else {
-            return []
-        }
-        for try await bookmarks in service.readingBookmarksSequence(quran: quran) {
+        for try await bookmarks in service.readingBookmarksSequence(quran: target.quran) {
             return bookmarks
         }
         return []

@@ -58,6 +58,38 @@ final class MultipartTextQuranTests: XCTestCase {
         XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905} · ٢:٢٥٥")
     }
 
+    func test_ayahReference_withDecorationHidden_keepsLocalizedNameAndCoordinate() {
+        let text: MultipartText = "\(ayah: ayah, decorationHidden: true)"
+
+        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) · 2:255")
+        XCTAssertEqual(text.accessibilityText, ayah.localizedName)
+    }
+
+    func test_ayahReference_withDecorationHidden_inArabicLocale_keepsPlainArabicName() {
+        let text: MultipartText = "\(ayah: ayah, decorationHidden: true)"
+
+        XCTAssertEqual(text.rawValue(locale: arabic), "\(sura.localizedName(language: .arabic)) · ٢:٢٥٥")
+    }
+
+    func test_indoPakAyahReference_withDecorationHidden_omitsAdditionalArabicName() {
+        let ayah = Quran.hafsIndoPak.suras[1].verses[254]
+        let text: MultipartText = "\(ayah: ayah, decorationHidden: true)"
+
+        XCTAssertEqual(text.rawValue(locale: english), "\(ayah.sura.localizedName()) · 2:255")
+    }
+
+    @MainActor
+    func test_ayahReference_withDecorationHidden_preservesUIKitRendering() {
+        let text: MultipartText = "\(ayah: ayah, emphasizingSura: true, decorationHidden: true)"
+
+        XCTAssertEqual(text.attributedString(ofSize: .body).string, text.rawValue)
+        XCTAssertFalse(text.attributedString(ofSize: .body).string.contains("\u{E905}"))
+        XCTAssertEqual(
+            QuranReference.ayah(ayah, decorationHidden: true).attributedString(size: .body, locale: arabic).string,
+            text.rawValue(locale: arabic)
+        )
+    }
+
     func test_singleAyahRange_usesStartReference() {
         let text: MultipartText = "\(ayahRange: ayah ... ayah)"
 

@@ -258,7 +258,7 @@ private struct AyahMenuViewList: View {
         case .available(let slot):
             Row(
                 title: l("ayah.menu.reading-bookmark.title"),
-                subtitle: .text(slot?.displayName ?? "Choose a bookmark"),
+                subtitle: .text(slot?.displayName ?? "Move here"),
                 subtitlePlacement: .below,
                 action: dataObject.actions.showReadingBookmarkMenu
             ) {

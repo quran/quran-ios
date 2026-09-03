@@ -16,8 +16,8 @@ public struct ReadingBookmarkMenuBuilder {
 
     // MARK: Public
 
-    public func build(pages: [Page]) -> UIViewController {
-        build(target: .pages(pages))
+    public func build(page: Page, pages: [Page]) -> UIViewController {
+        build(target: .pages(page, pages))
     }
 
     public func build(ayah: AyahNumber) -> UIViewController {

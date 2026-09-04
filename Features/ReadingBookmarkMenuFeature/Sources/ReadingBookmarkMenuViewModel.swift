@@ -99,9 +99,9 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
                 let clearedBookmark = try await service.clearReadingBookmark(in: slot)
                 bookmarks.removeAll { $0.slot == slot }
                 bookmarks.append(clearedBookmark)
-                return ReadingBookmarkUndoToast.removed(bookmark) { [service, target] in
+                return ReadingBookmarkUndoToast.removed(bookmark) {
                     Task { @MainActor in
-                        await Self.undoRemoval(bookmark, service: service, target: target)
+                        await self.restore(bookmark)
                     }
                 }
             }
@@ -114,14 +114,9 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
                 return ReadingBookmarkUndoToast.moved(
                     from: previousBookmark,
                     to: bookmark
-                ) { [service, target] in
+                ) {
                     Task { @MainActor in
-                        await Self.undoMove(
-                            bookmark,
-                            to: previousBookmark,
-                            service: service,
-                            target: target
-                        )
+                        await self.restore(previousBookmark)
                     }
                 }
             }
@@ -203,50 +198,11 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
         }
     }
 
-    // TODO: Fix
-    private static func currentBookmarks(
-        service: MobileSyncReadingBookmarkService,
-        target: Target
-    ) async throws -> [PlacedReadingBookmark] {
-        for try await bookmarks in service.placedReadingBookmarksSequence(quran: target.quran) {
-            return bookmarks
-        }
-        return []
-    }
-
-    private static func undoRemoval(
-        _ bookmark: PlacedReadingBookmark,
-        service: MobileSyncReadingBookmarkService,
-        target: Target
-    ) async {
+    private func restore(_ bookmark: PlacedReadingBookmark) async {
         do {
-            let bookmarks = try await currentBookmarks(service: service, target: target)
-            guard !bookmarks.contains(where: { $0.slot == bookmark.slot }) else {
-                return
-            }
             try await service.addReadingBookmark(at: bookmark.placement, slot: bookmark.slot)
         } catch {
-            crasher.recordError(error, reason: "Failed to undo reading bookmark removal")
-        }
-    }
-
-    private static func undoMove(
-        _ movedBookmark: PlacedReadingBookmark,
-        to previousBookmark: PlacedReadingBookmark,
-        service: MobileSyncReadingBookmarkService,
-        target: Target
-    ) async {
-        do {
-            let bookmarks = try await currentBookmarks(service: service, target: target)
-            guard bookmarks.first(where: { $0.slot == movedBookmark.slot }) == movedBookmark else {
-                return
-            }
-            try await service.addReadingBookmark(
-                at: previousBookmark.placement,
-                slot: previousBookmark.slot
-            )
-        } catch {
-            crasher.recordError(error, reason: "Failed to undo reading bookmark move")
+            crasher.recordError(error, reason: "Failed to restore reading bookmark")
         }
     }
 }

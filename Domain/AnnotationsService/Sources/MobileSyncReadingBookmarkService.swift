@@ -84,7 +84,24 @@ public struct MobileSyncReadingBookmarkService {
         )
     }
 
+    @discardableResult
+    public func renameReadingBookmark(
+        in slot: QuranAnnotations.ReadingBookmarkSlot,
+        name: String?,
+        quran: Quran
+    ) async throws -> QuranAnnotations.ReadingBookmark {
+        let bookmark = try await quranDataService.renameReadingBookmark(slot: slot.mobileSyncSlot, name: name)
+        guard let renamed = Self.readingBookmark(from: bookmark, quran: quran, storedPageQuran: storedPageQuran) else {
+            throw MappingError.invalidBookmark
+        }
+        return renamed
+    }
+
     // MARK: Private
+
+    private enum MappingError: Error {
+        case invalidBookmark
+    }
 
     private let quranDataService: QuranDataService
     private let storedPageQuran: Quran

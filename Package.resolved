@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/quran/mobile-sync-spm.git",
       "state" : {
-        "revision" : "db8a7f2bf6244df3412abaeb42c6053d7e119134",
-        "version" : "0.1.21"
+        "revision" : "6af6f1dda6421416401cdba16b37adc1449cd6ed",
+        "version" : "0.1.22"
       }
     },
     {

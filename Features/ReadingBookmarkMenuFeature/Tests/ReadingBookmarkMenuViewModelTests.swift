@@ -140,6 +140,44 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         restored.task.cancel()
     }
 
+    func test_removedBookmarkUndo_restoresPreviousLocationAfterSlotChanges() async throws {
+        let previousAyah = ayah(2)
+        try await service.addReadingBookmark(at: .ayah(previousAyah), slot: .coral)
+        let sut = makeSUT(target: .ayah(previousAyah))
+        let startTask = await start(sut)
+        defer { startTask.cancel() }
+        let toast = await sut.select(.coral)
+        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .coral)
+        let restored = bookmarkExpectation(
+            description: "Restores removed bookmark over a later placement",
+            slot: .coral,
+            placement: .ayah(previousAyah)
+        )
+        defer { restored.task.cancel() }
+
+        try XCTUnwrap(toast?.action).handler()
+        await fulfillment(of: [restored.expectation], timeout: 2)
+    }
+
+    func test_movedBookmarkUndo_restoresPreviousLocationAfterSlotChanges() async throws {
+        let previousPage = Quran.hafsMadani1405.pages[40]
+        try await service.addReadingBookmark(at: .page(previousPage), slot: .indigo)
+        let sut = makeSUT(target: .ayah(ayah(2)))
+        let startTask = await start(sut)
+        defer { startTask.cancel() }
+        let toast = await sut.select(.indigo)
+        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .indigo)
+        let restored = bookmarkExpectation(
+            description: "Restores moved bookmark over a later placement",
+            slot: .indigo,
+            placement: .page(previousPage)
+        )
+        defer { restored.task.cancel() }
+
+        try XCTUnwrap(toast?.action).handler()
+        await fulfillment(of: [restored.expectation], timeout: 2)
+    }
+
     func test_start_updatesItemsWhenServicePublishesNewBookmark() async throws {
         let selectedAyah = ayah(2)
         let sut = makeSUT(target: .ayah(selectedAyah))

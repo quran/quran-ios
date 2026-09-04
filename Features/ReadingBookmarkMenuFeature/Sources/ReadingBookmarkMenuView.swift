@@ -20,8 +20,13 @@ struct ReadingBookmarkMenuView: View {
     var body: some View {
         ReadingBookmarkMenuContent(
             error: $viewModel.error,
+            draftNames: $viewModel.draftNames,
+            editMode: viewModel.editModeBinding,
             items: viewModel.items,
+            target: viewModel.target.placement,
+            isEnabled: !viewModel.isMutating,
             start: { await viewModel.start() },
+            saveNames: { await viewModel.saveNames(in: $0) },
             select: { slot in await select(slot) }
         )
     }
@@ -43,13 +48,15 @@ struct ReadingBookmarkMenuView: View {
 @MainActor
 private struct ReadingBookmarkMenuContent: View {
     @Binding var error: Error?
+    @Binding var draftNames: [ReadingBookmarkSlot: String]
+    @Binding var editMode: EditMode
 
     let items: [ReadingBookmarkMenuViewModel.Item]
+    let target: PlacedReadingBookmark.Placement
+    let isEnabled: Bool
     let start: AsyncAction
+    let saveNames: ([ReadingBookmarkSlot]) async -> Bool
     let select: AsyncItemAction<ReadingBookmarkSlot>
-
-    @State private var editMode: EditMode = .inactive
-    @State private var draftNames: [ReadingBookmarkSlot: String] = [:]
 
     @ScaledMetric private var minimumWidth = 320.0
 
@@ -62,15 +69,17 @@ private struct ReadingBookmarkMenuContent: View {
                     ForEach(items) { item in
                         ReadingBookmarkMenuRow(
                             item: item,
-                            title: displayName(for: item.slot),
+                            target: target,
                             name: Binding(
-                                get: { draftNames[item.slot] ?? item.slot.displayName },
+                                get: { draftNames[item.slot] ?? item.name ?? "" },
                                 set: { draftNames[item.slot] = $0 }
                             ),
-                            editMode: $editMode,
+                            isEnabled: isEnabled,
+                            editMode: editMode,
+                            save: { await saveNames([item.slot]) },
                             select: { await select(item.slot) }
                         )
-                        if item.id != items.last?.id {
+                        if item.slot != items.last?.slot {
                             Divider()
                                 .padding(.horizontal)
                         }
@@ -84,11 +93,6 @@ private struct ReadingBookmarkMenuContent: View {
             await start()
         }
         .errorAlert(error: $error)
-        .onChange(of: editMode) { mode in
-            if mode.isEditing {
-                draftNames.removeAll()
-            }
-        }
     }
 
     private var header: some View {
@@ -101,7 +105,7 @@ private struct ReadingBookmarkMenuContent: View {
                     .accessibilityAddTraits(.isHeader)
                 EditModeButton(editMode: $editMode)
                     .buttonStyle(.plain)
-                    .disabled(items.isEmpty || items.contains { !$0.isEnabled })
+                    .disabled(items.isEmpty || !isEnabled)
             }
             .font(.subheadline.weight(.semibold))
             Divider()
@@ -113,40 +117,34 @@ private struct ReadingBookmarkMenuContent: View {
         }
         .padding()
     }
-
-    private func displayName(for slot: ReadingBookmarkSlot) -> String {
-        let name = draftNames[slot]?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        return name.isEmpty ? slot.displayName : name
-    }
 }
 
 #Preview {
     ReadingBookmarkMenuContent(
         error: .constant(nil),
+        draftNames: .constant([:]),
+        editMode: .constant(.inactive),
         items: [
             .init(
                 slot: .coral,
-                subtitle: .text("Saved here"),
-                action: .remove,
-                isCurrent: true,
-                isEnabled: true
+                name: nil,
+                placement: .page(Quran.hafsMadani1405.pages[0])
             ),
             .init(
                 slot: .teal,
-                subtitle: "at \(ayah: Quran.hafsMadani1405.suras[1].verses[29], decorationHidden: true)",
-                action: .moveHere,
-                isCurrent: false,
-                isEnabled: true
+                name: nil,
+                placement: .ayah(Quran.hafsMadani1405.suras[1].verses[29])
             ),
             .init(
                 slot: .indigo,
-                subtitle: .text("Not placed yet"),
-                action: .setHere,
-                isCurrent: false,
-                isEnabled: true
+                name: nil,
+                placement: .unplaced
             ),
         ],
+        target: .page(Quran.hafsMadani1405.pages[0]),
+        isEnabled: true,
         start: {},
+        saveNames: { _ in true },
         select: { _ in }
     )
 }

@@ -5,9 +5,18 @@ import Crashing
 import NoorUI
 import QuranAnnotations
 import QuranKit
+import SwiftUI
 
 @MainActor
 final class ReadingBookmarkMenuViewModel: ObservableObject {
+    struct Item: Identifiable {
+        let slot: ReadingBookmarkSlot
+        let name: String?
+        let placement: ReadingBookmark.Placement
+
+        var id: ReadingBookmarkSlot { slot }
+    }
+
     enum Target {
         case pages(Page, [Page])
         case ayah(AyahNumber)
@@ -31,51 +40,100 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
         }
     }
 
-    struct Item: Identifiable {
-        enum Action: Equatable {
-            case remove
-            case moveHere
-            case setHere
-        }
-
-        let slot: ReadingBookmarkSlot
-        let subtitle: MultipartText
-        let action: Action
-        let isCurrent: Bool
-        let isEnabled: Bool
-
-        var id: ReadingBookmarkSlot { slot }
-    }
-
     // MARK: Lifecycle
 
     init(service: MobileSyncReadingBookmarkService, target: Target) {
         self.service = service
         self.target = target
-        items = Self.makeItems(
-            bookmarks: [],
-            target: target,
-            isLoading: true,
-            isMutating: false
-        )
     }
 
     // MARK: Internal
 
-    @Published private(set) var items: [Item]
+    let target: Target
     @Published var error: Error?
+    @Published var draftNames: [ReadingBookmarkSlot: String] = [:]
+    @Published private(set) var editMode: EditMode = .inactive
+
+    var items: [Item] {
+        if isLoading {
+            return []
+        }
+        return ReadingBookmarkSlot.allCases.map { slot in
+            let bookmark = bookmark(in: slot)
+            return Item(
+                slot: slot,
+                name: bookmark?.name,
+                placement: bookmark?.placement ?? .unplaced
+            )
+        }
+    }
+
+    var editModeBinding: Binding<EditMode> {
+        Binding(
+            get: { self.editMode },
+            set: { mode in
+                if mode.isEditing {
+                    self.beginEditing()
+                } else {
+                    Task { @MainActor in
+                        await self.finishEditing()
+                    }
+                }
+            }
+        )
+    }
+
+    func beginEditing() {
+        draftNames = [:]
+        editMode = .active
+    }
+
+    func finishEditing() async {
+        if await saveNames(in: ReadingBookmarkSlot.allCases) {
+            editMode = .inactive
+        }
+    }
+
+    func saveNames(in slots: [ReadingBookmarkSlot]) async -> Bool {
+        guard !isLoading, !isMutating else { return false }
+        isMutating = true
+        defer {
+            isMutating = false
+        }
+
+        do {
+            for slot in slots {
+                guard let draft = draftNames[slot] else { continue }
+                let name = draft.trimmingCharacters(in: .whitespacesAndNewlines)
+                if name != (bookmark(in: slot)?.name ?? "") {
+                    let renamed = try await service.renameReadingBookmark(
+                        in: slot,
+                        name: name.isEmpty ? nil : name,
+                        quran: target.quran
+                    )
+                    storedBookmarks.removeAll { $0.slot == slot }
+                    storedBookmarks.append(renamed)
+                }
+                draftNames.removeValue(forKey: slot)
+            }
+            return true
+        } catch is CancellationError {
+            return false
+        } catch {
+            self.error = error
+            return false
+        }
+    }
 
     func start() async {
         do {
             for try await bookmarks in service.readingBookmarksSequence(quran: target.quran) {
-                self.bookmarks = bookmarks
+                storedBookmarks = bookmarks
                 isLoading = false
-                refreshItems()
             }
         } catch is CancellationError {
         } catch {
             isLoading = false
-            refreshItems()
             self.error = error
         }
     }
@@ -87,18 +145,16 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
 
         isMutating = true
         let placement = target.placement
-        refreshItems()
         defer {
             isMutating = false
-            refreshItems()
         }
 
         do {
             let previousBookmark = bookmark(in: slot).flatMap(PlacedReadingBookmark.init)
             if let bookmark = previousBookmark, bookmark.placement == placement {
                 let clearedBookmark = try await service.clearReadingBookmark(in: slot)
-                bookmarks.removeAll { $0.slot == slot }
-                bookmarks.append(clearedBookmark)
+                storedBookmarks.removeAll { $0.slot == slot }
+                storedBookmarks.append(clearedBookmark)
                 return ReadingBookmarkUndoToast.removed(bookmark) {
                     Task { @MainActor in
                         await self.restore(bookmark)
@@ -107,8 +163,8 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
             }
 
             let bookmark = try await service.addReadingBookmark(at: placement, slot: slot)
-            bookmarks.removeAll { $0.slot == slot }
-            bookmarks.append(ReadingBookmark(bookmark))
+            storedBookmarks.removeAll { $0.slot == slot }
+            storedBookmarks.append(ReadingBookmark(bookmark))
 
             if let previousBookmark {
                 return ReadingBookmarkUndoToast.moved(
@@ -132,70 +188,12 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
     // MARK: Private
 
     private let service: MobileSyncReadingBookmarkService
-    private let target: Target
-    private var bookmarks: [ReadingBookmark] = []
-    private var isLoading = true
-    private var isMutating = false
+    @Published private var storedBookmarks: [ReadingBookmark] = []
+    @Published private var isLoading = true
+    @Published private(set) var isMutating = false
 
     private func bookmark(in slot: ReadingBookmarkSlot) -> ReadingBookmark? {
-        bookmarks.first { $0.slot == slot }
-    }
-
-    private func refreshItems() {
-        items = Self.makeItems(
-            bookmarks: bookmarks,
-            target: target,
-            isLoading: isLoading,
-            isMutating: isMutating
-        )
-    }
-
-    private static func makeItems(
-        bookmarks: [ReadingBookmark],
-        target: Target,
-        isLoading: Bool,
-        isMutating: Bool
-    ) -> [Item] {
-        if isLoading {
-            return []
-        }
-        return ReadingBookmarkSlot.allCases.map { slot in
-            let placement = target.placement
-            guard let bookmark = bookmarks.first(where: { $0.slot == slot }).flatMap(PlacedReadingBookmark.init) else {
-                return Item(
-                    slot: slot,
-                    subtitle: .text("Not placed yet"),
-                    action: .setHere,
-                    isCurrent: false,
-                    isEnabled: !isMutating
-                )
-            }
-            if bookmark.placement == placement {
-                return Item(
-                    slot: slot,
-                    subtitle: .text("Saved here"),
-                    action: .remove,
-                    isCurrent: true,
-                    isEnabled: !isMutating
-                )
-            }
-            return Item(
-                slot: slot,
-                subtitle: "at \(Self.locationTitle(bookmark.placement))",
-                action: .moveHere,
-                isCurrent: false,
-                isEnabled: !isMutating
-            )
-        }
-    }
-
-    private static func locationTitle(_ placement: PlacedReadingBookmark.Placement) -> MultipartText {
-        switch placement {
-        case .ayah(let ayah):
-            "\(ayah: ayah, decorationHidden: true)"
-        case .page(let page):
-            .text(page.localizedName)
-        }
+        storedBookmarks.first { $0.slot == slot }
     }
 
     private func restore(_ bookmark: PlacedReadingBookmark) async {

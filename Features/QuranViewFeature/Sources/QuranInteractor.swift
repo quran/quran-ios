@@ -598,8 +598,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     private func showPageBookmarkIfNeeded(for pages: [Page]) {
         #if QURAN_SYNC
-        let locations = pages.map(ReadingPositionBookmark.Location.page)
-        let bookmark = deps.readingBookmarksObserver.latest(at: locations)
+        let placements = pages.map(PlacedReadingBookmark.Placement.page)
+        let bookmark = deps.readingBookmarksObserver.latest(at: placements)
         presenter?.updateReadingBookmark(bookmark?.slot)
         #else
         presenter?.updateBookmark(bookmarked(pages))

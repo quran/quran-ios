@@ -12,7 +12,7 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
         case pages(Page, [Page])
         case ayah(AyahNumber)
 
-        var location: ReadingPositionBookmark.Location {
+        var placement: PlacedReadingBookmark.Placement {
             switch self {
             case .pages(let page, _):
                 .page(page)
@@ -86,7 +86,7 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
         }
 
         isMutating = true
-        let location = target.location
+        let placement = target.placement
         refreshItems()
         defer {
             isMutating = false
@@ -94,9 +94,11 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
         }
 
         do {
-            if let bookmark = bookmark(in: slot), bookmark.location == location {
-                try await service.removeReadingBookmark(in: slot)
+            let previousBookmark = bookmark(in: slot).flatMap(PlacedReadingBookmark.init)
+            if let bookmark = previousBookmark, bookmark.placement == placement {
+                let clearedBookmark = try await service.clearReadingBookmark(in: slot)
                 bookmarks.removeAll { $0.slot == slot }
+                bookmarks.append(clearedBookmark)
                 return ReadingBookmarkUndoToast.removed(bookmark) { [service, target] in
                     Task { @MainActor in
                         await Self.undoRemoval(bookmark, service: service, target: target)
@@ -104,10 +106,9 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
                 }
             }
 
-            let previousBookmark = bookmark(in: slot)
-            let bookmark = try await service.addReadingBookmark(at: location, slot: slot)
+            let bookmark = try await service.addReadingBookmark(at: placement, slot: slot)
             bookmarks.removeAll { $0.slot == slot }
-            bookmarks.append(bookmark)
+            bookmarks.append(ReadingBookmark(bookmark))
 
             if let previousBookmark {
                 return ReadingBookmarkUndoToast.moved(
@@ -137,11 +138,11 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
 
     private let service: MobileSyncReadingBookmarkService
     private let target: Target
-    private var bookmarks: [ReadingPositionBookmark] = []
+    private var bookmarks: [ReadingBookmark] = []
     private var isLoading = true
     private var isMutating = false
 
-    private func bookmark(in slot: ReadingBookmarkSlot) -> ReadingPositionBookmark? {
+    private func bookmark(in slot: ReadingBookmarkSlot) -> ReadingBookmark? {
         bookmarks.first { $0.slot == slot }
     }
 
@@ -155,7 +156,7 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
     }
 
     private static func makeItems(
-        bookmarks: [ReadingPositionBookmark],
+        bookmarks: [ReadingBookmark],
         target: Target,
         isLoading: Bool,
         isMutating: Bool
@@ -164,8 +165,8 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
             return []
         }
         return ReadingBookmarkSlot.allCases.map { slot in
-            let location = target.location
-            guard let bookmark = bookmarks.first(where: { $0.slot == slot }) else {
+            let placement = target.placement
+            guard let bookmark = bookmarks.first(where: { $0.slot == slot }).flatMap(PlacedReadingBookmark.init) else {
                 return Item(
                     slot: slot,
                     subtitle: .text("Not placed yet"),
@@ -174,7 +175,7 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
                     isEnabled: !isMutating
                 )
             }
-            if bookmark.location == location {
+            if bookmark.placement == placement {
                 return Item(
                     slot: slot,
                     subtitle: .text("Saved here"),
@@ -185,7 +186,7 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
             }
             return Item(
                 slot: slot,
-                subtitle: "at \(Self.location(of: bookmark))",
+                subtitle: "at \(Self.locationTitle(bookmark.placement))",
                 action: .moveHere,
                 isCurrent: false,
                 isEnabled: !isMutating
@@ -193,8 +194,8 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
         }
     }
 
-    private static func location(of bookmark: ReadingPositionBookmark) -> MultipartText {
-        switch bookmark.location {
+    private static func locationTitle(_ placement: PlacedReadingBookmark.Placement) -> MultipartText {
+        switch placement {
         case .ayah(let ayah):
             "\(ayah: ayah, decorationHidden: true)"
         case .page(let page):
@@ -206,15 +207,15 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
     private static func currentBookmarks(
         service: MobileSyncReadingBookmarkService,
         target: Target
-    ) async throws -> [ReadingPositionBookmark] {
-        for try await bookmarks in service.readingBookmarksSequence(quran: target.quran) {
+    ) async throws -> [PlacedReadingBookmark] {
+        for try await bookmarks in service.placedReadingBookmarksSequence(quran: target.quran) {
             return bookmarks
         }
         return []
     }
 
     private static func undoRemoval(
-        _ bookmark: ReadingPositionBookmark,
+        _ bookmark: PlacedReadingBookmark,
         service: MobileSyncReadingBookmarkService,
         target: Target
     ) async {
@@ -223,15 +224,15 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
             guard !bookmarks.contains(where: { $0.slot == bookmark.slot }) else {
                 return
             }
-            try await service.addReadingBookmark(at: bookmark.location, slot: bookmark.slot)
+            try await service.addReadingBookmark(at: bookmark.placement, slot: bookmark.slot)
         } catch {
             crasher.recordError(error, reason: "Failed to undo reading bookmark removal")
         }
     }
 
     private static func undoMove(
-        _ movedBookmark: ReadingPositionBookmark,
-        to previousBookmark: ReadingPositionBookmark,
+        _ movedBookmark: PlacedReadingBookmark,
+        to previousBookmark: PlacedReadingBookmark,
         service: MobileSyncReadingBookmarkService,
         target: Target
     ) async {
@@ -241,7 +242,7 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
                 return
             }
             try await service.addReadingBookmark(
-                at: previousBookmark.location,
+                at: previousBookmark.placement,
                 slot: previousBookmark.slot
             )
         } catch {

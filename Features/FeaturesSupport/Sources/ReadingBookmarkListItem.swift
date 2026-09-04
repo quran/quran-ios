@@ -15,7 +15,7 @@ public struct ReadingBookmarkListItem: View {
     // MARK: Lifecycle
 
     public init(
-        bookmark: ReadingPositionBookmark,
+        bookmark: PlacedReadingBookmark,
         action: @escaping Action
     ) {
         self.bookmark = bookmark
@@ -42,11 +42,11 @@ public struct ReadingBookmarkListItem: View {
 
     // MARK: Private
 
-    private let bookmark: ReadingPositionBookmark
+    private let bookmark: PlacedReadingBookmark
     private let action: Action
 
     private var locationTitle: String {
-        switch bookmark.location {
+        switch bookmark.placement {
         case .ayah(let ayah):
             lFormat("quran_ayah", table: .android, ayah.ayah)
         case .page(let page):

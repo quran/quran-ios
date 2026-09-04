@@ -54,7 +54,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     @Published var isPresentingAddCollection = false
     @Published var isSyncBannerDismissed: Bool
     @Published var newCollectionName = ""
-    @Published var readingBookmarks: [ReadingPositionBookmark] = []
+    @Published var readingBookmarks: [PlacedReadingBookmark] = []
 
     var shouldShowSyncBanner: Bool {
         !isAuthenticated && !isSyncBannerDismissed
@@ -203,8 +203,8 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         )
     }
 
-    func navigateTo(_ readingBookmark: ReadingPositionBookmark) {
-        switch readingBookmark.location {
+    func navigateTo(_ readingBookmark: PlacedReadingBookmark) {
+        switch readingBookmark.placement {
         case .ayah(let ayahNumber):
             navigateToAyah(ayahNumber)
         case .page(let page):
@@ -274,7 +274,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
         for await reading in readings {
             observationTask?.cancel()
-            let sequence = readingBookmarkService.readingBookmarksSequence(quran: reading.quran)
+            let sequence = readingBookmarkService.placedReadingBookmarksSequence(quran: reading.quran)
             observationTask = Task { [weak self] in
                 do {
                     for try await bookmarks in sequence {

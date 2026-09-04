@@ -8,11 +8,11 @@ import XCTest
 final class ReadingBookmarkSelectionTests: XCTestCase {
     func test_latest_returnsMostRecentlyModifiedBookmarkAtLocation() {
         let page = Quran.hafsMadani1405.pages[2]
-        let older = bookmark(slot: .coral, location: .page(page), modifiedOn: Date(timeIntervalSince1970: 1))
-        let newer = bookmark(slot: .teal, location: .page(page), modifiedOn: Date(timeIntervalSince1970: 2))
+        let older = bookmark(slot: .coral, placement: .page(page), modifiedOn: Date(timeIntervalSince1970: 1))
+        let newer = bookmark(slot: .teal, placement: .page(page), modifiedOn: Date(timeIntervalSince1970: 2))
         let unrelated = bookmark(
             slot: .indigo,
-            location: .page(Quran.hafsMadani1405.pages[3]),
+            placement: .page(Quran.hafsMadani1405.pages[3]),
             modifiedOn: Date(timeIntervalSince1970: 3)
         )
 
@@ -35,11 +35,11 @@ final class ReadingBookmarkSelectionTests: XCTestCase {
     func test_latest_returnsMostRecentlyModifiedBookmarkAcrossLocations() {
         let firstPage = Quran.hafsMadani1405.pages[2]
         let secondPage = Quran.hafsMadani1405.pages[3]
-        let older = bookmark(slot: .coral, location: .page(firstPage), modifiedOn: Date(timeIntervalSince1970: 1))
-        let newer = bookmark(slot: .teal, location: .page(secondPage), modifiedOn: Date(timeIntervalSince1970: 2))
+        let older = bookmark(slot: .coral, placement: .page(firstPage), modifiedOn: Date(timeIntervalSince1970: 1))
+        let newer = bookmark(slot: .teal, placement: .page(secondPage), modifiedOn: Date(timeIntervalSince1970: 2))
         let unrelated = bookmark(
             slot: .indigo,
-            location: .page(Quran.hafsMadani1405.pages[4]),
+            placement: .page(Quran.hafsMadani1405.pages[4]),
             modifiedOn: Date(timeIntervalSince1970: 3)
         )
 
@@ -51,15 +51,22 @@ final class ReadingBookmarkSelectionTests: XCTestCase {
         XCTAssertEqual(selected, newer)
     }
 
+    func test_latest_returnsNilWithoutRequestedPlacements() {
+        let page = Quran.hafsMadani1405.pages[2]
+        let placed = bookmark(slot: .teal, placement: .page(page), modifiedOn: .distantPast)
+
+        XCTAssertNil(ReadingBookmarkSelection.latest(at: [], in: [placed]))
+    }
+
     private func bookmark(
         slot: ReadingBookmarkSlot,
-        location: ReadingPositionBookmark.Location,
+        placement: PlacedReadingBookmark.Placement,
         modifiedOn: Date
-    ) -> ReadingPositionBookmark {
-        ReadingPositionBookmark(
+    ) -> PlacedReadingBookmark {
+        PlacedReadingBookmark(
             id: String(describing: slot),
             slot: slot,
-            location: location,
+            placement: placement,
             modifiedOn: modifiedOn
         )
     }

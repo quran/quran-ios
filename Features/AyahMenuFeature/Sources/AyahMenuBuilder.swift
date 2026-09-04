@@ -27,7 +27,7 @@ public struct AyahMenuInput {
         notes: [QuranAnnotations.Note],
         highlightVerses: [AyahNumber: HighlightColor] = [:],
         bookmarkedVerses: Set<AyahNumber> = [],
-        readingBookmark: ReadingPositionBookmark? = nil
+        readingBookmark: PlacedReadingBookmark? = nil
     ) {
         self.sourceView = sourceView
         self.pointInView = pointInView
@@ -60,7 +60,7 @@ public struct AyahMenuInput {
     #if QURAN_SYNC
     let highlightVerses: [AyahNumber: HighlightColor]
     let bookmarkedVerses: Set<AyahNumber>
-    let readingBookmark: ReadingPositionBookmark?
+    let readingBookmark: PlacedReadingBookmark?
     #endif
 }
 

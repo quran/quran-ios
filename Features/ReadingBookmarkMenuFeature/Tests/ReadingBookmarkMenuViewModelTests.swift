@@ -66,7 +66,7 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let toast = await sut.select(.teal)
         let storedBookmark = try await storedBookmark(in: .teal)
 
-        XCTAssertEqual(storedBookmark?.location, .ayah(selectedAyah))
+        XCTAssertEqual(storedBookmark?.placement, .ayah(selectedAyah))
         XCTAssertNil(toast?.action)
     }
 
@@ -82,8 +82,8 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let movedBookmark = try await storedBookmark(in: .indigo)
         let unchangedBookmark = try await storedBookmark(in: .coral)
 
-        XCTAssertEqual(movedBookmark?.location, .ayah(destination))
-        XCTAssertEqual(unchangedBookmark?.location, .ayah(ayah(1)))
+        XCTAssertEqual(movedBookmark?.placement, .ayah(destination))
+        XCTAssertEqual(unchangedBookmark?.placement, .ayah(ayah(1)))
         XCTAssertNotNil(toast?.action)
     }
 
@@ -97,7 +97,8 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let toast = await sut.select(.coral)
         let storedBookmark = try await storedBookmark(in: .coral)
 
-        XCTAssertNil(storedBookmark)
+        XCTAssertNotNil(storedBookmark)
+        XCTAssertEqual(storedBookmark?.placement, .unplaced)
         XCTAssertNotNil(toast?.action)
     }
 
@@ -111,7 +112,7 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let restored = bookmarkExpectation(
             description: "Restores removed reading bookmark",
             slot: .coral,
-            location: .ayah(selectedAyah)
+            placement: .ayah(selectedAyah)
         )
 
         toast?.action?.handler()
@@ -130,7 +131,7 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let restored = bookmarkExpectation(
             description: "Restores moved reading bookmark",
             slot: .indigo,
-            location: .ayah(previousAyah)
+            placement: .ayah(previousAyah)
         )
 
         toast?.action?.handler()
@@ -172,7 +173,7 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         _ = await sut.select(.teal)
         let storedBookmark = try await storedBookmark(in: .teal)
 
-        XCTAssertEqual(storedBookmark?.location, .page(firstPage))
+        XCTAssertEqual(storedBookmark?.placement, .page(firstPage))
     }
 
     func test_pageTarget_describesBookmarkOnCurrentPage() async throws {
@@ -185,6 +186,23 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let current = sut.items.first { $0.slot == .coral }
         XCTAssertEqual(current?.subtitle.accessibilityText, "Saved here")
         XCTAssertEqual(current?.action, .remove)
+    }
+
+    func test_clearedPin_showsSetHereAndDoesNotOfferMoveUndo() async throws {
+        try await service.addReadingBookmark(at: .ayah(ayah(1)), slot: .coral)
+        try await service.clearReadingBookmark(in: .coral)
+        let sut = makeSUT(target: .ayah(ayah(2)))
+        let startTask = await start(sut)
+        defer { startTask.cancel() }
+
+        XCTAssertEqual(sut.items.first?.action, .setHere)
+        XCTAssertEqual(sut.items.first?.subtitle.accessibilityText, "Not placed yet")
+
+        let toast = await sut.select(.coral)
+        let stored = try await storedBookmark(in: .coral)
+        XCTAssertEqual(stored?.placement, .ayah(ayah(2)))
+        XCTAssertNotNil(toast)
+        XCTAssertNil(toast?.action)
     }
 
     private func makeSUT(target: ReadingBookmarkMenuViewModel.Target) -> ReadingBookmarkMenuViewModel {
@@ -208,7 +226,7 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         return task
     }
 
-    private func storedBookmark(in slot: ReadingBookmarkSlot) async throws -> ReadingPositionBookmark? {
+    private func storedBookmark(in slot: ReadingBookmarkSlot) async throws -> ReadingBookmark? {
         var iterator = service.readingBookmarksSequence(quran: .hafsMadani1405).makeAsyncIterator()
         return try await iterator.next()?.first { $0.slot == slot }
     }
@@ -216,14 +234,14 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
     private func bookmarkExpectation(
         description: String,
         slot: ReadingBookmarkSlot,
-        location: ReadingPositionBookmark.Location
+        placement: ReadingBookmark.Placement
     ) -> (expectation: XCTestExpectation, task: Task<Void, Never>) {
         let expectation = expectation(description: description)
         let service = service!
         let task = Task {
             do {
                 for try await bookmarks in service.readingBookmarksSequence(quran: .hafsMadani1405) {
-                    if bookmarks.first(where: { $0.slot == slot })?.location == location {
+                    if bookmarks.first(where: { $0.slot == slot })?.placement == placement {
                         expectation.fulfill()
                         return
                     }

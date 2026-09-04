@@ -52,7 +52,7 @@ final class AyahMenuViewModel {
         #if QURAN_SYNC
         let highlightVerses: [AyahNumber: HighlightColor]
         let bookmarkedVerses: Set<AyahNumber>
-        let readingBookmark: ReadingPositionBookmark?
+        let readingBookmark: PlacedReadingBookmark?
         #else
         let noteService: NoteService
         #endif

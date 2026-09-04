@@ -3,18 +3,18 @@ import QuranAnnotations
 
 enum ReadingBookmarkSelection {
     static func latest(
-        at location: ReadingPositionBookmark.Location,
-        in bookmarks: [ReadingPositionBookmark]
-    ) -> ReadingPositionBookmark? {
-        latest(at: [location], in: bookmarks)
+        at placement: PlacedReadingBookmark.Placement,
+        in bookmarks: [PlacedReadingBookmark]
+    ) -> PlacedReadingBookmark? {
+        latest(at: [placement], in: bookmarks)
     }
 
     static func latest(
-        at locations: [ReadingPositionBookmark.Location],
-        in bookmarks: [ReadingPositionBookmark]
-    ) -> ReadingPositionBookmark? {
+        at placements: [PlacedReadingBookmark.Placement],
+        in bookmarks: [PlacedReadingBookmark]
+    ) -> PlacedReadingBookmark? {
         bookmarks
-            .filter { locations.contains($0.location) }
+            .filter { placements.contains($0.placement) }
             .max { $0.modifiedOn < $1.modifiedOn }
     }
 }

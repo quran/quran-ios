@@ -135,7 +135,7 @@ final class AyahMenuViewModelTests: XCTestCase {
         notes: [Note] = [],
         highlightVerses: [AyahNumber: HighlightColor] = [:],
         bookmarkedVerses: Set<AyahNumber> = [],
-        readingBookmark: ReadingPositionBookmark? = nil
+        readingBookmark: PlacedReadingBookmark? = nil
     ) -> AyahMenuViewModel {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         return AyahMenuViewModel(deps: .init(
@@ -156,11 +156,11 @@ final class AyahMenuViewModelTests: XCTestCase {
     private func readingBookmark(
         slot: ReadingBookmarkSlot,
         at ayah: AyahNumber
-    ) -> ReadingPositionBookmark {
-        ReadingPositionBookmark(
+    ) -> PlacedReadingBookmark {
+        PlacedReadingBookmark(
             id: "reading-bookmark",
             slot: slot,
-            location: .ayah(ayah),
+            placement: .ayah(ayah),
             modifiedOn: .distantPast
         )
     }

@@ -19,7 +19,13 @@ public struct MobileSyncReadingBookmarkService {
 
     // MARK: Public
 
-    public func readingBookmarksSequence(quran: Quran) -> AnyAsyncSequence<[ReadingPositionBookmark]> {
+    public func placedReadingBookmarksSequence(quran: Quran) -> AnyAsyncSequence<[PlacedReadingBookmark]> {
+        .init(readingBookmarksSequence(quran: quran).map { bookmarks in
+            bookmarks.compactMap(PlacedReadingBookmark.init)
+        })
+    }
+
+    public func readingBookmarksSequence(quran: Quran) -> AnyAsyncSequence<[QuranAnnotations.ReadingBookmark]> {
         let storedPageQuran = storedPageQuran
         let sequence = quranDataService.readingBookmarksSequence()
             .map { bookmarks in
@@ -33,21 +39,22 @@ public struct MobileSyncReadingBookmarkService {
 
     @discardableResult
     public func addReadingBookmark(
-        at location: ReadingPositionBookmark.Location,
+        at placement: PlacedReadingBookmark.Placement,
         slot: QuranAnnotations.ReadingBookmarkSlot
-    ) async throws -> ReadingPositionBookmark {
-        switch location {
+    ) async throws -> PlacedReadingBookmark {
+        switch placement {
         case .ayah(let ayah):
             let bookmark = try await quranDataService.setAyahReadingBookmark(
                 slot: slot.mobileSyncSlot,
                 sura: Int32(ayah.sura.suraNumber),
                 ayah: Int32(ayah.ayah)
             )
-            return ReadingPositionBookmark(
+            return PlacedReadingBookmark(
                 id: bookmark.id,
                 slot: slot,
-                location: location,
-                modifiedOn: bookmark.lastUpdated
+                placement: .ayah(ayah),
+                modifiedOn: bookmark.lastUpdated,
+                name: bookmark.name
             )
         case .page(let page):
             let storedPage = try storedPage(for: page)
@@ -55,17 +62,26 @@ public struct MobileSyncReadingBookmarkService {
                 slot: slot.mobileSyncSlot,
                 page: Int32(storedPage.pageNumber)
             )
-            return ReadingPositionBookmark(
+            return PlacedReadingBookmark(
                 id: bookmark.id,
                 slot: slot,
-                location: location,
-                modifiedOn: bookmark.lastUpdated
+                placement: .page(page),
+                modifiedOn: bookmark.lastUpdated,
+                name: bookmark.name
             )
         }
     }
 
-    public func removeReadingBookmark(in slot: QuranAnnotations.ReadingBookmarkSlot) async throws {
-        _ = try await quranDataService.clearReadingBookmark(slot: slot.mobileSyncSlot)
+    @discardableResult
+    public func clearReadingBookmark(in slot: QuranAnnotations.ReadingBookmarkSlot) async throws -> QuranAnnotations.ReadingBookmark {
+        let bookmark = try await quranDataService.clearReadingBookmark(slot: slot.mobileSyncSlot)
+        return QuranAnnotations.ReadingBookmark(
+            id: bookmark.id,
+            slot: slot,
+            placement: .unplaced,
+            modifiedOn: bookmark.lastUpdated,
+            name: bookmark.name
+        )
     }
 
     // MARK: Private
@@ -74,11 +90,11 @@ public struct MobileSyncReadingBookmarkService {
     private let storedPageQuran: Quran
 
     private static func readingBookmark(
-        from bookmark: any ReadingBookmark,
+        from bookmark: any MobileSync.ReadingBookmark,
         quran: Quran,
         storedPageQuran: Quran
-    ) -> ReadingPositionBookmark? {
-        let location: ReadingPositionBookmark.Location
+    ) -> QuranAnnotations.ReadingBookmark? {
+        let placement: QuranAnnotations.ReadingBookmark.Placement
         switch bookmark {
         case let bookmark as AyahReadingBookmark:
             guard let ayah = AyahNumber(
@@ -88,25 +104,28 @@ public struct MobileSyncReadingBookmarkService {
             ) else {
                 return nil
             }
-            location = .ayah(ayah)
+            placement = .ayah(ayah)
         case let bookmark as PageReadingBookmark:
             guard let storedPage = Page(quran: storedPageQuran, pageNumber: Int(bookmark.page)),
                   let page = QuranPageMapper(destination: quran).mapPage(storedPage)
             else {
                 return nil
             }
-            location = .page(page)
+            placement = .page(page)
+        case is EmptyReadingBookmark:
+            placement = .unplaced
         default:
             return nil
         }
         guard let slot = ReadingBookmarkSlot(mobileSyncSlot: bookmark.slot) else {
             return nil
         }
-        return ReadingPositionBookmark(
+        return QuranAnnotations.ReadingBookmark(
             id: bookmark.id,
             slot: slot,
-            location: location,
-            modifiedOn: bookmark.lastUpdated
+            placement: placement,
+            modifiedOn: bookmark.lastUpdated,
+            name: bookmark.name
         )
     }
 

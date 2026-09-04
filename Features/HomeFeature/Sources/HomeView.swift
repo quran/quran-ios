@@ -58,7 +58,7 @@ struct HomeView: View {
 private struct HomeViewUI: View {
     let type: HomeViewType
     #if QURAN_SYNC
-    let readingBookmarks: [ReadingPositionBookmark]
+    let readingBookmarks: [PlacedReadingBookmark]
     #endif
     let lastPages: [LastPage]
     let suras: [Sura]
@@ -68,7 +68,7 @@ private struct HomeViewUI: View {
     let start: AsyncAction
 
     #if QURAN_SYNC
-    let selectReadingBookmark: ItemAction<ReadingPositionBookmark>
+    let selectReadingBookmark: ItemAction<PlacedReadingBookmark>
     #endif
     let selectLastPage: ItemAction<LastPage>
     let selectSura: ItemAction<Sura>
@@ -113,7 +113,7 @@ private struct HomeViewUI: View {
     }
 
     #if QURAN_SYNC
-    func readingBookmarkView(_ bookmark: ReadingPositionBookmark) -> some View {
+    func readingBookmarkView(_ bookmark: PlacedReadingBookmark) -> some View {
         ReadingBookmarkListItem(
             bookmark: bookmark,
             action: { selectReadingBookmark(bookmark) }
@@ -227,10 +227,10 @@ struct HomeView_Previews: PreviewProvider {
         @State var lastPages: [LastPage] = staticLastPages
         #if QURAN_SYNC
         @State var readingBookmarks = ReadingBookmarkSlot.allCases.enumerated().map { index, slot in
-            ReadingPositionBookmark(
+            PlacedReadingBookmark(
                 id: "preview-reading-bookmark-\(slot)",
                 slot: slot,
-                location: .page(Quran.hafsMadani1405.pages[269 + index]),
+                placement: .page(Quran.hafsMadani1405.pages[269 + index]),
                 modifiedOn: Date(timeIntervalSinceNow: Double(index + 1) * -180)
             )
         }

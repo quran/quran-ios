@@ -61,6 +61,34 @@ final class QuranReadingBookmarksObserverTests: XCTestCase {
         withExtendedLifetime(sut) {}
     }
 
+    func test_start_removesClearedPinsFromPublishedBookmarks() async throws {
+        let page = Quran.hafsMadani1405.pages[40]
+        try await service.addReadingBookmark(at: .page(page), slot: .coral)
+        let sut = QuranReadingBookmarksObserver(service: service, quran: .hafsMadani1405)
+        let loaded = expectation(description: "Publishes placed pin")
+        let cleared = expectation(description: "Removes cleared pin")
+        var didLoad = false
+        var didClear = false
+        let observation = sut.$bookmarks.sink { bookmarks in
+            if !didLoad, bookmarks.map(\.slot) == [.coral] {
+                didLoad = true
+                loaded.fulfill()
+            } else if didLoad, !didClear, bookmarks.isEmpty {
+                didClear = true
+                cleared.fulfill()
+            }
+        }
+
+        sut.start()
+        await fulfillment(of: [loaded], timeout: 2)
+        try await service.clearReadingBookmark(in: .coral)
+        await fulfillment(of: [cleared], timeout: 2)
+
+        XCTAssertTrue(sut.bookmarks.isEmpty)
+        observation.cancel()
+        withExtendedLifetime(sut) {}
+    }
+
     private func ayah(_ number: Int) -> AyahNumber {
         AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: number)!
     }

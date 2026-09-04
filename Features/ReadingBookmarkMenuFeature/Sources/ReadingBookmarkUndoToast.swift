@@ -5,31 +5,31 @@ import QuranAnnotations
 import QuranLocalization
 
 enum ReadingBookmarkUndoToast {
-    static func saved(_ bookmark: ReadingPositionBookmark) -> Toast {
-        Toast(MultipartText.localizedFormat("ayah.menu.reading-bookmark.saved", location(of: bookmark)))
+    static func saved(_ bookmark: PlacedReadingBookmark) -> Toast {
+        Toast(MultipartText.localizedFormat("ayah.menu.reading-bookmark.saved", locationTitle(bookmark.placement)))
     }
 
     static func moved(
-        from previousBookmark: ReadingPositionBookmark,
-        to currentBookmark: ReadingPositionBookmark,
+        from previousBookmark: PlacedReadingBookmark,
+        to currentBookmark: PlacedReadingBookmark,
         undo: @escaping () -> Void
     ) -> Toast {
         makeToast(
             MultipartText.localizedFormat(
                 "ayah.menu.reading-bookmark.moved",
-                location(of: previousBookmark),
-                location(of: currentBookmark)
+                locationTitle(previousBookmark.placement),
+                locationTitle(currentBookmark.placement)
             ),
             undo: undo
         )
     }
 
     static func removed(
-        _ bookmark: ReadingPositionBookmark,
+        _ bookmark: PlacedReadingBookmark,
         undo: @escaping () -> Void
     ) -> Toast {
         makeToast(
-            MultipartText.localizedFormat("ayah.menu.reading-bookmark.removed", location(of: bookmark)),
+            MultipartText.localizedFormat("ayah.menu.reading-bookmark.removed", locationTitle(bookmark.placement)),
             undo: undo
         )
     }
@@ -41,8 +41,8 @@ enum ReadingBookmarkUndoToast {
         )
     }
 
-    private static func location(of bookmark: ReadingPositionBookmark) -> MultipartText {
-        switch bookmark.location {
+    private static func locationTitle(_ placement: PlacedReadingBookmark.Placement) -> MultipartText {
+        switch placement {
         case .ayah(let ayah):
             return "\(ayah: ayah)"
         case .page(let page):

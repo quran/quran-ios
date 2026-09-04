@@ -87,7 +87,7 @@ final class HomeViewModel: ObservableObject {
     }
 
     #if QURAN_SYNC
-    @Published var readingBookmarks: [ReadingPositionBookmark] = [] {
+    @Published var readingBookmarks: [PlacedReadingBookmark] = [] {
         didSet { recordListUpdate(reason: "reading_bookmarks_changed") }
     }
     #endif
@@ -148,8 +148,8 @@ final class HomeViewModel: ObservableObject {
     }
 
     #if QURAN_SYNC
-    func navigateTo(_ readingBookmark: ReadingPositionBookmark) {
-        switch readingBookmark.location {
+    func navigateTo(_ readingBookmark: PlacedReadingBookmark) {
+        switch readingBookmark.placement {
         case .ayah(let ayahNumber):
             navigateToAyah(ayahNumber)
         case .page(let page):
@@ -217,7 +217,7 @@ final class HomeViewModel: ObservableObject {
 
         for await reading in readings {
             observationTask?.cancel()
-            let sequence = readingBookmarkService.readingBookmarksSequence(quran: reading.quran)
+            let sequence = readingBookmarkService.placedReadingBookmarksSequence(quran: reading.quran)
             observationTask = Task { [weak self] in
                 do {
                     for try await bookmarks in sequence {

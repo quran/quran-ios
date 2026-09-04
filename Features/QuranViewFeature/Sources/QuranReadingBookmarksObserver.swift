@@ -24,13 +24,13 @@ final class QuranReadingBookmarksObserver {
 
     // MARK: Internal
 
-    @Published private(set) var bookmarks: [ReadingPositionBookmark] = []
+    @Published private(set) var bookmarks: [PlacedReadingBookmark] = []
 
     func start() {
         guard task == nil else {
             return
         }
-        let sequence = service.readingBookmarksSequence(quran: quran)
+        let sequence = service.placedReadingBookmarksSequence(quran: quran)
         task = Task { [weak self] in
             do {
                 for try await bookmarks in sequence {
@@ -43,12 +43,12 @@ final class QuranReadingBookmarksObserver {
         }
     }
 
-    func latest(at location: ReadingPositionBookmark.Location) -> ReadingPositionBookmark? {
-        ReadingBookmarkSelection.latest(at: location, in: bookmarks)
+    func latest(at placement: PlacedReadingBookmark.Placement) -> PlacedReadingBookmark? {
+        ReadingBookmarkSelection.latest(at: placement, in: bookmarks)
     }
 
-    func latest(at locations: [ReadingPositionBookmark.Location]) -> ReadingPositionBookmark? {
-        ReadingBookmarkSelection.latest(at: locations, in: bookmarks)
+    func latest(at placements: [PlacedReadingBookmark.Placement]) -> PlacedReadingBookmark? {
+        ReadingBookmarkSelection.latest(at: placements, in: bookmarks)
     }
 
     // MARK: Private

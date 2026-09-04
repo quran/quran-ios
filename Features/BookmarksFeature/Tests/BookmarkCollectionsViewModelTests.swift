@@ -431,18 +431,33 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let task = Task { await sut.start() }
 
         try await service.addReadingBookmark(at: .page(page), slot: .teal)
-        await waitUntil { sut.readingBookmarks.first { $0.slot == .teal }?.location == .page(page) }
+        await waitUntil { sut.readingBookmarks.first { $0.slot == .teal }?.placement == .page(page) }
 
         XCTAssertEqual(sut.readingBookmarks.first { $0.slot == .teal }?.sura, page.firstVerse.sura)
         task.cancel()
     }
 
+    func test_start_hidesClearedReadingBookmarks() async throws {
+        let service = makeReadingBookmarkService()
+        let page = ReadingPreferences.shared.reading.quran.pages[269]
+        let sut = makeSUT(readingBookmarkService: service)
+        let task = Task { await sut.start() }
+        defer { task.cancel() }
+        try await service.addReadingBookmark(at: .page(page), slot: .teal)
+        await waitUntil { sut.readingBookmarks.contains { $0.slot == .teal } }
+
+        try await service.clearReadingBookmark(in: .teal)
+        await waitUntil { sut.readingBookmarks.isEmpty }
+
+        XCTAssertTrue(sut.readingBookmarks.isEmpty)
+    }
+
     func test_navigateToPageReadingBookmark_navigatesToPage() {
         let page = Quran.hafsMadani1405.pages[269]
-        let bookmark = ReadingPositionBookmark(
+        let bookmark = QuranAnnotations.PlacedReadingBookmark(
             id: "reading-bookmark",
             slot: .coral,
-            location: .page(page),
+            placement: .page(page),
             modifiedOn: .distantPast
         )
         var navigatedPage: Page?
@@ -455,10 +470,10 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
     func test_navigateToAyahReadingBookmark_navigatesToBookmarkedAyah() {
         let ayah = Quran.hafsMadani1405.pages[269].firstVerse
-        let bookmark = ReadingPositionBookmark(
+        let bookmark = QuranAnnotations.PlacedReadingBookmark(
             id: "reading-bookmark",
             slot: .coral,
-            location: .ayah(ayah),
+            placement: .ayah(ayah),
             modifiedOn: .distantPast
         )
         var navigatedAyah: AyahNumber?

@@ -112,7 +112,7 @@ public struct EditModeButton: View {
     public var body: some View {
         EditButton()
             .environment(\.editMode, $editMode)
-            .foregroundStyle(editMode.isEditing ? Color.appIdentity : Color.label)
+            .foregroundStyle(editMode.isEditing ? Color.accentColor : Color.label)
     }
 
     @Binding private var editMode: EditMode

@@ -48,10 +48,10 @@ private struct ReadingBookmarkMenuContent: View {
     let start: AsyncAction
     let select: AsyncItemAction<ReadingBookmarkSlot>
 
+    @State private var editMode: EditMode = .inactive
+    @State private var draftNames: [ReadingBookmarkSlot: String] = [:]
+
     @ScaledMetric private var minimumWidth = 320.0
-    @ScaledMetric private var verticalPadding = 12.0
-    @ScaledMetric private var actionHorizontalPadding = 12.0
-    @ScaledMetric private var actionVerticalPadding = 6.0
 
     var body: some View {
         PreferredContentSizeMatchesScrollView {
@@ -60,7 +60,16 @@ private struct ReadingBookmarkMenuContent: View {
                     header
 
                     ForEach(items) { item in
-                        row(item)
+                        ReadingBookmarkMenuRow(
+                            item: item,
+                            title: displayName(for: item.slot),
+                            name: Binding(
+                                get: { draftNames[item.slot] ?? item.slot.displayName },
+                                set: { draftNames[item.slot] = $0 }
+                            ),
+                            editMode: $editMode,
+                            select: { await select(item.slot) }
+                        )
                         if item.id != items.last?.id {
                             Divider()
                                 .padding(.horizontal)
@@ -75,6 +84,11 @@ private struct ReadingBookmarkMenuContent: View {
             await start()
         }
         .errorAlert(error: $error)
+        .onChange(of: editMode) { mode in
+            if mode.isEditing {
+                draftNames.removeAll()
+            }
+        }
     }
 
     private var header: some View {
@@ -85,9 +99,9 @@ private struct ReadingBookmarkMenuContent: View {
                     .foregroundStyle(Color.label)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                Button("Edit", action: {})
+                EditModeButton(editMode: $editMode)
                     .buttonStyle(.plain)
-                    .foregroundStyle(Color.accentColor)
+                    .disabled(items.isEmpty || items.contains { !$0.isEnabled })
             }
             .font(.subheadline.weight(.semibold))
             Divider()
@@ -100,54 +114,9 @@ private struct ReadingBookmarkMenuContent: View {
         .padding()
     }
 
-    private func row(_ item: ReadingBookmarkMenuViewModel.Item) -> some View {
-        AsyncButton {
-            await select(item.slot)
-        } label: {
-            HStack(spacing: 14) {
-                ReadingBookmarkPin(style: .filled)
-                    .foregroundColor(item.isEnabled ? item.slot.swiftUIColor : .tertiaryLabel)
-                    .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(item.slot.displayName)
-                        .fontWeight(.semibold)
-                        .foregroundColor(item.isEnabled ? .label : .tertiaryLabel)
-                    item.subtitle.view(ofSize: .footnote)
-                        .foregroundColor(item.isEnabled ? .secondaryLabel : .tertiaryLabel)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                Spacer(minLength: 0)
-                actionLabel(item.action)
-                    .opacity(item.isEnabled ? 1 : 0.4)
-            }
-            .padding(.horizontal)
-            .padding(.vertical, verticalPadding)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(BackgroundHighlightingStyle())
-        .disabled(!item.isEnabled)
-    }
-
-    private func actionLabel(_ action: ReadingBookmarkMenuViewModel.Item.Action) -> some View {
-        Group {
-            switch action {
-            case .remove:
-                Text(action.title)
-                    .foregroundStyle(Color.systemRed)
-            case .moveHere, .setHere:
-                Text(action.title)
-                    .foregroundStyle(action == .moveHere ? Color.white : Color.accentColor)
-                    .padding(.horizontal, actionHorizontalPadding)
-                    .padding(.vertical, actionVerticalPadding)
-                    .background(
-                        Color.accentColor.opacity(action == .moveHere ? 1 : 0.1),
-                        in: Capsule()
-                    )
-            }
-        }
-        .font(.footnote.bold())
-        .fixedSize()
+    private func displayName(for slot: ReadingBookmarkSlot) -> String {
+        let name = draftNames[slot]?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return name.isEmpty ? slot.displayName : name
     }
 }
 
@@ -182,16 +151,4 @@ private struct ReadingBookmarkMenuContent: View {
     )
 }
 
-private extension ReadingBookmarkMenuViewModel.Item.Action {
-    var title: String {
-        switch self {
-        case .remove:
-            "Remove"
-        case .moveHere:
-            "Move here"
-        case .setHere:
-            "Set here"
-        }
-    }
-}
 #endif

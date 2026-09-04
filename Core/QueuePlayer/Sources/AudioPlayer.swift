@@ -18,9 +18,7 @@ class AudioPlayer {
         playbackRate = rate
         audioPlaying = AudioPlaying(request: request, fileIndex: 0, frameIndex: 0)
         player = Player(url: request.files[0].url)
-        player.onRateChanged = { [weak self] in
-            self?.rateChanged(to: $0)
-        }
+        configurePlayerCallbacks()
         interruptionMonitor.onAudioInterruption = { [weak self] in
             self?.onAudioInterruption(type: $0)
         }
@@ -107,9 +105,7 @@ class AudioPlayer {
 
     private var player: Player {
         didSet {
-            player.onRateChanged = { [weak self] in
-                self?.rateChanged(to: $0)
-            }
+            configurePlayerCallbacks()
         }
     }
 
@@ -154,14 +150,18 @@ class AudioPlayer {
         actions?.audioFrameChanged(fileIndex, frameIndex, player.playerItem)
     }
 
-    private func onFrameEnded() {
-        let time = getDurationToFrameEnd()
-        // make sure we reached the end of the frame
-        // don't use `abs` since we could be notified a little bit after
-        guard time < 0.2 else {
-            // audio is 200 ms behind, reschedule the timer
-            waitUntilFrameEnds()
-            return
+    private func onFrameEnded(reachedNaturalEnd: Bool = false) {
+        if !reachedNaturalEnd {
+            guard let time = getDurationToFrameEnd() else {
+                return
+            }
+            // make sure we reached the end of the frame
+            // don't use `abs` since we could be notified a little bit after
+            guard time < 0.2 else {
+                // audio is 200 ms behind, reschedule the timer
+                waitUntilFrameEnds()
+                return
+            }
         }
 
         // 1. Done playing the frame?
@@ -221,7 +221,7 @@ class AudioPlayer {
             return 0
         }
         let frameStart = audioPlaying.frame.startTime
-        let frameEnd = audioPlaying.frameEndTime ?? player.duration
+        let frameEnd = audioPlaying.frameEndTime ?? player.currentTime
         let recitedMediaDuration = max(0, frameEnd - frameStart)
         // Convert media duration to wall-clock recited time before scaling.
         return recitedMediaDuration / Double(playbackRate) * multiplier
@@ -256,10 +256,16 @@ class AudioPlayer {
             return
         }
 
-        // max with 100ms since sometimes the returned value could be negative
-        let mediaDelta = max(0, getDurationToFrameEnd(currentTime: currentTime))
-        // Convert media time to wall-clock time
-        let interval = max(0.05, mediaDelta / Double(playbackRate)) // small floor for stability
+        guard let interval = playbackTimerInterval(
+            frameEndTime: audioPlaying.frameEndTime,
+            currentTime: currentTime ?? player.currentTime,
+            playbackRate: playbackRate
+        ) else {
+            // Whole-file audio has no timing metadata. AVPlayer's natural-end
+            // notification advances it without synchronously loading duration.
+            timer = nil
+            return
+        }
         timer = Timer(interval: interval, queue: .main) { [weak self] in
             self?.timer = nil
             self?.onFrameEnded()
@@ -276,15 +282,43 @@ class AudioPlayer {
         actions?.playbackRateChanged(rate)
     }
 
+    private func configurePlayerCallbacks() {
+        player.onRateChanged = { [weak self] in
+            self?.rateChanged(to: $0)
+        }
+        player.onPlaybackEnded = { [weak self] in
+            self?.onFrameEnded(reachedNaturalEnd: true)
+        }
+    }
+
     private func seek(to frame: AudioFrame) {
         player.seek(to: frame.startTime, rate: playbackRate)
     }
 
     // MARK: - Utilities
 
-    private func getDurationToFrameEnd(currentTime: TimeInterval? = nil) -> TimeInterval {
+    private func getDurationToFrameEnd(currentTime: TimeInterval? = nil) -> TimeInterval? {
+        guard let frameEndTime = audioPlaying.frameEndTime else {
+            return nil
+        }
         let currentTimeInSeconds = currentTime ?? player.currentTime
-        let frameEndTime = audioPlaying.frameEndTime ?? player.duration
         return frameEndTime - currentTimeInSeconds
     }
+}
+
+func playbackTimerInterval(
+    frameEndTime: TimeInterval?,
+    currentTime: TimeInterval,
+    playbackRate: Float
+) -> TimeInterval? {
+    guard let frameEndTime,
+          frameEndTime.isFinite,
+          currentTime.isFinite,
+          playbackRate.isFinite,
+          playbackRate > 0
+    else {
+        return nil
+    }
+    let mediaDelta = max(0, frameEndTime - currentTime)
+    return max(0.05, mediaDelta / Double(playbackRate))
 }

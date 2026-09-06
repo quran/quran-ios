@@ -20,6 +20,8 @@
 
 import Analytics
 import Crashing
+import FeaturesSupport
+import QuranKit
 import UIKit
 import VLogging
 import WhatsNewFeature
@@ -59,6 +61,25 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         super.viewDidLoad()
         delegate = self
         updateCrashContext(selectedIndex: selectedIndex)
+    }
+
+    /// Opens the Quran on the deep linked sura or ayah, replacing whatever the home tab
+    /// currently shows so links never stack Quran screens on top of each other.
+    func navigate(to deepLink: QuranDeepLink) {
+        guard let homeTab = viewControllers?.first as? TabViewController else {
+            logger.error("Deep link: home tab is unavailable")
+            return
+        }
+        presentedViewController?.dismiss(animated: false)
+        selectedIndex = 0
+        homeTab.popToRootViewController(animated: false)
+
+        switch deepLink {
+        case .sura(let sura):
+            homeTab.quranNavigator.navigateTo(page: sura.page, lastPage: nil)
+        case .ayah(let ayah):
+            homeTab.quranNavigator.navigateTo(ayah: ayah, lastPage: nil)
+        }
     }
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {

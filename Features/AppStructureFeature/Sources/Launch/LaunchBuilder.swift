@@ -38,27 +38,7 @@ public struct LaunchBuilder {
         )
     }
 
-    public func handleIncomingUrl(urlContext: UIOpenURLContext) {
-        let url = urlContext.url
-
-        if url.scheme == "quran" || url.scheme == "quran-ios" {
-            let path: String = if #available(iOS 16.0, *) {
-                url.path(percentEncoded: true)
-            } else {
-                url.path
-            }
-            _ = navigateTo(path: path)
-        }
-    }
-
     // MARK: Internal
 
     let container: AppDependencies
-
-    // MARK: Public
-
-    private func navigateTo(path: String) -> Bool {
-        // TODO: Implement the actual navigation
-        return true
-    }
 }

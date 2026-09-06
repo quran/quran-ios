@@ -10,6 +10,8 @@ import AppMigrationFeature
 import AppMigrator
 import AudioUpdater
 import Crashing
+import QuranKit
+import ReadingService
 import SettingsService
 import UIKit
 import VLogging
@@ -57,6 +59,16 @@ public final class LaunchStartup {
         )
     }
 
+    public func handleIncomingUrl(urlContext: UIOpenURLContext) {
+        let url = urlContext.url
+        guard let deepLink = QuranDeepLink(url: url, quran: ReadingPreferences.shared.reading.quran) else {
+            logger.notice("Deep link: ignoring unsupported url \(url)")
+            return
+        }
+        logger.info("Deep link: handling \(url)")
+        navigate(to: deepLink)
+    }
+
     // MARK: Private
 
     private let fileSystemMigrator: FileSystemMigrator
@@ -68,7 +80,8 @@ public final class LaunchStartup {
     private let notificationCenter = NotificationCenter.default
 
     private let appMigrator = AppMigrator()
-    private var appViewController: UIViewController?
+    private var appViewController: AppViewController?
+    private var pendingDeepLink: QuranDeepLink?
     private var protectedDataObserver: NSObjectProtocol?
     private var protectedDataStartupState = ProtectedDataStartupState()
 
@@ -160,6 +173,21 @@ public final class LaunchStartup {
         }
         crashContext.setStartupPhase("ready")
         logger.info("Crash context: startup phase ready")
+
+        if let pendingDeepLink {
+            self.pendingDeepLink = nil
+            appViewController.navigate(to: pendingDeepLink)
+        }
+    }
+
+    /// Links can arrive while the app is still migrating or waiting for protected data,
+    /// so they are replayed once the app UI exists.
+    private func navigate(to deepLink: QuranDeepLink) {
+        guard let appViewController else {
+            pendingDeepLink = deepLink
+            return
+        }
+        appViewController.navigate(to: deepLink)
     }
 
     private func registerMigrators() {

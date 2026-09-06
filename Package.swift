@@ -851,6 +851,9 @@ private func featuresTargets() -> [[Target]] {
 
         target(type, name: "AppStructureFeature", dependencies: [
             "Crashing",
+            "FeaturesSupport",
+            "QuranKit",
+            "ReadingService",
             "HomeFeature",
             "BookmarksFeature",
             "NotesFeature",

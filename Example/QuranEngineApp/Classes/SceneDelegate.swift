@@ -27,6 +27,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         launchStartup?.launch(from: window)
 
         self.launchStartup = launchStartup
+
+        // A link that launches the app arrives here, not in `scene(_:openURLContexts:)`.
+        if let urlContext = connectionOptions.urlContexts.first {
+            launchStartup?.handleIncomingUrl(urlContext: urlContext)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -61,7 +66,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let urlContext: UIOpenURLContext = URLContexts.first else {
             return
         }
-        launchBuilder?.handleIncomingUrl(urlContext: urlContext)
+        launchStartup?.handleIncomingUrl(urlContext: urlContext)
     }
 
     // MARK: Private

@@ -89,8 +89,8 @@ public final class AudioBannerViewModel: ObservableObject {
         play(
             from: from,
             to: to,
-            verseRuns: .finite(1),
-            listRuns: repeatVerses ? .indefinite : .finite(1),
+            verseRuns: AudioPreferences.shared.verseRuns,
+            listRuns: repeatVerses ? .indefinite : AudioPreferences.shared.listRuns,
             playbackRate: playbackRate,
             verseDelay: AudioPreferences.shared.verseDelay,
             repetitionDelay: AudioPreferences.shared.repetitionDelay
@@ -223,8 +223,8 @@ public final class AudioBannerViewModel: ObservableObject {
         play(
             from: currentPage.firstVerse,
             to: nil,
-            verseRuns: .finite(1),
-            listRuns: .finite(1),
+            verseRuns: AudioPreferences.shared.verseRuns,
+            listRuns: AudioPreferences.shared.listRuns,
             playbackRate: playbackRate,
             verseDelay: AudioPreferences.shared.verseDelay,
             repetitionDelay: AudioPreferences.shared.repetitionDelay
@@ -599,6 +599,8 @@ extension AudioBannerViewModel: AdvancedAudioOptionsListener {
         selectReciter(newOptions.reciter)
         AudioPreferences.shared.verseDelay = newOptions.verseDelay
         AudioPreferences.shared.repetitionDelay = newOptions.repetitionDelay
+        AudioPreferences.shared.verseRuns = newOptions.verseRuns
+        AudioPreferences.shared.listRuns = newOptions.listRuns
         play(
             from: newOptions.start,
             to: newOptions.end,

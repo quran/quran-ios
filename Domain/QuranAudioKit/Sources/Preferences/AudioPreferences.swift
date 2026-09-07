@@ -33,6 +33,12 @@ public class AudioPreferences {
     @TransformedPreference(audioRepetitionDelayKey, transformer: .rawRepresentable(defaultValue: .oneSecond))
     public var repetitionDelay: RepetitionDelay
 
+    @TransformedPreference(audioVerseRunsKey, transformer: runsTransformer)
+    public var verseRuns: Runs
+
+    @TransformedPreference(audioListRunsKey, transformer: runsTransformer)
+    public var listRuns: Runs
+
     // MARK: Private
 
     private static let audioEndKey = PreferenceKey<Int>(key: "audioEndKey", defaultValue: AudioEnd.juz.rawValue)
@@ -40,4 +46,11 @@ public class AudioPreferences {
     private static let audioStreamingEnabledKey = PreferenceKey<Bool>(key: "audioStreamingEnabled", defaultValue: false)
     private static let audioVerseDelayKey = PreferenceKey<Int>(key: "audioVerseDelay", defaultValue: VerseDelay.none.rawValue)
     private static let audioRepetitionDelayKey = PreferenceKey<Int>(key: "audioRepetitionDelay", defaultValue: RepetitionDelay.oneSecond.rawValue)
+    private static let audioVerseRunsKey = PreferenceKey<Int>(key: "audioVerseRuns", defaultValue: defaultRuns.preferenceValue)
+    private static let audioListRunsKey = PreferenceKey<Int>(key: "audioListRuns", defaultValue: defaultRuns.preferenceValue)
+    private static let defaultRuns = Runs.finite(1)
+    private static let runsTransformer = PreferenceTransformer<Int, Runs>(
+        rawToValue: { Runs(preferenceValue: $0) },
+        valueToRaw: { $0.preferenceValue }
+    )
 }

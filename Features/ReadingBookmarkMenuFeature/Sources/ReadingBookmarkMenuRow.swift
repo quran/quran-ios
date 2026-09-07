@@ -1,19 +1,60 @@
 #if QURAN_SYNC
 import NoorUI
+import QuranAnnotations
+import QuranKit
 import SwiftUI
 import UIx
 
 @MainActor
 struct ReadingBookmarkMenuRow: View {
+    enum Action {
+        case remove
+        case moveHere
+        case setHere
+    }
+
     let item: ReadingBookmarkMenuViewModel.Item
-    let title: String
+    let target: PlacedReadingBookmark.Placement
     @Binding var name: String
-    @Binding var editMode: EditMode
+    let isEnabled: Bool
+    let editMode: EditMode
+    let save: () async -> Bool
     let select: AsyncAction
+
+    @FocusState private var isNameFocused: Bool
 
     @ScaledMetric private var verticalPadding = 12.0
     @ScaledMetric private var actionHorizontalPadding = 12.0
     @ScaledMetric private var actionVerticalPadding = 6.0
+
+    var action: Action {
+        switch item.placement {
+        case .unplaced:
+            .setHere
+        case .ayah(let ayah):
+            target == .ayah(ayah) ? .remove : .moveHere
+        case .page(let page):
+            target == .page(page) ? .remove : .moveHere
+        }
+    }
+
+    var subtitle: MultipartText {
+        switch action {
+        case .remove:
+            return .text("Saved here")
+        case .setHere:
+            return .text("Not placed yet")
+        case .moveHere:
+            switch item.placement {
+            case .ayah(let ayah):
+                return "at \(ayah: ayah, decorationHidden: true)"
+            case .page(let page):
+                return "at \(page.localizedName)"
+            case .unplaced:
+                return .text("Not placed yet")
+            }
+        }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -23,18 +64,25 @@ struct ReadingBookmarkMenuRow: View {
                 bookmarkRow
             }
         }
-        .disabled(!item.isEnabled)
+        .disabled(!isEnabled)
     }
 
     private var editingRow: some View {
         HStack {
             pin
             TextField(item.slot.displayName, text: $name)
+                .focused($isNameFocused)
                 .textFieldStyle(.roundedBorder)
                 .textInputAutocapitalization(.words)
                 .disableAutocorrection(true)
                 .submitLabel(.done)
-                .onSubmit { editMode = .inactive }
+                .onSubmit {
+                    Task { @MainActor in
+                        if await save() {
+                            isNameFocused = false
+                        }
+                    }
+                }
                 .accessibilityLabel("\(item.slot.displayName) pin name")
         }
         .padding(.horizontal)
@@ -48,16 +96,16 @@ struct ReadingBookmarkMenuRow: View {
             HStack {
                 pin
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(title)
+                    Text(item.name ?? item.slot.displayName)
                         .fontWeight(.semibold)
-                        .foregroundColor(item.isEnabled ? .label : .tertiaryLabel)
-                    item.subtitle.view(ofSize: .footnote)
-                        .foregroundColor(item.isEnabled ? .secondaryLabel : .tertiaryLabel)
+                        .foregroundColor(isEnabled ? .label : .tertiaryLabel)
+                    subtitle.view(ofSize: .footnote)
+                        .foregroundColor(isEnabled ? .secondaryLabel : .tertiaryLabel)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer(minLength: 0)
                 actionLabel
-                    .opacity(item.isEnabled ? 1 : 0.4)
+                    .opacity(isEnabled ? 1 : 0.4)
             }
             .padding(.horizontal)
             .padding(.vertical, verticalPadding)
@@ -69,23 +117,23 @@ struct ReadingBookmarkMenuRow: View {
 
     private var pin: some View {
         ReadingBookmarkPin(style: .filled)
-            .foregroundColor(item.isEnabled ? item.slot.swiftUIColor : .tertiaryLabel)
+            .foregroundColor(isEnabled ? item.slot.swiftUIColor : .tertiaryLabel)
             .accessibilityHidden(true)
     }
 
     private var actionLabel: some View {
         Group {
-            switch item.action {
+            switch action {
             case .remove:
-                Text(item.action.title)
+                Text(action.title)
                     .foregroundStyle(Color.systemRed)
             case .moveHere, .setHere:
-                Text(item.action.title)
-                    .foregroundStyle(item.action == .moveHere ? Color.white : Color.accentColor)
+                Text(action.title)
+                    .foregroundStyle(action == .moveHere ? Color.white : Color.accentColor)
                     .padding(.horizontal, actionHorizontalPadding)
                     .padding(.vertical, actionVerticalPadding)
                     .background(
-                        Color.accentColor.opacity(item.action == .moveHere ? 1 : 0.1),
+                        Color.accentColor.opacity(action == .moveHere ? 1 : 0.1),
                         in: Capsule()
                     )
             }
@@ -99,19 +147,19 @@ struct ReadingBookmarkMenuRow: View {
     ReadingBookmarkMenuRow(
         item: .init(
             slot: .coral,
-            subtitle: .text("Saved here"),
-            action: .remove,
-            isCurrent: true,
-            isEnabled: true
+            name: nil,
+            placement: .page(Quran.hafsMadani1405.pages[0])
         ),
-        title: "Coral",
-        name: .constant("Coral"),
-        editMode: .constant(.active),
+        target: .page(Quran.hafsMadani1405.pages[0]),
+        name: .constant(""),
+        isEnabled: true,
+        editMode: .active,
+        save: { true },
         select: {}
     )
 }
 
-private extension ReadingBookmarkMenuViewModel.Item.Action {
+private extension ReadingBookmarkMenuRow.Action {
     var title: String {
         switch self {
         case .remove:

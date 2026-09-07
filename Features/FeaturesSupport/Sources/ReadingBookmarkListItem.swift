@@ -30,7 +30,7 @@ public struct ReadingBookmarkListItem: View {
                 Image(uiImage: ReadingBookmarkPin.image(style: .filled)),
                 color: bookmark.slot.swiftUIColor
             ),
-            title: "\(bookmark.slot.displayName) · \(sura: bookmark.sura)",
+            title: "\(bookmark.name ?? bookmark.slot.displayName) · \(sura: bookmark.sura)",
             subtitle: .init(
                 text: "\(locationTitle) · \(bookmark.modifiedOn.timeAgo())",
                 location: .bottom

@@ -134,6 +134,66 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
         XCTAssertEqual(placed?.first?.sura, expectedPage.firstVerse.sura)
     }
 
+    func test_renameReadingBookmark_preservesPlacedBookmark() async throws {
+        let original = try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .coral)
+
+        let renamed = try await service.renameReadingBookmark(in: .coral, name: "Daily reading", quran: .hafsMadani1405)
+        let stored = try await storedBookmark()
+
+        XCTAssertEqual(stored, renamed)
+        XCTAssertEqual(stored?.id, original.id)
+        XCTAssertEqual(stored?.placement, .ayah(ayah(255)))
+        XCTAssertEqual(stored?.name, "Daily reading")
+    }
+
+    func test_renameReadingBookmark_createsUnplacedPin() async throws {
+        let renamed = try await service.renameReadingBookmark(in: .teal, name: "Review", quran: .hafsMadani1405)
+
+        let stored = try await storedBookmark(in: .teal)
+        XCTAssertEqual(stored, renamed)
+        XCTAssertEqual(stored?.slot, .teal)
+        XCTAssertEqual(stored?.placement, .unplaced)
+        XCTAssertEqual(stored?.name, "Review")
+    }
+
+    func test_renameReadingBookmark_nilClearsNameWithoutClearingPage() async throws {
+        let page = Quran.hafsMadani1405.pages[40]
+        try await service.addReadingBookmark(at: .page(page), slot: .coral)
+        try await service.renameReadingBookmark(in: .coral, name: "Review", quran: .hafsMadani1405)
+
+        let renamed = try await service.renameReadingBookmark(in: .coral, name: nil, quran: .hafsMadani1405)
+        let stored = try await storedBookmark()
+
+        XCTAssertEqual(stored, renamed)
+        XCTAssertNil(stored?.name)
+        XCTAssertEqual(stored?.placement, .page(page))
+    }
+
+    func test_namedBookmark_preservesNameWhenMovedAndCleared() async throws {
+        try await service.renameReadingBookmark(in: .coral, name: "Daily reading", quran: .hafsMadani1405)
+
+        let moved = try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .coral)
+        let cleared = try await service.clearReadingBookmark(in: .coral)
+
+        XCTAssertEqual(moved.name, "Daily reading")
+        XCTAssertEqual(cleared.name, "Daily reading")
+        XCTAssertEqual(cleared.placement, .unplaced)
+    }
+
+    func test_renameReadingBookmark_returnsPageInRequestedQuran() async throws {
+        let page = Quran.hafsMadani1405.pages[40]
+        try await service.addReadingBookmark(at: .page(page), slot: .coral)
+        let quran = Quran.hafsIndoPak
+        let mappedPage = try XCTUnwrap(QuranPageMapper(destination: quran).mapPage(page))
+
+        let renamed = try await service.renameReadingBookmark(in: .coral, name: "Review", quran: quran)
+        let stored = try await storedBookmark(quran: quran)
+
+        XCTAssertEqual(renamed, stored)
+        XCTAssertEqual(renamed.placement, .page(mappedPage))
+        XCTAssertEqual(renamed.name, "Review")
+    }
+
     private func storedBookmark(
         in slot: ReadingBookmarkSlot = .coral,
         quran: Quran = .hafsMadani1405

@@ -116,7 +116,7 @@ struct ReadingBookmarkMenuRow: View {
     }
 
     private var pin: some View {
-        ReadingBookmarkPin(style: .filled)
+        ReadingBookmarkPin(style: item.placement == .unplaced ? .outline : .filled)
             .foregroundColor(isEnabled ? item.slot.swiftUIColor : .tertiaryLabel)
             .accessibilityHidden(true)
     }

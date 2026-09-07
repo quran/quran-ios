@@ -4,7 +4,7 @@ BUILD_TOOLS_DIR=./BuildTools
 
 PACKAGE_SCHEME ?= QuranEngine-Package
 PACKAGE_SDK ?= iphonesimulator
-PACKAGE_DESTINATION ?= name=iPhone 17e,OS=26.5
+PACKAGE_DESTINATION ?= name=iPhone 17e,OS=latest
 EXAMPLE_PROJECT ?= Example/QuranEngineApp.xcodeproj
 EXAMPLE_SCHEME ?= QuranEngineApp
 EXAMPLE_SDK ?= iphonesimulator

@@ -87,18 +87,19 @@ final class AyahMenuViewModelTests: XCTestCase {
         let selectedAyah = verses[0]
         let sut = makeSUT(verses: [selectedAyah])
 
-        XCTAssertEqual(sut.readingBookmarkState, .available(slot: nil))
+        XCTAssertEqual(sut.readingBookmarkState, .available(bookmark: nil))
         XCTAssertEqual(sut.selectedAyah, selectedAyah)
     }
 
-    func test_readingBookmarkState_showsSelectedSlotForSingleAyah() {
+    func test_readingBookmarkState_showsSelectedBookmarkForSingleAyah() {
         let selectedAyah = verses[0]
+        let bookmark = readingBookmark(slot: .indigo, at: selectedAyah)
         let sut = makeSUT(
             verses: [selectedAyah],
-            readingBookmark: readingBookmark(slot: .indigo, at: selectedAyah)
+            readingBookmark: bookmark
         )
 
-        XCTAssertEqual(sut.readingBookmarkState, .available(slot: .indigo))
+        XCTAssertEqual(sut.readingBookmarkState, .available(bookmark: bookmark))
     }
 
     func test_editNote_requestsNotesListAndNewNoteWhenSelectionHasNoNotes() async {

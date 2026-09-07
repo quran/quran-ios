@@ -255,18 +255,18 @@ private struct AyahMenuViewList: View {
             ) {
                 Image(uiImage: ReadingBookmarkPin.image(style: .outline, badge: .ellipsis))
             }
-        case .available(let slot):
+        case .available(let bookmark):
             Row(
                 title: l("ayah.menu.reading-bookmark.title"),
-                subtitle: .text(slot?.displayName ?? "Move here"),
+                subtitle: .text(bookmark?.displayName ?? "Move here"),
                 subtitlePlacement: .below,
                 action: dataObject.actions.showReadingBookmarkMenu
             ) {
                 Image(uiImage: ReadingBookmarkPin.image(
-                    style: slot == nil ? .outline : .filled,
+                    style: bookmark == nil ? .outline : .filled,
                     badge: .ellipsis
                 ))
-                .foregroundColor(slot?.swiftUIColor ?? .label)
+                .foregroundColor(bookmark?.slot.swiftUIColor ?? .label)
             }
         }
     }
@@ -563,7 +563,7 @@ private func previewDataObject(
         repeatSubtitle: "selected verses",
         actions: previewActions,
         isTranslationView: isTranslationView,
-        readingBookmarkState: .available(slot: nil)
+        readingBookmarkState: .available(bookmark: nil)
     )
     #else
     return AyahMenuUI.DataObject(

@@ -124,7 +124,7 @@ final class AyahMenuViewModel {
         guard selectedAyah != nil else {
             return .disabled(message: l("ayah.menu.reading-bookmark.single-ayah-only"))
         }
-        return .available(slot: deps.readingBookmark?.slot)
+        return .available(bookmark: deps.readingBookmark)
     }
     #endif
 

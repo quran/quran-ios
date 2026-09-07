@@ -49,7 +49,7 @@ protocol QuranPresentable: UIViewController {
 
     func setVisiblePages(_ pages: [Page])
     #if QURAN_SYNC
-    func updateReadingBookmark(_ slot: ReadingBookmarkSlot?)
+    func updateReadingBookmark(_ bookmark: PlacedReadingBookmark?)
     #else
     func updateBookmark(_ isBookmarked: Bool)
     #endif
@@ -600,7 +600,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         #if QURAN_SYNC
         let placements = pages.map(PlacedReadingBookmark.Placement.page)
         let bookmark = deps.readingBookmarksObserver.latest(at: placements)
-        presenter?.updateReadingBookmark(bookmark?.slot)
+        presenter?.updateReadingBookmark(bookmark)
         #else
         presenter?.updateBookmark(bookmarked(pages))
         #endif

@@ -14,7 +14,6 @@ private enum SearchRegex {
     static let spaceRegex = "\\p{Z}+"
     /// Match unicode categories Marks (M), Punctuation (P), Symbols (S), Control (C) and Arabic Tatweel character.
     static let invalidSearchRegex = "[\\p{M}\\p{P}\\p{S}\\p{C}\u{0640}]"
-    static let arabicSimilarityRegex = "[\u{0627}\u{0623}\u{0621}\u{062a}\u{0629}\u{0647}\u{0649}\u{0626}]"
     static let arabicSimilarityReplacements: [Character: String] = [
         // given: ا
         // match: آأإاﻯ
@@ -47,7 +46,54 @@ private enum SearchRegex {
         // given: ئ
         // match: ئﻯي
         "\u{0626}": "\u{0626}\u{0649}\u{064a}",
+
+        // The letters below are typed on Urdu, Farsi and Pashto keyboards in place of
+        // the Arabic letters used by the mushaf, so a search from those keyboards has
+        // to reach the Arabic spelling.
+
+        // given: ک
+        // match: كک
+        "\u{06a9}": "\u{0643}\u{06a9}",
+
+        // given: ی
+        // match: يﻯی
+        "\u{06cc}": "\u{064a}\u{0649}\u{06cc}",
+
+        // given: ے
+        // match: يﻯے
+        "\u{06d2}": "\u{064a}\u{0649}\u{06d2}",
+
+        // given: ې
+        // match: يﻯې
+        "\u{06d0}": "\u{064a}\u{0649}\u{06d0}",
+
+        // given: ۍ
+        // match: يﻯۍ
+        "\u{06cd}": "\u{064a}\u{0649}\u{06cd}",
+
+        // given: ہ
+        // match: هةہ
+        "\u{06c1}": "\u{0647}\u{0629}\u{06c1}",
+
+        // given: ھ
+        // match: هھ
+        "\u{06be}": "\u{0647}\u{06be}",
+
+        // given: ۃ
+        // match: ةۃ
+        "\u{06c3}": "\u{0629}\u{06c3}",
+
+        // given: ۀ
+        // match: ةهۀ
+        "\u{06c0}": "\u{0629}\u{0647}\u{06c0}",
+
+        // given: ۂ
+        // match: ةهۂ
+        "\u{06c2}": "\u{0629}\u{0647}\u{06c2}",
     ]
+
+    /// Derived from the replacements so a letter cannot be added to one and forgotten in the other.
+    static let arabicSimilarityRegex = "[" + String(arabicSimilarityReplacements.keys) + "]"
 }
 
 struct SearchTerm {

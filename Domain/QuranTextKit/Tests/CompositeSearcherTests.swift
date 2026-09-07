@@ -105,6 +105,14 @@ class CompositeSearcherTests: XCTestCase {
         XCTAssertTrue(results.map(\.text).contains(where: \.isQuranText))
     }
 
+    func testUrduKeyboardFindsTheSameVersesAsArabicKeyboard() async throws {
+        let arabic = try await searcher.search(for: "كتاب", quran: quran)
+        let urdu = try await searcher.search(for: "کتاب", quran: quran)
+
+        XCTAssertFalse(arabic.isEmpty)
+        XCTAssertEqual(urdu, arabic)
+    }
+
     func testMatchTranslation() async throws {
         await testAutocomplete(term: "All")
         try await testSearch(term: "All")

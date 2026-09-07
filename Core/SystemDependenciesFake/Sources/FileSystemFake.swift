@@ -20,6 +20,7 @@ public final class FileSystemFake: FileSystem, Sendable {
         var removedItems: [URL] = []
         var filesInDirectory: [URL: [URL]] = [:]
         var resourceValuesByURL: [URL: ResourceValuesFake] = [:]
+        var urlsExcludedFromBackup: Set<URL> = []
     }
 
     // MARK: Lifecycle
@@ -51,6 +52,11 @@ public final class FileSystemFake: FileSystem, Sendable {
     public var resourceValuesByURL: [URL: ResourceValuesFake] {
         get { state.withCriticalRegion { $0.resourceValuesByURL } }
         set { state.withCriticalRegion { $0.resourceValuesByURL = newValue } }
+    }
+
+    public var urlsExcludedFromBackup: Set<URL> {
+        get { state.withCriticalRegion { $0.urlsExcludedFromBackup } }
+        set { state.withCriticalRegion { $0.urlsExcludedFromBackup = newValue } }
     }
 
     public func fileExists(at url: URL) -> Bool {
@@ -99,6 +105,17 @@ public final class FileSystemFake: FileSystem, Sendable {
             return values
         }
         throw FileSystemError.noResourceValues
+    }
+
+    public func setExcludedFromBackup(_ excluded: Bool, at url: URL) throws {
+        guard files.contains(url) else {
+            throw FileSystemError.general("Item doesn't exist: \(url)")
+        }
+        if excluded {
+            urlsExcludedFromBackup.insert(url)
+        } else {
+            urlsExcludedFromBackup.remove(url)
+        }
     }
 
     public func setResourceValues(_ url: URL, fileSize: Int?) {

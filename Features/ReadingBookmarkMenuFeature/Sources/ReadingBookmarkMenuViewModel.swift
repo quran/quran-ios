@@ -9,7 +9,7 @@ import SwiftUI
 
 @MainActor
 final class ReadingBookmarkMenuViewModel: ObservableObject {
-    struct Item: Identifiable {
+    struct Item: Identifiable, ReadingBookmarkDisplayable {
         let slot: ReadingBookmarkSlot
         let name: String?
         let placement: ReadingBookmark.Placement

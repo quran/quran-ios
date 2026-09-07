@@ -96,7 +96,7 @@ struct ReadingBookmarkMenuRow: View {
             HStack {
                 pin
                 VStack(alignment: .leading, spacing: 1) {
-                    Text(item.name ?? item.slot.displayName)
+                    Text(item.displayName)
                         .fontWeight(.semibold)
                         .foregroundColor(isEnabled ? .label : .tertiaryLabel)
                     subtitle.view(ofSize: .footnote)

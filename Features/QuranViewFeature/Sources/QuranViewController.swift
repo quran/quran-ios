@@ -276,14 +276,14 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
 
     #if QURAN_SYNC
-    func updateReadingBookmark(_ slot: ReadingBookmarkSlot?) {
-        let style: ReadingBookmarkPin.Style = slot == nil ? .outline : .filled
+    func updateReadingBookmark(_ bookmark: PlacedReadingBookmark?) {
+        let style: ReadingBookmarkPin.Style = bookmark == nil ? .outline : .filled
         readingBookmarkMenuNavigationButton.image = ReadingBookmarkPin.image(
             style: style,
             badge: .ellipsis
         )
-        readingBookmarkMenuNavigationButton.tintColor = slot?.color
-        readingBookmarkMenuNavigationButton.accessibilityValue = slot?.displayName
+        readingBookmarkMenuNavigationButton.tintColor = bookmark?.slot.color
+        readingBookmarkMenuNavigationButton.accessibilityValue = bookmark?.displayName
         quranView?.navigationItem.setRightBarButtonItems(
             [moreNavigationButton, readingBookmarkMenuNavigationButton],
             animated: false

@@ -6,6 +6,7 @@
 //  Copyright © 2019 Quran.com. All rights reserved.
 //
 
+import FeaturesSupport
 import NoorUI
 import UIKit
 
@@ -27,6 +28,8 @@ class TabViewController: BaseNavigationController, TabPresenter {
     }
 
     // MARK: Internal
+
+    var quranNavigator: QuranNavigator { interactor }
 
     func getTabBarItem() -> UITabBarItem {
         fatalError("\(#function) should be subclassed")

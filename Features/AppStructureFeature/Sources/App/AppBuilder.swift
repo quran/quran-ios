@@ -13,7 +13,7 @@ import UIKit
 struct AppBuilder {
     let container: AppDependencies
 
-    func build() -> UIViewController {
+    func build() -> AppViewController {
         let interactor = AppInteractor(
             supportsCloudKit: container.supportsCloudKit,
             analytics: container.analytics,
@@ -26,10 +26,9 @@ struct AppBuilder {
                 SettingsTabBuilder(container: container),
             ]
         )
-        let viewController = AppViewController(
+        return AppViewController(
             analytics: container.analytics,
             interactor: interactor
         )
-        return viewController
     }
 }

@@ -10,7 +10,7 @@ import GRDB
 import QuranKit
 import SQLitePersistence
 
-public struct GRDBLinePagePersistence: LinePagePersistence {
+public struct GRDBLinePagePersistence: LinePagePersistence, LinePageAyahMarkerPersistence {
     // MARK: Lifecycle
 
     init(db: DatabaseConnection) {

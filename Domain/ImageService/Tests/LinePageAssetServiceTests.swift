@@ -109,6 +109,7 @@ final class LinePageAssetServiceTests: XCTestCase {
             readingDirectory: rootURL,
             metrics: metrics,
             requiredPageNumbers: requiredPageNumbers,
+            ayahMarkerURL: nil,
             fileSystem: DefaultFileSystem()
         )
     }

@@ -52,16 +52,19 @@ public struct LinePageAssets {
         page: Page,
         ayahInfoDatabaseURL: URL,
         lines: [LineImage],
-        sidelines: [SidelineImage]
+        sidelines: [SidelineImage],
+        ayahMarkerURL: URL?
     ) {
         self.page = page
         self.ayahInfoDatabaseURL = ayahInfoDatabaseURL
         self.lines = lines
         self.sidelines = sidelines
+        self.ayahMarkerURL = ayahMarkerURL
     }
 
     public let page: Page
     public let ayahInfoDatabaseURL: URL
+    public let ayahMarkerURL: URL?
     public let lines: [LineImage]
     public let sidelines: [SidelineImage]
 }
@@ -69,11 +72,12 @@ public struct LinePageAssets {
 public struct LinePageAssetService {
     // MARK: Lifecycle
 
-    public init(readingDirectory: URL?, metrics: LinePageMetrics, quran: Quran, fileSystem: FileSystem = DefaultFileSystem()) {
+    public init(readingDirectory: URL?, metrics: LinePageMetrics, quran: Quran, ayahMarkerURL: URL?, fileSystem: FileSystem = DefaultFileSystem()) {
         self.init(
             readingDirectory: readingDirectory,
             metrics: metrics,
             requiredPageNumbers: quran.pages.map(\.pageNumber),
+            ayahMarkerURL: ayahMarkerURL,
             fileSystem: fileSystem
         )
     }
@@ -83,12 +87,14 @@ public struct LinePageAssetService {
             readingDirectory: readingDirectory,
             metrics: .madaniLinePages(widthParameter: widthParameter),
             requiredPageNumbers: Quran.hafsMadani1440.pages.map(\.pageNumber),
+            ayahMarkerURL: nil,
             fileSystem: fileSystem
         )
     }
 
-    init(readingDirectory: URL?, metrics: LinePageMetrics, requiredPageNumbers: [Int], fileSystem: FileSystem) {
+    init(readingDirectory: URL?, metrics: LinePageMetrics, requiredPageNumbers: [Int], ayahMarkerURL: URL?, fileSystem: FileSystem) {
         self.readingDirectory = readingDirectory
+        self.ayahMarkerURL = ayahMarkerURL
         self.metrics = metrics
         self.requiredPageNumbers = requiredPageNumbers
         self.fileSystem = fileSystem
@@ -124,6 +130,7 @@ public struct LinePageAssetService {
     // MARK: Private
 
     private let readingDirectory: URL?
+    private let ayahMarkerURL: URL?
     private let metrics: LinePageMetrics
     private let requiredPageNumbers: [Int]
     private let fileSystem: FileSystem
@@ -155,7 +162,8 @@ public struct LinePageAssetService {
                 page: page,
                 ayahInfoDatabaseURL: ayahInfoDatabaseURL,
                 lines: lines,
-                sidelines: loadSidelines(pageNumber: page.pageNumber, in: readingDirectory)
+                sidelines: loadSidelines(pageNumber: page.pageNumber, in: readingDirectory),
+                ayahMarkerURL: ayahMarkerURL
             )
         )
     }

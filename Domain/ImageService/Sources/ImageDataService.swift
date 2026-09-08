@@ -28,9 +28,13 @@ extension ImageDataServiceError: LocalizedError {
 public struct ImageDataService {
     // MARK: Lifecycle
 
-    public init(ayahInfoDatabase: URL, imagesURL: URL) {
+    public init(ayahInfoDatabase: URL, imagesURL: URL, ayahMarkerURL: URL?) {
         self.imagesURL = imagesURL
-        persistence = GRDBWordFramePersistence(fileURL: ayahInfoDatabase)
+        let persistence = GRDBWordFramePersistence(fileURL: ayahInfoDatabase)
+        self.persistence = persistence
+        ayahMarkerPersistence = ayahMarkerURL.map {
+            GRDBWordFramePersistence(fileURL: $0)
+        } ?? persistence
     }
 
     // MARK: Public
@@ -40,7 +44,7 @@ public struct ImageDataService {
     }
 
     public func ayahNumbers(_ page: Page) async throws -> [AyahNumberLocation] {
-        try await persistence.ayahNumbers(page)
+        try await ayahMarkerPersistence.ayahNumbers(page)
     }
 
     public func imageForPage(_ page: Page) async throws -> ImagePage {
@@ -73,6 +77,7 @@ public struct ImageDataService {
 
     private let processor = WordFrameProcessor()
     private let persistence: WordFramePersistence
+    private let ayahMarkerPersistence: AyahMarkerPersistence
     private let imagesURL: URL
 
     private func logFiles(directory: URL) {

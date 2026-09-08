@@ -22,15 +22,44 @@ class ImageDataServiceTests: XCTestCase {
     override func setUpWithError() throws {
         service = ImageDataService(
             ayahInfoDatabase: TestResources.resourceURL("hafs_1405_ayahinfo.db"),
-            imagesURL: TestResources.testDataURL.appendingPathComponent("images")
+            imagesURL: TestResources.testDataURL.appendingPathComponent("images"),
+            ayahMarkerURL: nil
         )
+    }
+
+    /// A separate marker database supplies markers without replacing the word-frame/header database.
+    func testSeparateAyahMarkerDatabase() async throws {
+        let markerURL = TestResources.resourceURL("hafs_1421_ayahinfo_1120.db")
+        let page = quran.pages[0]
+        let separate = ImageDataService(
+            ayahInfoDatabase: TestResources.resourceURL("hafs_1405_ayahinfo.db"),
+            imagesURL: TestResources.testDataURL.appendingPathComponent("images"),
+            ayahMarkerURL: markerURL
+        )
+        let markerSource = ImageDataService(
+            ayahInfoDatabase: markerURL,
+            imagesURL: TestResources.testDataURL,
+            ayahMarkerURL: nil
+        )
+        let actualMarkers = try await separate.ayahNumbers(page)
+        let expectedMarkers = try await markerSource.ayahNumbers(page)
+        let originalMarkers = try await service.ayahNumbers(page)
+        XCTAssertEqual(actualMarkers, expectedMarkers)
+        XCTAssertNotEqual(actualMarkers, originalMarkers)
+        let actualHeaders = try await separate.suraHeaders(page)
+        let originalHeaders = try await service.suraHeaders(page)
+        XCTAssertEqual(actualHeaders, originalHeaders)
+        let actualImage = try await separate.imageForPage(page)
+        let originalImage = try await service.imageForPage(page)
+        XCTAssertEqual(actualImage.wordFrames.lines[0].frames, originalImage.wordFrames.lines[0].frames)
     }
 
     func testPageMarkers() async throws {
         let quran = Reading.hafs_1421.quran
         service = ImageDataService(
             ayahInfoDatabase: TestResources.resourceURL("hafs_1421_ayahinfo_1120.db"),
-            imagesURL: URL(string: "invalid")!
+            imagesURL: URL(string: "invalid")!,
+            ayahMarkerURL: nil
         )
 
         var surasHeaders = 0
@@ -41,6 +70,13 @@ class ImageDataServiceTests: XCTestCase {
             surasHeaders += pageSuraHeaders.count
         }
         XCTAssertEqual(surasHeaders, quran.suras.count)
+    }
+
+    func testPageMarkersForMushafWithBakedInMarkers() async throws {
+        for page in quran.pages {
+            let ayahNumbers = try await service.ayahNumbers(page)
+            XCTAssertEqual(ayahNumbers.map(\.ayah), page.verses, "Page \(page.pageNumber)")
+        }
     }
 
     func testWordFrameCollection() async throws {
@@ -76,7 +112,8 @@ class ImageDataServiceTests: XCTestCase {
         let page = quran.pages[0]
         service = ImageDataService(
             ayahInfoDatabase: TestResources.resourceURL("hafs_1405_ayahinfo.db"),
-            imagesURL: imagesURL
+            imagesURL: imagesURL,
+            ayahMarkerURL: nil
         )
 
         do {

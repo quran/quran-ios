@@ -18,6 +18,8 @@ import VLogging
 public actor ReadingResourcesService {
     // MARK: Lifecycle
 
+    /// - Parameter removeOtherReadings: Whether loading a reading deletes other readings' downloaded resources.
+    ///   Integration tests pass `false` to retain resources while checking multiple mushafs.
     public init(
         fileManager: FileSystem = DefaultFileSystem(),
         zipper: Zipper = DefaultZipper(),
@@ -26,13 +28,15 @@ public actor ReadingResourcesService {
         preferencesObservingStarted: EventObserver? = nil,
         preferenceLoadingCompleted: EventObserver? = nil,
         downloader: DownloadManager,
-        remoteResources: ReadingRemoteResources?
+        remoteResources: ReadingRemoteResources?,
+        removeOtherReadings: Bool = true
     ) {
         self.zipper = zipper
         self.fileManager = fileManager
         self.preferencesObservingStarted = preferencesObservingStarted
         self.preferenceLoadingCompleted = preferenceLoadingCompleted
         self.remoteResources = remoteResources
+        self.removeOtherReadings = removeOtherReadings
         self.downloader = ReadingResourceDownloader(downloader: downloader, remoteResources: remoteResources)
         self.scheduler = scheduler
         self.throttleInterval = throttleInterval
@@ -65,10 +69,19 @@ public actor ReadingResourcesService {
             }
             await self?.preferencesObservingStarted?()
             for await reading in readings {
+                guard !Task.isCancelled else { return }
                 await self?.loadResourceInAsyncTask(reading)
             }
         }
         .asCancellableTask()
+    }
+
+    /// Stops observing preferences and cancels this service's current loading task.
+    /// Integration tests stop the hosted app's loader before using their own loader with cleanup disabled,
+    /// preventing the app's loader from deleting resources as tests switch readings.
+    public func stopLoadingResources() {
+        readingsTask = nil
+        readingTask = nil
     }
 
     public func retry() async {
@@ -94,9 +107,11 @@ public actor ReadingResourcesService {
     private let fileManager: FileSystem
     private let downloader: ReadingResourceDownloader
     private let remoteResources: ReadingRemoteResources?
+    private let removeOtherReadings: Bool
 
     private func loadResourceInAsyncTask(_ reading: Reading) {
         readingTask = Task {
+            guard !Task.isCancelled else { return }
             let status = await self.loadResource(of: reading)
             self.send(status, from: reading)
             await self.preferenceLoadingCompleted?()
@@ -105,7 +120,9 @@ public actor ReadingResourcesService {
     }
 
     private func loadResource(of reading: Reading) async -> ResourceStatus {
-        removePreviouslyDownloadedResources(exclude: reading)
+        if removeOtherReadings {
+            removePreviouslyDownloadedResources(exclude: reading)
+        }
         await downloader.cancelDownload(exclude: reading)
 
         logger.info("Resources: Start loading reading resources of: \(reading)")

@@ -16,6 +16,7 @@ public protocol FileSystem: Sendable {
     func moveItem(at src: URL, to dst: URL) throws
     func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL]
     func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues
+    func setExcludedFromBackup(_ excluded: Bool, at url: URL) throws
 
     func writeToFile(at path: URL, content: String) throws
 }
@@ -45,6 +46,13 @@ public struct DefaultFileSystem: FileSystem {
 
     public func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues {
         try url.resourceValues(forKeys: keys)
+    }
+
+    public func setExcludedFromBackup(_ excluded: Bool, at url: URL) throws {
+        var url = url
+        var values = URLResourceValues()
+        values.isExcludedFromBackup = excluded
+        try url.setResourceValues(values)
     }
 
     public func createDirectory(at url: URL, withIntermediateDirectories createIntermediates: Bool) throws {
@@ -85,5 +93,9 @@ public extension FileSystem {
 
     func moveItem(at src: URL, to dst: RelativeFilePath) throws {
         try moveItem(at: src, to: dst.url)
+    }
+
+    func setExcludedFromBackup(_ excluded: Bool, at path: RelativeFilePath) throws {
+        try setExcludedFromBackup(excluded, at: path.url)
     }
 }

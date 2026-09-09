@@ -81,6 +81,13 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         let directory = destinationURL.deletingLastPathComponent()
         try? fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
 
+        // Downloaded resources can be fetched again, including files extracted here later.
+        do {
+            try fileManager.setExcludedFromBackup(true, at: directory)
+        } catch {
+            crasher.recordError(error, reason: "Couldn't exclude download directory from backup '\(directory)'")
+        }
+
         // move the file to destination
         do {
             try fileManager.moveItem(at: location, to: destinationURL)

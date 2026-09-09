@@ -21,6 +21,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "AppMigrationFeatureTests",
+        "name" : "AppMigrationFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "AppStructureFeatureTests",
         "name" : "AppStructureFeatureTests"
       }

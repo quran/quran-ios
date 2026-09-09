@@ -22,12 +22,14 @@ public final class LaunchStartup {
 
     init(
         appBuilder: AppBuilder,
+        downloadBackupMigrator: DownloadBackupMigrator,
         audioUpdater: AudioUpdater,
         fileSystemMigrator: FileSystemMigrator,
         recitersPathMigrator: RecitersPathMigrator,
         reviewService: ReviewService
     ) {
         self.appBuilder = appBuilder
+        self.downloadBackupMigrator = downloadBackupMigrator
         self.audioUpdater = audioUpdater
         self.fileSystemMigrator = fileSystemMigrator
         self.recitersPathMigrator = recitersPathMigrator
@@ -74,6 +76,7 @@ public final class LaunchStartup {
     private let fileSystemMigrator: FileSystemMigrator
     private let recitersPathMigrator: RecitersPathMigrator
     private let appBuilder: AppBuilder
+    private let downloadBackupMigrator: DownloadBackupMigrator
     private let audioUpdater: AudioUpdater
     private let reviewService: ReviewService
     private let crashApplicationObserver = CrashApplicationObserver()
@@ -193,6 +196,7 @@ public final class LaunchStartup {
     private func registerMigrators() {
         appMigrator.register(migrator: fileSystemMigrator, for: "1.16.0")
         appMigrator.register(migrator: recitersPathMigrator, for: "1.19.1")
+        appMigrator.register(migrator: downloadBackupMigrator, for: "2.6.9")
     }
 
     private func updateAudioIfNeeded() {

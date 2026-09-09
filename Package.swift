@@ -626,7 +626,9 @@ private func featuresTargets() -> [[Target]] {
             .product(name: "Popover_OC", package: "Popover"),
         ]),
 
-        target(type, name: "AppMigrationFeature", hasTests: false, dependencies: [
+        target(type, name: "AppMigrationFeature", dependencies: [
+            "SystemDependencies",
+            "VLogging",
             "AppMigrator",
             "ReciterService",
             "Utilities",

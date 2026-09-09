@@ -10,8 +10,10 @@ EXAMPLE_SCHEME ?= QuranEngineApp
 EXAMPLE_SDK ?= iphonesimulator
 EXAMPLE_DESTINATION ?= generic/platform=iOS
 EXAMPLE_BUNDLE_IDENTIFIER ?= com.quran.QuranEngineApp
-EXAMPLE_NO_SYNC_SIMULATOR ?= iPhone 17e,26.5
-EXAMPLE_SYNC_SIMULATOR ?= iPhone 17 Pro Max,26.5
+# simctl needs a concrete runtime version when locating the device to launch.
+LATEST_IOS_SIMULATOR_OS = $(shell xcrun simctl list runtimes | sed -nE 's/^iOS ([0-9.]+) .* - com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+$$/\1/p' | sort -V | tail -n 1)
+EXAMPLE_NO_SYNC_SIMULATOR ?= iPhone 17e,$(LATEST_IOS_SIMULATOR_OS)
+EXAMPLE_SYNC_SIMULATOR ?= iPhone 17 Pro Max,$(LATEST_IOS_SIMULATOR_OS)
 DERIVED_DATA_DIR ?= .build/DerivedData
 GIT_COMMON_DIR := $(shell git rev-parse --path-format=absolute --git-common-dir)
 QURAN_WORKSPACE_DIR := $(abspath $(GIT_COMMON_DIR)/../..)

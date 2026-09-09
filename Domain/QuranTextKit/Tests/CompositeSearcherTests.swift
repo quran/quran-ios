@@ -113,6 +113,15 @@ class CompositeSearcherTests: XCTestCase {
         XCTAssertEqual(urdu, arabic)
     }
 
+    func testCanonicalKeyboardEncodingsFindTheSameVerses() async throws {
+        for input in ["رحمۀ", "رحمۂ", "علۓ"] {
+            let composed = try await searcher.search(for: input, quran: quran)
+            let decomposed = try await searcher.search(for: input.decomposedStringWithCanonicalMapping, quran: quran)
+            XCTAssertFalse(composed.isEmpty, input)
+            XCTAssertEqual(decomposed, composed, input)
+        }
+    }
+
     func testMatchTranslation() async throws {
         await testAutocomplete(term: "All")
         try await testSearch(term: "All")

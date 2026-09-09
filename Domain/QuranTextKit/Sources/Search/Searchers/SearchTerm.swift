@@ -47,9 +47,9 @@ private enum SearchRegex {
         // match: ئﻯي
         "\u{0626}": "\u{0626}\u{0649}\u{064a}",
 
-        // The letters below are typed on Urdu, Farsi and Pashto keyboards in place of
-        // the Arabic letters used by the mushaf, so a search from those keyboards has
-        // to reach the Arabic spelling.
+        // Tolerant keyboard substitutions for Urdu, Farsi and Pashto input.
+        // These are search approximations, not linguistic equivalences. Keep the
+        // original letter in each class so it can still match translation text.
 
         // given: ک
         // match: كک
@@ -62,6 +62,10 @@ private enum SearchRegex {
         // given: ے
         // match: يﻯے
         "\u{06d2}": "\u{064a}\u{0649}\u{06d2}",
+
+        // given: ۓ
+        // match: ئيىۓ (same tolerance as Arabic yeh with hamza)
+        "\u{06d3}": "\u{0626}\u{064a}\u{0649}\u{06d3}",
 
         // given: ې
         // match: يﻯې
@@ -99,12 +103,13 @@ private enum SearchRegex {
 struct SearchTerm {
     // MARK: Lifecycle
 
-    init?(_ value: String) {
+    init?(_ value: String, normalizeUnicode: Bool = true) {
         compactQuery = value.trimmedWords()
         if compactQuery.isEmpty {
             return nil
         }
-        persistenceQuery = compactQuery.removeInvalidSearchCharacters()
+        let query = normalizeUnicode ? compactQuery.precomposedStringWithCanonicalMapping : compactQuery
+        persistenceQuery = query.removeInvalidSearchCharacters()
         guard let resultRegex = Self.regexForArabicSimilarityCharacters(persistenceQuery) else {
             return nil
         }
@@ -188,7 +193,7 @@ struct SearchTerm {
     ) -> [SearchResult] {
         var results: [SearchResult] = []
         for verse in verses {
-            for text in [verse.text, verse.text.decomposedStringWithCompatibilityMapping] {
+            for text in [verse.text, verse.text.precomposedStringWithCanonicalMapping, verse.text.decomposedStringWithCompatibilityMapping] {
                 let ranges = text.split(separatedBy: queryRegex)
                 if !ranges.isEmpty {
                     let result = SearchResult(text: transform(text), ranges: ranges, ayah: verse.verse)

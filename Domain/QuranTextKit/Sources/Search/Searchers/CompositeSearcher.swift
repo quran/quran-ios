@@ -51,7 +51,7 @@ public struct CompositeSearcher {
     // MARK: Public
 
     public func autocomplete(term: String, quran: Quran) async -> [SearchText] {
-        guard let term = SearchTerm(term) else {
+        guard let term = SearchTerm(term, normalizeUnicode: false) else {
             return []
         }
         logger.info("Autocompleting term: \(term.compactQuery)")

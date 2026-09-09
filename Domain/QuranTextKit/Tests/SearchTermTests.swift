@@ -17,7 +17,7 @@ final class SearchTermTests: XCTestCase {
     }
 
     func testYehVariantsMatchArabicYeh() {
-        for yeh in ["ی", "ے", "ې", "ۍ"] {
+        for yeh in ["ی", "ے", "ې", "ۍ", "ۓ"] {
             XCTAssertTrue(matches("الذ" + yeh, in: "الذي خلق"), "\(yeh) doesn't match Arabic yeh")
         }
     }
@@ -28,7 +28,7 @@ final class SearchTermTests: XCTestCase {
         }
     }
 
-    func testTehMarbutaVariantsMatchArabicTehMarbuta() {
+    func testHehAndTehMarbutaFormsMatchArabicTehMarbuta() {
         for tehMarbuta in ["ۃ", "ۀ", "ۂ"] {
             XCTAssertTrue(matches("رحم" + tehMarbuta, in: "رحمة من ربك"), "\(tehMarbuta) doesn't match Arabic teh marbuta")
         }
@@ -46,6 +46,48 @@ final class SearchTermTests: XCTestCase {
     func testPersoArabicLettersBecomeWildcardsInThePersistenceQuery() {
         let term = SearchTerm("کتاب")
         XCTAssertEqual(term?.persistenceQueryReplacingArabicSimilarityCharactersWithUnderscore(), "___ب")
+    }
+
+    func testCanonicalEncodingsProduceTheSameSearchQuery() throws {
+        for suffix in ["\u{06c0}", "\u{06c2}", "\u{06d3}"] {
+            let composed = try XCTUnwrap(SearchTerm("رحم" + suffix))
+            let decomposed = try XCTUnwrap(SearchTerm("رحم" + suffix.decomposedStringWithCanonicalMapping))
+            XCTAssertEqual(Array(composed.persistenceQuery.unicodeScalars), Array(decomposed.persistenceQuery.unicodeScalars))
+            XCTAssertEqual(composed.persistenceQueryReplacingArabicSimilarityCharactersWithUnderscore(), decomposed.persistenceQueryReplacingArabicSimilarityCharactersWithUnderscore())
+        }
+        XCTAssertTrue(matches("رحم\u{06d5}\u{0654}", in: "رحمة"))
+        XCTAssertTrue(matches("رحم\u{06c1}\u{0654}", in: "رحمة"))
+        XCTAssertTrue(matches("عل\u{06d2}\u{0654}", in: "علي"))
+        XCTAssertTrue(matches("علۓ", in: "علئ"))
+    }
+
+    func testCanonicalNormalizationPreservesOriginalQuery() throws {
+        let input = "cafe\u{0301}"
+        let term = try XCTUnwrap(SearchTerm(input))
+        XCTAssertEqual(Array(term.compactQuery.unicodeScalars), Array(input.unicodeScalars))
+        XCTAssertEqual(Array(term.persistenceQuery.unicodeScalars), Array("café".unicodeScalars))
+        XCTAssertTrue(matches(input, in: "café"))
+        XCTAssertTrue(matches("café", in: input))
+    }
+
+    func testAutocompleteCanRetainItsExistingNormalization() throws {
+        let input = "رحم\u{06d5}\u{0654}"
+        let term = try XCTUnwrap(SearchTerm(input, normalizeUnicode: false))
+        XCTAssertEqual(Array(term.persistenceQuery.unicodeScalars), Array("رحم\u{06d5}".unicodeScalars))
+    }
+
+    func testMappedLettersStillMatchOriginalTranslationLetters() {
+        for letter in ["ک", "ی", "ے", "ې", "ۍ", "ۓ", "ہ", "ھ", "ۃ", "ۀ", "ۂ"] {
+            XCTAssertTrue(matches(letter, in: "لفظ " + letter), letter)
+            XCTAssertFalse(matches(letter, in: "ب"), letter)
+        }
+    }
+
+    func testDistinctConsonantsAreNotMappedToArabicLookalikes() {
+        for (input, text) in [("پ", "ب"), ("چ", "ج"), ("ژ", "ز"), ("گ", "ك")] {
+            XCTAssertFalse(matches(input, in: text))
+            XCTAssertTrue(matches(input, in: input))
+        }
     }
 
     // MARK: Private

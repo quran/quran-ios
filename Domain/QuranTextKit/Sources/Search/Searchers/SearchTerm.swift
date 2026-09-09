@@ -14,7 +14,6 @@ private enum SearchRegex {
     static let spaceRegex = "\\p{Z}+"
     /// Match unicode categories Marks (M), Punctuation (P), Symbols (S), Control (C) and Arabic Tatweel character.
     static let invalidSearchRegex = "[\\p{M}\\p{P}\\p{S}\\p{C}\u{0640}]"
-    static let arabicSimilarityRegex = "[\u{0627}\u{0623}\u{0621}\u{062a}\u{0629}\u{0647}\u{0649}\u{0626}]"
     static let arabicSimilarityReplacements: [Character: String] = [
         // given: ا
         // match: آأإاﻯ
@@ -47,18 +46,70 @@ private enum SearchRegex {
         // given: ئ
         // match: ئﻯي
         "\u{0626}": "\u{0626}\u{0649}\u{064a}",
+
+        // Tolerant keyboard substitutions for Urdu, Farsi and Pashto input.
+        // These are search approximations, not linguistic equivalences. Keep the
+        // original letter in each class so it can still match translation text.
+
+        // given: ک
+        // match: كک
+        "\u{06a9}": "\u{0643}\u{06a9}",
+
+        // given: ی
+        // match: يﻯی
+        "\u{06cc}": "\u{064a}\u{0649}\u{06cc}",
+
+        // given: ے
+        // match: يﻯے
+        "\u{06d2}": "\u{064a}\u{0649}\u{06d2}",
+
+        // given: ۓ
+        // match: ئيىۓ (same tolerance as Arabic yeh with hamza)
+        "\u{06d3}": "\u{0626}\u{064a}\u{0649}\u{06d3}",
+
+        // given: ې
+        // match: يﻯې
+        "\u{06d0}": "\u{064a}\u{0649}\u{06d0}",
+
+        // given: ۍ
+        // match: يﻯۍ
+        "\u{06cd}": "\u{064a}\u{0649}\u{06cd}",
+
+        // given: ہ
+        // match: هةہ
+        "\u{06c1}": "\u{0647}\u{0629}\u{06c1}",
+
+        // given: ھ
+        // match: هھ
+        "\u{06be}": "\u{0647}\u{06be}",
+
+        // given: ۃ
+        // match: ةۃ
+        "\u{06c3}": "\u{0629}\u{06c3}",
+
+        // given: ۀ
+        // match: ةهۀ
+        "\u{06c0}": "\u{0629}\u{0647}\u{06c0}",
+
+        // given: ۂ
+        // match: ةهۂ
+        "\u{06c2}": "\u{0629}\u{0647}\u{06c2}",
     ]
+
+    /// Derived from the replacements so a letter cannot be added to one and forgotten in the other.
+    static let arabicSimilarityRegex = "[" + String(arabicSimilarityReplacements.keys) + "]"
 }
 
 struct SearchTerm {
     // MARK: Lifecycle
 
-    init?(_ value: String) {
+    init?(_ value: String, normalizeUnicode: Bool = true) {
         compactQuery = value.trimmedWords()
         if compactQuery.isEmpty {
             return nil
         }
-        persistenceQuery = compactQuery.removeInvalidSearchCharacters()
+        let query = normalizeUnicode ? compactQuery.precomposedStringWithCanonicalMapping : compactQuery
+        persistenceQuery = query.removeInvalidSearchCharacters()
         guard let resultRegex = Self.regexForArabicSimilarityCharacters(persistenceQuery) else {
             return nil
         }
@@ -142,7 +193,7 @@ struct SearchTerm {
     ) -> [SearchResult] {
         var results: [SearchResult] = []
         for verse in verses {
-            for text in [verse.text, verse.text.decomposedStringWithCompatibilityMapping] {
+            for text in [verse.text, verse.text.precomposedStringWithCanonicalMapping, verse.text.decomposedStringWithCompatibilityMapping] {
                 let ranges = text.split(separatedBy: queryRegex)
                 if !ranges.isEmpty {
                     let result = SearchResult(text: transform(text), ranges: ranges, ayah: verse.verse)

@@ -397,7 +397,7 @@ public final class AudioBannerViewModel: ObservableObject {
     }
 
     private func playing(ayah: AyahNumber) {
-        logger.info("AudioBanner: playing verse \(ayah)")
+        logger.info("AudioBanner: playing verse \(ayah.nonLocalizedDescription)")
         crashContext.setPlayingAyah(sura: ayah.sura.suraNumber, ayah: ayah.ayah)
         listener?.highlightReadingAyah(ayah)
     }

@@ -57,14 +57,14 @@ class TranslationVerseViewModel: ObservableObject {
     }
 
     func next() {
-        logger.info("Verse Translation: moving to next verse currentVerse:\(currentVerse)")
+        logger.info("Verse Translation: moving to next verse currentVerse:\(currentVerse.nonLocalizedDescription)")
         if let next = currentVerse.next {
             currentVerse = next
         }
     }
 
     func previous() {
-        logger.info("Verse Translation: moving to previous verse currentVerse:\(currentVerse)")
+        logger.info("Verse Translation: moving to previous verse currentVerse:\(currentVerse.nonLocalizedDescription)")
         if let previous = currentVerse.previous {
             currentVerse = previous
         }

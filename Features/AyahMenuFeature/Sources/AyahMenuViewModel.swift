@@ -159,7 +159,7 @@ final class AyahMenuViewModel {
     // MARK: - Items & Actions
 
     func play() {
-        logger.info("AyahMenu: play tapped. Verses: \(deps.verses)")
+        logger.info("AyahMenu: play tapped. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.dismissAyahMenu()
 
         let verses = deps.verses
@@ -168,7 +168,7 @@ final class AyahMenuViewModel {
     }
 
     func repeatVerses() {
-        logger.info("AyahMenu: repeat verses tapped. Verses: \(deps.verses)")
+        logger.info("AyahMenu: repeat verses tapped. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.dismissAyahMenu()
 
         let verses = deps.verses
@@ -177,13 +177,13 @@ final class AyahMenuViewModel {
 
     #if QURAN_SYNC
     func bookmark() {
-        logger.info("AyahMenu: bookmark tapped. Verses: \(deps.verses)")
+        logger.info("AyahMenu: bookmark tapped. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.showCollectionEditor(for: deps.verses)
     }
 
     #else
     func updateHighlight(color: HighlightColor) async {
-        logger.info("AyahMenu: update verse highlights. Verses: \(deps.verses)")
+        logger.info("AyahMenu: update verse highlights. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.dismissAyahMenu()
 
         do {
@@ -201,7 +201,7 @@ final class AyahMenuViewModel {
 
     #if QURAN_SYNC
     func showReadingBookmarkMenu(_ viewController: UIViewController) {
-        logger.info("AyahMenu: show reading bookmark menu. Verses: \(deps.verses)")
+        logger.info("AyahMenu: show reading bookmark menu. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.showReadingBookmarkMenu(
             viewController,
             in: deps.sourceView,
@@ -211,28 +211,28 @@ final class AyahMenuViewModel {
     #endif
 
     func deleteNotes() async {
-        logger.info("AyahMenu: delete notes. Verses: \(deps.verses)")
+        logger.info("AyahMenu: delete notes. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.dismissAyahMenu()
         await listener?.deleteNotes(in: deps.verses)
     }
 
     func editNote() async {
         #if QURAN_SYNC
-        logger.info("AyahMenu: show notes. Verses: \(deps.verses)")
+        logger.info("AyahMenu: show notes. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         await listener?.showNotes(for: deps.verses, addingNewNote: deps.notes.isEmpty)
         #else
-        logger.info("AyahMenu: edit notes. Verses: \(deps.verses)")
+        logger.info("AyahMenu: edit notes. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         await listener?.showNoteEditor(for: deps.verses)
         #endif
     }
 
     func showTranslation() {
-        logger.info("AyahMenu: showTranslation. Verses: \(deps.verses)")
+        logger.info("AyahMenu: showTranslation. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.showTranslation(deps.verses)
     }
 
     func copy() {
-        logger.info("AyahMenu: copy. Verses: \(deps.verses)")
+        logger.info("AyahMenu: copy. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.dismissAyahMenu()
         Task {
             if let lines = try? await retrieveSelectedAyahText() {
@@ -243,7 +243,7 @@ final class AyahMenuViewModel {
     }
 
     func share() {
-        logger.info("AyahMenu: share. Verses: \(deps.verses)")
+        logger.info("AyahMenu: share. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         Task {
             if let lines = try? await retrieveSelectedAyahText() {
                 let withNewLines = lines.joined(separator: "\n")

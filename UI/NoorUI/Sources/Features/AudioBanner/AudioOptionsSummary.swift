@@ -33,7 +33,7 @@ public struct AudioOptionsSummary: Equatable {
 
     private func count(_ runs: Runs) -> String {
         switch runs {
-        case .finite(let count): return "×" + count.formatted(.number.locale(Locale.current.fixedLocaleNumbers()))
+        case .finite(let count): return "×" + NumberFormatter.shared.format(count)
         case .indefinite: return "∞"
         }
     }

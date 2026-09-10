@@ -58,7 +58,7 @@ public struct AudioBannerViewUI: View {
     private let options: AudioOptionsSummary
     @ScaledMetric private var maxWidth = 500
 
-    public init(state: AudioBannerState, actions: AudioBannerActions, options: AudioOptionsSummary = .init()) {
+    public init(state: AudioBannerState, actions: AudioBannerActions, options: AudioOptionsSummary) {
         self.state = state
         self.actions = actions
         self.options = options
@@ -107,7 +107,6 @@ private struct AudioPlaying: View {
 
     @Environment(\.layoutDirection) private var layoutDirection
     @ScaledMetric private var minimumRateSpacing = 4.0
-    @ScaledMetric private var summarySpacing = 4.0
     @State private var controlSizes: [Control: CGSize] = [:]
 
     private var rateMenu: some View {
@@ -166,8 +165,7 @@ private struct AudioPlaying: View {
             }
         }
         .frame(height: measuredHeight)
-        .padding(.horizontal)
-        .padding(.vertical, options.hasNonDefaultValues ? summarySpacing : nil)
+        .padding()
     }
 
     private var measuredHeight: CGFloat {
@@ -342,7 +340,8 @@ private extension View {
     )
     AudioBannerViewUI(
         state: .playing(paused: false, rate: 1),
-        actions: actions
+        actions: actions,
+        options: .init()
     )
     .frame(width: 300)
     .background(Color.systemGroupedBackground)
@@ -386,7 +385,7 @@ private extension View {
                 }
                 Spacer()
                 Group {
-                    AudioBannerViewUI(state: state, actions: actions)
+                    AudioBannerViewUI(state: state, actions: actions, options: .init())
                 }
             }
             .frame(maxWidth: .infinity)
@@ -403,7 +402,7 @@ private extension View {
         cancelDownloading: {}, reciters: {}, more: {}, setPlaybackRate: { _ in }
     )
     VStack {
-        AudioBannerViewUI(state: .readyToPlay(reciter: "Mishary Al-afasy"), actions: actions)
+        AudioBannerViewUI(state: .readyToPlay(reciter: "Mishary Al-afasy"), actions: actions, options: .init())
         AudioBannerViewUI(
             state: .readyToPlay(reciter: "Mishary Al-afasy"), actions: actions,
             options: .init(rate: 0.5, verseRuns: .finite(3), rangeRuns: .finite(2))

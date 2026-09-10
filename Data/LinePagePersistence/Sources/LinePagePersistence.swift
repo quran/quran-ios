@@ -9,6 +9,10 @@ import QuranKit
 
 public protocol LinePagePersistence {
     func highlightSpans(_ page: Page) async throws -> [LinePageHighlightSpan]
-    func ayahMarkers(_ page: Page) async throws -> [LinePageAyahMarker]
     func suraHeaders(_ page: Page) async throws -> [LinePageSuraHeader]
+}
+
+/// Reads line-relative ayah markers independently of highlight and sura-header data.
+public protocol LinePageAyahMarkerPersistence {
+    func ayahMarkers(_ page: Page) async throws -> [LinePageAyahMarker]
 }

@@ -11,7 +11,7 @@ import QuranGeometry
 import QuranKit
 import SQLitePersistence
 
-public struct GRDBWordFramePersistence: WordFramePersistence {
+public struct GRDBWordFramePersistence: WordFramePersistence, AyahMarkerPersistence {
     // MARK: Lifecycle
 
     init(db: DatabaseConnection) {
@@ -47,13 +47,36 @@ public struct GRDBWordFramePersistence: WordFramePersistence {
 
     public func ayahNumbers(_ page: Page) async throws -> [AyahNumberLocation] {
         try await db.read { db in
-            let query = GRDBAyahMarker.filter(GRDBAyahMarker.Columns.page == page.pageNumber)
-            let ayahMarkers = try GRDBAyahMarker.fetchAll(db, query)
-            return ayahMarkers.map { $0.toAyahNumberLocation(quran: page.quran) }
+            if try db.tableExists(GRDBAyahMarker.databaseTableName) {
+                let query = GRDBAyahMarker.filter(GRDBAyahMarker.Columns.page == page.pageNumber)
+                let ayahMarkers = try GRDBAyahMarker.fetchAll(db, query)
+                return ayahMarkers.map { $0.toAyahNumberLocation(quran: page.quran) }
+            }
+
+            return try Self.glyphAyahNumbers(page, database: db)
         }
     }
 
     // MARK: Internal
+
+    /// The existing glyph fallback, exposed internally for resource integration checks.
+    static func glyphAyahNumbers(_ page: Page, database db: Database) throws -> [AyahNumberLocation] {
+        let query = GRDBGlyph.filter(GRDBGlyph.Columns.page == page.pageNumber)
+        let glyphs = try GRDBGlyph.fetchAll(db, query)
+        let finalGlyphs = Dictionary(grouping: glyphs) { glyph in
+            AyahNumber(quran: page.quran, sura: glyph.sura, ayah: glyph.ayah)!
+        }
+        .compactMap { ayah, glyphs in
+            // Some resources repeat positions (Hafs 1440, 2:2). Prefer the later line,
+            // then the leftmost rectangle in Arabic reading order. Remaining geometry
+            // makes the choice independent of database row order.
+            glyphs.max {
+                ($0.position, $0.line, -$0.minX, $0.minY, $0.maxY, -$0.maxX)
+                    < ($1.position, $1.line, -$1.minX, $1.minY, $1.maxY, -$1.maxX)
+            }?.toAyahNumberLocation(ayah: ayah)
+        }
+        return finalGlyphs.sorted { $0.ayah < $1.ayah }
+    }
 
     let db: DatabaseConnection
 }
@@ -113,6 +136,14 @@ extension GRDBGlyph {
             maxX: maxX,
             minY: minY,
             maxY: maxY
+        )
+    }
+
+    func toAyahNumberLocation(ayah: AyahNumber) -> AyahNumberLocation {
+        return AyahNumberLocation(
+            ayah: ayah,
+            x: (minX + maxX) / 2,
+            y: (minY + maxY) / 2
         )
     }
 }

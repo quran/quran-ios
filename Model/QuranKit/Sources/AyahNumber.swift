@@ -46,6 +46,11 @@ public struct AyahNumber: Navigatable {
         "<AyahNumber sura=\(sura.suraNumber) ayah=\(ayah)>"
     }
 
+    /// Locale-independent sura and ayah numbers for logs and diagnostics, for example "2:255".
+    public var nonLocalizedDescription: String {
+        "\(sura.suraNumber):\(ayah)"
+    }
+
     public var previous: AyahNumber? {
         if self != sura.firstVerse {
             // same sura

@@ -17,14 +17,18 @@ public protocol ReadingRemoteResources {
 public struct RemoteResource {
     // MARK: Lifecycle
 
-    public init(url: URL, reading: Reading, version: Int) {
+    public init(url: URL, reading: Reading, version: Int, ayahMarkerURL: URL?) {
         self.url = url
         self.reading = reading
         self.version = version
+        self.ayahMarkerURL = ayahMarkerURL
         downloadDestination = Reading.readingsPath.appendingPathComponent(reading.localPath, isDirectory: true)
     }
 
     // MARK: Public
+
+    /// Optional local marker database, independent of downloads and resource cleanup.
+    public let ayahMarkerURL: URL?
 
     public let downloadDestination: RelativeFilePath
 

@@ -35,6 +35,6 @@ final class ReadingRemoteResourcesFake: ReadingRemoteResources {
 
         let url = urls[reading] ?? defaultURL
         let version = versions[reading] ?? 0
-        return url.map { RemoteResource(url: URL(validURL: $0), reading: reading, version: version) }
+        return url.map { RemoteResource(url: URL(validURL: $0), reading: reading, version: version, ayahMarkerURL: nil) }
     }
 }

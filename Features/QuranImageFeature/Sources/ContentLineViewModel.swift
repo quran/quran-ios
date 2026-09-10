@@ -106,6 +106,9 @@ final class ContentLineViewModel: ObservableObject {
         switch result {
         case .available(let assets):
             let persistence = GRDBLinePagePersistence(fileURL: assets.ayahInfoDatabaseURL)
+            let ayahMarkerPersistence: LinePageAyahMarkerPersistence = assets.ayahMarkerURL.map {
+                GRDBLinePagePersistence(fileURL: $0)
+            } ?? persistence
             self.assets = assets
             geometryData = LinePageGeometryData(
                 metrics: linePageMetrics,
@@ -113,12 +116,12 @@ final class ContentLineViewModel: ObservableObject {
                 highlightSpans: [],
                 ayahMarkers: [],
                 suraHeaders: [],
-                sidelines: geometrySidelines(from: assets)
+                sidelines: ContentLineLayoutBuilder.geometrySidelines(from: assets)
             )
 
             do {
                 async let highlightSpans = persistence.highlightSpans(page)
-                async let ayahMarkers = persistence.ayahMarkers(page)
+                async let ayahMarkers = ayahMarkerPersistence.ayahMarkers(page)
                 async let suraHeaders = persistence.suraHeaders(page)
                 let loadedHighlightSpans = try await highlightSpans
                 let loadedAyahMarkers = try await ayahMarkers
@@ -130,7 +133,7 @@ final class ContentLineViewModel: ObservableObject {
                     highlightSpans: loadedHighlightSpans,
                     ayahMarkers: loadedAyahMarkers,
                     suraHeaders: loadedSuraHeaders,
-                    sidelines: geometrySidelines(from: assets)
+                    sidelines: ContentLineLayoutBuilder.geometrySidelines(from: assets)
                 )
             } catch {
                 logger.warning("Quran Line Page: failed to load overlay data for page \(page.pageNumber): \(error)")
@@ -148,17 +151,10 @@ final class ContentLineViewModel: ObservableObject {
             return nil
         }
 
-        let orientation: LinePageOrientation = availableSize.height > availableSize.width ? .portrait : .landscape
         let layout = geometryEngine.layout(
-            LinePageGeometryInput(
+            ContentLineLayoutBuilder.input(
+                page: page,
                 availableSize: availableSize,
-                orientation: orientation,
-                pageParity: page.pageNumber.isMultiple(of: 2) ? .even : .odd,
-                displaySettings: LinePageDisplaySettings(
-                    showHeaderFooter: showHeaderFooter,
-                    showSidelines: showSidelines && !geometryData.sidelines.isEmpty,
-                    showLineDividers: showLineDividers && page.pageNumber > 3
-                ),
                 data: LinePageGeometryData(
                     metrics: linePageMetrics,
                     lineCount: assets.lines.count,
@@ -167,10 +163,10 @@ final class ContentLineViewModel: ObservableObject {
                     suraHeaders: geometryData.suraHeaders,
                     sidelines: geometryData.sidelines
                 ),
-                highlights: LinePageHighlightState(
-                    highlightedVerses: Set(highlightColorsByVerse.keys)
-                ),
-                suraHeaderAspectRatio: suraHeaderAspectRatio
+                showHeaderFooter: showHeaderFooter,
+                showSidelines: showSidelines,
+                showLineDividers: showLineDividers,
+                highlightedVerses: Set(highlightColorsByVerse.keys)
             )
         )
         currentLayout = layout
@@ -212,32 +208,6 @@ final class ContentLineViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     private var currentLayout: LinePageLayout?
     private var contentFrame: CGRect = .zero
-
-    private var suraHeaderAspectRatio: CGFloat {
-        let image = NoorImage.suraHeader.uiImage
-        return image.size.height / image.size.width
-    }
-
-    private func geometrySidelines(from assets: LinePageAssets) -> [LinePageGeometryData.Sideline] {
-        assets.sidelines.map {
-            LinePageGeometryData.Sideline(
-                id: $0.imageURL.lastPathComponent,
-                targetLine: $0.targetLine,
-                direction: $0.direction,
-                intrinsicSize: imagePixelSize($0.image)
-            )
-        }
-    }
-
-    private func imagePixelSize(_ image: UIImage) -> CGSize {
-        if let cgImage = image.cgImage {
-            return CGSize(width: CGFloat(cgImage.width), height: CGFloat(cgImage.height))
-        }
-        return CGSize(
-            width: image.size.width * image.scale,
-            height: image.size.height * image.scale
-        )
-    }
 
     private func scrollToVerseIfNeededSynchronously() {
         let ayah = highlights.firstScrollingVerse()

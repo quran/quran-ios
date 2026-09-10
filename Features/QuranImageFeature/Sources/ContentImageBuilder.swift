@@ -59,7 +59,8 @@ public struct ContentImageBuilder {
         let readingDirectory = Self.readingDirectory(reading, container: container)
         return ImageDataService(
             ayahInfoDatabase: reading.ayahInfoDatabase(in: readingDirectory),
-            imagesURL: reading.imagesDirectory(in: readingDirectory)
+            imagesURL: reading.imagesDirectory(in: readingDirectory),
+            ayahMarkerURL: container.remoteResources?.resource(for: reading)?.ayahMarkerURL
         )
     }
 
@@ -70,22 +71,23 @@ public struct ContentImageBuilder {
         return LinePageAssetService(
             readingDirectory: Self.readingDirectory(reading, container: container),
             metrics: metrics,
-            quran: reading.quran
+            quran: reading.quran,
+            ayahMarkerURL: container.remoteResources?.resource(for: reading)?.ayahMarkerURL
         )
     }
 
-    // MARK: Private
-
-    private let container: AppDependencies
-    private let highlightsService: QuranHighlightsService
-
-    private static func readingDirectory(_ reading: Reading, container: AppDependencies) -> URL {
+    static func readingDirectory(_ reading: Reading, container: AppDependencies) -> URL {
         let remoteResource = container.remoteResources?.resource(for: reading)
         let remotePath = remoteResource?.downloadDestination.url
         let bundlePath = { Bundle.main.url(forResource: reading.localPath, withExtension: nil) }
         logger.info("Images: Use \(remoteResource != nil ? "remote" : "bundle") For reading \(reading)")
         return remotePath ?? bundlePath()!
     }
+
+    // MARK: Private
+
+    private let container: AppDependencies
+    private let highlightsService: QuranHighlightsService
 }
 
 private extension Reading {

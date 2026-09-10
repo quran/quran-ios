@@ -58,7 +58,10 @@ public final class TransformedPreference<Raw, T> {
 
     public var wrappedValue: T {
         get { transformer.rawToValue(preference.wrappedValue) }
-        set { preference.wrappedValue = transformer.valueToRaw(newValue) }
+        set {
+            guard transformer.isValidValue(newValue) else { return }
+            preference.wrappedValue = transformer.valueToRaw(newValue)
+        }
     }
 
     public var projectedValue: AnyPublisher<T, Never> {

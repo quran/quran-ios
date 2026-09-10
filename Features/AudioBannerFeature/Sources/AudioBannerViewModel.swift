@@ -161,8 +161,8 @@ public final class AudioBannerViewModel: ObservableObject {
     private let reciterListBuilder: ReciterListBuilder
     private let advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder
 
-    private var verseRuns: Runs = .finite(1)
-    private var listRuns: Runs = .finite(1)
+    private var verseRuns: Runs = AudioPreferences.shared.verseRuns
+    private var listRuns: Runs = AudioPreferences.shared.listRuns
     private var verseDelay: VerseDelay = AudioPreferences.shared.verseDelay
     private var repetitionDelay: RepetitionDelay = AudioPreferences.shared.repetitionDelay
     private var reciters: [Reciter] = []

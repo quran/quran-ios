@@ -544,3 +544,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "بەت ئاستى ئىزاھى #%d";
+
+/* Audio banner options summary */
+"audio.summary.verse" = "ئايەت %@";
+"audio.summary.range" = "دائىرە %@";
+"audio.options" = "ئاۋاز تاللانمىلىرى";

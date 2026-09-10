@@ -30,7 +30,8 @@ struct AudioBannerView: View {
         )
         AudioBannerViewUI(
             state: viewModel.audioBannerState,
-            actions: actions
+            actions: actions,
+            options: viewModel.audioOptionsSummary
         )
         .onReceive(viewModel.$toast.compactMap { $0 }) { toast in
             viewModel.toast = nil

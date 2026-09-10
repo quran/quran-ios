@@ -453,3 +453,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Voetnoot nr. %d";
+
+/* Audio banner options summary */
+"audio.summary.verse" = "vers %@";
+"audio.summary.range" = "bereik %@";
+"audio.options" = "Audio-opties";

@@ -106,6 +106,17 @@ public final class AudioBannerViewModel: ObservableObject {
     @Published var modalRequest: ModalPresentationRequest?
     @Published var playbackRate: Float
 
+    var audioOptionsSummary: AudioOptionsSummary {
+        if case .stopped = playingState {
+            return AudioOptionsSummary(
+                rate: playbackRate,
+                verseRuns: AudioPreferences.shared.verseRuns,
+                rangeRuns: AudioPreferences.shared.listRuns
+            )
+        }
+        return AudioOptionsSummary(rate: playbackRate, verseRuns: verseRuns, rangeRuns: listRuns)
+    }
+
     var audioBannerState: AudioBannerState {
         switch playingState {
         case .playing: .playing(paused: false, rate: playbackRate)
@@ -161,8 +172,8 @@ public final class AudioBannerViewModel: ObservableObject {
     private let reciterListBuilder: ReciterListBuilder
     private let advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder
 
-    private var verseRuns: Runs = AudioPreferences.shared.verseRuns
-    private var listRuns: Runs = AudioPreferences.shared.listRuns
+    @Published private var verseRuns: Runs = AudioPreferences.shared.verseRuns
+    @Published private var listRuns: Runs = AudioPreferences.shared.listRuns
     private var verseDelay: VerseDelay = AudioPreferences.shared.verseDelay
     private var repetitionDelay: RepetitionDelay = AudioPreferences.shared.repetitionDelay
     private var reciters: [Reciter] = []

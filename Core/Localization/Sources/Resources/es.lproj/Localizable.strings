@@ -541,3 +541,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Nota al pie n.º %d";
+
+/* Audio banner options summary */
+"audio.summary.verse" = "aleya %@";
+"audio.summary.range" = "rango %@";
+"audio.options" = "Opciones de audio";

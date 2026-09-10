@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QuranAudio
 
 public struct AudioRequest: Equatable, Sendable {
     // MARK: Lifecycle

@@ -342,3 +342,8 @@
 
 "notes.minimum-length.alert.title" = "Note is too short";
 "notes.minimum-length.alert.body" = "Notes must be at least %d characters.";
+
+/* Audio banner options summary */
+"audio.summary.verse" = "verse %@";
+"audio.summary.range" = "range %@";
+"audio.options" = "Audio options";

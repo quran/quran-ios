@@ -339,3 +339,8 @@
 "translation.text.ayah-number" = "%d:%d";
 "translation.text.footnote-number" = "[%d]";
 "translation.text.footnote-title" = "الحاشية رقم %d";
+
+/* Audio banner options summary */
+"audio.summary.verse" = "الآية %@";
+"audio.summary.range" = "المجموعة %@";
+"audio.options" = "خيارات الصوت";

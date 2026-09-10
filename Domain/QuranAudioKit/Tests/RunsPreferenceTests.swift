@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import QueuePlayer
+import QuranAudio
 import XCTest
 @testable import QuranAudioKit
 

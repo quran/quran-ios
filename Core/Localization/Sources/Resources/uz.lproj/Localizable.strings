@@ -543,3 +543,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Izoh #%d";
+
+/* Audio banner options summary */
+"audio.summary.verse" = "oyat %@";
+"audio.summary.range" = "oraliq %@";
+"audio.options" = "Audio sozlamalari";

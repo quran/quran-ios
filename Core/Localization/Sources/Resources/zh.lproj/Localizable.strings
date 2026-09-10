@@ -542,3 +542,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "脚注 #%d";
+
+/* Audio banner options summary */
+"audio.summary.verse" = "节 %@";
+"audio.summary.range" = "范围 %@";
+"audio.options" = "音频选项";

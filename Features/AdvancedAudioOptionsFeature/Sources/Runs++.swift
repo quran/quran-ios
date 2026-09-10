@@ -8,7 +8,7 @@
 
 import Foundation
 import Localization
-import QueuePlayer
+import QuranAudio
 
 extension Runs {
     var localizedDescription: String {

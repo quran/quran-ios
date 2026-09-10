@@ -157,7 +157,7 @@ public class QuranAudioPlayer {
         let info = audioRequest.getPlayerInfo(for: fileIndex)
         nowPlaying.update(info: info)
         nowPlaying.update(playingIndex: fileIndex)
-        nowPlaying.update(duration: playerItem.asset.duration.seconds)
+        nowPlaying.update(duration: playerItem.duration.seconds)
         nowPlaying.update(elapsedTime: playerItem.currentTime().seconds)
 
         let ayah = audioRequest.getAyahNumberFrom(fileIndex: fileIndex, frameIndex: frameIndex)

@@ -23,10 +23,16 @@ public class NowPlayingUpdater {
     }
 
     public func update(duration: TimeInterval) {
+        guard duration.isFinite, duration >= 0 else {
+            return
+        }
         update([MPMediaItemPropertyPlaybackDuration: duration])
     }
 
     public func update(elapsedTime: TimeInterval) {
+        guard elapsedTime.isFinite, elapsedTime >= 0 else {
+            return
+        }
         update([MPNowPlayingInfoPropertyElapsedPlaybackTime: elapsedTime])
     }
 

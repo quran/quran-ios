@@ -14,14 +14,28 @@ final class Player {
 
     deinit {
         rateObservation?.invalidate()
+        if let playbackEndedObserver {
+            NotificationCenter.default.removeObserver(playbackEndedObserver)
+        }
     }
 
     init(url: URL) {
-        asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
+        asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: url.isFileURL])
         playerItem = AVPlayerItem(asset: asset)
         playerItem.audioTimePitchAlgorithm = .spectral
         player = AVPlayer(playerItem: playerItem)
-        player.automaticallyWaitsToMinimizeStalling = false
+        player.automaticallyWaitsToMinimizeStalling = !url.isFileURL
+
+        playbackEndedObserver = NotificationCenter.default.addObserver(
+            forName: AVPlayerItem.didPlayToEndTimeNotification,
+            object: playerItem,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self else { return }
+            Task {
+                await self.onPlaybackEnded?()
+            }
+        }
 
         rateObservation = player.observe(\AVPlayer.rate, options: [.new]) { [weak self] _, change in
             if let rate = change.newValue {
@@ -36,15 +50,12 @@ final class Player {
     // MARK: Internal
 
     var onRateChanged: (@Sendable @MainActor (Float) -> Void)?
+    var onPlaybackEnded: (@Sendable @MainActor () -> Void)?
 
     let playerItem: AVPlayerItem
 
     var currentTime: TimeInterval {
         player.currentTime().seconds
-    }
-
-    var duration: TimeInterval {
-        asset.duration.seconds
     }
 
     // MARK: Internal helpers (read-only)
@@ -54,7 +65,11 @@ final class Player {
     }
 
     func play(rate: Float) {
-        player.playImmediately(atRate: rate)
+        if asset.url.isFileURL {
+            player.playImmediately(atRate: rate)
+        } else {
+            player.rate = rate
+        }
     }
 
     func pause() {
@@ -79,6 +94,7 @@ final class Player {
 
     private let asset: AVURLAsset
     private let player: AVPlayer
+    private var playbackEndedObserver: NSObjectProtocol?
 
     private var rateObservation: NSKeyValueObservation? {
         didSet { oldValue?.invalidate() }

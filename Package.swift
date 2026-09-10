@@ -138,7 +138,7 @@ private func coreTargets() -> [[Target]] {
 
         target(type, name: "Localization", dependencies: []),
 
-        target(type, name: "QueuePlayer", hasTests: false, dependencies: [
+        target(type, name: "QueuePlayer", dependencies: [
             "Timing",
         ]),
 

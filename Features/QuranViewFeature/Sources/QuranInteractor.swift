@@ -204,7 +204,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     func highlightReadingAyah(_ ayah: AyahNumber?) {
-        logger.info("Quran: highlight reading verse \(String(describing: ayah))")
+        logger.info("Quran: highlight reading verse \(ayah?.nonLocalizedDescription ?? "nil")")
         contentViewModel?.highlightReadingAyah(ayah)
     }
 
@@ -261,7 +261,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     #if QURAN_SYNC
     func showNotes(for verses: [AyahNumber], addingNewNote: Bool) async {
-        logger.info("Quran: show ayah notes. Verses: \(verses)")
+        logger.info("Quran: show ayah notes. Verses: \(verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         contentViewModel?.removeAyahMenuHighlight()
         presenter?.dismissPresentedViewController { [weak self] in
             guard let self else {
@@ -293,7 +293,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     #if QURAN_SYNC
     func showCollectionEditor(for verses: [AyahNumber]) {
-        logger.info("Quran: show bookmark editor. Verses: \(verses)")
+        logger.info("Quran: show bookmark editor. Verses: \(verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         contentViewModel?.removeAyahMenuHighlight()
         presenter?.dismissPresentedViewController { [weak self] in
             guard let self else {
@@ -344,7 +344,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber]) {
-        logger.info("Quran: present ayah menu, verses: \(verses)")
+        logger.info("Quran: present ayah menu, verses: \(verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         #if QURAN_SYNC
         let highlightVerses = deps.highlightsService.highlights.highlightVerses
         let bookmarkedVerses = Set(deps.syncedCollectionsObserver.collections.flatMap { collection in

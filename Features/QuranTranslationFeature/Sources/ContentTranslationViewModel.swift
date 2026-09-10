@@ -238,7 +238,7 @@ public final class ContentTranslationViewModel: ObservableObject {
         do {
             let requestedVerses = verses
             let requestedTranslationIds = selectedTranslations
-            logger.info("Loading translations data; selectedTranslations='\(requestedTranslationIds)'; verses='\(requestedVerses)'")
+            logger.info("Loading translations data; selectedTranslations='\(requestedTranslationIds)'; verses='\(requestedVerses.map(\.nonLocalizedDescription).joined(separator: ", "))'")
 
             let localTranslations = try await localTranslationsRetriever.getLocalTranslations()
             try Task.checkCancellation()
@@ -380,7 +380,7 @@ public final class ContentTranslationViewModel: ObservableObject {
         }
         for item in items(quranFont: reading.quranFont) {
             if item.id.ayah == ayah {
-                logger.info("Quran Translation: scrollToVerseIfNeeded \(ayah)")
+                logger.info("Quran Translation: scrollToVerseIfNeeded \(ayah.nonLocalizedDescription)")
                 scrollToItem = item.id
                 break
             }

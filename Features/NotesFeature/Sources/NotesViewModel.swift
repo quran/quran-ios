@@ -171,12 +171,12 @@ final class NotesViewModel: ObservableObject {
     #endif
 
     func navigateTo(_ item: NoteItem) {
-        logger.info("Notes: select note at \(item.note.startAyah)")
+        logger.info("Notes: select note at \(item.note.startAyah.nonLocalizedDescription)")
         navigateTo(item.note.startAyah)
     }
 
     func editNote(_ item: NoteItem) {
-        logger.info("Notes: edit note at \(item.note.startAyah)")
+        logger.info("Notes: edit note at \(item.note.startAyah.nonLocalizedDescription)")
         editNoteAction(item.note)
     }
 
@@ -203,7 +203,7 @@ final class NotesViewModel: ObservableObject {
                 self.error = error
             }
             #else
-            logger.info("Notes: delete note at \(item.note.startAyah)")
+            logger.info("Notes: delete note at \(item.note.startAyah.nonLocalizedDescription)")
             do {
                 try await noteService.removeNotes(with: Array(item.note.verses))
             } catch {

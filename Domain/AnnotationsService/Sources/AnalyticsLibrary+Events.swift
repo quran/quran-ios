@@ -11,7 +11,7 @@ import VLogging
 
 extension AnalyticsLibrary {
     private func logVersesEvent(_ name: String, verses: some Collection<AyahNumber>) {
-        let versesDescription = verses.map(\.shortDescription).joined(separator: ", ")
+        let versesDescription = verses.map(\.nonLocalizedDescription).joined(separator: ", ")
         logger.info("AnalyticsVerses=\(name). Verses: [\(versesDescription)]")
         logEvent(name, value: verses.count.description)
     }
@@ -26,11 +26,5 @@ extension AnalyticsLibrary {
 
     public func updateNote(verses: Set<AyahNumber>) {
         logVersesEvent("UpdateNoteVersesNum", verses: verses)
-    }
-}
-
-private extension AyahNumber {
-    var shortDescription: String {
-        "\(sura):\(ayah)"
     }
 }

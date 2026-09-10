@@ -127,7 +127,7 @@ class ContentImageViewModel: ObservableObject {
         guard let ayah = highlightsService.highlights.firstScrollingVerse() else {
             return
         }
-        logger.info("Quran Image: scrollToVerseIfNeeded \(ayah)")
+        logger.info("Quran Image: scrollToVerseIfNeeded \(ayah.nonLocalizedDescription)")
         scrollToVerse = ayah
     }
 

@@ -212,7 +212,7 @@ final class ContentLineViewModel: ObservableObject {
     private func scrollToVerseIfNeededSynchronously() {
         let ayah = highlights.firstScrollingVerse()
         if let ayah {
-            logger.info("Quran Line Page: scrollToVerseIfNeeded \(ayah)")
+            logger.info("Quran Line Page: scrollToVerseIfNeeded \(ayah.nonLocalizedDescription)")
         }
         scrollToVerse = ayah
     }

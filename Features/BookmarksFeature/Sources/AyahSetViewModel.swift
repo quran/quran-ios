@@ -53,7 +53,7 @@ final class AyahSetViewModel: ObservableObject {
     }
 
     func navigateTo(_ ayah: AyahNumber) {
-        logger.info("Bookmarks: select ayah set entry at \(ayah)")
+        logger.info("Bookmarks: select ayah set entry at \(ayah.nonLocalizedDescription)")
         navigateToAyah(ayah)
     }
 

@@ -229,9 +229,8 @@ private struct ReadyToPlay: View {
                 Button(action: actions.play) {
                     AudioControlLabel {
                         NoorSystemImage.play.image
-                            .padding(.vertical, options.hasNonDefaultValues ? 0 : nil)
+                            .padding()
                     }
-                    .padding(.horizontal)
                 }
                 Spacer()
                 Text(reciter)

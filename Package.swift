@@ -860,6 +860,7 @@ private func featuresTargets() -> [[Target]] {
             "Crashing",
             "FeaturesSupport",
             "QuranKit",
+            "QuranAudio",
             "ReadingService",
             "HomeFeature",
             "BookmarksFeature",

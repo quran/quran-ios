@@ -91,13 +91,23 @@ class TranslationVerseViewController: UIHostingController<TranslationVerseView> 
             self?.viewModel.previous()
         }
 
+        let arrows: [UIBarButtonItem]
         switch view.effectiveUserInterfaceLayoutDirection {
         case .leftToRight:
-            navigationItem.rightBarButtonItems = [overflow, previous, next]
+            arrows = [next, previous]
         case .rightToLeft:
-            navigationItem.rightBarButtonItems = [overflow, next, previous]
+            arrows = [previous, next]
         @unknown default:
             fatalError("Unhandled case")
+        }
+
+        if #available(iOS 16.0, *) {
+            navigationItem.trailingItemGroups = [
+                UIBarButtonItemGroup(barButtonItems: arrows, representativeItem: nil),
+                UIBarButtonItemGroup(barButtonItems: [overflow], representativeItem: nil),
+            ]
+        } else {
+            navigationItem.rightBarButtonItems = [overflow] + arrows.reversed()
         }
 
         moreButton = overflow

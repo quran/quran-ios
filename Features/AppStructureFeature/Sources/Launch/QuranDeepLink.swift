@@ -6,11 +6,25 @@
 //
 
 import Foundation
+import QuranAudio
 import QuranKit
 
-enum QuranDeepLink: Equatable {
+enum QuranDeepLinkTarget: Equatable {
     case sura(Sura)
     case ayah(AyahNumber)
+}
+
+struct QuranDeepLinkAudio: Equatable {
+    let end: AyahNumber?
+    let verseRuns: Runs
+    let listRuns: Runs
+    let reciterId: Int?
+    let playbackRate: Float?
+}
+
+struct QuranDeepLink: Equatable {
+    let target: QuranDeepLinkTarget
+    let audio: QuranDeepLinkAudio?
 }
 
 extension QuranDeepLink {
@@ -19,6 +33,10 @@ extension QuranDeepLink {
     /// Parses links of the form `quran://sura` and `quran://sura/ayah`, matching the
     /// format handled by `QuranForwarderActivity` on Android. Non numeric segments are
     /// skipped, so `quran://sura/2/255` resolves the same way `quran://2/255` does.
+    ///
+    /// Audio playback query parameters (`play`, `to`, `verse_repeat`, `range_repeat`,
+    /// `reciter`, `speed`) are only parsed when `play` is present and truthy; otherwise
+    /// they are ignored entirely and `audio` is `nil`.
     init?(url: URL, quran: Quran) {
         guard let scheme = url.scheme?.lowercased(), Self.supportedSchemes.contains(scheme) else {
             return nil
@@ -29,19 +47,35 @@ extension QuranDeepLink {
             return nil
         }
 
-        guard numbers.count > 1 else {
-            self = .sura(sura)
+        let target: QuranDeepLinkTarget
+        if numbers.count > 1 {
+            guard let ayah = AyahNumber(sura: sura, ayah: numbers[1]) else {
+                return nil
+            }
+            target = .ayah(ayah)
+        } else {
+            target = .sura(sura)
+        }
+
+        let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+        guard Self.isPlayEnabled(queryItems) else {
+            self.target = target
+            audio = nil
             return
         }
-        guard let ayah = AyahNumber(sura: sura, ayah: numbers[1]) else {
+
+        guard let audio = Self.audio(for: target, queryItems: queryItems) else {
             return nil
         }
-        self = .ayah(ayah)
+        self.target = target
+        self.audio = audio
     }
 
     // MARK: Private
 
     private static let supportedSchemes: Set<String> = ["quran", "quran-ios"]
+    private static let repeatRange = 1 ... 100
+    private static let playbackRateRange: ClosedRange<Float> = 0.25 ... 2.0
 
     /// The authority of `quran://2/255` is the sura, so it is read from the host and
     /// not from the path.
@@ -52,5 +86,107 @@ extension QuranDeepLink {
         }
         segments.append(contentsOf: url.pathComponents.filter { $0 != "/" })
         return segments
+    }
+
+    private static func value(_ name: String, in queryItems: [URLQueryItem]) -> String? {
+        queryItems.first { $0.name == name }?.value
+    }
+
+    private static func isPlayEnabled(_ queryItems: [URLQueryItem]) -> Bool {
+        guard let play = value("play", in: queryItems)?.lowercased() else {
+            return false
+        }
+        return play == "true" || play == "1"
+    }
+
+    private static func audio(for target: QuranDeepLinkTarget, queryItems: [URLQueryItem]) -> QuranDeepLinkAudio? {
+        guard let verseRuns = runs(named: "verse_repeat", in: queryItems) else {
+            return nil
+        }
+        guard let listRuns = runs(named: "range_repeat", in: queryItems) else {
+            return nil
+        }
+        guard let end = end(for: target, queryItems: queryItems) else {
+            return nil
+        }
+        guard let reciterId = reciterId(in: queryItems) else {
+            return nil
+        }
+        guard let playbackRate = playbackRate(in: queryItems) else {
+            return nil
+        }
+        return QuranDeepLinkAudio(
+            end: end,
+            verseRuns: verseRuns,
+            listRuns: listRuns,
+            reciterId: reciterId,
+            playbackRate: playbackRate
+        )
+    }
+
+    private static func runs(named name: String, in queryItems: [URLQueryItem]) -> Runs? {
+        guard let rawValue = value(name, in: queryItems) else {
+            return .finite(1)
+        }
+        if rawValue.lowercased() == "infinite" {
+            return .indefinite
+        }
+        guard let count = Int(rawValue), repeatRange.contains(count) else {
+            return nil
+        }
+        return .finite(count)
+    }
+
+    private static func end(for target: QuranDeepLinkTarget, queryItems: [URLQueryItem]) -> AyahNumber?? {
+        guard let rawValue = value("to", in: queryItems) else {
+            return .some(nil)
+        }
+
+        let components = rawValue.split(separator: ":", omittingEmptySubsequences: false)
+        guard components.count == 2,
+              let suraNumber = Int(components[0]),
+              let ayahNumber = Int(components[1])
+        else {
+            return nil
+        }
+
+        let quran: Quran
+        let start: AyahNumber
+        switch target {
+        case .sura(let sura):
+            quran = sura.quran
+            start = sura.firstVerse
+        case .ayah(let ayah):
+            quran = ayah.quran
+            start = ayah
+        }
+
+        guard let sura = Sura(quran: quran, suraNumber: suraNumber),
+              let endAyah = AyahNumber(sura: sura, ayah: ayahNumber),
+              endAyah >= start
+        else {
+            return nil
+        }
+        return .some(endAyah)
+    }
+
+    private static func reciterId(in queryItems: [URLQueryItem]) -> Int?? {
+        guard let rawValue = value("reciter", in: queryItems) else {
+            return .some(nil)
+        }
+        guard let reciterId = Int(rawValue), reciterId >= 1 else {
+            return nil
+        }
+        return .some(reciterId)
+    }
+
+    private static func playbackRate(in queryItems: [URLQueryItem]) -> Float?? {
+        guard let rawValue = value("speed", in: queryItems) else {
+            return .some(nil)
+        }
+        guard let playbackRate = Float(rawValue), playbackRateRange.contains(playbackRate) else {
+            return nil
+        }
+        return .some(playbackRate)
     }
 }

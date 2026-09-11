@@ -245,6 +245,20 @@ final class QuranDeepLinkTests: XCTestCase {
         XCTAssertNil(deepLink("quran://2/255?play=true&to=2:999"))
     }
 
+    func testToOnSuraOnlyLinkUsesFirstAyahAsStart() {
+        let audio = deepLink("quran://2?play=true&to=2:10")?.audio
+        XCTAssertEqual(audio?.end, ayah(sura: 2, ayah: 10))
+    }
+
+    func testToOnSuraOnlyLinkEqualToFirstAyahIsAccepted() {
+        let audio = deepLink("quran://2?play=true&to=2:1")?.audio
+        XCTAssertEqual(audio?.end, ayah(sura: 2, ayah: 1))
+    }
+
+    func testToOnSuraOnlyLinkInEarlierSuraIsRejected() {
+        XCTAssertNil(deepLink("quran://3?play=true&to=2:255"))
+    }
+
     // MARK: - reciter
 
     func testReciterIdIsParsed() {

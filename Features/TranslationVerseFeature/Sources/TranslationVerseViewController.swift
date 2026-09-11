@@ -69,6 +69,7 @@ class TranslationVerseViewController: UIHostingController<TranslationVerseView> 
     private let viewModel: TranslationVerseViewModel
     private var cancellables: Set<AnyCancellable> = []
 
+    private var moreButton: UIBarButtonItem?
     private var nextButton: UIBarButtonItem?
     private var previousButton: UIBarButtonItem?
 
@@ -99,12 +100,14 @@ class TranslationVerseViewController: UIHostingController<TranslationVerseView> 
             fatalError("Unhandled case")
         }
 
+        moreButton = overflow
         nextButton = next
         previousButton = previous
     }
 
     private func settingsTapped() {
-        guard let item = navigationItem.rightBarButtonItems?.first else {
+        // UIHostingController can move navigation items into trailingItemGroups on iOS 18.
+        guard let item = moreButton else {
             return
         }
         logger.info("Verse Translation: Settings button tapped")

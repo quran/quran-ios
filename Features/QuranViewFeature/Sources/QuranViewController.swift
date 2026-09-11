@@ -185,7 +185,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
 
     func presentMoreMenu(_ viewController: UIViewController) {
-        presentPopover(viewController, pointingTo: quranView!.navigationItem.rightBarButtonItems!.first!)
+        presentPopover(viewController, pointingTo: moreNavigationButton)
     }
 
     func presentTranslationsSelection(_ viewController: UIViewController) {

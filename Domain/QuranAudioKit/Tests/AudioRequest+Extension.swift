@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import QuranAudio
 @testable import QueuePlayer
 
 struct EncodableAudioRequest: Encodable {

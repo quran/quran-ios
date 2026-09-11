@@ -22,9 +22,7 @@ public enum Runs: Hashable, Sendable, Comparable {
     case finite(Int)
     case indefinite
 
-    // MARK: Internal
-
-    var maxRuns: Int {
+    public var maxRuns: Int {
         switch self {
         case .finite(let count): return count
         case .indefinite: return .max

@@ -525,3 +525,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Түсіндірме №%d";
+
+/* Audio banner options summary */
+"audio.summary.verse" = "аят %@";
+"audio.summary.range" = "аралық %@";
+"audio.options" = "Аудио параметрлері";

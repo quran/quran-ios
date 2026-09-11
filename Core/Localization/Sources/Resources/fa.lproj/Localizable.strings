@@ -543,3 +543,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "پاورقی شمارهٔ %d";
+
+/* Audio banner options summary */
+"audio.summary.verse" = "آیه %@";
+"audio.summary.range" = "محدوده %@";
+"audio.options" = "گزینه‌های صوتی";

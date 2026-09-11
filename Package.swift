@@ -138,10 +138,6 @@ private func coreTargets() -> [[Target]] {
 
         target(type, name: "Localization", dependencies: []),
 
-        target(type, name: "QueuePlayer", hasTests: false, dependencies: [
-            "Timing",
-        ]),
-
         target(type, name: "AsyncUtilitiesForTesting", hasTests: false, dependencies: [
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
         ]),
@@ -189,6 +185,7 @@ private func uiTargets() -> [[Target]] {
             .process("Resources"),
         ]),
         target(type, name: "NoorUI", dependencies: [
+            "QuranAudio",
             "UIx",
             "Crashing",
             "Localization",
@@ -381,6 +378,11 @@ private func dataTargets() -> [[Target]] {
 private func domainTargets() -> [[Target]] {
     let type = TargetType.domain
     return [
+        target(type, name: "QueuePlayer", hasTests: false, dependencies: [
+            "QuranAudio",
+            "Timing",
+        ]),
+
         target(type, name: "QuranResources", hasTests: false, resources: [
             .copy("Databases"),
         ]),
@@ -430,6 +432,7 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "QuranAudioKit", dependencies: [
+            "QuranAudio",
             "BatchDownloader",
             "AudioTimingService",
             "ReciterService",
@@ -636,6 +639,7 @@ private func featuresTargets() -> [[Target]] {
         ]),
 
         target(type, name: "AdvancedAudioOptionsFeature", dependencies: [
+            "QuranAudio",
             "NoorUI",
             "ReciterListFeature",
             "QuranAudioKit",
@@ -643,6 +647,7 @@ private func featuresTargets() -> [[Target]] {
         ]),
 
         target(type, name: "AudioBannerFeature", hasTests: false, dependencies: [
+            "QuranAudio",
             "Caching",
             "AppDependencies",
             "NoorUI",

@@ -7,6 +7,7 @@
 
 import Localization
 import SwiftUI
+import UIKit
 import UIx
 
 public enum AudioBannerState {
@@ -55,20 +56,22 @@ public struct AudioBannerActions {
 public struct AudioBannerViewUI: View {
     private let state: AudioBannerState
     private let actions: AudioBannerActions
+    private let options: AudioOptionsSummary
     @ScaledMetric private var maxWidth = 500
 
-    public init(state: AudioBannerState, actions: AudioBannerActions) {
+    public init(state: AudioBannerState, actions: AudioBannerActions, options: AudioOptionsSummary) {
         self.state = state
         self.actions = actions
+        self.options = options
     }
 
     public var body: some View {
         ZStack {
             switch state {
             case .playing(let paused, let rate):
-                AudioPlaying(paused: paused, currentRate: rate, actions: actions)
+                AudioPlaying(paused: paused, currentRate: rate, actions: actions, options: options)
             case .readyToPlay(let reciter):
-                ReadyToPlay(reciter: reciter, actions: actions)
+                ReadyToPlay(reciter: reciter, actions: actions, options: options)
             case .downloading(let progress):
                 Downloading(progress: progress, actions: actions)
             }
@@ -101,20 +104,11 @@ private struct AudioPlaying: View {
     let paused: Bool
     let currentRate: Float
     let actions: AudioBannerActions
+    let options: AudioOptionsSummary
 
     @Environment(\.layoutDirection) private var layoutDirection
     @ScaledMetric private var minimumRateSpacing = 4.0
     @State private var controlSizes: [Control: CGSize] = [:]
-
-    private let minimumTapLength = 44.0
-
-    private var stopButton: some View {
-        Button(action: actions.stop) {
-            NoorSystemImage.stop.image
-                .frame(minWidth: minimumTapLength, minHeight: minimumTapLength)
-                .contentShape(Rectangle())
-        }
-    }
 
     private var rateMenu: some View {
         Menu {
@@ -122,46 +116,14 @@ private struct AudioPlaying: View {
                 Button(PlaybackSpeed.formatted(value)) { actions.setPlaybackRate(value) }
             }
         } label: {
-            Text(PlaybackSpeed.formatted(currentRate))
-                .font(.footnote)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 6)
-                .background(Color(.systemGray5))
-                .clipShape(Capsule())
-                .frame(minWidth: minimumTapLength, minHeight: minimumTapLength)
-                .contentShape(Rectangle())
-        }
-    }
-
-    private var backwardButton: some View {
-        Button(action: actions.backward) {
-            NoorSystemImage.backward.image
-                .frame(minWidth: minimumTapLength, minHeight: minimumTapLength)
-                .contentShape(Rectangle())
-        }
-    }
-
-    private var playPauseButton: some View {
-        Button(action: paused ? actions.resume : actions.pause) {
-            (paused ? NoorSystemImage.play.image : NoorSystemImage.pause.image)
-                .frame(minWidth: minimumTapLength, minHeight: minimumTapLength)
-                .contentShape(Rectangle())
-        }
-    }
-
-    private var forwardButton: some View {
-        Button(action: actions.forward) {
-            NoorSystemImage.forward.image
-                .frame(minWidth: minimumTapLength, minHeight: minimumTapLength)
-                .contentShape(Rectangle())
-        }
-    }
-
-    private var moreButton: some View {
-        Button(action: actions.more) {
-            NoorSystemImage.more.image
-                .frame(minWidth: minimumTapLength, minHeight: minimumTapLength)
-                .contentShape(Rectangle())
+            AudioControlLabel {
+                Text(PlaybackSpeed.formatted(currentRate))
+                    .font(.footnote)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .background(Color(.systemGray5))
+                    .clipShape(Capsule())
+            }
         }
     }
 
@@ -170,28 +132,33 @@ private struct AudioPlaying: View {
             let layout = makeLayout(availableWidth: geometry.size.width)
 
             ZStack {
-                stopButton
-                    .onSizeChange { updateSize($0, for: .stop) }
-                    .position(layout.position(for: .stop))
+                Button(action: actions.stop) {
+                    AudioControlLabel {
+                        NoorSystemImage.stop.image
+                            .padding()
+                    }
+                }
+                .onSizeChange { updateSize($0, for: .stop) }
+                .position(layout.position(for: .stop))
 
                 if layout.showsRate {
                     rateMenu
                         .position(layout.position(for: .rate))
                 }
 
-                backwardButton
+                AudioControlButton(image: .backward, action: actions.backward)
                     .onSizeChange { updateSize($0, for: .backward) }
                     .position(layout.position(for: .backward))
 
-                playPauseButton
+                AudioControlButton(image: paused ? .play : .pause, action: paused ? actions.resume : actions.pause)
                     .onSizeChange { updateSize($0, for: .playPause) }
                     .position(layout.position(for: .playPause))
 
-                forwardButton
+                AudioControlButton(image: .forward, action: actions.forward)
                     .onSizeChange { updateSize($0, for: .forward) }
                     .position(layout.position(for: .forward))
 
-                moreButton
+                AudioOptionsButton(summary: options, action: actions.more)
                     .onSizeChange { updateSize($0, for: .more) }
                     .position(layout.position(for: .more))
 
@@ -204,11 +171,10 @@ private struct AudioPlaying: View {
             }
         }
         .frame(height: measuredHeight)
-        .padding()
     }
 
     private var measuredHeight: CGFloat {
-        max(minimumTapLength, controlSizes.values.map(\.height).max() ?? 0)
+        max(AudioControlMetrics.minimumTapLength, controlSizes.values.map(\.height).max() ?? 0)
     }
 
     private func makeLayout(availableWidth: CGFloat) -> Layout {
@@ -248,7 +214,7 @@ private struct AudioPlaying: View {
     }
 
     private func size(for control: Control) -> CGSize {
-        controlSizes[control] ?? CGSize(width: minimumTapLength, height: minimumTapLength)
+        controlSizes[control] ?? CGSize(width: AudioControlMetrics.minimumTapLength, height: AudioControlMetrics.minimumTapLength)
     }
 
     private func updateSize(_ size: CGSize, for control: Control) {
@@ -260,24 +226,23 @@ private struct AudioPlaying: View {
 private struct ReadyToPlay: View {
     let reciter: String
     let actions: AudioBannerActions
-    @ScaledMetric private var cornerRadius = Dimensions.cornerRadius
+    let options: AudioOptionsSummary
 
     var body: some View {
         ZStack {
             HStack {
                 Button(action: actions.play) {
-                    NoorSystemImage.play.image
-                        .padding()
+                    AudioControlLabel {
+                        NoorSystemImage.play.image
+                            .padding()
+                    }
                 }
                 Spacer()
                 Text(reciter)
                     .font(.body)
                     .lineLimit(1)
                 Spacer()
-                Button(action: actions.more) {
-                    NoorSystemImage.more.image
-                        .padding()
-                }
+                AudioOptionsButton(summary: options, action: actions.more)
             }
             .background {
                 Button(action: actions.reciters) {
@@ -300,11 +265,7 @@ private struct Downloading: View {
     var body: some View {
         HStack {
             AsyncButton(action: actions.cancelDownloading) {
-                ZStack {
-                    // workaround to have uniform height.
-                    NoorSystemImage.more.image
-                        .padding()
-                        .hidden()
+                AudioControlLabel {
                     NoorSystemImage.cancel.image
                         .padding()
                 }
@@ -378,7 +339,8 @@ private extension View {
     )
     AudioBannerViewUI(
         state: .playing(paused: false, rate: 1),
-        actions: actions
+        actions: actions,
+        options: .init()
     )
     .frame(width: 300)
     .background(Color.systemGroupedBackground)
@@ -422,7 +384,7 @@ private extension View {
                 }
                 Spacer()
                 Group {
-                    AudioBannerViewUI(state: state, actions: actions)
+                    AudioBannerViewUI(state: state, actions: actions, options: .init())
                 }
             }
             .frame(maxWidth: .infinity)
@@ -431,4 +393,54 @@ private extension View {
     }
 
     return PreviewView()
+}
+
+#Preview("Audio option indicators") {
+    let actions = AudioBannerActions(
+        play: {}, pause: {}, resume: {}, stop: {}, backward: {}, forward: {},
+        cancelDownloading: {}, reciters: {}, more: {}, setPlaybackRate: { _ in }
+    )
+    ScrollView {
+        VStack {
+            AudioBannerViewUI(state: .downloading(progress: 0.3), actions: actions, options: .init())
+            AudioBannerViewUI(state: .downloading(progress: 0.3), actions: actions, options: .init(rate: 0.5))
+            AudioBannerViewUI(state: .readyToPlay(reciter: "Mishary Al-afasy"), actions: actions, options: .init())
+            AudioBannerViewUI(
+                state: .readyToPlay(reciter: "Mishary Al-afasy"), actions: actions,
+                options: .init(rate: 0.5, verseRuns: .finite(3), rangeRuns: .finite(2))
+            )
+            AudioBannerViewUI(
+                state: .playing(paused: false, rate: 0.5), actions: actions,
+                options: .init(rate: 0.5, verseRuns: .finite(3), rangeRuns: .finite(2))
+            )
+            AudioBannerViewUI(
+                state: .playing(paused: true, rate: 1), actions: actions,
+                options: .init(rangeRuns: .indefinite)
+            )
+            AudioBannerViewUI(
+                state: .playing(paused: true, rate: 1), actions: actions,
+                options: .init()
+            )
+            AudioBannerViewUI(
+                state: .readyToPlay(reciter: "مشاري العفاسي"), actions: actions,
+                options: .init()
+            )
+            .environment(\.layoutDirection, .rightToLeft)
+            .dynamicTypeSize(.xxLarge)
+            AudioBannerViewUI(
+                state: .readyToPlay(reciter: "مشاري العفاسي"), actions: actions,
+                options: .init(rate: 0.5, verseRuns: .finite(3), rangeRuns: .finite(2))
+            )
+            .environment(\.layoutDirection, .rightToLeft)
+            .dynamicTypeSize(.xxLarge)
+            AudioBannerViewUI(
+                state: .readyToPlay(reciter: "مشاري العفاسي"), actions: actions,
+                options: .init(rate: 0.5, verseRuns: .finite(3), rangeRuns: .finite(2))
+            )
+            .environment(\.layoutDirection, .rightToLeft)
+            .dynamicTypeSize(.accessibility1)
+        }
+        .padding(.vertical)
+    }
+    .background(Color.systemGroupedBackground)
 }

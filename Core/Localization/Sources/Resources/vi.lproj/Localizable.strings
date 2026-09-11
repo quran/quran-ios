@@ -450,3 +450,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Chú thích #%d";
+
+/* Audio banner options summary */
+"audio.summary.verse" = "câu %@";
+"audio.summary.range" = "đoạn %@";
+"audio.options" = "Tùy chọn âm thanh";

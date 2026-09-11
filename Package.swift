@@ -870,6 +870,8 @@ private func featuresTargets() -> [[Target]] {
             "WhatsNewFeature",
             "AudioUpdater",
             "AppMigrationFeature",
+        ], testDependencies: [
+            "QuranAudio",
         ]),
     ]
 }

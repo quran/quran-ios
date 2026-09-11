@@ -100,31 +100,22 @@ extension QuranDeepLink {
     }
 
     private static func audio(for target: QuranDeepLinkTarget, queryItems: [URLQueryItem]) -> QuranDeepLinkAudio? {
-        guard let verseRuns = runs(named: "verse_repeat", in: queryItems) else {
-            return nil
-        }
-        guard let listRuns = runs(named: "range_repeat", in: queryItems) else {
-            return nil
-        }
-        guard let end = end(for: target, queryItems: queryItems) else {
-            return nil
-        }
-        guard let reciterId = reciterId(in: queryItems) else {
-            return nil
-        }
-        guard let playbackRate = playbackRate(in: queryItems) else {
-            return nil
-        }
-        return QuranDeepLinkAudio(
-            end: end,
-            verseRuns: verseRuns,
-            listRuns: listRuns,
-            reciterId: reciterId,
-            playbackRate: playbackRate
+        try? parseAudio(for: target, queryItems: queryItems)
+    }
+
+    private static func parseAudio(
+        for target: QuranDeepLinkTarget, queryItems: [URLQueryItem]
+    ) throws -> QuranDeepLinkAudio {
+        QuranDeepLinkAudio(
+            end: try end(for: target, queryItems: queryItems),
+            verseRuns: try runs(named: "verse_repeat", in: queryItems),
+            listRuns: try runs(named: "range_repeat", in: queryItems),
+            reciterId: try reciterId(in: queryItems),
+            playbackRate: try playbackRate(in: queryItems)
         )
     }
 
-    private static func runs(named name: String, in queryItems: [URLQueryItem]) -> Runs? {
+    private static func runs(named name: String, in queryItems: [URLQueryItem]) throws -> Runs {
         guard let rawValue = value(name, in: queryItems) else {
             return .finite(1)
         }
@@ -132,14 +123,14 @@ extension QuranDeepLink {
             return .indefinite
         }
         guard let count = Int(rawValue), repeatRange.contains(count) else {
-            return nil
+            throw AudioParameterError.invalid
         }
         return .finite(count)
     }
 
-    private static func end(for target: QuranDeepLinkTarget, queryItems: [URLQueryItem]) -> AyahNumber?? {
+    private static func end(for target: QuranDeepLinkTarget, queryItems: [URLQueryItem]) throws -> AyahNumber? {
         guard let rawValue = value("to", in: queryItems) else {
-            return .some(nil)
+            return nil
         }
 
         let components = rawValue.split(separator: ":", omittingEmptySubsequences: false)
@@ -147,7 +138,7 @@ extension QuranDeepLink {
               let suraNumber = Int(components[0]),
               let ayahNumber = Int(components[1])
         else {
-            return nil
+            throw AudioParameterError.invalid
         }
 
         let quran: Quran
@@ -165,28 +156,32 @@ extension QuranDeepLink {
               let endAyah = AyahNumber(sura: sura, ayah: ayahNumber),
               endAyah >= start
         else {
-            return nil
+            throw AudioParameterError.invalid
         }
-        return .some(endAyah)
+        return endAyah
     }
 
-    private static func reciterId(in queryItems: [URLQueryItem]) -> Int?? {
+    private static func reciterId(in queryItems: [URLQueryItem]) throws -> Int? {
         guard let rawValue = value("reciter", in: queryItems) else {
-            return .some(nil)
+            return nil
         }
         guard let reciterId = Int(rawValue), reciterId >= 1 else {
-            return nil
+            throw AudioParameterError.invalid
         }
-        return .some(reciterId)
+        return reciterId
     }
 
-    private static func playbackRate(in queryItems: [URLQueryItem]) -> Float?? {
+    private static func playbackRate(in queryItems: [URLQueryItem]) throws -> Float? {
         guard let rawValue = value("speed", in: queryItems) else {
-            return .some(nil)
-        }
-        guard let playbackRate = Float(rawValue), playbackRateRange.contains(playbackRate) else {
             return nil
         }
-        return .some(playbackRate)
+        guard let playbackRate = Float(rawValue), playbackRateRange.contains(playbackRate) else {
+            throw AudioParameterError.invalid
+        }
+        return playbackRate
     }
+}
+
+private enum AudioParameterError: Error {
+    case invalid
 }

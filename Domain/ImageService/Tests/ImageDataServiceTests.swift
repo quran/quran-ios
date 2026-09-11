@@ -29,10 +29,17 @@ class ImageDataServiceTests: XCTestCase {
 
     /// A separate marker database supplies markers without replacing the word-frame/header database.
     func testSeparateAyahMarkerDatabase() async throws {
-        let markerURL = TestResources.resourceURL("hafs_1421_ayahinfo_1120.db")
-        let page = quran.pages[0]
+        // Only the 1421 fixture includes headers; the 1405 fixture supplies distinct glyph-based markers.
+        let originalURL = TestResources.resourceURL("hafs_1421_ayahinfo_1120.db")
+        let markerURL = TestResources.resourceURL("hafs_1405_ayahinfo.db")
+        let page = Reading.hafs_1421.quran.pages[0]
+        let original = ImageDataService(
+            ayahInfoDatabase: originalURL,
+            imagesURL: TestResources.testDataURL.appendingPathComponent("images"),
+            ayahMarkerURL: nil
+        )
         let separate = ImageDataService(
-            ayahInfoDatabase: TestResources.resourceURL("hafs_1405_ayahinfo.db"),
+            ayahInfoDatabase: originalURL,
             imagesURL: TestResources.testDataURL.appendingPathComponent("images"),
             ayahMarkerURL: markerURL
         )
@@ -43,14 +50,15 @@ class ImageDataServiceTests: XCTestCase {
         )
         let actualMarkers = try await separate.ayahNumbers(page)
         let expectedMarkers = try await markerSource.ayahNumbers(page)
-        let originalMarkers = try await service.ayahNumbers(page)
+        let originalMarkers = try await original.ayahNumbers(page)
         XCTAssertEqual(actualMarkers, expectedMarkers)
         XCTAssertNotEqual(actualMarkers, originalMarkers)
         let actualHeaders = try await separate.suraHeaders(page)
-        let originalHeaders = try await service.suraHeaders(page)
+        let originalHeaders = try await original.suraHeaders(page)
+        XCTAssertFalse(originalHeaders.isEmpty)
         XCTAssertEqual(actualHeaders, originalHeaders)
         let actualImage = try await separate.imageForPage(page)
-        let originalImage = try await service.imageForPage(page)
+        let originalImage = try await original.imageForPage(page)
         XCTAssertEqual(actualImage.wordFrames.lines[0].frames, originalImage.wordFrames.lines[0].frames)
     }
 

@@ -1,5 +1,6 @@
 import Localization
 import SwiftUI
+import UIx
 
 struct AudioOptionsButton: View {
     let summary: AudioOptionsSummary
@@ -7,8 +8,11 @@ struct AudioOptionsButton: View {
 
     @ScaledMetric private var dotSize = 8
     @ScaledMetric private var dotBorder = 2
-    @ScaledMetric(relativeTo: .caption) private var summarySpacing = 4
-    @ScaledMetric(relativeTo: .caption) private var summaryPadding = 24
+    @ScaledMetric(relativeTo: .caption2) private var summarySpacing = 2
+
+    @State private var summaryTextHeight: CGFloat = 0
+    @State private var imageSize: CGSize = .zero
+    @State private var buttonSize: CGSize = .zero
 
     var body: some View {
         Button(action: action) {
@@ -28,21 +32,29 @@ struct AudioOptionsButton: View {
                         if summary.hasNonDefaultValues {
                             GeometryReader { geometry in
                                 Text(summary.text)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .font(.caption2)
+                                    .foregroundStyle(.tertiary)
                                     .fixedSize()
                                     .frame(width: geometry.size.width, alignment: .trailing)
-                                    .offset(y: geometry.size.height + summarySpacing)
+                                    .offset(x: -imageSize.width / 2, y: geometry.size.height)
                                     .allowsHitTesting(false)
                                     .accessibilityHidden(true)
+                                    .onGeometryValueChange(of: \.size.height) { summaryTextHeight = $0 }
                             }
                         }
                     }
+                    .onGeometryValueChange(of: \.size) { imageSize = $0 }
+                    .padding()
             }
         }
         .buttonStyle(.plain)
         .accessibilityLabel(l("audio.options"))
         .accessibilityValue(summary.text)
+        .onGeometryValueChange(of: \.size) { buttonSize = $0 }
         .padding(.vertical, summary.hasNonDefaultValues ? summaryPadding : 0)
+    }
+
+    var summaryPadding: CGFloat {
+        summaryTextHeight - (buttonSize.height - imageSize.height) / 2 + summarySpacing
     }
 }

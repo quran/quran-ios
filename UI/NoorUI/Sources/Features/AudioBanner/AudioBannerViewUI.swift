@@ -7,6 +7,7 @@
 
 import Localization
 import SwiftUI
+import UIKit
 import UIx
 
 public enum AudioBannerState {
@@ -131,9 +132,14 @@ private struct AudioPlaying: View {
             let layout = makeLayout(availableWidth: geometry.size.width)
 
             ZStack {
-                AudioControlButton(image: .stop, action: actions.stop)
-                    .onSizeChange { updateSize($0, for: .stop) }
-                    .position(layout.position(for: .stop))
+                Button(action: actions.stop) {
+                    AudioControlLabel {
+                        NoorSystemImage.stop.image
+                            .padding()
+                    }
+                }
+                .onSizeChange { updateSize($0, for: .stop) }
+                .position(layout.position(for: .stop))
 
                 if layout.showsRate {
                     rateMenu
@@ -165,7 +171,6 @@ private struct AudioPlaying: View {
             }
         }
         .frame(height: measuredHeight)
-        .padding()
     }
 
     private var measuredHeight: CGFloat {
@@ -238,7 +243,6 @@ private struct ReadyToPlay: View {
                     .lineLimit(1)
                 Spacer()
                 AudioOptionsButton(summary: options, action: actions.more)
-                    .padding(.horizontal)
             }
             .background {
                 Button(action: actions.reciters) {
@@ -261,11 +265,7 @@ private struct Downloading: View {
     var body: some View {
         HStack {
             AsyncButton(action: actions.cancelDownloading) {
-                ZStack {
-                    // workaround to have uniform height.
-                    NoorSystemImage.more.image
-                        .padding()
-                        .hidden()
+                AudioControlLabel {
                     NoorSystemImage.cancel.image
                         .padding()
                 }
@@ -400,27 +400,47 @@ private extension View {
         play: {}, pause: {}, resume: {}, stop: {}, backward: {}, forward: {},
         cancelDownloading: {}, reciters: {}, more: {}, setPlaybackRate: { _ in }
     )
-    VStack {
-        AudioBannerViewUI(state: .readyToPlay(reciter: "Mishary Al-afasy"), actions: actions, options: .init())
-        AudioBannerViewUI(
-            state: .readyToPlay(reciter: "Mishary Al-afasy"), actions: actions,
-            options: .init(rate: 0.5, verseRuns: .finite(3), rangeRuns: .finite(2))
-        )
-        AudioBannerViewUI(
-            state: .playing(paused: false, rate: 0.5), actions: actions,
-            options: .init(rate: 0.5, verseRuns: .finite(3), rangeRuns: .finite(2))
-        )
-        AudioBannerViewUI(
-            state: .playing(paused: true, rate: 1), actions: actions,
-            options: .init(rangeRuns: .indefinite)
-        )
-        AudioBannerViewUI(
-            state: .readyToPlay(reciter: "مشاري العفاسي"), actions: actions,
-            options: .init(rate: 0.5, verseRuns: .finite(3), rangeRuns: .finite(2))
-        )
-        .environment(\.layoutDirection, .rightToLeft)
-        .dynamicTypeSize(.accessibility1)
+    ScrollView {
+        VStack {
+            AudioBannerViewUI(state: .downloading(progress: 0.3), actions: actions, options: .init())
+            AudioBannerViewUI(state: .downloading(progress: 0.3), actions: actions, options: .init(rate: 0.5))
+            AudioBannerViewUI(state: .readyToPlay(reciter: "Mishary Al-afasy"), actions: actions, options: .init())
+            AudioBannerViewUI(
+                state: .readyToPlay(reciter: "Mishary Al-afasy"), actions: actions,
+                options: .init(rate: 0.5, verseRuns: .finite(3), rangeRuns: .finite(2))
+            )
+            AudioBannerViewUI(
+                state: .playing(paused: false, rate: 0.5), actions: actions,
+                options: .init(rate: 0.5, verseRuns: .finite(3), rangeRuns: .finite(2))
+            )
+            AudioBannerViewUI(
+                state: .playing(paused: true, rate: 1), actions: actions,
+                options: .init(rangeRuns: .indefinite)
+            )
+            AudioBannerViewUI(
+                state: .playing(paused: true, rate: 1), actions: actions,
+                options: .init()
+            )
+            AudioBannerViewUI(
+                state: .readyToPlay(reciter: "مشاري العفاسي"), actions: actions,
+                options: .init()
+            )
+            .environment(\.layoutDirection, .rightToLeft)
+            .dynamicTypeSize(.xxLarge)
+            AudioBannerViewUI(
+                state: .readyToPlay(reciter: "مشاري العفاسي"), actions: actions,
+                options: .init(rate: 0.5, verseRuns: .finite(3), rangeRuns: .finite(2))
+            )
+            .environment(\.layoutDirection, .rightToLeft)
+            .dynamicTypeSize(.xxLarge)
+            AudioBannerViewUI(
+                state: .readyToPlay(reciter: "مشاري العفاسي"), actions: actions,
+                options: .init(rate: 0.5, verseRuns: .finite(3), rangeRuns: .finite(2))
+            )
+            .environment(\.layoutDirection, .rightToLeft)
+            .dynamicTypeSize(.accessibility1)
+        }
+        .padding(.vertical)
     }
-    .padding(.vertical)
     .background(Color.systemGroupedBackground)
 }

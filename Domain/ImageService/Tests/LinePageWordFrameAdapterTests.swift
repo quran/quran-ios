@@ -24,6 +24,7 @@ final class LinePageWordFrameAdapterTests: XCTestCase {
                 .init(ayah: ayah1, line: 2, left: 0.40, right: 0.80),
             ],
             quran: quran,
+            metrics: .madaniLinePages(widthParameter: 1440),
             lineCount: 15
         )
 
@@ -31,9 +32,9 @@ final class LinePageWordFrameAdapterTests: XCTestCase {
         XCTAssertEqual(firstAyahFrames.map(\.word.wordNumber), [1, 2, 3])
         XCTAssertEqual(firstAyahFrames.map(\.line), [1, 1, 3])
 
-        let firstLine = try XCTUnwrap(wordFrames.lineFramesVerVerse(ayah1).first)
-        XCTAssertEqual(Set(firstLine.frames.map(\.word.verse)), [ayah1])
-        XCTAssertEqual(Set(firstLine.frames.map(\.line)), [1])
+        let firstLine = wordFrames.frames.filter { $0.line == 1 }
+        XCTAssertEqual(Set(firstLine.map(\.word.verse)), [ayah1])
+        XCTAssertEqual(firstLine.map(\.word.wordNumber), [1, 2])
 
         let secondAyahFrames = wordFrames.wordFramesForVerse(ayah2)
         XCTAssertEqual(secondAyahFrames.map(\.word.wordNumber), [1])
@@ -44,9 +45,10 @@ final class LinePageWordFrameAdapterTests: XCTestCase {
         let wordFrames = LinePageWordFrameAdapter().wordFrames(
             from: [],
             quran: .hafsMadani1405,
+            metrics: .madaniLinePages(widthParameter: 1440),
             lineCount: 15
         )
 
-        XCTAssertEqual(wordFrames.lines, [])
+        XCTAssertEqual(wordFrames.frames, [])
     }
 }

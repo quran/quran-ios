@@ -24,7 +24,13 @@ struct PagesView: View {
                 Group {
                     switch viewModel.quranMode {
                     case .arabic:
+                        #if QURAN_SYNC
+                        viewModel.deps.imageDataSourceBuilder.build(at: page) {
+                            viewModel.onAnnotatedAyahTapped($0, at: $1)
+                        }
+                        #else
                         viewModel.deps.imageDataSourceBuilder.build(at: page)
+                        #endif
                     case .translation:
                         viewModel.deps.translationDataSourceBuilder.build(at: page)
                     }

@@ -29,6 +29,41 @@ public struct ContentImageBuilder {
 
     // MARK: Public
 
+    #if QURAN_SYNC
+    @ViewBuilder
+    public func build(
+        at page: Page,
+        onAnnotatedAyahTap: @escaping (AyahNumber, CGPoint) -> Void
+    ) -> some View {
+        let reading = ReadingPreferences.shared.reading
+        if reading.usesLinePages {
+            let linePageAssetService = Self.buildLinePageAssetService(reading: reading, container: container)
+            let viewModel = ContentLineViewModel(
+                reading: reading,
+                page: page,
+                linePageAssetService: linePageAssetService,
+                highlightsService: highlightsService
+            )
+            ContentLineView(
+                viewModel: viewModel,
+                onAnnotatedAyahTap: onAnnotatedAyahTap
+            )
+        } else {
+            let imageService = Self.buildImageDataService(reading: reading, container: container)
+            let viewModel = ContentImageViewModel(
+                reading: reading,
+                page: page,
+                imageDataService: imageService,
+                highlightsService: highlightsService
+            )
+            ContentImageView(
+                viewModel: viewModel,
+                onAnnotatedAyahTap: onAnnotatedAyahTap
+            )
+        }
+    }
+
+    #else
     @ViewBuilder
     public func build(at page: Page) -> some View {
         let reading = ReadingPreferences.shared.reading
@@ -52,6 +87,8 @@ public struct ContentImageBuilder {
             ContentImageView(viewModel: viewModel)
         }
     }
+
+    #endif
 
     // MARK: Internal
 

@@ -9,32 +9,38 @@ import CoreGraphics
 import QuranKit
 
 public struct WordFrameCollection: Equatable {
-    public var lines: [WordFrameLine]
+    public var frames: [WordFrame]
 
-    public init(lines: [WordFrameLine]) {
-        self.lines = lines
+    public init(frames: [WordFrame]) {
+        self.frames = frames
+    }
+
+    /// The earliest available frame for each verse, in verse order.
+    public var verseStartFrames: [WordFrame] {
+        Dictionary(grouping: frames, by: \.word.verse)
+            .sorted { $0.key < $1.key }
+            .compactMap { _, frames in
+                frames.min(by: Self.precedesInVerse)
+            }
+    }
+
+    /// Supports verses continuing from a previous page.
+    public func verseStartFrame(for verse: AyahNumber) -> WordFrame? {
+        frames.lazy
+            .filter { $0.word.verse == verse }
+            .min(by: Self.precedesInVerse)
     }
 
     public func wordFramesForVerse(_ verse: AyahNumber) -> [WordFrame] {
-        lines
-            .flatMap(\.frames)
-            .filter { $0.word.verse == verse }
-    }
-
-    public func lineFramesVerVerse(_ verse: AyahNumber) -> [WordFrameLine] {
-        lines.filter { line in
-            line.frames.contains { $0.word.verse == verse }
-        }
+        frames.filter { $0.word.verse == verse }
     }
 
     public func wordFrameForWord(_ word: Word) -> WordFrame? {
-        let frames = wordFramesForVerse(word.verse)
-        return frames.first(where: { $0.word == word })
+        frames.first(where: { $0.word == word })
     }
 
     public func wordAtLocation(_ location: CGPoint, imageScale: WordFrameScale) -> Word? {
-        let flattenFrames = lines.flatMap(\.frames)
-        for frame in flattenFrames {
+        for frame in frames {
             let rectangle = frame.rect.scaled(by: imageScale)
             if rectangle.contains(location) {
                 return frame.word
@@ -43,9 +49,13 @@ public struct WordFrameCollection: Equatable {
         return nil
     }
 
-    public func topPadding(atLineIndex lineIndex: Int, scale: WordFrameScale) -> CGFloat {
-        let topLine = lineIndex == 0 ? 0 : lines[lineIndex - 1].frames[0].maxY
-        let padding = CGFloat(lines[lineIndex].frames[0].minY - topLine)
-        return padding * scale.scale
+    private static func precedesInVerse(_ lhs: WordFrame, _ rhs: WordFrame) -> Bool {
+        if lhs.word.wordNumber != rhs.word.wordNumber {
+            return lhs.word.wordNumber < rhs.word.wordNumber
+        }
+        if lhs.line != rhs.line {
+            return lhs.line < rhs.line
+        }
+        return lhs.minX > rhs.minX
     }
 }

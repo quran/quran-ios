@@ -31,7 +31,8 @@ struct ReadingImageView: View {
         ImageDecorations(
             suraHeaders: suraHeaders,
             ayahNumbers: ayahNumbers,
-            wordFrames: WordFrameCollection(lines: []),
+            drawsAyahNumbersAndSuraHeaders: true,
+            wordFrames: WordFrameCollection(frames: []),
             highlights: [:]
         )
     }

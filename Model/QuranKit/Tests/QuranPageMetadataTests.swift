@@ -110,11 +110,18 @@ final class QuranPageMetadataTests: XCTestCase {
         XCTAssertTrue(Reading.allReadings.contains(.indoPak))
         XCTAssertEqual(Reading.indoPak.quran, .hafsIndoPak)
         XCTAssertEqual(Reading.indoPak.linePageMetrics, .indoPakLinePages)
-        XCTAssertEqual(Reading.indoPak.linePageAssetWidth, 1342)
+        XCTAssertEqual(Reading.indoPak.linePageMetrics?.widthParameter, 1342)
         XCTAssertEqual(Reading.indoPak.imageAssetWidth, 1342)
         XCTAssertTrue(Reading.indoPak.usesLinePageDividers)
         XCTAssertTrue(Reading.indoPak.usesLinePageSidelines)
         XCTAssertTrue(Reading.indoPak.usesInvertedQuranImageRenderingInDarkMode)
+    }
+
+    func testOnlyReadingsWithoutEmbeddedDecorationsDrawAyahNumbersAndSuraHeaders() {
+        let readingsWithoutEmbeddedDecorations: Set<Reading> = [.hafs_1421, .hafs_1439, .hafs_1441]
+        for reading in Reading.allReadings {
+            XCTAssertEqual(reading.drawsAyahNumbersAndSuraHeaders, readingsWithoutEmbeddedDecorations.contains(reading), "\(reading)")
+        }
     }
 
     func testOnlyIndoPakEnablesOptionalLinePageOverlays() {

@@ -8,5 +8,5 @@
 import Foundation
 
 public func testResourceURL(_ resource: String) -> URL {
-    URL(validURL: "\(#filePath)/../../../../Domain/TestResources/test_data/\(resource)").standardized
+    URL(validURL: "\(#filePath)/../../../../../Domain/TestResources/Sources/test_data/\(resource)").standardized
 }

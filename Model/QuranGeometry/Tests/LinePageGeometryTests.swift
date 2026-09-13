@@ -5,10 +5,9 @@
 //  Created by Mohamed Afifi on 2026-03-29.
 //
 
-import LinePagePersistence
 import QuranKit
 import XCTest
-@testable import ImageService
+@testable import QuranGeometry
 
 final class LinePageGeometryTests: XCTestCase {
     // MARK: Internal
@@ -43,7 +42,7 @@ final class LinePageGeometryTests: XCTestCase {
                 displaySettings: LinePageDisplaySettings(showHeaderFooter: true, showSidelines: true),
                 data: makeData(
                     sidelines: [
-                        .init(targetLine: 3, direction: .up, intrinsicSize: CGSize(width: 50, height: 200)),
+                        .init(id: "sideline-0", targetLine: 3, direction: .up, intrinsicSize: CGSize(width: 50, height: 200)),
                     ]
                 ),
                 suraHeaderAspectRatio: 0.25
@@ -84,22 +83,13 @@ final class LinePageGeometryTests: XCTestCase {
 
         let firstHighlight = layout.highlightRects[0]
         XCTAssertEqual(firstHighlight.ayah, highlightedAyah)
-        XCTAssertEqual(
-            firstHighlight.rect,
-            expectedHighlightRect(for: makeData().highlightSpans[0], pageFrame: layout.pageFrame)
-        )
+        assertEqual(firstHighlight.rect, CGRect(x: 97.8, y: 280.079365, width: 205, height: 47.968254))
 
         let firstMarker = try XCTUnwrap(layout.ayahMarkerPlacements.first { $0.marker.ayah == markerAyah })
-        XCTAssertEqual(
-            firstMarker.frame,
-            expectedMarkerFrame(for: firstMarker.marker, pageFrame: layout.pageFrame)
-        )
+        assertEqual(firstMarker.frame, CGRect(x: 72.3612, y: 345.707464, width: 20, height: 20))
 
         let header = try XCTUnwrap(layout.suraHeaderPlacements.first)
-        XCTAssertEqual(
-            header.frame,
-            expectedHeaderFrame(for: header.header, pageFrame: layout.pageFrame, aspectRatio: 0.25)
-        )
+        assertEqual(header.frame, CGRect(x: 7.777778, y: 160.071429, width: 384.444444, height: 96.111111))
     }
 
     func testVerseHitTestingAndSelectionAnchorsFollowAyahSpans() throws {
@@ -116,7 +106,6 @@ final class LinePageGeometryTests: XCTestCase {
             )
         )
 
-        let data = makeData()
         let firstRect = try XCTUnwrap(layout.selectionAnchors(for: firstAyah)).start
         let secondRect = try XCTUnwrap(layout.selectionAnchors(for: secondAyah)).start
         let firstPoint = CGPoint(x: firstRect.midX, y: firstRect.midY)
@@ -139,19 +128,12 @@ final class LinePageGeometryTests: XCTestCase {
         XCTAssertNil(layout.verse(at: CGPoint(x: layout.pageFrame.minX - 1, y: layout.pageFrame.minY + 210)))
 
         let firstAnchors = try XCTUnwrap(layout.selectionAnchors(for: firstAyah))
-        let firstSpan = data.highlightSpans[0]
-        assertEqual(firstAnchors.start, expectedSelectionRect(for: firstSpan, pageFrame: layout.pageFrame))
-        assertEqual(firstAnchors.end, expectedSelectionRect(for: firstSpan, pageFrame: layout.pageFrame))
+        assertEqual(firstAnchors.start, CGRect(x: 97.8, y: 280, width: 204.4, height: 48))
+        assertEqual(firstAnchors.end, firstAnchors.start)
 
         let secondAnchors = try XCTUnwrap(layout.selectionAnchors(for: secondAyah))
-        assertEqual(
-            secondAnchors.start,
-            expectedSelectionRect(for: data.highlightSpans[1], pageFrame: layout.pageFrame)
-        )
-        assertEqual(
-            secondAnchors.end,
-            expectedSelectionRect(for: data.highlightSpans[2], pageFrame: layout.pageFrame)
-        )
+        assertEqual(secondAnchors.start, CGRect(x: 62.4, y: 328, width: 275.2, height: 48))
+        assertEqual(secondAnchors.end, CGRect(x: 168.8, y: 376, width: 155.6, height: 48))
     }
 
     func testVerseHitTestingSupportsLastLine() throws {
@@ -282,8 +264,8 @@ final class LinePageGeometryTests: XCTestCase {
                 data: makeData(
                     lineCount: 10,
                     sidelines: [
-                        .init(targetLine: 8, direction: .down, intrinsicSize: CGSize(width: 100, height: 500)),
-                        .init(targetLine: 8, direction: .down, intrinsicSize: CGSize(width: 120, height: 520)),
+                        .init(id: "sideline-1", targetLine: 8, direction: .down, intrinsicSize: CGSize(width: 100, height: 500)),
+                        .init(id: "sideline-2", targetLine: 8, direction: .down, intrinsicSize: CGSize(width: 120, height: 520)),
                     ]
                 ),
                 suraHeaderAspectRatio: 0.25
@@ -306,7 +288,7 @@ final class LinePageGeometryTests: XCTestCase {
                 data: makeData(
                     metrics: metrics,
                     sidelines: [
-                        .init(targetLine: 5, direction: .down, intrinsicSize: rawSidelineSize),
+                        .init(id: "sideline-3", targetLine: 5, direction: .down, intrinsicSize: rawSidelineSize),
                     ]
                 ),
                 suraHeaderAspectRatio: 0.25
@@ -314,22 +296,13 @@ final class LinePageGeometryTests: XCTestCase {
         )
 
         let sideline = try XCTUnwrap(layout.sidelinePlacements.first)
-        let scale = layout.pageFrame.width / CGFloat(metrics.widthParameter)
-        let renderedIntrinsicHeight = rawSidelineSize.height * scale
-        let originalLinesSpanned = ceil(rawSidelineSize.height / (1.35 * CGFloat(metrics.intrinsicLineHeight)))
-        let sidelineFrameHeight = try XCTUnwrap(layout.sidelineFrame?.height)
-        let slotHeight = sidelineFrameHeight / CGFloat(metrics.lineCount)
-        let expectedHeight = (renderedIntrinsicHeight + (originalLinesSpanned * slotHeight)) / 2
-
-        XCTAssertEqual(sideline.frame.height, expectedHeight, accuracy: 0.001)
+        XCTAssertEqual(sideline.frame.height, 168.743567, accuracy: 0.001)
         XCTAssertLessThan(sideline.frame.height, rawSidelineSize.height / 2)
     }
 
     // MARK: Private
 
     private let quran = Quran.hafsMadani1405
-    private let lineHeightRatio: CGFloat = 174 / 1080
-    private let suraHeaderWidthRatio: CGFloat = 1038 / 1080
 
     private func makeEngine() -> LinePageGeometryEngine {
         LinePageGeometryEngine()
@@ -361,74 +334,6 @@ final class LinePageGeometryTests: XCTestCase {
 
     private func ayah(_ sura: Int, _ ayah: Int) throws -> AyahNumber {
         try XCTUnwrap(AyahNumber(quran: quran, sura: sura, ayah: ayah))
-    }
-
-    private func expectedHighlightRect(for span: LinePageHighlightSpan, pageFrame: CGRect) -> CGRect {
-        let lineHeight = pageFrame.width * lineHeightRatio
-        let lineHeightWithoutOverlap = (pageFrame.height - lineHeight) / 14
-        let yStart = (lineHeight - lineHeightWithoutOverlap) / 2
-        let y = pageFrame.minY + yStart + (lineHeightWithoutOverlap * CGFloat(span.line))
-        return CGRect(
-            x: pageFrame.minX + (span.left * pageFrame.width),
-            y: y,
-            width: ceil((span.right - span.left) * pageFrame.width),
-            height: lineHeightWithoutOverlap
-        )
-    }
-
-    private func expectedMarkerFrame(for marker: LinePageAyahMarker, pageFrame: CGRect) -> CGRect {
-        let lineHeight = pageFrame.width * lineHeightRatio
-        let markerDimension = pageFrame.width * 0.05
-        let yStart = ((pageFrame.height - lineHeight) / 14) * CGFloat(marker.line)
-        return CGRect(
-            x: pageFrame.minX + (marker.centerX * pageFrame.width) - (markerDimension / 2),
-            y: pageFrame.minY + yStart + (marker.centerY * lineHeight) - (markerDimension / 2),
-            width: markerDimension,
-            height: markerDimension
-        )
-    }
-
-    private func expectedHeaderFrame(
-        for header: LinePageSuraHeader,
-        pageFrame: CGRect,
-        aspectRatio: CGFloat
-    ) -> CGRect {
-        let lineHeight = pageFrame.width * lineHeightRatio
-        let width = pageFrame.width * suraHeaderWidthRatio
-        let height = width * aspectRatio
-        let yStart = ((pageFrame.height - lineHeight) / 14) * CGFloat(header.line)
-        return CGRect(
-            x: pageFrame.minX + (header.centerX * pageFrame.width) - (width / 2),
-            y: pageFrame.minY + yStart + (header.centerY * lineHeight) - (height / 2),
-            width: width,
-            height: height
-        )
-    }
-
-    private func expectedSelectionRect(for span: LinePageHighlightSpan, pageFrame: CGRect) -> CGRect {
-        let hitFrame = expectedHitFrame(lineNumber: span.line, pageFrame: pageFrame)
-        return CGRect(
-            x: hitFrame.minX + (span.left * pageFrame.width),
-            y: hitFrame.minY,
-            width: (span.right - span.left) * pageFrame.width,
-            height: hitFrame.height
-        )
-    }
-
-    private func expectedHitFrame(lineNumber: Int, pageFrame: CGRect) -> CGRect {
-        let width = Int(pageFrame.width)
-        let height = Int(pageFrame.height)
-        let lineHeight = Int(CGFloat(width) * lineHeightRatio)
-        let lineHeightWithoutOverlap = (height - lineHeight) / 14
-        let offset = (lineHeight - lineHeightWithoutOverlap) / 2
-        let lineIndex = lineNumber
-        let fullLineStart = Int(floor(Double(height - lineHeight) / 14 * Double(lineIndex)))
-        return CGRect(
-            x: pageFrame.minX,
-            y: pageFrame.minY + CGFloat(fullLineStart + offset),
-            width: pageFrame.width,
-            height: CGFloat(lineHeightWithoutOverlap)
-        )
     }
 
     private func assertEqual(_ lhs: CGRect, _ rhs: CGRect, accuracy: CGFloat = 0.001) {

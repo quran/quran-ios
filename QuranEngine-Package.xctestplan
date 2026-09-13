@@ -189,6 +189,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "QuranGeometryTests",
+        "name" : "QuranGeometryTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "ImageServiceTests",
         "name" : "ImageServiceTests"
       }

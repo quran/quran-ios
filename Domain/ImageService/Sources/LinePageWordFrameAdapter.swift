@@ -6,7 +6,6 @@
 //
 
 import CoreGraphics
-import LinePagePersistence
 import QuranGeometry
 import QuranKit
 import WordFrameService

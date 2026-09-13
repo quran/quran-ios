@@ -5,7 +5,7 @@
 //  Created by OpenAI Codex on 2026-03-31.
 //
 
-import LinePagePersistence
+import QuranGeometry
 import QuranKit
 import XCTest
 @testable import ImageService

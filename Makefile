@@ -79,6 +79,7 @@ endef
 .PHONY: build-example-sync-local-debug run-example-sync-local-debug
 .PHONY: clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect lint-no-kotlin-interop
 .PHONY: install-swiftlint build-for-analyzer swiftlint-analyzer
+.PHONY: preview test-preview-tools
 
 test-no-sync:
 	$(WITHOUT_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build test -scheme "$(PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
@@ -136,6 +137,13 @@ run-example-no-sync-whats-new: build-example-no-sync
 
 run-example-sync-whats-new: build-example-sync
 	$(call run-example-app,$(EXAMPLE_SYNC_SIMULATOR),$(WITH_QURAN_SYNC_DERIVED_DATA),$(WHATS_NEW_LAUNCH_ARGUMENTS))
+
+preview: export PREVIEW_FILE = $(f)
+preview:
+	@env QURAN_SYNC= node Tools/preview.mjs
+
+test-preview-tools:
+	node --test Tools/preview.test.mjs
 
 clone-swiftformat:
 	@mkdir -p $(BUILD_TOOLS_DIR)

@@ -20,11 +20,11 @@ public struct LinePageWordFrameAdapter {
     public func wordFrames(
         from highlightSpans: [LinePageHighlightSpan],
         quran: Quran,
-        metrics: LinePageMetrics = .madaniLinePages(widthParameter: 1080),
+        metrics: LinePageMetrics,
         lineCount: Int
     ) -> WordFrameCollection {
         guard !highlightSpans.isEmpty else {
-            return WordFrameCollection(lines: [])
+            return WordFrameCollection(frames: [])
         }
 
         let orderedSpans = highlightSpans.sorted(by: spanSort)

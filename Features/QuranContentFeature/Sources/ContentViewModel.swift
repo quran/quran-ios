@@ -132,6 +132,9 @@ public final class ContentViewModel: ObservableObject {
 
     @PublishedBinding var twoPagesEnabled: Bool
     @Published var geometryActions: [PageGeometryActions] = []
+    #if QURAN_SYNC
+    weak var ayahMenuSourceView: UIView?
+    #endif
 
     @PublishedBinding var highlights: QuranHighlights
 
@@ -175,6 +178,17 @@ public final class ContentViewModel: ObservableObject {
     func onVisiblePageChanged() {
         listener?.contentViewDidChangeVisiblePage()
     }
+
+    #if QURAN_SYNC
+    func onAnnotatedAyahTapped(_ ayah: AyahNumber, at globalPoint: CGPoint) {
+        guard let sourceView = ayahMenuSourceView else {
+            return
+        }
+        let point = sourceView.convert(globalPoint, from: nil)
+        onViewLongPressStarted(at: point, sourceView: sourceView, verse: ayah)
+        onViewLongPressEnded()
+    }
+    #endif
 
     // MARK: Private
 

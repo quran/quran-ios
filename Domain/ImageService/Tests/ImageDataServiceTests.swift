@@ -59,7 +59,7 @@ class ImageDataServiceTests: XCTestCase {
         XCTAssertEqual(actualHeaders, originalHeaders)
         let actualImage = try await separate.imageForPage(page)
         let originalImage = try await original.imageForPage(page)
-        XCTAssertEqual(actualImage.wordFrames.lines[0].frames, originalImage.wordFrames.lines[0].frames)
+        XCTAssertEqual(actualImage.wordFrames.frames, originalImage.wordFrames.frames)
     }
 
     func testPageMarkers() async throws {
@@ -92,7 +92,8 @@ class ImageDataServiceTests: XCTestCase {
         let image = try await service.imageForPage(page)
         let wordFrames = image.wordFrames
 
-        XCTAssertEqual(wordFrames.lines[0].frames, wordFrames.wordFramesForVerse(page.firstVerse))
+        let firstLine = try XCTUnwrap(wordFrames.frames.first?.line)
+        XCTAssertEqual(wordFrames.frames.filter { $0.line == firstLine }, wordFrames.wordFramesForVerse(page.firstVerse))
         XCTAssertEqual(
             CGRect(x: 705, y: 254.0, width: 46.0, height: 95.0),
             wordFrames.wordFrameForWord(Word(verse: page.firstVerse, wordNumber: 2))?.rect
@@ -165,7 +166,7 @@ class ImageDataServiceTests: XCTestCase {
         assertSnapshot(matching: imagePage.image, as: .image, testName: testName)
 
         // assert the word frames values
-        let frames = imagePage.wordFrames.lines.flatMap(\.frames).sorted { $0.word < $1.word }
+        let frames = imagePage.wordFrames.frames.sorted { $0.word < $1.word }
         assertSnapshot(matching: frames, as: .json, testName: testName)
 
         if ProcessInfo.processInfo.environment["LocalSnapshots"] != nil {
@@ -187,7 +188,7 @@ class ImageDataServiceTests: XCTestCase {
             .systemTeal,
         ]
         let strokeColor = UIColor.gray
-        let verses = Set(frames.lines.flatMap(\.frames).map(\.word.verse)).sorted()
+        let verses = Set(frames.frames.map(\.word.verse)).sorted()
         for (offset, verse) in verses.enumerated() {
             let frames = try XCTUnwrap(frames.wordFramesForVerse(verse))
             let color = fillColors[offset % fillColors.count]

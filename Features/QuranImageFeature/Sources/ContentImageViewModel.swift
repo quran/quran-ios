@@ -43,19 +43,19 @@ class ContentImageViewModel: ObservableObject {
 
     let page: Page
     @Published var imagePage: ImagePage?
-    @Published var suraHeaderLocations: [SuraHeaderLocation] = []
-    @Published var ayahNumberLocations: [AyahNumberLocation] = []
-    @Published var highlights: QuranHighlights
     @Published var scrollToVerse: AyahNumber?
-
     @Published var scale: WordFrameScale = .zero
     @Published var imageFrame: CGRect = .zero
+
+    @Published private var suraHeaderLocations: [SuraHeaderLocation] = []
+    @Published private var ayahNumberLocations: [AyahNumberLocation] = []
+    @Published private var highlights: QuranHighlights
 
     var imageRenderingMode: QuranThemedImage.RenderingMode {
         reading.usesInvertedQuranImageRenderingInDarkMode ? .invertInDarkMode : .tinted
     }
 
-    var decorations: ImageDecorations {
+    private var frameHighlights: [WordFrame: Color] {
         // Add verse highlights
         var frameHighlights: [WordFrame: Color] = [:]
         let versesByHighlights = highlights.versesByHighlights()
@@ -69,14 +69,24 @@ class ContentImageViewModel: ObservableObject {
         if let word = highlights.pointedWord, let frame = imagePage?.wordFrames.wordFrameForWord(word) {
             frameHighlights[frame] = QuranHighlights.wordHighlightColor
         }
+        return frameHighlights
+    }
 
+    var decorations: ImageDecorations {
         return ImageDecorations(
             suraHeaders: suraHeaderLocations,
             ayahNumbers: ayahNumberLocations,
-            wordFrames: imagePage?.wordFrames ?? WordFrameCollection(lines: []),
+            drawsAyahNumbersAndSuraHeaders: reading.drawsAyahNumbersAndSuraHeaders,
+            wordFrames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
             highlights: frameHighlights
         )
     }
+
+    #if QURAN_SYNC
+    var ayahAnnotations: [AyahNumber: Set<AyahAnnotation>] {
+        highlights.annotationsByVerse
+    }
+    #endif
 
     func loadImagePage() async {
         guard ReadingPreferences.shared.reading == reading else {
@@ -91,9 +101,9 @@ class ContentImageViewModel: ObservableObject {
             }
             self.imagePage = imagePage
 
-            if reading == .hafs_1421 {
+            ayahNumberLocations = try await imageDataService.ayahNumbers(page)
+            if reading.drawsAyahNumbersAndSuraHeaders {
                 suraHeaderLocations = try await imageDataService.suraHeaders(page)
-                ayahNumberLocations = try await imageDataService.ayahNumbers(page)
             }
 
             scrollToVerseIfNeeded()

@@ -17,7 +17,7 @@ public struct WordFrameProcessor {
 
     public func processWordFrames(_ frames: [WordFrame]) -> WordFrameCollection {
         guard !frames.isEmpty else {
-            return WordFrameCollection(lines: [])
+            return WordFrameCollection(frames: [])
         }
 
         // group by line
@@ -32,7 +32,7 @@ public struct WordFrameProcessor {
         unionFramesHorizontallyInEachLine(&lines)
         alignLineEdges(&lines)
 
-        return WordFrameCollection(lines: lines.map { WordFrameLine(frames: $0) })
+        return WordFrameCollection(frames: lines.flatMap { $0 })
     }
 
     // MARK: Private

@@ -6,6 +6,7 @@
 //
 
 import NoorUI
+import QuranAnnotations
 import QuranGeometry
 import QuranKit
 import QuranLocalization
@@ -14,9 +15,28 @@ import SwiftUI
 
 struct ContentImageView: View {
     @StateObject var viewModel: ContentImageViewModel
+    #if QURAN_SYNC
+    let onAnnotatedAyahTap: (AyahNumber, CGPoint) -> Void
+    #endif
 
     var body: some View {
         VStack {
+            #if QURAN_SYNC
+            ContentImageViewBody(
+                decorations: viewModel.decorations,
+                ayahAnnotations: viewModel.ayahAnnotations,
+                onAnnotatedAyahTap: onAnnotatedAyahTap,
+                image: viewModel.imagePage?.image,
+                renderingMode: viewModel.imageRenderingMode,
+                quarterName: viewModel.page.localizedQuarterName,
+                suraNames: viewModel.page.suraNames(),
+                page: viewModel.page.localizedNumber,
+                scrollToVerse: viewModel.scrollToVerse,
+                wordFrames: viewModel.imagePage?.wordFrames,
+                onScaleChange: { viewModel.scale = $0 },
+                onGlobalFrameChange: { viewModel.imageFrame = $0 }
+            )
+            #else
             ContentImageViewBody(
                 decorations: viewModel.decorations,
                 image: viewModel.imagePage?.image,
@@ -29,6 +49,7 @@ struct ContentImageView: View {
                 onScaleChange: { viewModel.scale = $0 },
                 onGlobalFrameChange: { viewModel.imageFrame = $0 }
             )
+            #endif
         }
         .geometryActions(
             PageGeometryActions(
@@ -45,6 +66,10 @@ struct ContentImageView: View {
 
 private struct ContentImageViewBody: View {
     let decorations: ImageDecorations
+    #if QURAN_SYNC
+    var ayahAnnotations: [AyahNumber: Set<AyahAnnotation>] = [:]
+    var onAnnotatedAyahTap: (AyahNumber, CGPoint) -> Void = { _, _ in }
+    #endif
     let image: UIImage?
     let renderingMode: QuranThemedImage.RenderingMode
     let quarterName: String
@@ -56,7 +81,13 @@ private struct ContentImageViewBody: View {
     let onGlobalFrameChange: (CGRect) -> Void
 
     var body: some View {
-        AdaptiveImageScrollView(decorations: decorations, renderingMode: renderingMode) {
+        #if QURAN_SYNC
+        let content = AdaptiveImageScrollView(
+            decorations: decorations,
+            renderingMode: renderingMode,
+            ayahAnnotations: ayahAnnotations,
+            onAnnotatedAyahTap: onAnnotatedAyahTap
+        ) {
             image
         } onScaleChange: {
             onScaleChange($0)
@@ -67,22 +98,37 @@ private struct ContentImageViewBody: View {
         } footer: {
             QuranPageFooter(page: page)
         }
-        .font(.footnote)
-        .populateReadableInsets()
-        .quranScrolling(scrollToValue: scrollToVerse) {
-            wordFrames?.lineFramesVerVerse($0).first
+        #else
+        let content = AdaptiveImageScrollView(decorations: decorations, renderingMode: renderingMode) {
+            image
+        } onScaleChange: {
+            onScaleChange($0)
+        } onGlobalFrameChange: {
+            onGlobalFrameChange($0)
+        } header: {
+            QuranPageHeader(quarterName: quarterName, suraNames: suraNames)
+        } footer: {
+            QuranPageFooter(page: page)
         }
+        #endif
+        return content
+            .font(.footnote)
+            .populateReadableInsets()
+            .quranScrolling(scrollToValue: scrollToVerse) { AyahScrollTarget(ayah: $0) }
     }
 }
 
 #Preview {
+    let decorations = ImageDecorations(
+        suraHeaders: [],
+        ayahNumbers: [],
+        drawsAyahNumbersAndSuraHeaders: false,
+        wordFrames: WordFrameCollection(frames: []),
+        highlights: [:]
+    )
+
     ContentImageViewBody(
-        decorations: ImageDecorations(
-            suraHeaders: [],
-            ayahNumbers: [],
-            wordFrames: WordFrameCollection(lines: []),
-            highlights: [:]
-        ),
+        decorations: decorations,
         image: UIImage(contentsOfFile: testResourceURL("images/page604.png").path)!,
         renderingMode: .tinted,
         quarterName: "ABC",

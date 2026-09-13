@@ -84,6 +84,16 @@ final class ContentLineViewModel: ObservableObject {
         highlights.versesByHighlights().mapValues { Color($0) }
     }
 
+    #if QURAN_SYNC
+    var ayahAnnotations: [AyahNumber: Set<AyahAnnotation>] {
+        highlights.annotationsByVerse
+    }
+    #endif
+
+    var drawsAyahNumbersAndSuraHeaders: Bool {
+        reading.drawsAyahNumbersAndSuraHeaders
+    }
+
     var chromeStyle: LinePageChromeStyle {
         LinePageChromeStyle(reading: reading)
     }
@@ -145,7 +155,7 @@ final class ContentLineViewModel: ObservableObject {
         }
     }
 
-    func layout(for availableSize: CGSize, showHeaderFooter: Bool = true) -> LinePageLayout? {
+    func layout(for availableSize: CGSize, showHeaderFooter: Bool) -> LinePageLayout? {
         guard let assets else {
             currentLayout = nil
             return nil

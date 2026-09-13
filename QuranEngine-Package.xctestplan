@@ -280,6 +280,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "QuranImageFeatureTests",
+        "name" : "QuranImageFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "QuranViewFeatureTests",
         "name" : "QuranViewFeatureTests"
       }

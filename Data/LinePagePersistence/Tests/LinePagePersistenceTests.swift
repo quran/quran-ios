@@ -7,6 +7,7 @@
 
 import QuranGeometry
 import QuranKit
+import TestResources
 import XCTest
 @testable import LinePagePersistence
 
@@ -86,10 +87,6 @@ final class LinePagePersistenceTests: XCTestCase {
     private let quran = Quran.hafsMadani1405
 
     private func makePersistence() -> GRDBLinePagePersistence {
-        GRDBLinePagePersistence(fileURL: fixtureURL(named: "line_page_ayahinfo"))
-    }
-
-    private func fixtureURL(named name: String) -> URL {
-        Bundle.module.url(forResource: name, withExtension: "db")!
+        GRDBLinePagePersistence(fileURL: TestResources.resourceURL("line_page_ayahinfo.db"))
     }
 }

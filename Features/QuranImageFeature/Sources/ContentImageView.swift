@@ -83,7 +83,7 @@ private struct ContentImageViewBody: View {
             wordFrames: WordFrameCollection(lines: []),
             highlights: [:]
         ),
-        image: UIImage(contentsOfFile: testResourceURL("images/page604.png").absoluteString)!,
+        image: UIImage(contentsOfFile: testResourceURL("images/page604.png").path)!,
         renderingMode: .tinted,
         quarterName: "ABC",
         suraNames: "ABC",

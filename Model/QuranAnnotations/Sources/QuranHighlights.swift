@@ -17,16 +17,37 @@ public struct QuranHighlights: Equatable {
     public var readingVerses: [AyahNumber] = []
     public var shareVerses: [AyahNumber] = []
     public var navigationVerse: AyahNumber?
-    #if QURAN_SYNC
     public var highlightVerses: [AyahNumber: HighlightColor] = [:]
-    #else
-    public var noteVerses: [AyahNumber: Note] = [:]
+    public var noteVerses: Set<AyahNumber> = []
+    #if QURAN_SYNC
+    public var collectionVerses: Set<AyahNumber> = []
+    public var readingBookmarks: [PlacedReadingBookmark] = []
     #endif
 
     public var pointedWord: Word?
 }
 
 extension QuranHighlights {
+    #if QURAN_SYNC
+    public var annotationsByVerse: [AyahNumber: Set<AyahAnnotation>] {
+        var annotations: [AyahNumber: Set<AyahAnnotation>] = [:]
+
+        for ayah in noteVerses {
+            annotations[ayah, default: []].insert(.note)
+        }
+        for ayah in collectionVerses {
+            annotations[ayah, default: []].insert(.collection)
+        }
+        for bookmark in readingBookmarks {
+            guard case .ayah(let ayah) = bookmark.placement else {
+                continue
+            }
+            annotations[ayah, default: []].insert(.readingBookmark(bookmark.slot))
+        }
+        return annotations
+    }
+    #endif
+
     public func needsScrolling(comparingTo oldValue: Self) -> Bool {
         if oldValue.readingVerses != readingVerses {
             return true

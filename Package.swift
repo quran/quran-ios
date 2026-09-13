@@ -165,7 +165,7 @@ private func modelTargets() -> [[Target]] {
             "Utilities",
             "QuranKit",
         ]),
-        target(type, name: "QuranAnnotations", hasTests: false, dependencies: [
+        target(type, name: "QuranAnnotations", dependencies: [
             "QuranKit",
             "QuranText",
         ]),

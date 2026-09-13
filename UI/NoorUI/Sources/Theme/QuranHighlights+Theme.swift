@@ -35,18 +35,12 @@ extension QuranHighlights {
 
     // TODO: Use Color
     public func versesByHighlights() -> [AyahNumber: UIColor] {
-        // Sort order: share, reading, navigation, .note
+        // Sort order: share, reading, navigation, saved highlights
         var versesByHighlights: [AyahNumber: UIColor] = [:]
 
-        #if QURAN_SYNC
         for (verse, color) in highlightVerses {
             versesByHighlights[verse] = color.uiColor.withAlphaComponent(Self.opacity)
         }
-        #else
-        for (verse, note) in noteVerses {
-            versesByHighlights[verse] = note.color.uiColor.withAlphaComponent(Self.opacity)
-        }
-        #endif
 
         func add(verses: [AyahNumber], color: UIColor) {
             for verse in verses {

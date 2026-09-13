@@ -28,6 +28,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "QuranAnnotationsTests",
+        "name" : "QuranAnnotationsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "AppStructureFeatureTests",
         "name" : "AppStructureFeatureTests"
       }

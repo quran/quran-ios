@@ -25,11 +25,9 @@ public struct ContentBuilder {
 
     public func build(withListener listener: ContentListener, input: QuranInput) -> (ContentViewController, ContentViewModel) {
         let quran = ReadingPreferences.shared.reading.quran
-        let noteService = container.noteService()
         let lastPageUpdater = LastPageUpdater(service: container.lastPageService())
         let interactorDeps = ContentViewModel.Deps(
             analytics: container.analytics,
-            noteService: noteService,
             lastPageUpdater: lastPageUpdater,
             quran: quran,
             highlightsService: highlightsService,

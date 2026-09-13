@@ -88,13 +88,11 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let translationsSelectionBuilder: TranslationsListBuilder
         let translationVerseBuilder: TranslationVerseBuilder
         let resources: ReadingResourcesService
-        let notesObserver: QuranNotesObserver
+        let annotationsObserver: QuranAnnotationsObserver
         #if QURAN_SYNC
         let ayahNotesBuilder: AyahNotesBuilder
         let bookmarkAyahsBuilder: BookmarkAyahsBuilder
-        let syncedHighlightsObserver: QuranSyncedHighlightsObserver
-        let syncedCollectionsObserver: QuranSyncedCollectionsObserver
-        let readingBookmarksObserver: QuranReadingBookmarksObserver
+        let noteService: MobileSyncNoteService
         let readingBookmarkMenuBuilder: ReadingBookmarkMenuBuilder
         #else
         let noteEditorBuilder: NoteEditorBuilder
@@ -129,21 +127,19 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     var visiblePages: [Page] { contentViewModel?.visiblePages ?? [] }
 
     func start() {
-        deps.notesObserver.start()
         #if QURAN_SYNC
-        deps.syncedHighlightsObserver.start()
-        deps.syncedCollectionsObserver.start()
-        deps.readingBookmarksObserver.$bookmarks
+        deps.annotationsObserver.$readingBookmarks
             .receive(on: DispatchQueue.main) // sink after the bookmark property is updated
             .sink { [weak self] _ in self?.reloadPageBookmark() }
             .store(in: &cancellables)
-        deps.readingBookmarksObserver.start()
         #else
         deps.pageBookmarkService.pageBookmarks(quran: deps.quran)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.pageBookmarks = $0 }
             .store(in: &cancellables)
         #endif
+
+        deps.annotationsObserver.start()
 
         contentStatePreferences.$quranMode
             .sink { [weak self] _ in self?.onQuranModeUpdated() }
@@ -218,7 +214,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func deleteNotes(in verses: [AyahNumber]) async {
         #if QURAN_SYNC
-        let notesObserver = deps.notesObserver
+        let noteService = deps.noteService
         let notesToDelete = notesInteractingVerses(verses)
         if !notesToDelete.isEmpty {
             presenter?.confirmNoteDelete(
@@ -226,7 +222,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                     do {
                         self?.contentViewModel?.removeAyahMenuHighlight()
                         for note in notesToDelete {
-                            try await notesObserver.remove(note)
+                            try await noteService.removeNote(note)
                         }
                     } catch {
                         crasher.recordError(error, reason: "Failed to delete synced notes")
@@ -283,7 +279,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             return
         }
         do {
-            let note = try await deps.notesObserver.prepareNote(for: verses)
+            let color = deps.noteService.color(from: notes)
+            let note = try await deps.noteService.updateHighlight(verses: verses, color: color, quran: deps.quran)
             presentNoteEditor(note: note)
         } catch {
             crasher.recordError(error, reason: "Failed to prepare note editor")
@@ -301,7 +298,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             }
             let viewController = deps.bookmarkAyahsBuilder.build(
                 verses: verses,
-                collections: deps.syncedCollectionsObserver.collections,
+                collections: deps.annotationsObserver.collections,
                 highlights: deps.highlightsService.highlights.highlightVerses
             )
             presenter?.presentBookmarkAyahs(viewController)
@@ -347,7 +344,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         logger.info("Quran: present ayah menu, verses: \(verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         #if QURAN_SYNC
         let highlightVerses = deps.highlightsService.highlights.highlightVerses
-        let bookmarkedVerses = Set(deps.syncedCollectionsObserver.collections.flatMap { collection in
+        let bookmarkedVerses = Set(deps.annotationsObserver.collections.flatMap { collection in
             collection.bookmarks.map(\.ayah)
         })
         #endif
@@ -360,7 +357,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             highlightVerses: highlightVerses,
             bookmarkedVerses: bookmarkedVerses,
             readingBookmark: verses.count == 1
-                ? deps.readingBookmarksObserver.latest(at: .ayah(verses[0]))
+                ? deps.annotationsObserver.latestReadingBookmark(at: [.ayah(verses[0])])
                 : nil
         )
         #else
@@ -531,7 +528,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     #endif
 
     private func notesInteractingVerses(_ verses: [AyahNumber]) -> [Note] {
-        deps.notesObserver.notes(interacting: verses)
+        deps.annotationsObserver.notes(interacting: verses)
     }
 
     #if !QURAN_SYNC
@@ -599,7 +596,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private func showPageBookmarkIfNeeded(for pages: [Page]) {
         #if QURAN_SYNC
         let placements = pages.map(PlacedReadingBookmark.Placement.page)
-        let bookmark = deps.readingBookmarksObserver.latest(at: placements)
+        let bookmark = deps.annotationsObserver.latestReadingBookmark(at: placements)
         presenter?.updateReadingBookmark(bookmark)
         #else
         presenter?.updateBookmark(bookmarked(pages))

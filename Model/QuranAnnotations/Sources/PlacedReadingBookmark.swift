@@ -2,7 +2,7 @@
 import Foundation
 import QuranKit
 
-public struct PlacedReadingBookmark: Equatable {
+public struct PlacedReadingBookmark: Hashable, Sendable {
     // MARK: Lifecycle
 
     public init(id: String, slot: ReadingBookmarkSlot, placement: Placement, modifiedOn: Date, name: String? = nil) {
@@ -34,7 +34,7 @@ public struct PlacedReadingBookmark: Equatable {
 
     // MARK: Public
 
-    public enum Placement: Equatable {
+    public enum Placement: Hashable, Sendable {
         case ayah(AyahNumber)
         case page(Page)
     }

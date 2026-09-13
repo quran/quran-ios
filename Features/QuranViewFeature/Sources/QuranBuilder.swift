@@ -45,17 +45,14 @@ public struct QuranBuilder {
         let reading = ReadingPreferences.shared.reading
         let quran = reading.quran
         #if QURAN_SYNC
-        let notesObserver = QuranNotesObserver(noteService: container.mobileSyncNoteService(), quran: quran)
-        let syncedHighlightsObserver = QuranSyncedHighlightsObserver(
-            ayahHighlightService: container.ayahHighlightService(),
+        let noteService = container.mobileSyncNoteService()
+        let annotationsObserver = QuranAnnotationsObserver(
+            noteService: noteService,
+            highlightService: container.ayahHighlightService(),
+            collectionService: container.ayahBookmarkCollectionService(),
+            readingBookmarkService: container.readingBookmarkService(),
+            quran: quran,
             highlightsService: highlightsService
-        )
-        let syncedCollectionsObserver = QuranSyncedCollectionsObserver(
-            service: container.ayahBookmarkCollectionService()
-        )
-        let readingBookmarksObserver = QuranReadingBookmarksObserver(
-            service: container.readingBookmarkService(),
-            quran: quran
         )
         let interactorDeps = QuranInteractor.Deps(
             quran: quran,
@@ -68,18 +65,20 @@ public struct QuranBuilder {
             translationsSelectionBuilder: TranslationsListBuilder(container: container),
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources,
-            notesObserver: notesObserver,
+            annotationsObserver: annotationsObserver,
             ayahNotesBuilder: AyahNotesBuilder(container: container),
             bookmarkAyahsBuilder: BookmarkAyahsBuilder(container: container),
-            syncedHighlightsObserver: syncedHighlightsObserver,
-            syncedCollectionsObserver: syncedCollectionsObserver,
-            readingBookmarksObserver: readingBookmarksObserver,
+            noteService: noteService,
             readingBookmarkMenuBuilder: ReadingBookmarkMenuBuilder(container: container)
         )
         #else
         let pageBookmarkService = PageBookmarkService(persistence: container.pageBookmarkPersistence)
         let noteService = container.noteService()
-        let notesObserver = QuranNotesObserver(noteService: noteService, quran: quran)
+        let annotationsObserver = QuranAnnotationsObserver(
+            noteService: noteService,
+            quran: quran,
+            highlightsService: highlightsService
+        )
         let interactorDeps = QuranInteractor.Deps(
             quran: quran,
             highlightsService: highlightsService,
@@ -91,7 +90,7 @@ public struct QuranBuilder {
             translationsSelectionBuilder: TranslationsListBuilder(container: container),
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources,
-            notesObserver: notesObserver,
+            annotationsObserver: annotationsObserver,
             noteEditorBuilder: NoteEditorBuilder(container: container),
             analytics: container.analytics,
             pageBookmarkService: pageBookmarkService,

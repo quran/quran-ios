@@ -36,7 +36,6 @@ public final class ContentViewModel: ObservableObject {
         let quranContentStatePreferences = QuranContentStatePreferences.shared
         let fontSizePreferences = FontSizePreferences.shared
         let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
-        let noteService: NoteService
         let lastPageUpdater: LastPageUpdater
         let quran: Quran
 
@@ -96,9 +95,6 @@ public final class ContentViewModel: ObservableObject {
 
         updateQuranModeCrashContext()
 
-        #if !QURAN_SYNC
-        loadNotes()
-        #endif
         configureInitialPage()
     }
 
@@ -204,14 +200,6 @@ public final class ContentViewModel: ObservableObject {
         return start.array(to: end)
     }
 
-    private static func dictionaryFrom<K: Hashable, U>(_ array: [(K, U)]) -> [K: U] {
-        var dict: [K: U] = [:]
-        for element in array {
-            dict[element.0] = element.1
-        }
-        return dict
-    }
-
     private func configureInitialPage() {
         deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
         highlights.navigationVerse = input.navigationAyah
@@ -261,16 +249,6 @@ public final class ContentViewModel: ObservableObject {
     private func updateLastPageTo(_ pages: [Page]) {
         deps.lastPageUpdater.updateTo(pages: pages)
     }
-
-    #if !QURAN_SYNC
-    private func loadNotes() {
-        deps.noteService.notes(quran: deps.quran)
-            .map { notes in notes.flatMap { note in note.verses.map { ($0, note) } } }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.highlights.noteVerses = Self.dictionaryFrom($0) }
-            .store(in: &cancellables)
-    }
-    #endif
 }
 
 private extension AnalyticsLibrary {

@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2026-03-28.
 //
 
+import QuranGeometry
 import QuranKit
 import XCTest
 @testable import LinePagePersistence

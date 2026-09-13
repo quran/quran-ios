@@ -154,7 +154,7 @@ private func modelTargets() -> [[Target]] {
         ], testDependencies: [
             "QuranKit",
         ]),
-        target(type, name: "QuranGeometry", hasTests: false, dependencies: [
+        target(type, name: "QuranGeometry", dependencies: [
             "QuranKit",
         ]),
         target(type, name: "QuranAudio", hasTests: false, dependencies: [
@@ -301,6 +301,7 @@ private func dataTargets() -> [[Target]] {
 
         target(type, name: "LinePagePersistence", dependencies: [
             "SQLitePersistence",
+            "QuranGeometry",
             "QuranKit",
         ], testResources: [
             .process("Resources"),
@@ -506,8 +507,8 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "ImageService", dependencies: [
+            "QuranGeometry",
             "WordFrameService",
-            "LinePagePersistence",
             "SystemDependencies",
         ], testDependencies: [
             "ReadingService",
@@ -715,6 +716,7 @@ private func featuresTargets() -> [[Target]] {
 
         target(type, name: "QuranImageFeature", hasTests: false, dependencies: [
             "AppDependencies",
+            "QuranGeometry",
             "NoorUI",
             "ImageService",
             "LinePagePersistence",

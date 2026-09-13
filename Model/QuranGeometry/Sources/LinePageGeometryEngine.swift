@@ -1,276 +1,10 @@
 //
-//  LinePageGeometry.swift
-//
-//
-//  Created by Mohamed Afifi on 2026-03-29.
+//  LinePageGeometryEngine.swift
 //
 
 import CoreGraphics
 import Foundation
-import LinePagePersistence
 import QuranKit
-
-public enum LinePageOrientation: Sendable {
-    case portrait
-    case landscape
-}
-
-public enum LinePageParity: Sendable {
-    case odd
-    case even
-}
-
-public struct LinePageDisplaySettings: Sendable {
-    public init(
-        showHeaderFooter: Bool = true,
-        showSidelines: Bool = false,
-        showLineDividers: Bool = false
-    ) {
-        self.showHeaderFooter = showHeaderFooter
-        self.showSidelines = showSidelines
-        self.showLineDividers = showLineDividers
-    }
-
-    public let showHeaderFooter: Bool
-    public let showSidelines: Bool
-    public let showLineDividers: Bool
-}
-
-public struct LinePageHighlightState: Sendable {
-    public init(highlightedVerses: Set<AyahNumber> = []) {
-        self.highlightedVerses = highlightedVerses
-    }
-
-    public let highlightedVerses: Set<AyahNumber>
-}
-
-public struct LinePageGeometryData: Sendable {
-    public struct Sideline: Hashable, Sendable {
-        public init(
-            id: String = "",
-            targetLine: Int,
-            direction: LinePageAssets.SidelineDirection,
-            intrinsicSize: CGSize
-        ) {
-            self.id = id
-            self.targetLine = targetLine
-            self.direction = direction
-            self.intrinsicSize = intrinsicSize
-        }
-
-        public let id: String
-        public let targetLine: Int
-        public let direction: LinePageAssets.SidelineDirection
-        /// Size in source asset pixels for the reading's width parameter.
-        public let intrinsicSize: CGSize
-    }
-
-    public init(
-        metrics: LinePageMetrics = .madaniLinePages(widthParameter: 1080),
-        lineCount: Int? = nil,
-        highlightSpans: [LinePageHighlightSpan],
-        ayahMarkers: [LinePageAyahMarker],
-        suraHeaders: [LinePageSuraHeader],
-        sidelines: [Sideline]
-    ) {
-        self.metrics = metrics
-        self.lineCount = lineCount ?? metrics.lineCount
-        self.highlightSpans = highlightSpans
-        self.ayahMarkers = ayahMarkers
-        self.suraHeaders = suraHeaders
-        self.sidelines = sidelines
-    }
-
-    public let metrics: LinePageMetrics
-    public let lineCount: Int
-    public let highlightSpans: [LinePageHighlightSpan]
-    public let ayahMarkers: [LinePageAyahMarker]
-    public let suraHeaders: [LinePageSuraHeader]
-    public let sidelines: [Sideline]
-}
-
-public struct LinePageGeometryInput: Sendable {
-    public init(
-        availableSize: CGSize,
-        orientation: LinePageOrientation,
-        verticalPadding: CGFloat = 0,
-        pageParity: LinePageParity,
-        displaySettings: LinePageDisplaySettings,
-        data: LinePageGeometryData,
-        highlights: LinePageHighlightState = LinePageHighlightState(),
-        suraHeaderAspectRatio: CGFloat
-    ) {
-        self.availableSize = availableSize
-        self.orientation = orientation
-        self.verticalPadding = verticalPadding
-        self.pageParity = pageParity
-        self.displaySettings = displaySettings
-        self.data = data
-        self.highlights = highlights
-        self.suraHeaderAspectRatio = suraHeaderAspectRatio
-    }
-
-    public let availableSize: CGSize
-    public let orientation: LinePageOrientation
-    public let verticalPadding: CGFloat
-    public let pageParity: LinePageParity
-    public let displaySettings: LinePageDisplaySettings
-    public let data: LinePageGeometryData
-    public let highlights: LinePageHighlightState
-    public let suraHeaderAspectRatio: CGFloat
-}
-
-public struct LinePageLineFrame: Hashable, Sendable {
-    public init(lineNumber: Int, imageFrame: CGRect, hitFrame: CGRect) {
-        self.lineNumber = lineNumber
-        self.imageFrame = imageFrame
-        self.hitFrame = hitFrame
-    }
-
-    public let lineNumber: Int
-    public let imageFrame: CGRect
-    public let hitFrame: CGRect
-}
-
-public struct LinePageHighlightRect: Hashable, Sendable {
-    public init(ayah: AyahNumber, rect: CGRect) {
-        self.ayah = ayah
-        self.rect = rect
-    }
-
-    public let ayah: AyahNumber
-    public let rect: CGRect
-}
-
-public struct LinePageAyahMarkerPlacement: Hashable, Sendable {
-    public init(marker: LinePageAyahMarker, frame: CGRect) {
-        self.marker = marker
-        self.frame = frame
-    }
-
-    public let marker: LinePageAyahMarker
-    public let frame: CGRect
-}
-
-public struct LinePageSuraHeaderPlacement: Hashable, Sendable {
-    public init(header: LinePageSuraHeader, frame: CGRect) {
-        self.header = header
-        self.frame = frame
-    }
-
-    public let header: LinePageSuraHeader
-    public let frame: CGRect
-}
-
-public struct LinePageSidelinePlacement: Hashable, Sendable {
-    public init(sideline: LinePageGeometryData.Sideline, frame: CGRect) {
-        self.sideline = sideline
-        self.frame = frame
-    }
-
-    public let sideline: LinePageGeometryData.Sideline
-    public let frame: CGRect
-}
-
-public struct LinePageLineDivider: Hashable, Sendable {
-    public init(lineNumber: Int, frame: CGRect) {
-        self.lineNumber = lineNumber
-        self.frame = frame
-    }
-
-    public let lineNumber: Int
-    public let frame: CGRect
-}
-
-public struct LinePageSelectionAnchors: Hashable, Sendable {
-    public init(start: CGRect, end: CGRect) {
-        self.start = start
-        self.end = end
-    }
-
-    public let start: CGRect
-    public let end: CGRect
-}
-
-public struct LinePageLayout: Sendable {
-    // MARK: Lifecycle
-
-    fileprivate init(
-        contentSize: CGSize,
-        headerFrame: CGRect,
-        pageFrame: CGRect,
-        footerFrame: CGRect,
-        sidelineFrame: CGRect?,
-        lineFrames: [LinePageLineFrame],
-        highlightRects: [LinePageHighlightRect],
-        ayahMarkerPlacements: [LinePageAyahMarkerPlacement],
-        suraHeaderPlacements: [LinePageSuraHeaderPlacement],
-        sidelinePlacements: [LinePageSidelinePlacement],
-        lineDividers: [LinePageLineDivider],
-        versesByLine: [Int: [LinePageHighlightSpan]],
-        selectionLineRanges: [SelectionLineRange],
-        selectionAnchorsByAyah: [AyahNumber: LinePageSelectionAnchors]
-    ) {
-        self.contentSize = contentSize
-        self.headerFrame = headerFrame
-        self.pageFrame = pageFrame
-        self.footerFrame = footerFrame
-        self.sidelineFrame = sidelineFrame
-        self.lineFrames = lineFrames
-        self.highlightRects = highlightRects
-        self.ayahMarkerPlacements = ayahMarkerPlacements
-        self.suraHeaderPlacements = suraHeaderPlacements
-        self.sidelinePlacements = sidelinePlacements
-        self.lineDividers = lineDividers
-        self.versesByLine = versesByLine
-        self.selectionLineRanges = selectionLineRanges
-        self.selectionAnchorsByAyah = selectionAnchorsByAyah
-    }
-
-    // MARK: Public
-
-    public let contentSize: CGSize
-    public let headerFrame: CGRect
-    public let pageFrame: CGRect
-    public let footerFrame: CGRect
-    public let sidelineFrame: CGRect?
-    public let lineFrames: [LinePageLineFrame]
-    public let highlightRects: [LinePageHighlightRect]
-    public let ayahMarkerPlacements: [LinePageAyahMarkerPlacement]
-    public let suraHeaderPlacements: [LinePageSuraHeaderPlacement]
-    public let sidelinePlacements: [LinePageSidelinePlacement]
-    public let lineDividers: [LinePageLineDivider]
-
-    public func verse(at point: CGPoint) -> AyahNumber? {
-        guard pageFrame.contains(point) else {
-            return nil
-        }
-
-        let localPoint = CGPoint(x: point.x - pageFrame.minX, y: point.y - pageFrame.minY)
-        guard let lineRange = selectionLineRanges.first(where: { $0.fullLineRange.contains(localPoint.y) }) else {
-            return nil
-        }
-
-        let matches = versesByLine[lineRange.lineNumber, default: []]
-            .filter {
-                let left = $0.left * pageFrame.width
-                let right = $0.right * pageFrame.width
-                return (left ... right).contains(localPoint.x)
-            }
-            .map(\.ayah)
-        return matches.max()
-    }
-
-    public func selectionAnchors(for ayah: AyahNumber) -> LinePageSelectionAnchors? {
-        selectionAnchorsByAyah[ayah]
-    }
-
-    // MARK: Private
-
-    private let versesByLine: [Int: [LinePageHighlightSpan]]
-    private let selectionLineRanges: [SelectionLineRange]
-    private let selectionAnchorsByAyah: [AyahNumber: LinePageSelectionAnchors]
-}
 
 public struct LinePageGeometryEngine {
     private struct Measurements {
@@ -408,8 +142,6 @@ public struct LinePageGeometryEngine {
         )
     }
 
-    // MARK: Private
-
     private func measurements(for input: LinePageGeometryInput) -> Measurements {
         let availableWidth = input.availableSize.width
         let availableHeight = input.availableSize.height
@@ -482,6 +214,26 @@ public struct LinePageGeometryEngine {
             )
         }
     }
+
+    private func minimumPageHeightToWidthRatio(data: LinePageGeometryData) -> CGFloat {
+        guard !data.metrics.allowLineOverlap else {
+            return overlappingPageMinimumHeightToWidthRatio
+        }
+
+        return max(
+            overlappingPageMinimumHeightToWidthRatio,
+            CGFloat(data.lineCount) * CGFloat(data.metrics.lineHeightRatio)
+        )
+    }
+
+    private func scrollablePageHeightToWidthRatio(data: LinePageGeometryData) -> CGFloat {
+        max(
+            scrollableOverlappingPageHeightToWidthRatio,
+            minimumPageHeightToWidthRatio(data: data)
+        )
+    }
+
+    // MARK: Lines and Selection
 
     private func lineFrames(in pageFrame: CGRect, data: LinePageGeometryData) -> [LinePageLineFrame] {
         let ranges = selectionLineRanges(in: pageFrame, data: data)
@@ -607,6 +359,47 @@ public struct LinePageGeometryEngine {
         }
     }
 
+    private func selectionAnchors(
+        for spans: [LinePageHighlightSpan],
+        in pageFrame: CGRect,
+        data: LinePageGeometryData
+    ) -> [AyahNumber: LinePageSelectionAnchors] {
+        let lineRanges = Dictionary(uniqueKeysWithValues: selectionLineRanges(in: pageFrame, data: data).map {
+            ($0.lineNumber, $0.hitFrame)
+        })
+
+        let grouped = Dictionary(grouping: spans, by: \.ayah)
+        return grouped.mapValues { spans in
+            let ordered = spans.sorted {
+                if $0.line == $1.line {
+                    return $0.left < $1.left
+                }
+                return $0.line < $1.line
+            }
+            let start = selectionRect(for: ordered.first!, lineRanges: lineRanges, pageWidth: pageFrame.width)
+            let end = selectionRect(for: ordered.last!, lineRanges: lineRanges, pageWidth: pageFrame.width)
+            return LinePageSelectionAnchors(start: start, end: end)
+        }
+    }
+
+    private func selectionRect(
+        for span: LinePageHighlightSpan,
+        lineRanges: [Int: CGRect],
+        pageWidth: CGFloat
+    ) -> CGRect {
+        let hitFrame = lineRanges[span.line] ?? .zero
+        let minX = hitFrame.minX + (span.left * pageWidth)
+        let maxX = hitFrame.minX + (span.right * pageWidth)
+        return CGRect(
+            x: minX,
+            y: hitFrame.minY,
+            width: maxX - minX,
+            height: hitFrame.height
+        )
+    }
+
+    // MARK: Decorations
+
     private func highlightRects(
         for highlightedVerses: Set<AyahNumber>,
         spans: [LinePageHighlightSpan],
@@ -713,232 +506,6 @@ public struct LinePageGeometryEngine {
             )
         }
     }
-
-    private func sidelinePlacements(
-        for sidelines: [LinePageGeometryData.Sideline],
-        in sidelineFrame: CGRect?,
-        pageFrame: CGRect,
-        parity: LinePageParity,
-        data: LinePageGeometryData
-    ) -> [LinePageSidelinePlacement] {
-        guard let sidelineFrame else {
-            return []
-        }
-
-        let sortedSidelines = sidelines.sorted { lhs, rhs in
-            if lhs.targetLine == rhs.targetLine {
-                return lhs.intrinsicSize.height < rhs.intrinsicSize.height
-            }
-            return lhs.targetLine < rhs.targetLine
-        }
-        let intrinsicScale = sidelineIntrinsicScale(in: pageFrame, metrics: data.metrics)
-        let renderedIntrinsicSizes = sortedSidelines.map {
-            renderedSidelineSize(for: $0, scale: intrinsicScale)
-        }
-        let lineHeight = sidelineFrame.height / CGFloat(max(data.lineCount, 1))
-
-        let locations = sortedSidelines.enumerated().map { item -> ClosedRange<CGFloat> in
-            let sideline = item.element
-            let intrinsicSize = renderedIntrinsicSizes[item.offset]
-            let targetLineTop = lineHeight * CGFloat(sideline.targetLine - 1)
-            let y = if sideline.direction == .up {
-                max(CGFloat.zero, targetLineTop + lineHeight - intrinsicSize.height)
-            } else {
-                targetLineTop
-            }
-            return y ... (y + intrinsicSize.height)
-        }
-
-        return sortedSidelines.enumerated().map { item in
-            let index = item.offset
-            let sideline = item.element
-            let location = locations[index]
-            let size = sidelineSize(
-                for: sideline,
-                at: index,
-                sortedSidelines: sortedSidelines,
-                locations: locations,
-                containerWidth: sidelineFrame.width,
-                lineHeight: lineHeight,
-                lineCount: data.lineCount,
-                renderedIntrinsicSize: renderedIntrinsicSizes[index],
-                intrinsicScale: intrinsicScale,
-                metrics: data.metrics
-            )
-
-            let y: CGFloat
-            if locations.count > index + 1, locations[index + 1].lowerBound < (location.lowerBound + size.height) {
-                let updatedY = location.lowerBound + size.height
-                y = location.lowerBound - (updatedY - locations[index + 1].lowerBound)
-            } else if location.lowerBound + size.height > sidelineFrame.height {
-                y = location.lowerBound - ((location.lowerBound + size.height) - sidelineFrame.height)
-            } else {
-                y = location.lowerBound
-            }
-
-            let x = if parity == .odd {
-                sidelineFrame.width - size.width
-            } else {
-                CGFloat.zero
-            }
-
-            return LinePageSidelinePlacement(
-                sideline: sideline,
-                frame: CGRect(
-                    x: sidelineFrame.minX + x,
-                    y: sidelineFrame.minY + y,
-                    width: size.width,
-                    height: size.height
-                )
-            )
-        }
-    }
-
-    private func sidelineSize(
-        for sideline: LinePageGeometryData.Sideline,
-        at index: Int,
-        sortedSidelines: [LinePageGeometryData.Sideline],
-        locations: [ClosedRange<CGFloat>],
-        containerWidth: CGFloat,
-        lineHeight: CGFloat,
-        lineCount: Int,
-        renderedIntrinsicSize: CGSize,
-        intrinsicScale: CGFloat,
-        metrics: LinePageMetrics
-    ) -> CGSize {
-        let intrinsic = sideline.intrinsicSize
-        let renderedIntrinsic = renderedIntrinsicSize
-        guard intrinsic.height > 0, renderedIntrinsic.height > 0 else {
-            return .zero
-        }
-
-        let overlapsNext = locations.count > index + 1 && locations[index + 1].lowerBound < locations[index].upperBound
-
-        if overlapsNext {
-            let originalLinesSpanned = originalLinesSpanned(for: intrinsic, metrics: metrics)
-            let nextUsedLine: Int = if sideline.direction == .up {
-                (sortedSidelines.filter { $0.targetLine < sideline.targetLine }
-                    .map(\.targetLine)
-                    .max() ?? 1) - 1
-            } else {
-                (sortedSidelines.filter { $0.targetLine > sideline.targetLine }
-                    .map(\.targetLine)
-                    .min() ?? (lineCount + 1)) - 1
-            }
-
-            let targetLinesToSpan = max(originalLinesSpanned, abs(nextUsedLine - sideline.targetLine))
-            let targetHeight = CGFloat(targetLinesToSpan) * lineHeight
-            if renderedIntrinsic.height - targetHeight < (sidelineResizeThreshold * intrinsicScale) {
-                return renderedIntrinsic
-            }
-            return CGSize(
-                width: (targetHeight / renderedIntrinsic.height) * renderedIntrinsic.width,
-                height: targetHeight
-            )
-        }
-
-        if renderedIntrinsic.width > containerWidth {
-            return CGSize(
-                width: containerWidth,
-                height: (containerWidth / renderedIntrinsic.width) * renderedIntrinsic.height
-            )
-        }
-
-        let originalLinesSpanned = originalLinesSpanned(for: intrinsic, metrics: metrics)
-        let originalTargetHeight = CGFloat(originalLinesSpanned) * lineHeight
-        let targetHeight = abs(renderedIntrinsic.height + originalTargetHeight) / 2
-        return CGSize(
-            width: (targetHeight / renderedIntrinsic.height) * renderedIntrinsic.width,
-            height: targetHeight
-        )
-    }
-
-    private func sidelineIntrinsicScale(in pageFrame: CGRect, metrics: LinePageMetrics) -> CGFloat {
-        guard metrics.widthParameter > 0 else {
-            return 1
-        }
-        return pageFrame.width / CGFloat(metrics.widthParameter)
-    }
-
-    private func renderedSidelineSize(
-        for sideline: LinePageGeometryData.Sideline,
-        scale: CGFloat
-    ) -> CGSize {
-        CGSize(
-            width: sideline.intrinsicSize.width * scale,
-            height: sideline.intrinsicSize.height * scale
-        )
-    }
-
-    private func originalLinesSpanned(for intrinsic: CGSize, metrics: LinePageMetrics) -> Int {
-        guard metrics.intrinsicLineHeight > 0 else {
-            return 1
-        }
-        return max(Int(ceil(intrinsic.height / (1.35 * CGFloat(metrics.intrinsicLineHeight)))), 1)
-    }
-
-    private func selectionAnchors(
-        for spans: [LinePageHighlightSpan],
-        in pageFrame: CGRect,
-        data: LinePageGeometryData
-    ) -> [AyahNumber: LinePageSelectionAnchors] {
-        let lineRanges = Dictionary(uniqueKeysWithValues: selectionLineRanges(in: pageFrame, data: data).map {
-            ($0.lineNumber, $0.hitFrame)
-        })
-
-        let grouped = Dictionary(grouping: spans, by: \.ayah)
-        return grouped.mapValues { spans in
-            let ordered = spans.sorted {
-                if $0.line == $1.line {
-                    return $0.left < $1.left
-                }
-                return $0.line < $1.line
-            }
-            let start = selectionRect(for: ordered.first!, lineRanges: lineRanges, pageWidth: pageFrame.width)
-            let end = selectionRect(for: ordered.last!, lineRanges: lineRanges, pageWidth: pageFrame.width)
-            return LinePageSelectionAnchors(start: start, end: end)
-        }
-    }
-
-    private func selectionRect(
-        for span: LinePageHighlightSpan,
-        lineRanges: [Int: CGRect],
-        pageWidth: CGFloat
-    ) -> CGRect {
-        let hitFrame = lineRanges[span.line] ?? .zero
-        let minX = hitFrame.minX + (span.left * pageWidth)
-        let maxX = hitFrame.minX + (span.right * pageWidth)
-        return CGRect(
-            x: minX,
-            y: hitFrame.minY,
-            width: maxX - minX,
-            height: hitFrame.height
-        )
-    }
-
-    private func minimumPageHeightToWidthRatio(data: LinePageGeometryData) -> CGFloat {
-        guard !data.metrics.allowLineOverlap else {
-            return overlappingPageMinimumHeightToWidthRatio
-        }
-
-        return max(
-            overlappingPageMinimumHeightToWidthRatio,
-            CGFloat(data.lineCount) * CGFloat(data.metrics.lineHeightRatio)
-        )
-    }
-
-    private func scrollablePageHeightToWidthRatio(data: LinePageGeometryData) -> CGFloat {
-        max(
-            scrollableOverlappingPageHeightToWidthRatio,
-            minimumPageHeightToWidthRatio(data: data)
-        )
-    }
-}
-
-private struct SelectionLineRange: Sendable {
-    let lineNumber: Int
-    let fullLineRange: ClosedRange<CGFloat>
-    let hitFrame: CGRect
 }
 
 private let headerFooterHeightRatio: CGFloat = 0.04
@@ -949,6 +516,5 @@ private let lineDividerHeight: CGFloat = 1
 private let scrollablePageWidthRatio: CGFloat = 0.97
 private let scrollableMaximumPageWidth: CGFloat = 1080
 private let scrollableOverlappingPageHeightToWidthRatio: CGFloat = 1.76
-private let sidelineResizeThreshold: CGFloat = 25
 private let sidelineWidthRatio: CGFloat = 0.1
 private let suraHeaderWidthRatio: CGFloat = 1038 / 1080

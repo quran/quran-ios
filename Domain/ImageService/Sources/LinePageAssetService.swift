@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import LinePagePersistence
+import QuranGeometry
 import QuranKit
 import SystemDependencies
 import UIKit
@@ -29,13 +29,8 @@ public struct LinePageAssets {
         public let image: UIImage
     }
 
-    public enum SidelineDirection: String, Sendable {
-        case up
-        case down
-    }
-
     public struct SidelineImage {
-        public init(targetLine: Int, direction: SidelineDirection, imageURL: URL, image: UIImage) {
+        public init(targetLine: Int, direction: LinePageSidelineDirection, imageURL: URL, image: UIImage) {
             self.targetLine = targetLine
             self.direction = direction
             self.imageURL = imageURL
@@ -43,7 +38,7 @@ public struct LinePageAssets {
         }
 
         public let targetLine: Int
-        public let direction: SidelineDirection
+        public let direction: LinePageSidelineDirection
         public let imageURL: URL
         public let image: UIImage
     }
@@ -202,7 +197,7 @@ public struct LinePageAssetService {
             return []
         }
 
-        let defaultDirection: LinePageAssets.SidelineDirection = pageNumber.isMultiple(of: 2) ? .down : .up
+        let defaultDirection: LinePageSidelineDirection = pageNumber.isMultiple(of: 2) ? .down : .up
 
         return files
             .filter { $0.pathExtension.lowercased() == "png" }
@@ -217,7 +212,7 @@ public struct LinePageAssetService {
                     return nil
                 }
 
-                let direction: LinePageAssets.SidelineDirection = if baseName.contains("_up") {
+                let direction: LinePageSidelineDirection = if baseName.contains("_up") {
                     .up
                 } else if baseName.contains("_down") {
                     .down

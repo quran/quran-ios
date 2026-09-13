@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 @MainActor
 final class QuranScrollScheduler: ObservableObject {
@@ -68,7 +69,8 @@ struct QuranScrollingViewModifier<Value: Equatable, ID: Hashable>: ViewModifier 
 
     private func scheduleScroll(to value: Value?, using scrollView: ScrollViewProxy) {
         scheduler.scheduleScroll(to: value, transform: transform) { id in
-            withAnimation(.easeInOut(duration: 0.25)) {
+            // Respect animation suppression by the UIKit host.
+            withAnimation(UIView.areAnimationsEnabled ? .easeInOut(duration: 0.25) : nil) {
                 scrollView.scrollTo(id, anchor: anchor)
             }
         }

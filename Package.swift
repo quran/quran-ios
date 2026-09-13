@@ -303,9 +303,7 @@ private func dataTargets() -> [[Target]] {
             "SQLitePersistence",
             "QuranGeometry",
             "QuranKit",
-        ], testResources: [
-            .process("Resources"),
-        ]),
+        ], testDependencies: ["TestResources"]),
 
         target(type, name: "WordTextPersistence", hasTests: false, dependencies: [
             "SQLitePersistence",
@@ -714,7 +712,7 @@ private func featuresTargets() -> [[Target]] {
             "Caching",
         ]),
 
-        target(type, name: "QuranImageFeature", hasTests: false, dependencies: [
+        target(type, name: "QuranImageFeature", dependencies: [
             "AppDependencies",
             "QuranGeometry",
             "NoorUI",
@@ -725,7 +723,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranLocalization",
             "QuranTextKit",
             "Caching",
-        ]),
+        ], testDependencies: ["TestResources"]),
 
         target(type, name: "ReadingSelectorFeature", hasTests: false, dependencies: [
             "AppDependencies",
@@ -979,6 +977,10 @@ func validateDependenciesStructure(_ targets: [Target]) {
         let validDependencyTypes = TargetType.validDependencies[targetType]!
         for dependency in target.dependencies {
             let dependencyName = dependencyName(of: dependency)
+            // Shared fixtures are available to tests in every layer.
+            if target.isTest && dependencyName == "TestResources" {
+                continue
+            }
             guard let dependencyType = targetTypes[dependencyName] else {
                 continue
             }

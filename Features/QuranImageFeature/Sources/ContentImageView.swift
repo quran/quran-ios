@@ -85,10 +85,11 @@ private struct ContentImageViewBody: View {
         let content = AdaptiveImageScrollView(
             decorations: decorations,
             renderingMode: renderingMode,
-            ayahAnnotations: ayahAnnotations,
-            onAnnotatedAyahTap: onAnnotatedAyahTap
+            ayahAnnotations: ayahAnnotations
         ) {
             image
+        } onAnnotatedAyahTap: {
+            onAnnotatedAyahTap($0, $1)
         } onScaleChange: {
             onScaleChange($0)
         } onGlobalFrameChange: {

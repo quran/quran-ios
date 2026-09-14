@@ -17,6 +17,7 @@ import UIx
 public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     // MARK: Lifecycle
 
+    #if !QURAN_SYNC
     public init(
         decorations: ImageDecorations,
         renderingMode: QuranThemedImage.RenderingMode = .tinted,
@@ -26,10 +27,6 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
         @ViewBuilder header: () -> Header,
         @ViewBuilder footer: () -> Footer
     ) {
-        #if QURAN_SYNC
-        ayahAnnotations = [:]
-        onAnnotatedAyahTap = { _, _ in }
-        #endif
         self.decorations = decorations
         self.image = image()
         self.renderingMode = renderingMode
@@ -38,14 +35,13 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
         self.onScaleChange = onScaleChange
         self.onGlobalFrameChange = onGlobalFrameChange
     }
-
-    #if QURAN_SYNC
+    #else
     public init(
         decorations: ImageDecorations,
         renderingMode: QuranThemedImage.RenderingMode = .tinted,
         ayahAnnotations: [AyahNumber: Set<AyahAnnotation>],
-        onAnnotatedAyahTap: @escaping (AyahNumber, CGPoint) -> Void,
         image: () -> UIImage?,
+        onAnnotatedAyahTap: @escaping (AyahNumber, CGPoint) -> Void,
         onScaleChange: @escaping (WordFrameScale) -> Void,
         onGlobalFrameChange: @escaping (CGRect) -> Void,
         @ViewBuilder header: () -> Header,
@@ -152,10 +148,10 @@ private struct AnnotatedAyahImagePreview: View {
     var body: some View {
         AdaptiveImageScrollView(
             decorations: decorations,
-            ayahAnnotations: ayah.map { [$0: [.collection, .note]] } ?? [:],
-            onAnnotatedAyahTap: { _, _ in tapCount += 1 }
+            ayahAnnotations: ayah.map { [$0: [.collection, .note]] } ?? [:]
         ) {
             UIImage(contentsOfFile: testResourceURL("images/page604.png").path)
+        } onAnnotatedAyahTap: { _, _ in tapCount += 1
         } onScaleChange: { _ in
         } onGlobalFrameChange: { _ in
         } header: {

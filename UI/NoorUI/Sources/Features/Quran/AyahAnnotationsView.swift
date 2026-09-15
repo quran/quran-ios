@@ -13,10 +13,12 @@ public struct AyahAnnotationsView: View {
     public init(
         markers: [AyahMarkerPlacement],
         annotations: [AyahNumber: Set<AyahAnnotation>],
+        annotationsHidden: Bool,
         onAnnotatedAyahTap: @escaping (AyahNumber, CGPoint) -> Void
     ) {
         self.markers = markers
         self.annotations = annotations
+        self.annotationsHidden = annotationsHidden
         self.onAnnotatedAyahTap = onAnnotatedAyahTap
     }
 
@@ -37,8 +39,13 @@ public struct AyahAnnotationsView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .environment(\.layoutDirection, .leftToRight)
+        .opacity(annotationsHidden ? 0 : 1)
+        .animation(ReaderVisibilityAnimation.animation, value: annotationsHidden)
+        .allowsHitTesting(!annotationsHidden)
+        .accessibilityHidden(annotationsHidden)
     }
 
+    private let annotationsHidden: Bool
     private let markers: [AyahMarkerPlacement]
     private let annotations: [AyahNumber: Set<AyahAnnotation>]
     private let onAnnotatedAyahTap: (AyahNumber, CGPoint) -> Void
@@ -68,6 +75,7 @@ private struct AyahAnnotationsPlacementPreview: View {
                 AyahAnnotationsView(
                     markers: markers,
                     annotations: [ayahs[0]: [.note], ayahs[1]: [.collection, .note]],
+                    annotationsHidden: false,
                     onAnnotatedAyahTap: { ayah, _ in tappedAyah = ayah }
                 )
             }

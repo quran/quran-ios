@@ -2,6 +2,7 @@
 //  ContentTranslationViewModelTests.swift
 //
 
+import AnnotationsService
 import Combine
 import QuranKit
 import QuranText
@@ -11,6 +12,42 @@ import XCTest
 
 @MainActor
 final class ContentTranslationViewModelTests: XCTestCase {
+    func testHighlightsFollowChangesToDisplayedVerses() {
+        let first = Quran.hafsMadani1405.pages[0].firstVerse
+        let second = Quran.hafsMadani1405.pages[1].firstVerse
+        let service = VerseOverlayService()
+        service.overlays.colorHighlights = [first: .green, second: .blue]
+        let sut = makeSUT(overlayService: service)
+
+        sut.verses = [first]
+        XCTAssertEqual(Set(sut.highlights.keys), [first])
+
+        sut.verses = [second]
+        XCTAssertEqual(Set(sut.highlights.keys), [second])
+    }
+
+    func testUnrelatedOverlayChangesDoNotRepublishTranslationHighlights() {
+        let verse = Quran.hafsMadani1405.pages[0].firstVerse
+        let other = Quran.hafsMadani1405.pages[1].firstVerse
+        let service = VerseOverlayService()
+        let sut = makeSUT(overlayService: service)
+        sut.verses = [verse]
+        var updates = 0
+        let subscription = sut.$highlights.dropFirst().sink { _ in updates += 1 }
+        defer { subscription.cancel() }
+
+        service.overlays.colorHighlights = [other: .green]
+        service.overlays.notedVerses = [verse]
+        service.overlays.annotationsHidden = true
+
+        XCTAssertEqual(updates, 0)
+
+        service.overlays.colorHighlights[verse] = .blue
+
+        XCTAssertEqual(updates, 1)
+        XCTAssertEqual(Set(sut.highlights.keys), [verse])
+    }
+
     func testReadingUpdatesFromPreferences() {
         let preferences = ReadingPreferences.shared
         let originalReading = preferences.reading
@@ -53,12 +90,12 @@ final class ContentTranslationViewModelTests: XCTestCase {
         withExtendedLifetime(cancellable) { }
     }
 
-    private func makeSUT() -> ContentTranslationViewModel {
+    private func makeSUT(overlayService: VerseOverlayService = .init()) -> ContentTranslationViewModel {
         let unavailableURL = URL(fileURLWithPath: "/tmp/unavailable-quran-translation-test")
         return ContentTranslationViewModel(
             localTranslationsRetriever: .init(databasesURL: unavailableURL),
             dataService: .init(databasesURL: unavailableURL, quranFileURL: unavailableURL),
-            highlightsService: .init()
+            overlayService: overlayService
         )
     }
 

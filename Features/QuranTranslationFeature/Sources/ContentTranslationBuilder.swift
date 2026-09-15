@@ -16,11 +16,11 @@ import TranslationService
 
 public struct ContentTranslationBuilder {
     private let container: AppDependencies
-    private let highlightsService: QuranHighlightsService
+    private let overlayService: VerseOverlayService
 
-    public init(container: AppDependencies, highlightsService: QuranHighlightsService) {
+    public init(container: AppDependencies, overlayService: VerseOverlayService) {
         self.container = container
-        self.highlightsService = highlightsService
+        self.overlayService = overlayService
     }
 
     @MainActor
@@ -34,7 +34,7 @@ public struct ContentTranslationBuilder {
         let viewModel = ContentTranslationViewModel(
             localTranslationsRetriever: localTranslationsRetriever,
             dataService: dataService,
-            highlightsService: highlightsService
+            overlayService: overlayService
         )
         viewModel.verses = page.verses
         return ContentTranslationView(viewModel: viewModel)

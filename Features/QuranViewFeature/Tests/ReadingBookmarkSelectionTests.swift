@@ -19,7 +19,7 @@ final class ReadingBookmarkSelectionTests: XCTestCase {
             collectionService: AyahBookmarkCollectionService(quranDataService: database.quranDataService),
             readingBookmarkService: service,
             quran: .hafsMadani1405,
-            highlightsService: QuranHighlightsService()
+            overlayService: VerseOverlayService()
         )
     }
 

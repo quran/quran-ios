@@ -1,5 +1,5 @@
 //
-//  QuranHighlights+Theme.swift
+//  VerseOverlays+Theme.swift
 //  Quran
 //
 //  Created by Mohamed Afifi on 10/7/18.
@@ -24,21 +24,21 @@ import SwiftUI
 import UIKit
 
 // TODO: Use SwiftUI.Color and remove UIColor usage.
-extension QuranHighlights {
+extension VerseOverlays {
     public static let opacity = 0.3
 
     public static let wordHighlightColor = Color.appIdentity.opacity(opacity)
 
-    static let readingColor = UIColor.appIdentity.withAlphaComponent(opacity)
-    static let shareColor = UIColor.systemBlue.withAlphaComponent(opacity)
+    static let playingColor = UIColor.appIdentity.withAlphaComponent(opacity)
+    static let selectionColor = UIColor.systemBlue.withAlphaComponent(opacity)
     static let navigationColor = UIColor.systemGray.withAlphaComponent(opacity)
 
     // TODO: Use Color
     public func versesByHighlights() -> [AyahNumber: UIColor] {
-        // Sort order: share, reading, navigation, saved highlights
+        // Sort order: selection, playback, navigation, saved highlights
         var versesByHighlights: [AyahNumber: UIColor] = [:]
 
-        for (verse, color) in highlightVerses {
+        for (verse, color) in colorHighlights {
             versesByHighlights[verse] = color.uiColor.withAlphaComponent(Self.opacity)
         }
 
@@ -48,11 +48,11 @@ extension QuranHighlights {
             }
         }
 
-        if let navigationVerse {
-            versesByHighlights[navigationVerse] = Self.navigationColor
+        if let navigationTarget {
+            versesByHighlights[navigationTarget] = Self.navigationColor
         }
-        add(verses: readingVerses, color: Self.readingColor)
-        add(verses: shareVerses, color: Self.shareColor)
+        add(verses: playingVerses, color: Self.playingColor)
+        add(verses: selectedVerses, color: Self.selectionColor)
         return versesByHighlights
     }
 }

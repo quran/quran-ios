@@ -25,6 +25,7 @@ struct ContentImageView: View {
             ContentImageViewBody(
                 decorations: viewModel.decorations,
                 ayahAnnotations: viewModel.ayahAnnotations,
+                annotationsHidden: viewModel.annotationsHidden,
                 onAnnotatedAyahTap: onAnnotatedAyahTap,
                 image: viewModel.imagePage?.image,
                 renderingMode: viewModel.imageRenderingMode,
@@ -68,6 +69,7 @@ private struct ContentImageViewBody: View {
     let decorations: ImageDecorations
     #if QURAN_SYNC
     var ayahAnnotations: [AyahNumber: Set<AyahAnnotation>] = [:]
+    var annotationsHidden = false
     var onAnnotatedAyahTap: (AyahNumber, CGPoint) -> Void = { _, _ in }
     #endif
     let image: UIImage?
@@ -85,7 +87,8 @@ private struct ContentImageViewBody: View {
         let content = AdaptiveImageScrollView(
             decorations: decorations,
             renderingMode: renderingMode,
-            ayahAnnotations: ayahAnnotations
+            ayahAnnotations: ayahAnnotations,
+            annotationsHidden: annotationsHidden
         ) {
             image
         } onAnnotatedAyahTap: {

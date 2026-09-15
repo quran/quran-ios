@@ -22,9 +22,9 @@ import VLogging
 public struct ContentImageBuilder {
     // MARK: Lifecycle
 
-    public init(container: AppDependencies, highlightsService: QuranHighlightsService) {
+    public init(container: AppDependencies, overlayService: VerseOverlayService) {
         self.container = container
-        self.highlightsService = highlightsService
+        self.overlayService = overlayService
     }
 
     // MARK: Public
@@ -42,7 +42,7 @@ public struct ContentImageBuilder {
                 reading: reading,
                 page: page,
                 linePageAssetService: linePageAssetService,
-                highlightsService: highlightsService
+                overlayService: overlayService
             )
             ContentLineView(
                 viewModel: viewModel,
@@ -54,7 +54,7 @@ public struct ContentImageBuilder {
                 reading: reading,
                 page: page,
                 imageDataService: imageService,
-                highlightsService: highlightsService
+                overlayService: overlayService
             )
             ContentImageView(
                 viewModel: viewModel,
@@ -73,7 +73,7 @@ public struct ContentImageBuilder {
                 reading: reading,
                 page: page,
                 linePageAssetService: linePageAssetService,
-                highlightsService: highlightsService
+                overlayService: overlayService
             )
             ContentLineView(viewModel: viewModel)
         } else {
@@ -82,7 +82,7 @@ public struct ContentImageBuilder {
                 reading: reading,
                 page: page,
                 imageDataService: imageService,
-                highlightsService: highlightsService
+                overlayService: overlayService
             )
             ContentImageView(viewModel: viewModel)
         }
@@ -124,7 +124,7 @@ public struct ContentImageBuilder {
     // MARK: Private
 
     private let container: AppDependencies
-    private let highlightsService: QuranHighlightsService
+    private let overlayService: VerseOverlayService
 }
 
 private extension Reading {

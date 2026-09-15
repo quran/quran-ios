@@ -18,20 +18,20 @@ final class QuranAnnotationsObserver {
         collectionService: AyahBookmarkCollectionService,
         readingBookmarkService: MobileSyncReadingBookmarkService,
         quran: Quran,
-        highlightsService: QuranHighlightsService
+        overlayService: VerseOverlayService
     ) {
         self.noteService = noteService
         self.highlightService = highlightService
         self.collectionService = collectionService
         self.readingBookmarkService = readingBookmarkService
         self.quran = quran
-        self.highlightsService = highlightsService
+        self.overlayService = overlayService
     }
     #else
-    init(noteService: NoteService, quran: Quran, highlightsService: QuranHighlightsService) {
+    init(noteService: NoteService, quran: Quran, overlayService: VerseOverlayService) {
         self.noteService = noteService
         self.quran = quran
-        self.highlightsService = highlightsService
+        self.overlayService = overlayService
     }
     #endif
 
@@ -121,7 +121,7 @@ final class QuranAnnotationsObserver {
     // MARK: Private
 
     private let quran: Quran
-    private let highlightsService: QuranHighlightsService
+    private let overlayService: VerseOverlayService
     #if QURAN_SYNC
     private let noteService: MobileSyncNoteService
     private let highlightService: MobileSyncAyahHighlightService
@@ -138,9 +138,9 @@ final class QuranAnnotationsObserver {
 
     private func updateNotes(_ notes: [Note]) {
         self.notes = notes
-        highlightsService.highlights.noteVerses = Set(notes.flatMap(\.verses))
+        overlayService.overlays.notedVerses = Set(notes.flatMap(\.verses))
         #if !QURAN_SYNC
-        highlightsService.highlights.highlightVerses = notes.reduce(into: [:]) { colors, note in
+        overlayService.overlays.colorHighlights = notes.reduce(into: [:]) { colors, note in
             for verse in note.verses {
                 colors[verse] = note.color
             }
@@ -180,17 +180,17 @@ final class QuranAnnotationsObserver {
     }
 
     private func updateHighlights(_ verses: [AyahNumber: HighlightColor]) {
-        highlightsService.highlights.highlightVerses = verses
+        overlayService.overlays.colorHighlights = verses
     }
 
     private func updateCollections(_ collections: [AyahBookmarkCollection]) {
         self.collections = collections
-        highlightsService.highlights.collectionVerses = Set(collections.flatMap { $0.bookmarks.map(\.ayah) })
+        overlayService.overlays.collectionVerses = Set(collections.flatMap { $0.bookmarks.map(\.ayah) })
     }
 
     private func updateReadingBookmarks(_ bookmarks: [PlacedReadingBookmark]) {
         readingBookmarks = bookmarks
-        highlightsService.highlights.readingBookmarks = bookmarks
+        overlayService.overlays.readingBookmarks = bookmarks
     }
     #endif
 }

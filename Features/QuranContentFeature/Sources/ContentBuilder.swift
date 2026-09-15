@@ -16,9 +16,9 @@ import ReadingService
 public struct ContentBuilder {
     // MARK: Lifecycle
 
-    public init(container: AppDependencies, highlightsService: QuranHighlightsService) {
+    public init(container: AppDependencies, overlayService: VerseOverlayService) {
         self.container = container
-        self.highlightsService = highlightsService
+        self.overlayService = overlayService
     }
 
     // MARK: Public
@@ -30,9 +30,9 @@ public struct ContentBuilder {
             analytics: container.analytics,
             lastPageUpdater: lastPageUpdater,
             quran: quran,
-            highlightsService: highlightsService,
-            imageDataSourceBuilder: ContentImageBuilder(container: container, highlightsService: highlightsService),
-            translationDataSourceBuilder: ContentTranslationBuilder(container: container, highlightsService: highlightsService)
+            overlayService: overlayService,
+            imageDataSourceBuilder: ContentImageBuilder(container: container, overlayService: overlayService),
+            translationDataSourceBuilder: ContentTranslationBuilder(container: container, overlayService: overlayService)
         )
         let viewModel = ContentViewModel(deps: interactorDeps, input: input)
 
@@ -45,5 +45,5 @@ public struct ContentBuilder {
     // MARK: Private
 
     private let container: AppDependencies
-    private let highlightsService: QuranHighlightsService
+    private let overlayService: VerseOverlayService
 }

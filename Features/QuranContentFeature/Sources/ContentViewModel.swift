@@ -39,7 +39,7 @@ public final class ContentViewModel: ObservableObject {
         let lastPageUpdater: LastPageUpdater
         let quran: Quran
 
-        let highlightsService: QuranHighlightsService
+        let overlayService: VerseOverlayService
 
         let imageDataSourceBuilder: ContentImageBuilder
         let translationDataSourceBuilder: ContentTranslationBuilder
@@ -61,11 +61,11 @@ public final class ContentViewModel: ObservableObject {
 
         visiblePages = [input.initialPage]
 
-        let highlightsService = deps.highlightsService
-        _highlights = PublishedBinding(
-            wrappedValue: highlightsService.highlights,
-            updates: highlightsService.$highlights,
-            set: { highlightsService.highlights = $0 }
+        let overlayService = deps.overlayService
+        _overlays = PublishedBinding(
+            wrappedValue: overlayService.overlays,
+            updates: overlayService.$overlays,
+            set: { overlayService.overlays = $0 }
         )
 
         let contentStatePreferences = deps.quranContentStatePreferences
@@ -80,8 +80,8 @@ public final class ContentViewModel: ObservableObject {
             set: { contentStatePreferences.quranMode = $0 }
         )
 
-        $highlights
-            .zip($highlights.dropFirst())
+        $overlays
+            .zip($overlays.dropFirst())
             .sink { [weak self] oldValue, newValue in
                 if let ayah = newValue.verseToScrollTo(comparingTo: oldValue) {
                     self?.visiblePages = [ayah.page]
@@ -116,11 +116,11 @@ public final class ContentViewModel: ObservableObject {
     }
 
     public func highlightWord(_ word: Word?) {
-        highlights.pointedWord = word
+        overlays.pointedWord = word
     }
 
     public func highlightReadingAyah(_ ayah: AyahNumber?) {
-        highlights.readingVerses = [ayah].compactMap { $0 }
+        overlays.playingVerses = [ayah].compactMap { $0 }
     }
 
     // MARK: Internal
@@ -136,7 +136,7 @@ public final class ContentViewModel: ObservableObject {
     weak var ayahMenuSourceView: UIView?
     #endif
 
-    @PublishedBinding var highlights: QuranHighlights
+    @PublishedBinding var overlays: VerseOverlays
 
     var pagingStrategy: PagingStrategy {
         twoPagesEnabled ? .doublePage : .singlePage
@@ -198,7 +198,7 @@ public final class ContentViewModel: ObservableObject {
 
     private var longPressData: LongPressData? {
         didSet {
-            highlights.shareVerses = selectedVerses ?? []
+            overlays.selectedVerses = selectedVerses ?? []
         }
     }
 
@@ -216,12 +216,12 @@ public final class ContentViewModel: ObservableObject {
 
     private func configureInitialPage() {
         deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
-        highlights.navigationVerse = input.navigationAyah
+        overlays.navigationTarget = input.navigationAyah
     }
 
     private func visiblePagesUpdated() {
         // Remove the navigation highlight when the reader changes pages.
-        highlights.navigationVerse = nil
+        overlays.navigationTarget = nil
 
         let pages = visiblePages
         let isTranslationView = deps.quranContentStatePreferences.quranMode == .translation

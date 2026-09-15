@@ -66,7 +66,7 @@ protocol QuranPresentable: UIViewController {
     func presentTranslatedVerse(_ viewController: UIViewController, didDismiss: @escaping () -> Void)
     func presentAudioBanner(_ audioBanner: UIViewController)
     func presentWordPointer(_ viewController: UIViewController)
-    func presentQuranContent(_ viewController: UIViewController)
+    func presentQuranContent(_ viewController: ContentViewController)
     func presentTranslationsSelection(_ viewController: UIViewController)
 
     func dismissWordPointer(_ viewController: UIViewController)
@@ -79,7 +79,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 {
     struct Deps {
         let quran: Quran
-        let highlightsService: QuranHighlightsService
+        let overlayService: VerseOverlayService
         let ayahMenuBuilder: AyahMenuBuilder
         let moreMenuBuilder: MoreMenuBuilder
         let audioBannerBuilder: AudioBannerBuilder
@@ -299,7 +299,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             let viewController = deps.bookmarkAyahsBuilder.build(
                 verses: verses,
                 collections: deps.annotationsObserver.collections,
-                highlights: deps.highlightsService.highlights.highlightVerses
+                highlights: deps.overlayService.overlays.colorHighlights
             )
             presenter?.presentBookmarkAyahs(viewController)
         }
@@ -343,7 +343,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber]) {
         logger.info("Quran: present ayah menu, verses: \(verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         #if QURAN_SYNC
-        let highlightVerses = deps.highlightsService.highlights.highlightVerses
+        let colorHighlights = deps.overlayService.overlays.colorHighlights
         let bookmarkedVerses = Set(deps.annotationsObserver.collections.flatMap { collection in
             collection.bookmarks.map(\.ayah)
         })
@@ -354,7 +354,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             pointInView: point,
             verses: verses,
             notes: notesInteractingVerses(verses),
-            highlightVerses: highlightVerses,
+            highlightVerses: colorHighlights,
             bookmarkedVerses: bookmarkedVerses,
             readingBookmark: verses.count == 1
                 ? deps.annotationsObserver.latestReadingBookmark(at: [.ayah(verses[0])])

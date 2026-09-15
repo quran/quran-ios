@@ -25,16 +25,17 @@ final class ContentLineViewModel: ObservableObject {
         reading: Reading,
         page: Page,
         linePageAssetService: LinePageAssetService,
-        highlightsService: QuranHighlightsService
+        overlayService: VerseOverlayService
     ) {
         self.reading = reading
         self.page = page
         self.linePageAssetService = linePageAssetService
+        self.overlayService = overlayService
         let contentStatePreferences = QuranContentStatePreferences.shared
         showSidelines = reading.usesLinePageSidelines && contentStatePreferences.showLinePageSidelines
         showLineDividers = reading.usesLinePageDividers && contentStatePreferences.showLinePageDividers
         linePageMetrics = reading.linePageMetrics ?? .madaniLinePages(widthParameter: 1080)
-        highlights = highlightsService.highlights
+        overlays = overlayService.overlays.restricted(to: page)
 
         geometryData = LinePageGeometryData(
             metrics: linePageMetrics,
@@ -44,8 +45,10 @@ final class ContentLineViewModel: ObservableObject {
             sidelines: []
         )
 
-        highlightsService.$highlights
-            .sink { [weak self] in self?.highlights = $0 }
+        overlayService.$overlays
+            .map { $0.restricted(to: page) }
+            .removeDuplicates()
+            .sink { [weak self] in self?.overlays = $0 }
             .store(in: &cancellables)
 
         contentStatePreferences.$showLinePageSidelines
@@ -60,7 +63,7 @@ final class ContentLineViewModel: ObservableObject {
             }
             .store(in: &cancellables)
 
-        highlightsService.scrolling
+        overlayService.scrollRequests
             .sink { [weak self] in
                 self?.scrollToVerseIfNeeded()
             }
@@ -73,7 +76,7 @@ final class ContentLineViewModel: ObservableObject {
 
     @Published var assets: LinePageAssets?
     @Published private(set) var geometryData: LinePageGeometryData
-    @Published var highlights: QuranHighlights
+    @Published private var overlays: VerseOverlays
     @Published var scrollToVerse: AyahNumber?
 
     var imageRenderingMode: QuranThemedImage.RenderingMode {
@@ -81,12 +84,14 @@ final class ContentLineViewModel: ObservableObject {
     }
 
     var highlightColorsByVerse: [AyahNumber: Color] {
-        highlights.versesByHighlights().mapValues { Color($0) }
+        overlays.versesByHighlights().mapValues { Color($0) }
     }
 
     #if QURAN_SYNC
+    var annotationsHidden: Bool { overlays.annotationsHidden }
+
     var ayahAnnotations: [AyahNumber: Set<AyahAnnotation>] {
-        highlights.annotationsByVerse
+        overlays.annotationsByVerse
     }
     #endif
 
@@ -209,6 +214,7 @@ final class ContentLineViewModel: ObservableObject {
     // MARK: Private
 
     private let reading: Reading
+    private let overlayService: VerseOverlayService
     private let linePageAssetService: LinePageAssetService
     private let linePageMetrics: LinePageMetrics
     @Published private var showSidelines: Bool
@@ -220,7 +226,7 @@ final class ContentLineViewModel: ObservableObject {
     private var contentFrame: CGRect = .zero
 
     private func scrollToVerseIfNeededSynchronously() {
-        let ayah = highlights.firstScrollingVerse()
+        let ayah = overlayService.overlays.firstScrollingVerse()
         if let ayah {
             logger.info("Quran Line Page: scrollToVerseIfNeeded \(ayah.nonLocalizedDescription)")
         }

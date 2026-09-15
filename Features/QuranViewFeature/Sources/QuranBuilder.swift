@@ -40,7 +40,7 @@ public struct QuranBuilder {
     // MARK: Public
 
     public func build(input: QuranInput) -> UIViewController {
-        let highlightsService = QuranHighlightsService()
+        let overlayService = VerseOverlayService()
 
         let reading = ReadingPreferences.shared.reading
         let quran = reading.quran
@@ -52,16 +52,16 @@ public struct QuranBuilder {
             collectionService: container.ayahBookmarkCollectionService(),
             readingBookmarkService: container.readingBookmarkService(),
             quran: quran,
-            highlightsService: highlightsService
+            overlayService: overlayService
         )
         let interactorDeps = QuranInteractor.Deps(
             quran: quran,
-            highlightsService: highlightsService,
+            overlayService: overlayService,
             ayahMenuBuilder: AyahMenuBuilder(container: container),
             moreMenuBuilder: MoreMenuBuilder(),
             audioBannerBuilder: AudioBannerBuilder(container: container),
             wordPointerBuilder: WordPointerBuilder(container: container),
-            contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
+            contentBuilder: ContentBuilder(container: container, overlayService: overlayService),
             translationsSelectionBuilder: TranslationsListBuilder(container: container),
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources,
@@ -77,16 +77,16 @@ public struct QuranBuilder {
         let annotationsObserver = QuranAnnotationsObserver(
             noteService: noteService,
             quran: quran,
-            highlightsService: highlightsService
+            overlayService: overlayService
         )
         let interactorDeps = QuranInteractor.Deps(
             quran: quran,
-            highlightsService: highlightsService,
+            overlayService: overlayService,
             ayahMenuBuilder: AyahMenuBuilder(container: container),
             moreMenuBuilder: MoreMenuBuilder(),
             audioBannerBuilder: AudioBannerBuilder(container: container),
             wordPointerBuilder: WordPointerBuilder(container: container),
-            contentBuilder: ContentBuilder(container: container, highlightsService: highlightsService),
+            contentBuilder: ContentBuilder(container: container, overlayService: overlayService),
             translationsSelectionBuilder: TranslationsListBuilder(container: container),
             translationVerseBuilder: TranslationVerseBuilder(container: container),
             resources: container.readingResources,

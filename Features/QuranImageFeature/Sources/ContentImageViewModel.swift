@@ -21,18 +21,20 @@ import VLogging
 class ContentImageViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(reading: Reading, page: Page, imageDataService: ImageDataService, highlightsService: QuranHighlightsService) {
+    init(reading: Reading, page: Page, imageDataService: ImageDataService, overlayService: VerseOverlayService) {
         self.page = page
         self.reading = reading
         self.imageDataService = imageDataService
-        self.highlightsService = highlightsService
-        highlights = highlightsService.highlights
+        self.overlayService = overlayService
+        overlays = overlayService.overlays.restricted(to: page)
 
-        highlightsService.$highlights
-            .sink { [weak self] in self?.highlights = $0 }
+        overlayService.$overlays
+            .map { $0.restricted(to: page) }
+            .removeDuplicates()
+            .sink { [weak self] in self?.overlays = $0 }
             .store(in: &cancellables)
 
-        highlightsService.scrolling
+        overlayService.scrollRequests
             .sink { [weak self] in
                 self?.scrollToVerseIfNeeded()
             }
@@ -49,7 +51,7 @@ class ContentImageViewModel: ObservableObject {
 
     @Published private var suraHeaderLocations: [SuraHeaderLocation] = []
     @Published private var ayahNumberLocations: [AyahNumberLocation] = []
-    @Published private var highlights: QuranHighlights
+    @Published private var overlays: VerseOverlays
 
     var imageRenderingMode: QuranThemedImage.RenderingMode {
         reading.usesInvertedQuranImageRenderingInDarkMode ? .invertInDarkMode : .tinted
@@ -58,7 +60,7 @@ class ContentImageViewModel: ObservableObject {
     private var frameHighlights: [WordFrame: Color] {
         // Add verse highlights
         var frameHighlights: [WordFrame: Color] = [:]
-        let versesByHighlights = highlights.versesByHighlights()
+        let versesByHighlights = overlays.versesByHighlights()
         for (ayah, color) in versesByHighlights {
             for frame in imagePage?.wordFrames.wordFramesForVerse(ayah) ?? [] {
                 frameHighlights[frame] = Color(color)
@@ -66,8 +68,8 @@ class ContentImageViewModel: ObservableObject {
         }
 
         // Add word highlight
-        if let word = highlights.pointedWord, let frame = imagePage?.wordFrames.wordFrameForWord(word) {
-            frameHighlights[frame] = QuranHighlights.wordHighlightColor
+        if let word = overlays.pointedWord, let frame = imagePage?.wordFrames.wordFrameForWord(word) {
+            frameHighlights[frame] = VerseOverlays.wordHighlightColor
         }
         return frameHighlights
     }
@@ -83,8 +85,10 @@ class ContentImageViewModel: ObservableObject {
     }
 
     #if QURAN_SYNC
+    var annotationsHidden: Bool { overlays.annotationsHidden }
+
     var ayahAnnotations: [AyahNumber: Set<AyahAnnotation>] {
-        highlights.annotationsByVerse
+        overlays.annotationsByVerse
     }
     #endif
 
@@ -129,12 +133,12 @@ class ContentImageViewModel: ObservableObject {
     // MARK: Private
 
     private let imageDataService: ImageDataService
-    private let highlightsService: QuranHighlightsService
+    private let overlayService: VerseOverlayService
     private let reading: Reading
     private var cancellables: Set<AnyCancellable> = []
 
     private func scrollToVerseIfNeededSynchronously() {
-        guard let ayah = highlightsService.highlights.firstScrollingVerse() else {
+        guard let ayah = overlayService.overlays.firstScrollingVerse() else {
             return
         }
         logger.info("Quran Image: scrollToVerseIfNeeded \(ayah.nonLocalizedDescription)")
@@ -142,7 +146,7 @@ class ContentImageViewModel: ObservableObject {
     }
 
     private func scrollToVerseIfNeeded() {
-        // Execute in the next runloop to allow the highlightsService value to load.
+        // Execute in the next runloop to allow the overlayService value to load.
         DispatchQueue.main.async {
             self.scrollToVerseIfNeededSynchronously()
         }

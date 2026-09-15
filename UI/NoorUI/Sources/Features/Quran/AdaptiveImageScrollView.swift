@@ -40,6 +40,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
         decorations: ImageDecorations,
         renderingMode: QuranThemedImage.RenderingMode = .tinted,
         ayahAnnotations: [AyahNumber: Set<AyahAnnotation>],
+        annotationsHidden: Bool,
         image: () -> UIImage?,
         onAnnotatedAyahTap: @escaping (AyahNumber, CGPoint) -> Void,
         onScaleChange: @escaping (WordFrameScale) -> Void,
@@ -48,6 +49,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
         @ViewBuilder footer: () -> Footer
     ) {
         self.ayahAnnotations = ayahAnnotations
+        self.annotationsHidden = annotationsHidden
         self.onAnnotatedAyahTap = onAnnotatedAyahTap
         self.decorations = decorations
         self.image = image()
@@ -88,6 +90,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     @State private var imageViewSize: CGSize = .zero
     #if QURAN_SYNC
     private let ayahAnnotations: [AyahNumber: Set<AyahAnnotation>]
+    private let annotationsHidden: Bool
     private let onAnnotatedAyahTap: (AyahNumber, CGPoint) -> Void
     #endif
     private let onScaleChange: (WordFrameScale) -> Void
@@ -128,6 +131,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                 AyahAnnotationsView(
                     markers: layout.ayahMarkers,
                     annotations: ayahAnnotations,
+                    annotationsHidden: annotationsHidden,
                     onAnnotatedAyahTap: onAnnotatedAyahTap
                 )
             }
@@ -148,7 +152,8 @@ private struct AnnotatedAyahImagePreview: View {
     var body: some View {
         AdaptiveImageScrollView(
             decorations: decorations,
-            ayahAnnotations: ayah.map { [$0: [.collection, .note]] } ?? [:]
+            ayahAnnotations: ayah.map { [$0: [.collection, .note]] } ?? [:],
+            annotationsHidden: false
         ) {
             UIImage(contentsOfFile: testResourceURL("images/page604.png").path)
         } onAnnotatedAyahTap: { _, _ in tapCount += 1

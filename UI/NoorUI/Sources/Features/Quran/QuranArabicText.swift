@@ -28,11 +28,11 @@ public struct QuranArabicText: View {
 
     #if QURAN_SYNC
     private let annotations: Set<AyahAnnotation>
-    private let onAyahNumberTapped: ((CGPoint) -> Void)?
+    private let onAyahNumberTapped: (CGPoint) -> Void
     @State private var capsuleFrame: CGRect = .zero
     @ScaledMetric private var minimumTargetSize = 44.0
 
-    public init(verse: AyahNumber, text: QuranText, quranFont: QuranFont, fontSize: FontSize, annotations: Set<AyahAnnotation>, onAyahNumberTapped: ((CGPoint) -> Void)? = nil) {
+    public init(verse: AyahNumber, text: QuranText, quranFont: QuranFont, fontSize: FontSize, annotations: Set<AyahAnnotation>, onAyahNumberTapped: @escaping (CGPoint) -> Void) {
         self.verse = verse
         self.text = text
         self.quranFont = quranFont
@@ -69,20 +69,16 @@ public struct QuranArabicText: View {
     @ViewBuilder
     private var ayahNumber: some View {
         #if QURAN_SYNC
-        if let onAyahNumberTapped {
-            Button {
-                onAyahNumberTapped(CGPoint(x: capsuleFrame.midX, y: capsuleFrame.midY))
-            } label: {
-                capsule
-                    .onGlobalFrameChanged { capsuleFrame = $0 }
-                    .frame(minWidth: minimumTargetSize, minHeight: minimumTargetSize)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("translation-ayah-number-\(verse.sura.suraNumber)-\(verse.ayah)")
-        } else {
+        Button {
+            onAyahNumberTapped(CGPoint(x: capsuleFrame.midX, y: capsuleFrame.midY))
+        } label: {
             capsule
+                .onGlobalFrameChanged { capsuleFrame = $0 }
+                .frame(minWidth: minimumTargetSize, minHeight: minimumTargetSize)
+                .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("translation-ayah-number-\(verse.sura.suraNumber)-\(verse.ayah)")
         #else
         capsule
         #endif
@@ -134,7 +130,8 @@ public struct QuranArabicText: View {
                 text: QuranText(""),
                 quranFont: .uthmanicHafs,
                 fontSize: .medium,
-                annotations: annotations
+                annotations: annotations,
+                onAyahNumberTapped: { _ in }
             )
         }
     }

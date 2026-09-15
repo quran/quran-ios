@@ -36,10 +36,8 @@ extension TranslationSuraName: View {
 
 extension TranslationArabicText {
     #if QURAN_SYNC
-    func view(onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?) -> some View {
-        QuranArabicText(verse: verse, text: text, quranFont: quranFont, fontSize: arabicFontSize, annotations: annotations, onAyahNumberTapped: onAyahNumberTapped.map { action in
-            { point in action(verse, point) }
-        })
+    func view(onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) -> some View {
+        QuranArabicText(verse: verse, text: text, quranFont: quranFont, fontSize: arabicFontSize, annotations: annotations, onAyahNumberTapped: { point in onAyahNumberTapped(verse, point) })
     }
     #else
     func view() -> some View {
@@ -96,7 +94,7 @@ extension TranslatorText: View {
 
 extension TranslationItem {
     #if QURAN_SYNC
-    func view(onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?) -> some View {
+    func view(onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) -> some View {
         content { $0.view(onAyahNumberTapped: onAyahNumberTapped) }
     }
     #else
@@ -170,7 +168,7 @@ private struct ContentTranslationPreview: View {
 
     private func itemView(_ item: TranslationItem) -> some View {
         #if QURAN_SYNC
-        item.view(onAyahNumberTapped: nil)
+        item.view(onAyahNumberTapped: { _, _ in })
         #else
         item.view()
         #endif

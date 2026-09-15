@@ -16,14 +16,22 @@ import Utilities
 public struct ContentTranslationView: View {
     @StateObject var viewModel: ContentTranslationViewModel
 
-    private let onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?
+    #if QURAN_SYNC
+    private let onAyahNumberTapped: (AyahNumber, CGPoint) -> Void
 
-    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel, onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)? = nil) {
+    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel, onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) {
         _viewModel = StateObject(wrappedValue: viewModel())
         self.onAyahNumberTapped = onAyahNumberTapped
     }
+    #else
+    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel())
+    }
+    #endif
 
-    public var body: some View {
+    @ViewBuilder
+    private var content: some View {
+        #if QURAN_SYNC
         ContentTranslationViewBody(
             items: viewModel.items(quranFont: viewModel.reading.quranFont),
             arabicFontSize: viewModel.arabicFontSize,
@@ -35,16 +43,32 @@ public struct ContentTranslationView: View {
             openURL: { viewModel.openURL($0) },
             onAyahNumberTapped: onAyahNumberTapped
         )
-        .geometryActions(
-            PageGeometryActions(
-                id: ObjectIdentifier(viewModel),
-                word: { _ in nil },
-                verse: { point in viewModel.ayahAtPoint(point) }
-            )
+        #else
+        ContentTranslationViewBody(
+            items: viewModel.items(quranFont: viewModel.reading.quranFont),
+            arabicFontSize: viewModel.arabicFontSize,
+            translationFontSize: viewModel.translationFontSize,
+            highlights: viewModel.highlights,
+            scrollToItem: viewModel.scrollToItem,
+            tracker: viewModel.tracker,
+            footnote: $viewModel.footnote,
+            openURL: { viewModel.openURL($0) }
         )
-        .task(id: Pair(viewModel.verses, viewModel.selectedTranslations)) {
-            await viewModel.load()
-        }
+        #endif
+    }
+
+    public var body: some View {
+        content
+            .geometryActions(
+                PageGeometryActions(
+                    id: ObjectIdentifier(viewModel),
+                    word: { _ in nil },
+                    verse: { point in viewModel.ayahAtPoint(point) }
+                )
+            )
+            .task(id: Pair(viewModel.verses, viewModel.selectedTranslations)) {
+                await viewModel.load()
+            }
     }
 }
 
@@ -60,7 +84,9 @@ private struct ContentTranslationViewBody: View {
     @Binding var footnote: TranslationFootnote?
 
     let openURL: (TranslationURL) -> Void
-    let onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?
+    #if QURAN_SYNC
+    let onAyahNumberTapped: (AyahNumber, CGPoint) -> Void
+    #endif
 
     var body: some View {
         List {

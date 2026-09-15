@@ -43,7 +43,7 @@ final class QuranTextViewTests: XCTestCase {
         let marker = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
         let text = QuranText("IndoPak verse \(marker)")
         #if QURAN_SYNC
-        let view = QuranArabicText(verse: verse, text: text, quranFont: .indoPak, fontSize: .medium, annotations: [])
+        let view = QuranArabicText(verse: verse, text: text, quranFont: .indoPak, fontSize: .medium, annotations: [], onAyahNumberTapped: { _ in })
         #else
         let view = QuranArabicText(verse: verse, text: text, quranFont: .indoPak, fontSize: .medium)
         #endif

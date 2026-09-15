@@ -70,7 +70,7 @@ struct TranslationArabicText: Identifiable & Hashable {
     let arabicFontSize: FontSize
 
     #if QURAN_SYNC
-    var annotations: Set<AyahAnnotation> = []
+    let annotations: Set<AyahAnnotation>
     #endif
 
     var id: TranslationItemId { .arabic(verse) }

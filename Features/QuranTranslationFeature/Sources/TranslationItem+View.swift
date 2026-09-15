@@ -176,12 +176,22 @@ private struct ContentTranslationPreview: View {
                     .init(sura: quran.firstSura, quranFont: .uthmanicHafs, arabicFontSize: fontSize),
                     nil
                 )
+                #if QURAN_SYNC
+                TranslationItem.arabicText(.init(
+                    verse: quran.firstVerse,
+                    text: QuranText(quran.arabicBesmAllah),
+                    quranFont: .uthmanicHafs,
+                    arabicFontSize: fontSize,
+                    annotations: []
+                ), nil)
+                #else
                 TranslationItem.arabicText(.init(
                     verse: quran.firstVerse,
                     text: QuranText(quran.arabicBesmAllah),
                     quranFont: .uthmanicHafs,
                     arabicFontSize: fontSize
                 ), nil)
+                #endif
                 ForEach(0 ..< (readMore ? 1 : chunks.count), id: \.self) { chunkIndex in
                     TranslationItem.translationTextChunk(
                         .init(

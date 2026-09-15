@@ -173,14 +173,21 @@ public final class ContentTranslationViewModel: ObservableObject {
             // Add arabic quran text
             let arabicVerseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
             let arabicText = QuranText(verseText.arabicText.text + " " + arabicVerseNumber)
-            var arabicItem = TranslationArabicText(
+            #if QURAN_SYNC
+            let arabicItem = TranslationArabicText(
+                verse: verse,
+                text: arabicText,
+                quranFont: quranFont,
+                arabicFontSize: arabicFontSize,
+                annotations: annotationsByVerse[verse, default: []]
+            )
+            #else
+            let arabicItem = TranslationArabicText(
                 verse: verse,
                 text: arabicText,
                 quranFont: quranFont,
                 arabicFontSize: arabicFontSize
             )
-            #if QURAN_SYNC
-            arabicItem.annotations = annotationsByVerse[verse, default: []]
             #endif
             items.append(.arabicText(arabicItem, color))
 

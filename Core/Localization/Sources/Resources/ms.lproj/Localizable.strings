@@ -529,3 +529,7 @@
 "audio.summary.verse" = "ayat %@";
 "audio.summary.range" = "julat %@";
 "audio.options" = "Pilihan audio";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "Tunjukkan lagi (%@)";
+"reading-bookmarks.show-less" = "Tunjukkan kurang";

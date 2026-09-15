@@ -546,3 +546,7 @@
 "audio.summary.verse" = "аят %@";
 "audio.summary.range" = "диапазон %@";
 "audio.options" = "Настройки аудио";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "Показать ещё (%@)";
+"reading-bookmarks.show-less" = "Показать меньше";

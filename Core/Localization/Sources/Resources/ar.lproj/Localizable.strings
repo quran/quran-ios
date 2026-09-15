@@ -344,3 +344,7 @@
 "audio.summary.verse" = "الآية %@";
 "audio.summary.range" = "المجموعة %@";
 "audio.options" = "خيارات الصوت";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "إظهار المزيد (%@)";
+"reading-bookmarks.show-less" = "إظهار أقل";

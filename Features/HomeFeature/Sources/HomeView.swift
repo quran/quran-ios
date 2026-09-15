@@ -81,13 +81,10 @@ private struct HomeViewUI: View {
         ZStack {
             NoorList {
                 #if QURAN_SYNC
-                if !readingBookmarks.isEmpty {
-                    NoorBasicSection(title: l("ayah.menu.reading-bookmark.title")) {
-                        ForEach(readingBookmarks, id: \.slot) { readingBookmark in
-                            readingBookmarkView(readingBookmark)
-                        }
-                    }
-                }
+                ReadingBookmarksSection(
+                    bookmarks: readingBookmarks,
+                    selectBookmark: selectReadingBookmark
+                )
                 #endif
 
                 NoorHorizontalSection(title: lAndroid("recent_pages"), lastPages) { lastPage in
@@ -111,15 +108,6 @@ private struct HomeViewUI: View {
         }
         .task { await start() }
     }
-
-    #if QURAN_SYNC
-    func readingBookmarkView(_ bookmark: PlacedReadingBookmark) -> some View {
-        ReadingBookmarkListItem(
-            bookmark: bookmark,
-            action: { selectReadingBookmark(bookmark) }
-        )
-    }
-    #endif
 
     func lastPageView(_ lastPage: LastPage) -> some View {
         let ayah = lastPage.page.firstVerse

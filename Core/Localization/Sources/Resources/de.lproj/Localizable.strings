@@ -546,3 +546,7 @@
 "audio.summary.verse" = "Vers %@";
 "audio.summary.range" = "Bereich %@";
 "audio.options" = "Audiooptionen";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "Mehr anzeigen (%@)";
+"reading-bookmarks.show-less" = "Weniger anzeigen";

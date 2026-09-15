@@ -547,3 +547,7 @@
 "audio.summary.verse" = "versículo %@";
 "audio.summary.range" = "intervalo %@";
 "audio.options" = "Opções de áudio";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "Mostrar mais (%@)";
+"reading-bookmarks.show-less" = "Mostrar menos";

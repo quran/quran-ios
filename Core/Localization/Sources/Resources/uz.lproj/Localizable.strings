@@ -548,3 +548,7 @@
 "audio.summary.verse" = "oyat %@";
 "audio.summary.range" = "oraliq %@";
 "audio.options" = "Audio sozlamalari";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "Ko‘proq ko‘rsatish (%@)";
+"reading-bookmarks.show-less" = "Kamroq ko‘rsatish";

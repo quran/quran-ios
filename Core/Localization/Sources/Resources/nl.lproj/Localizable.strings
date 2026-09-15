@@ -458,3 +458,7 @@
 "audio.summary.verse" = "vers %@";
 "audio.summary.range" = "bereik %@";
 "audio.options" = "Audio-opties";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "Meer tonen (%@)";
+"reading-bookmarks.show-less" = "Minder tonen";

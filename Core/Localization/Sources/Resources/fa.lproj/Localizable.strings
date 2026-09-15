@@ -548,3 +548,7 @@
 "audio.summary.verse" = "آیه %@";
 "audio.summary.range" = "محدوده %@";
 "audio.options" = "گزینه‌های صوتی";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "نمایش بیشتر (%@)";
+"reading-bookmarks.show-less" = "نمایش کمتر";

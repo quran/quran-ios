@@ -347,3 +347,7 @@
 "audio.summary.verse" = "verse %@";
 "audio.summary.range" = "range %@";
 "audio.options" = "Audio options";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "Show more (%@)";
+"reading-bookmarks.show-less" = "Show less";

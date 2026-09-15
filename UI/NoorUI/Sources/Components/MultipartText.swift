@@ -46,8 +46,8 @@ private struct TextPartView: View {
             highlighting(text: text, ranges: ranges)
                 .optionalLineLimit(lineLimit)
                 .font(size.plainFont)
-        case .sura(let sura):
-            QuranReferenceView(reference: .sura(sura), size: size)
+        case .sura(let sura, let emphasizesSura):
+            QuranReferenceView(reference: .sura(sura), size: size, emphasizesSura: emphasizesSura)
         case .ayah(let ayah, let emphasizesSura, let decorationHidden):
             QuranReferenceView(
                 reference: .ayah(ayah, decorationHidden: decorationHidden),
@@ -122,7 +122,7 @@ private extension View {
 enum TextPart {
     case plain(text: String)
     case highlighting(text: String, ranges: [HighlightingRange], lineLimit: Int?)
-    case sura(Sura)
+    case sura(Sura, emphasizesSura: Bool = false)
     case ayah(AyahNumber, emphasizesSura: Bool, decorationHidden: Bool = false)
     case ayahCoordinate(AyahNumber)
     case quran(
@@ -139,7 +139,7 @@ enum TextPart {
         switch self {
         case .plain(let text), .highlighting(let text, _, _):
             text
-        case .sura(let sura):
+        case .sura(let sura, _):
             QuranReference.sura(sura).rawValue(locale: locale)
         case .ayah(let ayah, _, let decorationHidden):
             QuranReference.ayah(ayah, decorationHidden: decorationHidden).rawValue(locale: locale)
@@ -154,7 +154,7 @@ enum TextPart {
         switch self {
         case .plain(let text), .highlighting(let text, _, _):
             text
-        case .sura(let sura):
+        case .sura(let sura, _):
             QuranReference.sura(sura).accessibilityText
         case .ayah(let ayah, _, _):
             QuranReference.ayah(ayah).accessibilityText
@@ -178,8 +178,8 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             parts.append(.plain(text: literal))
         }
 
-        public mutating func appendInterpolation(sura: Sura) {
-            parts.append(.sura(sura))
+        public mutating func appendInterpolation(sura: Sura, emphasizingSura: Bool = false) {
+            parts.append(.sura(sura, emphasizesSura: emphasizingSura))
         }
 
         public mutating func appendInterpolation(

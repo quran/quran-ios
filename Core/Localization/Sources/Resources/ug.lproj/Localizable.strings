@@ -549,3 +549,7 @@
 "audio.summary.verse" = "ئايەت %@";
 "audio.summary.range" = "دائىرە %@";
 "audio.options" = "ئاۋاز تاللانمىلىرى";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "تېخىمۇ كۆپ كۆرسىتىش (%@)";
+"reading-bookmarks.show-less" = "ئازراق كۆرسىتىش";

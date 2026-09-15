@@ -488,3 +488,7 @@
 "audio.summary.verse" = "ayet %@";
 "audio.summary.range" = "aralık %@";
 "audio.options" = "Ses seçenekleri";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "Daha fazla göster (%@)";
+"reading-bookmarks.show-less" = "Daha az göster";

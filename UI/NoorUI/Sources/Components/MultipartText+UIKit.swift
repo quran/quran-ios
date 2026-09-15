@@ -25,8 +25,8 @@ private extension TextPart {
             NSAttributedString(string: text, attributes: [.font: size.plainUIFont])
         case .highlighting(let text, let ranges, _):
             highlightedAttributedString(text: text, ranges: ranges, size: size)
-        case .sura(let sura):
-            QuranReference.sura(sura).attributedString(size: size, locale: locale)
+        case .sura(let sura, let emphasizesSura):
+            QuranReference.sura(sura).attributedString(size: size, locale: locale, emphasizesSura: emphasizesSura)
         case .ayah(let ayah, let emphasizesSura, let decorationHidden):
             QuranReference.ayah(ayah, decorationHidden: decorationHidden).attributedString(
                 size: size,

@@ -547,3 +547,7 @@
 "audio.summary.verse" = "节 %@";
 "audio.summary.range" = "范围 %@";
 "audio.options" = "音频选项";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "显示更多（%@）";
+"reading-bookmarks.show-less" = "收起";

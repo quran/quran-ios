@@ -530,3 +530,7 @@
 "audio.summary.verse" = "аят %@";
 "audio.summary.range" = "аралық %@";
 "audio.options" = "Аудио параметрлері";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "Көбірек көрсету (%@)";
+"reading-bookmarks.show-less" = "Азырақ көрсету";

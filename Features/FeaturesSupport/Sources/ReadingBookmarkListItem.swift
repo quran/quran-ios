@@ -16,9 +16,11 @@ public struct ReadingBookmarkListItem: View {
 
     public init(
         bookmark: PlacedReadingBookmark,
+        showsBookmarkName: Bool = true,
         action: @escaping Action
     ) {
         self.bookmark = bookmark
+        self.showsBookmarkName = showsBookmarkName
         self.action = action
     }
 
@@ -30,7 +32,7 @@ public struct ReadingBookmarkListItem: View {
                 Image(uiImage: ReadingBookmarkPin.image(style: .filled)),
                 color: bookmark.slot.swiftUIColor
             ),
-            title: "\(bookmark.displayName) · \(sura: bookmark.sura)",
+            title: showsBookmarkName ? "\(bookmark.displayName) · \(sura: bookmark.sura)" : "\(sura: bookmark.sura, emphasizingSura: true)",
             subtitle: .init(
                 text: "\(locationTitle) · \(bookmark.modifiedOn.timeAgo())",
                 location: .bottom
@@ -43,6 +45,7 @@ public struct ReadingBookmarkListItem: View {
     // MARK: Private
 
     private let bookmark: PlacedReadingBookmark
+    private let showsBookmarkName: Bool
     private let action: Action
 
     private var locationTitle: String {

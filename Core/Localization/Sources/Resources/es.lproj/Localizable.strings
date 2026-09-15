@@ -546,3 +546,7 @@
 "audio.summary.verse" = "aleya %@";
 "audio.summary.range" = "rango %@";
 "audio.options" = "Opciones de audio";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "Mostrar más (%@)";
+"reading-bookmarks.show-less" = "Mostrar menos";

@@ -455,3 +455,7 @@
 "audio.summary.verse" = "câu %@";
 "audio.summary.range" = "đoạn %@";
 "audio.options" = "Tùy chọn âm thanh";
+
+/* Home reading bookmarks */
+"reading-bookmarks.show-more" = "Hiển thị thêm (%@)";
+"reading-bookmarks.show-less" = "Hiển thị ít hơn";

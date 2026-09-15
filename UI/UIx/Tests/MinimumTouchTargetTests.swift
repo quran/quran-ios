@@ -23,12 +23,22 @@ final class MinimumTouchTargetTests: XCTestCase {
         XCTAssertEqual(size.height, 60, accuracy: 0.5)
     }
 
-    func testTouchTargetGrowsWithDynamicType() {
+    func testMinimumStaysFixedAcrossDynamicTypeSizes() {
+        for dynamicTypeSize in [DynamicTypeSize.xSmall, .accessibility5] {
+            let size = fittingSize(
+                Color.clear.frame(width: 12, height: 12).minimumTouchTarget()
+                    .dynamicTypeSize(dynamicTypeSize)
+            )
+            XCTAssertEqual(size.width, 44, accuracy: 0.5)
+            XCTAssertEqual(size.height, 44, accuracy: 0.5)
+        }
+    }
+
+    func testScaledTextCanGrowBeyondTheMinimum() {
         let size = fittingSize(
-            Color.clear.frame(width: 12, height: 12).minimumTouchTarget()
-                .dynamicTypeSize(.accessibility3)
+            Text("Tap").font(.body).minimumTouchTarget()
+                .dynamicTypeSize(.accessibility5)
         )
-        XCTAssertGreaterThan(size.width, 44)
         XCTAssertGreaterThan(size.height, 44)
     }
 

@@ -1,7 +1,7 @@
 import SwiftUI
 
 public extension View {
-    /// Gives a control label a rectangular touch target of at least 44 scaled points.
+    /// Gives a control label a rectangular touch target of at least 44 points.
     /// Apply inside the button label so the entire padded area responds to taps.
     func minimumTouchTarget() -> some View {
         modifier(MinimumTouchTargetModifier())
@@ -9,7 +9,7 @@ public extension View {
 }
 
 private struct MinimumTouchTargetModifier: ViewModifier {
-    @ScaledMetric private var minimumLength = 44.0
+    private let minimumLength: CGFloat = 44
 
     func body(content: Content) -> some View {
         content

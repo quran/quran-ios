@@ -42,7 +42,11 @@ final class QuranTextViewTests: XCTestCase {
         let verse = Quran.hafsIndoPak.firstVerse
         let marker = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
         let text = QuranText("IndoPak verse \(marker)")
+        #if QURAN_SYNC
+        let view = QuranArabicText(verse: verse, text: text, quranFont: .indoPak, fontSize: .medium, annotations: [])
+        #else
         let view = QuranArabicText(verse: verse, text: text, quranFont: .indoPak, fontSize: .medium)
+        #endif
 
         let override = try XCTUnwrap(view.ayahMarkerFontOverrides.first)
         XCTAssertEqual(view.ayahMarkerFontOverrides.count, 1)

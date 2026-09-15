@@ -65,7 +65,11 @@ private struct ContentTranslationViewBody: View {
     var body: some View {
         List {
             ForEach(items) { item in
+                #if QURAN_SYNC
                 item.view(onAyahNumberTapped: onAyahNumberTapped)
+                #else
+                item.view()
+                #endif
             }
         }
         .listStyle(.plain)

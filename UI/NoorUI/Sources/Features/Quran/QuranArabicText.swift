@@ -27,24 +27,27 @@ public struct QuranArabicText: View {
     let fontSize: FontSize
 
     #if QURAN_SYNC
-    private var annotations: Set<AyahAnnotation> = []
-    private var onAyahNumberTapped: ((CGPoint) -> Void)?
+    private let annotations: Set<AyahAnnotation>
+    private let onAyahNumberTapped: ((CGPoint) -> Void)?
     @State private var capsuleFrame: CGRect = .zero
     @ScaledMetric private var minimumTargetSize = 44.0
 
     public init(verse: AyahNumber, text: QuranText, quranFont: QuranFont, fontSize: FontSize, annotations: Set<AyahAnnotation>, onAyahNumberTapped: ((CGPoint) -> Void)? = nil) {
-        self.init(verse: verse, text: text, quranFont: quranFont, fontSize: fontSize)
+        self.verse = verse
+        self.text = text
+        self.quranFont = quranFont
+        self.fontSize = fontSize
         self.annotations = annotations
         self.onAyahNumberTapped = onAyahNumberTapped
     }
-    #endif
-
+    #else
     public init(verse: AyahNumber, text: QuranText, quranFont: QuranFont, fontSize: FontSize) {
         self.verse = verse
         self.text = text
         self.quranFont = quranFont
         self.fontSize = fontSize
     }
+    #endif
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {

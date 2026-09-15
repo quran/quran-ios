@@ -295,7 +295,7 @@ final class HomeViewModel: ObservableObject {
     }
 
     private var listRowCount: Int {
-        var count = lastPages.count
+        var count = lastPages.isEmpty ? 0 : 1
         #if QURAN_SYNC
         count += readingBookmarks.count
         #endif

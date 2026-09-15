@@ -90,7 +90,7 @@ private struct HomeViewUI: View {
                 }
                 #endif
 
-                NoorSection(title: lAndroid("recent_pages"), lastPages) { lastPage in
+                NoorHorizontalSection(title: lAndroid("recent_pages"), lastPages) { lastPage in
                     lastPageView(lastPage)
                 }
 
@@ -123,16 +123,24 @@ private struct HomeViewUI: View {
 
     func lastPageView(_ lastPage: LastPage) -> some View {
         let ayah = lastPage.page.firstVerse
-        return NoorListItem(
-            image: .init(.lastPage, color: .secondaryLabel),
-            title: "\(sura: ayah.sura)",
-            subtitle: .init(text: .text(lastPage.modifiedOn.timeAgo()), location: .bottom),
-            accessory: .text(
-                lastPage.page.localizedNumber,
-                accessibilityLabel: lastPage.page.localizedName
-            ),
-            action: .sync { selectLastPage(lastPage) }
-        )
+        return Button {
+            selectLastPage(lastPage)
+        } label: {
+            NoorListItem(
+                image: .init(.lastPage, color: .secondaryLabel),
+                title: "\(sura: ayah.sura)",
+                subtitle: .init(text: .text(lastPage.modifiedOn.timeAgo()), location: .bottom),
+                accessory: .text(
+                    lastPage.page.localizedNumber,
+                    accessibilityLabel: lastPage.page.localizedName
+                )
+            )
+            .fixedSize(horizontal: true, vertical: true)
+            .padding()
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("recent-page-\(lastPage.page.pageNumber)")
     }
 
     func suraView(_ sura: Sura) -> some View {

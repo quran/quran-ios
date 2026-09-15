@@ -17,6 +17,7 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
+import NoorUI
 import UIKit
 import UIx
 import ViewConstrainer
@@ -109,20 +110,14 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
             return
         }
 
-        UIView.animate(
-            withDuration: 0.3,
-            delay: 0,
-            usingSpringWithDamping: 1,
-            initialSpringVelocity: 0,
-            options: .beginFromCurrentState
-        ) {
+        ReaderVisibilityAnimation.animate {
             if animateNavigationBar {
                 self.navigationBar.alpha = hidden ? 0 : 1
             }
             if animateAudioBar {
                 self.audioView?.alpha = hidden ? 0 : 1
             }
-        } completion: { [weak self] _ in
+        } completion: { [weak self] in
             guard let self, barsVisibilityAnimationID == animationID else { return }
             if animateNavigationBar, navigationBarHidden == hidden {
                 updateNavigationBarVisibility()

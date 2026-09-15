@@ -25,6 +25,7 @@ import NoorUI
 #if QURAN_SYNC
 import QuranAnnotations
 #endif
+import QuranContentFeature
 import QuranKit
 import QuranLocalization
 import QuranTextKit
@@ -235,7 +236,10 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
     #endif
 
-    func presentQuranContent(_ viewController: UIViewController) {
+    func presentQuranContent(_ viewController: ContentViewController) {
+        #if QURAN_SYNC
+        viewController.setAyahAnnotationsHidden(statusBarHidden)
+        #endif
         addContent(viewController)
     }
 
@@ -379,8 +383,13 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         stopBarHiddenTimer()
 
         quranView?.setBarsHidden(hidden, animated: true)
+        #if QURAN_SYNC
+        for contentViewController in children.compactMap({ $0 as? ContentViewController }) {
+            contentViewController.setAyahAnnotationsHidden(hidden)
+        }
+        #endif
 
-        UIView.animate(withDuration: 0.3) {
+        ReaderVisibilityAnimation.animate {
             self.statusBarHidden = hidden
         }
     }

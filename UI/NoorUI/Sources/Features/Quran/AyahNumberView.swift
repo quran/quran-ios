@@ -86,6 +86,7 @@ public struct AyahNumberView: View {
                     AyahAnnotationsView(
                         markers: [.init(ayah: ayah, frame: CGRect(origin: .zero, size: geometry.size))],
                         annotations: [ayah: [.collection, .note]],
+                        annotationsHidden: false,
                         onAnnotatedAyahTap: { _, _ in }
                     )
                 }

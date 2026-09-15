@@ -30,8 +30,8 @@ final class ContentScrollingTests: XCTestCase {
         let page = reading.quran.pages[603]
         let initialAyah = try XCTUnwrap(AyahNumber(quran: reading.quran, sura: 114, ayah: 1))
         let nextAyah = try XCTUnwrap(AyahNumber(quran: reading.quran, sura: 113, ayah: 1))
-        let highlights = QuranHighlightsService()
-        highlights.highlights.navigationVerse = initialAyah
+        let overlayService = VerseOverlayService()
+        overlayService.overlays.navigationTarget = initialAyah
         let model = ContentImageViewModel(
             reading: reading,
             page: page,
@@ -40,7 +40,7 @@ final class ContentScrollingTests: XCTestCase {
                 imagesURL: TestResources.testDataURL.appendingPathComponent("images"),
                 ayahMarkerURL: nil
             ),
-            highlightsService: highlights
+            overlayService: overlayService
         )
         #if QURAN_SYNC
         let view = ContentImageView(viewModel: model, onAnnotatedAyahTap: { _, _ in })
@@ -52,7 +52,7 @@ final class ContentScrollingTests: XCTestCase {
         let scrollView = try XCTUnwrap(findScrollView(in: host.controller.view))
 
         for ayah in [initialAyah, nextAyah] {
-            if ayah == nextAyah { highlights.highlights.navigationVerse = ayah }
+            if ayah == nextAyah { overlayService.overlays.navigationTarget = ayah }
             await waitUntil("Page image scrolls to \(ayah)", diagnostics: {
                 "scale=\(model.scale.scale), image=\(model.imageFrame), "
                     + "offset=\(scrollView.contentOffset), content=\(scrollView.contentSize)"
@@ -74,15 +74,15 @@ final class ContentScrollingTests: XCTestCase {
         let nextAyah = page.quran.suras[0].verses[1]
         let root = try makeLinePageFiles(metrics: metrics)
         defer { try? FileManager.default.removeItem(at: root) }
-        let highlights = QuranHighlightsService()
-        highlights.highlights.navigationVerse = initialAyah
+        let overlayService = VerseOverlayService()
+        overlayService.overlays.navigationTarget = initialAyah
         let model = ContentLineViewModel(
             reading: reading,
             page: page,
             linePageAssetService: LinePageAssetService(
                 readingDirectory: root, metrics: metrics, quran: reading.quran, ayahMarkerURL: nil
             ),
-            highlightsService: highlights
+            overlayService: overlayService
         )
         #if QURAN_SYNC
         let view = ContentLineView(viewModel: model, onAnnotatedAyahTap: { _, _ in })
@@ -94,7 +94,7 @@ final class ContentScrollingTests: XCTestCase {
         let scrollView = try XCTUnwrap(findScrollView(in: host.controller.view))
 
         for ayah in [initialAyah, nextAyah] {
-            if ayah == nextAyah { highlights.highlights.navigationVerse = ayah }
+            if ayah == nextAyah { overlayService.overlays.navigationTarget = ayah }
             await waitUntil("Line images scroll to \(ayah)", diagnostics: {
                 "spans=\(model.geometryData.highlightSpans.count), "
                     + "offset=\(scrollView.contentOffset), content=\(scrollView.contentSize)"

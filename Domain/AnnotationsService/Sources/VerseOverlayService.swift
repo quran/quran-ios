@@ -1,5 +1,5 @@
 //
-//  QuranHighlightsService.swift
+//  VerseOverlayService.swift
 //
 //
 //  Created by Mohamed Afifi on 2023-12-23.
@@ -9,22 +9,23 @@ import Combine
 import QuranAnnotations
 import VLogging
 
-public final class QuranHighlightsService {
+public final class VerseOverlayService {
     // MARK: Lifecycle
 
     public init() { }
 
     // MARK: Public
 
-    @Published public var highlights = QuranHighlights() {
+    @Published public var overlays = VerseOverlays() {
         didSet {
-            logger.info("Highlights updated")
+            logger.info("Verse overlays updated")
         }
     }
 
-    public var scrolling: AnyPublisher<Void, Never> {
-        $highlights
-            .zip($highlights.dropFirst())
+    /// Signals playback or navigation target changes using the complete overlay state.
+    public var scrollRequests: AnyPublisher<Void, Never> {
+        $overlays
+            .zip($overlays.dropFirst())
             .filter { oldValue, newValue in
                 newValue.needsScrolling(comparingTo: oldValue)
             }
@@ -33,6 +34,6 @@ public final class QuranHighlightsService {
     }
 
     public func reset() {
-        highlights = QuranHighlights()
+        overlays = VerseOverlays()
     }
 }

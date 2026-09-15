@@ -59,6 +59,12 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
         return nil
     }
 
+    #if QURAN_SYNC
+    public func setAyahAnnotationsHidden(_ hidden: Bool) {
+        viewModel.overlays.annotationsHidden = hidden
+    }
+    #endif
+
     // MARK: Internal
 
     @objc

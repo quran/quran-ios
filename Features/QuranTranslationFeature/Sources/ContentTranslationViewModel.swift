@@ -32,22 +32,30 @@ public final class ContentTranslationViewModel: ObservableObject {
     public init(
         localTranslationsRetriever: LocalTranslationsRetriever,
         dataService: QuranTextDataService,
-        highlightsService: QuranHighlightsService
+        overlayService: VerseOverlayService
     ) {
         self.dataService = dataService
-        self.highlightsService = highlightsService
+        self.overlayService = overlayService
         self.localTranslationsRetriever = localTranslationsRetriever
         reading = ReadingPreferences.shared.reading
         arabicFontSize = fontSizePreferences.arabicFontSize
         translationFontSize = fontSizePreferences.translationFontSize
         selectedTranslations = selectedTranslationsPreferences.selectedTranslationIds
-        highlights = highlightsService.highlights.versesByHighlights().mapValues { Color($0) }
+        highlights = [:]
 
-        highlightsService.$highlights
-            .sink { [weak self] in self?.highlights = $0.versesByHighlights().mapValues { Color($0) } }
+        overlayService.$overlays
+            .combineLatest($verses)
+            .map { overlays, verses in
+                let colors = overlays.versesByHighlights()
+                return Dictionary(uniqueKeysWithValues: Set(verses).compactMap { verse in
+                    colors[verse].map { (verse, Color($0)) }
+                })
+            }
+            .removeDuplicates()
+            .sink { [weak self] in self?.highlights = $0 }
             .store(in: &cancellables)
 
-        highlightsService.scrolling
+        overlayService.scrollRequests
             .sink { [weak self] in
                 self?.scrollToVerseIfNeeded()
             }
@@ -303,7 +311,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     private var listGeneration = 0
     private var recordedRowCount = 0
-    private let highlightsService: QuranHighlightsService
+    private let overlayService: VerseOverlayService
     private let dataService: QuranTextDataService
     private let localTranslationsRetriever: LocalTranslationsRetriever
     private let readingPreferences = ReadingPreferences.shared
@@ -375,7 +383,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     }
 
     private func scrollToVerseIfNeededSynchronously() {
-        guard let ayah = highlightsService.highlights.firstScrollingVerse() else {
+        guard let ayah = overlayService.overlays.firstScrollingVerse() else {
             return
         }
         for item in items(quranFont: reading.quranFont) {
@@ -388,7 +396,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     }
 
     private func scrollToVerseIfNeeded() {
-        // Execute in the next runloop to allow the highlightsService value to load.
+        // Execute in the next runloop to allow the overlayService value to load.
         DispatchQueue.main.async {
             self.scrollToVerseIfNeededSynchronously()
         }

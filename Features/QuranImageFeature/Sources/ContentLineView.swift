@@ -31,6 +31,7 @@ struct ContentLineView: View {
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
             ayahAnnotations: viewModel.ayahAnnotations,
+            annotationsHidden: viewModel.annotationsHidden,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
             chromeStyle: viewModel.chromeStyle,
             imageRenderingMode: viewModel.imageRenderingMode,
@@ -78,6 +79,7 @@ private struct ContentLineViewBody: View {
     let highlightColorsByVerse: [AyahNumber: Color]
     #if QURAN_SYNC
     let ayahAnnotations: [AyahNumber: Set<AyahAnnotation>]
+    let annotationsHidden: Bool
     #endif
     let drawsAyahNumbersAndSuraHeaders: Bool
     let chromeStyle: LinePageChromeStyle
@@ -148,6 +150,7 @@ private struct ContentLineViewBody: View {
                             AyahMarkerPlacement(ayah: $0.marker.ayah, frame: $0.frame)
                         },
                         annotations: ayahAnnotations,
+                        annotationsHidden: annotationsHidden,
                         onAnnotatedAyahTap: onAnnotatedAyahTap
                     )
                 }

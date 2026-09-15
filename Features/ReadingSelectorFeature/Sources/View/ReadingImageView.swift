@@ -23,7 +23,12 @@ struct ReadingImageView: View {
 
     private var content: some View {
         #if QURAN_SYNC
-        AdaptiveImageScrollView(decorations: decorations, renderingMode: renderingMode, ayahAnnotations: [:]) {
+        AdaptiveImageScrollView(
+            decorations: decorations,
+            renderingMode: renderingMode,
+            ayahAnnotations: [:],
+            annotationsHidden: false
+        ) {
             image
         } onAnnotatedAyahTap: { _, _ in
         } onScaleChange: { _ in

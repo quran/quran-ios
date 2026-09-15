@@ -119,8 +119,7 @@ public struct HighlightColorPicker: View {
                 }
             }
             .frame(width: circleLength, height: circleLength)
-            .frame(minWidth: minimumTapLength, minHeight: minimumTapLength)
-            .contentShape(Circle())
+            .minimumTouchTarget()
         }
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityLabel)

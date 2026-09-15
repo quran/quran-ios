@@ -11,8 +11,18 @@ import SwiftUI
 struct TranslationVerseView: View {
     @StateObject var viewModel: TranslationVerseViewModel
 
-    var body: some View {
+    @ViewBuilder
+    private var content: some View {
+        #if QURAN_SYNC
+        // This standalone verse sheet has no ayah-menu presentation.
+        ContentTranslationView(viewModel: viewModel.translationViewModel, onAyahNumberTapped: { _, _ in })
+        #else
         ContentTranslationView(viewModel: viewModel.translationViewModel)
+        #endif
+    }
+
+    var body: some View {
+        content
             .themedBackground()
             .themedForeground()
             .populateThemeStyle()

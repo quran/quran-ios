@@ -45,7 +45,7 @@ private struct AyahAnnotationsLabel: View {
     var body: some View {
         HStack(spacing: height * 0.14) {
             ForEach(annotations.ordered) { annotation in
-                annotationIcon(annotation)
+                AyahAnnotationIcon(annotation: annotation, size: height * 0.52)
             }
         }
         .font(.system(size: height * 0.48, weight: .semibold))
@@ -59,26 +59,6 @@ private struct AyahAnnotationsLabel: View {
     }
 
     @Environment(\.themeStyle) private var themeStyle
-
-    private func annotationIcon(_ annotation: AyahAnnotation) -> some View {
-        Group {
-            switch annotation {
-            case .readingBookmark(let bookmark):
-                Image(uiImage: ReadingBookmarkPin.image(style: .filled))
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundStyle(bookmark.swiftUIColor)
-            case .collection:
-                NoorSystemImage.bookmark.image
-                    .foregroundStyle(Color(themeStyle.secondaryTextColor))
-            case .note:
-                NoorSystemImage.note.image
-                    .foregroundStyle(Color(themeStyle.secondaryTextColor))
-            }
-        }
-        .symbolRenderingMode(.monochrome)
-        .frame(width: height * 0.52, height: height * 0.52)
-    }
 }
 
 private struct AyahAnnotationsButtonStyle: ButtonStyle {

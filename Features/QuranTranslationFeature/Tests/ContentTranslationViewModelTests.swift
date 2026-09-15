@@ -4,6 +4,7 @@
 
 import AnnotationsService
 import Combine
+import QuranAnnotations
 import QuranKit
 import QuranText
 import ReadingService
@@ -12,6 +13,85 @@ import XCTest
 
 @MainActor
 final class ContentTranslationViewModelTests: XCTestCase {
+    #if QURAN_SYNC
+    func testArabicItemsIncludeLiveAnnotationsAndRemoveClearedBadges() throws {
+        let verse = Quran.hafsMadani1405.firstVerse
+        let service = VerseOverlayService()
+        let sut = makeSUT(overlayService: service)
+        sut.verses = [verse]
+        sut.commitLoadedContent(
+            verses: [verse],
+            translations: [makeTranslation(id: 1)],
+            verseTexts: [verse: makeVerseText(translationCount: 1)]
+        )
+        let originalItem = try arabicItem(in: sut)
+
+        service.overlays.notedVerses = [verse]
+        service.overlays.collectionVerses = [verse]
+        service.overlays.readingBookmarks = [
+            .init(id: "coral", slot: .coral, placement: .ayah(verse), modifiedOn: .distantPast),
+            .init(id: "teal", slot: .teal, placement: .ayah(verse), modifiedOn: .distantPast),
+            .init(id: "page", slot: .indigo, placement: .page(verse.page), modifiedOn: .distantPast),
+        ]
+
+        let annotatedItem = try arabicItem(in: sut)
+        XCTAssertEqual(annotatedItem.annotations, [.note, .collection, .readingBookmark(.coral), .readingBookmark(.teal)])
+        XCTAssertEqual(annotatedItem.id, originalItem.id)
+        XCTAssertNotEqual(annotatedItem, originalItem)
+
+        service.overlays.notedVerses = []
+        service.overlays.collectionVerses = []
+        service.overlays.readingBookmarks = []
+
+        XCTAssertEqual(try arabicItem(in: sut), originalItem)
+    }
+
+    func testAnnotationsFollowChangesToDisplayedVerses() {
+        let first = Quran.hafsMadani1405.pages[0].firstVerse
+        let second = Quran.hafsMadani1405.pages[1].firstVerse
+        let service = VerseOverlayService()
+        service.overlays.notedVerses = [first]
+        service.overlays.collectionVerses = [second]
+        let sut = makeSUT(overlayService: service)
+
+        sut.verses = [first]
+        XCTAssertEqual(sut.annotationsByVerse, [first: [.note]])
+
+        sut.verses = [second]
+        XCTAssertEqual(sut.annotationsByVerse, [second: [.collection]])
+    }
+
+    func testUnrelatedOverlayChangesDoNotRepublishTranslationAnnotations() {
+        let verse = Quran.hafsMadani1405.pages[0].firstVerse
+        let other = Quran.hafsMadani1405.pages[1].firstVerse
+        let service = VerseOverlayService()
+        let sut = makeSUT(overlayService: service)
+        sut.verses = [verse]
+        var updates = 0
+        let subscription = sut.$annotationsByVerse.dropFirst().sink { _ in updates += 1 }
+        defer { subscription.cancel() }
+
+        service.overlays.notedVerses = [other]
+        service.overlays.collectionVerses = [other]
+        service.overlays.colorHighlights = [verse: .green]
+
+        XCTAssertEqual(updates, 0)
+
+        service.overlays.notedVerses.insert(verse)
+        service.overlays.notedVerses.insert(verse)
+
+        XCTAssertEqual(updates, 1)
+        XCTAssertEqual(sut.annotationsByVerse, [verse: [.note]])
+    }
+
+    private func arabicItem(in viewModel: ContentTranslationViewModel) throws -> TranslationArabicText {
+        try XCTUnwrap(viewModel.items(quranFont: .uthmanicHafs).compactMap { item in
+            guard case .arabicText(let text, _) = item else { return nil }
+            return text
+        }.first)
+    }
+    #endif
+
     func testHighlightsFollowChangesToDisplayedVerses() {
         let first = Quran.hafsMadani1405.pages[0].firstVerse
         let second = Quran.hafsMadani1405.pages[1].firstVerse

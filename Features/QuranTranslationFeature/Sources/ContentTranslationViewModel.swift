@@ -10,6 +10,7 @@ import Combine
 import Crashing
 import Foundation
 import NoorUI
+import QuranAnnotations
 import QuranKit
 import QuranText
 import QuranTextKit
@@ -54,6 +55,20 @@ public final class ContentTranslationViewModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] in self?.highlights = $0 }
             .store(in: &cancellables)
+
+        #if QURAN_SYNC
+        overlayService.$overlays
+            .combineLatest($verses)
+            .map { overlays, verses in
+                Dictionary(uniqueKeysWithValues: Set(verses).compactMap { verse in
+                    let annotations = overlays.annotationTypes(for: verse)
+                    return annotations.isEmpty ? nil : (verse, annotations)
+                })
+            }
+            .removeDuplicates()
+            .sink { [weak self] in self?.annotationsByVerse = $0 }
+            .store(in: &cancellables)
+        #endif
 
         overlayService.scrollRequests
             .sink { [weak self] in
@@ -112,6 +127,10 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     @Published var highlights: [AyahNumber: Color]
 
+    #if QURAN_SYNC
+    @Published private(set) var annotationsByVerse: [AyahNumber: Set<AyahAnnotation>] = [:]
+    #endif
+
     @Published var footnote: TranslationFootnote?
 
     @Published var scrollToItem: TranslationItemId?
@@ -154,17 +173,23 @@ public final class ContentTranslationViewModel: ObservableObject {
             // Add arabic quran text
             let arabicVerseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
             let arabicText = QuranText(verseText.arabicText.text + " " + arabicVerseNumber)
-            items.append(
-                .arabicText(
-                    TranslationArabicText(
-                        verse: verse,
-                        text: arabicText,
-                        quranFont: quranFont,
-                        arabicFontSize: arabicFontSize
-                    ),
-                    color
-                )
+            #if QURAN_SYNC
+            let arabicItem = TranslationArabicText(
+                verse: verse,
+                text: arabicText,
+                quranFont: quranFont,
+                arabicFontSize: arabicFontSize,
+                annotations: annotationsByVerse[verse, default: []]
             )
+            #else
+            let arabicItem = TranslationArabicText(
+                verse: verse,
+                text: arabicText,
+                quranFont: quranFont,
+                arabicFontSize: arabicFontSize
+            )
+            #endif
+            items.append(.arabicText(arabicItem, color))
 
             for (index, translation) in translations.enumerated() {
                 let text = verseText.translations[index]

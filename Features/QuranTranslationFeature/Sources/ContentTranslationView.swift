@@ -16,8 +16,11 @@ import Utilities
 public struct ContentTranslationView: View {
     @StateObject var viewModel: ContentTranslationViewModel
 
-    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel) {
+    private let onAnnotatedAyahTap: ((AyahNumber, CGPoint) -> Void)?
+
+    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel, onAnnotatedAyahTap: ((AyahNumber, CGPoint) -> Void)? = nil) {
         _viewModel = StateObject(wrappedValue: viewModel())
+        self.onAnnotatedAyahTap = onAnnotatedAyahTap
     }
 
     public var body: some View {
@@ -29,7 +32,8 @@ public struct ContentTranslationView: View {
             scrollToItem: viewModel.scrollToItem,
             tracker: viewModel.tracker,
             footnote: $viewModel.footnote,
-            openURL: { viewModel.openURL($0) }
+            openURL: { viewModel.openURL($0) },
+            onAnnotatedAyahTap: onAnnotatedAyahTap
         )
         .geometryActions(
             PageGeometryActions(
@@ -56,11 +60,12 @@ private struct ContentTranslationViewBody: View {
     @Binding var footnote: TranslationFootnote?
 
     let openURL: (TranslationURL) -> Void
+    let onAnnotatedAyahTap: ((AyahNumber, CGPoint) -> Void)?
 
     var body: some View {
         List {
             ForEach(items) { item in
-                item
+                item.view(onAnnotatedAyahTap: onAnnotatedAyahTap)
             }
         }
         .listStyle(.plain)

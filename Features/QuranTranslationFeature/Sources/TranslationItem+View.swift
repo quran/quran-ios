@@ -36,7 +36,17 @@ extension TranslationSuraName: View {
 
 extension TranslationArabicText: View {
     var body: some View {
+        view(onAnnotatedAyahTap: nil)
+    }
+
+    func view(onAnnotatedAyahTap: ((AyahNumber, CGPoint) -> Void)?) -> some View {
+        #if QURAN_SYNC
+        QuranArabicText(verse: verse, text: text, quranFont: quranFont, fontSize: arabicFontSize, annotations: annotations, onAnnotatedAyahTap: onAnnotatedAyahTap.map { action in
+            { point in action(verse, point) }
+        })
+        #else
         QuranArabicText(verse: verse, text: text, quranFont: quranFont, fontSize: arabicFontSize)
+        #endif
     }
 }
 
@@ -88,6 +98,10 @@ extension TranslatorText: View {
 
 extension TranslationItem: View {
     var body: some View {
+        view(onAnnotatedAyahTap: nil)
+    }
+
+    func view(onAnnotatedAyahTap: ((AyahNumber, CGPoint) -> Void)?) -> some View {
         VStack {
             switch self {
             case .pageHeader(let pageHeader):
@@ -99,7 +113,7 @@ extension TranslationItem: View {
             case .suraName(let suraName, _):
                 suraName
             case .arabicText(let arabicText, _):
-                arabicText
+                arabicText.view(onAnnotatedAyahTap: onAnnotatedAyahTap)
             case .translationTextChunk(let translationTextChunk, _):
                 translationTextChunk
             case .translationReferenceVerse(let translationReferenceVerse, _):

@@ -28,14 +28,14 @@ public struct QuranArabicText: View {
 
     #if QURAN_SYNC
     private var annotations: Set<AyahAnnotation> = []
-    private var onAnnotatedAyahTap: ((CGPoint) -> Void)?
+    private var onAyahNumberTapped: ((CGPoint) -> Void)?
     @State private var capsuleFrame: CGRect = .zero
     @ScaledMetric private var minimumTargetSize = 44.0
 
-    public init(verse: AyahNumber, text: QuranText, quranFont: QuranFont, fontSize: FontSize, annotations: Set<AyahAnnotation>, onAnnotatedAyahTap: ((CGPoint) -> Void)? = nil) {
+    public init(verse: AyahNumber, text: QuranText, quranFont: QuranFont, fontSize: FontSize, annotations: Set<AyahAnnotation>, onAyahNumberTapped: ((CGPoint) -> Void)? = nil) {
         self.init(verse: verse, text: text, quranFont: quranFont, fontSize: fontSize)
         self.annotations = annotations
-        self.onAnnotatedAyahTap = onAnnotatedAyahTap
+        self.onAyahNumberTapped = onAyahNumberTapped
     }
     #endif
 
@@ -66,9 +66,9 @@ public struct QuranArabicText: View {
     @ViewBuilder
     private var ayahNumber: some View {
         #if QURAN_SYNC
-        if !annotations.isEmpty, let onAnnotatedAyahTap {
+        if let onAyahNumberTapped {
             Button {
-                onAnnotatedAyahTap(CGPoint(x: capsuleFrame.midX, y: capsuleFrame.midY))
+                onAyahNumberTapped(CGPoint(x: capsuleFrame.midX, y: capsuleFrame.midY))
             } label: {
                 capsule
                     .onGlobalFrameChanged { capsuleFrame = $0 }
@@ -76,7 +76,7 @@ public struct QuranArabicText: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .accessibilityIdentifier("translation-ayah-annotations-\(verse.sura.suraNumber)-\(verse.ayah)")
+            .accessibilityIdentifier("translation-ayah-number-\(verse.sura.suraNumber)-\(verse.ayah)")
         } else {
             capsule
         }

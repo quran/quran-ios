@@ -26,7 +26,7 @@ struct PagesView: View {
                     case .arabic:
                         #if QURAN_SYNC
                         viewModel.deps.imageDataSourceBuilder.build(at: page) {
-                            viewModel.onAnnotatedAyahTapped($0, at: $1)
+                            viewModel.onAyahNumberTapped($0, at: $1)
                         }
                         #else
                         viewModel.deps.imageDataSourceBuilder.build(at: page)
@@ -34,7 +34,7 @@ struct PagesView: View {
                     case .translation:
                         #if QURAN_SYNC
                         viewModel.deps.translationDataSourceBuilder.build(at: page) {
-                            viewModel.onAnnotatedAyahTapped($0, at: $1)
+                            viewModel.onAyahNumberTapped($0, at: $1)
                         }
                         #else
                         viewModel.deps.translationDataSourceBuilder.build(at: page)

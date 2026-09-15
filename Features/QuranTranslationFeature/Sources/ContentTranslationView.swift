@@ -16,11 +16,11 @@ import Utilities
 public struct ContentTranslationView: View {
     @StateObject var viewModel: ContentTranslationViewModel
 
-    private let onAnnotatedAyahTap: ((AyahNumber, CGPoint) -> Void)?
+    private let onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?
 
-    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel, onAnnotatedAyahTap: ((AyahNumber, CGPoint) -> Void)? = nil) {
+    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel, onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)? = nil) {
         _viewModel = StateObject(wrappedValue: viewModel())
-        self.onAnnotatedAyahTap = onAnnotatedAyahTap
+        self.onAyahNumberTapped = onAyahNumberTapped
     }
 
     public var body: some View {
@@ -33,7 +33,7 @@ public struct ContentTranslationView: View {
             tracker: viewModel.tracker,
             footnote: $viewModel.footnote,
             openURL: { viewModel.openURL($0) },
-            onAnnotatedAyahTap: onAnnotatedAyahTap
+            onAyahNumberTapped: onAyahNumberTapped
         )
         .geometryActions(
             PageGeometryActions(
@@ -60,12 +60,12 @@ private struct ContentTranslationViewBody: View {
     @Binding var footnote: TranslationFootnote?
 
     let openURL: (TranslationURL) -> Void
-    let onAnnotatedAyahTap: ((AyahNumber, CGPoint) -> Void)?
+    let onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?
 
     var body: some View {
         List {
             ForEach(items) { item in
-                item.view(onAnnotatedAyahTap: onAnnotatedAyahTap)
+                item.view(onAyahNumberTapped: onAyahNumberTapped)
             }
         }
         .listStyle(.plain)

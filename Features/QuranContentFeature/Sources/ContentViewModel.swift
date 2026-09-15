@@ -180,7 +180,7 @@ public final class ContentViewModel: ObservableObject {
     }
 
     #if QURAN_SYNC
-    func onAnnotatedAyahTapped(_ ayah: AyahNumber, at globalPoint: CGPoint) {
+    func onAyahNumberTapped(_ ayah: AyahNumber, at globalPoint: CGPoint) {
         guard let sourceView = ayahMenuSourceView else {
             return
         }

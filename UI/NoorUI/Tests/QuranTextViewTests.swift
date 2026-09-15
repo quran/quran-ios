@@ -15,6 +15,24 @@ import XCTest
 @testable import NoorUI
 
 final class QuranTextViewTests: XCTestCase {
+    #if QURAN_SYNC
+    func test_ayahNumber_withoutAnnotations_keepsTheSameTouchTargetHeight() async {
+        let sizes = await MainActor.run {
+            let verse = Quran.hafsMadani1405.firstVerse
+            let plain = QuranArabicText(
+                verse: verse, text: "بِسْمِ اللَّهِ", quranFont: .uthmanicHafs, fontSize: .medium,
+                annotations: [], onAyahNumberTapped: { _ in }
+            )
+            let annotated = QuranArabicText(
+                verse: verse, text: "بِسْمِ اللَّهِ", quranFont: .uthmanicHafs, fontSize: .medium,
+                annotations: [.note], onAyahNumberTapped: { _ in }
+            )
+            return (fittingSize(plain), fittingSize(annotated))
+        }
+        XCTAssertEqual(sizes.0.height, sizes.1.height, accuracy: 1)
+    }
+    #endif
+
     func test_readingFont_usesIndoPakFontOnlyForIndoPakReading() {
         XCTAssertEqual(Reading.indoPak.quranFont, .indoPak)
         XCTAssertEqual(Reading.hafs_1405.quranFont, .uthmanicHafs)

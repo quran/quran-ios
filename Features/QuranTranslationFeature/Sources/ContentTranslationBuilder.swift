@@ -25,8 +25,8 @@ public struct ContentTranslationBuilder {
 
     #if QURAN_SYNC
     @MainActor
-    public func build(at page: Page, onAnnotatedAyahTap: @escaping (AyahNumber, CGPoint) -> Void) -> some View {
-        ContentTranslationView(viewModel: makeViewModel(at: page), onAnnotatedAyahTap: onAnnotatedAyahTap)
+    public func build(at page: Page, onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) -> some View {
+        ContentTranslationView(viewModel: makeViewModel(at: page), onAyahNumberTapped: onAyahNumberTapped)
     }
     #else
     @MainActor

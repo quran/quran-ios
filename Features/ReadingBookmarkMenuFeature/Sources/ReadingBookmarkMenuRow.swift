@@ -129,13 +129,10 @@ struct ReadingBookmarkMenuRow: View {
                     .foregroundStyle(Color.systemRed)
             case .moveHere, .setHere:
                 Text(action.title)
-                    .foregroundStyle(action == .moveHere ? Color.white : Color.accentColor)
+                    .foregroundStyle(Color.white)
                     .padding(.horizontal, actionHorizontalPadding)
                     .padding(.vertical, actionVerticalPadding)
-                    .background(
-                        Color.accentColor.opacity(action == .moveHere ? 1 : 0.1),
-                        in: Capsule()
-                    )
+                    .background(Color.accentColor, in: Capsule())
             }
         }
         .font(.footnote.bold())

@@ -205,7 +205,8 @@ final class NotesViewModelTests: XCTestCase {
 
         XCTAssertTrue(text.hasPrefix("My note\n\n"))
         XCTAssertTrue(text.contains("﴿ ١ ﴾"))
-        XCTAssertTrue(text.hasSuffix("Al-Fātihah, Ayah 1"))
+        XCTAssertTrue(text.contains("Al-Fātihah, Ayah 1"))
+        XCTAssertTrue(text.hasSuffix("https://quran.com/1/1"))
     }
 
     func test_navigateToNote_navigatesToStartAyah() throws {

@@ -52,7 +52,7 @@ public struct ShareableVerseTextRetriever {
         async let translationText = translations(for: verses)
 
         let result = try await [arabicText, translationText].flatMap { $0 }
-        return result + ["", versesSummary(verses)]
+        return result + ["", versesSummary(verses), quranComURL(verses)]
     }
 
     // MARK: Private
@@ -68,6 +68,16 @@ public struct ShareableVerseTextRetriever {
             return verses[0].localizedName
         }
         return "\(verses[0].localizedName) - \(verses.last!.localizedName)"
+    }
+
+    private func quranComURL(_ verses: [AyahNumber]) -> String {
+        let first = verses[0]
+        let last = verses.last!
+        let suraNumber = first.sura.suraNumber
+        if verses.count > 1, last.sura.suraNumber == suraNumber {
+            return "https://quran.com/\(suraNumber)/\(first.ayah)-\(last.ayah)"
+        }
+        return "https://quran.com/\(suraNumber)/\(first.ayah)"
     }
 
     private func arabicText(for verse: AyahNumber) async throws -> String {

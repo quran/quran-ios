@@ -54,13 +54,15 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                 verses: [quran.suras[0].verses[2]],
                 result: ["\(rightToLeftMark)ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ٣ ﴾\(endMark)",
                          "",
-                         "Al-Fātihah, Ayah 3"]
+                         "Al-Fātihah, Ayah 3",
+                         "https://quran.com/1/3"]
             ),
             (
                 verses: [quran.suras[0].verses[0], quran.suras[0].verses[1], quran.suras[0].verses[2]],
                 result: ["\(rightToLeftMark)بِسۡمِ ٱللَّهِ ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ١ ﴾\(endMark) \(rightToLeftMark)ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَـٰلَمِینَ﴿ ٢ ﴾\(endMark) \(rightToLeftMark)ٱلرَّحۡمَـٰنِ ٱلرَّحِیمِ﴿ ٣ ﴾\(endMark)",
                          "",
-                         "Al-Fātihah, Ayah 1 - Al-Fātihah, Ayah 3"]
+                         "Al-Fātihah, Ayah 1 - Al-Fātihah, Ayah 3",
+                         "https://quran.com/1/1-3"]
             ),
         ]
         for test in tests {
@@ -83,7 +85,8 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                          "• Sahih International:",
                          TestData.translationTextAt(translations[1], quran.suras[0].verses[2]),
                          "",
-                         "Al-Fātihah, Ayah 3"]
+                         "Al-Fātihah, Ayah 3",
+                         "https://quran.com/1/3"]
             ),
             (
                 verses: [quran.suras[0].verses[0], quran.suras[0].verses[1], quran.suras[0].verses[2]],
@@ -99,13 +102,22 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                          TestData.translationTextAt(translations[1], quran.suras[0].verses[1]),
                          TestData.translationTextAt(translations[1], quran.suras[0].verses[2]),
                          "",
-                         "Al-Fātihah, Ayah 1 - Al-Fātihah, Ayah 3"]
+                         "Al-Fātihah, Ayah 1 - Al-Fātihah, Ayah 3",
+                         "https://quran.com/1/1-3"]
             ),
         ]
         for test in tests {
             let versesText = try await shareableTextRetriever.textForVerses(test.verses)
             XCTAssertEqual(test.result, versesText)
         }
+    }
+
+    func testShareArabicTextAcrossSuras() async throws {
+        statePreferences.quranMode = .arabic
+
+        let verses = [quran.suras[0].verses.last!, quran.suras[1].verses[0]]
+        let versesText = try await shareableTextRetriever.textForVerses(verses)
+        XCTAssertEqual(versesText.last, "https://quran.com/1/7")
     }
 
     func testShareTranslationTextReferenceVerse() async throws {
@@ -119,7 +131,8 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                                          "• Khan & Hilai:",
                                          "See ayah 38.",
                                          "",
-                                         "Al-Baqarah, Ayah 50"])
+                                         "Al-Baqarah, Ayah 50",
+                                         "https://quran.com/2/50"])
 
         let verseSavedAsTextReference = try await shareableTextRetriever.textForVerses([quran.suras[1].verses[50]])
         XCTAssertEqual(verseSavedAsTextReference, ["\(rightToLeftMark)وَإِذۡ وَ ٰ⁠عَدۡنَا مُوسَىٰۤ أَرۡبَعِینَ لَیۡلَةࣰ ثُمَّ ٱتَّخَذۡتُمُ ٱلۡعِجۡلَ مِنۢ بَعۡدِهِۦ وَأَنتُمۡ ظَـٰلِمُونَ﴿ ٥١ ﴾\(endMark)",
@@ -127,7 +140,8 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
                                                    "• Khan & Hilai:",
                                                    "See ayah 38.",
                                                    "",
-                                                   "Al-Baqarah, Ayah 51"])
+                                                   "Al-Baqarah, Ayah 51",
+                                                   "https://quran.com/2/51"])
     }
 
     // MARK: Private

@@ -66,13 +66,13 @@ public struct HighlightColorPicker: View {
                 )
             }
         }
-        .frame(height: minimumTapLength)
+        .frame(height: max(minimumTapLength, circleLength))
     }
 
     // MARK: Private
 
     @ScaledMetric private var circleLength = 36.0
-    @ScaledMetric private var minimumTapLength = 44.0
+    private let minimumTapLength: CGFloat = 44
     @ScaledMetric private var selectedStrokeWidth = 3.0
     @ScaledMetric private var dividerHeight = 24.0
     @ScaledMetric private var spacing = 8.0
@@ -119,8 +119,7 @@ public struct HighlightColorPicker: View {
                 }
             }
             .frame(width: circleLength, height: circleLength)
-            .frame(minWidth: minimumTapLength, minHeight: minimumTapLength)
-            .contentShape(Circle())
+            .minimumTouchTarget()
         }
         .buttonStyle(.plain)
         .accessibilityLabel(accessibilityLabel)

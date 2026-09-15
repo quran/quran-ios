@@ -21,8 +21,7 @@ struct AyahAnnotationsButton: View {
             action(CGPoint(x: globalFrame.midX, y: globalFrame.midY))
         } label: {
             AyahAnnotationsLabel(annotations: annotations, height: height)
-                .frame(minWidth: minimumTargetSize, minHeight: minimumTargetSize)
-                .contentShape(Rectangle())
+                .minimumTouchTarget()
         }
         .buttonStyle(AyahAnnotationsButtonStyle())
         .accessibilityLabel(accessibilityLabel)
@@ -31,7 +30,6 @@ struct AyahAnnotationsButton: View {
     }
 
     @State private var globalFrame: CGRect = .zero
-    @ScaledMetric private var minimumTargetSize = 44.0
 
     var accessibilityLabel: String {
         ([ayah.localizedName] + annotations.ordered.map(\.accessibilityLabel)).joined(separator: ", ")

@@ -295,8 +295,7 @@ public struct NoorListItem: View {
                 AsyncButton(action: action) {
                     image.image
                         .foregroundColor(color ?? .accentColor)
-                        .frame(minWidth: 44, minHeight: 44)
-                        .contentShape(Rectangle())
+                        .minimumTouchTarget()
                 }
                 .buttonStyle(.borderless)
                 .accessibilityLabel(accessibilityLabel)

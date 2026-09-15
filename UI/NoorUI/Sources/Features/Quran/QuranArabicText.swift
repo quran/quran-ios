@@ -30,7 +30,6 @@ public struct QuranArabicText: View {
     private let annotations: Set<AyahAnnotation>
     private let onAyahNumberTapped: (CGPoint) -> Void
     @State private var capsuleFrame: CGRect = .zero
-    @ScaledMetric private var minimumTargetSize = 44.0
 
     public init(verse: AyahNumber, text: QuranText, quranFont: QuranFont, fontSize: FontSize, annotations: Set<AyahAnnotation>, onAyahNumberTapped: @escaping (CGPoint) -> Void) {
         self.verse = verse
@@ -74,8 +73,7 @@ public struct QuranArabicText: View {
         } label: {
             capsule
                 .onGlobalFrameChanged { capsuleFrame = $0 }
-                .frame(minWidth: minimumTargetSize, minHeight: minimumTargetSize)
-                .contentShape(Rectangle())
+                .minimumTouchTarget()
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("translation-ayah-number-\(verse.sura.suraNumber)-\(verse.ayah)")

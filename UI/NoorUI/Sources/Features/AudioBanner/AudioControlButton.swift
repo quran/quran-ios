@@ -1,4 +1,5 @@
 import SwiftUI
+import UIx
 
 enum AudioControlMetrics {
     static let minimumTapLength: CGFloat = 44
@@ -13,8 +14,7 @@ struct AudioControlLabel<Content: View>: View {
 
     var body: some View {
         content
-            .frame(minWidth: AudioControlMetrics.minimumTapLength, minHeight: AudioControlMetrics.minimumTapLength)
-            .contentShape(Rectangle())
+            .minimumTouchTarget()
     }
 }
 

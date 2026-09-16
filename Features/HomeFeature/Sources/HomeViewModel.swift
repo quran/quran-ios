@@ -222,12 +222,7 @@ final class HomeViewModel: ObservableObject {
                 do {
                     for try await bookmarks in sequence {
                         guard !Task.isCancelled else { return }
-                        self?.readingBookmarks = bookmarks.sorted {
-                            if $0.modifiedOn != $1.modifiedOn {
-                                return $0.modifiedOn > $1.modifiedOn
-                            }
-                            return $0.id < $1.id
-                        }
+                        self?.readingBookmarks = PlacedReadingBookmark.sortedByDate(bookmarks)
                     }
                 } catch is CancellationError {
                     return

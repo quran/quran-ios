@@ -44,16 +44,13 @@ private struct BookmarkCollectionsContent: View {
                 }
             }
 
-            if !viewModel.readingBookmarks.isEmpty {
-                NoorBasicSection(title: l("ayah.menu.reading-bookmark.title")) {
-                    ForEach(viewModel.readingBookmarks, id: \.slot) { readingBookmark in
-                        ReadingBookmarkListItem(
-                            bookmark: readingBookmark,
-                            action: { viewModel.navigateTo(readingBookmark) }
-                        )
-                    }
-                }
-            }
+            ContinueReadingSection(
+                title: "Reading bookmarks",
+                readingBookmarks: viewModel.readingBookmarks,
+                lastPages: [],
+                selectReadingBookmark: { viewModel.navigateTo($0) },
+                selectLastPage: { _ in }
+            )
 
             NoorBasicSection(title: l("bookmarks.collections.colored")) {
                 ForEach(HighlightColor.alphabeticallySortedColors, id: \.self) { color in

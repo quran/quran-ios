@@ -45,6 +45,16 @@ public struct PlacedReadingBookmark: Hashable, Sendable {
     public let modifiedOn: Date
     public let name: String?
 
+    /// Orders bookmarks newest first, using their IDs to break ties consistently.
+    public static func sortedByDate(_ bookmarks: [Self]) -> [Self] {
+        bookmarks.sorted {
+            if $0.modifiedOn != $1.modifiedOn {
+                return $0.modifiedOn > $1.modifiedOn
+            }
+            return $0.id < $1.id
+        }
+    }
+
     public var sura: Sura {
         switch placement {
         case .ayah(let ayah):

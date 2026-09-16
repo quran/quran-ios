@@ -222,7 +222,12 @@ final class HomeViewModel: ObservableObject {
                 do {
                     for try await bookmarks in sequence {
                         guard !Task.isCancelled else { return }
-                        self?.readingBookmarks = bookmarks
+                        self?.readingBookmarks = bookmarks.sorted {
+                            if $0.modifiedOn != $1.modifiedOn {
+                                return $0.modifiedOn > $1.modifiedOn
+                            }
+                            return $0.id < $1.id
+                        }
                     }
                 } catch is CancellationError {
                     return
@@ -294,10 +299,18 @@ final class HomeViewModel: ObservableObject {
         }
     }
 
-    private var listRowCount: Int {
-        var count = lastPages.count
+    private var hasContinueReadingSection: Bool {
         #if QURAN_SYNC
-        count += readingBookmarks.count
+        !lastPages.isEmpty || !readingBookmarks.isEmpty
+        #else
+        !lastPages.isEmpty
+        #endif
+    }
+
+    private var listRowCount: Int {
+        var count = lastPages.isEmpty ? 0 : 1
+        #if QURAN_SYNC
+        count += readingBookmarks.count + (readingBookmarks.count > 1 ? 1 : 0)
         #endif
         switch type {
         case .suras:
@@ -309,12 +322,7 @@ final class HomeViewModel: ObservableObject {
     }
 
     private var listSectionCount: Int {
-        var count = lastPages.isEmpty ? 0 : 1
-        #if QURAN_SYNC
-        if !readingBookmarks.isEmpty {
-            count += 1
-        }
-        #endif
+        var count = hasContinueReadingSection ? 1 : 0
         switch type {
         case .suras:
             count += Set(suras.map(\.page.startJuz)).count

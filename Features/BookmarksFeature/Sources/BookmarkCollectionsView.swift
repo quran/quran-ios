@@ -53,15 +53,7 @@ private struct BookmarkCollectionsContent: View {
             )
 
             NoorBasicSection(title: l("bookmarks.collections.colored")) {
-                ForEach(HighlightColor.alphabeticallySortedColors, id: \.self) { color in
-                    collectionRow(
-                        title: color.localizedName,
-                        image: .bookmark,
-                        imageColor: color.color,
-                        count: viewModel.highlights.values.count { $0 == color },
-                        action: { viewModel.showHighlights(color) }
-                    )
-                }
+                ColoredBookmarksView(items: coloredBookmarks) { viewModel.showHighlights($0) }
             }
 
             NoorBasicSection(title: l("bookmarks.collections.mine")) {
@@ -106,6 +98,14 @@ private struct BookmarkCollectionsContent: View {
         )
         .errorAlert(error: $viewModel.error)
         .environment(\.editMode, $viewModel.editMode)
+    }
+
+    private var coloredBookmarks: [ColoredBookmarksView.Item] {
+        HighlightColor.alphabeticallySortedColors
+            .map { color in
+                ColoredBookmarksView.Item(color: color, count: viewModel.highlights.values.count { $0 == color })
+            }
+            .sorted { $0.count > $1.count }
     }
 
     private func collectionRow(

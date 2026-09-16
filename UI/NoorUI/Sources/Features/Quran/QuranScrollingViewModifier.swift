@@ -70,7 +70,7 @@ struct QuranScrollingViewModifier<Value: Equatable, ID: Hashable>: ViewModifier 
     private func scheduleScroll(to value: Value?, using scrollView: ScrollViewProxy) {
         scheduler.scheduleScroll(to: value, transform: transform) { id in
             // Respect animation suppression by the UIKit host.
-            withAnimation(UIView.areAnimationsEnabled ? .easeInOut(duration: 0.25) : nil) {
+            withAnimation(UIView.areAnimationsEnabled ? NoorAnimation.standard : nil) {
                 scrollView.scrollTo(id, anchor: anchor)
             }
         }

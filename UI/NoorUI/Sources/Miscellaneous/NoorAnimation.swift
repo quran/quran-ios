@@ -1,12 +1,14 @@
 //
-//  ReaderVisibilityAnimation.swift
+//  NoorAnimation.swift
 //
 
 import SwiftUI
 import UIKit
 
-public enum ReaderVisibilityAnimation {
-    public static var animation: Animation {
+/// Shared animation for ordinary UI transitions, including visibility and layout changes.
+public enum NoorAnimation {
+    /// A smooth 0.3-second transition with an ease-in-out fallback on older systems.
+    public static var standard: Animation {
         if #available(iOS 18.0, *) {
             .smooth(duration: duration)
         } else {
@@ -17,8 +19,8 @@ public enum ReaderVisibilityAnimation {
     @MainActor
     public static func animate(changes: @escaping () -> Void, completion: (() -> Void)? = nil) {
         if #available(iOS 18.0, *) {
-            // Use the same animation for UIKit bars and SwiftUI annotations.
-            UIView.animate(animation, changes: changes, completion: completion)
+            // Keep UIKit transitions consistent with SwiftUI.
+            UIView.animate(standard, changes: changes, completion: completion)
         } else {
             UIView.animate(
                 withDuration: duration,

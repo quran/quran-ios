@@ -61,7 +61,7 @@ public struct HighlightColorPicker: View {
                 }
                 .frame(minWidth: proxy.size.width, alignment: .center)
                 .animation(
-                    accessibilityReduceMotion ? nil : .easeInOut(duration: 0.2),
+                    accessibilityReduceMotion ? nil : NoorAnimation.standard,
                     value: onRemove != nil
                 )
             }

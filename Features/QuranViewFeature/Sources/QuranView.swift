@@ -110,7 +110,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
             return
         }
 
-        ReaderVisibilityAnimation.animate {
+        NoorAnimation.animate {
             if animateNavigationBar {
                 self.navigationBar.alpha = hidden ? 0 : 1
             }

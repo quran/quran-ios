@@ -158,7 +158,7 @@ private class ToastContainerViewController: UIViewController {
         setUpShowToastConstraints()
 
         // Animate the toast into view
-        UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0) {
+        NoorAnimation.animate {
             self.view.layoutIfNeeded()
         }
     }
@@ -166,10 +166,10 @@ private class ToastContainerViewController: UIViewController {
     func dismissToast(completion: (() -> Void)? = nil) {
         setUpHideToastConstraints()
 
-        // Animate the toast into view
-        UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, animations: {
+        // Animate the toast out of view.
+        NoorAnimation.animate {
             self.view.layoutIfNeeded()
-        }, completion: { _ in
+        } completion: {
             self.toastViewController.willMove(toParent: nil)
             self.toastViewController.view.removeFromSuperview()
             self.toastViewController.removeFromParent()
@@ -177,14 +177,13 @@ private class ToastContainerViewController: UIViewController {
                 self.dismissCompletion?()
                 completion?()
             }
-        })
+        }
     }
 
     // MARK: Private
 
     private let toastViewController: UIViewController
     private let bottomOffset: CGFloat
-    private let animationDuration: CGFloat = 0.3
 
     private var activeConstraint: NSLayoutConstraint? {
         didSet {

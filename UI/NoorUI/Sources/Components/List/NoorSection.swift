@@ -74,7 +74,7 @@ public struct NoorBasicSection<Content: View>: View {
     @ViewBuilder
     private func collapsibleHeader(isExpanded: Binding<Bool>) -> some View {
         Button {
-            withAnimation {
+            withAnimation(NoorAnimation.standard) {
                 isExpanded.wrappedValue.toggle()
             }
         } label: {

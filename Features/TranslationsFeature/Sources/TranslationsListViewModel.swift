@@ -10,6 +10,7 @@ import BatchDownloader
 import Combine
 import Crashing
 import Foundation
+import NoorUI
 import QuranText
 import SwiftUI
 import TranslationService
@@ -194,7 +195,7 @@ final class TranslationsListViewModel: ObservableObject {
         } catch {
             self.error = error
         }
-        withAnimation {
+        withAnimation(NoorAnimation.standard) {
             loading = false
         }
     }

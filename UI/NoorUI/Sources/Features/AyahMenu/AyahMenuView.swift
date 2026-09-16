@@ -38,7 +38,7 @@ public struct AyahMenuView: View {
         case .list:
             ScrollView {
                 AyahMenuViewList(dataObject: dataObject) {
-                    withAnimation {
+                    withAnimation(NoorAnimation.standard) {
                         state = .highlights
                     }
                 }

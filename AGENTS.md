@@ -32,6 +32,8 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Views should stay mostly declarative; business logic belongs in view models/interactors/services.
 - Reuse NoorUI/UIx components before adding one-off controls.
 - Put new reusable UI components in NoorUI; avoid feature-local component duplicates.
+- Prefer `NoorAnimation.standard` for SwiftUI animations and `NoorAnimation.animate` for UIKit animations unless there is a clear reason for different behavior. Preserve Reduce Motion handling and intentional animation suppression.
+- Do not add a NoorUI dependency to lower-level modules such as UIx.
 - Use NoorUI navigation-action components instead of constructing feature-local buttons.
 - Keep Edit, Close, overflow, and secondary navigation actions neutral. Reserve the app tint for Done and primary actions.
 - Use Done only to commit or finish an editing/confirmation flow. Use a leading Close × for dismissal-only modals, with localized accessibility text.

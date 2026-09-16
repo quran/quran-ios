@@ -227,13 +227,13 @@ struct TranslationsListView_Previews: PreviewProvider {
                     downloadedTranslations: downloaded,
                     availableTranslations: available,
                     selectAction: { item in
-                        withAnimation {
+                        withAnimation(NoorAnimation.standard) {
                             downloaded.remove(at: downloaded.firstIndex(of: item)!)
                             selected.append(item)
                         }
                     },
                     deselectAction: { item in
-                        withAnimation {
+                        withAnimation(NoorAnimation.standard) {
                             selected.remove(at: selected.firstIndex(of: item)!)
                             downloaded.append(item)
                         }

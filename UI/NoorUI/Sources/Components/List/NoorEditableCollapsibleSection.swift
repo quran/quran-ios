@@ -53,7 +53,7 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
     private var header: some View {
         HStack {
             Button {
-                withAnimation {
+                withAnimation(NoorAnimation.standard) {
                     isExpanded.toggle()
                 }
             } label: {

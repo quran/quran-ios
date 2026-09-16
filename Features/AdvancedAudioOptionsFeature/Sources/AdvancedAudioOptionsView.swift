@@ -228,7 +228,7 @@ private struct RunsPicker: View {
     var body: some View {
         Group {
             Button {
-                withAnimation(.easeInOut(duration: 0.2)) {
+                withAnimation(NoorAnimation.standard) {
                     isExpanded.toggle()
                 }
             } label: {

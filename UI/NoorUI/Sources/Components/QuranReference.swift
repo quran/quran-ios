@@ -29,14 +29,14 @@ enum QuranReference {
         }
     }
 
-    case sura(Sura)
-    case ayah(AyahNumber, decorationHidden: Bool = false)
+    case sura(Sura, nameStyle: SuraNameStyle = .standard)
+    case ayah(AyahNumber, nameStyle: SuraNameStyle = .standard)
 
     // MARK: Internal
 
     var accessibilityText: String {
         switch self {
-        case .sura(let sura):
+        case .sura(let sura, _):
             sura.localizedName()
         case .ayah(let ayah, _):
             ayah.localizedName
@@ -56,7 +56,7 @@ enum QuranReference {
     }
 
     fileprivate func localizedName(locale: Locale) -> String? {
-        if decorationHidden, locale.isArabicLanguage {
+        if nameStyle == .text, locale.isArabicLanguage {
             return sura.localizedName(language: .arabic)
         }
         return locale.isArabicLanguage ? nil : sura.localizedName()
@@ -76,7 +76,7 @@ enum QuranReference {
         if let localizedName = localizedName(locale: locale) {
             components.append(localizedName)
         }
-        if !decorationHidden {
+        if showsArabicName(locale: locale) {
             components.append(arabicName.text)
         }
 
@@ -100,7 +100,7 @@ enum QuranReference {
             ))
         }
 
-        if !decorationHidden {
+        if showsArabicName(locale: locale) {
             if result.length > 0 {
                 result.append(NSAttributedString(string: " "))
             }
@@ -124,12 +124,20 @@ enum QuranReference {
         return result
     }
 
-    fileprivate var decorationHidden: Bool {
+    private var nameStyle: SuraNameStyle {
         switch self {
-        case .sura:
-            false
-        case .ayah(_, let decorationHidden):
-            decorationHidden
+        case .sura(_, let nameStyle):
+            nameStyle
+        case .ayah(_, let nameStyle):
+            nameStyle
+        }
+    }
+
+    fileprivate func showsArabicName(locale: Locale) -> Bool {
+        switch nameStyle {
+        case .standard: true
+        case .text: false
+        case .compact: locale.isArabicLanguage
         }
     }
 
@@ -137,7 +145,7 @@ enum QuranReference {
 
     private var sura: Sura {
         switch self {
-        case .sura(let sura):
+        case .sura(let sura, _):
             sura
         case .ayah(let ayah, _):
             ayah.sura
@@ -199,7 +207,7 @@ struct QuranReferenceView: View {
                     .fontWeight(emphasizesSura ? .heavy : nil)
             }
 
-            if !reference.decorationHidden {
+            if reference.showsArabicName(locale: locale) {
                 switch arabicName {
                 case .decoratedGlyph(let text):
                     Text(text)
@@ -300,4 +308,60 @@ extension MultipartText.FontSize {
         case .footnote: 16
         }
     }
+}
+
+// MARK: - Previews
+
+@MainActor
+private struct QuranReferencePreview: View {
+    init(quran: Quran) {
+        self.quran = quran
+        if UIFont(name: "icomoon", size: 20) == nil {
+            FontName.registerFonts()
+        }
+    }
+
+    let quran: Quran
+
+    var body: some View {
+        NoorList {
+            references("standard", style: .standard)
+            references("text", style: .text)
+            references("compact", style: .compact)
+        }
+    }
+
+    private func references(_ title: String, style: SuraNameStyle) -> some View {
+        Section(title) {
+            MultipartText("\(sura: quran.suras[0], nameStyle: style)")
+                .view(ofSize: .body)
+            MultipartText("\(ayah: quran.suras[0].verses[5], nameStyle: style)")
+                .view(ofSize: .body)
+        }
+        .textCase(nil)
+    }
+}
+
+#Preview("English · Madani") {
+    QuranReferencePreview(quran: .hafsMadani1405)
+        .environment(\.locale, Locale(identifier: "en"))
+        .environment(\.layoutDirection, .leftToRight)
+}
+
+#Preview("Arabic · Madani") {
+    QuranReferencePreview(quran: .hafsMadani1405)
+        .environment(\.locale, Locale(identifier: "ar"))
+        .environment(\.layoutDirection, .rightToLeft)
+}
+
+#Preview("English · IndoPak") {
+    QuranReferencePreview(quran: .hafsIndoPak)
+        .environment(\.locale, Locale(identifier: "en"))
+        .environment(\.layoutDirection, .leftToRight)
+}
+
+#Preview("Arabic · IndoPak") {
+    QuranReferencePreview(quran: .hafsIndoPak)
+        .environment(\.locale, Locale(identifier: "ar"))
+        .environment(\.layoutDirection, .rightToLeft)
 }

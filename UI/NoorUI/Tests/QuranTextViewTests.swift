@@ -70,7 +70,9 @@ final class QuranTextViewTests: XCTestCase {
 
     func test_indopakJuzRow_matchesMadaniVerticalSpacing() async {
         let sizes = await MainActor.run {
-            FontName.registerFonts()
+            if UIFont(name: "icomoon", size: 20) == nil {
+                FontName.registerFonts()
+            }
             let value = QuranText("بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ ١")
             let uthmanicText: MultipartText = "\(quran: value, font: .uthmanicHafs, lineLimit: 1)"
             let indoPakText: MultipartText = "\(quran: value, font: .indoPak, lineLimit: 1)"

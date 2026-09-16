@@ -29,6 +29,18 @@ class WordTextServiceTests: XCTestCase {
         XCTAssertEqual(text, "rabbika")
     }
 
+    func testIsWordPointerActiveDefaultsToFalse() {
+        XCTAssertFalse(preferences.isWordPointerActive)
+    }
+
+    func testIsWordPointerActivePersists() {
+        preferences.isWordPointerActive = true
+        XCTAssertTrue(preferences.isWordPointerActive)
+
+        preferences.isWordPointerActive = false
+        XCTAssertFalse(preferences.isWordPointerActive)
+    }
+
     // MARK: Private
 
     private var service: WordTextService!

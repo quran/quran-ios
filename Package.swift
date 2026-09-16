@@ -816,6 +816,7 @@ private func featuresTargets() -> [[Target]] {
             "NoteEditorFeature",
             "NotesFeature",
             "WordPointerFeature",
+            "WordTextService",
             "TranslationsFeature",
             "TranslationVerseFeature",
             "FeaturesSupport",

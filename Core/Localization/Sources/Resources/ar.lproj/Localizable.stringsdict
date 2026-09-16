@@ -74,5 +74,30 @@
             <string>%d كلمة</string>
         </dict>
     </dict>
+    <!-- Additional reading bookmarks hidden by the collapsed section. -->
+    <key>bookmarks.reading.more-count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@bookmarks@</string>
+        <key>bookmarks</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>لا توجد علامات إضافية</string>
+            <key>one</key>
+            <string>علامة إضافية واحدة</string>
+            <key>two</key>
+            <string>علامتان إضافيتان</string>
+            <key>few</key>
+            <string>%d علامات إضافية</string>
+            <key>many</key>
+            <string>%d علامة إضافية</string>
+            <key>other</key>
+            <string>%d علامة إضافية</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

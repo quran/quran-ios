@@ -98,7 +98,7 @@ public struct ContinueReadingSection: View {
                 HStack {
                     if bookmarksExpanded {
                         Spacer(minLength: 0)
-                        Text("Show less")
+                        Text(l("bookmarks.reading.show-less"))
                         Image(systemName: "chevron.up")
                             .font(.caption.weight(.semibold))
                         Spacer(minLength: 0)
@@ -111,7 +111,7 @@ public struct ContinueReadingSection: View {
                                     .overlay(Circle().stroke(Color(uiColor: .secondarySystemGroupedBackground), lineWidth: 2))
                             }
                         }
-                        Text(readingBookmarks.count == 2 ? "1 more bookmark" : "\(readingBookmarks.count - 1) more bookmarks")
+                        Text(lFormat("bookmarks.reading.more-count", readingBookmarks.count - 1))
                         Spacer(minLength: 0)
                         Image(systemName: "chevron.down")
                             .font(.caption.weight(.semibold))
@@ -126,7 +126,7 @@ public struct ContinueReadingSection: View {
             .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden, edges: .bottom)
             .accessibilityIdentifier("home.readingBookmarks.expand")
-            .accessibilityValue(bookmarksExpanded ? "Expanded" : "Collapsed")
+            .accessibilityValue(l(bookmarksExpanded ? "accessibility.expanded" : "accessibility.collapsed"))
         }
     }
     #endif
@@ -136,7 +136,7 @@ public struct ContinueReadingSection: View {
             HStack {
                 Image(systemName: "clock")
                     .accessibilityHidden(true)
-                Text("\(lAndroid("recent_pages")) (\(lastPages.count.formatted()))")
+                Text(lFormat("home.recent-pages.title", lastPages.count.formatted()))
             }
             .font(.subheadline.weight(.semibold))
             .foregroundColor(.secondaryLabel)

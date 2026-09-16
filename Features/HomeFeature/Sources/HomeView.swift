@@ -81,18 +81,15 @@ private struct HomeViewUI: View {
         ZStack {
             NoorList {
                 #if QURAN_SYNC
-                if !readingBookmarks.isEmpty {
-                    NoorBasicSection(title: l("ayah.menu.reading-bookmark.title")) {
-                        ForEach(readingBookmarks, id: \.slot) { readingBookmark in
-                            readingBookmarkView(readingBookmark)
-                        }
-                    }
-                }
+                ContinueReadingSection(
+                    readingBookmarks: readingBookmarks,
+                    lastPages: lastPages,
+                    selectReadingBookmark: selectReadingBookmark,
+                    selectLastPage: selectLastPage
+                )
+                #else
+                ContinueReadingSection(lastPages: lastPages, selectLastPage: selectLastPage)
                 #endif
-
-                NoorSection(title: lAndroid("recent_pages"), lastPages) { lastPage in
-                    lastPageView(lastPage)
-                }
 
                 switch type {
                 case .suras:
@@ -110,29 +107,6 @@ private struct HomeViewUI: View {
             .id(surahSortOrder.rawValue)
         }
         .task { await start() }
-    }
-
-    #if QURAN_SYNC
-    func readingBookmarkView(_ bookmark: PlacedReadingBookmark) -> some View {
-        ReadingBookmarkListItem(
-            bookmark: bookmark,
-            action: { selectReadingBookmark(bookmark) }
-        )
-    }
-    #endif
-
-    func lastPageView(_ lastPage: LastPage) -> some View {
-        let ayah = lastPage.page.firstVerse
-        return NoorListItem(
-            image: .init(.lastPage, color: .secondaryLabel),
-            title: "\(sura: ayah.sura)",
-            subtitle: .init(text: .text(lastPage.modifiedOn.timeAgo()), location: .bottom),
-            accessory: .text(
-                lastPage.page.localizedNumber,
-                accessibilityLabel: lastPage.page.localizedName
-            ),
-            action: .sync { selectLastPage(lastPage) }
-        )
     }
 
     func suraView(_ sura: Sura) -> some View {
@@ -199,109 +173,114 @@ private struct HomeViewUI: View {
     }
 }
 
-struct HomeView_Previews: PreviewProvider {
-    struct Preview: View {
-        static let ayahText: QuranText = "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ"
+@MainActor
+private struct HomePreview: View {
+    static let ayahText: QuranText = "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ"
 
-        static var staticLastPages: [LastPage] {
-            let pages = Quran.hafsMadani1405.pages.shuffled()
-            return (0 ..< 3).map { i in
+    static var staticLastPages: [LastPage] {
+        let pages = [0, 4, 49, 76, 105, 127, 150, 176, 200, 221].map { Quran.hafsMadani1405.pages[$0] }
+        return (0 ..< pages.count).map { i -> LastPage in
+            let timestamp = Date(timeIntervalSinceNow: -Double(i * 31 + 1) * 60)
+            #if QURAN_SYNC
+            return LastPage(
+                id: "preview-\(i)",
+                page: pages[i],
+                modifiedOn: timestamp
+            )
+            #else
+            return LastPage(
+                page: pages[i],
+                createdOn: timestamp,
+                modifiedOn: timestamp
+            )
+            #endif
+        }
+    }
+
+    let quran = Quran.hafsMadani1405
+
+    @State var lastPages: [LastPage] = staticLastPages
+    #if QURAN_SYNC
+    @State var readingBookmarks: [PlacedReadingBookmark] = [
+        PlacedReadingBookmark(
+            id: "preview-teal", slot: .teal,
+            placement: .ayah(Quran.hafsMadani1405.suras[0].verses[5]),
+            modifiedOn: Date(timeIntervalSinceNow: -36000)
+        ),
+        PlacedReadingBookmark(
+            id: "preview-coral", slot: .coral,
+            placement: .page(Quran.hafsMadani1405.pages[22]),
+            modifiedOn: Date(timeIntervalSinceNow: -86400)
+        ),
+        PlacedReadingBookmark(
+            id: "preview-indigo", slot: .indigo,
+            placement: .ayah(Quran.hafsMadani1405.suras[35].verses[57]),
+            modifiedOn: Date(timeIntervalSinceNow: -259_200)
+        ),
+    ]
+    #endif
+    @State var type: HomeViewType = .suras
+    @State var collapsedJuzs: Set<Juz> = []
+
+    var body: some View {
+        NavigationView {
+            Group {
                 #if QURAN_SYNC
-                LastPage(
-                    id: "preview-\(i)",
-                    page: pages[i],
-                    modifiedOn: Date(timeIntervalSince1970: Double(i) * 60 * -3)
+                HomeViewUI(
+                    type: type,
+                    readingBookmarks: readingBookmarks,
+                    lastPages: lastPages,
+                    suras: quran.suras,
+                    quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
+                    quranFont: .uthmanicHafs,
+                    start: {},
+                    selectReadingBookmark: { _ in },
+                    selectLastPage: { _ in },
+                    selectSura: { _ in },
+                    selectQuarter: { _ in },
+                    surahSortOrder: .ascending,
+                    isJuzExpanded: { !collapsedJuzs.contains($0) },
+                    setJuzExpanded: { juz, expanded in
+                        if expanded { collapsedJuzs.remove(juz) } else { collapsedJuzs.insert(juz) }
+                    }
                 )
                 #else
-                LastPage(
-                    page: pages[i],
-                    createdOn: Date(timeIntervalSince1970: Double(i) * 60 * -3),
-                    modifiedOn: Date(timeIntervalSince1970: Double(i) * 60 * -3)
+                HomeViewUI(
+                    type: type,
+                    lastPages: lastPages,
+                    suras: quran.suras,
+                    quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
+                    quranFont: .uthmanicHafs,
+                    start: {},
+                    selectLastPage: { _ in },
+                    selectSura: { _ in },
+                    selectQuarter: { _ in },
+                    surahSortOrder: .ascending,
+                    isJuzExpanded: { !collapsedJuzs.contains($0) },
+                    setJuzExpanded: { juz, expanded in
+                        if expanded { collapsedJuzs.remove(juz) } else { collapsedJuzs.insert(juz) }
+                    }
                 )
                 #endif
             }
-        }
-
-        let quran = Quran.hafsMadani1405
-
-        @State var lastPages: [LastPage] = staticLastPages
-        #if QURAN_SYNC
-        @State var readingBookmarks = ReadingBookmarkSlot.allCases.enumerated().map { index, slot in
-            PlacedReadingBookmark(
-                id: "preview-reading-bookmark-\(slot)",
-                slot: slot,
-                placement: .page(Quran.hafsMadani1405.pages[269 + index]),
-                modifiedOn: Date(timeIntervalSinceNow: Double(index + 1) * -180)
-            )
-        }
-        #endif
-        @State var type: HomeViewType = .juzs
-        @State var collapsedJuzs: Set<Juz> = []
-
-        var body: some View {
-            NavigationView {
-                Group {
-                    #if QURAN_SYNC
-                    HomeViewUI(
-                        type: type,
-                        readingBookmarks: readingBookmarks,
-                        lastPages: lastPages,
-                        suras: quran.suras,
-                        quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
-                        quranFont: .uthmanicHafs,
-                        start: {},
-                        selectReadingBookmark: { _ in },
-                        selectLastPage: { _ in },
-                        selectSura: { _ in },
-                        selectQuarter: { _ in },
-                        surahSortOrder: .ascending,
-                        isJuzExpanded: { !collapsedJuzs.contains($0) },
-                        setJuzExpanded: { juz, expanded in
-                            if expanded { collapsedJuzs.remove(juz) } else { collapsedJuzs.insert(juz) }
-                        }
-                    )
-                    #else
-                    HomeViewUI(
-                        type: type,
-                        lastPages: lastPages,
-                        suras: quran.suras,
-                        quarters: quran.quarters.map { QuarterItem(quarter: $0, ayahText: Self.ayahText) },
-                        quranFont: .uthmanicHafs,
-                        start: {},
-                        selectLastPage: { _ in },
-                        selectSura: { _ in },
-                        selectQuarter: { _ in },
-                        surahSortOrder: .ascending,
-                        isJuzExpanded: { !collapsedJuzs.contains($0) },
-                        setJuzExpanded: { juz, expanded in
-                            if expanded { collapsedJuzs.remove(juz) } else { collapsedJuzs.insert(juz) }
-                        }
-                    )
-                    #endif
+            .navigationTitle("Home")
+            .toolbar {
+                if type == .suras {
+                    Button("Juzs") { type = .juzs }
+                } else {
+                    Button("Suras") { type = .suras }
                 }
-                .navigationTitle("Home")
-                .toolbar {
-                    if type == .suras {
-                        Button("Juzs") { type = .juzs }
-                    } else {
-                        Button("Suras") { type = .suras }
-                    }
 
-                    if lastPages.isEmpty {
-                        Button("Populate Last Pages") { lastPages = Self.staticLastPages }
-                    } else {
-                        Button("Empty") { lastPages = [] }
-                    }
+                if lastPages.isEmpty {
+                    Button("Populate Last Pages") { lastPages = Self.staticLastPages }
+                } else {
+                    Button("Empty") { lastPages = [] }
                 }
             }
         }
     }
+}
 
-    // MARK: Internal
-
-    static var previews: some View {
-        VStack {
-            Preview()
-        }
-    }
+#Preview {
+    HomePreview()
 }

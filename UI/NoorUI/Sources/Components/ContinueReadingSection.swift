@@ -9,23 +9,27 @@ import UIx
 public struct ContinueReadingSection: View {
     #if QURAN_SYNC
     public init(
+        title: String,
         readingBookmarks: [PlacedReadingBookmark],
         lastPages: [LastPage],
         selectReadingBookmark: @escaping (PlacedReadingBookmark) -> Void,
         selectLastPage: @escaping (LastPage) -> Void
     ) {
+        self.title = title
         self.readingBookmarks = readingBookmarks
         self.lastPages = lastPages
         self.selectReadingBookmark = selectReadingBookmark
         self.selectLastPage = selectLastPage
     }
     #else
-    public init(lastPages: [LastPage], selectLastPage: @escaping (LastPage) -> Void) {
+    public init(title: String, lastPages: [LastPage], selectLastPage: @escaping (LastPage) -> Void) {
+        self.title = title
         self.lastPages = lastPages
         self.selectLastPage = selectLastPage
     }
     #endif
 
+    private let title: String
     #if QURAN_SYNC
     private let readingBookmarks: [PlacedReadingBookmark]
     #endif
@@ -60,7 +64,7 @@ public struct ContinueReadingSection: View {
                         .listRowSeparator(.hidden)
                 }
             } header: {
-                Text("Continue reading")
+                Text(title)
                     .font(.headline)
                     .foregroundColor(.secondaryLabel)
             }
@@ -158,12 +162,14 @@ public struct ContinueReadingSection: View {
 
 @MainActor
 private struct ContinueReadingSectionPreview: View {
+    let title: String
     var bookmarkCount = 3
     var showsRecentPages = true
 
     var body: some View {
         #if QURAN_SYNC
         ContinueReadingSection(
+            title: title,
             readingBookmarks: Array(Self.bookmarks.prefix(bookmarkCount)),
             lastPages: showsRecentPages ? Self.lastPages : [],
             selectReadingBookmark: { _ in },
@@ -171,6 +177,7 @@ private struct ContinueReadingSectionPreview: View {
         )
         #else
         ContinueReadingSection(
+            title: title,
             lastPages: showsRecentPages ? Self.lastPages : [],
             selectLastPage: { _ in }
         )
@@ -212,13 +219,13 @@ private struct ContinueReadingSectionPreview: View {
 #Preview {
     List {
         #if QURAN_SYNC
-        ContinueReadingSectionPreview()
+        ContinueReadingSectionPreview(title: "Multiple reading bookmarks")
 
-        ContinueReadingSectionPreview(bookmarkCount: 1)
+        ContinueReadingSectionPreview(title: "Single reading bookmark", bookmarkCount: 1)
 
-        ContinueReadingSectionPreview(showsRecentPages: false)
+        ContinueReadingSectionPreview(title: "No recent pages", showsRecentPages: false)
         #endif
 
-        ContinueReadingSectionPreview(bookmarkCount: 0)
+        ContinueReadingSectionPreview(title: "No reading bookmarks", bookmarkCount: 0)
     }
 }

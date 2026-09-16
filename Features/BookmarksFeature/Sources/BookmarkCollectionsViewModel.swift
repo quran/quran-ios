@@ -279,7 +279,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
                 do {
                     for try await bookmarks in sequence {
                         guard !Task.isCancelled else { return }
-                        self?.readingBookmarks = bookmarks
+                        self?.readingBookmarks = PlacedReadingBookmark.sortedByDate(bookmarks)
                     }
                 } catch is CancellationError {
                     return

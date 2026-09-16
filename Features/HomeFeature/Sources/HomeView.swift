@@ -82,13 +82,14 @@ private struct HomeViewUI: View {
             NoorList {
                 #if QURAN_SYNC
                 ContinueReadingSection(
+                    title: "Continue reading",
                     readingBookmarks: readingBookmarks,
                     lastPages: lastPages,
                     selectReadingBookmark: selectReadingBookmark,
                     selectLastPage: selectLastPage
                 )
                 #else
-                ContinueReadingSection(lastPages: lastPages, selectLastPage: selectLastPage)
+                ContinueReadingSection(title: "Continue reading", lastPages: lastPages, selectLastPage: selectLastPage)
                 #endif
 
                 switch type {

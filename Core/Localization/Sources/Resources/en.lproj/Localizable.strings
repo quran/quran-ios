@@ -347,3 +347,18 @@
 "audio.summary.verse" = "verse %@";
 "audio.summary.range" = "range %@";
 "audio.options" = "Audio options";
+
+// MARK: - Continue reading and reading bookmarks
+
+// Home heading for saved reading positions and recent pages.
+"home.continue-reading.title" = "Continue reading";
+// Collections heading for saved reading positions.
+"bookmarks.reading.title" = "Reading bookmarks";
+// Button that collapses the additional reading bookmarks.
+"bookmarks.reading.show-less" = "Show less";
+// VoiceOver state when the additional reading bookmarks are visible.
+"accessibility.expanded" = "Expanded";
+// VoiceOver state when the additional reading bookmarks are hidden.
+"accessibility.collapsed" = "Collapsed";
+// Recent pages heading with a localized page count.
+"home.recent-pages.title" = "Recent pages (%@)";

@@ -53,5 +53,22 @@
             <string>%d so‘z</string>
         </dict>
     </dict>
+    <!-- Additional reading bookmarks hidden by the collapsed section. -->
+    <key>bookmarks.reading.more-count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@bookmarks@</string>
+        <key>bookmarks</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>Yana %d ta xatchoʻp</string>
+            <key>other</key>
+            <string>Yana %d ta xatchoʻp</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

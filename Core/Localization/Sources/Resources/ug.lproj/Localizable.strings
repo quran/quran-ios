@@ -549,3 +549,24 @@
 "audio.summary.verse" = "ئايەت %@";
 "audio.summary.range" = "دائىرە %@";
 "audio.options" = "ئاۋاز تاللانمىلىرى";
+
+// MARK: - Continue reading and reading bookmarks
+
+// Home heading for saved reading positions and recent pages.
+// Metadata: Translated by AI; human review required.
+"home.continue-reading.title" = "ئوقۇشنى داۋاملاشتۇرۇش";
+// Collections heading for saved reading positions.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.title" = "ئوقۇش خەتكۈچلىرى";
+// Button that collapses the additional reading bookmarks.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.show-less" = "ئازراق كۆرسىتىش";
+// VoiceOver state when the additional reading bookmarks are visible.
+// Metadata: Translated by AI; human review required.
+"accessibility.expanded" = "كېڭەيتىلگەن";
+// VoiceOver state when the additional reading bookmarks are hidden.
+// Metadata: Translated by AI; human review required.
+"accessibility.collapsed" = "يىغىلغان";
+// Recent pages heading with a localized page count.
+// Metadata: Translated by AI; human review required.
+"home.recent-pages.title" = "يېقىنقى بەتلەر (%@)";

@@ -546,3 +546,24 @@
 "audio.summary.verse" = "aleya %@";
 "audio.summary.range" = "rango %@";
 "audio.options" = "Opciones de audio";
+
+// MARK: - Continue reading and reading bookmarks
+
+// Home heading for saved reading positions and recent pages.
+// Metadata: Translated by AI; human review required.
+"home.continue-reading.title" = "Continuar leyendo";
+// Collections heading for saved reading positions.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.title" = "Marcadores de lectura";
+// Button that collapses the additional reading bookmarks.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.show-less" = "Mostrar menos";
+// VoiceOver state when the additional reading bookmarks are visible.
+// Metadata: Translated by AI; human review required.
+"accessibility.expanded" = "Expandido";
+// VoiceOver state when the additional reading bookmarks are hidden.
+// Metadata: Translated by AI; human review required.
+"accessibility.collapsed" = "Contraído";
+// Recent pages heading with a localized page count.
+// Metadata: Translated by AI; human review required.
+"home.recent-pages.title" = "Páginas recientes (%@)";

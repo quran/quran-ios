@@ -548,3 +548,24 @@
 "audio.summary.verse" = "oyat %@";
 "audio.summary.range" = "oraliq %@";
 "audio.options" = "Audio sozlamalari";
+
+// MARK: - Continue reading and reading bookmarks
+
+// Home heading for saved reading positions and recent pages.
+// Metadata: Translated by AI; human review required.
+"home.continue-reading.title" = "Oʻqishni davom ettirish";
+// Collections heading for saved reading positions.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.title" = "Oʻqish xatchoʻplari";
+// Button that collapses the additional reading bookmarks.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.show-less" = "Kamroq koʻrsatish";
+// VoiceOver state when the additional reading bookmarks are visible.
+// Metadata: Translated by AI; human review required.
+"accessibility.expanded" = "Kengaytirilgan";
+// VoiceOver state when the additional reading bookmarks are hidden.
+// Metadata: Translated by AI; human review required.
+"accessibility.collapsed" = "Yigʻilgan";
+// Recent pages heading with a localized page count.
+// Metadata: Translated by AI; human review required.
+"home.recent-pages.title" = "Soʻnggi sahifalar (%@)";

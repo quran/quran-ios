@@ -45,7 +45,7 @@ private struct BookmarkCollectionsContent: View {
             }
 
             ContinueReadingSection(
-                title: "Reading bookmarks",
+                title: l("bookmarks.reading.title"),
                 readingBookmarks: viewModel.readingBookmarks,
                 lastPages: [],
                 selectReadingBookmark: { viewModel.navigateTo($0) },

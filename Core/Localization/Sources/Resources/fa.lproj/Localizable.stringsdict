@@ -53,5 +53,22 @@
             <string>%d واژه</string>
         </dict>
     </dict>
+    <!-- Additional reading bookmarks hidden by the collapsed section. -->
+    <key>bookmarks.reading.more-count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@bookmarks@</string>
+        <key>bookmarks</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d نشانک دیگر</string>
+            <key>other</key>
+            <string>%d نشانک دیگر</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

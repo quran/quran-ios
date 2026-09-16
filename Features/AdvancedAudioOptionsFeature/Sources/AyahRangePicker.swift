@@ -56,7 +56,7 @@ struct AyahRangePicker: View {
     }
 
     private func toggle(_ boundary: Boundary) {
-        withAnimation(.easeInOut(duration: 0.2)) {
+        withAnimation(NoorAnimation.standard) {
             expandedBoundary = expandedBoundary == boundary ? nil : boundary
         }
     }

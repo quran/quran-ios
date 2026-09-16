@@ -389,7 +389,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         }
         #endif
 
-        ReaderVisibilityAnimation.animate {
+        NoorAnimation.animate {
             self.statusBarHidden = hidden
         }
     }

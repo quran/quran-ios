@@ -40,7 +40,7 @@ public struct AyahAnnotationsView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .environment(\.layoutDirection, .leftToRight)
         .opacity(annotationsHidden ? 0 : 1)
-        .animation(ReaderVisibilityAnimation.animation, value: annotationsHidden)
+        .animation(NoorAnimation.standard, value: annotationsHidden)
         .allowsHitTesting(!annotationsHidden)
         .accessibilityHidden(annotationsHidden)
     }

@@ -63,7 +63,7 @@ struct FontSizeStepper: View {
                     }
                 }
                 .opacity(showDots ? 1 : 0)
-                .animation(.bouncy, value: showDots)
+                .animation(NoorAnimation.standard, value: showDots)
                 .onSizeChange { dotsSize = $0 }
                 .offset(y: dotsOffset)
             }

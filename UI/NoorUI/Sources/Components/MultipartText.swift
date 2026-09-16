@@ -46,11 +46,11 @@ private struct TextPartView: View {
             highlighting(text: text, ranges: ranges)
                 .optionalLineLimit(lineLimit)
                 .font(size.plainFont)
-        case .sura(let sura):
-            QuranReferenceView(reference: .sura(sura), size: size)
-        case .ayah(let ayah, let emphasizesSura, let decorationHidden):
+        case .sura(let sura, let emphasizesSura, let nameStyle):
+            QuranReferenceView(reference: .sura(sura, nameStyle: nameStyle), size: size, emphasizesSura: emphasizesSura)
+        case .ayah(let ayah, let emphasizesSura, let nameStyle):
             QuranReferenceView(
-                reference: .ayah(ayah, decorationHidden: decorationHidden),
+                reference: .ayah(ayah, nameStyle: nameStyle),
                 size: size,
                 emphasizesSura: emphasizesSura
             )
@@ -122,8 +122,8 @@ private extension View {
 enum TextPart {
     case plain(text: String)
     case highlighting(text: String, ranges: [HighlightingRange], lineLimit: Int?)
-    case sura(Sura)
-    case ayah(AyahNumber, emphasizesSura: Bool, decorationHidden: Bool = false)
+    case sura(Sura, emphasizesSura: Bool, nameStyle: SuraNameStyle = .standard)
+    case ayah(AyahNumber, emphasizesSura: Bool, nameStyle: SuraNameStyle = .standard)
     case ayahCoordinate(AyahNumber)
     case quran(
         text: QuranText,
@@ -139,10 +139,10 @@ enum TextPart {
         switch self {
         case .plain(let text), .highlighting(let text, _, _):
             text
-        case .sura(let sura):
-            QuranReference.sura(sura).rawValue(locale: locale)
-        case .ayah(let ayah, _, let decorationHidden):
-            QuranReference.ayah(ayah, decorationHidden: decorationHidden).rawValue(locale: locale)
+        case .sura(let sura, _, let nameStyle):
+            QuranReference.sura(sura, nameStyle: nameStyle).rawValue(locale: locale)
+        case .ayah(let ayah, _, let nameStyle):
+            QuranReference.ayah(ayah, nameStyle: nameStyle).rawValue(locale: locale)
         case .ayahCoordinate(let ayah):
             ayah.localizedCoordinate(locale: locale)
         case .quran(let text, _, _, _, _):
@@ -154,7 +154,7 @@ enum TextPart {
         switch self {
         case .plain(let text), .highlighting(let text, _, _):
             text
-        case .sura(let sura):
+        case .sura(let sura, _, _):
             QuranReference.sura(sura).accessibilityText
         case .ayah(let ayah, _, _):
             QuranReference.ayah(ayah).accessibilityText
@@ -178,16 +178,16 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             parts.append(.plain(text: literal))
         }
 
-        public mutating func appendInterpolation(sura: Sura) {
-            parts.append(.sura(sura))
+        public mutating func appendInterpolation(sura: Sura, emphasizingSura: Bool = false, nameStyle: SuraNameStyle = .standard) {
+            parts.append(.sura(sura, emphasizesSura: emphasizingSura, nameStyle: nameStyle))
         }
 
         public mutating func appendInterpolation(
             ayah: AyahNumber,
             emphasizingSura: Bool = false,
-            decorationHidden: Bool = false
+            nameStyle: SuraNameStyle = .standard
         ) {
-            parts.append(.ayah(ayah, emphasizesSura: emphasizingSura, decorationHidden: decorationHidden))
+            parts.append(.ayah(ayah, emphasizesSura: emphasizingSura, nameStyle: nameStyle))
         }
 
         public mutating func appendInterpolation(ayahRange range: ClosedRange<AyahNumber>) {

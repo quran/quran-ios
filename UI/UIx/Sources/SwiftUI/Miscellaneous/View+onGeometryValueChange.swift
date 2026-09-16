@@ -8,12 +8,22 @@ extension View {
     ) -> some View {
         background {
             GeometryReader { geometry in
-                let value = transform(geometry)
-                Color.clear
-                    .task(id: value) {
-                        action(value)
-                    }
+                GeometryValueObserver(value: transform(geometry), action: action)
             }
         }
+    }
+}
+
+// Keep SwiftUI's task return type inside a concrete view. Exposing it through the
+// geometry helper causes an undefined opaque type descriptor when archiving with Xcode 26.5.
+private struct GeometryValueObserver<Value: Equatable>: View {
+    let value: Value
+    let action: (Value) -> Void
+
+    var body: some View {
+        Color.clear
+            .task(id: value) {
+                action(value)
+            }
     }
 }

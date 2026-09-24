@@ -8,7 +8,7 @@ import QuranKit
 import SwiftUI
 
 public struct AyahAnnotationsView: View {
-    private static let heightScale: CGFloat = 0.62
+    private static let heightScale: CGFloat = 0.8
 
     public init(
         markers: [AyahMarkerPlacement],

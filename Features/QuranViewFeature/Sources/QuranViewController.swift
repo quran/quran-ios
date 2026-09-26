@@ -86,6 +86,8 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         view.backgroundColor = ThemeService.shared.themeStyle.backgroundColor
         quranView?.navigationItem.largeTitleDisplayMode = .never
         quranView?.delegate = self
+        quranView?.navigationBarUserInterfaceStyle = ThemeService.shared.userInterfaceStyle
+        observeThemeChanges()
 
         if #unavailable(iOS 26.0) {
             quranView?.navigationItem.titleView = TwoLineNavigationTitleView(
@@ -134,6 +136,17 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.updateContentStatus($0) }
             .store(in: &cancellables)
+    }
+
+    private func observeThemeChanges() {
+        let themeService = ThemeService.shared
+        Publishers.Merge(
+            themeService.themeStylePublisher.map { _ in },
+            themeService.appearanceModePublisher.map { _ in }
+        )
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] in self?.quranView?.navigationBarUserInterfaceStyle = themeService.userInterfaceStyle }
+        .store(in: &cancellables)
     }
 
     func hideBars() {

@@ -49,6 +49,14 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     let navigationBar = UINavigationBar()
     let navigationItem = UINavigationItem()
 
+    /// On iOS 26+, the scroll edge effect keeps the bar title from following the window's theme, so pin it explicitly.
+    var navigationBarUserInterfaceStyle: UIUserInterfaceStyle = .unspecified {
+        didSet {
+            guard #available(iOS 26.0, *) else { return }
+            navigationBar.overrideUserInterfaceStyle = navigationBarUserInterfaceStyle
+        }
+    }
+
     override func layoutSubviews() {
         navigationItem.titleView?.setNeedsLayout()
         super.layoutSubviews()

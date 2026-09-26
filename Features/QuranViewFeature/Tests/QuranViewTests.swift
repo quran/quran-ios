@@ -183,6 +183,43 @@ final class QuranViewTests: XCTestCase {
         XCTAssertFalse(audioView.isUserInteractionEnabled)
     }
 
+    func test_navigationBarUserInterfaceStyleOverridesNavigationBarStyle() throws {
+        guard #available(iOS 26.0, *) else {
+            throw XCTSkip("The navigation bar style is only pinned on iOS 26.")
+        }
+        let context = makeSut()
+
+        context.sut.navigationBarUserInterfaceStyle = .dark
+
+        XCTAssertEqual(context.sut.navigationBar.overrideUserInterfaceStyle, .dark)
+    }
+
+    func test_changingNavigationBarUserInterfaceStyleUpdatesNavigationBarStyle() throws {
+        guard #available(iOS 26.0, *) else {
+            throw XCTSkip("The navigation bar style is only pinned on iOS 26.")
+        }
+        let context = makeSut()
+        context.sut.navigationBarUserInterfaceStyle = .dark
+
+        context.sut.navigationBarUserInterfaceStyle = .light
+
+        XCTAssertEqual(context.sut.navigationBar.overrideUserInterfaceStyle, .light)
+    }
+
+    func test_navigationBarUserInterfaceStyleKeepsNavigationBarScrollEdgeInteraction() throws {
+        guard #available(iOS 26.0, *) else {
+            throw XCTSkip("UIScrollEdgeElementContainerInteraction requires iOS 26.")
+        }
+        let context = makeSut()
+        let interaction = try scrollEdgeInteraction(in: context.sut.navigationBar)
+
+        context.sut.navigationBarUserInterfaceStyle = .dark
+        context.sut.layoutSubviews()
+
+        XCTAssertIdentical(try scrollEdgeInteraction(in: context.sut.navigationBar), interaction)
+        XCTAssertIdentical(interaction.scrollView, context.contentScrollView)
+    }
+
     private struct TestContext {
         let retainedHostViewController: UIViewController
         let sut: QuranView

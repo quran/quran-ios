@@ -204,17 +204,17 @@ private struct HomePreview: View {
     #if QURAN_SYNC
     @State var readingBookmarks: [PlacedReadingBookmark] = [
         PlacedReadingBookmark(
-            id: "preview-teal", slot: .teal,
+            id: "preview-purple", slot: .purple,
             placement: .ayah(Quran.hafsMadani1405.suras[0].verses[5]),
             modifiedOn: Date(timeIntervalSinceNow: -36000)
         ),
         PlacedReadingBookmark(
-            id: "preview-coral", slot: .coral,
+            id: "preview-green", slot: .green,
             placement: .page(Quran.hafsMadani1405.pages[22]),
             modifiedOn: Date(timeIntervalSinceNow: -86400)
         ),
         PlacedReadingBookmark(
-            id: "preview-indigo", slot: .indigo,
+            id: "preview-blue", slot: .blue,
             placement: .ayah(Quran.hafsMadani1405.suras[35].verses[57]),
             modifiedOn: Date(timeIntervalSinceNow: -259_200)
         ),

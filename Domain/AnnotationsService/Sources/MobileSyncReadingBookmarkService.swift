@@ -161,19 +161,19 @@ public struct MobileSyncReadingBookmarkService {
 private extension QuranAnnotations.ReadingBookmarkSlot {
     var sortIndex: Int {
         switch self {
-        case .coral: return 0
-        case .teal: return 1
-        case .indigo: return 2
+        case .green: return 0
+        case .purple: return 1
+        case .blue: return 2
         }
     }
 
     init?(mobileSyncSlot: MobileSync.ReadingBookmarkSlot) {
-        if mobileSyncSlot == .coral {
-            self = .coral
-        } else if mobileSyncSlot == .teal {
-            self = .teal
-        } else if mobileSyncSlot == .indigo {
-            self = .indigo
+        if mobileSyncSlot == .green {
+            self = .green
+        } else if mobileSyncSlot == .purple {
+            self = .purple
+        } else if mobileSyncSlot == .blue {
+            self = .blue
         } else {
             logger.error("Unsupported mobile sync slot \(mobileSyncSlot.name)")
             return nil
@@ -182,12 +182,12 @@ private extension QuranAnnotations.ReadingBookmarkSlot {
 
     var mobileSyncSlot: MobileSync.ReadingBookmarkSlot {
         switch self {
-        case .coral:
-            .coral
-        case .teal:
-            .teal
-        case .indigo:
-            .indigo
+        case .green:
+            .green
+        case .purple:
+            .purple
+        case .blue:
+            .blue
         }
     }
 }

@@ -33,9 +33,9 @@ final class ReadingBookmarkSelectionTests: XCTestCase {
 
     func test_latest_returnsMostRecentlyModifiedBookmarkAtLocation() async throws {
         let page = Quran.hafsMadani1405.pages[2]
-        let older = try await bookmark(slot: .teal, placement: .page(page))
-        let newer = try await bookmark(slot: .coral, placement: .page(page))
-        let unrelated = try await bookmark(slot: .indigo, placement: .page(Quran.hafsMadani1405.pages[3]))
+        let older = try await bookmark(slot: .purple, placement: .page(page))
+        let newer = try await bookmark(slot: .green, placement: .page(page))
+        let unrelated = try await bookmark(slot: .blue, placement: .page(Quran.hafsMadani1405.pages[3]))
         await observeBookmarks(count: 3)
 
         XCTAssertGreaterThan(newer.modifiedOn, older.modifiedOn)
@@ -45,7 +45,7 @@ final class ReadingBookmarkSelectionTests: XCTestCase {
 
     func test_latest_returnsNilWithoutBookmarkAtLocation() async throws {
         let page = Quran.hafsMadani1405.pages[2]
-        try await bookmark(slot: .coral, placement: .page(Quran.hafsMadani1405.pages[3]))
+        try await bookmark(slot: .green, placement: .page(Quran.hafsMadani1405.pages[3]))
         await observeBookmarks(count: 1)
 
         XCTAssertNil(observer.latestReadingBookmark(at: [.page(page)]))
@@ -54,9 +54,9 @@ final class ReadingBookmarkSelectionTests: XCTestCase {
     func test_latest_returnsMostRecentlyModifiedBookmarkAcrossLocations() async throws {
         let firstPage = Quran.hafsMadani1405.pages[2]
         let secondPage = Quran.hafsMadani1405.pages[3]
-        let older = try await bookmark(slot: .teal, placement: .page(firstPage))
-        let newer = try await bookmark(slot: .coral, placement: .page(secondPage))
-        let unrelated = try await bookmark(slot: .indigo, placement: .page(Quran.hafsMadani1405.pages[4]))
+        let older = try await bookmark(slot: .purple, placement: .page(firstPage))
+        let newer = try await bookmark(slot: .green, placement: .page(secondPage))
+        let unrelated = try await bookmark(slot: .blue, placement: .page(Quran.hafsMadani1405.pages[4]))
         await observeBookmarks(count: 3)
 
         XCTAssertGreaterThan(newer.modifiedOn, older.modifiedOn)
@@ -65,7 +65,7 @@ final class ReadingBookmarkSelectionTests: XCTestCase {
     }
 
     func test_latest_returnsNilWithoutRequestedPlacements() async throws {
-        try await bookmark(slot: .teal, placement: .page(Quran.hafsMadani1405.pages[2]))
+        try await bookmark(slot: .purple, placement: .page(Quran.hafsMadani1405.pages[2]))
         await observeBookmarks(count: 1)
 
         XCTAssertNil(observer.latestReadingBookmark(at: []))

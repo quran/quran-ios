@@ -7,9 +7,9 @@ import Foundation
 import QuranKit
 
 public enum ReadingBookmarkSlot: CaseIterable, Sendable {
-    case coral
-    case teal
-    case indigo
+    case green
+    case purple
+    case blue
 }
 
 public struct ReadingBookmark: Equatable {

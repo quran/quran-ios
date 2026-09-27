@@ -29,13 +29,13 @@ final class ContentTranslationViewModelTests: XCTestCase {
         service.overlays.notedVerses = [verse]
         service.overlays.collectionVerses = [verse]
         service.overlays.readingBookmarks = [
-            .init(id: "coral", slot: .coral, placement: .ayah(verse), modifiedOn: .distantPast),
-            .init(id: "teal", slot: .teal, placement: .ayah(verse), modifiedOn: .distantPast),
-            .init(id: "page", slot: .indigo, placement: .page(verse.page), modifiedOn: .distantPast),
+            .init(id: "green", slot: .green, placement: .ayah(verse), modifiedOn: .distantPast),
+            .init(id: "purple", slot: .purple, placement: .ayah(verse), modifiedOn: .distantPast),
+            .init(id: "page", slot: .blue, placement: .page(verse.page), modifiedOn: .distantPast),
         ]
 
         let annotatedItem = try arabicItem(in: sut)
-        XCTAssertEqual(annotatedItem.annotations, [.note, .collection, .readingBookmark(.coral), .readingBookmark(.teal)])
+        XCTAssertEqual(annotatedItem.annotations, [.note, .collection, .readingBookmark(.green), .readingBookmark(.purple)])
         XCTAssertEqual(annotatedItem.id, originalItem.id)
         XCTAssertNotEqual(annotatedItem, originalItem)
 

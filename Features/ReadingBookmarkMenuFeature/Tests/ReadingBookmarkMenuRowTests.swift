@@ -50,7 +50,7 @@ final class ReadingBookmarkMenuRowTests: XCTestCase {
         target: PlacedReadingBookmark.Placement
     ) -> ReadingBookmarkMenuRow {
         ReadingBookmarkMenuRow(
-            item: .init(slot: .coral, name: nil, placement: placement),
+            item: .init(slot: .green, name: nil, placement: placement),
             target: target,
             name: .constant(""),
             isEnabled: true,

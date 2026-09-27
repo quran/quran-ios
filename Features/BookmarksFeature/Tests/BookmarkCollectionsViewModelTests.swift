@@ -430,10 +430,10 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let sut = makeSUT(readingBookmarkService: service)
         let task = Task { await sut.start() }
 
-        try await service.addReadingBookmark(at: .page(page), slot: .teal)
-        await waitUntil { sut.readingBookmarks.first { $0.slot == .teal }?.placement == .page(page) }
+        try await service.addReadingBookmark(at: .page(page), slot: .purple)
+        await waitUntil { sut.readingBookmarks.first { $0.slot == .purple }?.placement == .page(page) }
 
-        XCTAssertEqual(sut.readingBookmarks.first { $0.slot == .teal }?.sura, page.firstVerse.sura)
+        XCTAssertEqual(sut.readingBookmarks.first { $0.slot == .purple }?.sura, page.firstVerse.sura)
         task.cancel()
     }
 
@@ -443,10 +443,10 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let sut = makeSUT(readingBookmarkService: service)
         let task = Task { await sut.start() }
         defer { task.cancel() }
-        try await service.addReadingBookmark(at: .page(page), slot: .teal)
-        await waitUntil { sut.readingBookmarks.contains { $0.slot == .teal } }
+        try await service.addReadingBookmark(at: .page(page), slot: .purple)
+        await waitUntil { sut.readingBookmarks.contains { $0.slot == .purple } }
 
-        try await service.clearReadingBookmark(in: .teal)
+        try await service.clearReadingBookmark(in: .purple)
         await waitUntil { sut.readingBookmarks.isEmpty }
 
         XCTAssertTrue(sut.readingBookmarks.isEmpty)
@@ -456,7 +456,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let page = Quran.hafsMadani1405.pages[269]
         let bookmark = QuranAnnotations.PlacedReadingBookmark(
             id: "reading-bookmark",
-            slot: .coral,
+            slot: .green,
             placement: .page(page),
             modifiedOn: .distantPast
         )
@@ -472,7 +472,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let ayah = Quran.hafsMadani1405.pages[269].firstVerse
         let bookmark = QuranAnnotations.PlacedReadingBookmark(
             id: "reading-bookmark",
-            slot: .coral,
+            slot: .green,
             placement: .ayah(ayah),
             modifiedOn: .distantPast
         )

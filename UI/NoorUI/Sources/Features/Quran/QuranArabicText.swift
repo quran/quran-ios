@@ -122,7 +122,7 @@ public struct QuranArabicText: View {
 #if QURAN_SYNC
 #Preview("Ayah number and annotations") {
     VStack(alignment: .leading) {
-        ForEach([Set<AyahAnnotation>(), [.note], [.readingBookmark(.coral), .readingBookmark(.teal), .collection, .note]], id: \.self) { annotations in
+        ForEach([Set<AyahAnnotation>(), [.note], [.readingBookmark(.green), .readingBookmark(.purple), .collection, .note]], id: \.self) { annotations in
             QuranArabicText(
                 verse: Quran.hafsMadani1405.suras[1].verses[7],
                 text: QuranText(""),

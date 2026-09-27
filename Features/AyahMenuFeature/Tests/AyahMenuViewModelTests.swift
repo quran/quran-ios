@@ -93,7 +93,7 @@ final class AyahMenuViewModelTests: XCTestCase {
 
     func test_readingBookmarkState_showsSelectedBookmarkForSingleAyah() {
         let selectedAyah = verses[0]
-        let bookmark = readingBookmark(slot: .indigo, at: selectedAyah)
+        let bookmark = readingBookmark(slot: .blue, at: selectedAyah)
         let sut = makeSUT(
             verses: [selectedAyah],
             readingBookmark: bookmark

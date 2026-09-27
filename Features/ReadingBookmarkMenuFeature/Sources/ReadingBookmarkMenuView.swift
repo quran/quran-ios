@@ -126,17 +126,17 @@ private struct ReadingBookmarkMenuContent: View {
         editMode: .constant(.inactive),
         items: [
             .init(
-                slot: .coral,
+                slot: .green,
                 name: nil,
                 placement: .page(Quran.hafsMadani1405.pages[0])
             ),
             .init(
-                slot: .teal,
+                slot: .purple,
                 name: nil,
                 placement: .ayah(Quran.hafsMadani1405.suras[1].verses[29])
             ),
             .init(
-                slot: .indigo,
+                slot: .blue,
                 name: nil,
                 placement: .unplaced
             ),

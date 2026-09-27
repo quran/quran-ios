@@ -71,6 +71,10 @@ public struct NoorBasicSection<Content: View>: View {
 
     // MARK: Private
 
+    /// The List adds about this much margin around the header label, outside the Button.
+    /// Expanding only the content shape covers that margin without changing the layout.
+    private let headerHitSlop: CGFloat = 10
+
     @ViewBuilder
     private func collapsibleHeader(isExpanded: Binding<Bool>) -> some View {
         Button {
@@ -87,7 +91,7 @@ public struct NoorBasicSection<Content: View>: View {
                     .font(.footnote.weight(.semibold))
                     .rotationEffect(.degrees(isExpanded.wrappedValue ? 0 : -90))
             }
-            .contentShape(Rectangle())
+            .contentShape(Rectangle().inset(by: -headerHitSlop))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(title ?? "")

@@ -77,14 +77,21 @@ public final class AppMigrator {
 
     private func versionUpdaters() -> [Migrator] {
         switch launchVersion {
-        case .update(let old, _), .firstLaunch(version: let old), .sameVersion(version: let old):
-            return updaters(for: old)
+        case let .update(old, new):
+            return updaters(from: old, to: new)
+        case .firstLaunch, .sameVersion:
+            // A new installation has nothing to migrate, and the same version already migrated.
+            return []
         }
     }
 
-    private func updaters(for version: String) -> [Migrator] {
-        migrators // Returns updaters where: oldVersion < updaters.version.
-            .filter { version.compare($0.0, options: .numeric) == .orderedAscending }
+    /// Returns updaters where: oldVersion < updater.version <= newVersion.
+    private func updaters(from old: AppVersion, to new: AppVersion) -> [Migrator] {
+        migrators
+            .filter { version, _ in
+                old.compare(version, options: .numeric) == .orderedAscending &&
+                    version.compare(new, options: .numeric) != .orderedDescending
+            }
             .map { $1 }
     }
 }

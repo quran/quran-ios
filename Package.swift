@@ -559,6 +559,20 @@ private func domainTargets() -> [[Target]] {
             "QuranKit",
         ]),
 
+        target(type, name: "LegacyDataMigration", dependencies: [
+            "LegacyDataPersistence",
+            "Preferences",
+            "VLogging",
+        ] + mobileSyncTargetDependencies, testDependencies: [
+            "AsyncUtilitiesForTesting",
+            "CoreDataModel",
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
+            "LegacyDataPersistence",
+            "MobileSyncTestSupport",
+            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+        ] + mobileSyncTargetDependencies),
+
         target(type, name: "SettingsService", hasTests: false, dependencies: [
             "Analytics",
             "Preferences",

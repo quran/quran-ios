@@ -133,6 +133,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "LegacyDataMigrationTests",
+        "name" : "LegacyDataMigrationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "NetworkSupportTests",
         "name" : "NetworkSupportTests"
       }

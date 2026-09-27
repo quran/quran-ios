@@ -103,7 +103,7 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
         try await service.addReadingBookmark(at: .ayah(ayah(2)), slot: .purple)
         try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .blue)
 
-        var iterator = database.quranDataService.readingBookmarksSequence().makeAsyncIterator()
+        let iterator = database.quranDataService.readingBookmarksSequence().makeAsyncIterator()
         let bookmarks = try await iterator.next() ?? []
 
         // Other platforms read these slots, so a swapped mapping must fail even though it round-trips.

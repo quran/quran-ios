@@ -248,6 +248,17 @@ private func dataTargets() -> [[Target]] {
             "CoreDataPersistenceTestSupport",
         ]),
 
+        target(type, name: "LegacyDataPersistence", dependencies: [
+            "CoreDataModel",
+            "CoreDataPersistence",
+            "QuranAnnotations",
+            "QuranKit",
+        ] + mobileSyncTargetDependencies, testDependencies: [
+            "CoreDataModel",
+            "CoreDataPersistenceTestSupport",
+            "QuranAnnotations",
+        ] + mobileSyncTargetDependencies),
+
         target(type, name: "NotePersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",

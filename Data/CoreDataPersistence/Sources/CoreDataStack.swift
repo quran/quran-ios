@@ -49,42 +49,40 @@ public class CoreDataStack {
     }
 
     public func newBackgroundContext() -> NSManagedObjectContext {
-        let context = persistentContainer.newBackgroundContext()
-        context.transactionAuthor = appTransactionAuthorName
-        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        return context
+        makeBackgroundContext(in: persistentContainer)
+    }
+
+    /// Loads the store if needed and creates a background context.
+    ///
+    /// Unlike ``newBackgroundContext()``, a load failure, such as protected data being
+    /// unavailable, is thrown instead of crashing, and the next call tries to load again.
+    public func openBackgroundContext() throws -> NSManagedObjectContext {
+        try makeBackgroundContext(in: loadedPersistentContainer())
+    }
+
+    /// Emits whenever the store changes, including CloudKit imports, after history processing merges the change.
+    ///
+    /// The subscription is active when this method returns, even before the store loads.
+    public func changes() -> AsyncStream<Void> {
+        let (stream, continuation) = AsyncStream.makeStream(of: Void.self, bufferingPolicy: .bufferingNewest(1))
+        let id = UUID()
+        changeContinuations.withCriticalRegion { $0[id] = continuation }
+        continuation.onTermination = { [changeContinuations] _ in
+            changeContinuations.withCriticalRegion { $0[id] = nil }
+        }
+        return stream
     }
 
     // MARK: Internal
 
     /// A persistent container that can load cloud-backed and non-cloud stores.
-    lazy var persistentContainer: NSPersistentContainer = {
-        crashContext.setPersistence(store: name, operation: "load_store", phase: "starting")
-        logger.info("Core Data store load starting: \(name)")
-        let container = loadPersistentContainer()
-        crashContext.setPersistence(store: name, operation: "load_store", phase: "ready")
-        logger.info("Core Data store loaded: \(name)")
-
-        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        container.viewContext.transactionAuthor = appTransactionAuthorName
-
-        // Pin the viewContext to the current generation token and set it to keep itself up to date with local changes.
-        container.viewContext.automaticallyMergesChangesFromParent = true
+    var persistentContainer: NSPersistentContainer {
         do {
-            try container.viewContext.setQueryGenerationFrom(.current)
+            return try loadedPersistentContainer()
         } catch {
-            crashContext.setPersistence(store: name, operation: "pin_generation", phase: "failed")
-            fatalError("###\(#function): Failed to pin viewContext to the current generation:\(error)")
+            fatalError("###\(#function): Failed to load persistent store: \(error)")
         }
-
-        // Observe Core Data remote change notifications.
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(Self.storeRemoteChange(_:)),
-            name: .NSPersistentStoreRemoteChange, object: container.persistentStoreCoordinator
-        )
-
-        return container
-    }()
+    }
 
     // MARK: Private
 
@@ -93,6 +91,12 @@ public class CoreDataStack {
     private let name: String
     private let modelUrl: URL
     private let persistentStoreLoader: (NSPersistentContainer) -> NSError?
+
+    private let containerLock = NSLock()
+    private var loadedContainer: NSPersistentContainer?
+
+    /// Separate from the container lock, so subscribing never waits for a store load.
+    private let changeContinuations = ManagedCriticalState<[UUID: AsyncStream<Void>.Continuation]>([:])
 
     private let lazyUniquifiers: () -> [CoreDataEntityUniquifier]
     private lazy var uniquifiers: [CoreDataEntityUniquifier] = lazyUniquifiers()
@@ -115,7 +119,60 @@ public class CoreDataStack {
         return NSPersistentCloudKitContainer(name: name, managedObjectModel: model)
     }
 
-    private func loadPersistentContainer() -> NSPersistentContainer {
+    /// Returns the loaded container, loading it on first use. A failed load is not cached.
+    private func loadedPersistentContainer() throws -> NSPersistentContainer {
+        containerLock.lock()
+        defer { containerLock.unlock() }
+        if let loadedContainer {
+            return loadedContainer
+        }
+        let container = try makeLoadedPersistentContainer()
+        loadedContainer = container
+        return container
+    }
+
+    private func makeLoadedPersistentContainer() throws -> NSPersistentContainer {
+        crashContext.setPersistence(store: name, operation: "load_store", phase: "starting")
+        logger.info("Core Data store load starting: \(name)")
+        let container = try loadPersistentContainer()
+        crashContext.setPersistence(store: name, operation: "load_store", phase: "ready")
+        logger.info("Core Data store loaded: \(name)")
+
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        container.viewContext.transactionAuthor = appTransactionAuthorName
+
+        // Pin the viewContext to the current generation token and set it to keep itself up to date with local changes.
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        do {
+            try container.viewContext.setQueryGenerationFrom(.current)
+        } catch {
+            crashContext.setPersistence(store: name, operation: "pin_generation", phase: "failed")
+            logger.error("Core Data failed to pin the view context generation: \(name). Error: \(error)")
+            // Close the discarded stores, so a retry never opens the file with a second coordinator.
+            let coordinator = container.persistentStoreCoordinator
+            for store in coordinator.persistentStores {
+                try? coordinator.remove(store)
+            }
+            throw error
+        }
+
+        // Observe Core Data remote change notifications.
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(Self.storeRemoteChange(_:)),
+            name: .NSPersistentStoreRemoteChange, object: container.persistentStoreCoordinator
+        )
+
+        return container
+    }
+
+    private func makeBackgroundContext(in container: NSPersistentContainer) -> NSManagedObjectContext {
+        let context = container.newBackgroundContext()
+        context.transactionAuthor = appTransactionAuthorName
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return context
+    }
+
+    private func loadPersistentContainer() throws -> NSPersistentContainer {
         var attempt = 1
         while true {
             let container = newPersistenceContainer()
@@ -126,7 +183,8 @@ public class CoreDataStack {
             }
             guard PersistentStoreLoadRecovery.shouldRetry(error, attempt: attempt) else {
                 crashContext.setPersistence(store: name, operation: "load_store", phase: "failed")
-                fatalError("###\(#function): Failed to load persistent store: \(error)")
+                logger.error("Core Data store failed to load: \(name). Error: \(error)")
+                throw error
             }
 
             crashContext.setPersistence(store: name, operation: "load_store", phase: "retrying_sqlite_misuse")
@@ -181,6 +239,11 @@ public class CoreDataStack {
                 crashContext.setPersistence(store: self.name, operation: "merge_remote_change", phase: "executing")
                 self.historyProcessor.processNewHistory(using: taskContext)
                 crashContext.setPersistence(store: self.name, operation: "merge_remote_change", phase: "ready")
+            }
+            // Emitted after history processing, so observers read deduplicated data.
+            let continuations = self.changeContinuations.withCriticalRegion { Array($0.values) }
+            for continuation in continuations {
+                continuation.yield()
             }
         }
     }

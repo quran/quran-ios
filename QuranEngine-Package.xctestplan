@@ -126,6 +126,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "LegacyDataPersistenceTests",
+        "name" : "LegacyDataPersistenceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "NetworkSupportTests",
         "name" : "NetworkSupportTests"
       }

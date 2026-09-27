@@ -12,6 +12,7 @@ import XCTest
 
 class CoreDataStackTests: XCTestCase {
     var stack: CoreDataStack!
+    var temporaryDirectory: URL?
 
     override func setUp() {
         super.setUp()
@@ -20,6 +21,9 @@ class CoreDataStackTests: XCTestCase {
 
     override func tearDown() {
         stack = nil
+        if let temporaryDirectory {
+            try? FileManager.default.removeItem(at: temporaryDirectory)
+        }
         super.tearDown()
     }
 
@@ -89,6 +93,75 @@ class CoreDataStackTests: XCTestCase {
         XCTAssertEqual(attempts, 2)
         XCTAssertEqual(containers.count, 2)
         XCTAssertFalse(containers[0] === containers[1])
+    }
+
+    func test_openBackgroundContext_throwsLoadFailureAndLoadsOnRetry() throws {
+        var isProtectedDataAvailable = false
+        stack = CoreDataStack(
+            name: "CoreDataStackRecoverableTests-\(UUID().uuidString)",
+            modelUrl: CoreDataModelResources.quranModel,
+            lazyUniquifiers: { [] },
+            persistentStoreLoader: { container in
+                guard isProtectedDataAvailable else {
+                    return NSError(domain: NSCocoaErrorDomain, code: NSFileReadNoPermissionError)
+                }
+                container.persistentStoreDescriptions.first?.type = NSInMemoryStoreType
+                var loadError: NSError?
+                container.loadPersistentStores { _, error in
+                    loadError = error as NSError?
+                }
+                return loadError
+            }
+        )
+
+        XCTAssertThrowsError(try stack.openBackgroundContext()) { error in
+            XCTAssertEqual((error as NSError).code, NSFileReadNoPermissionError)
+        }
+
+        isProtectedDataAvailable = true
+        let context = try stack.openBackgroundContext()
+        XCTAssertEqual(context.transactionAuthor, "app")
+        XCTAssertIdentical(try stack.openBackgroundContext().persistentStoreCoordinator, context.persistentStoreCoordinator)
+    }
+
+    func test_changes_emitsWhenTheStoreChanges() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("CoreDataStackChangesTests-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        temporaryDirectory = directory
+        stack = CoreDataStack(
+            name: "CoreDataStackChangesTests",
+            modelUrl: CoreDataModelResources.quranModel,
+            lazyUniquifiers: { [] },
+            persistentStoreLoader: { container in
+                container.persistentStoreDescriptions.first?.url = directory.appendingPathComponent("Quran.sqlite")
+                var loadError: NSError?
+                container.loadPersistentStores { _, error in
+                    loadError = error as NSError?
+                }
+                return loadError
+            }
+        )
+
+        // Subscribe before the store loads.
+        let changes = stack.changes()
+        let changed = expectation(description: "The store reports a change")
+        let task = Task {
+            for await _ in changes {
+                changed.fulfill()
+                return
+            }
+        }
+        defer { task.cancel() }
+
+        let context = stack.newBackgroundContext()
+        try context.performAndWait {
+            let note = MO_Note(context: context)
+            note.note = "Arrived"
+            try context.save()
+        }
+
+        wait(for: [changed], timeout: 5)
     }
 
     func test_storeLoadRecoveryOnlyRetriesFirstSQLiteMisuse() {

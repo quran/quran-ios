@@ -57,7 +57,9 @@ public struct QuranPaginationView<Content: View>: View {
         .themedBackground()
         .themedForeground()
         .populateThemeStyle()
-        .appearanceModeColorSchema()
+        // Don't override the color scheme here: it becomes the pages' UIKit interface style, and the
+        // bars' scroll edge effect adopts it (e.g. a light navigation bar in the dark Quiet theme).
+        .appearanceModeThemeColors()
         .ignoresSafeArea()
     }
 

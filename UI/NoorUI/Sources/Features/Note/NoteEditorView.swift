@@ -57,6 +57,7 @@ private struct NoteEditorContent: View {
 
     @Environment(\.locale) private var locale
     @Environment(\.themeStyle) private var themeStyle
+    @Environment(\.themeColors) private var themeColors
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @ScaledMetric private var highlightSpacing = 12.0
 
@@ -87,8 +88,8 @@ private struct NoteEditorContent: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             footer
         }
-        .foregroundColor(Color(themeStyle.textColor))
-        .background(Color(themeStyle.backgroundColor).ignoresSafeArea())
+        .foregroundColor(themeColors.text)
+        .background(themeColors.background.ignoresSafeArea())
         .contentShape(Rectangle())
         .onTapGesture {
             note.editing = false
@@ -112,7 +113,7 @@ private struct NoteEditorContent: View {
         sectionDivider {
             Text("✳︎")
                 .font(.title3)
-                .foregroundColor(Color(themeStyle.pageSeparatorLine))
+                .foregroundColor(themeColors.pageSeparatorLine)
                 .accessibilityHidden(true)
         }
     }
@@ -122,7 +123,7 @@ private struct NoteEditorContent: View {
             Text(l("notes.editor.note-divider"))
                 .font(.footnote)
                 .tracking(locale.isArabicLanguage ? 0 : 3)
-                .foregroundColor(Color(themeStyle.secondaryTextColor))
+                .foregroundColor(themeColors.secondaryText)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
                 .layoutPriority(1)
@@ -158,7 +159,7 @@ private struct NoteEditorContent: View {
         }
         .font(.footnote)
         .padding()
-        .background(Color(themeStyle.backgroundColor))
+        .background(themeColors.background)
         .overlay(alignment: .top) {
             thinDivider
         }
@@ -166,7 +167,7 @@ private struct NoteEditorContent: View {
 
     private var metadata: some View {
         metadataText
-            .foregroundColor(Color(themeStyle.secondaryTextColor))
+            .foregroundColor(themeColors.secondaryText)
             .accessibilityLabel(Text(metadataAccessibilityLabel))
     }
 
@@ -192,12 +193,12 @@ private struct NoteEditorContent: View {
 
     private var thinDivider: some View {
         Divider()
-            .overlay(Color(themeStyle.secondaryTextColor).opacity(0.2))
+            .overlay(themeColors.secondaryText.opacity(0.2))
     }
 
     private var dividerLine: some View {
         Rectangle()
-            .fill(Color(themeStyle.pageSeparatorLine))
+            .fill(themeColors.pageSeparatorLine)
             .frame(height: 1)
     }
 

@@ -30,38 +30,38 @@ extension View {
 }
 
 private struct ThemeBackgroundStyle: ViewModifier {
-    @Environment(\.themeStyle) var themeStyle
+    @Environment(\.themeColors) var themeColors
 
     func body(content: Content) -> some View {
         content
-            .background(Color(themeStyle.backgroundColor))
+            .background(themeColors.background)
     }
 }
 
 private struct ThemeForegroundStyle: ViewModifier {
-    @Environment(\.themeStyle) var themeStyle
+    @Environment(\.themeColors) var themeColors
 
     func body(content: Content) -> some View {
         content
-            .foregroundColor(Color(themeStyle.textColor))
+            .foregroundColor(themeColors.text)
     }
 }
 
 private struct ThemeSecondaryForegroundStyle: ViewModifier {
-    @Environment(\.themeStyle) var themeStyle
+    @Environment(\.themeColors) var themeColors
 
     func body(content: Content) -> some View {
         content
-            .foregroundColor(Color(themeStyle.secondaryTextColor))
+            .foregroundColor(themeColors.secondaryText)
     }
 }
 
 private struct ThemeSecondaryBackgroundStyle: ViewModifier {
-    @Environment(\.themeStyle) var themeStyle
+    @Environment(\.themeColors) var themeColors
 
     func body(content: Content) -> some View {
         content
-            .background(Color(themeStyle.secondaryBackgroundColor))
+            .background(themeColors.secondaryBackground)
     }
 }
 

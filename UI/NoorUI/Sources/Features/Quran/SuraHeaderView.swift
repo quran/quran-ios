@@ -17,7 +17,6 @@ public struct SuraHeaderView: View {
             .resizable()
             .aspectRatio(contentMode: .fit)
             .foregroundColor(tint)
-            .themedColorScheme()
     }
 }
 

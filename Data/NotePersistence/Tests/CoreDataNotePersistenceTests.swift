@@ -109,6 +109,25 @@ class CoreDataNotePersistenceTests: XCTestCase {
 
         XCTAssertEqual(collector.items, [[]])
     }
+
+    func test_notesIncludesNoteOnceItsVersesArrive() throws {
+        // CloudKit can deliver a note before its verses.
+        let context = stack.newBackgroundContext()
+        let note = try context.performAndWait {
+            let note = context.newNote("Verses arrive later", modifiedOn: 100)
+            try context.save()
+            return note
+        }
+
+        try context.performAndWait {
+            note.addToVerses(context.newVerse(sura: 1, ayah: 1))
+            try context.save()
+        }
+
+        let notes = PublisherCollector(CoreDataNotePersistence(stack: stack, time: time).notes()).items.last
+        XCTAssertEqual(notes?.map(\.note), ["Verses arrive later"])
+        XCTAssertEqual(notes?.map(\.verses), [[verse1]])
+    }
 }
 
 extension NotePersistenceModel {

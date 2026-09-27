@@ -137,8 +137,7 @@ class Container: AppDependencies {
         let stack = CoreDataStack(name: "Quran", modelUrl: CoreDataModelResources.quranModel) {
             let lastPage = CoreDataLastPageUniquifier()
             let pageBookmark = CoreDataPageBookmarkUniquifier()
-            let note = CoreDataNoteUniquifier()
-            return [lastPage, pageBookmark, note]
+            return [lastPage, pageBookmark]
         }
         return stack
     }()

@@ -12,6 +12,7 @@ import FeaturesSupport
 import Localization
 #if QURAN_SYNC
 import AuthenticationClient
+import LegacyDataMigration
 import MobileSync
 #endif
 import NoorUI
@@ -34,6 +35,7 @@ final class SettingsRootViewModel: ObservableObject {
         analytics: AnalyticsLibrary,
         reviewService: ReviewService,
         authenticationClient: any AuthenticationClient,
+        legacyDataImportCoordinator: LegacyDataImportCoordinator,
         audioDownloadsBuilder: AudioDownloadsBuilder,
         translationsListBuilder: TranslationsListBuilder,
         readingSelectorBuilder: ReadingSelectorBuilder,
@@ -47,6 +49,7 @@ final class SettingsRootViewModel: ObservableObject {
         self.analytics = analytics
         self.reviewService = reviewService
         self.authenticationClient = authenticationClient
+        self.legacyDataImportCoordinator = legacyDataImportCoordinator
         self.audioDownloadsBuilder = audioDownloadsBuilder
         self.translationsListBuilder = translationsListBuilder
         self.readingSelectorBuilder = readingSelectorBuilder
@@ -229,6 +232,8 @@ final class SettingsRootViewModel: ObservableObject {
     func logoutFromQuranCom() async {
         analytics.quranSyncSignOut(from: .settings)
         logger.info("Quran Sync: starting sign out from Settings")
+        // Stop legacy import before the logout reset, so legacy data never returns afterwards.
+        await legacyDataImportCoordinator.disable()
         do {
             try await authenticationClient.logout()
             isAuthenticated = false
@@ -246,6 +251,7 @@ final class SettingsRootViewModel: ObservableObject {
     #if QURAN_SYNC
     private let quranProfileURL: URL
     private var authenticationClient: any AuthenticationClient
+    private let legacyDataImportCoordinator: LegacyDataImportCoordinator
     #endif
 
     private func showSingleChoiceSelector<T: Hashable>(

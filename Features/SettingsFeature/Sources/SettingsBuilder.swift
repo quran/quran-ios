@@ -31,6 +31,7 @@ public struct SettingsBuilder {
             analytics: container.analytics,
             reviewService: ReviewService(analytics: container.analytics),
             authenticationClient: container.authenticationClient,
+            legacyDataImportCoordinator: container.legacyDataImportCoordinator,
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),

@@ -12,6 +12,7 @@ import BatchDownloader
 import Foundation
 import LastPagePersistence
 #if QURAN_SYNC
+import LegacyDataMigration
 import MobileSync
 #endif
 import NotePersistence
@@ -44,6 +45,8 @@ public protocol AppDependencies {
     #if QURAN_SYNC
     var authenticationClient: any AuthenticationClient { get }
     var quranDataService: QuranDataService { get }
+    /// Imports the legacy Core Data store. Share one instance so scans never overlap.
+    var legacyDataImportCoordinator: LegacyDataImportCoordinator { get }
     #endif
 }
 

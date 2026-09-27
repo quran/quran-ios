@@ -71,11 +71,8 @@ public struct NoorBasicSection<Content: View>: View {
 
     // MARK: Private
 
-    /// Vertical hit slop for the collapsible header. The List adds this much margin
-    /// above and below the header label on iOS 26, and a Button only responds inside
-    /// its label, so taps near the header's edges were missed. Padding the label,
-    /// applying a rectangular content shape, then removing the padding again makes
-    /// the hit area match the visible header without changing the layout.
+    /// The List adds about this much margin around the header label, outside the Button.
+    /// Expanding only the content shape covers that margin without changing the layout.
     private let headerHitSlop: CGFloat = 10
 
     @ViewBuilder
@@ -94,9 +91,7 @@ public struct NoorBasicSection<Content: View>: View {
                     .font(.footnote.weight(.semibold))
                     .rotationEffect(.degrees(isExpanded.wrappedValue ? 0 : -90))
             }
-            .padding(.vertical, headerHitSlop)
-            .contentShape(Rectangle())
-            .padding(.vertical, -headerHitSlop)
+            .contentShape(Rectangle().inset(by: -headerHitSlop))
         }
         .buttonStyle(.plain)
         .accessibilityLabel(title ?? "")

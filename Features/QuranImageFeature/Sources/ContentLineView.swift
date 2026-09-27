@@ -110,10 +110,10 @@ private struct ContentLineViewBody: View {
 
     // MARK: Private
 
-    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.themeColorScheme) private var themeColorScheme
 
     private var chromePalette: LinePageChromePalette {
-        chromeStyle.palette(for: colorScheme)
+        chromeStyle.palette(for: themeColorScheme)
     }
 
     private func lineCanvas(_ layout: LinePageLayout?) -> some View {

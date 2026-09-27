@@ -52,14 +52,14 @@ extension QuranSeparators {
 
         // MARK: Internal
 
-        @Environment(\.themeStyle) var themeStyle
+        @Environment(\.themeColors) var themeColors
 
         var gradientColors: [Color] {
-            [Color(themeStyle.pageSeparatorBackground), Color(themeStyle.backgroundColor)]
+            [themeColors.pageSeparatorBackground, themeColors.background]
         }
 
         var lineColor: Color {
-            Color(themeStyle.pageSeparatorLine)
+            themeColors.pageSeparatorLine
         }
 
         let lines: Int = 5
@@ -110,14 +110,14 @@ extension QuranSeparators {
 
         // MARK: Internal
 
-        @Environment(\.themeStyle) var themeStyle
+        @Environment(\.themeColors) var themeColors
 
         var gradientColors: [Color] {
-            [Color(themeStyle.pageSeparatorBackground), Color(themeStyle.backgroundColor)]
+            [themeColors.pageSeparatorBackground, themeColors.background]
         }
 
         var lineColor: Color {
-            Color(themeStyle.pageSeparatorLine)
+            themeColors.pageSeparatorLine
         }
 
         let width: CGFloat = QuranSeparators.middleWidth / 2

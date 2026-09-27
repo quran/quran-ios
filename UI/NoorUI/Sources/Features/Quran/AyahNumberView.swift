@@ -38,7 +38,6 @@ public struct AyahNumberView: View {
             ayahText
                 .foregroundColor(markerTextColor)
         }
-        .themedColorScheme()
     }
 
     private var ayahRing: some View {

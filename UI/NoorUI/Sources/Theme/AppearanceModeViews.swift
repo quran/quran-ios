@@ -9,12 +9,10 @@ import Combine
 import SwiftUI
 
 extension View {
-    public func appearanceModeColorSchema() -> some View {
-        modifier(AppearanceModeColorSchema())
-    }
-
-    public func themedColorScheme() -> some View {
-        modifier(ThemedColorScheme())
+    /// Resolves theme colors with the appearance mode's color scheme without overriding the
+    /// subtree's color scheme, so hosted UIKit views keep the window's interface style.
+    public func appearanceModeThemeColors() -> some View {
+        modifier(AppearanceModeThemeColors())
     }
 }
 
@@ -48,28 +46,12 @@ private final class AppearanceModeColorSchemaViewModel: ObservableObject {
     }
 }
 
-private struct AppearanceModeColorSchema: ViewModifier {
+private struct AppearanceModeThemeColors: ViewModifier {
     @StateObject private var viewModel = AppearanceModeColorSchemaViewModel()
 
     func body(content: Content) -> some View {
-        if let colorSchema = viewModel.colorSchema {
-            content
-                .environment(\.colorScheme, colorSchema)
-        } else {
-            content
-        }
-    }
-}
-
-private struct ThemedColorScheme: ViewModifier {
-    @Environment(\.themeStyle) private var themeStyle
-
-    func body(content: Content) -> some View {
-        if themeStyle == .quiet {
-            content.environment(\.colorScheme, .dark)
-        } else {
-            content
-        }
+        content
+            .environment(\.themeColorSchemeOverride, viewModel.colorSchema)
     }
 }
 

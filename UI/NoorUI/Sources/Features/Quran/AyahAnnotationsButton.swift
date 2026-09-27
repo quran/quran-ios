@@ -51,12 +51,12 @@ private struct AyahAnnotationsLabel: View {
         .padding(.horizontal, height * 0.28)
         .background {
             Capsule()
-                .fill(Color(themeStyle.backgroundColor))
+                .fill(themeColors.background)
                 .shadow(color: .black.opacity(0.18), radius: 1, y: 1)
         }
     }
 
-    @Environment(\.themeStyle) private var themeStyle
+    @Environment(\.themeColors) private var themeColors
 }
 
 private struct AyahAnnotationsButtonStyle: ButtonStyle {

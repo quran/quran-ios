@@ -33,7 +33,7 @@ private struct ThemeStyleOptionView: View {
             .themedForeground()
             .themedBackground()
             .cornerRadius(cornerRadius)
-            .appearanceModeColorSchema()
+            .appearanceModeThemeColors()
             .overlay {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .stroke(Color.label, lineWidth: isSelected ? borderWidth : 0)

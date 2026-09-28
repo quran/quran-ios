@@ -71,6 +71,12 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
             .store(in: &cancellables)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Deactivating the search controller when leaving clears the search bar text.
+        searchController.searchBar.text = viewModel.searchTerm
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         searchController.isActive = false

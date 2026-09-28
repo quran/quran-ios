@@ -820,13 +820,17 @@ private func featuresTargets() -> [[Target]] {
             "Caching",
         ]),
 
-        target(type, name: "SearchFeature", hasTests: false, dependencies: [
+        target(type, name: "SearchFeature", dependencies: [
             "AppDependencies",
             "QuranTextKit",
             "QuranLocalization",
             "FeaturesSupport",
             "ReadingService",
             "NoorUI",
+        ], testDependencies: [
+            "Analytics",
+            "QuranResources",
+            "QuranText",
         ]),
 
         target(type, name: "HomeFeature", hasTests: false, dependencies: [

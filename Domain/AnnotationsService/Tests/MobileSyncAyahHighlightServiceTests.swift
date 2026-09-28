@@ -48,6 +48,21 @@ final class MobileSyncAyahHighlightServiceTests: XCTestCase {
         }
     }
 
+    func test_setHighlight_storesTheMatchingMobileSyncColor() async throws {
+        try await service.setHighlight(.red, for: [ayah(1)])
+        try await service.setHighlight(.green, for: [ayah(2)])
+        try await service.setHighlight(.blue, for: [ayah(3)])
+        try await service.setHighlight(.yellow, for: [ayah(4)])
+        try await service.setHighlight(.purple, for: [ayah(5)])
+
+        let iterator = database.quranDataService.highlightsSequence().makeAsyncIterator()
+        let highlights = try await iterator.next() ?? []
+
+        // Other platforms read these colors, so a swapped mapping must fail even though it round-trips.
+        let colors = highlights.map { "\($0.color.name) 1:\($0.ayah)" }
+        XCTAssertEqual(colors.sorted(), ["BLUE 1:3", "GREEN 1:2", "PINK 1:1", "PURPLE 1:5", "YELLOW 1:4"])
+    }
+
     private func storedHighlights(
         where predicate: ([AyahNumber: HighlightColor]) -> Bool
     ) async throws -> [AyahNumber: HighlightColor] {

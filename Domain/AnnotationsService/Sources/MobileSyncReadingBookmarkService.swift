@@ -168,11 +168,11 @@ private extension QuranAnnotations.ReadingBookmarkSlot {
     }
 
     init?(mobileSyncSlot: MobileSync.ReadingBookmarkSlot) {
-        if mobileSyncSlot == .green {
+        if mobileSyncSlot == .teal {
             self = .green
-        } else if mobileSyncSlot == .purple {
+        } else if mobileSyncSlot == .orange {
             self = .purple
-        } else if mobileSyncSlot == .blue {
+        } else if mobileSyncSlot == .red {
             self = .blue
         } else {
             logger.error("Unsupported mobile sync slot \(mobileSyncSlot.name)")
@@ -183,11 +183,11 @@ private extension QuranAnnotations.ReadingBookmarkSlot {
     var mobileSyncSlot: MobileSync.ReadingBookmarkSlot {
         switch self {
         case .green:
-            .green
+            .teal
         case .purple:
-            .purple
+            .orange
         case .blue:
-            .blue
+            .red
         }
     }
 }

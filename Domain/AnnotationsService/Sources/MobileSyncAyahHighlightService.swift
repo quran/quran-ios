@@ -69,7 +69,7 @@ private extension HighlightColor {
     init?(_ color: AyahHighlightColor) {
         switch color {
         case .blue: self = .blue
-        case .red: self = .red
+        case .pink: self = .red
         case .green: self = .green
         case .yellow: self = .yellow
         case .purple: self = .purple
@@ -80,7 +80,7 @@ private extension HighlightColor {
     var mobileSyncColor: AyahHighlightColor {
         switch self {
         case .blue: .blue
-        case .red: .red
+        case .red: .pink
         case .green: .green
         case .yellow: .yellow
         case .purple: .purple

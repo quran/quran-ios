@@ -115,6 +115,10 @@ final class SearchViewModel: ObservableObject {
     private let contentStatePreferences = QuranContentStatePreferences.shared
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
 
+    // `start()` reruns whenever the view reappears, and observation replays current values.
+    private var observedReading: Reading?
+    private var searchResultsTerm: String?
+
     private func search(for term: String) async throws -> [SearchResults] {
         searchState = .searching
         let quran = reading.quran
@@ -131,15 +135,23 @@ final class SearchViewModel: ObservableObject {
         for await state in states {
             switch state {
             case .entry:
-                continue
+                searchResultsTerm = nil
             case .search(let term):
+                if searchResultsTerm == term {
+                    continue
+                }
                 searchState = .searching
                 let result = await Result(catching: { try await search(for: term) })
+                if Task.isCancelled {
+                    return
+                }
                 if searchTerm == term {
                     switch result {
                     case .success(let results):
+                        searchResultsTerm = term
                         searchState = .searchResult(results)
                     case .failure(let error):
+                        searchResultsTerm = term
                         self.error = error
                         searchState = .searchResult([])
                     }
@@ -160,8 +172,11 @@ final class SearchViewModel: ObservableObject {
     private func observeReadingChanges() async {
         let readings = $reading
             .values()
-        for await _ in readings {
-            searchTerm = ""
+        for await reading in readings {
+            if let observedReading, observedReading != reading {
+                reset()
+            }
+            observedReading = reading
         }
     }
 

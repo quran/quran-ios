@@ -329,6 +329,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "SearchFeatureTests",
+        "name" : "SearchFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "SyncedPageBookmarkPersistenceTests",
         "name" : "SyncedPageBookmarkPersistenceTests"
       }

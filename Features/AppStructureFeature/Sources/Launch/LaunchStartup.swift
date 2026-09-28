@@ -93,6 +93,9 @@ public final class LaunchStartup {
         case .start:
             stopObservingProtectedData()
             crashContext.setProtectedDataAvailable(UIApplication.shared.isProtectedDataAvailable)
+            #if QURAN_SYNC
+            startLegacyDataImport()
+            #endif
             upgradeIfNeeded(window: window)
         case .wait:
             waitForProtectedData(window: window)
@@ -197,7 +200,23 @@ public final class LaunchStartup {
         appMigrator.register(migrator: fileSystemMigrator, for: "1.16.0")
         appMigrator.register(migrator: recitersPathMigrator, for: "1.19.1")
         appMigrator.register(migrator: downloadBackupMigrator, for: "2.6.9")
+        #if QURAN_SYNC
+        // Upgrades import legacy data once before showing the UI.
+        appMigrator.register(
+            migrator: LegacyDataMigrator(coordinator: appBuilder.container.legacyDataImportCoordinator),
+            for: "3.0.0"
+        )
+        #endif
     }
+
+    #if QURAN_SYNC
+    /// Imports legacy data on every launch and after each change to the legacy store.
+    /// Resolving the coordinator opens MobileSync, which needs protected data.
+    private func startLegacyDataImport() {
+        let coordinator = appBuilder.container.legacyDataImportCoordinator
+        Task { await coordinator.start() }
+    }
+    #endif
 
     private func updateAudioIfNeeded() {
         // don't run audio updater after upgrading the app

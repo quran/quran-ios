@@ -595,6 +595,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "QuranResources",
             "AuthenticationClient",
+            "LegacyDataMigration",
         ] + mobileSyncTargetDependencies),
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [
@@ -654,13 +655,21 @@ private func featuresTargets() -> [[Target]] {
         ]),
 
         target(type, name: "AppMigrationFeature", dependencies: [
+            "LegacyDataMigration",
             "SystemDependencies",
             "VLogging",
             "AppMigrator",
             "ReciterService",
             "Utilities",
             "NoorUI",
-        ]),
+        ], testDependencies: [
+            "AppMigrator",
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
+            "LegacyDataMigration",
+            "LegacyDataPersistence",
+            "MobileSyncTestSupport",
+        ] + mobileSyncTargetDependencies),
 
         target(type, name: "AdvancedAudioOptionsFeature", dependencies: [
             "QuranAudio",
@@ -857,6 +866,7 @@ private func featuresTargets() -> [[Target]] {
             "AppDependencies",
             "AuthenticationClient",
             "FeaturesSupport",
+            "LegacyDataMigration",
             "SettingsService",
             "NoorUI",
             "VLogging",
@@ -873,7 +883,11 @@ private func featuresTargets() -> [[Target]] {
             "AuthenticationClientFake",
             "MobileSyncTestSupport",
             "BatchDownloader",
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
             "LastPagePersistence",
+            "LegacyDataMigration",
+            "LegacyDataPersistence",
             "NotePersistence",
             "PageBookmarkPersistence",
             "ReadingSelectorFeature",

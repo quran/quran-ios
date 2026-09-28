@@ -14,6 +14,8 @@ import Foundation
 import LastPagePersistence
 #if QURAN_SYNC
 import AuthenticationClient
+import LegacyDataMigration
+import LegacyDataPersistence
 import MobileSync
 #endif
 import NotePersistence
@@ -49,6 +51,11 @@ class Container: AppDependencies {
         let authService = syncAppGraph.authService
         return AuthenticationClientMobileSyncImpl(authService: authService)
     }()
+
+    private(set) lazy var legacyDataImportCoordinator = LegacyDataImportCoordinator(
+        reader: CoreDataLegacyDataReader(stack: coreDataStack),
+        quranDataService: quranDataService
+    )
     #endif
 
     private(set) lazy var downloadManager: DownloadManager = {

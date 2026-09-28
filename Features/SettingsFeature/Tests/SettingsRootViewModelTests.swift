@@ -6,8 +6,11 @@ import AudioDownloadsFeature
 import AuthenticationClient
 import AuthenticationClientFake
 import BatchDownloader
+import CoreDataPersistence
+import CoreDataPersistenceTestSupport
 import Foundation
 import LastPagePersistence
+import LegacyDataPersistence
 import MobileSync
 import MobileSyncTestSupport
 import NotePersistence
@@ -18,11 +21,24 @@ import SettingsService
 import TranslationsFeature
 import UIKit
 import XCTest
+@testable import LegacyDataMigration
 @testable import SettingsFeature
 
 @MainActor
 final class SettingsRootViewModelTests: XCTestCase {
     // MARK: Internal
+
+    override func setUp() async throws {
+        try await super.setUp()
+        try await database.reset()
+        LegacyImportPreferences.reset()
+    }
+
+    override func tearDown() async throws {
+        try await database.reset()
+        LegacyImportPreferences.reset()
+        try await super.tearDown()
+    }
 
     func test_refreshAuthenticationState_returnsNotAuthenticated_whenClientIsMissing() async {
         let sut = makeSUT(authenticationClient: nil)
@@ -134,6 +150,27 @@ final class SettingsRootViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_logout_disablesLegacyImport() async throws {
+        let store = TemporaryCoreDataStore()
+        let stack = store.stack()
+        try stack.write { context in
+            let note = context.newNote("Legacy note", modifiedOn: 1)
+            note.addToVerses(context.newVerse(sura: 1, ayah: 1))
+        }
+        let coordinator = LegacyDataImportCoordinator(
+            reader: CoreDataLegacyDataReader(stack: stack),
+            quranDataService: database.quranDataService
+        )
+        let sut = makeSUT(authenticationClient: AuthenticationClientFake(), legacyDataImportCoordinator: coordinator)
+
+        await sut.logoutFromQuranCom()
+        try await coordinator.importNow()
+
+        let notes = database.quranDataService.notesSequence().makeAsyncIterator()
+        let importedNotes = try await notes.next()
+        XCTAssertEqual(importedNotes, [])
+    }
+
     func test_logout_setsErrorWhenClientIsMissing() async {
         let sut = makeSUT(authenticationClient: nil)
 
@@ -147,6 +184,7 @@ final class SettingsRootViewModelTests: XCTestCase {
     private func makeSUT(
         analytics: AnalyticsLibrary = AnalyticsRecorder(),
         authenticationClient: (any AuthenticationClient)?,
+        legacyDataImportCoordinator: LegacyDataImportCoordinator? = nil,
         navigationController: UINavigationController? = nil
     ) -> SettingsRootViewModel {
         let navigationController = navigationController ?? UINavigationController()
@@ -155,6 +193,7 @@ final class SettingsRootViewModelTests: XCTestCase {
             analytics: analytics,
             reviewService: ReviewService(analytics: AnalyticsSpy()),
             authenticationClient: authenticationClient ?? UnavailableAuthenticationClient(),
+            legacyDataImportCoordinator: legacyDataImportCoordinator ?? container.legacyDataImportCoordinator,
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
@@ -163,6 +202,8 @@ final class SettingsRootViewModelTests: XCTestCase {
             navigationController: navigationController
         )
     }
+
+    private let database = MobileSyncTestDatabase.shared
 
     private func assertClientIsNotAuthenticated(_ error: Error?, file: StaticString = #filePath, line: UInt = #line) {
         guard case .notAuthenticated = error as? AuthenticationClientError else {
@@ -208,6 +249,10 @@ private struct AppDependenciesStub: AppDependencies {
     var pageBookmarkPersistence: PageBookmarkPersistence { fatalError("Unused in tests") }
     #if QURAN_SYNC
     var quranDataService: QuranDataService { MobileSyncTestDatabase.shared.quranDataService }
+    let legacyDataImportCoordinator = LegacyDataImportCoordinator(
+        reader: CoreDataLegacyDataReader(stack: CoreDataStack.testingStack()),
+        quranDataService: MobileSyncTestDatabase.shared.quranDataService
+    )
     #endif
 }
 

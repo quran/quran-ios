@@ -83,6 +83,33 @@ final class AppMigratorTests: XCTestCase {
         XCTAssertNotNil(nonBlockingWorker.update)
     }
 
+    func test_newInstallationBeforeUpdaterVersions_runsNoUpdater() async {
+        bundle.info["CFBundleShortVersionString"] = "1.15.0"
+
+        await verifyNoMigration()
+    }
+
+    func test_sameVersionBeforeUpdaterVersions_runsNoUpdater() async {
+        preferences.appVersion = "1.16.5"
+        bundle.info["CFBundleShortVersionString"] = "1.16.5"
+
+        await verifyNoMigration()
+    }
+
+    func test_upgrade_skipsUpdatersNewerThanCurrentVersion() async {
+        preferences.appVersion = "1.15.0"
+        bundle.info["CFBundleShortVersionString"] = "1.16.5"
+
+        let status = service.migrationStatus()
+        XCTAssertEqual(status, .migrate(blocksUI: true, titles: ["Worker 1"]))
+
+        await service.migrate()
+
+        XCTAssertNotNil(worker1.update)
+        XCTAssertNil(worker2.update)
+        XCTAssertNil(nonBlockingWorker.update)
+    }
+
     func test_upgrade_runAllUpdaters() async {
         preferences.appVersion = "1.15.0"
 

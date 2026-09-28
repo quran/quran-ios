@@ -75,17 +75,17 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     private func waitUntil(
-        timeout: Duration = .seconds(10),
+        timeout: TimeInterval = 10,
         condition: @escaping @MainActor () -> Bool,
         file: StaticString = #filePath,
         line: UInt = #line
     ) async {
-        let deadline = ContinuousClock.now + timeout
-        while ContinuousClock.now < deadline {
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
             if condition() {
                 return
             }
-            try? await Task.sleep(for: .milliseconds(10))
+            try? await Task.sleep(nanoseconds: 10_000_000)
         }
         XCTFail("Condition was not met in time", file: file, line: line)
     }

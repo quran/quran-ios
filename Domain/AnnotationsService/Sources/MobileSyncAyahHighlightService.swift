@@ -52,7 +52,7 @@ public struct MobileSyncAyahHighlightService {
 
     public func removeHighlight(for ayahs: [AyahNumber]) async throws {
         for ayah in ayahs {
-            _ = try await quranDataService.removeAyahHighlight(
+            _ = try await quranDataService.deleteAyahHighlight(
                 sura: Int32(ayah.sura.suraNumber),
                 ayah: Int32(ayah.ayah)
             )

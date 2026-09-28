@@ -54,7 +54,7 @@ public struct MobileSyncNoteService {
     }
 
     public func removeNote(_ note: QuranAnnotations.Note) async throws {
-        try await quranDataService.removeNote(id: note.id)
+        try await quranDataService.deleteNote(id: note.id)
     }
 
     // MARK: Internal

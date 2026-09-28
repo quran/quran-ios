@@ -72,8 +72,8 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         try await collectionService.createCollection(named: "Duas")
         var iterator = collectionService.collectionsSequence().makeAsyncIterator()
         let collections = try await iterator.next() ?? []
-        let duas = try XCTUnwrap(collections.first { $0.collection.name == "Duas" })
-        try await collectionService.addAyahBookmarkToCollection(collectionId: duas.collection.id, ayah: ayah(1))
+        let duas = try XCTUnwrap(collections.first { $0.name == "Duas" })
+        try await collectionService.addAyahBookmarkToCollection(collectionId: duas.id, ayah: ayah(1))
         let overlayService = VerseOverlayService()
         let observer = makeObserver(overlayService: overlayService)
         defer { observer.stop() }
@@ -82,8 +82,8 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         await waitForOverlays(overlayService) { $0.collectionVerses == [self.ayah(1)] }
 
         XCTAssertEqual(observer.collections.count, 2)
-        XCTAssertTrue(observer.collections.contains { $0.collection.isDefault })
-        XCTAssertTrue(observer.collections.contains { $0.collection.name == "Duas" })
+        XCTAssertTrue(observer.collections.contains { $0.isDefault })
+        XCTAssertTrue(observer.collections.contains { $0.name == "Duas" })
         XCTAssertEqual(overlayService.overlays.annotationsByVerse, [ayah(1): [.collection]])
         XCTAssertTrue(overlayService.overlays.colorHighlights.isEmpty)
     }
@@ -165,8 +165,8 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         try await readingBookmarkService.addReadingBookmark(at: .ayah(verse), slot: .purple)
         var iterator = collectionService.collectionsSequence().makeAsyncIterator()
         let collections = try await iterator.next() ?? []
-        let collection = try XCTUnwrap(collections.first { $0.collection.isDefault })
-        try await collectionService.addAyahBookmarkToCollection(collectionId: collection.collection.id, ayah: verse)
+        let collection = try XCTUnwrap(collections.first { $0.isDefault })
+        try await collectionService.addAyahBookmarkToCollection(collectionId: collection.id, ayah: verse)
         let overlayService = VerseOverlayService()
         overlayService.overlays.navigationTarget = verse
         overlayService.overlays.playingVerses = [verse]
@@ -199,8 +199,8 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         try await readingBookmarkService.addReadingBookmark(at: .ayah(verse), slot: .purple)
         var iterator = collectionService.collectionsSequence().makeAsyncIterator()
         let collections = try await iterator.next() ?? []
-        let collection = try XCTUnwrap(collections.first { $0.collection.isDefault })
-        try await collectionService.addAyahBookmarkToCollection(collectionId: collection.collection.id, ayah: verse)
+        let collection = try XCTUnwrap(collections.first { $0.isDefault })
+        try await collectionService.addAyahBookmarkToCollection(collectionId: collection.id, ayah: verse)
         let overlayService = VerseOverlayService()
         var observer: QuranAnnotationsObserver? = makeObserver(overlayService: overlayService)
         weak var weakObserver = observer

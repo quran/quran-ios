@@ -7,60 +7,10 @@
 
 import Foundation
 @preconcurrency import MobileSync
+import QuranAnnotations
 import QuranKit
 import ReadingService
 import Utilities
-
-public struct AyahBookmarkCollection: Identifiable {
-    public init(collection: Collection_, bookmarks: [AyahCollectionBookmark]) {
-        self.collection = collection
-        self.bookmarks = bookmarks
-    }
-
-    public let collection: Collection_
-    public let bookmarks: [AyahCollectionBookmark]
-
-    public var id: String { collection.id }
-    public var canDelete: Bool { !collection.isSystem }
-    public var canRename: Bool { !collection.isSystem }
-}
-
-public struct AyahCollectionBookmark: Identifiable {
-    public let bookmark: CollectionAyahBookmark
-    public let ayah: AyahNumber
-
-    public var id: String { bookmark.bookmarkId }
-}
-
-private enum AyahBookmarkCollectionName {
-    static let oldPageBookmarks = "Old Page Bookmarks"
-}
-
-public enum AyahBookmarkCollectionKind: Equatable {
-    case defaultBookmarks
-    case oldPageBookmarks
-    case user
-
-    fileprivate init(collection: Collection_) {
-        if collection.isDefault {
-            self = .defaultBookmarks
-        } else if collection.name.caseInsensitiveCompare(AyahBookmarkCollectionName.oldPageBookmarks) == .orderedSame {
-            self = .oldPageBookmarks
-        } else {
-            self = .user
-        }
-    }
-
-    public var isOldPageBookmarks: Bool {
-        self == .oldPageBookmarks
-    }
-}
-
-extension AyahBookmarkCollection {
-    public var kind: AyahBookmarkCollectionKind {
-        AyahBookmarkCollectionKind(collection: collection)
-    }
-}
 
 public struct AyahBookmarkCollectionService {
     // MARK: Lifecycle
@@ -97,14 +47,14 @@ public struct AyahBookmarkCollectionService {
 
     public func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {
         try await quranDataService.removeAyahBookmarkFromCollection(
-            collectionId: bookmark.bookmark.collectionId,
-            bookmarkId: bookmark.bookmark.bookmarkId
+            collectionId: bookmark.collectionID,
+            bookmarkId: bookmark.id
         )
     }
 
     public func addAyahs(_ ayahs: [AyahNumber], toCollectionWithID collectionID: String) async throws {
         let collections = try await loadStoredCollections()
-        guard let collection = collections.first(where: { $0.collection.id == collectionID }) else {
+        guard let collection = collections.first(where: { $0.id == collectionID }) else {
             return
         }
 
@@ -113,7 +63,7 @@ public struct AyahBookmarkCollectionService {
 
     public func removeAyahs(_ ayahs: [AyahNumber], fromCollectionWithID collectionID: String) async throws {
         let collections = try await loadStoredCollections()
-        guard let collection = collections.first(where: { $0.collection.id == collectionID }) else {
+        guard let collection = collections.first(where: { $0.id == collectionID }) else {
             return
         }
 
@@ -137,7 +87,10 @@ public struct AyahBookmarkCollectionService {
                 return nil
             }
             return AyahBookmarkCollection(
-                collection: collection.collection,
+                id: collection.collection.id,
+                name: collection.collection.name,
+                isDefault: collection.collection.isDefault,
+                isSystem: collection.collection.isSystem,
                 bookmarks: collection.bookmarks.compactMap { bookmark(for: $0, quran: quran) }
             )
         }
@@ -173,7 +126,7 @@ public struct AyahBookmarkCollectionService {
     ) async throws {
         for ayah in Self.ayahsToAdd(ayahs, to: collection) {
             try await addAyahBookmarkToCollection(
-                collectionId: collection.collection.id,
+                collectionId: collection.id,
                 ayah: ayah
             )
         }
@@ -200,7 +153,7 @@ public struct AyahBookmarkCollectionService {
             return nil
         }
 
-        return AyahCollectionBookmark(bookmark: bookmark, ayah: ayah)
+        return AyahCollectionBookmark(id: bookmark.bookmarkId, collectionID: bookmark.collectionId, ayah: ayah)
     }
 }
 #endif

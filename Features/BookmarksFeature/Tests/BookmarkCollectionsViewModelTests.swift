@@ -19,7 +19,7 @@ import XCTest
 @MainActor
 final class BookmarkCollectionsViewModelTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared
-    private let oldPageBookmarksCollectionName = "Old Page Bookmarks"
+    private let oldPageBookmarksCollectionName = AyahBookmarkCollection.oldPageBookmarksName
 
     override func setUp() async throws {
         try await super.setUp()
@@ -40,7 +40,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             collection(name: "A Collection"),
         ])
 
-        XCTAssertEqual(collections.map(\.collection.name), [
+        XCTAssertEqual(collections.map(\.name), [
             "A Collection",
             "B Collection",
             "Z Collection",
@@ -53,7 +53,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             collection(name: oldPageBookmarksCollectionName),
         ])
 
-        XCTAssertEqual(collections.map(\.collection.name), [
+        XCTAssertEqual(collections.map(\.name), [
             oldPageBookmarksCollectionName,
             "Personal",
         ])
@@ -67,7 +67,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             collection(name: "Default", id: "__default__", isDefault: true, isSystem: true),
         ])
 
-        XCTAssertEqual(collections.map(\.collection.name), [
+        XCTAssertEqual(collections.map(\.name), [
             "Default",
             oldPageBookmarksCollectionName,
             "A Collection",
@@ -339,7 +339,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let stored = try await storedCollections()
         let collection = try XCTUnwrap(
             AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
-                .first { !$0.collection.isDefault }
+                .first { !$0.isDefault }
         )
         let sut = makeSUT(collectionService: service)
 
@@ -371,7 +371,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         }
         let collection = try XCTUnwrap(
             AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
-                .first { $0.collection.name == "Personal" }
+                .first { $0.name == "Personal" }
         )
         let sut = makeSUT(collectionService: service)
 
@@ -490,7 +490,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let stored = try await storedCollections()
         let collection = try XCTUnwrap(
             AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
-                .first { !$0.collection.isDefault }
+                .first { !$0.isDefault }
         )
         let navigationController = UINavigationController()
         let sut = makeSUT(
@@ -501,7 +501,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         sut.showCollection(collection)
 
         XCTAssertTrue(navigationController.topViewController is AyahSetViewController)
-        XCTAssertEqual(navigationController.topViewController?.title, collection.collection.name)
+        XCTAssertEqual(navigationController.topViewController?.title, collection.name)
     }
 
     func test_showHighlights_pushesAyahSetViewController() throws {
@@ -611,16 +611,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         isDefault: Bool = false,
         isSystem: Bool = false
     ) -> AyahBookmarkCollection {
-        AyahBookmarkCollection(
-            collection: Collection_(
-                name: name,
-                lastUpdated: .distantPast,
-                id: id ?? name,
-                isDefault: isDefault,
-                isSystem: isSystem
-            ),
-            bookmarks: []
-        )
+        AyahBookmarkCollection(id: id ?? name, name: name, isDefault: isDefault, isSystem: isSystem, bookmarks: [])
     }
 
     private func waitUntil(

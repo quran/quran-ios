@@ -54,7 +54,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             ayahBookmarkCollectionService: fixture.collectionService,
             ayahHighlightService: fixture.highlightService
         )
-        let study = try XCTUnwrap(sut.displayedCollections.first { $0.collection.name == "Study" })
+        let study = try XCTUnwrap(sut.displayedCollections.first { $0.name == "Study" })
         XCTAssertEqual(sut.collectionSelection(for: study), .mixed)
 
         await sut.toggleCollection(study)
@@ -154,11 +154,11 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         try await collectionService.createCollection(named: "Study")
 
         var collections = try await mappedCollections()
-        let study = try XCTUnwrap(collections.first { $0.collection.name == "Study" })
+        let study = try XCTUnwrap(collections.first { $0.name == "Study" })
         for verse in verses {
             try await highlightService.setHighlight(.red, for: [verse])
         }
-        try await collectionService.addAyahBookmarkToCollection(collectionId: study.collection.id, ayah: verses[0])
+        try await collectionService.addAyahBookmarkToCollection(collectionId: study.id, ayah: verses[0])
         collections = try await mappedCollections()
         return (collectionService, highlightService, collections, try await storedHighlights(using: highlightService))
     }

@@ -13,7 +13,7 @@ extension AyahBookmarkCollection {
         case .oldPageBookmarks:
             l("bookmarks.old-page-bookmarks")
         case .user:
-            collection.name
+            name
         }
     }
 

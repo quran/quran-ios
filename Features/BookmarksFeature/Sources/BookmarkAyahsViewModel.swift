@@ -110,11 +110,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
     }
 
     func collectionSelection(for collection: AyahBookmarkCollection) -> CollectionSelection {
-        collectionSelections[collection.collection.id] ?? .unselected
+        collectionSelections[collection.id] ?? .unselected
     }
 
     func toggleCollection(_ collection: AyahBookmarkCollection) async {
-        let id = collection.collection.id
+        let id = collection.id
         guard !updatingCollectionIDs.contains(id) else {
             return
         }
@@ -150,7 +150,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
     }
 
     func isUpdatingCollection(_ collection: AyahBookmarkCollection) -> Bool {
-        updatingCollectionIDs.contains(collection.collection.id)
+        updatingCollectionIDs.contains(collection.id)
     }
 
     func presentAddCollection() {
@@ -185,11 +185,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
         self.collections = collections
 
         let displayedCollections = BookmarkCollectionsViewModel.displayedCollections(from: collections)
-        let displayedCollectionIDs = Set(displayedCollections.map(\.collection.id))
+        let displayedCollectionIDs = Set(displayedCollections.map(\.id))
         collectionSelections = collectionSelections.filter { displayedCollectionIDs.contains($0.key) }
 
         for collection in displayedCollections {
-            let id = collection.collection.id
+            let id = collection.id
             if !updatingCollectionIDs.contains(id) {
                 collectionSelections[id] = Self.collectionSelection(for: verses, in: collection)
             }

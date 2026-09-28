@@ -28,7 +28,7 @@ protocol ManageableAyahSetDataSource: AyahSetDataSource {
 
 struct BookmarkCollectionAyahSetDataSource: ManageableAyahSetDataSource {
     init(collection: AyahBookmarkCollection, service: AyahBookmarkCollectionService) {
-        collectionID = collection.collection.id
+        collectionID = collection.id
         initialContent = Self.content(collection)
         self.service = service
     }
@@ -41,7 +41,7 @@ struct BookmarkCollectionAyahSetDataSource: ManageableAyahSetDataSource {
         return .init(
             service.collectionsSequence()
                 .map { collections in
-                    guard let collection = collections.first(where: { $0.collection.id == collectionID }) else {
+                    guard let collection = collections.first(where: { $0.id == collectionID }) else {
                         return initialContent
                     }
                     return Self.content(collection)

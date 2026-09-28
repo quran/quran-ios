@@ -126,6 +126,20 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "LegacyDataPersistenceTests",
+        "name" : "LegacyDataPersistenceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "LegacyDataMigrationTests",
+        "name" : "LegacyDataMigrationTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "NetworkSupportTests",
         "name" : "NetworkSupportTests"
       }

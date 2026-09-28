@@ -248,6 +248,17 @@ private func dataTargets() -> [[Target]] {
             "CoreDataPersistenceTestSupport",
         ]),
 
+        target(type, name: "LegacyDataPersistence", dependencies: [
+            "CoreDataModel",
+            "CoreDataPersistence",
+            "QuranAnnotations",
+            "QuranKit",
+        ] + mobileSyncTargetDependencies, testDependencies: [
+            "CoreDataModel",
+            "CoreDataPersistenceTestSupport",
+            "QuranAnnotations",
+        ] + mobileSyncTargetDependencies),
+
         target(type, name: "NotePersistence", dependencies: [
             "CoreDataModel",
             "CoreDataPersistence",
@@ -547,6 +558,20 @@ private func domainTargets() -> [[Target]] {
             "PageBookmarkPersistence",
             "QuranKit",
         ]),
+
+        target(type, name: "LegacyDataMigration", dependencies: [
+            "LegacyDataPersistence",
+            "Preferences",
+            "VLogging",
+        ] + mobileSyncTargetDependencies, testDependencies: [
+            "AsyncUtilitiesForTesting",
+            "CoreDataModel",
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
+            "LegacyDataPersistence",
+            "MobileSyncTestSupport",
+            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+        ] + mobileSyncTargetDependencies),
 
         target(type, name: "SettingsService", hasTests: false, dependencies: [
             "Analytics",

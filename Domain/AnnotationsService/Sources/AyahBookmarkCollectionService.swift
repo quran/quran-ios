@@ -96,7 +96,10 @@ public struct AyahBookmarkCollectionService {
     }
 
     public func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {
-        try await quranDataService.removeAyahBookmarkFromCollection(bookmark.bookmark)
+        try await quranDataService.removeAyahBookmarkFromCollection(
+            collectionId: bookmark.bookmark.collectionId,
+            bookmarkId: bookmark.bookmark.bookmarkId
+        )
     }
 
     public func addAyahs(_ ayahs: [AyahNumber], toCollectionWithID collectionID: String) async throws {

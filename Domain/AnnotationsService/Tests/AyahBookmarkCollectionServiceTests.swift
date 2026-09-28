@@ -106,7 +106,7 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         let collections = try await iterator.next() ?? []
 
         XCTAssertEqual(collections.count, 1)
-        XCTAssertTrue(collections[0].collection.isDefault)
+        XCTAssertTrue(collections[0].isDefault)
     }
 
     private func storedCollection(

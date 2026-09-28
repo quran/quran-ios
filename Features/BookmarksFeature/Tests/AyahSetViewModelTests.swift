@@ -13,7 +13,7 @@ import XCTest
 @MainActor
 final class AyahSetViewModelTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared
-    private let oldPageBookmarksCollectionName = "Old Page Bookmarks"
+    private let oldPageBookmarksCollectionName = AyahBookmarkCollection.oldPageBookmarksName
 
     override func setUp() async throws {
         try await super.setUp()
@@ -33,7 +33,7 @@ final class AyahSetViewModelTests: XCTestCase {
         }
         let collection = try XCTUnwrap(
             AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
-                .first { !$0.collection.isDefault }
+                .first { !$0.isDefault }
         )
         let sut = makeSUT(collection: collection, service: service)
         let observed = expectation(description: "Observes persisted collection")
@@ -56,7 +56,7 @@ final class AyahSetViewModelTests: XCTestCase {
         let storedCollection = try await firstCollection()
         let ayah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1))
         try await service.addAyahBookmarkToCollection(
-            collectionId: storedCollection.collection.id,
+            collectionId: storedCollection.id,
             ayah: ayah
         )
         let collection = try await firstCollection()
@@ -93,7 +93,7 @@ final class AyahSetViewModelTests: XCTestCase {
         let collection = try XCTUnwrap(
             AyahBookmarkCollectionService
                 .collections(from: stored, quran: .hafsMadani1405)
-                .first { $0.collection.name == oldPageBookmarksCollectionName }
+                .first { $0.name == oldPageBookmarksCollectionName }
         )
         let bookmark = try XCTUnwrap(collection.bookmarks.first)
         let sut = makeSUT(collection: collection, service: service)
@@ -120,7 +120,7 @@ final class AyahSetViewModelTests: XCTestCase {
         await sut.renamePending()
 
         let renamedCollection = try await firstCollection()
-        XCTAssertEqual(renamedCollection.collection.name, "Duas")
+        XCTAssertEqual(renamedCollection.name, "Duas")
         XCTAssertNil(sut.error)
     }
 
@@ -151,7 +151,7 @@ final class AyahSetViewModelTests: XCTestCase {
         try await service.createCollection(named: "Personal")
         let storedCollection = try await firstCollection()
         try await service.addAyahBookmarkToCollection(
-            collectionId: storedCollection.collection.id,
+            collectionId: storedCollection.id,
             ayah: AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
         )
         let stored = try await storedCollections {
@@ -159,7 +159,7 @@ final class AyahSetViewModelTests: XCTestCase {
         }
         let collection = try XCTUnwrap(
             AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
-                .first { $0.collection.name == "Personal" }
+                .first { $0.name == "Personal" }
         )
         var didDeleteCollection = false
         let sut = makeSUT(
@@ -183,7 +183,7 @@ final class AyahSetViewModelTests: XCTestCase {
         let storedCollection = try await firstCollection()
         let ayah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
         try await service.addAyahBookmarkToCollection(
-            collectionId: storedCollection.collection.id,
+            collectionId: storedCollection.id,
             ayah: ayah
         )
         let collection = try await firstCollection()
@@ -315,7 +315,7 @@ final class AyahSetViewModelTests: XCTestCase {
         }
         return try XCTUnwrap(
             AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
-                .first { !$0.collection.isDefault }
+                .first { !$0.isDefault }
         )
     }
 

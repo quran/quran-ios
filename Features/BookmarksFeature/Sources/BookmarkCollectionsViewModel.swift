@@ -62,7 +62,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     var oldPageBookmarksCollection: AyahBookmarkCollection? {
         collections.first {
-            $0.kind.isOldPageBookmarks
+            $0.kind == .oldPageBookmarks
         }
     }
 
@@ -80,14 +80,14 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
         collections.sorted { lhs, rhs in
-            lhs.collection.name.localizedCaseInsensitiveCompare(rhs.collection.name) == .orderedAscending
+            lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
         }
     }
 
     static func deletableCollections(from collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
         let deletableCollections = collections.filter(\.canDelete)
-        let oldPageBookmarks = deletableCollections.filter(\.kind.isOldPageBookmarks)
-        let remainingCollections = deletableCollections.filter { !$0.kind.isOldPageBookmarks }
+        let oldPageBookmarks = deletableCollections.filter { $0.kind == .oldPageBookmarks }
+        let remainingCollections = deletableCollections.filter { $0.kind != .oldPageBookmarks }
         return oldPageBookmarks + remainingCollections
     }
 
@@ -174,7 +174,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             return
         }
         do {
-            try await ayahBookmarkCollectionService.removeCollection(id: collection.collection.id)
+            try await ayahBookmarkCollectionService.removeCollection(id: collection.id)
         } catch {
             logger.error("Quran Sync: failed to remove bookmark collection: \(error)")
             self.error = error

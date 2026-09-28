@@ -6,6 +6,7 @@
 import AnnotationsService
 import Localization
 import NoorUI
+import QuranAnnotations
 import SwiftUI
 import UIx
 
@@ -28,7 +29,7 @@ struct BookmarkAyahsView: View {
             }
 
             NoorBasicSection(title: l("bookmarks.collections.mine")) {
-                ForEach(viewModel.displayedCollections, id: \.collection.id) { collection in
+                ForEach(viewModel.displayedCollections, id: \.id) { collection in
                     collectionRow(collection)
                 }
 

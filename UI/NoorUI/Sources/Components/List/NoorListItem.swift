@@ -276,6 +276,7 @@ public struct NoorListItem: View {
             Text(text)
                 .foregroundColor(.secondaryLabel)
                 .fontWeight(.light)
+                .fixedSize()
                 .accessibilityLabel(accessibilityLabel ?? text)
         case .disclosureIndicator:
             DisclosureIndicator()

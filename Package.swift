@@ -646,11 +646,18 @@ private func featuresTargets() -> [[Target]] {
             "MobileSyncTestSupport",
         ]),
 
-        target(type, name: "WhatsNewFeature", hasTests: false, dependencies: [
+        target(type, name: "WhatsNewFeature", dependencies: [
             "NoorUI",
             "Analytics",
+            "AppMigrator",
+            "Localization",
+            "UIx",
+            "VLogging",
         ], resources: [
             .copy("whats-new.plist"),
+        ], testDependencies: [
+            "Analytics",
+            "AppMigrator",
         ]),
 
         target(type, name: "WordPointerFeature", hasTests: false, dependencies: [
@@ -925,6 +932,8 @@ private func featuresTargets() -> [[Target]] {
         ] + mobileSyncTargetDependencies),
 
         target(type, name: "AppStructureFeature", dependencies: [
+            "AppIconFeature",
+            "AppMigrator",
             "Crashing",
             "FeaturesSupport",
             "NoorUI",

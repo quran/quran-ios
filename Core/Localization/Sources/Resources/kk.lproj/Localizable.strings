@@ -315,23 +315,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "Жалғастыру";
 
-// New app icon announcement
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.title" = "Жаңа белгіше";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.body" = "Келесі жаңартуымызда басты экрандағы Құран қолданбасының белгішесі өзгереді. Бұл жаңа белгіше енді Алланың сөзіне негізделген құралдар топтамасының ортақ нышаны болады. Толығырақ ақпарат жақында.";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.now" = "ҚАЗІР";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.coming_soon" = "ЖАҚЫНДА";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.same_app.title" = "Сол қолданба, жаңа белгіше";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.same_app.body" = "Барлық бетбелгілеріңіз, оқу барысыңыз және параметрлеріңіз өз орнында қалады.";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.release.title" = "Келесі нұсқада шығады";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.release.body" = "Басты экранда жаңа белгішені көру үшін соңғы нұсқаға жаңартыңыз.";
+// New app icon
+// Metadata: Translated by AI; human review required.
+"new.app_icon.body" = "Құран қолданбасы енді Алланың сөзіне негізделген құралдар топтамасының ортақ нышанын иеленді. Бетбелгілеріңіз, жазбаларыңыз және оқу барысыңыз қалдырған жеріңізде тұр.";
+// Metadata: Translated by AI; human review required.
+"new.app_icon.choose_another" = "Басқа белгіше таңдау";
+// Metadata: Translated by AI; human review required.
+"new.app_icon.title" = "Жаңа белгішеміз келді";
 
 // Reading layouts
 // Metadata: Translated by ChatGPT; human review required.

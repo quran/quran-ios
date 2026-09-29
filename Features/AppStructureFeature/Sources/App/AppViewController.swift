@@ -18,7 +18,6 @@
 //  GNU General Public License for more details.
 //
 
-import Analytics
 import Crashing
 import FeaturesSupport
 import QuranKit
@@ -32,9 +31,10 @@ protocol AppPresenter: UITabBarController {
 class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPresenter {
     // MARK: Lifecycle
 
-    init(analytics: AnalyticsLibrary, interactor: AppInteractor) {
+    init(interactor: AppInteractor, whatsNewController: AppWhatsNewController, isAppIconAvailable: Bool) {
         self.interactor = interactor
-        whatsNewController = AppWhatsNewController(analytics: analytics)
+        self.whatsNewController = whatsNewController
+        self.isAppIconAvailable = isAppIconAvailable
         super.init(nibName: nil, bundle: nil)
         interactor.presenter = self
         interactor.start()
@@ -102,19 +102,36 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         guard !hasStartedPostLaunchPresentation else { return }
         hasStartedPostLaunchPresentation = true
 
-        whatsNewController.presentWhatsNewIfNeeded(from: self)
+        whatsNewController.presentWhatsNewIfNeeded(
+            from: self,
+            onChooseAnotherIcon: isAppIconAvailable ? { [weak self] in self?.showAppIcons() } : nil
+        )
     }
 
     // MARK: Private
 
     private let interactor: AppInteractor
     private let whatsNewController: AppWhatsNewController
+    private let isAppIconAvailable: Bool
     private var hasStartedPostLaunchPresentation = false
 
     private let tabNames = ["home", "notes", "bookmarks", "search", "settings"]
 
     private var visibleViewController: UIViewController? {
         presentedViewController ?? selectedViewController
+    }
+
+    /// Opens the App Icon list in the Settings tab.
+    private func showAppIcons() {
+        guard let index = viewControllers?.firstIndex(where: { $0 is SettingsTabViewController }),
+              let settingsTab = viewControllers?[index] as? SettingsTabViewController
+        else {
+            logger.error("App icon: settings tab is unavailable")
+            return
+        }
+        selectedIndex = index
+        updateCrashContext(selectedIndex: index)
+        settingsTab.showAppIcons()
     }
 
     private func updateCrashContext(selectedIndex: Int) {

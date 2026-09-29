@@ -333,23 +333,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "new.action" = "Davom etish";
 
-// New app icon announcement
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.title" = "Yangi ilova belgisi";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.body" = "Keyingi yangilanishimizda bosh ekraningizdagi Qur’on ilovasi belgisi o‘zgaradi. Bu yangi belgi endi Allohning kalomi atrofida yaratilgan vositalar oilasining umumiy ramzidir. Batafsil ma’lumot tez orada.";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.now" = "HOZIR";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.coming_soon" = "TEZ ORADA";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.same_app.title" = "O‘sha ilova, yangi belgi";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.same_app.body" = "Barcha xatcho‘plaringiz, o‘qish jarayoningiz va sozlamalaringiz aynan o‘z joyida qoladi.";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.release.title" = "Keyingi versiyada taqdim etiladi";
-// Metadata: Translated by ChatGPT; human review required.
-"new.icon_announcement.release.body" = "Bosh ekraningizda yangi belgini ko‘rish uchun eng so‘nggi versiyaga yangilang.";
+// New app icon
+// Metadata: Translated by AI; human review required.
+"new.app_icon.body" = "Qur’on ilovasi endi Allohning kalomi atrofida yaratilgan vositalar oilasining umumiy ramzini o‘zida aks ettiradi. Xatcho‘plaringiz, eslatmalaringiz va o‘qish jarayoningiz aynan qoldirgan joyingizda.";
+// Metadata: Translated by AI; human review required.
+"new.app_icon.choose_another" = "Boshqa belgi tanlash";
+// Metadata: Translated by AI; human review required.
+"new.app_icon.title" = "Yangi belgimiz shu yerda";
 
 // Reading layouts
 // Metadata: Translated by ChatGPT; human review required.

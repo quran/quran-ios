@@ -16,6 +16,13 @@ struct AppWhatsNew: Decodable {
 struct WhatsNewVersion: Decodable {
     let version: String
     let items: [WhatsNewItem]
+    /// A full-screen reveal, presented before any feature items.
+    let reveal: WhatsNewReveal?
+}
+
+enum WhatsNewReveal: String, Decodable {
+    /// The "Nightfall" reveal of the new app icon.
+    case appIcon = "app-icon"
 }
 
 struct WhatsNewItem: Decodable {

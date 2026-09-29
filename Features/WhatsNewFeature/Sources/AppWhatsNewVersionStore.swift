@@ -9,8 +9,14 @@
 import Preferences
 
 final class AppWhatsNewVersionStore {
+    // MARK: Internal
+
     @Preference(whatsNewVersion)
     var lastSeenVersion: String?
+
+    static func reset() {
+        Preferences.shared.removeValueForKey(whatsNewVersion)
+    }
 
     // MARK: Private
 

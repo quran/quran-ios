@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,25 +18,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="quran-engine2" translatesAutoresizingMaskIntoConstraints="NO" id="nnX-PI-GYt">
-                                <rect key="frame" x="20" y="-406" width="353" height="1464"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="app-glyph" translatesAutoresizingMaskIntoConstraints="NO" id="nnX-PI-GYt">
+                                <rect key="frame" x="130" y="359" width="133" height="133"/>
+                                <color key="tintColor" systemColor="labelColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="132.76" id="Wd8-Gl-Yp1"/>
+                                    <constraint firstAttribute="width" secondItem="nnX-PI-GYt" secondAttribute="height" multiplier="1:1" id="As9-Gl-Yp2"/>
+                                </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="QuranEngine Example!  Repo: https://github.com/quran/quran-ios" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OBk-7F-jBS">
-                                <rect key="frame" x="20" y="939" width="353" height="61"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="QuranEngine" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OBk-7F-jBS">
+                                <rect key="frame" x="146" y="480.5" width="101" height="21"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <color key="textColor" name="AccentColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="OBk-7F-jBS" firstAttribute="top" secondItem="nnX-PI-GYt" secondAttribute="bottom" constant="-119" id="Fde-Yi-zbb"/>
-                            <constraint firstItem="nnX-PI-GYt" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-100" id="Lx6-SN-1fZ"/>
-                            <constraint firstItem="nnX-PI-GYt" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="20" id="mKZ-J6-HTN"/>
-                            <constraint firstItem="OBk-7F-jBS" firstAttribute="trailing" secondItem="nnX-PI-GYt" secondAttribute="trailing" id="r2i-Lo-2zW"/>
-                            <constraint firstItem="OBk-7F-jBS" firstAttribute="leading" secondItem="nnX-PI-GYt" secondAttribute="leading" id="rEL-77-kqA"/>
-                            <constraint firstAttribute="trailing" secondItem="nnX-PI-GYt" secondAttribute="trailing" constant="20" id="ww1-wr-8ww"/>
+                            <constraint firstItem="OBk-7F-jBS" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Fde-Yi-zbb"/>
+                            <constraint firstItem="OBk-7F-jBS" firstAttribute="top" secondItem="nnX-PI-GYt" secondAttribute="bottom" constant="-11.35" id="r2i-Lo-2zW"/>
+                            <constraint firstItem="nnX-PI-GYt" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-1" id="Lx6-SN-1fZ"/>
+                            <constraint firstItem="nnX-PI-GYt" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="mKZ-J6-HTN"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -45,7 +49,13 @@
         </scene>
     </scenes>
     <resources>
-        <image name="quran-engine2" width="1464" height="1464"/>
+        <image name="app-glyph" width="466" height="466"/>
+        <namedColor name="AccentColor">
+            <color red="0.52941176470588236" green="0.29803921568627451" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

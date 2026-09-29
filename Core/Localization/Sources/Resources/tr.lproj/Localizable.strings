@@ -80,8 +80,11 @@
 
 "theme.light" = "Açık";
 "theme.dark" = "Koyu";
-"theme.auto" = "Otomatik";
+// Metadata: Translated by AI; human review required.
+"theme.match_device" = "Cihazla aynı";
 "theme.auto.message" = "Kur'an uygulamasının teması iPhone ayarlarına göre belirlenecek";
+// Metadata: Translated by AI; human review required.
+"theme.appearance" = "Görünüm";
 
 // MARK: - Tabs
 

@@ -36,6 +36,7 @@ public enum NoorSystemImage: String {
     case signOut = "rectangle.portrait.and.arrow.right"
     case search = "magnifyingglass"
     case mushafs = "books.vertical.fill"
+    case appearance = "circle.lefthalf.filled"
     case debug = "ant"
     case play = "play.fill"
     case stop = "stop.fill"

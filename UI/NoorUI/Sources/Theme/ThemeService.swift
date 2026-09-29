@@ -7,6 +7,7 @@
 //
 
 import Combine
+import Localization
 import Preferences
 import UIKit
 
@@ -88,7 +89,7 @@ public class ThemeService {
     }
 }
 
-public enum AppearanceMode: Int, CustomStringConvertible {
+public enum AppearanceMode: Int, CaseIterable, CustomStringConvertible {
     case light = 0
     case dark = 1
     case auto = 2
@@ -100,6 +101,22 @@ public enum AppearanceMode: Int, CustomStringConvertible {
         case .light: return "light"
         case .dark: return "dark"
         case .auto: return "auto"
+        }
+    }
+
+    public var localizedName: String {
+        switch self {
+        case .auto: l("theme.match_device")
+        case .light: l("theme.light")
+        case .dark: l("theme.dark")
+        }
+    }
+
+    public var systemImageName: String {
+        switch self {
+        case .light: "sun.horizon.fill"
+        case .dark: "moon.stars.fill"
+        case .auto: "circle.lefthalf.filled"
         }
     }
 }

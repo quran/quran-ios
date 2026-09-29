@@ -93,10 +93,12 @@
 "theme.light" = "Жарық";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.dark" = "Қараңғы";
-// Metadata: Translated by ChatGPT; human review required.
-"theme.auto" = "Автоматты";
+// Metadata: Translated by AI; human review required.
+"theme.match_device" = "Құрылғыға сәйкес";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.auto.message" = "Құран қосымшасы iPhone-ның көрініс параметрлеріне сәйкес келеді";
+// Metadata: Translated by AI; human review required.
+"theme.appearance" = "Көрініс";
 
 // MARK: - Tabs
 

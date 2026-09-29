@@ -123,6 +123,15 @@ final class SettingsRootViewModel: ObservableObject {
         }
     }
 
+    func selectAppearanceMode(_ mode: AppearanceMode) {
+        guard mode != appearanceMode else {
+            return
+        }
+        logger.info("Settings: appearance mode changed to \(mode)")
+        analytics.changeAppearanceMode(mode)
+        appearanceMode = mode
+    }
+
     func navigateToAudioEndSelector() {
         logger.info("Settings: presentAudioEndSelector")
         showSingleChoiceSelector(
@@ -272,5 +281,11 @@ final class SettingsRootViewModel: ObservableObject {
         )
         viewController.title = title
         navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+private extension AnalyticsLibrary {
+    func changeAppearanceMode(_ mode: AppearanceMode) {
+        logEvent("ChangeAppearanceMode", value: mode.description)
     }
 }

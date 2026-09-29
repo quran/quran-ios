@@ -75,8 +75,11 @@
 
 "theme.light" = "Licht";
 "theme.dark" = "Donker";
-"theme.auto" = "Auto";
+// Metadata: Translated by AI; human review required.
+"theme.match_device" = "Zoals apparaat";
 "theme.auto.message" = "De Koran-app houdt zich aan de weergave-instelling van uw iPhone";
+// Metadata: Translated by AI; human review required.
+"theme.appearance" = "Weergave";
 
 // MARK: - Tabs
 

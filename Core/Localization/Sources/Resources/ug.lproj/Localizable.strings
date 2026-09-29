@@ -107,10 +107,12 @@
 "theme.light" = "يورۇق";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.dark" = "قاراڭغۇ";
-// Metadata: Translated by ChatGPT; human review required.
-"theme.auto" = "ئاپتوماتىك";
+// Metadata: Translated by AI; human review required.
+"theme.match_device" = "ئۈسكۈنىگە ماس";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.auto.message" = "قۇرئان ئەپى iPhone-نىڭ كۆرۈنمە تەڭشەكلىرىگە ماسلىشىدۇ";
+// Metadata: Translated by AI; human review required.
+"theme.appearance" = "كۆرۈنمە";
 
 // MARK: - Tabs
 

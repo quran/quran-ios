@@ -107,10 +107,12 @@
 "theme.light" = "Yorug'";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.dark" = "Qorong'u";
-// Metadata: Translated by ChatGPT; human review required.
-"theme.auto" = "Avtomatik";
+// Metadata: Translated by AI; human review required.
+"theme.match_device" = "Qurilmaga mos";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.auto.message" = "Qur'on ilovasi iPhone-ning ko'rinish sozlamalariga rioya qiladi";
+// Metadata: Translated by AI; human review required.
+"theme.appearance" = "Ko'rinish";
 
 // MARK: - Tabs
 

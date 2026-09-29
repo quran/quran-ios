@@ -17,7 +17,7 @@ struct SettingsRootView: View {
     var body: some View {
         #if QURAN_SYNC
         SettingsRootViewUI(
-            appearanceMode: $viewModel.appearanceMode,
+            appearanceMode: appearanceMode,
             streamingEnabled: $viewModel.streamingEnabled,
             error: $viewModel.error,
             audioEnd: viewModel.audioEnd.name,
@@ -39,7 +39,7 @@ struct SettingsRootView: View {
         )
         #else
         SettingsRootViewUI(
-            appearanceMode: $viewModel.appearanceMode,
+            appearanceMode: appearanceMode,
             streamingEnabled: $viewModel.streamingEnabled,
             error: $viewModel.error,
             audioEnd: viewModel.audioEnd.name,
@@ -54,6 +54,13 @@ struct SettingsRootView: View {
             navigateToDiagnotics: { viewModel.navigateToDiagnotics() }
         )
         #endif
+    }
+
+    private var appearanceMode: Binding<AppearanceMode> {
+        Binding(
+            get: { viewModel.appearanceMode },
+            set: { viewModel.selectAppearanceMode($0) }
+        )
     }
 }
 
@@ -101,9 +108,7 @@ private struct SettingsRootViewUI: View {
             #endif
 
             NoorBasicSection {
-                VStack {
-                    AppearanceModeSelector(appearanceMode: $appearanceMode)
-                }
+                AppearanceMenu(appearanceMode: $appearanceMode)
             }
 
             NoorBasicSection {
@@ -201,9 +206,9 @@ private struct SettingsRootViewUI: View {
     }
 }
 
-struct SettingsRootView_Previews: PreviewProvider {
+#Preview {
     struct Container: View {
-        @State var appearanceMode: AppearanceMode
+        @State var appearanceMode = AppearanceMode.auto
         @State var streamingEnabled = false
 
         var body: some View {
@@ -248,12 +253,5 @@ struct SettingsRootView_Previews: PreviewProvider {
             #endif
         }
     }
-
-    // MARK: Internal
-
-    static var previews: some View {
-        VStack {
-            Container(appearanceMode: .auto)
-        }
-    }
+    return Container()
 }

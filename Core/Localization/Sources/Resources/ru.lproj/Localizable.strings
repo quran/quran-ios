@@ -107,10 +107,12 @@
 "theme.light" = "Светлая";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.dark" = "Темная";
-// Metadata: Translated by ChatGPT; human review required.
-"theme.auto" = "Авто";
+// Metadata: Translated by AI; human review required.
+"theme.match_device" = "Как на устройстве";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.auto.message" = "Приложение Коран будет соответствовать настройкам внешнего вида вашего iPhone";
+// Metadata: Translated by AI; human review required.
+"theme.appearance" = "Оформление";
 
 // MARK: - Tabs
 

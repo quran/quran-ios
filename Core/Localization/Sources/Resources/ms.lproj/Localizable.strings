@@ -90,10 +90,12 @@
 "theme.light" = "Cerah";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.dark" = "Gelap";
-// Metadata: Translated by ChatGPT; human review required.
-"theme.auto" = "Auto";
+// Metadata: Translated by AI; human review required.
+"theme.match_device" = "Ikut peranti";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.auto.message" = "Aplikasi Quran akan mematuhi tetapan penampilan iPhone anda";
+// Metadata: Translated by AI; human review required.
+"theme.appearance" = "Penampilan";
 
 // MARK: - Tabs
 

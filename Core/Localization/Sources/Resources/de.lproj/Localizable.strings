@@ -107,10 +107,12 @@
 "theme.light" = "Hell";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.dark" = "Dunkel";
-// Metadata: Translated by ChatGPT; human review required.
-"theme.auto" = "Auto";
+// Metadata: Translated by AI; human review required.
+"theme.match_device" = "Wie Gerät";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.auto.message" = "Quran-App folgt den Erscheinungseinstellungen Ihres iPhones";
+// Metadata: Translated by AI; human review required.
+"theme.appearance" = "Erscheinungsbild";
 
 // MARK: - Tabs
 

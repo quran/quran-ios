@@ -95,8 +95,8 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             ayahBookmarkCollectionService: fixture.collectionService,
             ayahHighlightService: fixture.highlightService
         )
-        XCTAssertEqual(sut.highlightSelection, .mixed([.red]))
-        XCTAssertEqual(sut.partiallySelectedHighlightColors, [.red])
+        XCTAssertEqual(sut.highlightSelection, .mixed([.pink]))
+        XCTAssertEqual(sut.partiallySelectedHighlightColors, [.pink])
 
         await sut.selectHighlight(nil)
 
@@ -117,8 +117,8 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             ayahHighlightService: fixture.highlightService
         )
 
-        XCTAssertEqual(sut.highlightSelection, .mixed([.red, .green]))
-        XCTAssertEqual(sut.partiallySelectedHighlightColors, [.red, .green])
+        XCTAssertEqual(sut.highlightSelection, .mixed([.pink, .green]))
+        XCTAssertEqual(sut.partiallySelectedHighlightColors, [.pink, .green])
     }
 
     func test_titleShowsSingleAyah() {
@@ -156,7 +156,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         var collections = try await mappedCollections()
         let study = try XCTUnwrap(collections.first { $0.name == "Study" })
         for verse in verses {
-            try await highlightService.setHighlight(.red, for: [verse])
+            try await highlightService.setHighlight(.pink, for: [verse])
         }
         try await collectionService.addAyahBookmarkToCollection(collectionId: study.id, ayah: verses[0])
         collections = try await mappedCollections()

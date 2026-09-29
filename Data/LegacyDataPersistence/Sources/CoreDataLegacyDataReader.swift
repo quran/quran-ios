@@ -196,10 +196,10 @@ private func verse(of verse: MO_Verse) -> AyahNumber? {
     return AyahNumber(quran: .hafsMadani1405, sura: sura, ayah: ayah)
 }
 
-/// Unknown colors are red, like the notes list. MobileSync names that color pink.
+/// Unknown colors are pink, like the notes list.
 private func highlightColor(_ rawValue: Int?) -> AyahHighlightColor {
-    switch HighlightColor(rawValue: rawValue ?? HighlightColor.red.rawValue) ?? .red {
-    case .red: .pink
+    switch HighlightColor(rawValue: rawValue ?? HighlightColor.pink.rawValue) ?? .pink {
+    case .pink: .pink
     case .green: .green
     case .blue: .blue
     case .yellow: .yellow

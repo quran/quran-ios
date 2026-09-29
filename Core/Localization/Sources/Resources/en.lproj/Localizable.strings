@@ -236,6 +236,9 @@
 "highlight.color.blue" = "Blue";
 "highlight.color.yellow" = "Yellow";
 "highlight.color.purple" = "Purple";
+"highlight.color.pink" = "Pink";
+"highlight.color.teal" = "Teal";
+"highlight.color.orange" = "Orange";
 
 // MARK: - Reading Selector
 

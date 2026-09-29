@@ -383,10 +383,16 @@
 "highlight.color.blue" = "Blauw";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.green" = "Groen";
+// Metadata: Translated by AI; human review required.
+"highlight.color.orange" = "Oranje";
+// Metadata: Translated by AI; human review required.
+"highlight.color.pink" = "Roze";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.purple" = "Paars";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.red" = "Rood";
+// Metadata: Translated by AI; human review required.
+"highlight.color.teal" = "Blauwgroen";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.yellow" = "Geel";
 

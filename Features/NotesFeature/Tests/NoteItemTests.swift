@@ -61,7 +61,7 @@ final class NoteItemTests: XCTestCase {
             verses: [ayah],
             modifiedDate: Date(),
             text: body,
-            color: .red
+            color: .pink
         )
     }
     #endif

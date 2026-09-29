@@ -413,10 +413,16 @@
 "highlight.color.blue" = "Mavi";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.green" = "Yeşil";
+// Metadata: Translated by AI; human review required.
+"highlight.color.orange" = "Turuncu";
+// Metadata: Translated by AI; human review required.
+"highlight.color.pink" = "Pembe";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.purple" = "Mor";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.red" = "Kırmızı";
+// Metadata: Translated by AI; human review required.
+"highlight.color.teal" = "Petrol mavisi";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.yellow" = "Sarı";
 

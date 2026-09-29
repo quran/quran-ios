@@ -472,10 +472,16 @@
 "highlight.color.blue" = "蓝色";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.green" = "绿色";
+// Metadata: Translated by AI; human review required.
+"highlight.color.orange" = "橙色";
+// Metadata: Translated by AI; human review required.
+"highlight.color.pink" = "粉色";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.purple" = "紫色";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.red" = "红色";
+// Metadata: Translated by AI; human review required.
+"highlight.color.teal" = "蓝绿色";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.yellow" = "黄色";
 

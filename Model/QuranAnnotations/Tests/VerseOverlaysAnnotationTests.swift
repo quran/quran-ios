@@ -9,21 +9,21 @@ final class VerseOverlaysAnnotationTests: XCTestCase {
         let otherPage = Quran.hafsMadani1405.pages[1]
         var overlays = VerseOverlays()
         overlays.collectionVerses = [page.firstVerse, otherPage.firstVerse]
-        let ayahBookmark = bookmark(.green, at: page.firstVerse)
+        let ayahBookmark = bookmark(.teal, at: page.firstVerse)
         let pageBookmark = PlacedReadingBookmark(
-            id: "page", slot: .purple, placement: .page(page), modifiedOn: .distantPast
+            id: "page", slot: .orange, placement: .page(page), modifiedOn: .distantPast
         )
         overlays.readingBookmarks = [
             ayahBookmark, pageBookmark,
-            bookmark(.blue, at: otherPage.firstVerse),
-            PlacedReadingBookmark(id: "other-page", slot: .green, placement: .page(otherPage), modifiedOn: .distantPast),
+            bookmark(.red, at: otherPage.firstVerse),
+            PlacedReadingBookmark(id: "other-page", slot: .teal, placement: .page(otherPage), modifiedOn: .distantPast),
         ]
 
         let restricted = overlays.restricted(to: page)
 
         XCTAssertEqual(restricted.collectionVerses, [page.firstVerse])
         XCTAssertEqual(restricted.readingBookmarks, [ayahBookmark, pageBookmark])
-        XCTAssertEqual(restricted.annotationTypes(for: page.firstVerse), [.collection, .readingBookmark(.green)])
+        XCTAssertEqual(restricted.annotationTypes(for: page.firstVerse), [.collection, .readingBookmark(.teal)])
         XCTAssertTrue(restricted.annotationTypes(for: otherPage.firstVerse).isEmpty)
     }
 
@@ -35,11 +35,11 @@ final class VerseOverlaysAnnotationTests: XCTestCase {
         overlays.collectionVerses = [verse]
         overlays.colorHighlights = [page.verses[1]: .green]
         overlays.readingBookmarks = [
-            bookmark(.green, at: verse), bookmark(.purple, at: verse),
-            PlacedReadingBookmark(id: "page", slot: .blue, placement: .page(page), modifiedOn: .distantPast),
+            bookmark(.teal, at: verse), bookmark(.orange, at: verse),
+            PlacedReadingBookmark(id: "page", slot: .red, placement: .page(page), modifiedOn: .distantPast),
         ]
 
-        XCTAssertEqual(overlays.annotationTypes(for: verse), [.note, .collection, .readingBookmark(.green), .readingBookmark(.purple)])
+        XCTAssertEqual(overlays.annotationTypes(for: verse), [.note, .collection, .readingBookmark(.teal), .readingBookmark(.orange)])
         XCTAssertTrue(overlays.annotationTypes(for: page.verses[1]).isEmpty)
         XCTAssertEqual(overlays.annotationsByVerse, [verse: overlays.annotationTypes(for: verse)])
     }
@@ -47,14 +47,14 @@ final class VerseOverlaysAnnotationTests: XCTestCase {
     func test_renamingBookmark_preservesAnnotationWithoutScrolling() {
         let ayah = Quran.hafsMadani1405.suras[1].verses[4]
         var original = VerseOverlays()
-        original.readingBookmarks = [bookmark(.green, at: ayah)]
+        original.readingBookmarks = [bookmark(.teal, at: ayah)]
         var renamed = original
-        renamed.readingBookmarks = [bookmark(.green, at: ayah, name: "Hifz")]
+        renamed.readingBookmarks = [bookmark(.teal, at: ayah, name: "Hifz")]
 
-        XCTAssertEqual(renamed.annotationsByVerse, [ayah: [.readingBookmark(.green)]])
+        XCTAssertEqual(renamed.annotationsByVerse, [ayah: [.readingBookmark(.teal)]])
         XCTAssertNotEqual(renamed, original)
         XCTAssertFalse(renamed.needsScrolling(comparingTo: original))
-        renamed.readingBookmarks = [bookmark(.green, at: ayah)]
+        renamed.readingBookmarks = [bookmark(.teal, at: ayah)]
         XCTAssertEqual(renamed.annotationsByVerse, original.annotationsByVerse)
     }
 
@@ -66,8 +66,8 @@ final class VerseOverlaysAnnotationTests: XCTestCase {
         overlays.readingBookmarks = ReadingBookmarkSlot.allCases.map { bookmark($0, at: ayah) }
 
         XCTAssertEqual(overlays.annotationsByVerse, [ayah: [
-            .readingBookmark(.green), .readingBookmark(.purple),
-            .readingBookmark(.blue), .collection, .note,
+            .readingBookmark(.teal), .readingBookmark(.orange),
+            .readingBookmark(.red), .collection, .note,
         ]])
     }
 
@@ -76,11 +76,11 @@ final class VerseOverlaysAnnotationTests: XCTestCase {
         let second = Quran.hafsMadani1405.suras[1].verses[5]
         var overlays = VerseOverlays()
         overlays.notedVerses = [first]
-        overlays.readingBookmarks = [bookmark(.green, at: first), bookmark(.purple, at: first)]
+        overlays.readingBookmarks = [bookmark(.teal, at: first), bookmark(.orange, at: first)]
 
-        overlays.readingBookmarks = [bookmark(.green, at: second)]
+        overlays.readingBookmarks = [bookmark(.teal, at: second)]
 
-        XCTAssertEqual(overlays.annotationsByVerse, [first: [.note], second: [.readingBookmark(.green)]])
+        XCTAssertEqual(overlays.annotationsByVerse, [first: [.note], second: [.readingBookmark(.teal)]])
     }
 
     func test_annotationChanges_doNotScrollTheReader() {
@@ -95,7 +95,7 @@ final class VerseOverlaysAnnotationTests: XCTestCase {
     func test_pageBookmarks_doNotProduceAyahAnnotations() {
         var overlays = VerseOverlays()
         overlays.readingBookmarks = [PlacedReadingBookmark(
-            id: "green", slot: .green, placement: .page(Quran.hafsMadani1405.pages[0]),
+            id: "teal", slot: .teal, placement: .page(Quran.hafsMadani1405.pages[0]),
             modifiedOn: .distantPast, name: "Hifz"
         )]
 

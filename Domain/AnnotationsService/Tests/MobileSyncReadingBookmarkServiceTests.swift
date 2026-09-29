@@ -26,11 +26,11 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
         let ayah = ayah(255)
         let placement = PlacedReadingBookmark.Placement.ayah(ayah)
 
-        let created: PlacedReadingBookmark = try await service.addReadingBookmark(at: placement, slot: .green)
+        let created: PlacedReadingBookmark = try await service.addReadingBookmark(at: placement, slot: .teal)
         let stored = try await storedBookmark()
 
         XCTAssertEqual(created.placement, .ayah(ayah))
-        XCTAssertEqual(created.slot, .green)
+        XCTAssertEqual(created.slot, .teal)
         XCTAssertEqual(stored?.placement, .ayah(ayah))
         XCTAssertEqual(stored, ReadingBookmark(created))
     }
@@ -38,29 +38,29 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     func test_addReadingBookmark_replacesExistingBookmark() async throws {
         let original = ayah(254)
         let destination = ayah(255)
-        try await service.addReadingBookmark(at: .ayah(original), slot: .purple)
+        try await service.addReadingBookmark(at: .ayah(original), slot: .orange)
 
-        try await service.addReadingBookmark(at: .ayah(destination), slot: .purple)
-        let stored = try await storedBookmark(in: .purple)
+        try await service.addReadingBookmark(at: .ayah(destination), slot: .orange)
+        let stored = try await storedBookmark(in: .orange)
 
         XCTAssertEqual(stored?.placement, .ayah(destination))
     }
 
     func test_clearReadingBookmark_clearsLocationButPreservesPin() async throws {
-        let placed = try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .blue)
+        let placed = try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .red)
 
-        let cleared = try await service.clearReadingBookmark(in: .blue)
-        let stored = try await storedBookmark(in: .blue)
+        let cleared = try await service.clearReadingBookmark(in: .red)
+        let stored = try await storedBookmark(in: .red)
 
         XCTAssertEqual(stored, cleared)
         XCTAssertEqual(stored?.id, placed.id)
-        XCTAssertEqual(stored?.slot, .blue)
+        XCTAssertEqual(stored?.slot, .red)
         XCTAssertEqual(stored?.placement, .unplaced)
     }
 
     func test_readingBookmarkSequence_mapsPageIntoRequestedQuran() async throws {
         let storedPage = Quran.hafsMadani1405.pages[254]
-        _ = try await service.addReadingBookmark(at: .page(storedPage), slot: .green)
+        _ = try await service.addReadingBookmark(at: .page(storedPage), slot: .teal)
         let quran = Quran.hafsIndoPak
         let expectedPage = try XCTUnwrap(QuranPageMapper(destination: quran).mapPage(storedPage))
 
@@ -72,7 +72,7 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     func test_addReadingBookmark_persistsPageLocation() async throws {
         let storedPage = Quran.hafsMadani1405.pages[254]
 
-        let created = try await service.addReadingBookmark(at: .page(storedPage), slot: .green)
+        let created = try await service.addReadingBookmark(at: .page(storedPage), slot: .teal)
         let stored = try await storedBookmark()
 
         XCTAssertEqual(created.placement, .page(storedPage))
@@ -80,28 +80,28 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     }
 
     func test_addReadingBookmarks_preservesEachSlot() async throws {
-        try await service.addReadingBookmark(at: .ayah(ayah(254)), slot: .green)
-        try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .purple)
+        try await service.addReadingBookmark(at: .ayah(ayah(254)), slot: .teal)
+        try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .orange)
 
         let bookmarks = try await storedBookmarks()
 
-        XCTAssertEqual(Set(bookmarks.map(\.slot)), [.green, .purple])
+        XCTAssertEqual(Set(bookmarks.map(\.slot)), [.teal, .orange])
     }
 
     func test_readingBookmarksSequence_ordersBookmarksBySlot() async throws {
-        try await service.addReadingBookmark(at: .ayah(ayah(256)), slot: .blue)
-        try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .purple)
-        try await service.addReadingBookmark(at: .ayah(ayah(254)), slot: .green)
+        try await service.addReadingBookmark(at: .ayah(ayah(256)), slot: .red)
+        try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .orange)
+        try await service.addReadingBookmark(at: .ayah(ayah(254)), slot: .teal)
 
         let bookmarks = try await storedBookmarks()
 
-        XCTAssertEqual(bookmarks.map(\.slot), [.green, .purple, .blue])
+        XCTAssertEqual(bookmarks.map(\.slot), [.teal, .orange, .red])
     }
 
     func test_addReadingBookmark_storesTheMatchingMobileSyncSlot() async throws {
-        try await service.addReadingBookmark(at: .ayah(ayah(1)), slot: .green)
-        try await service.addReadingBookmark(at: .ayah(ayah(2)), slot: .purple)
-        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .blue)
+        try await service.addReadingBookmark(at: .ayah(ayah(1)), slot: .teal)
+        try await service.addReadingBookmark(at: .ayah(ayah(2)), slot: .orange)
+        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .red)
 
         let iterator = database.quranDataService.readingBookmarksSequence().makeAsyncIterator()
         let bookmarks = try await iterator.next() ?? []
@@ -115,32 +115,32 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     }
 
     func test_placedReadingBookmarksSequence_filtersUnplacedPinsAndPreservesMetadata() async throws {
-        let blue = try await service.addReadingBookmark(at: .ayah(ayah(256)), slot: .blue)
-        let green = try await service.addReadingBookmark(at: .ayah(ayah(254)), slot: .green)
-        try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .purple)
-        try await service.clearReadingBookmark(in: .purple)
+        let red = try await service.addReadingBookmark(at: .ayah(ayah(256)), slot: .red)
+        let teal = try await service.addReadingBookmark(at: .ayah(ayah(254)), slot: .teal)
+        try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .orange)
+        try await service.clearReadingBookmark(in: .orange)
 
         var iterator = service.placedReadingBookmarksSequence(quran: .hafsMadani1405).makeAsyncIterator()
         let placed = try await iterator.next()
         let all = try await storedBookmarks()
 
-        XCTAssertEqual(all.map(\.slot), [.green, .purple, .blue])
-        XCTAssertEqual(all.first { $0.slot == .purple }?.placement, .unplaced)
+        XCTAssertEqual(all.map(\.slot), [.teal, .orange, .red])
+        XCTAssertEqual(all.first { $0.slot == .orange }?.placement, .unplaced)
         XCTAssertEqual(placed, [
             PlacedReadingBookmark(
-                id: green.id, slot: .green, placement: .ayah(ayah(254)),
-                modifiedOn: green.modifiedOn, name: green.name
+                id: teal.id, slot: .teal, placement: .ayah(ayah(254)),
+                modifiedOn: teal.modifiedOn, name: teal.name
             ),
             PlacedReadingBookmark(
-                id: blue.id, slot: .blue, placement: .ayah(ayah(256)),
-                modifiedOn: blue.modifiedOn, name: blue.name
+                id: red.id, slot: .red, placement: .ayah(ayah(256)),
+                modifiedOn: red.modifiedOn, name: red.name
             ),
         ])
     }
 
     func test_placedReadingBookmarksSequence_mapsPageIntoRequestedQuran() async throws {
         let storedPage = Quran.hafsMadani1405.pages[254]
-        try await service.addReadingBookmark(at: .page(storedPage), slot: .green)
+        try await service.addReadingBookmark(at: .page(storedPage), slot: .teal)
         let quran = Quran.hafsIndoPak
         let expectedPage = try XCTUnwrap(QuranPageMapper(destination: quran).mapPage(storedPage))
 
@@ -152,9 +152,9 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     }
 
     func test_renameReadingBookmark_preservesPlacedBookmark() async throws {
-        let original = try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .green)
+        let original = try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .teal)
 
-        let renamed = try await service.renameReadingBookmark(in: .green, name: "Daily reading", quran: .hafsMadani1405)
+        let renamed = try await service.renameReadingBookmark(in: .teal, name: "Daily reading", quran: .hafsMadani1405)
         let stored = try await storedBookmark()
 
         XCTAssertEqual(stored, renamed)
@@ -164,21 +164,21 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     }
 
     func test_renameReadingBookmark_createsUnplacedPin() async throws {
-        let renamed = try await service.renameReadingBookmark(in: .purple, name: "Review", quran: .hafsMadani1405)
+        let renamed = try await service.renameReadingBookmark(in: .orange, name: "Review", quran: .hafsMadani1405)
 
-        let stored = try await storedBookmark(in: .purple)
+        let stored = try await storedBookmark(in: .orange)
         XCTAssertEqual(stored, renamed)
-        XCTAssertEqual(stored?.slot, .purple)
+        XCTAssertEqual(stored?.slot, .orange)
         XCTAssertEqual(stored?.placement, .unplaced)
         XCTAssertEqual(stored?.name, "Review")
     }
 
     func test_renameReadingBookmark_nilClearsNameWithoutClearingPage() async throws {
         let page = Quran.hafsMadani1405.pages[40]
-        try await service.addReadingBookmark(at: .page(page), slot: .green)
-        try await service.renameReadingBookmark(in: .green, name: "Review", quran: .hafsMadani1405)
+        try await service.addReadingBookmark(at: .page(page), slot: .teal)
+        try await service.renameReadingBookmark(in: .teal, name: "Review", quran: .hafsMadani1405)
 
-        let renamed = try await service.renameReadingBookmark(in: .green, name: nil, quran: .hafsMadani1405)
+        let renamed = try await service.renameReadingBookmark(in: .teal, name: nil, quran: .hafsMadani1405)
         let stored = try await storedBookmark()
 
         XCTAssertEqual(stored, renamed)
@@ -187,10 +187,10 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     }
 
     func test_namedBookmark_preservesNameWhenMovedAndCleared() async throws {
-        try await service.renameReadingBookmark(in: .green, name: "Daily reading", quran: .hafsMadani1405)
+        try await service.renameReadingBookmark(in: .teal, name: "Daily reading", quran: .hafsMadani1405)
 
-        let moved = try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .green)
-        let cleared = try await service.clearReadingBookmark(in: .green)
+        let moved = try await service.addReadingBookmark(at: .ayah(ayah(255)), slot: .teal)
+        let cleared = try await service.clearReadingBookmark(in: .teal)
 
         XCTAssertEqual(moved.name, "Daily reading")
         XCTAssertEqual(cleared.name, "Daily reading")
@@ -199,11 +199,11 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
 
     func test_renameReadingBookmark_returnsPageInRequestedQuran() async throws {
         let page = Quran.hafsMadani1405.pages[40]
-        try await service.addReadingBookmark(at: .page(page), slot: .green)
+        try await service.addReadingBookmark(at: .page(page), slot: .teal)
         let quran = Quran.hafsIndoPak
         let mappedPage = try XCTUnwrap(QuranPageMapper(destination: quran).mapPage(page))
 
-        let renamed = try await service.renameReadingBookmark(in: .green, name: "Review", quran: quran)
+        let renamed = try await service.renameReadingBookmark(in: .teal, name: "Review", quran: quran)
         let stored = try await storedBookmark(quran: quran)
 
         XCTAssertEqual(renamed, stored)
@@ -212,7 +212,7 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     }
 
     private func storedBookmark(
-        in slot: ReadingBookmarkSlot = .green,
+        in slot: ReadingBookmarkSlot = .teal,
         quran: Quran = .hafsMadani1405
     ) async throws -> ReadingBookmark? {
         try await storedBookmarks(quran: quran).first { $0.slot == slot }

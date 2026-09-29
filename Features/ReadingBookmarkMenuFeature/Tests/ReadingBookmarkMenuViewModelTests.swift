@@ -36,17 +36,17 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
 
     func test_start_exposesStoredPlacementsAndTarget() async throws {
         let selectedAyah = ayah(2)
-        try await service.addReadingBookmark(at: .ayah(selectedAyah), slot: .green)
-        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .purple)
+        try await service.addReadingBookmark(at: .ayah(selectedAyah), slot: .teal)
+        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .orange)
         let sut = makeSUT(target: .ayah(selectedAyah))
         let startTask = await start(sut)
         defer { startTask.cancel() }
 
-        let current = sut.items.first { $0.slot == .green }
+        let current = sut.items.first { $0.slot == .teal }
         XCTAssertEqual(current?.placement, .ayah(selectedAyah))
         XCTAssertEqual(sut.target.placement, .ayah(selectedAyah))
 
-        let elsewhere = sut.items.first { $0.slot == .purple }
+        let elsewhere = sut.items.first { $0.slot == .orange }
         XCTAssertEqual(elsewhere?.placement, .ayah(ayah(3)))
     }
 
@@ -56,8 +56,8 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let startTask = await start(sut)
         defer { startTask.cancel() }
 
-        let toast = await sut.select(.purple)
-        let storedBookmark = try await storedBookmark(in: .purple)
+        let toast = await sut.select(.orange)
+        let storedBookmark = try await storedBookmark(in: .orange)
 
         XCTAssertEqual(storedBookmark?.placement, .ayah(selectedAyah))
         XCTAssertNil(toast?.action)
@@ -65,15 +65,15 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
 
     func test_selectSlotPlacedElsewhere_movesOnlyThatSlot() async throws {
         let destination = ayah(2)
-        try await service.addReadingBookmark(at: .ayah(ayah(1)), slot: .green)
-        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .blue)
+        try await service.addReadingBookmark(at: .ayah(ayah(1)), slot: .teal)
+        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .red)
         let sut = makeSUT(target: .ayah(destination))
         let startTask = await start(sut)
         defer { startTask.cancel() }
 
-        let toast = await sut.select(.blue)
-        let movedBookmark = try await storedBookmark(in: .blue)
-        let unchangedBookmark = try await storedBookmark(in: .green)
+        let toast = await sut.select(.red)
+        let movedBookmark = try await storedBookmark(in: .red)
+        let unchangedBookmark = try await storedBookmark(in: .teal)
 
         XCTAssertEqual(movedBookmark?.placement, .ayah(destination))
         XCTAssertEqual(unchangedBookmark?.placement, .ayah(ayah(1)))
@@ -82,13 +82,13 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
 
     func test_selectSlotAlreadyAtTarget_removesIt() async throws {
         let selectedAyah = ayah(2)
-        try await service.addReadingBookmark(at: .ayah(selectedAyah), slot: .green)
+        try await service.addReadingBookmark(at: .ayah(selectedAyah), slot: .teal)
         let sut = makeSUT(target: .ayah(selectedAyah))
         let startTask = await start(sut)
         defer { startTask.cancel() }
 
-        let toast = await sut.select(.green)
-        let storedBookmark = try await storedBookmark(in: .green)
+        let toast = await sut.select(.teal)
+        let storedBookmark = try await storedBookmark(in: .teal)
 
         XCTAssertNotNil(storedBookmark)
         XCTAssertEqual(storedBookmark?.placement, .unplaced)
@@ -97,14 +97,14 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
 
     func test_removedBookmarkUndo_restoresPreviousLocation() async throws {
         let selectedAyah = ayah(2)
-        try await service.addReadingBookmark(at: .ayah(selectedAyah), slot: .green)
+        try await service.addReadingBookmark(at: .ayah(selectedAyah), slot: .teal)
         let sut = makeSUT(target: .ayah(selectedAyah))
         let startTask = await start(sut)
         defer { startTask.cancel() }
-        let toast = await sut.select(.green)
+        let toast = await sut.select(.teal)
         let restored = bookmarkExpectation(
             description: "Restores removed reading bookmark",
-            slot: .green,
+            slot: .teal,
             placement: .ayah(selectedAyah)
         )
 
@@ -116,14 +116,14 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
 
     func test_movedBookmarkUndo_restoresPreviousLocation() async throws {
         let previousAyah = ayah(1)
-        try await service.addReadingBookmark(at: .ayah(previousAyah), slot: .blue)
+        try await service.addReadingBookmark(at: .ayah(previousAyah), slot: .red)
         let sut = makeSUT(target: .ayah(ayah(2)))
         let startTask = await start(sut)
         defer { startTask.cancel() }
-        let toast = await sut.select(.blue)
+        let toast = await sut.select(.red)
         let restored = bookmarkExpectation(
             description: "Restores moved reading bookmark",
-            slot: .blue,
+            slot: .red,
             placement: .ayah(previousAyah)
         )
 
@@ -135,15 +135,15 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
 
     func test_removedBookmarkUndo_restoresPreviousLocationAfterSlotChanges() async throws {
         let previousAyah = ayah(2)
-        try await service.addReadingBookmark(at: .ayah(previousAyah), slot: .green)
+        try await service.addReadingBookmark(at: .ayah(previousAyah), slot: .teal)
         let sut = makeSUT(target: .ayah(previousAyah))
         let startTask = await start(sut)
         defer { startTask.cancel() }
-        let toast = await sut.select(.green)
-        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .green)
+        let toast = await sut.select(.teal)
+        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .teal)
         let restored = bookmarkExpectation(
             description: "Restores removed bookmark over a later placement",
-            slot: .green,
+            slot: .teal,
             placement: .ayah(previousAyah)
         )
         defer { restored.task.cancel() }
@@ -154,15 +154,15 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
 
     func test_movedBookmarkUndo_restoresPreviousLocationAfterSlotChanges() async throws {
         let previousPage = Quran.hafsMadani1405.pages[40]
-        try await service.addReadingBookmark(at: .page(previousPage), slot: .blue)
+        try await service.addReadingBookmark(at: .page(previousPage), slot: .red)
         let sut = makeSUT(target: .ayah(ayah(2)))
         let startTask = await start(sut)
         defer { startTask.cancel() }
-        let toast = await sut.select(.blue)
-        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .blue)
+        let toast = await sut.select(.red)
+        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .red)
         let restored = bookmarkExpectation(
             description: "Restores moved bookmark over a later placement",
-            slot: .blue,
+            slot: .red,
             placement: .page(previousPage)
         )
         defer { restored.task.cancel() }
@@ -181,7 +181,7 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let observation = sut.objectWillChange.receive(on: RunLoop.main).sink {
             let bookmarks = sut.items
             guard !didFulfill,
-                  bookmarks.first(where: { $0.slot == .blue })?.placement == .ayah(selectedAyah)
+                  bookmarks.first(where: { $0.slot == .red })?.placement == .ayah(selectedAyah)
             else {
                 return
             }
@@ -189,7 +189,7 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
             observed.fulfill()
         }
 
-        try await service.addReadingBookmark(at: .ayah(selectedAyah), slot: .blue)
+        try await service.addReadingBookmark(at: .ayah(selectedAyah), slot: .red)
         await fulfillment(of: [observed], timeout: 2)
 
         observation.cancel()
@@ -202,53 +202,53 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let startTask = await start(sut)
         defer { startTask.cancel() }
 
-        _ = await sut.select(.purple)
-        let storedBookmark = try await storedBookmark(in: .purple)
+        _ = await sut.select(.orange)
+        let storedBookmark = try await storedBookmark(in: .orange)
 
         XCTAssertEqual(storedBookmark?.placement, .page(firstPage))
     }
 
     func test_pageTarget_exposesBookmarkOnCurrentPage() async throws {
         let page = Quran.hafsMadani1405.pages[40]
-        try await service.addReadingBookmark(at: .page(page), slot: .green)
+        try await service.addReadingBookmark(at: .page(page), slot: .teal)
         let sut = makeSUT(target: .pages(page, [page]))
         let startTask = await start(sut)
         defer { startTask.cancel() }
 
-        let current = sut.items.first { $0.slot == .green }
+        let current = sut.items.first { $0.slot == .teal }
         XCTAssertEqual(current?.placement, .page(page))
         XCTAssertEqual(sut.target.placement, .page(page))
     }
 
     func test_clearedPin_isUnplacedAndDoesNotOfferMoveUndo() async throws {
-        try await service.addReadingBookmark(at: .ayah(ayah(1)), slot: .green)
-        try await service.clearReadingBookmark(in: .green)
+        try await service.addReadingBookmark(at: .ayah(ayah(1)), slot: .teal)
+        try await service.clearReadingBookmark(in: .teal)
         let sut = makeSUT(target: .ayah(ayah(2)))
         let startTask = await start(sut)
         defer { startTask.cancel() }
 
         XCTAssertEqual(sut.items.first?.placement, .unplaced)
 
-        let toast = await sut.select(.green)
-        let stored = try await storedBookmark(in: .green)
+        let toast = await sut.select(.teal)
+        let stored = try await storedBookmark(in: .teal)
         XCTAssertEqual(stored?.placement, .ayah(ayah(2)))
         XCTAssertNotNil(toast)
         XCTAssertNil(toast?.action)
     }
 
     func test_beginEditing_clearsDraftsWithoutCopyingSavedNames() async throws {
-        try await service.renameReadingBookmark(in: .purple, name: "Review", quran: .hafsMadani1405)
+        try await service.renameReadingBookmark(in: .orange, name: "Review", quran: .hafsMadani1405)
         let sut = makeSUT(target: .ayah(ayah(1)))
         let startTask = await start(sut)
         defer { startTask.cancel() }
 
-        sut.draftNames[.green] = "Discarded draft"
+        sut.draftNames[.teal] = "Discarded draft"
         sut.beginEditing()
 
         XCTAssertTrue(sut.draftNames.isEmpty)
         XCTAssertTrue(sut.editMode.isEditing)
-        XCTAssertEqual(sut.items.first { $0.slot == .purple }?.name, "Review")
-        XCTAssertNil(sut.items.first { $0.slot == .green }?.name)
+        XCTAssertEqual(sut.items.first { $0.slot == .orange }?.name, "Review")
+        XCTAssertNil(sut.items.first { $0.slot == .teal }?.name)
     }
 
     func test_saveNames_singleSlotSavesTrimmedNameAndLeavesOtherDrafts() async throws {
@@ -256,19 +256,19 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let startTask = await start(sut)
         defer { startTask.cancel() }
         sut.beginEditing()
-        sut.draftNames[.green] = "  Daily reading \n"
-        sut.draftNames[.purple] = "Review"
+        sut.draftNames[.teal] = "  Daily reading \n"
+        sut.draftNames[.orange] = "Review"
 
-        let saved = await sut.saveNames(in: [.green])
-        let green = try await storedBookmark(in: .green)
-        let purple = try await storedBookmark(in: .purple)
+        let saved = await sut.saveNames(in: [.teal])
+        let teal = try await storedBookmark(in: .teal)
+        let orange = try await storedBookmark(in: .orange)
 
         XCTAssertTrue(saved)
-        XCTAssertEqual(green?.name, "Daily reading")
-        XCTAssertEqual(green?.placement, .unplaced)
-        XCTAssertNil(purple)
-        XCTAssertNil(sut.draftNames[.green])
-        XCTAssertEqual(sut.draftNames[.purple], "Review")
+        XCTAssertEqual(teal?.name, "Daily reading")
+        XCTAssertEqual(teal?.placement, .unplaced)
+        XCTAssertNil(orange)
+        XCTAssertNil(sut.draftNames[.teal])
+        XCTAssertEqual(sut.draftNames[.orange], "Review")
         XCTAssertTrue(sut.editMode.isEditing)
     }
 
@@ -278,27 +278,27 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         defer { startTask.cancel() }
         XCTAssertFalse(sut.editMode.isEditing)
         sut.beginEditing()
-        sut.draftNames[.green] = "Daily reading"
-        sut.draftNames[.purple] = "Review"
+        sut.draftNames[.teal] = "Daily reading"
+        sut.draftNames[.orange] = "Review"
 
         await sut.finishEditing()
-        let green = try await storedBookmark(in: .green)
-        let purple = try await storedBookmark(in: .purple)
+        let teal = try await storedBookmark(in: .teal)
+        let orange = try await storedBookmark(in: .orange)
 
         XCTAssertFalse(sut.editMode.isEditing)
-        XCTAssertEqual(green?.name, "Daily reading")
-        XCTAssertEqual(purple?.name, "Review")
+        XCTAssertEqual(teal?.name, "Daily reading")
+        XCTAssertEqual(orange?.name, "Review")
     }
 
     func test_finishEditing_whenSaveCannotRunKeepsEditingAndDrafts() async {
         let sut = makeSUT(target: .ayah(ayah(1)))
         sut.beginEditing()
-        sut.draftNames[.green] = "Daily reading"
+        sut.draftNames[.teal] = "Daily reading"
 
         await sut.finishEditing()
 
         XCTAssertTrue(sut.editMode.isEditing)
-        XCTAssertEqual(sut.draftNames[.green], "Daily reading")
+        XCTAssertEqual(sut.draftNames[.teal], "Daily reading")
     }
 
     func test_editModeBinding_routesEditingAndSavingThroughViewModel() async throws {
@@ -307,7 +307,7 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         defer { startTask.cancel() }
         sut.editModeBinding.wrappedValue = .active
         XCTAssertTrue(sut.editMode.isEditing)
-        sut.draftNames[.green] = "Daily reading"
+        sut.draftNames[.teal] = "Daily reading"
         let finished = expectation(description: "Exits editing after saving")
         let observation = sut.$editMode
             .filter { !$0.isEditing }
@@ -317,7 +317,7 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
 
         sut.editModeBinding.wrappedValue = .inactive
         await fulfillment(of: [finished], timeout: 2)
-        let stored = try await storedBookmark(in: .green)
+        let stored = try await storedBookmark(in: .teal)
 
         XCTAssertFalse(sut.editMode.isEditing)
         XCTAssertEqual(stored?.name, "Daily reading")
@@ -328,37 +328,37 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let startTask = await start(sut)
         defer { startTask.cancel() }
         sut.beginEditing()
-        sut.draftNames[.green] = "Daily reading"
-        sut.draftNames[.purple] = "Review"
-        _ = await sut.saveNames(in: [.green])
-        let submitted = try await storedBookmark(in: .green)
+        sut.draftNames[.teal] = "Daily reading"
+        sut.draftNames[.orange] = "Review"
+        _ = await sut.saveNames(in: [.teal])
+        let submitted = try await storedBookmark(in: .teal)
 
         let saved = await sut.saveNames(in: ReadingBookmarkSlot.allCases)
-        let green = try await storedBookmark(in: .green)
-        let purple = try await storedBookmark(in: .purple)
-        let blue = try await storedBookmark(in: .blue)
+        let teal = try await storedBookmark(in: .teal)
+        let orange = try await storedBookmark(in: .orange)
+        let red = try await storedBookmark(in: .red)
 
         XCTAssertTrue(saved)
-        XCTAssertEqual(green, submitted)
-        XCTAssertEqual(purple?.name, "Review")
-        XCTAssertNil(blue)
+        XCTAssertEqual(teal, submitted)
+        XCTAssertEqual(orange?.name, "Review")
+        XCTAssertNil(red)
     }
 
     func test_saveNames_blankNameClearsCustomName() async throws {
-        try await service.renameReadingBookmark(in: .green, name: "Daily reading", quran: .hafsMadani1405)
+        try await service.renameReadingBookmark(in: .teal, name: "Daily reading", quran: .hafsMadani1405)
         let sut = makeSUT(target: .ayah(ayah(1)))
         let startTask = await start(sut)
         defer { startTask.cancel() }
         sut.beginEditing()
-        sut.draftNames[.green] = " \n "
+        sut.draftNames[.teal] = " \n "
 
-        let saved = await sut.saveNames(in: [.green])
-        let stored = try await storedBookmark(in: .green)
+        let saved = await sut.saveNames(in: [.teal])
+        let stored = try await storedBookmark(in: .teal)
 
         XCTAssertTrue(saved)
         XCTAssertNotNil(stored)
         XCTAssertNil(stored?.name)
-        XCTAssertNil(sut.draftNames[.green])
+        XCTAssertNil(sut.draftNames[.teal])
     }
 
     func test_saveNames_publishesSavedNameToMenu() async {
@@ -366,35 +366,35 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let startTask = await start(sut)
         defer { startTask.cancel() }
         sut.beginEditing()
-        sut.draftNames[.green] = "Daily reading"
+        sut.draftNames[.teal] = "Daily reading"
         let observed = expectation(description: "Shows saved custom name")
         let observation = sut.objectWillChange
             .receive(on: RunLoop.main)
             .map { sut.items }
-            .filter { $0.first(where: { $0.slot == .green })?.name == "Daily reading" }
+            .filter { $0.first(where: { $0.slot == .teal })?.name == "Daily reading" }
             .prefix(1)
             .sink { _ in observed.fulfill() }
         defer { observation.cancel() }
 
-        let saved = await sut.saveNames(in: [.green])
+        let saved = await sut.saveNames(in: [.teal])
         await fulfillment(of: [observed], timeout: 2)
 
         XCTAssertTrue(saved)
         sut.beginEditing()
         XCTAssertTrue(sut.draftNames.isEmpty)
-        XCTAssertEqual(sut.items.first { $0.slot == .green }?.name, "Daily reading")
+        XCTAssertEqual(sut.items.first { $0.slot == .teal }?.name, "Daily reading")
     }
 
     func test_saveNames_untouchedNameDoesNotWriteOrClearIt() async throws {
-        try await service.renameReadingBookmark(in: .green, name: "Daily reading", quran: .hafsMadani1405)
-        let original = try await storedBookmark(in: .green)
+        try await service.renameReadingBookmark(in: .teal, name: "Daily reading", quran: .hafsMadani1405)
+        let original = try await storedBookmark(in: .teal)
         let sut = makeSUT(target: .ayah(ayah(1)))
         let startTask = await start(sut)
         defer { startTask.cancel() }
         sut.beginEditing()
 
         let saved = await sut.saveNames(in: ReadingBookmarkSlot.allCases)
-        let stored = try await storedBookmark(in: .green)
+        let stored = try await storedBookmark(in: .teal)
 
         XCTAssertTrue(saved)
         XCTAssertEqual(stored, original)
@@ -406,15 +406,15 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         startTask.cancel()
         await startTask.value
         sut.beginEditing()
-        sut.draftNames[.green] = "Daily reading"
+        sut.draftNames[.teal] = "Daily reading"
 
-        let saved = await sut.saveNames(in: [.green])
-        let submitted = try await storedBookmark(in: .green)
+        let saved = await sut.saveNames(in: [.teal])
+        let submitted = try await storedBookmark(in: .teal)
         await sut.finishEditing()
-        let stored = try await storedBookmark(in: .green)
+        let stored = try await storedBookmark(in: .teal)
 
         XCTAssertTrue(saved)
-        XCTAssertEqual(sut.items.first { $0.slot == .green }?.name, "Daily reading")
+        XCTAssertEqual(sut.items.first { $0.slot == .teal }?.name, "Daily reading")
         XCTAssertEqual(sut.items.map(\.slot), ReadingBookmarkSlot.allCases)
         XCTAssertEqual(stored, submitted)
         sut.beginEditing()

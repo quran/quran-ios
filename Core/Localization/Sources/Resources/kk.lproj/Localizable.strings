@@ -455,10 +455,16 @@
 "highlight.color.blue" = "Көк";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.green" = "Жасыл";
+// Metadata: Translated by AI; human review required.
+"highlight.color.orange" = "Қызғылт сары";
+// Metadata: Translated by AI; human review required.
+"highlight.color.pink" = "Қызғылт";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.purple" = "Күлгін";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.red" = "Қызыл";
+// Metadata: Translated by AI; human review required.
+"highlight.color.teal" = "Көкшіл жасыл";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.yellow" = "Сары";
 

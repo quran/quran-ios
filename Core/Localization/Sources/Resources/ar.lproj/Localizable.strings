@@ -210,6 +210,9 @@
 "highlight.color.blue" = "أزرق";
 "highlight.color.yellow" = "أصفر";
 "highlight.color.purple" = "بنفسجي";
+"highlight.color.pink" = "وردي";
+"highlight.color.teal" = "أزرق مخضر";
+"highlight.color.orange" = "برتقالي";
 
 // MARK: - Reading Selector
 

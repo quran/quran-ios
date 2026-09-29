@@ -380,10 +380,16 @@
 "highlight.color.blue" = "Xanh dương";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.green" = "Xanh lá";
+// Metadata: Translated by AI; human review required.
+"highlight.color.orange" = "Cam";
+// Metadata: Translated by AI; human review required.
+"highlight.color.pink" = "Hồng";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.purple" = "Tím";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.red" = "Đỏ";
+// Metadata: Translated by AI; human review required.
+"highlight.color.teal" = "Xanh mòng két";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.yellow" = "Vàng";
 

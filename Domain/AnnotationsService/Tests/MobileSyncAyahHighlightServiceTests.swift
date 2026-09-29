@@ -22,7 +22,7 @@ final class MobileSyncAyahHighlightServiceTests: XCTestCase {
     }
 
     func test_setHighlight_replacesExistingHighlights() async throws {
-        try await service.setHighlight(.red, for: [ayah(1), ayah(2)])
+        try await service.setHighlight(.pink, for: [ayah(1), ayah(2)])
         try await service.setHighlight(.green, for: [ayah(1), ayah(2)])
 
         let highlights = try await storedHighlights(where: { $0.count == 2 })
@@ -31,7 +31,7 @@ final class MobileSyncAyahHighlightServiceTests: XCTestCase {
     }
 
     func test_removeHighlight_removesExistingHighlights() async throws {
-        try await service.setHighlight(.red, for: [ayah(1), ayah(2)])
+        try await service.setHighlight(.pink, for: [ayah(1), ayah(2)])
 
         try await service.removeHighlight(for: [ayah(1), ayah(2)])
 
@@ -49,7 +49,7 @@ final class MobileSyncAyahHighlightServiceTests: XCTestCase {
     }
 
     func test_setHighlight_storesTheMatchingMobileSyncColor() async throws {
-        try await service.setHighlight(.red, for: [ayah(1)])
+        try await service.setHighlight(.pink, for: [ayah(1)])
         try await service.setHighlight(.green, for: [ayah(2)])
         try await service.setHighlight(.blue, for: [ayah(3)])
         try await service.setHighlight(.yellow, for: [ayah(4)])

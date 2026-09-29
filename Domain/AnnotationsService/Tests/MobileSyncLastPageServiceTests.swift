@@ -220,10 +220,10 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
         XCTAssertEqual(lastPages, [])
     }
 
-    func test_lastPagesSortsByModificationTimeThenIdentityAndLimitsToThree() async throws {
+    func test_lastPagesSortsByModificationTimeThenIdentityAndLimitsToTen() async throws {
         let quran = Quran.hafsMadani1405
-        let pages = [10, 20, 30, 40].map { quran.pages[$0] }
-        let timestamps = [3.0, 5.0, 5.0, 1.0].map(Date.init(timeIntervalSince1970:))
+        let pages = (1 ... 11).map { quran.pages[$0 * 10] }
+        let timestamps = [3.0, 12, 12, 1, 4, 5, 6, 7, 8, 9, 10].map(Date.init(timeIntervalSince1970:))
         var sessionIds: [String] = []
         for (page, timestamp) in zip(pages, timestamps) {
             let verse = page.firstVerse
@@ -240,8 +240,10 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
         let lastPages = try XCTUnwrap(value)
         let tiedSessionIds = [sessionIds[1], sessionIds[2]].sorted()
 
-        XCTAssertEqual(lastPages.map(\.id), tiedSessionIds + [sessionIds[0]])
-        XCTAssertEqual(lastPages.map(\.modifiedOn), [timestamps[1], timestamps[2], timestamps[0]])
+        let newestFirst = [10, 9, 8, 7, 6, 5, 4, 0]
+
+        XCTAssertEqual(lastPages.map(\.id), tiedSessionIds + newestFirst.map { sessionIds[$0] })
+        XCTAssertEqual(lastPages.map(\.modifiedOn), [timestamps[1], timestamps[2]] + newestFirst.map { timestamps[$0] })
     }
 }
 #endif

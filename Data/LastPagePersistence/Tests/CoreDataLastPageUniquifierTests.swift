@@ -52,7 +52,9 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
     }
 
     func test_merge_removingOverflow() throws {
-        assertDatabaseContains([entity5, entity4, entity3, entity2, entity1])
+        let newerEntities = (6 ... 11).map { context.newLastPage(page: Int32($0 * 10 + 1), modifiedOn: TimeInterval($0)) }
+        try context.save()
+        assertDatabaseContains(newerEntities.reversed() + [entity5, entity4, entity3, entity2, entity1])
 
         // Merge transactions
         let transactions = [
@@ -64,7 +66,7 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
         ]
         XCTAssertNoThrow(try sut.merge(transactions: transactions, using: context))
 
-        assertDatabaseContains([entity5, entity4, entity3])
+        assertDatabaseContains(newerEntities.reversed() + [entity5, entity4, entity3, entity2])
     }
 
     func test_merge_noLastPageTransaction() throws {

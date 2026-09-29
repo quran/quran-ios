@@ -93,8 +93,9 @@
 
 "theme.light" = "Light";
 "theme.dark" = "Dark";
-"theme.auto" = "Auto";
+"theme.match_device" = "Match Device";
 "theme.auto.message" = "Quran app will adhere to your iPhone's appearance setting";
+"theme.appearance" = "Appearance";
 
 // MARK: - Tabs
 

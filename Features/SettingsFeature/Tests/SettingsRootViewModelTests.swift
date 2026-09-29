@@ -191,7 +191,7 @@ final class SettingsRootViewModelTests: XCTestCase {
         let container = AppDependenciesStub(authenticationClient: authenticationClient ?? UnavailableAuthenticationClient())
         return SettingsRootViewModel(
             analytics: analytics,
-            reviewService: ReviewService(analytics: AnalyticsSpy()),
+            reviewService: ReviewService(analytics: NoopAnalytics()),
             authenticationClient: authenticationClient ?? UnavailableAuthenticationClient(),
             legacyDataImportCoordinator: legacyDataImportCoordinator ?? container.legacyDataImportCoordinator,
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
@@ -223,37 +223,6 @@ private final class AnalyticsRecorder: AnalyticsLibrary, @unchecked Sendable {
     func logEvent(_ name: String, value: String) {
         events.append(.init(name: name, value: value))
     }
-}
-
-private struct AnalyticsSpy: AnalyticsLibrary {
-    func logEvent(_: String, value _: String) {}
-}
-
-private struct AppDependenciesStub: AppDependencies {
-    let authenticationClient: any AuthenticationClient
-
-    var databasesURL: URL { URL(fileURLWithPath: "/tmp") }
-    var wordsDatabase: URL { URL(fileURLWithPath: "/tmp/words.db") }
-    var appHost: URL { URL(string: "https://quran.com")! }
-    var filesAppHost: URL { URL(string: "https://files.quran.com")! }
-    var quranProfileURL: URL { URL(string: "https://quran.com/profile")! }
-    var logsDirectory: URL { URL(fileURLWithPath: "/tmp/logs") }
-    var databasesDirectory: URL { URL(fileURLWithPath: "/tmp") }
-    var supportsCloudKit: Bool { false }
-    var downloadManager: DownloadManager { fatalError("Unused in tests") }
-    var analytics: AnalyticsLibrary { AnalyticsSpy() }
-    var readingResources: ReadingResourcesService { fatalError("Unused in tests") }
-    var remoteResources: ReadingRemoteResources? { nil }
-    var lastPagePersistence: LastPagePersistence { fatalError("Unused in tests") }
-    var notePersistence: NotePersistence { fatalError("Unused in tests") }
-    var pageBookmarkPersistence: PageBookmarkPersistence { fatalError("Unused in tests") }
-    #if QURAN_SYNC
-    var quranDataService: QuranDataService { MobileSyncTestDatabase.shared.quranDataService }
-    let legacyDataImportCoordinator = LegacyDataImportCoordinator(
-        reader: CoreDataLegacyDataReader(stack: CoreDataStack.testingStack()),
-        quranDataService: MobileSyncTestDatabase.shared.quranDataService
-    )
-    #endif
 }
 
 private func makeUser(email: String?) -> UserInfo {

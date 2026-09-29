@@ -87,16 +87,8 @@ private struct SectionHeader: View {
 private struct AppearanceModeSelectorButton: View {
     @Binding var selectedAppearance: AppearanceMode
     var body: some View {
-        DropdownButton(items: [.auto, .dark, .light], selectedItem: $selectedAppearance) { appearance in
-            Label(appearance.localizedName, systemImage: icon(for: appearance))
-        }
-    }
-
-    private func icon(for mode: AppearanceMode) -> String {
-        switch mode {
-        case .auto: return "circle.righthalf.filled"
-        case .light: return "sun.max"
-        case .dark: return "moon"
+        DropdownButton(items: AppearanceMode.allCases, selectedItem: $selectedAppearance) { appearance in
+            Label(appearance.localizedName, systemImage: appearance.systemImageName)
         }
     }
 }

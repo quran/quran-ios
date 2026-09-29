@@ -107,10 +107,12 @@
 "theme.light" = "浅色";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.dark" = "深色";
-// Metadata: Translated by ChatGPT; human review required.
-"theme.auto" = "自动";
+// Metadata: Translated by AI; human review required.
+"theme.match_device" = "跟随设备";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.auto.message" = "古兰经应用将遵循您的 iPhone 外观设置";
+// Metadata: Translated by AI; human review required.
+"theme.appearance" = "外观";
 
 // MARK: - Tabs
 

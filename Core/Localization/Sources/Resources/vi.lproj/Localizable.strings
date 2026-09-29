@@ -75,8 +75,11 @@
 
 "theme.light" = "Sáng";
 "theme.dark" = "Tối";
-"theme.auto" = "Tự động";
+// Metadata: Translated by AI; human review required.
+"theme.match_device" = "Theo thiết bị";
 "theme.auto.message" = "Ứng dụng Kinh Quran sẽ tự theo cài đặt giao diện trên iPhone của bạn";
+// Metadata: Translated by AI; human review required.
+"theme.appearance" = "Giao diện";
 
 // MARK: - Tabs
 

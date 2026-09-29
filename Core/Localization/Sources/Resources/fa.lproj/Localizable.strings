@@ -107,10 +107,12 @@
 "theme.light" = "روشن";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.dark" = "تاریک";
-// Metadata: Translated by ChatGPT; human review required.
-"theme.auto" = "خودکار";
+// Metadata: Translated by AI; human review required.
+"theme.match_device" = "مطابق دستگاه";
 // Metadata: Translated by ChatGPT; human review required.
 "theme.auto.message" = "برنامه قرآن به تنظیمات ظاهری آیفون شما احترام می‌گذارد";
+// Metadata: Translated by AI; human review required.
+"theme.appearance" = "ظاهر";
 
 // MARK: - Tabs
 

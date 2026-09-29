@@ -6,6 +6,7 @@
 //
 
 import Analytics
+import AppIconFeature
 import AudioDownloadsFeature
 import Combine
 import FeaturesSupport
@@ -40,12 +41,16 @@ final class SettingsRootViewModel: ObservableObject {
         translationsListBuilder: TranslationsListBuilder,
         readingSelectorBuilder: ReadingSelectorBuilder,
         diagnosticsBuilder: DiagnosticsBuilder,
+        appIconService: AppIconService,
+        appIconBuilder: AppIconBuilder,
         quranProfileURL: URL,
         navigationController: UINavigationController
     ) {
         appearanceMode = themeService.appearanceMode
         audioEnd = audioPreferences.audioEnd
         streamingEnabled = audioPreferences.streamingEnabled
+        isAppIconAvailable = appIconService.isAvailable
+        appIconOption = appIconService.currentOption
         self.analytics = analytics
         self.reviewService = reviewService
         self.authenticationClient = authenticationClient
@@ -54,12 +59,14 @@ final class SettingsRootViewModel: ObservableObject {
         self.translationsListBuilder = translationsListBuilder
         self.readingSelectorBuilder = readingSelectorBuilder
         self.diagnosticsBuilder = diagnosticsBuilder
+        self.appIconBuilder = appIconBuilder
         self.quranProfileURL = quranProfileURL
         self.navigationController = navigationController
 
         themeService.appearanceModePublisher.assign(to: &$appearanceMode)
         audioPreferences.$audioEnd.assign(to: &$audioEnd)
         audioPreferences.$streamingEnabled.assign(to: &$streamingEnabled)
+        appIconService.currentOptionPublisher.assign(to: &$appIconOption)
     }
     #else
     init(
@@ -69,22 +76,28 @@ final class SettingsRootViewModel: ObservableObject {
         translationsListBuilder: TranslationsListBuilder,
         readingSelectorBuilder: ReadingSelectorBuilder,
         diagnosticsBuilder: DiagnosticsBuilder,
+        appIconService: AppIconService,
+        appIconBuilder: AppIconBuilder,
         navigationController: UINavigationController
     ) {
         appearanceMode = themeService.appearanceMode
         audioEnd = audioPreferences.audioEnd
         streamingEnabled = audioPreferences.streamingEnabled
+        isAppIconAvailable = appIconService.isAvailable
+        appIconOption = appIconService.currentOption
         self.analytics = analytics
         self.reviewService = reviewService
         self.audioDownloadsBuilder = audioDownloadsBuilder
         self.translationsListBuilder = translationsListBuilder
         self.readingSelectorBuilder = readingSelectorBuilder
         self.diagnosticsBuilder = diagnosticsBuilder
+        self.appIconBuilder = appIconBuilder
         self.navigationController = navigationController
 
         themeService.appearanceModePublisher.assign(to: &$appearanceMode)
         audioPreferences.$audioEnd.assign(to: &$audioEnd)
         audioPreferences.$streamingEnabled.assign(to: &$streamingEnabled)
+        appIconService.currentOptionPublisher.assign(to: &$appIconOption)
     }
     #endif
 
@@ -96,6 +109,10 @@ final class SettingsRootViewModel: ObservableObject {
     let translationsListBuilder: TranslationsListBuilder
     let readingSelectorBuilder: ReadingSelectorBuilder
     let diagnosticsBuilder: DiagnosticsBuilder
+    let appIconBuilder: AppIconBuilder
+
+    /// Whether the app can change its Home Screen icon. The App Icon row hides otherwise.
+    let isAppIconAvailable: Bool
 
     let contactUsService = ContactUsService()
     let themeService = ThemeService.shared
@@ -123,6 +140,9 @@ final class SettingsRootViewModel: ObservableObject {
         }
     }
 
+    /// The icon iOS shows for the app.
+    @Published private(set) var appIconOption: AppIconOption
+
     func selectAppearanceMode(_ mode: AppearanceMode) {
         guard mode != appearanceMode else {
             return
@@ -130,6 +150,12 @@ final class SettingsRootViewModel: ObservableObject {
         logger.info("Settings: appearance mode changed to \(mode)")
         analytics.changeAppearanceMode(mode)
         appearanceMode = mode
+    }
+
+    func navigateToAppIcons() {
+        logger.info("Settings: navigateToAppIcons")
+        let viewController = appIconBuilder.build(source: .settings)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
     func navigateToAudioEndSelector() {

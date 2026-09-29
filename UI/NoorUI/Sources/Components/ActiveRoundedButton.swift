@@ -20,7 +20,7 @@ public struct ActiveRoundedButton: View {
     public var body: some View {
         AsyncButton(action: action) {
             Text(label)
-                .foregroundColor(.white)
+                .foregroundColor(.onAccent)
                 .padding(.vertical, 5)
                 .padding(.horizontal, 10)
                 .background(
@@ -36,7 +36,7 @@ private struct RoundedActiveBackground: View {
 
     var body: some View {
         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-            .fill(Color.appIdentity.opacity(0.8))
+            .fill(Color.accentColor.opacity(0.8))
             .shadow(color: .systemGray3, radius: 2)
     }
 }

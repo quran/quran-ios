@@ -82,9 +82,9 @@ private struct BookmarkCollectionsContent: View {
                 }
 
                 NoorListItem(
-                    image: .init(.plusCircle, color: .appIdentity),
+                    image: .init(.plusCircle, color: .accentColor),
                     title: .text(l("bookmarks.collections.new")),
-                    titleColor: .appIdentity,
+                    titleColor: .accentColor,
                     action: .sync { viewModel.presentAddCollection() }
                 )
                 .deleteDisabled(true)

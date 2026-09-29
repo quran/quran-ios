@@ -10,6 +10,7 @@ EXAMPLE_SCHEME ?= QuranEngineApp
 EXAMPLE_SDK ?= iphonesimulator
 EXAMPLE_DESTINATION ?= generic/platform=iOS
 EXAMPLE_BUNDLE_IDENTIFIER ?= com.quran.QuranEngineApp
+EXAMPLE_RESOURCES_DIR ?= Example/QuranEngineApp/Resources
 # simctl needs a concrete runtime version when locating the device to launch.
 LATEST_IOS_SIMULATOR_OS = $(shell xcrun simctl list runtimes | sed -nE 's/^iOS ([0-9.]+) .* - com\.apple\.CoreSimulator\.SimRuntime\.iOS-[0-9-]+$$/\1/p' | sort -V | tail -n 1)
 EXAMPLE_NO_SYNC_SIMULATOR ?= iPhone 17e,$(LATEST_IOS_SIMULATOR_OS)
@@ -80,6 +81,7 @@ endef
 .PHONY: clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect lint-no-kotlin-interop
 .PHONY: install-swiftlint build-for-analyzer swiftlint-analyzer
 .PHONY: preview test-preview-tools
+.PHONY: export-example-app-icon-images
 
 test-no-sync:
 	$(WITHOUT_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build test -scheme "$(PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
@@ -197,3 +199,11 @@ build-for-analyzer:
 
 swiftlint-analyzer:
 	swiftlint analyze --strict  --quiet --compiler-log-path .build/xcodebuild.log
+
+# Renders the Example's icon images from its Icon Composer icons: the App Icon screen previews,
+# and the Now Playing artwork. The default icon's preview renders larger because the
+# What's New reveal shows it at 148 pt.
+export-example-app-icon-images:
+	Tools/export-app-icon-images.sh preview "$(EXAMPLE_RESOURCES_DIR)/AppIcon.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-icon-engine-amber.imageset" 180
+	Tools/export-app-icon-images.sh preview "$(EXAMPLE_RESOURCES_DIR)/AppIcon-Graphite.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-icon-engine-graphite.imageset" 60
+	Tools/export-app-icon-images.sh artwork "$(EXAMPLE_RESOURCES_DIR)/AppIcon.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-image.imageset" 1024

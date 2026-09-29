@@ -24,7 +24,7 @@ public struct ProminentRoundedButton: View {
         AsyncButton(action: action) {
             buttonLabel
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(Color.white)
+                .foregroundStyle(Color.onAccent)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, verticalPadding)
                 .background(

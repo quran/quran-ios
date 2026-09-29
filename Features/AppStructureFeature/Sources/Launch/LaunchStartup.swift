@@ -10,6 +10,7 @@ import AppMigrationFeature
 import AppMigrator
 import AudioUpdater
 import Crashing
+import NoorUI
 import QuranKit
 import ReadingService
 import SettingsService
@@ -26,7 +27,8 @@ public final class LaunchStartup {
         audioUpdater: AudioUpdater,
         fileSystemMigrator: FileSystemMigrator,
         recitersPathMigrator: RecitersPathMigrator,
-        reviewService: ReviewService
+        reviewService: ReviewService,
+        appIconService: AppIconService
     ) {
         self.appBuilder = appBuilder
         self.downloadBackupMigrator = downloadBackupMigrator
@@ -34,6 +36,7 @@ public final class LaunchStartup {
         self.fileSystemMigrator = fileSystemMigrator
         self.recitersPathMigrator = recitersPathMigrator
         self.reviewService = reviewService
+        self.appIconService = appIconService
     }
 
     deinit {
@@ -45,6 +48,8 @@ public final class LaunchStartup {
     // MARK: Public
 
     public func launch(from window: UIWindow) {
+        // The accent follows the icon iOS shows, before any screen reads it.
+        appIconService.applyAccent(to: window)
         crashApplicationObserver.start()
         crashContext.setStartupPhase("launching")
         #if QURAN_SYNC
@@ -79,6 +84,7 @@ public final class LaunchStartup {
     private let downloadBackupMigrator: DownloadBackupMigrator
     private let audioUpdater: AudioUpdater
     private let reviewService: ReviewService
+    private let appIconService: AppIconService
     private let crashApplicationObserver = CrashApplicationObserver()
     private let notificationCenter = NotificationCenter.default
 

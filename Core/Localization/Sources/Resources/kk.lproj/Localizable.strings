@@ -100,6 +100,33 @@
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Көрініс";
 
+// MARK: - App Icon
+
+// Metadata: Translated by AI; human review required.
+"app_icon.default" = "Әдепкі";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.black_gold" = "Қара және алтын";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.blue" = "Көк";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.green" = "Жасыл";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.navy_gold" = "Қою көк және алтын";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.orange" = "Қызғылт сары";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.purple" = "Күлгін";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.red" = "Қызыл";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.teal_white" = "Көкшіл жасыл және ақ";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.colors" = "Түстер";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.signature" = "Фирмалық";
+// Metadata: Translated by AI; human review required.
+"app_icon.title" = "Қолданба белгішесі";
+
 // MARK: - Tabs
 
 // Metadata: Translated by ChatGPT; human review required.

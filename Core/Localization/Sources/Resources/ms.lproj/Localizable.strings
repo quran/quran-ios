@@ -97,6 +97,33 @@
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Penampilan";
 
+// MARK: - App Icon
+
+// Metadata: Translated by AI; human review required.
+"app_icon.default" = "Lalai";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.black_gold" = "Hitam & emas";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.blue" = "Biru";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.green" = "Hijau";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.navy_gold" = "Biru laut & emas";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.orange" = "Oren";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.purple" = "Ungu";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.red" = "Merah";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.teal_white" = "Hijau kebiruan & putih";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.colors" = "Warna";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.signature" = "Istimewa";
+// Metadata: Translated by AI; human review required.
+"app_icon.title" = "Ikon aplikasi";
+
 // MARK: - Tabs
 
 // Metadata: Translated by ChatGPT; human review required.

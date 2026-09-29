@@ -10,6 +10,7 @@ import AppDependencies
 import BatchDownloader
 import Foundation
 import LastPagePersistence
+import NoorUI
 import NotePersistence
 import PageBookmarkPersistence
 import ReadingService
@@ -26,6 +27,18 @@ import MobileSyncTestSupport
 
 /// The dependencies the Settings builders read; the rest are unused in these tests.
 struct AppDependenciesStub: AppDependencies {
+    var appIconCatalog = AppIconCatalog(sections: [
+        .init(id: "all", title: "All", previewSize: .large, options: [
+            AppIconOption(
+                id: "primary",
+                alternateIconName: nil,
+                name: "Primary",
+                previewImageName: "app-icon-primary",
+                accent: AppIconAccent(light: .black, dark: .white, onDark: .black)
+            ),
+        ]),
+    ])
+
     #if QURAN_SYNC
     var authenticationClient: any AuthenticationClient = AuthenticationClientFake()
     let legacyDataImportCoordinator = LegacyDataImportCoordinator(

@@ -11,22 +11,24 @@ import SwiftUI
 import UIKit
 import UIx
 
+/// Done and Add inherit the window tint, so they follow the app icon accent live.
+/// Edit, Close, overflow, and secondary actions stay neutral.
 @MainActor
 public enum NavigationBarButton {
     public static func edit(action: @escaping @MainActor @Sendable () -> Void) -> UIBarButtonItem {
-        button(systemItem: .edit, tintColor: nil, action: action)
+        button(systemItem: .edit, tintColor: .label, action: action)
     }
 
     public static func done(action: @escaping @MainActor @Sendable () -> Void) -> UIBarButtonItem {
-        button(systemItem: .done, tintColor: .appIdentity, action: action)
+        button(systemItem: .done, tintColor: nil, action: action)
     }
 
     public static func close(action: @escaping @MainActor @Sendable () -> Void) -> UIBarButtonItem {
-        button(systemItem: .close, tintColor: nil, action: action)
+        button(systemItem: .close, tintColor: .label, action: action)
     }
 
     public static func add(action: @escaping @MainActor @Sendable () -> Void) -> UIBarButtonItem {
-        button(systemName: "plus", tintColor: .appIdentity, action: action)
+        button(systemName: "plus", tintColor: nil, action: action)
     }
 
     public static func secondary(
@@ -66,14 +68,16 @@ public enum NavigationBarButton {
 
     private static func button(
         systemName: String,
-        tintColor: UIColor,
+        tintColor: UIColor?,
         action: @escaping @MainActor @Sendable () -> Void
     ) -> UIBarButtonItem {
         let button = UIBarButtonItem(
             image: UIImage(systemName: systemName),
             primaryAction: UIAction { _ in action() }
         )
-        button.tintColor = tintColor
+        if let tintColor {
+            button.tintColor = tintColor
+        }
         return button
     }
 }

@@ -34,17 +34,27 @@ public struct NoorListItem: View {
         public init(_ image: NoorSystemImage, color: Color? = nil) {
             self.image = image.image
             self.color = color
+            appIconLength = nil
         }
 
         public init(_ image: Image, color: Color? = nil) {
             self.image = image
             self.color = color
+            appIconLength = nil
+        }
+
+        /// A Home Screen icon preview, drawn `length` points wide with the icon's rounded corners.
+        public init(appIcon option: AppIconOption, length: CGFloat) {
+            image = option.previewImage
+            color = nil
+            appIconLength = length
         }
 
         // MARK: Internal
 
         let image: Image
         let color: Color?
+        let appIconLength: CGFloat?
     }
 
     // MARK: Lifecycle
@@ -198,7 +208,9 @@ public struct NoorListItem: View {
             }
 
             if let image {
-                if let color = image.color {
+                if let appIconLength = image.appIconLength {
+                    AppIconPreview(image.image, length: appIconLength)
+                } else if let color = image.color {
                     image.image
                         .foregroundColor(color)
                 } else {

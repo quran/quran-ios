@@ -81,6 +81,33 @@
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Giao diện";
 
+// MARK: - App Icon
+
+// Metadata: Translated by AI; human review required.
+"app_icon.default" = "Mặc định";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.black_gold" = "Đen & vàng kim";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.blue" = "Xanh dương";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.green" = "Xanh lá";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.navy_gold" = "Xanh hải quân & vàng kim";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.orange" = "Cam";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.purple" = "Tím";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.red" = "Đỏ";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.teal_white" = "Xanh mòng két & trắng";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.colors" = "Màu sắc";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.signature" = "Đặc trưng";
+// Metadata: Translated by AI; human review required.
+"app_icon.title" = "Biểu tượng ứng dụng";
+
 // MARK: - Tabs
 
 "tab.notes" = "Ghi chú";

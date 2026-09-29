@@ -10,10 +10,13 @@
 		D975EDC62A4791D6009DE942 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D975EDC52A4791D6009DE942 /* AppDelegate.swift */; };
 		D975EDC82A4791D6009DE942 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D975EDC72A4791D6009DE942 /* SceneDelegate.swift */; };
 		D975EDCF2A4791D7009DE942 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D975EDCE2A4791D7009DE942 /* Assets.xcassets */; };
+		D9A1C0DE2E8F000100000021 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = D9A1C0DE2E8F000100000011 /* AppIcon.icon */; };
+		D9A1C0DE2E8F000100000022 /* AppIcon-Graphite.icon in Resources */ = {isa = PBXBuildFile; fileRef = D9A1C0DE2E8F000100000012 /* AppIcon-Graphite.icon */; };
 		D975EDD22A4791D7009DE942 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D975EDD02A4791D7009DE942 /* LaunchScreen.storyboard */; };
 		D975EDE22A4795BD009DE942 /* AppStructureFeature in Frameworks */ = {isa = PBXBuildFile; productRef = D975EDE12A4795BD009DE942 /* AppStructureFeature */; };
 		D975EDE52A47960D009DE942 /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = D975EDE42A47960D009DE942 /* Container.swift */; };
 		D975EDE72A4796AA009DE942 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D975EDE62A4796AA009DE942 /* Analytics.swift */; };
+		D9A1C0DE2E8F000100000002 /* AppIconCatalog+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A1C0DE2E8F000100000001 /* AppIconCatalog+Example.swift */; };
 		D975EDEA2A4799A2009DE942 /* reciters.plist in Resources */ = {isa = PBXBuildFile; fileRef = D975EDE92A4799A2009DE942 /* reciters.plist */; };
 		D98543D32A47C88700F477A2 /* hafs_1405 in Resources */ = {isa = PBXBuildFile; fileRef = D98543D22A47C88700F477A2 /* hafs_1405 */; };
 		D98543DD2A49095800F477A2 /* words.db in Resources */ = {isa = PBXBuildFile; fileRef = D98543DC2A49095800F477A2 /* words.db */; };
@@ -24,6 +27,8 @@
 		D975EDC52A4791D6009DE942 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D975EDC72A4791D6009DE942 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		D975EDCE2A4791D7009DE942 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D9A1C0DE2E8F000100000011 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		D9A1C0DE2E8F000100000012 /* AppIcon-Graphite.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "AppIcon-Graphite.icon"; sourceTree = "<group>"; };
 		D975EDD12A4791D7009DE942 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D975EDD32A4791D7009DE942 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D975EDDD2A479335009DE942 /* quran-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "quran-ios"; path = ..; sourceTree = "<group>"; };
@@ -33,6 +38,7 @@
 		D98543D22A47C88700F477A2 /* hafs_1405 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = hafs_1405; sourceTree = "<group>"; };
 		D98543D42A47E14200F477A2 /* QuranEngineApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QuranEngineApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		D98543DC2A49095800F477A2 /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = words.db; sourceTree = "<group>"; };
+		D9A1C0DE2E8F000100000001 /* AppIconCatalog+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppIconCatalog+Example.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +86,7 @@
 				D975EDC52A4791D6009DE942 /* AppDelegate.swift */,
 				D975EDC72A4791D6009DE942 /* SceneDelegate.swift */,
 				D975EDE42A47960D009DE942 /* Container.swift */,
+				D9A1C0DE2E8F000100000001 /* AppIconCatalog+Example.swift */,
 				D975EDE62A4796AA009DE942 /* Analytics.swift */,
 				D98543D42A47E14200F477A2 /* QuranEngineApp-Bridging-Header.h */,
 			);
@@ -89,6 +96,8 @@
 		D975EDDA2A479204009DE942 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D9A1C0DE2E8F000100000011 /* AppIcon.icon */,
+				D9A1C0DE2E8F000100000012 /* AppIcon-Graphite.icon */,
 				D975EDCE2A4791D7009DE942 /* Assets.xcassets */,
 				D98543D22A47C88700F477A2 /* hafs_1405 */,
 				D975EDD02A4791D7009DE942 /* LaunchScreen.storyboard */,
@@ -176,6 +185,8 @@
 				D975EDD22A4791D7009DE942 /* LaunchScreen.storyboard in Resources */,
 				D98543DD2A49095800F477A2 /* words.db in Resources */,
 				D975EDCF2A4791D7009DE942 /* Assets.xcassets in Resources */,
+				D9A1C0DE2E8F000100000021 /* AppIcon.icon in Resources */,
+				D9A1C0DE2E8F000100000022 /* AppIcon-Graphite.icon in Resources */,
 				D975EDEA2A4799A2009DE942 /* reciters.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -189,6 +200,7 @@
 			files = (
 				D975EDC62A4791D6009DE942 /* AppDelegate.swift in Sources */,
 				D975EDE52A47960D009DE942 /* Container.swift in Sources */,
+				D9A1C0DE2E8F000100000002 /* AppIconCatalog+Example.swift in Sources */,
 				D975EDE72A4796AA009DE942 /* Analytics.swift in Sources */,
 				D975EDC82A4791D6009DE942 /* SceneDelegate.swift in Sources */,
 			);
@@ -333,6 +345,7 @@
 		D975EDD72A4791D7009DE942 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-Graphite";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -364,6 +377,7 @@
 		D975EDD82A4791D7009DE942 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-Graphite";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;

@@ -114,6 +114,33 @@
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Ko'rinish";
 
+// MARK: - App Icon
+
+// Metadata: Translated by AI; human review required.
+"app_icon.default" = "Standart";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.black_gold" = "Qora va oltin";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.blue" = "Ko‘k";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.green" = "Yashil";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.navy_gold" = "To‘q ko‘k va oltin";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.orange" = "To‘q sariq";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.purple" = "Binafsha";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.red" = "Qizil";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.teal_white" = "Moviy-yashil va oq";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.colors" = "Ranglar";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.signature" = "Maxsus";
+// Metadata: Translated by AI; human review required.
+"app_icon.title" = "Ilova belgisi";
+
 // MARK: - Tabs
 
 // Metadata: Translated by ChatGPT; human review required.

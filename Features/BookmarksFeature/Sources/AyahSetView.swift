@@ -71,7 +71,7 @@ private struct AyahSetContentView: View {
             text: emptyStateText,
             image: .bookmark,
             style: .prominent(
-                imageColor: viewModel.content.highlightColor?.color ?? Color.appIdentity
+                imageColor: viewModel.content.highlightColor?.color ?? Color.accentColor
             )
         )
     }

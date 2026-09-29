@@ -79,7 +79,7 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
 
     private var background: some View {
         backgroundRectangle
-            .strokeBorder(selected ? Color.appIdentity : .clear, lineWidth: 2)
+            .strokeBorder(selected ? Color.accentColor : .clear, lineWidth: 2)
             .background(backgroundRectangle
                 .foregroundColor(Color.secondarySystemGroupedBackground)
             )
@@ -89,11 +89,11 @@ struct ReadingItem<Value: Hashable, ImageView: View>: View {
     @ViewBuilder private var checkmarkView: some View {
         if selected {
             NoorSystemImage.checkmark.image
-                .foregroundColor(.white)
+                .foregroundColor(.onAccent)
                 .padding()
                 .background(
                     Circle()
-                        .foregroundColor(Color.appIdentity)
+                        .foregroundColor(Color.accentColor)
                         .shadow(radius: 3)
                 )
         }

@@ -9,8 +9,9 @@ import SwiftUI
 import UIx
 
 extension Color {
-    public static var appIdentity: Color {
-        Color("appTint", bundle: .module)
+    /// Text and glyphs drawn on a filled `accentColor` background.
+    @MainActor public static var onAccent: Color {
+        Color(UIColor.onAccent)
     }
 
     public static var pageMarkerTint: Color {
@@ -24,8 +25,9 @@ extension Color {
 }
 
 public extension UIColor {
-    static var appIdentity: UIColor {
-        UIColor(named: "appTint", in: .module, compatibleWith: nil) ?? .systemIndigo
+    /// Text and glyphs drawn on a filled accent background.
+    @MainActor static var onAccent: UIColor {
+        AppIconAccent.current.onColor
     }
 }
 

@@ -353,6 +353,13 @@
         "identifier" : "UIxTests",
         "name" : "UIxTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AppIconFeatureTests",
+        "name" : "AppIconFeatureTests"
+      }
     }
   ],
   "version" : 1

@@ -59,7 +59,7 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
                     switch property.type {
                     case .supports:
                         Image(systemName: "checkmark.seal")
-                            .foregroundColor(Color.appIdentity)
+                            .foregroundColor(Color.accentColor)
                     case .lacks:
                         Image(systemName: "xmark.seal")
                             .foregroundColor(Color.red)
@@ -89,7 +89,7 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
             HStack {
                 Spacer()
                 Text(l("reading.selector.selectMushaf.long"))
-                    .foregroundColor(.white)
+                    .foregroundColor(.onAccent)
                 Spacer()
             }
             .padding()
@@ -98,7 +98,7 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
                     .fill(
                         LinearGradient(
                             gradient: Gradient(
-                                colors: [Color.appIdentity, Color.appIdentity.opacity(0.7)]
+                                colors: [Color.accentColor, Color.accentColor.opacity(0.7)]
                             ),
                             startPoint: .leading,
                             endPoint: .trailing
@@ -138,6 +138,5 @@ struct ReadingDetails_Previews: PreviewProvider {
 
     static var previews: some View {
         Preview()
-            .accentColor(.appIdentity)
     }
 }

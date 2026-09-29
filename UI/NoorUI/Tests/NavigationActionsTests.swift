@@ -8,15 +8,16 @@ final class NavigationActionsTests: XCTestCase {
         assertSystemPresentation(
             NavigationBarButton.edit { },
             systemItem: .edit,
-            tintColor: nil
+            tintColor: .label
         )
     }
 
     func test_doneButton_usesSystemPresentation() {
+        // Inherits the window tint, which follows the app icon accent.
         assertSystemPresentation(
             NavigationBarButton.done { },
             systemItem: .done,
-            tintColor: .appIdentity
+            tintColor: nil
         )
     }
 
@@ -24,8 +25,15 @@ final class NavigationActionsTests: XCTestCase {
         assertSystemPresentation(
             NavigationBarButton.close { },
             systemItem: .close,
-            tintColor: nil
+            tintColor: .label
         )
+    }
+
+    func test_addButton_inheritsWindowTint() {
+        let button = NavigationBarButton.add { }
+
+        XCTAssertNil(button.tintColor)
+        XCTAssertNotNil(button.primaryAction)
     }
 
     private func assertSystemPresentation(

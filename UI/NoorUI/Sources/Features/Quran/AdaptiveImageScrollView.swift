@@ -178,7 +178,6 @@ private struct AnnotatedAyahImagePreview: View {
         .themedBackground()
         .ignoresSafeArea()
         .environment(\.themeStyle, .paper)
-        .accentColor(.appIdentity)
     }
 
     private var decorations: ImageDecorations {

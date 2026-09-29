@@ -114,6 +114,33 @@
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "كۆرۈنمە";
 
+// MARK: - App Icon
+
+// Metadata: Translated by AI; human review required.
+"app_icon.default" = "كۆڭۈلدىكى";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.black_gold" = "قارا ۋە ئالتۇن رەڭ";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.blue" = "كۆك";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.green" = "يېشىل";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.navy_gold" = "قېنىق كۆك ۋە ئالتۇن رەڭ";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.orange" = "قىزغۇچ سېرىق";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.purple" = "بىنەپشە";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.red" = "قىزىل";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.teal_white" = "كۆكۈش يېشىل ۋە ئاق";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.colors" = "رەڭلەر";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.signature" = "ئالاھىدە";
+// Metadata: Translated by AI; human review required.
+"app_icon.title" = "ئەپ سىنبەلگىسى";
+
 // MARK: - Tabs
 
 // Metadata: Translated by ChatGPT; human review required.

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIx
 
 extension Color {
     public static var appIdentity: Color {
@@ -13,9 +14,12 @@ extension Color {
     }
 
     public static var pageMarkerTint: Color {
-        Color(UIColor { collection in
-            collection.userInterfaceStyle == .dark ? UIColor(rgb: 0x039F85) : UIColor(rgb: 0x004D40)
-        })
+        Color(UIColor(light: UIColor(rgb: 0x004D40), dark: UIColor(rgb: 0x039F85)))
+    }
+
+    /// Highlights the recited verse and word. It stays the same whatever the app icon.
+    static var recitation: Color {
+        Color(UIColor.recitation)
     }
 }
 
@@ -26,6 +30,10 @@ public extension UIColor {
 }
 
 extension UIColor {
+    static var recitation: UIColor {
+        UIColor(light: UIColor(rgb: 0xDC7702), dark: UIColor(rgb: 0xEF911D))
+    }
+
     static var themeCalmText: UIColor {
         UIColor(named: "theme-calm-text", in: .module, compatibleWith: nil)!
     }

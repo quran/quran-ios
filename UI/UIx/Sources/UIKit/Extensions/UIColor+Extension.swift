@@ -37,6 +37,13 @@ extension UIColor {
         )
     }
 
+    /// A color that resolves to `light` or `dark` for the current appearance.
+    public convenience init(light: UIColor, dark: UIColor) {
+        self.init { traits in
+            traits.userInterfaceStyle == .dark ? dark : light
+        }
+    }
+
     public func toHexString() -> String {
         var r: CGFloat = 0
         var g: CGFloat = 0

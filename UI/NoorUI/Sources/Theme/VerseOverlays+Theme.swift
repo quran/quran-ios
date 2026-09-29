@@ -27,9 +27,9 @@ import UIKit
 extension VerseOverlays {
     public static let opacity = 0.3
 
-    public static let wordHighlightColor = Color.appIdentity.opacity(opacity)
+    public static let wordHighlightColor = Color.recitation.opacity(opacity)
 
-    static let playingColor = UIColor.appIdentity.withAlphaComponent(opacity)
+    static let playingColor = UIColor.recitation.withAlphaComponent(opacity)
     static let selectionColor = UIColor.systemBlue.withAlphaComponent(opacity)
     static let navigationColor = UIColor.systemGray.withAlphaComponent(opacity)
 

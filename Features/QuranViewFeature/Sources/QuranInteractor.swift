@@ -38,6 +38,7 @@ import UIKit
 import UIx
 import VLogging
 import WordPointerFeature
+import WordTextService
 
 @MainActor
 protocol QuranPresentable: UIViewController {
@@ -107,6 +108,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     init(deps: Deps, input: QuranInput) {
         self.deps = deps
         self.input = input
+        isWordPointerActive = WordTextPreferences.shared.isWordPointerActive
         logger.info("Quran: opening quran \(input)")
     }
 
@@ -394,6 +396,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     func onIsWordPointerActiveUpdated(to isWordPointerActive: Bool) {
         self.isWordPointerActive = isWordPointerActive
+        wordTextPreferences.isWordPointerActive = isWordPointerActive
         if isWordPointerActive {
             if let presenter {
                 showWordPointer(referenceView: presenter.pagesView)
@@ -466,12 +469,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private let readingPreferences = ReadingPreferences.shared
     private let contentStatePreferences = QuranContentStatePreferences.shared
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
+    private let wordTextPreferences = WordTextPreferences.shared
 
     private var deps: Deps
     private let input: QuranInput
     private var audioBanner: AudioBannerViewModel?
     private var cancellables: Set<AnyCancellable> = []
-    private var isWordPointerActive: Bool = false
+    private var isWordPointerActive: Bool
     private var wordPointer: WordPointerViewController?
 
     private var visiblePageCancellable: AnyCancellable?
@@ -507,6 +511,14 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
         (contentViewController, contentViewModel) = presentQuranContent(with: input)
         presenter?.startHiddenBarsTimer()
+        restoreWordPointerIfNeeded()
+    }
+
+    private func restoreWordPointerIfNeeded() {
+        guard isWordPointerActive, readingPreferences.reading.supportsWordPositions, let presenter else {
+            return
+        }
+        showWordPointer(referenceView: presenter.pagesView)
     }
 
     private func presentTranslationsSelection() {

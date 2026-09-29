@@ -6,6 +6,14 @@
 	<array>
 		<dict>
 			<key>version</key>
+			<string>2.7.0</string>
+			<key>reveal</key>
+			<string>app-icon</string>
+			<key>items</key>
+			<array/>
+		</dict>
+		<dict>
+			<key>version</key>
 			<string>2.6.2</string>
 			<key>items</key>
 			<array>

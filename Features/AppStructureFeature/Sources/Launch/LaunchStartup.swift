@@ -143,9 +143,11 @@ public final class LaunchStartup {
 
     private func upgradeIfNeeded(window: UIWindow) {
         registerMigrators()
+        // Read before `migrationStatus()` or `migrate()` commits the current version.
+        let launchVersion = appMigrator.launchVersion
         switch appMigrator.migrationStatus() {
         case .noMigration:
-            showApp(window: window)
+            showApp(window: window, launchVersion: launchVersion)
         case let .migrate(blocksUI, titles):
             crashContext.setStartupPhase("migrating")
             logger.info("Crash context: startup phase migrating")
@@ -158,12 +160,12 @@ public final class LaunchStartup {
             }
             Task {
                 await appMigrator.migrate()
-                showApp(window: window)
+                showApp(window: window, launchVersion: launchVersion)
             }
         }
     }
 
-    private func showApp(window: UIWindow) {
+    private func showApp(window: UIWindow, launchVersion: LaunchVersionUpdate) {
         if self.appViewController != nil {
             return
         }
@@ -174,7 +176,7 @@ public final class LaunchStartup {
 
         let wasUpdated = window.rootViewController != nil
 
-        let appViewController = appBuilder.build()
+        let appViewController = appBuilder.build(launchVersion: launchVersion)
         self.appViewController = appViewController
 
         if wasUpdated {

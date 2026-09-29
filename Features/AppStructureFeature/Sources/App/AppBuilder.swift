@@ -7,13 +7,17 @@
 //
 
 import AppDependencies
+import AppMigrator
 import UIKit
+import WhatsNewFeature
 
 @MainActor
 struct AppBuilder {
     let container: AppDependencies
 
-    func build() -> AppViewController {
+    /// - Parameter launchVersion: How this launch relates to the previous one,
+    ///   captured before the launch commits the current app version.
+    func build(launchVersion: LaunchVersionUpdate) -> AppViewController {
         let interactor = AppInteractor(
             supportsCloudKit: container.supportsCloudKit,
             analytics: container.analytics,
@@ -27,8 +31,13 @@ struct AppBuilder {
             ]
         )
         return AppViewController(
-            analytics: container.analytics,
-            interactor: interactor
+            interactor: interactor,
+            whatsNewController: AppWhatsNewController(
+                analytics: container.analytics,
+                launchVersion: launchVersion,
+                appIconCatalog: container.appIconCatalog
+            ),
+            isAppIconAvailable: container.appIconService().isAvailable
         )
     }
 }

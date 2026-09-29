@@ -323,15 +323,10 @@
 "new.title" = "What's new";
 "new.action" = "Continue";
 
-// New app icon announcement
-"new.icon_announcement.title" = "A new icon";
-"new.icon_announcement.body" = "In our next update, the Quran app icon on your Home Screen will change. This new icon is now the shared mark of a family of tools built around Allah's word. More details soon.";
-"new.icon_announcement.now" = "NOW";
-"new.icon_announcement.coming_soon" = "COMING SOON";
-"new.icon_announcement.same_app.title" = "Same app, new icon";
-"new.icon_announcement.same_app.body" = "All your bookmarks, progress, and settings stay exactly where they are.";
-"new.icon_announcement.release.title" = "Rolling out next release";
-"new.icon_announcement.release.body" = "Update to the latest version to see the new icon on your Home Screen.";
+// New app icon
+"new.app_icon.title" = "Our new icon is here";
+"new.app_icon.body" = "Quran now carries the shared mark of a family of tools built around Allah’s word. Your bookmarks, notes, and progress are right where you left them.";
+"new.app_icon.choose_another" = "Choose Another Icon";
 
 // Reading layouts
 "new.reading_layouts" = "New Madani Mushafs";

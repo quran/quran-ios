@@ -360,6 +360,13 @@
         "identifier" : "AppIconFeatureTests",
         "name" : "AppIconFeatureTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "WhatsNewFeatureTests",
+        "name" : "WhatsNewFeatureTests"
+      }
     }
   ],
   "version" : 1

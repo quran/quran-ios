@@ -9,10 +9,10 @@ final class ReadingBookmarkDisplayNameTests: XCTestCase {
         let ayah = Quran.hafsMadani1405.suras[1].verses[4]
         for name in ["Hifz", nil] as [String?] {
             let bookmark = PlacedReadingBookmark(
-                id: "green", slot: .green, placement: .ayah(ayah), modifiedOn: .distantPast, name: name
+                id: "teal", slot: .teal, placement: .ayah(ayah), modifiedOn: .distantPast, name: name
             )
 
-            XCTAssertEqual(bookmark.displayName, name ?? ReadingBookmarkSlot.green.displayName)
+            XCTAssertEqual(bookmark.displayName, name ?? ReadingBookmarkSlot.teal.displayName)
             XCTAssertEqual(ReadingBookmark(bookmark).displayName, bookmark.displayName)
         }
     }

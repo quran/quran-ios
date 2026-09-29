@@ -263,7 +263,7 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
         XCTAssertEqual(data, emptyImport)
     }
 
-    func test_note_colorsMapIndependentlyWithRedDefault() async throws {
+    func test_note_colorsMapIndependentlyWithPinkDefault() async throws {
         let colors: [Int?] = [0, nil, 99, -1, 1, 2, 3, 4]
         let data = try await importData { context in
             for (index, color) in colors.enumerated() {

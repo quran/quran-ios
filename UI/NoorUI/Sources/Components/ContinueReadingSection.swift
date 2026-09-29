@@ -198,17 +198,17 @@ private struct ContinueReadingSectionPreview: View {
     #if QURAN_SYNC
     private static let bookmarks: [PlacedReadingBookmark] = [
         PlacedReadingBookmark(
-            id: "preview-purple", slot: .purple,
+            id: "preview-orange", slot: .orange,
             placement: .ayah(Quran.hafsMadani1405.suras[0].verses[5]),
             modifiedOn: referenceDate.addingTimeInterval(-36000)
         ),
         PlacedReadingBookmark(
-            id: "preview-green", slot: .green,
+            id: "preview-teal", slot: .teal,
             placement: .page(Quran.hafsMadani1405.pages[22]),
             modifiedOn: referenceDate.addingTimeInterval(-86400)
         ),
         PlacedReadingBookmark(
-            id: "preview-blue", slot: .blue,
+            id: "preview-red", slot: .red,
             placement: .ayah(Quran.hafsMadani1405.suras[35].verses[57]),
             modifiedOn: referenceDate.addingTimeInterval(-259_200)
         ),

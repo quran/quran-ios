@@ -202,15 +202,15 @@ final class AyahSetViewModelTests: XCTestCase {
 
     func test_start_observesSelectedHighlightsAndLoadsArabicText() async throws {
         let service = makeHighlightService()
-        let redAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
+        let pinkAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
         let greenAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1))
-        try await service.setHighlight(.red, for: [redAyah])
+        try await service.setHighlight(.pink, for: [pinkAyah])
         try await service.setHighlight(.green, for: [greenAyah])
-        let sut = makeHighlightSUT(color: .red, service: service)
+        let sut = makeHighlightSUT(color: .pink, service: service)
         let observed = expectation(description: "Observes selected highlights and Arabic text")
         let observation = Publishers.CombineLatest(sut.$content, sut.$ayahTexts)
             .filter { content, texts in
-                content.ayahs == [redAyah] && texts[redAyah]?.text.isEmpty == false
+                content.ayahs == [pinkAyah] && texts[pinkAyah]?.text.isEmpty == false
             }
             .prefix(1)
             .sink { _ in observed.fulfill() }
@@ -218,9 +218,9 @@ final class AyahSetViewModelTests: XCTestCase {
         let task = Task { await sut.start() }
         await fulfillment(of: [observed], timeout: 2)
 
-        XCTAssertEqual(sut.content.title, HighlightColor.red.localizedName)
-        XCTAssertEqual(sut.content.ayahs, [redAyah])
-        XCTAssertEqual(sut.content.highlightColor, .red)
+        XCTAssertEqual(sut.content.title, HighlightColor.pink.localizedName)
+        XCTAssertEqual(sut.content.ayahs, [pinkAyah])
+        XCTAssertEqual(sut.content.highlightColor, .pink)
         XCTAssertNil(sut.ayahTexts[greenAyah])
         XCTAssertNil(sut.error)
         task.cancel()
@@ -229,18 +229,18 @@ final class AyahSetViewModelTests: XCTestCase {
 
     func test_removeAyah_removesOnlySelectedHighlight() async throws {
         let service = makeHighlightService()
-        let redAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1))
+        let pinkAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1))
         let greenAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 2))
-        try await service.setHighlight(.red, for: [redAyah])
+        try await service.setHighlight(.pink, for: [pinkAyah])
         try await service.setHighlight(.green, for: [greenAyah])
-        let sut = makeHighlightSUT(color: .red, service: service)
+        let sut = makeHighlightSUT(color: .pink, service: service)
 
-        await sut.removeAyah(redAyah)
+        await sut.removeAyah(pinkAyah)
 
         let highlights = try await storedHighlights(using: service) {
-            $0[redAyah] == nil && $0[greenAyah] == .green
+            $0[pinkAyah] == nil && $0[greenAyah] == .green
         }
-        XCTAssertNil(highlights[redAyah])
+        XCTAssertNil(highlights[pinkAyah])
         XCTAssertEqual(highlights[greenAyah], .green)
         XCTAssertNil(sut.error)
     }

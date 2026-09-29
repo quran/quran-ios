@@ -474,10 +474,16 @@
 "highlight.color.blue" = "كۆك";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.green" = "يېشىل";
+// Metadata: Translated by AI; human review required.
+"highlight.color.orange" = "قىزغۇچ سېرىق";
+// Metadata: Translated by AI; human review required.
+"highlight.color.pink" = "ھالرەڭ";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.purple" = "بىنەپشە";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.red" = "قىزىل";
+// Metadata: Translated by AI; human review required.
+"highlight.color.teal" = "كۆكۈش يېشىل";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.yellow" = "سېرىق";
 

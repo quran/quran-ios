@@ -55,7 +55,7 @@ public struct ContinueReadingBookmarkRow: View {
 
 @MainActor
 private struct ContinueReadingBookmarkRowPreview: View {
-    init(placement: PlacedReadingBookmark.Placement, slot: ReadingBookmarkSlot = .purple) {
+    init(placement: PlacedReadingBookmark.Placement, slot: ReadingBookmarkSlot = .orange) {
         bookmark = PlacedReadingBookmark(
             id: "preview", slot: slot, placement: placement,
             modifiedOn: Date(timeIntervalSinceNow: -36000)
@@ -79,10 +79,10 @@ private struct ContinueReadingBookmarkRowPreview: View {
         ContinueReadingBookmarkRowPreview(placement: .ayah(Quran.hafsMadani1405.suras[0].verses[5]))
             .environment(\.locale, Locale(identifier: "en"))
 
-        ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[22]), slot: .green)
+        ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[22]), slot: .teal)
             .environment(\.locale, Locale(identifier: "en"))
 
-        ContinueReadingBookmarkRowPreview(placement: .ayah(Quran.hafsMadani1405.suras[35].verses[57]), slot: .blue)
+        ContinueReadingBookmarkRowPreview(placement: .ayah(Quran.hafsMadani1405.suras[35].verses[57]), slot: .red)
             .environment(\.locale, Locale(identifier: "ar"))
             .environment(\.layoutDirection, .rightToLeft)
 

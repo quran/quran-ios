@@ -136,7 +136,7 @@ struct HighlightColorPicker_Previews: PreviewProvider {
         Group {
             HighlightColorPicker(
                 selectedColor: .blue,
-                partiallySelectedColors: [.red, .green],
+                partiallySelectedColors: [.pink, .green],
                 onSelect: { _ in },
                 onRemove: {}
             )

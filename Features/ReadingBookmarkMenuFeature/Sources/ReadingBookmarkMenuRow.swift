@@ -143,7 +143,7 @@ struct ReadingBookmarkMenuRow: View {
 #Preview {
     ReadingBookmarkMenuRow(
         item: .init(
-            slot: .green,
+            slot: .teal,
             name: nil,
             placement: .page(Quran.hafsMadani1405.pages[0])
         ),

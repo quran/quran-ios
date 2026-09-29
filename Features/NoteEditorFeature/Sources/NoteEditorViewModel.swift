@@ -247,7 +247,7 @@ final class NoteEditorViewModel {
 
     private var selectedColor: HighlightColor {
         #if QURAN_SYNC
-        return .red
+        return .pink
         #else
         return note.color
         #endif

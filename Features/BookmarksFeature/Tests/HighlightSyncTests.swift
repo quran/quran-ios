@@ -6,7 +6,7 @@ final class HighlightSyncTests: XCTestCase {
     func test_highlightColorsIncludeEveryMobileSyncColor() {
         XCTAssertEqual(
             HighlightColor.sortedColors,
-            [.yellow, .green, .blue, .red, .purple]
+            [.yellow, .green, .blue, .pink, .purple]
         )
     }
 }

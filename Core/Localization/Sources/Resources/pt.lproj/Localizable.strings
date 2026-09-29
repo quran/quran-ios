@@ -472,10 +472,16 @@
 "highlight.color.blue" = "Azul";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.green" = "Verde";
+// Metadata: Translated by AI; human review required.
+"highlight.color.orange" = "Laranja";
+// Metadata: Translated by AI; human review required.
+"highlight.color.pink" = "Rosa";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.purple" = "Roxo";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.red" = "Vermelho";
+// Metadata: Translated by AI; human review required.
+"highlight.color.teal" = "Verde-azulado";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.yellow" = "Amarelo";
 

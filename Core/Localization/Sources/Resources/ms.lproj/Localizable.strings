@@ -454,10 +454,16 @@
 "highlight.color.blue" = "Biru";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.green" = "Hijau";
+// Metadata: Translated by AI; human review required.
+"highlight.color.orange" = "Oren";
+// Metadata: Translated by AI; human review required.
+"highlight.color.pink" = "Merah jambu";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.purple" = "Ungu";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.red" = "Merah";
+// Metadata: Translated by AI; human review required.
+"highlight.color.teal" = "Hijau kebiruan";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.yellow" = "Kuning";
 

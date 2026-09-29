@@ -141,7 +141,7 @@ public struct ColoredBookmarksView: View {
         .init(color: .green, count: 10),
         .init(color: .purple, count: 3),
         .init(color: .blue, count: 0),
-        .init(color: .red, count: 0),
+        .init(color: .pink, count: 0),
         .init(color: .yellow, count: 0),
     ]
     ScrollView([.horizontal, .vertical]) {

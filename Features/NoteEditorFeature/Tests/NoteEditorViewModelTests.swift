@@ -35,7 +35,7 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertFalse(editableNote.ayahText.text.isEmpty)
         XCTAssertTrue(editableNote.ayahText.text.contains("١"))
         XCTAssertEqual(editableNote.note, "Stored note")
-        XCTAssertEqual(editableNote.selectedColor, .red)
+        XCTAssertEqual(editableNote.selectedColor, .pink)
         XCTAssertEqual(editableNote.ayahRange, ayah(1) ... ayah(2))
         XCTAssertFalse(editableNote.modifiedSince.isEmpty)
         XCTAssertFalse(sut.viewModel.showsColors)
@@ -298,7 +298,7 @@ final class NoteEditorViewModelTests: XCTestCase {
             verses: [ayah(3), ayah(1)],
             modifiedDate: Date(timeIntervalSince1970: 1),
             text: "Stored note",
-            color: .red
+            color: .pink
         )
 
         XCTAssertEqual(note.startAyah, ayah(1))
@@ -371,7 +371,7 @@ final class NoteEditorViewModelTests: XCTestCase {
     #else
     private func makeLegacySUT(
         noteBody: String,
-        color: HighlightColor = .red
+        color: HighlightColor = .pink
     ) -> (viewModel: NoteEditorViewModel, noteService: LegacyNoteServiceFake, listener: ListenerSpy) {
         let noteService = LegacyNoteServiceFake()
         let listener = ListenerSpy()

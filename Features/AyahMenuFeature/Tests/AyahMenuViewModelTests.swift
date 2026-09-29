@@ -46,13 +46,13 @@ final class AyahMenuViewModelTests: XCTestCase {
     }
 
     func test_bookmarkState_isPartialWhenOnlySomeSelectedAyahsAreHighlighted() {
-        let sut = makeSUT(highlightVerses: [verses[0]: .red])
+        let sut = makeSUT(highlightVerses: [verses[0]: .pink])
 
         XCTAssertEqual(sut.bookmarkState, .partiallyHighlighted)
     }
 
     func test_bookmarkState_isPartialWhenSelectedAyahsHaveDifferentHighlightColors() {
-        let sut = makeSUT(highlightVerses: [verses[0]: .red, verses[1]: .green])
+        let sut = makeSUT(highlightVerses: [verses[0]: .pink, verses[1]: .green])
 
         XCTAssertEqual(sut.bookmarkState, .partiallyHighlighted)
     }
@@ -93,7 +93,7 @@ final class AyahMenuViewModelTests: XCTestCase {
 
     func test_readingBookmarkState_showsSelectedBookmarkForSingleAyah() {
         let selectedAyah = verses[0]
-        let bookmark = readingBookmark(slot: .blue, at: selectedAyah)
+        let bookmark = readingBookmark(slot: .red, at: selectedAyah)
         let sut = makeSUT(
             verses: [selectedAyah],
             readingBookmark: bookmark

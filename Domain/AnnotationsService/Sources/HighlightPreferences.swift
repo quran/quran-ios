@@ -22,7 +22,7 @@ public struct HighlightPreferences {
 
     // MARK: Private
 
-    private static let defaultLastUsedNoteHighlightColor = HighlightColor.red
+    private static let defaultLastUsedNoteHighlightColor = HighlightColor.pink
     private static let lastUsedNoteHighlightColorKey = PreferenceKey<Int>(
         key: "lastUsedNoteHighlightColor",
         defaultValue: defaultLastUsedNoteHighlightColor.rawValue

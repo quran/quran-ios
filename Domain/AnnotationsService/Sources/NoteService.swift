@@ -87,7 +87,7 @@ private extension Note {
             verses: Set(verses),
             modifiedDate: note.modifiedDate,
             text: note.note,
-            color: HighlightColor(rawValue: note.color) ?? .red
+            color: HighlightColor(rawValue: note.color) ?? .pink
         )
     }
 }

@@ -500,7 +500,7 @@ private let previewActions = AyahMenuUI.Actions(
     VStack {
         Spacer()
         AyahMenuView(dataObject: previewDataObject(
-            highlightingColor: .red,
+            highlightingColor: .pink,
             state: .highlighted,
             isTranslationView: true
         ))

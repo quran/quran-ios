@@ -473,10 +473,16 @@
 "highlight.color.blue" = "Ko‘k";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.green" = "Yashil";
+// Metadata: Translated by AI; human review required.
+"highlight.color.orange" = "To‘q sariq";
+// Metadata: Translated by AI; human review required.
+"highlight.color.pink" = "Pushti";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.purple" = "Binafsha";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.red" = "Qizil";
+// Metadata: Translated by AI; human review required.
+"highlight.color.teal" = "Moviy-yashil";
 // Metadata: Translated by ChatGPT; human review required.
 "highlight.color.yellow" = "Sariq";
 

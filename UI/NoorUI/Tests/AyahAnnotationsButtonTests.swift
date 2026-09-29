@@ -32,23 +32,23 @@ final class AyahAnnotationsButtonTests: XCTestCase {
     }
 
     func test_readingPins_useSlotAccessibleNames() {
-        let green = AyahAnnotation.readingBookmark(.green)
-        let purple = AyahAnnotation.readingBookmark(.purple)
-        let annotations: Set<AyahAnnotation> = [purple, .note, green]
+        let teal = AyahAnnotation.readingBookmark(.teal)
+        let orange = AyahAnnotation.readingBookmark(.orange)
+        let annotations: Set<AyahAnnotation> = [orange, .note, teal]
 
-        XCTAssertEqual(annotations.ordered, [green, purple, .note])
-        XCTAssertEqual(green.accessibilityLabel, "\(l("ayah.menu.reading-bookmark.title")), \(ReadingBookmarkSlot.green.displayName)")
+        XCTAssertEqual(annotations.ordered, [teal, orange, .note])
+        XCTAssertEqual(teal.accessibilityLabel, "\(l("ayah.menu.reading-bookmark.title")), \(ReadingBookmarkSlot.teal.displayName)")
     }
 
     func test_readingPins_haveStableOrderAndDistinctAccessibleNames() {
-        let green = AyahAnnotation.readingBookmark(.green)
-        let purple = AyahAnnotation.readingBookmark(.purple)
-        let blue = AyahAnnotation.readingBookmark(.blue)
-        let annotations: Set<AyahAnnotation> = [.note, blue, green, purple]
+        let teal = AyahAnnotation.readingBookmark(.teal)
+        let orange = AyahAnnotation.readingBookmark(.orange)
+        let red = AyahAnnotation.readingBookmark(.red)
+        let annotations: Set<AyahAnnotation> = [.note, red, teal, orange]
 
-        XCTAssertEqual(annotations.ordered, [green, purple, blue, .note])
+        XCTAssertEqual(annotations.ordered, [teal, orange, red, .note])
         XCTAssertEqual(Set(annotations.ordered.map(\.accessibilityLabel)).count, 4)
-        XCTAssertTrue(purple.accessibilityLabel.contains(ReadingBookmarkSlot.purple.displayName))
+        XCTAssertTrue(orange.accessibilityLabel.contains(ReadingBookmarkSlot.orange.displayName))
     }
 }
 #endif

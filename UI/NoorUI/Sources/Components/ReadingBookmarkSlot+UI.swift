@@ -8,23 +8,23 @@ public extension ReadingBookmarkSlot {
     /// Slots share the highlight color names.
     var displayName: String {
         switch self {
-        case .green:
-            l("highlight.color.green")
-        case .purple:
-            l("highlight.color.purple")
-        case .blue:
-            l("highlight.color.blue")
+        case .teal:
+            l("highlight.color.teal")
+        case .orange:
+            l("highlight.color.orange")
+        case .red:
+            l("highlight.color.red")
         }
     }
 
     var color: UIColor {
         switch self {
-        case .green:
-            .systemGreen
-        case .purple:
-            .systemPurple
-        case .blue:
-            .systemBlue
+        case .teal:
+            .systemTeal
+        case .orange:
+            .systemOrange
+        case .red:
+            .systemRed
         }
     }
 

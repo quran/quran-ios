@@ -111,7 +111,7 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
             guard let bookmark = bookmark as? AyahReadingBookmark else { return nil }
             return "\(bookmark.slot.name) 2:\(bookmark.ayah)"
         }
-        XCTAssertEqual(slots.sorted(), ["BLUE 2:3", "GREEN 2:1", "PURPLE 2:2"])
+        XCTAssertEqual(slots.sorted(), ["ORANGE 2:2", "RED 2:3", "TEAL 2:1"])
     }
 
     func test_placedReadingBookmarksSequence_filtersUnplacedPinsAndPreservesMetadata() async throws {

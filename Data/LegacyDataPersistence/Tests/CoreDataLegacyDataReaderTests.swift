@@ -272,7 +272,7 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
         }
 
         let highlights = data.highlights.sorted { $0.ayah < $1.ayah }
-        XCTAssertEqual(highlights.map(\.color), [.red, .red, .red, .red, .green, .blue, .yellow, .purple])
+        XCTAssertEqual(highlights.map(\.color), [.pink, .pink, .pink, .pink, .green, .blue, .yellow, .purple])
         XCTAssertEqual(highlights.map(\.lastUpdated), Array(repeating: date(0), count: colors.count))
     }
 

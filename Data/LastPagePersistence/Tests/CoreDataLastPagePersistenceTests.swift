@@ -65,7 +65,16 @@ final class CoreDataLastPagePersistenceTests: XCTestCase {
         // 6. Add more pages.
         _ = try await persistence.add(at: page(5))
         _ = try await persistence.add(at: page(6))
-        XCTAssertEqual(collector.items.last?.map(\.page.pageNumber), [6, 5, 3])
+        XCTAssertEqual(collector.items.last?.map(\.page.pageNumber), [6, 5, 3, 2])
+    }
+
+    func testKeepsOnlyTheTenMostRecentPages() async throws {
+        for pageNumber in 1 ... 11 {
+            _ = try await persistence.add(at: page(pageNumber))
+        }
+
+        let lastPages = try await persistence.retrieveAll()
+        XCTAssertEqual(lastPages.map(\.page.pageNumber), Array((2 ... 11).reversed()))
     }
 
     func testRetrieveAll() async throws {

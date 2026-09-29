@@ -33,7 +33,7 @@ public struct MobileSyncLastPageService: LastPageService {
                     }
                     return $0.modifiedOn > $1.modifiedOn
                 }
-                return Array(sorted.prefix(3))
+                return Array(sorted.prefix(Self.maxNumberOfLastPages))
             }
         return .init(sequence)
     }
@@ -58,6 +58,8 @@ public struct MobileSyncLastPageService: LastPageService {
     }
 
     // MARK: Private
+
+    private static let maxNumberOfLastPages = 10
 
     private let quranDataService: QuranDataService
 

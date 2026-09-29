@@ -84,7 +84,7 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
 
     // MARK: Private
 
-    private static let maxNumberOfLastPages = 3
+    private static let maxNumberOfLastPages = 10
 
     private let context: NSManagedObjectContext
     private let overflowHandler = CoreDataLastPageOverflowHandler()

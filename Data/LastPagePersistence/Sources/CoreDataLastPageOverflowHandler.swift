@@ -28,5 +28,5 @@ struct CoreDataLastPageOverflowHandler {
 
     // MARK: Private
 
-    private static let maxNumberOfLastPages = 3
+    private static let maxNumberOfLastPages = 10
 }

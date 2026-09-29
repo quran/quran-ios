@@ -7,6 +7,7 @@
 //
 
 import AppDependencies
+import AppIconFeature
 import AudioDownloadsFeature
 import Localization
 import ReadingSelectorFeature
@@ -36,6 +37,8 @@ public struct SettingsBuilder {
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
             diagnosticsBuilder: DiagnosticsBuilder(container: container),
+            appIconService: container.appIconService(),
+            appIconBuilder: AppIconBuilder(container: container),
             quranProfileURL: container.quranProfileURL,
             navigationController: navigationController
         )
@@ -47,6 +50,8 @@ public struct SettingsBuilder {
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
             diagnosticsBuilder: DiagnosticsBuilder(container: container),
+            appIconService: container.appIconService(),
+            appIconBuilder: AppIconBuilder(container: container),
             navigationController: navigationController
         )
         #endif

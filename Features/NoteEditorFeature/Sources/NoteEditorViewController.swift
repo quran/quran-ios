@@ -105,7 +105,6 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
         navigationController.navigationBar.standardAppearance = appearance
         navigationController.navigationBar.scrollEdgeAppearance = appearance
         navigationController.navigationBar.compactAppearance = appearance
-        navigationController.navigationBar.tintColor = .appIdentity
         navigationController.view.backgroundColor = themeStyle.backgroundColor
         return navigationController
     }

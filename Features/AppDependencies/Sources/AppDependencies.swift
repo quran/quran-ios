@@ -15,11 +15,13 @@ import LastPagePersistence
 import LegacyDataMigration
 import MobileSync
 #endif
+import NoorUI
 import NotePersistence
 import PageBookmarkPersistence
 import QuranResources
 import QuranTextKit
 import ReadingService
+import SystemDependencies
 
 public protocol AppDependencies {
     var databasesURL: URL { get }
@@ -41,6 +43,9 @@ public protocol AppDependencies {
     var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }
+
+    /// The Home Screen icons the app offers.
+    var appIconCatalog: AppIconCatalog { get }
 
     #if QURAN_SYNC
     var authenticationClient: any AuthenticationClient { get }
@@ -73,6 +78,15 @@ extension AppDependencies {
         NoteService(
             persistence: notePersistence,
             analytics: analytics
+        )
+    }
+
+    @MainActor
+    public func appIconService() -> AppIconService {
+        AppIconService(
+            catalog: appIconCatalog,
+            iconAccess: DefaultAlternateIconAccess(),
+            bundle: DefaultSystemBundle()
         )
     }
 

@@ -114,6 +114,33 @@
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "外观";
 
+// MARK: - App Icon
+
+// Metadata: Translated by AI; human review required.
+"app_icon.default" = "默认";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.black_gold" = "黑色与金色";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.blue" = "蓝色";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.green" = "绿色";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.navy_gold" = "藏青与金色";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.orange" = "橙色";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.purple" = "紫色";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.red" = "红色";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.teal_white" = "蓝绿与白色";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.colors" = "颜色";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.signature" = "经典";
+// Metadata: Translated by AI; human review required.
+"app_icon.title" = "应用图标";
+
 // MARK: - Tabs
 
 // Metadata: Translated by ChatGPT; human review required.

@@ -18,6 +18,7 @@ import LegacyDataMigration
 import LegacyDataPersistence
 import MobileSync
 #endif
+import NoorUI
 import NotePersistence
 import PageBookmarkPersistence
 import ReadingService
@@ -43,6 +44,8 @@ class Container: AppDependencies {
     private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
 
     private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
+
+    let appIconCatalog = AppIconCatalog.example
 
     #if QURAN_SYNC
     private(set) lazy var quranDataService: QuranDataService = syncAppGraph.quranDataService

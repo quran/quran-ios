@@ -55,7 +55,7 @@ public struct SyncSignInCard: View {
             AsyncButton(action: signInAction) {
                 Text(actionLabel)
                     .font(.headline)
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(Color.onAccent)
                     .padding(.horizontal, actionHorizontalPadding)
                     .padding(.vertical, actionVerticalPadding)
                     .background(Color.accentColor, in: Capsule())

@@ -231,6 +231,7 @@ private struct ContentTranslationPreview: View {
                 readMore.toggle()
             } label: {
                 Text("Toggle Read more")
+                    .foregroundStyle(Color.onAccent)
             }
             .buttonStyle(.borderedProminent)
             .padding()

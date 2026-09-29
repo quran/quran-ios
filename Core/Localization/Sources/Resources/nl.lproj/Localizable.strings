@@ -81,6 +81,33 @@
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Weergave";
 
+// MARK: - App Icon
+
+// Metadata: Translated by AI; human review required.
+"app_icon.default" = "Standaard";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.black_gold" = "Zwart en goud";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.blue" = "Blauw";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.green" = "Groen";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.navy_gold" = "Marineblauw en goud";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.orange" = "Oranje";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.purple" = "Paars";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.red" = "Rood";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.teal_white" = "Blauwgroen en wit";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.colors" = "Kleuren";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.signature" = "Signatuur";
+// Metadata: Translated by AI; human review required.
+"app_icon.title" = "App-icoon";
+
 // MARK: - Tabs
 
 "tab.notes" = "Notities";

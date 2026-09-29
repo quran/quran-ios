@@ -97,6 +97,21 @@
 "theme.auto.message" = "Quran app will adhere to your iPhone's appearance setting";
 "theme.appearance" = "Appearance";
 
+// MARK: - App Icon
+
+"app_icon.title" = "App Icon";
+"app_icon.default" = "Default";
+"app_icon.section.signature" = "Signature";
+"app_icon.section.colors" = "Colors";
+"app_icon.name.navy_gold" = "Navy & Gold";
+"app_icon.name.teal_white" = "Teal & White";
+"app_icon.name.black_gold" = "Black & Gold";
+"app_icon.name.blue" = "Blue";
+"app_icon.name.purple" = "Purple";
+"app_icon.name.red" = "Red";
+"app_icon.name.orange" = "Orange";
+"app_icon.name.green" = "Green";
+
 // MARK: - Tabs
 
 "tab.notes" = "Notes";

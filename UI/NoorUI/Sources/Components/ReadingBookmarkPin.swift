@@ -141,6 +141,6 @@ private struct ReadingBookmarkPinShape: Shape {
     HStack {
         ReadingBookmarkPin(style: .outline)
         ReadingBookmarkPin(style: .filled)
-            .foregroundColor(.appIdentity)
+            .foregroundColor(.accentColor)
     }
 }

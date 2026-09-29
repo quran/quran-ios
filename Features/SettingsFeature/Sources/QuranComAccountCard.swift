@@ -64,7 +64,7 @@ struct QuranComAccountCard: View {
             AsyncButton(action: signInAction) {
                 Text(l("setting.quran_account.sign_in"))
                     .font(.headline)
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(Color.onAccent)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, signInVerticalPadding)
                     .background(Color.accentColor, in: Capsule())

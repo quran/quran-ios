@@ -1,0 +1,123 @@
+{
+  "fill" : {
+    "automatic-gradient" : "srgb:0.97255,0.79216,0.48627,1.00000"
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "glass" : false,
+          "image-name" : "Wordmark.svg",
+          "name" : "Wordmark",
+          "opacity" : 1,
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          },
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "srgb:0.35686,0.27059,0.14902,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "srgb:0.96078,0.70588,0.32941,0.85000"
+              }
+            }
+          ]
+        }
+      ],
+      "name" : "Wordmark",
+      "shadow" : {
+        "kind" : "none",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "glass" : true,
+          "image-name" : "Glyph.svg",
+          "name" : "Glyph",
+          "position" : {
+            "scale" : 1.5954,
+            "translation-in-points" : [
+              0,
+              -80
+            ]
+          },
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "srgb:1.00000,1.00000,1.00000,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "srgb:0.96078,0.70588,0.32941,1.00000"
+              }
+            }
+          ]
+        }
+      ],
+      "name" : "Glyph",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "glass" : false,
+          "image-name" : "Background.svg",
+          "name" : "Background",
+          "position" : {
+            "scale" : 2.2,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          },
+          "fill-specializations" : [
+            {
+              "value" : {
+                "linear-gradient" : [
+                  "srgb:0.97255,0.79216,0.48627,1.00000",
+                  "srgb:0.93725,0.68235,0.29804,1.00000"
+                ]
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "linear-gradient" : [
+                  "srgb:0.32157,0.19608,0.03922,1.00000",
+                  "srgb:0.16471,0.09412,0.01176,1.00000"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "name" : "Background"
+    }
+  ],
+  "supported-platforms" : {
+    "squares" : "shared"
+  }
+}

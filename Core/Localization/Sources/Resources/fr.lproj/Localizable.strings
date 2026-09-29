@@ -114,6 +114,33 @@
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Apparence";
 
+// MARK: - App Icon
+
+// Metadata: Translated by AI; human review required.
+"app_icon.default" = "Par défaut";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.black_gold" = "Noir et or";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.blue" = "Bleu";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.green" = "Vert";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.navy_gold" = "Bleu marine et or";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.orange" = "Orange";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.purple" = "Violet";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.red" = "Rouge";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.teal_white" = "Bleu sarcelle et blanc";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.colors" = "Couleurs";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.signature" = "Signature";
+// Metadata: Translated by AI; human review required.
+"app_icon.title" = "Icône de l’app";
+
 // MARK: - Tabs
 
 // Metadata: Translated by ChatGPT; human review required.

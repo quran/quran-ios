@@ -85,6 +85,21 @@
 "theme.auto.message" = "سوف يلتزم تطبيق القرآن بإعداد مظهر iPhone الخاص بك";
 "theme.appearance" = "المظهر";
 
+// MARK: - App Icon
+
+"app_icon.title" = "أيقونة التطبيق";
+"app_icon.default" = "الافتراضية";
+"app_icon.section.signature" = "المميزة";
+"app_icon.section.colors" = "الألوان";
+"app_icon.name.navy_gold" = "كُحلي وذهبي";
+"app_icon.name.teal_white" = "أزرق مخضر وأبيض";
+"app_icon.name.black_gold" = "أسود وذهبي";
+"app_icon.name.blue" = "أزرق";
+"app_icon.name.purple" = "بنفسجي";
+"app_icon.name.red" = "أحمر";
+"app_icon.name.orange" = "برتقالي";
+"app_icon.name.green" = "أخضر";
+
 // MARK: - Tabs
 
 "tab.notes" = "الملاحظات";

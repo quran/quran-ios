@@ -53,7 +53,7 @@ struct AppWhatsNewView: View {
         Button(action: onContinue) {
             Text(l("new.action"))
                 .font(.headline)
-                .foregroundStyle(Color(.systemBackground))
+                .foregroundStyle(Color.onAccent)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, actionVerticalPadding)
                 .background(Color.accentColor)

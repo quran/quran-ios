@@ -67,7 +67,6 @@ struct PreparingContent_Previews: PreviewProvider {
             ContentStatusView(state: .downloading(progress: 0.4))
             ContentStatusView(state: .error(URLError(.notConnectedToInternet) as NSError, retry: {}))
         }
-        .accentColor(.appIdentity)
         .preferredColorScheme(.light)
     }
 }

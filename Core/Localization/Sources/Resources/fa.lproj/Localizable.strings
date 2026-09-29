@@ -114,6 +114,33 @@
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "ظاهر";
 
+// MARK: - App Icon
+
+// Metadata: Translated by AI; human review required.
+"app_icon.default" = "پیش‌فرض";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.black_gold" = "مشکی و طلایی";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.blue" = "آبی";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.green" = "سبز";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.navy_gold" = "سرمه‌ای و طلایی";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.orange" = "نارنجی";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.purple" = "بنفش";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.red" = "قرمز";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.teal_white" = "سبزآبی و سفید";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.colors" = "رنگ‌ها";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.signature" = "ویژه";
+// Metadata: Translated by AI; human review required.
+"app_icon.title" = "نماد برنامه";
+
 // MARK: - Tabs
 
 // Metadata: Translated by ChatGPT; human review required.

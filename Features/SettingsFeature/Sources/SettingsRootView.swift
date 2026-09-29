@@ -20,7 +20,9 @@ struct SettingsRootView: View {
             appearanceMode: appearanceMode,
             streamingEnabled: $viewModel.streamingEnabled,
             error: $viewModel.error,
+            appIcon: viewModel.isAppIconAvailable ? viewModel.appIconOption : nil,
             audioEnd: viewModel.audioEnd.name,
+            navigateToAppIcons: { viewModel.navigateToAppIcons() },
             navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
             navigateToAudioManager: { viewModel.navigateToAudioManager() },
             navigateToTranslationsList: { viewModel.navigateToTranslationsList() },
@@ -42,7 +44,9 @@ struct SettingsRootView: View {
             appearanceMode: appearanceMode,
             streamingEnabled: $viewModel.streamingEnabled,
             error: $viewModel.error,
+            appIcon: viewModel.isAppIconAvailable ? viewModel.appIconOption : nil,
             audioEnd: viewModel.audioEnd.name,
+            navigateToAppIcons: { viewModel.navigateToAppIcons() },
             navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
             navigateToAudioManager: { viewModel.navigateToAudioManager() },
             navigateToTranslationsList: { viewModel.navigateToTranslationsList() },
@@ -71,7 +75,10 @@ private struct SettingsRootViewUI: View {
     @Binding var streamingEnabled: Bool
     @Binding var error: Error?
 
+    /// The icon iOS shows, or `nil` when the app can't change its icon.
+    let appIcon: AppIconOption?
     let audioEnd: String
+    let navigateToAppIcons: Action
     let navigateToAudioEndSelector: Action
     let navigateToAudioManager: Action
     let navigateToTranslationsList: Action
@@ -109,6 +116,16 @@ private struct SettingsRootViewUI: View {
 
             NoorBasicSection {
                 AppearanceMenu(appearanceMode: $appearanceMode)
+
+                if let appIcon {
+                    NoorListItem(
+                        image: .init(appIcon: appIcon, length: appIconPreviewLength),
+                        title: .text(l("app_icon.title")),
+                        subtitle: .init(text: .text(appIcon.name), location: .trailing),
+                        accessory: .disclosureIndicator,
+                        action: .sync { navigateToAppIcons() }
+                    )
+                }
             }
 
             NoorBasicSection {
@@ -204,6 +221,10 @@ private struct SettingsRootViewUI: View {
         #endif
         .errorAlert(error: $error)
     }
+
+    // MARK: Private
+
+    @ScaledMetric(relativeTo: .body) private var appIconPreviewLength = 30.0
 }
 
 #Preview {
@@ -217,7 +238,9 @@ private struct SettingsRootViewUI: View {
                 appearanceMode: $appearanceMode,
                 streamingEnabled: $streamingEnabled,
                 error: .constant(nil),
+                appIcon: previewAppIcon,
                 audioEnd: "Surah",
+                navigateToAppIcons: {},
                 navigateToAudioEndSelector: {},
                 navigateToAudioManager: {},
                 navigateToTranslationsList: {},
@@ -239,7 +262,9 @@ private struct SettingsRootViewUI: View {
                 appearanceMode: $appearanceMode,
                 streamingEnabled: $streamingEnabled,
                 error: .constant(nil),
+                appIcon: previewAppIcon,
                 audioEnd: "Surah",
+                navigateToAppIcons: {},
                 navigateToAudioEndSelector: {},
                 navigateToAudioManager: {},
                 navigateToTranslationsList: {},
@@ -255,3 +280,11 @@ private struct SettingsRootViewUI: View {
     }
     return Container()
 }
+
+private let previewAppIcon = AppIconOption(
+    id: "navy-gold",
+    alternateIconName: nil,
+    name: "Navy & Gold",
+    previewImageName: "app-icon-navy-gold",
+    accent: AppIconAccent(light: .systemIndigo, dark: .systemYellow, onDark: .black)
+)

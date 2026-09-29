@@ -114,6 +114,33 @@
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Оформление";
 
+// MARK: - App Icon
+
+// Metadata: Translated by AI; human review required.
+"app_icon.default" = "По умолчанию";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.black_gold" = "Чёрный и золотой";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.blue" = "Синий";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.green" = "Зелёный";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.navy_gold" = "Тёмно-синий и золотой";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.orange" = "Оранжевый";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.purple" = "Фиолетовый";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.red" = "Красный";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.teal_white" = "Бирюзовый и белый";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.colors" = "Цвета";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.signature" = "Фирменные";
+// Metadata: Translated by AI; human review required.
+"app_icon.title" = "Иконка приложения";
+
 // MARK: - Tabs
 
 // Metadata: Translated by ChatGPT; human review required.

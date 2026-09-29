@@ -129,7 +129,7 @@ struct ReadingBookmarkMenuRow: View {
                     .foregroundStyle(Color.systemRed)
             case .moveHere, .setHere:
                 Text(action.title)
-                    .foregroundStyle(Color.white)
+                    .foregroundStyle(Color.onAccent)
                     .padding(.horizontal, actionHorizontalPadding)
                     .padding(.vertical, actionVerticalPadding)
                     .background(Color.accentColor, in: Capsule())

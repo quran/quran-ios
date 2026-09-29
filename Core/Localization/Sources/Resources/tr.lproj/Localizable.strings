@@ -86,6 +86,33 @@
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Görünüm";
 
+// MARK: - App Icon
+
+// Metadata: Translated by AI; human review required.
+"app_icon.default" = "Varsayılan";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.black_gold" = "Siyah ve altın";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.blue" = "Mavi";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.green" = "Yeşil";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.navy_gold" = "Lacivert ve altın";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.orange" = "Turuncu";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.purple" = "Mor";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.red" = "Kırmızı";
+// Metadata: Translated by AI; human review required.
+"app_icon.name.teal_white" = "Petrol mavisi ve beyaz";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.colors" = "Renkler";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.signature" = "İmza";
+// Metadata: Translated by AI; human review required.
+"app_icon.title" = "Uygulama simgesi";
+
 // MARK: - Tabs
 
 "tab.notes" = "Notlar";

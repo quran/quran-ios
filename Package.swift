@@ -196,6 +196,8 @@ private func uiTargets() -> [[Target]] {
             "QuranAnnotations",
             "QuranGeometry",
             "NoorFont",
+            "SystemDependencies",
+            "Utilities",
             "VLogging",
             .product(name: "GenericDataSources", package: "GenericDataSource"),
         ], resources: [
@@ -205,6 +207,8 @@ private func uiTargets() -> [[Target]] {
             "Localization",
             "QuranKit",
             "QuranLocalization",
+            "SystemDependenciesFake",
+            "UIx",
         ]),
     ]
 }
@@ -592,10 +596,12 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
             "BatchDownloader",
             "LastPagePersistence",
+            "NoorUI",
             "ReadingService",
             "QuranResources",
             "AuthenticationClient",
             "LegacyDataMigration",
+            "SystemDependencies",
         ] + mobileSyncTargetDependencies),
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [
@@ -867,8 +873,22 @@ private func featuresTargets() -> [[Target]] {
             "MobileSyncTestSupport",
         ] + mobileSyncTargetDependencies),
 
+        target(type, name: "AppIconFeature", dependencies: [
+            "Analytics",
+            "AppDependencies",
+            "Localization",
+            "NoorUI",
+            "UIx",
+            "VLogging",
+        ], testDependencies: [
+            "Analytics",
+            "NoorUI",
+            "SystemDependenciesFake",
+        ]),
+
         target(type, name: "SettingsFeature", dependencies: [
             "AppDependencies",
+            "AppIconFeature",
             "AuthenticationClient",
             "FeaturesSupport",
             "LegacyDataMigration",
@@ -883,6 +903,7 @@ private func featuresTargets() -> [[Target]] {
         ] + mobileSyncTargetDependencies, testDependencies: [
             "Analytics",
             "AppDependencies",
+            "AppIconFeature",
             "AudioDownloadsFeature",
             "AuthenticationClient",
             "AuthenticationClientFake",
@@ -893,17 +914,20 @@ private func featuresTargets() -> [[Target]] {
             "LastPagePersistence",
             "LegacyDataMigration",
             "LegacyDataPersistence",
+            "NoorUI",
             "NotePersistence",
             "PageBookmarkPersistence",
             "ReadingSelectorFeature",
             "ReadingService",
             "SettingsService",
+            "SystemDependenciesFake",
             "TranslationsFeature",
         ] + mobileSyncTargetDependencies),
 
         target(type, name: "AppStructureFeature", dependencies: [
             "Crashing",
             "FeaturesSupport",
+            "NoorUI",
             "QuranKit",
             "ReadingService",
             "HomeFeature",

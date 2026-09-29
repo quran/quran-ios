@@ -89,11 +89,11 @@ private struct BoundaryRow: View {
                 let reference: MultipartText = "\(ayah: verse)"
                 reference
                     .view(ofSize: .body, allowsWrapping: false)
-                    .foregroundStyle(isExpanded ? Color.appIdentity : .secondary)
+                    .foregroundStyle(isExpanded ? Color.accentColor : .secondary)
 
                 Image(systemName: "chevron.down")
                     .font(.footnote.weight(.semibold))
-                    .foregroundStyle(isExpanded ? Color.appIdentity : Color(.tertiaryLabel))
+                    .foregroundStyle(isExpanded ? Color.accentColor : Color(.tertiaryLabel))
             }
             .contentShape(Rectangle())
         }

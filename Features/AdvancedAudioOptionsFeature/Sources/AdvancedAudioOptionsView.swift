@@ -239,11 +239,11 @@ private struct RunsPicker: View {
                     Spacer(minLength: spacing)
 
                     selectedRunsLabel
-                        .foregroundStyle(isExpanded ? Color.appIdentity : .secondary)
+                        .foregroundStyle(isExpanded ? Color.accentColor : .secondary)
 
                     Image(systemName: "chevron.down")
                         .font(.footnote.weight(.semibold))
-                        .foregroundStyle(isExpanded ? Color.appIdentity : Color(.tertiaryLabel))
+                        .foregroundStyle(isExpanded ? Color.accentColor : Color(.tertiaryLabel))
                 }
                 .contentShape(Rectangle())
             }
@@ -370,12 +370,12 @@ private struct ChoicePill: View {
         Button(action: action) {
             Text(label)
                 .font(.subheadline.weight(.medium))
-                .foregroundColor(isSelected ? .white : .primary)
+                .foregroundColor(isSelected ? .onAccent : .primary)
                 .padding(.vertical, verticalPadding)
                 .padding(.horizontal, horizontalPadding)
                 .background(
                     Capsule(style: .continuous)
-                        .fill(isSelected ? Color.appIdentity.opacity(0.85) : Color(.secondarySystemFill))
+                        .fill(isSelected ? Color.accentColor.opacity(0.85) : Color(.secondarySystemFill))
                 )
         }
         .buttonStyle(.plain)

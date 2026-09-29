@@ -34,9 +34,9 @@ struct BookmarkAyahsView: View {
                 }
 
                 NoorListItem(
-                    image: .init(.plusCircle, color: .appIdentity),
+                    image: .init(.plusCircle, color: .accentColor),
                     title: .text(l("bookmarks.collections.new")),
-                    titleColor: .appIdentity,
+                    titleColor: .accentColor,
                     action: .sync { viewModel.presentAddCollection() }
                 )
             }
@@ -65,9 +65,9 @@ struct BookmarkAyahsView: View {
         case .unselected:
             .image(.checkmark_unchecked, color: .tertiaryLabel)
         case .mixed:
-            .image(.checkmark_indeterminate, color: .appIdentity)
+            .image(.checkmark_indeterminate, color: .accentColor)
         case .selected:
-            .image(.checkmark_checked, color: .appIdentity)
+            .image(.checkmark_checked, color: .accentColor)
         }
     }
 

@@ -6,27 +6,35 @@
 //
 
 import Analytics
+import AppIconFeature
 import AudioDownloadsFeature
-import NoorUI
 import ReadingSelectorFeature
 import SettingsService
+import SystemDependenciesFake
 import TranslationsFeature
 import UIKit
 import XCTest
+@testable import NoorUI
 @testable import SettingsFeature
 
-/// Covers the Appearance section: the appearance mode picker.
+/// Covers the Appearance section: the appearance mode picker and the App Icon row.
 @MainActor
 final class SettingsRootViewModelAppearanceTests: XCTestCase {
     // MARK: Internal
 
     override func setUp() async throws {
         try await super.setUp()
+        iconAccess = AlternateIconAccessFake()
+        bundle = SystemBundleFake()
+        bundle.info["CFBundleIcons"] = [
+            "CFBundleAlternateIcons": ["AppIcon-Blue": ["CFBundleIconName": "AppIcon-Blue"]],
+        ]
         originalAppearanceMode = ThemeService.shared.appearanceMode
     }
 
     override func tearDown() async throws {
         ThemeService.shared.appearanceMode = originalAppearanceMode
+        AppIconAccent.setCurrent(nil)
         try await super.tearDown()
     }
 
@@ -53,12 +61,78 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
         XCTAssertEqual(analytics.events, [])
     }
 
+    // MARK: App Icon
+
+    func test_appIconRow_showsCurrentIconName() {
+        iconAccess.alternateIconName = "AppIcon-Blue"
+
+        let sut = makeSUT()
+
+        XCTAssertTrue(sut.isAppIconAvailable)
+        XCTAssertEqual(sut.appIconOption.name, "Blue")
+    }
+
+    func test_appIconRow_hiddenWithoutPlatformSupport() {
+        iconAccess.supportsAlternateIcons = false
+
+        let sut = makeSUT()
+
+        XCTAssertFalse(sut.isAppIconAvailable)
+    }
+
+    func test_appIconRow_hiddenWhenAppDeclaresNoAlternateIcons() {
+        bundle.info["CFBundleIcons"] = nil
+
+        let sut = makeSUT()
+
+        XCTAssertFalse(sut.isAppIconAvailable)
+    }
+
+    func test_appIconRow_followsIconChange() async throws {
+        let service = makeService()
+        let sut = makeSUT(appIconService: service)
+        XCTAssertEqual(sut.appIconOption.name, "Navy")
+
+        try await service.set(blue)
+
+        XCTAssertEqual(sut.appIconOption.name, "Blue")
+    }
+
     // MARK: Private
 
+    private let navy = AppIconOption(
+        id: "navy",
+        alternateIconName: nil,
+        name: "Navy",
+        previewImageName: "app-icon-navy",
+        accent: AppIconAccent(light: .black, dark: .white, onDark: .black)
+    )
+    private let blue = AppIconOption(
+        id: "blue",
+        alternateIconName: "AppIcon-Blue",
+        name: "Blue",
+        previewImageName: "app-icon-blue",
+        accent: AppIconAccent(light: .systemBlue, dark: .systemBlue, onDark: .black)
+    )
+
+    private var iconAccess: AlternateIconAccessFake!
+    private var bundle: SystemBundleFake!
     private var originalAppearanceMode = AppearanceMode.auto
 
-    private func makeSUT(analytics: AnalyticsLibrary = NoopAnalytics()) -> SettingsRootViewModel {
-        let container = AppDependenciesStub()
+    private var catalog: AppIconCatalog {
+        AppIconCatalog(sections: [.init(id: "all", title: "All", previewSize: .large, options: [navy, blue])])
+    }
+
+    private func makeService() -> AppIconService {
+        AppIconService(catalog: catalog, iconAccess: iconAccess, bundle: bundle)
+    }
+
+    private func makeSUT(
+        analytics: AnalyticsLibrary = NoopAnalytics(),
+        appIconService: AppIconService? = nil
+    ) -> SettingsRootViewModel {
+        let container = AppDependenciesStub(appIconCatalog: catalog)
+        let appIconService = appIconService ?? makeService()
         #if QURAN_SYNC
         return SettingsRootViewModel(
             analytics: analytics,
@@ -69,6 +143,8 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
             diagnosticsBuilder: DiagnosticsBuilder(container: container),
+            appIconService: appIconService,
+            appIconBuilder: AppIconBuilder(container: container),
             quranProfileURL: container.quranProfileURL,
             navigationController: UINavigationController()
         )
@@ -80,6 +156,8 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
             diagnosticsBuilder: DiagnosticsBuilder(container: container),
+            appIconService: appIconService,
+            appIconBuilder: AppIconBuilder(container: container),
             navigationController: UINavigationController()
         )
         #endif

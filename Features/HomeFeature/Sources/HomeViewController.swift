@@ -56,7 +56,21 @@ final class HomeViewController: UIHostingController<HomeView> {
         segmentedControl.selectedSegmentIndex = viewModel.type.rawValue
         segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
         navigationItem.titleView = segmentedControl
+        padSegments()
         segmentChanged()
+    }
+
+    /// Widens every segment beyond its fitted title so the titles don't hug the control's border.
+    /// The padding is fixed because segment titles don't scale with Dynamic Type.
+    private func padSegments() {
+        let horizontalPadding: CGFloat = 12
+        let segments = 0 ..< segmentedControl.numberOfSegments
+        let fittedWidth = segmentedControl.sizeThatFits(UIView.layoutFittingCompressedSize).width
+        let segmentWidth = fittedWidth / CGFloat(segments.count) + 2 * horizontalPadding
+        for segment in segments {
+            segmentedControl.setWidth(segmentWidth, forSegmentAt: segment)
+        }
+        segmentedControl.sizeToFit()
     }
 
     private func configureNavigationBarButtons() {

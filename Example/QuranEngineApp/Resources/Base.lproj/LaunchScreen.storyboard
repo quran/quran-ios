@@ -20,7 +20,7 @@
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="app-glyph" translatesAutoresizingMaskIntoConstraints="NO" id="nnX-PI-GYt">
                                 <rect key="frame" x="130" y="359" width="133" height="133"/>
-                                <color key="tintColor" systemColor="labelColor"/>
+                                <color key="tintColor" name="AccentColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="132.76" id="Wd8-Gl-Yp1"/>
                                     <constraint firstAttribute="width" secondItem="nnX-PI-GYt" secondAttribute="height" multiplier="1:1" id="As9-Gl-Yp2"/>
@@ -53,9 +53,6 @@
         <namedColor name="AccentColor">
             <color red="0.52941176470588236" green="0.29803921568627451" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="labelColor">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

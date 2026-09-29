@@ -26,6 +26,7 @@ public struct PreferredContentSizeMatchesScrollView<ScrollViewContent: View>: Vi
 }
 
 public extension ScrollView {
+    @MainActor
     func preferredContentSizeMatchesScrollView() -> some View {
         PreferredContentSizeMatchesScrollView {
             self

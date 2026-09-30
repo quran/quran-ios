@@ -123,6 +123,24 @@ final class AppMigratorTests: XCTestCase {
         XCTAssertNotNil(nonBlockingWorker.update)
     }
 
+    func test_upgrade_launchVersionStaysStableAfterMigration() async {
+        preferences.appVersion = "1.17.0"
+
+        _ = service.migrationStatus()
+        await service.migrate()
+
+        assertUpdate(service.launchVersion, from: "1.17.0", to: "1.18.0")
+    }
+
+    func test_upgrade_noUpdater_launchVersionStaysStableAfterCommit() {
+        preferences.appVersion = "1.18.0"
+        bundle.info["CFBundleShortVersionString"] = "1.19.0"
+
+        XCTAssertEqual(service.migrationStatus(), .noMigration)
+
+        assertUpdate(service.launchVersion, from: "1.18.0", to: "1.19.0")
+    }
+
     // MARK: Private
 
     private var service: AppMigrator!
@@ -144,6 +162,21 @@ final class AppMigratorTests: XCTestCase {
         XCTAssertNil(worker1.update, file: file, line: line)
         XCTAssertNil(worker2.update, file: file, line: line)
         XCTAssertNil(nonBlockingWorker.update, file: file, line: line)
+    }
+
+    private func assertUpdate(
+        _ launchVersion: LaunchVersionUpdate,
+        from: AppVersion,
+        to: AppVersion,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        guard case let .update(actualFrom, actualTo) = launchVersion else {
+            XCTFail("Expected an update, got \(launchVersion)", file: file, line: line)
+            return
+        }
+        XCTAssertEqual(actualFrom, from, file: file, line: line)
+        XCTAssertEqual(actualTo, to, file: file, line: line)
     }
 }
 

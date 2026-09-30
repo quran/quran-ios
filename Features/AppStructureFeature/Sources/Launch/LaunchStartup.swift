@@ -170,7 +170,7 @@ public final class LaunchStartup {
             return
         }
 
-        updateAudioIfNeeded()
+        updateAudioIfNeeded(launchVersion: launchVersion)
         crashContext.setStartupPhase("building_ui")
         logger.info("Crash context: startup phase building_ui")
 
@@ -226,12 +226,13 @@ public final class LaunchStartup {
     }
     #endif
 
-    private func updateAudioIfNeeded() {
+    private func updateAudioIfNeeded(launchVersion: LaunchVersionUpdate) {
         // don't run audio updater after upgrading the app
-        if case .sameVersion = appMigrator.launchVersion {
-            Task {
-                await audioUpdater.updateAudioIfNeeded()
-            }
+        guard case .sameVersion = launchVersion else {
+            return
+        }
+        Task {
+            await audioUpdater.updateAudioIfNeeded()
         }
     }
 }

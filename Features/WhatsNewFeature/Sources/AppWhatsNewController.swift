@@ -138,6 +138,10 @@ public class AppWhatsNewController {
             },
             onChooseAnotherIcon: onChooseAnotherIcon.map { chooseAnotherIcon in
                 { dismiss(.chooseAnotherIcon, chooseAnotherIcon) }
+            },
+            onReplay: { [weak self] in
+                logger.info("WhatsNew: app icon reveal replayed")
+                self?.analytics.replayAppIconReveal(version: version)
             }
         )
         parent.present(viewController, animated: true)
@@ -176,6 +180,10 @@ private extension AnalyticsLibrary {
 
     func presentAppIconReveal(version: String) {
         logEvent("PresentingAppIconReveal", value: version)
+    }
+
+    func replayAppIconReveal(version: String) {
+        logEvent("AppIconRevealReplay", value: version)
     }
 
     func appIconReveal(_ action: AppIconRevealAction, version: String) {

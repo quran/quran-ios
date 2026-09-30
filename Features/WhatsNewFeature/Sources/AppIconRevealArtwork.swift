@@ -86,7 +86,7 @@ struct AppIconRevealPreviousIcon: View {
 }
 
 /// The new icon: a navy tile whose gold glyph writes in from right to left,
-/// a sheen across the glass, then the real icon on top.
+/// then the real icon on top, with a sheen across the glass.
 struct AppIconRevealIcon: View {
     // MARK: Internal
 
@@ -99,13 +99,20 @@ struct AppIconRevealIcon: View {
     let isNewIconVisible: Bool
     let isGlowVisible: Bool
 
+    /// Matches the corners of the new icon art, so the drawn tile hides under it.
+    static let shape = RoundedRectangle(
+        cornerRadius: AppIconRevealLayout.iconLength * 0.26,
+        style: .continuous
+    )
+
     var body: some View {
         ZStack {
             tile
             glyph
             pen
-            sheen
             finalIcon
+            // Above the real icon, so the sheen keeps sweeping across it after the reveal.
+            sheen
         }
         .frame(width: length, height: length)
         // A background keeps the larger glow from resizing the icon.
@@ -119,14 +126,8 @@ struct AppIconRevealIcon: View {
     private typealias Palette = AppIconRevealPalette
 
     private let length = AppIconRevealLayout.iconLength
-    /// Matches the corners of the new icon art, so the drawn tile hides under it.
-    private let cornerRatio: CGFloat = 0.26
     private let penSize = CGSize(width: 40, height: 104)
     private let sheenWidth: CGFloat = 36
-
-    private var shape: RoundedRectangle {
-        RoundedRectangle(cornerRadius: length * cornerRatio, style: .continuous)
-    }
 
     private var glow: some View {
         RadialGradient(
@@ -140,13 +141,13 @@ struct AppIconRevealIcon: View {
     }
 
     private var tile: some View {
-        shape
+        Self.shape
             .fill(LinearGradient(
                 colors: [Palette.tileTop, Palette.tileMiddle, Palette.tileBottom],
                 startPoint: .top,
                 endPoint: .bottom
             ))
-            .overlay(shape.strokeBorder(Color.white.opacity(0.1), lineWidth: 1))
+            .overlay(Self.shape.strokeBorder(Color.white.opacity(0.1), lineWidth: 1))
             .frame(width: length, height: length)
             .shadow(color: .black.opacity(0.35), radius: 18, y: 10)
             .opacity(isTileVisible ? 1 : 0)
@@ -194,7 +195,7 @@ struct AppIconRevealIcon: View {
         .rotationEffect(.degrees(20))
         .offset(x: length * (2 * sheenProgress - 1))
         .frame(width: length, height: length)
-        .clipShape(shape)
+        .clipShape(Self.shape)
         .blendMode(.plusLighter)
     }
 

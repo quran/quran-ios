@@ -11,6 +11,8 @@ import UIKit
 
 /// The "Nightfall" reveal of the new app icon. Night rises over the previous icon,
 /// the new icon is written in gold from right to left, then the copy rises beneath it.
+/// Once it settles, a sheen sweeps across the icon's glass every few seconds,
+/// and a double tap on the icon replays the reveal from the start.
 ///
 /// It looks the same whatever the app accent or appearance. It ends on `newIcon`, and reads
 /// the rest of its artwork from the main bundle: `previous-app-icon` and the `app-glyph` template.
@@ -22,8 +24,11 @@ struct AppIconRevealView: View {
     let newIcon: Image
     let onContinue: () -> Void
     let onChooseAnotherIcon: (() -> Void)?
-    /// Called once night covers the top of the screen.
-    let onNightfall: () -> Void
+    /// Called with `true` once night covers the top of the screen,
+    /// and with `false` when a replay rewinds it.
+    let onNightChange: (_ isNight: Bool) -> Void
+    /// Called when a double tap on the icon replays the reveal.
+    let onReplay: () -> Void
 
     var body: some View {
         GeometryReader { geometry in
@@ -52,7 +57,7 @@ struct AppIconRevealView: View {
         .ignoresSafeArea()
         // Outside the full-screen reader, which sees no safe area.
         .background(safeAreaReader)
-        .task { await run() }
+        .task(id: playback) { await run() }
     }
 
     // MARK: Private
@@ -87,6 +92,10 @@ struct AppIconRevealView: View {
     /// Chosen once when the reveal starts, so turning on Reduce Motion or VoiceOver
     /// midway can't hide the final layout.
     @State private var presentation: Presentation?
+    /// Counts the replays; changing it restarts the timeline.
+    @State private var playback = 0
+    /// The playback whose timeline has started, so reappearing doesn't restart it.
+    @State private var startedPlayback: Int?
     @State private var isNightRisen = false
     @State private var isHorizonGlowVisible = true
     @State private var isPreviousIconVisible = true
@@ -108,6 +117,11 @@ struct AppIconRevealView: View {
     /// Hides the night, the new icon, and the copy until the animation starts or the crossfade shows them.
     private var finalLayoutOpacity: Double {
         presentation == .animated || isFinalLayoutVisible ? 1 : 0
+    }
+
+    /// The animated reveal replays once it settles; the crossfade doesn't.
+    private var canReplay: Bool {
+        presentation == .animated && areActionsEnabled
     }
 
     // MARK: Layout
@@ -173,6 +187,10 @@ struct AppIconRevealView: View {
                 isNewIconVisible: isNewIconVisible,
                 isGlowVisible: isIconGlowVisible
             )
+            // Only the icon, not its glow, takes the double tap.
+            .contentShape(AppIconRevealIcon.shape)
+            .onTapGesture(count: 2, perform: replay)
+            .allowsHitTesting(canReplay)
             .scaleEffect(isLifted ? layout.liftedScale : 1)
             .offset(y: isLifted ? layout.liftOffset : 0)
             .opacity(finalLayoutOpacity)
@@ -181,9 +199,9 @@ struct AppIconRevealView: View {
                 isVisible: isPreviousIconVisible,
                 hidesWithMotion: presentation == .animated
             )
+            .allowsHitTesting(false)
         }
         .position(layout.restingCenter)
-        .allowsHitTesting(false)
         .accessibilityHidden(true)
     }
 
@@ -253,34 +271,51 @@ struct AppIconRevealView: View {
     // MARK: Timeline
 
     private func run() async {
-        guard presentation == nil else {
-            // The view reappeared after the reveal started: finish it without replaying it.
-            onNightfall()
+        if startedPlayback == playback {
+            // The view reappeared after this playback started: finish it without replaying it.
+            settleFinalLayout()
+            withoutAnimation {
+                isPreviousIconVisible = false
+                isFinalLayoutVisible = true
+            }
+            onNightChange(true)
             finishReveal()
-            return
-        }
-
-        if reduceMotion || voiceOverEnabled {
-            presentation = .crossfade
-            crossfadeToFinalLayout()
-            await play([
-                (Timeline.crossfade.end, {
-                    onNightfall()
-                    finishReveal()
-                }),
-            ])
-        } else {
+        } else if startedPlayback == nil {
+            startedPlayback = playback
+            if reduceMotion || voiceOverEnabled {
+                presentation = .crossfade
+                crossfadeToFinalLayout()
+                await play([
+                    (Timeline.crossfade.end, {
+                        onNightChange(true)
+                        finishReveal()
+                    }),
+                ])
+                return
+            }
             presentation = .animated
-            playNightfall()
-            await play([
-                (Timeline.nightfall, onNightfall),
-                (Timeline.newIcon.end, { UIImpactFeedbackGenerator(style: .soft).impactOccurred() }),
-                (Timeline.actions.start, finishReveal),
-            ])
+            await playNightfall()
+        } else {
+            startedPlayback = playback
+            await rewind()
+            guard !Task.isCancelled else {
+                return
+            }
+            await playNightfall()
         }
+        await shineRepeatedly()
     }
 
-    private func playNightfall() {
+    private func playNightfall() async {
+        animateNightfall()
+        await play([
+            (Timeline.nightfall, { onNightChange(true) }),
+            (Timeline.newIcon.end, { UIImpactFeedbackGenerator(style: .soft).impactOccurred() }),
+            (Timeline.actions.start, finishReveal),
+        ])
+    }
+
+    private func animateNightfall() {
         animate(Timeline.nightRise, .timingCurve(0.7, 0, 0.25, 1, duration: Timeline.nightRise.duration)) {
             isNightRisen = true
         }
@@ -322,9 +357,16 @@ struct AppIconRevealView: View {
 
     /// Settles every layer in its final state under the crossfade, then fades it in.
     private func crossfadeToFinalLayout() {
-        var transaction = Transaction()
-        transaction.disablesAnimations = true
-        withTransaction(transaction) {
+        settleFinalLayout()
+        animate(Timeline.crossfade, .easeInOut(duration: Timeline.crossfade.duration)) {
+            isFinalLayoutVisible = true
+            isPreviousIconVisible = false
+        }
+    }
+
+    /// Puts the night, the new icon, and the copy in their final state without animation.
+    private func settleFinalLayout() {
+        withoutAnimation {
             isNightRisen = true
             isHorizonGlowVisible = false
             isTileVisible = true
@@ -337,10 +379,62 @@ struct AppIconRevealView: View {
             isBodyVisible = true
             areActionsVisible = true
         }
-        animate(Timeline.crossfade, .easeInOut(duration: Timeline.crossfade.duration)) {
-            isFinalLayoutVisible = true
-            isPreviousIconVisible = false
+    }
+
+    /// Returns every layer to where the reveal starts, so it can play again.
+    private func rewind() async {
+        areActionsEnabled = false
+        onNightChange(false)
+        // The pen and the sheen would streak back across the icon, so they jump.
+        withoutAnimation {
+            isPenLit = false
+            isPenDone = false
+            sheenProgress = 0
         }
+        withAnimation(.easeInOut(duration: Timeline.rewind)) {
+            isNightRisen = false
+            isHorizonGlowVisible = true
+            isPreviousIconVisible = true
+            isTileVisible = false
+            glyphProgress = 0
+            isNewIconVisible = false
+            isIconGlowVisible = false
+            isLifted = false
+            isTitleVisible = false
+            isBodyVisible = false
+            areActionsVisible = false
+        }
+        await sleep(Timeline.rewind)
+    }
+
+    /// Sweeps the sheen across the icon's glass every few seconds until the timeline stops.
+    private func shineRepeatedly() async {
+        guard presentation == .animated else {
+            return
+        }
+        while !Task.isCancelled {
+            // Moves the sheen back to its hidden start; the pause keeps this apart from the sweep.
+            withoutAnimation { sheenProgress = 0 }
+            await sleep(Timeline.sheenRepeatDelay)
+            guard !Task.isCancelled else {
+                return
+            }
+            guard !reduceMotion else {
+                continue
+            }
+            withAnimation(.easeInOut(duration: Timeline.sheen.duration)) {
+                sheenProgress = 1
+            }
+            await sleep(Timeline.sheen.duration)
+        }
+    }
+
+    private func replay() {
+        guard canReplay else {
+            return
+        }
+        onReplay()
+        playback += 1
     }
 
     /// Enables the actions and moves VoiceOver to the title.
@@ -354,11 +448,21 @@ struct AppIconRevealView: View {
         withAnimation(animation.delay(beat.start), changes)
     }
 
+    private func withoutAnimation(_ changes: () -> Void) {
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction, changes)
+    }
+
+    private func sleep(_ seconds: TimeInterval) async {
+        try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+    }
+
     /// Runs the effects that aren't animations at their times, in order.
     private func play(_ effects: [(time: TimeInterval, effect: () -> Void)]) async {
         var elapsed: TimeInterval = 0
         for (time, effect) in effects {
-            try? await Task.sleep(nanoseconds: UInt64((time - elapsed) * 1_000_000_000))
+            await sleep(time - elapsed)
             guard !Task.isCancelled else {
                 return
             }
@@ -387,5 +491,11 @@ private struct RevealScrollBehavior: ViewModifier {
 }
 
 #Preview {
-    AppIconRevealView(newIcon: Image(systemName: "app.fill"), onContinue: {}, onChooseAnotherIcon: {}, onNightfall: {})
+    AppIconRevealView(
+        newIcon: Image(systemName: "app.fill"),
+        onContinue: {},
+        onChooseAnotherIcon: {},
+        onNightChange: { _ in },
+        onReplay: {}
+    )
 }

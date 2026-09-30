@@ -10,27 +10,36 @@ import SwiftUI
 import UIKit
 
 /// Presents the app icon reveal full screen. Swiping can't dismiss it,
-/// and the status bar turns light once night covers the screen.
+/// and the status bar turns light while night covers the screen.
 @MainActor
 final class AppIconRevealViewController: UIHostingController<AppIconRevealView> {
     // MARK: Lifecycle
 
-    /// - Parameter newIcon: The icon the reveal ends on.
-    init(newIcon: Image, onContinue: @escaping () -> Void, onChooseAnotherIcon: (() -> Void)?) {
+    /// - Parameters:
+    ///   - newIcon: The icon the reveal ends on.
+    ///   - onReplay: Called when a double tap on the icon replays the reveal.
+    init(
+        newIcon: Image,
+        onContinue: @escaping () -> Void,
+        onChooseAnotherIcon: (() -> Void)?,
+        onReplay: @escaping () -> Void
+    ) {
         super.init(rootView: AppIconRevealView(
             newIcon: newIcon,
             onContinue: onContinue,
             onChooseAnotherIcon: onChooseAnotherIcon,
-            onNightfall: {}
+            onNightChange: { _ in },
+            onReplay: onReplay
         ))
-        // Nightfall updates this controller's status bar, so the view is replaced once `self` exists.
+        // Night updates this controller's status bar, so the view is replaced once `self` exists.
         rootView = AppIconRevealView(
             newIcon: newIcon,
             onContinue: onContinue,
             onChooseAnotherIcon: onChooseAnotherIcon,
-            onNightfall: { [weak self] in
-                self?.showsLightStatusBar = true
-            }
+            onNightChange: { [weak self] isNight in
+                self?.showsLightStatusBar = isNight
+            },
+            onReplay: onReplay
         )
         modalPresentationStyle = .fullScreen
         modalTransitionStyle = .crossDissolve

@@ -41,7 +41,7 @@ final class LegacyDataMigratorTests: XCTestCase {
             note.addToVerses(context.newVerse(sura: 1, ayah: 1))
         }
 
-        await makeMigrator().execute(update: .update(from: "2.9.0", to: "3.0.0"))
+        await makeMigrator().execute(update: .update(from: "3.0.0", to: "3.1.0"))
 
         let notes = try await storedNotes()
         XCTAssertEqual(notes.map(\.body), ["Legacy note"])
@@ -50,7 +50,7 @@ final class LegacyDataMigratorTests: XCTestCase {
     func test_execute_finishesWhenTheStoreStaysUnreadable() async throws {
         try store.corrupt()
 
-        await makeMigrator().execute(update: .update(from: "2.9.0", to: "3.0.0"))
+        await makeMigrator().execute(update: .update(from: "3.0.0", to: "3.1.0"))
 
         let notes = try await storedNotes()
         XCTAssertEqual(notes, [])

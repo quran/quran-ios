@@ -212,7 +212,7 @@ public final class LaunchStartup {
         // Upgrades import legacy data once before showing the UI.
         appMigrator.register(
             migrator: LegacyDataMigrator(coordinator: appBuilder.container.legacyDataImportCoordinator),
-            for: "3.0.0"
+            for: "3.1.0"
         )
         #endif
     }

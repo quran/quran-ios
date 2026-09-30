@@ -199,6 +199,26 @@ public struct NoorListItem: View {
     }
 
     @State private var currentTask: Task<Void, Never>? = nil
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    /// The trailing subtitle drawn under the title instead of beside it.
+    ///
+    /// At accessibility sizes, a title and a trailing value can't share one line
+    /// without breaking words mid-word, so the value moves under the title.
+    private var stackedTrailingSubtitle: Subtitle? {
+        guard let subtitle, subtitle.location == .trailing, dynamicTypeSize.isAccessibilitySize else {
+            return nil
+        }
+        return subtitle
+    }
+
+    /// The trailing subtitle drawn beside the title, at the row's trailing edge.
+    private var inlineTrailingSubtitle: Subtitle? {
+        guard let subtitle, subtitle.location == .trailing, stackedTrailingSubtitle == nil else {
+            return nil
+        }
+        return subtitle
+    }
 
     private var content: some View {
         HStack {
@@ -264,16 +284,20 @@ public struct NoorListItem: View {
                     .environment(\.layoutDirection, .rightToLeft)
                 }
 
+                if let stackedTrailingSubtitle {
+                    subtitleView(stackedTrailingSubtitle, textFont: .body)
+                }
+
                 if let subtitle, subtitle.location == .bottom {
                     subtitleView(subtitle, textFont: .footnote)
                 }
             }
 
-            if subtitle?.location == .trailing || accessory != nil {
+            if inlineTrailingSubtitle != nil || accessory != nil {
                 Spacer()
 
-                if let subtitle, subtitle.location == .trailing {
-                    subtitleView(subtitle, textFont: .body)
+                if let inlineTrailingSubtitle {
+                    subtitleView(inlineTrailingSubtitle, textFont: .body)
                 }
 
                 if let accessory {
@@ -349,11 +373,11 @@ public struct NoorListItem: View {
     }
 }
 
-struct NoorListItem_Previews: PreviewProvider {
-    static let quran = Quran.hafsMadani1405
-    static let ayahText: QuranText = "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ"
+private struct NoorListItemPreview: View {
+    let quran = Quran.hafsMadani1405
+    let ayahText: QuranText = "وَإِذۡ قَالَ مُوسَىٰ لِقَوۡمِهِۦ يَٰقَوۡمِ إِنَّكُمۡ ظَلَمۡتُمۡ أَنفُسَكُم بِٱتِّخَاذِكُمُ ٱلۡعِجۡلَ فَتُوبُوٓاْ إِلَىٰ بَارِئِكُمۡ فَٱقۡتُلُوٓاْ أَنفُسَكُمۡ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ عِندَ بَارِئِكُمۡ فَتَابَ عَلَيۡكُمۡۚ إِنَّهُۥ هُوَ ٱلتَّوَّابُ ٱلرَّحِيمُ"
 
-    static var previews: some View {
+    var body: some View {
         List {
             ForEach(0 ..< 100) { section in
                 Section {
@@ -384,6 +408,14 @@ struct NoorListItem_Previews: PreviewProvider {
                         image: .init(.mail),
                         title: "Title",
                         subtitle: .init(text: "Subtitle", location: .trailing),
+                        accessory: .disclosureIndicator,
+                        action: .sync {}
+                    )
+
+                    NoorListItem(
+                        image: .init(.audio),
+                        title: "Download and play amount",
+                        subtitle: .init(text: "Sura", location: .trailing),
                         accessory: .disclosureIndicator,
                         action: .sync {}
                     )
@@ -422,4 +454,13 @@ struct NoorListItem_Previews: PreviewProvider {
             }
         }
     }
+}
+
+#Preview {
+    NoorListItemPreview()
+}
+
+#Preview("Accessibility size") {
+    NoorListItemPreview()
+        .dynamicTypeSize(.accessibility5)
 }

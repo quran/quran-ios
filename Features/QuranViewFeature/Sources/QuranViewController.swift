@@ -315,10 +315,12 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     // MARK: - Navigation Bar
 
-    private lazy var moreNavigationButton: UIBarButtonItem = {
-        let moreImage = UIImage.symbol("ellipsis.circle")
-        return UIBarButtonItem(image: moreImage, style: .plain, target: self, action: #selector(onMoreBarButtonTapped(_:)))
-    }()
+    private lazy var moreNavigationButton = UIBarButtonItem(
+        image: NavigationBarButton.overflowImage,
+        style: .plain,
+        target: self,
+        action: #selector(onMoreBarButtonTapped(_:))
+    )
 
     #if QURAN_SYNC
     private lazy var readingBookmarkMenuNavigationButton: UIBarButtonItem = {

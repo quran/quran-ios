@@ -148,6 +148,27 @@ final class AppWhatsNewControllerTests: XCTestCase {
         XCTAssertEqual(chooseAnotherIconCount, 0)
     }
 
+    func test_revealReplay_logsEachReplayWithoutDismissing() throws {
+        let analytics = AnalyticsRecorder()
+        let presenter = PresenterFake()
+        let sut = makeSUT(analytics: analytics, launchVersion: .update(from: "2.6.8", to: "2.7.0"))
+        store.lastSeenVersion = "2.6.2"
+        sut.present([revealVersion], from: presenter, onChooseAnotherIcon: nil)
+        let reveal = try presentedReveal(by: presenter)
+
+        reveal.rootView.onReplay()
+        reveal.rootView.onReplay()
+
+        XCTAssertEqual(analytics.events, [
+            AnalyticsEvent(name: "PresentingWhatsNew", value: "2.7.0"),
+            AnalyticsEvent(name: "PresentingAppIconReveal", value: "2.7.0"),
+            AnalyticsEvent(name: "AppIconRevealReplay", value: "2.7.0"),
+            AnalyticsEvent(name: "AppIconRevealReplay", value: "2.7.0"),
+        ])
+        XCTAssertIdentical(presenter.presentedController, reveal)
+        XCTAssertEqual(store.lastSeenVersion, "2.6.2")
+    }
+
     // MARK: Private
 
     private let store = AppWhatsNewVersionStore()

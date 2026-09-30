@@ -62,6 +62,11 @@ enum AppIconRevealTimeline {
 
     /// When night reaches the top of the screen and the status bar turns light.
     static let nightfall: TimeInterval = 1.6
+
+    /// The pause between sheen sweeps once the reveal settles.
+    static let sheenRepeatDelay: TimeInterval = 4
+    /// How long a replay takes to return every layer to the start.
+    static let rewind: TimeInterval = 0.5
 }
 
 /// Where the reveal places the icon and the copy.

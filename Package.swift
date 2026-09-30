@@ -94,7 +94,7 @@ private func coreTargets() -> [[Target]] {
         ]),
 
         target(type, name: "Locking", hasTests: false, dependencies: []),
-        target(type, name: "Preferences", hasTests: false, dependencies: []),
+        target(type, name: "Preferences", dependencies: []),
 
         target(type, name: "VLogging", hasTests: false, dependencies: [
             .product(name: "Logging", package: "swift-log"),

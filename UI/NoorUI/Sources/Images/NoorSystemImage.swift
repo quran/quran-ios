@@ -41,7 +41,7 @@ public enum NoorSystemImage: String {
     case play = "play.fill"
     case stop = "stop.fill"
     case pause = "pause.fill"
-    case more = "ellipsis.circle"
+    case audioOptions = "slider.horizontal.3"
     case edit = "pencil"
     case backward = "backward.fill"
     case forward = "forward.fill"

@@ -71,7 +71,7 @@ let package = Package(
 
         // UI
         .package(url: "https://github.com/GenericDataSource/GenericDataSource", from: "3.1.3"),
-        .package(url: "https://github.com/mohamede1945/Popover", branch: "feat/custom-colors"),
+        .package(url: "https://github.com/mohamede1945/Popover", branch: "master"),
 
         // Testing
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: "1.9.0"),

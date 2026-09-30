@@ -74,11 +74,11 @@ final class AppWhatsNewControllerTests: XCTestCase {
 
     func test_bundledWhatsNew_revealsAppIconForUpdatesFrom2_6() async {
         store.lastSeenVersion = "2.6.2"
-        let sut = makeSUT(launchVersion: .update(from: "2.6.8", to: "2.7.0"))
+        let sut = makeSUT(launchVersion: .update(from: "2.6.8", to: "3.0.1"))
 
         let versions = await sut.versionsToPresent(in: AppWhatsNewController.bundledWhatsNew())
 
-        XCTAssertEqual(versions.map(\.version), ["2.7.0"])
+        XCTAssertEqual(versions.map(\.version), ["3.0.1"])
         XCTAssertEqual(versions.map(\.reveal), [.appIcon])
         XCTAssertEqual(versions.flatMap(\.items).count, 0)
     }

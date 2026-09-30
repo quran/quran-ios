@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>version</key>
-			<string>2.7.0</string>
+			<string>3.0.1</string>
 			<key>reveal</key>
 			<string>app-icon</string>
 			<key>items</key>

@@ -211,10 +211,14 @@ public struct NoorListItem: View {
                 if let appIconLength = image.appIconLength {
                     AppIconPreview(image.image, length: appIconLength)
                 } else if let color = image.color {
-                    image.image
-                        .foregroundColor(color)
+                    NoorListIcon {
+                        image.image
+                            .foregroundColor(color)
+                    }
                 } else {
-                    image.image
+                    NoorListIcon {
+                        image.image
+                    }
                 }
             }
 

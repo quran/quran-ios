@@ -13,7 +13,7 @@ public enum NoorSystemImage: String {
     case download = "icloud.and.arrow.down"
     case cloud = "cloud.fill"
     case translation = "globe"
-    case heart = "heart.fill"
+    case heart
     case share = "square.and.arrow.up"
     case star
     case starFilled = "star.fill"
@@ -35,7 +35,7 @@ public enum NoorSystemImage: String {
     case settings = "gearshape"
     case signOut = "rectangle.portrait.and.arrow.right"
     case search = "magnifyingglass"
-    case mushafs = "books.vertical.fill"
+    case mushafs = "books.vertical"
     case appearance = "circle.lefthalf.filled"
     case debug = "ant"
     case play = "play.fill"

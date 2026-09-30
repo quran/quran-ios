@@ -6,6 +6,7 @@
 //
 
 import Localization
+import NoorUI
 import ReadingSelectorFeature
 import SwiftUI
 import UIx
@@ -75,28 +76,16 @@ final class HomeViewController: UIHostingController<HomeView> {
 
     private func configureNavigationBarButtons() {
         navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(
-                image: UIImage.symbol("books.vertical.fill"),
-                style: .plain,
-                target: self,
-                action: #selector(openReadingSelectors)
-            ),
+            NavigationBarButton.secondary(systemName: NoorSystemImage.mushafs.rawValue, glassSymbolScale: .medium) { [weak self] in
+                self?.openReadingSelectors()
+            },
         ]
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage.symbol("arrow.up.arrow.down"),
-            style: .plain,
-            target: self,
-            action: #selector(toggleSort)
-        )
+        navigationItem.leftBarButtonItem = NavigationBarButton.secondary(systemName: "arrow.up.arrow.down", glassSymbolScale: .medium) { [weak self] in
+            self?.viewModel.toggleSurahSortOrder()
+        }
     }
 
-    @objc
-    private func toggleSort() {
-        viewModel.toggleSurahSortOrder()
-    }
-
-    @objc
     private func openReadingSelectors() {
         let readingSelector = readingSelectorBuilder.build()
         navigationController?.pushViewController(readingSelector, animated: true)

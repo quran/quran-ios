@@ -30,7 +30,9 @@ public struct AppearanceMenu: View {
         } label: {
             // Menu labels take the tint; keep the row neutral like its neighbors.
             HStack {
-                NoorSystemImage.appearance.image
+                NoorListIcon {
+                    NoorSystemImage.appearance.image
+                }
                 if dynamicTypeSize.isAccessibilitySize {
                     VStack(alignment: .leading) {
                         title

@@ -28,27 +28,49 @@ public enum NavigationBarButton {
     }
 
     public static func add(action: @escaping @MainActor @Sendable () -> Void) -> UIBarButtonItem {
-        button(systemName: "plus", tintColor: nil, action: action)
+        button(image: UIImage(systemName: "plus"), tintColor: nil, action: action)
     }
 
+    /// Pass `glassSymbolScale` for symbols that are both wide and tall, such as `books.vertical`:
+    /// Liquid Glass draws each bar button inside a 44pt circle, which they crowd at the default scale.
     public static func secondary(
         systemName: String,
+        glassSymbolScale: UIImage.SymbolScale? = nil,
         action: @escaping @MainActor @Sendable () -> Void
     ) -> UIBarButtonItem {
-        button(systemName: systemName, tintColor: .label, action: action)
+        button(image: symbol(systemName, glassSymbolScale: glassSymbolScale), tintColor: .label, action: action)
     }
 
     public static func overflow(action: @escaping @MainActor @Sendable () -> Void) -> UIBarButtonItem {
-        secondary(systemName: "ellipsis.circle", action: action)
+        button(image: overflowImage, tintColor: .label, action: action)
     }
 
     public static func overflow(menu: UIMenu) -> UIBarButtonItem {
         let button = UIBarButtonItem(
-            image: UIImage(systemName: "ellipsis.circle"),
+            image: overflowImage,
             menu: menu
         )
         button.tintColor = .label
         return button
+    }
+
+    /// Liquid Glass already wraps each bar button in a circle, so a circled ellipsis would draw two.
+    public static var overflowImage: UIImage? {
+        if #available(iOS 26, *) {
+            UIImage(systemName: "ellipsis")
+        } else {
+            UIImage(systemName: "ellipsis.circle")
+        }
+    }
+
+    // MARK: Private
+
+    private static func symbol(_ systemName: String, glassSymbolScale: UIImage.SymbolScale?) -> UIImage? {
+        let image = UIImage(systemName: systemName)
+        guard #available(iOS 26, *), let glassSymbolScale else {
+            return image
+        }
+        return image?.applyingSymbolConfiguration(UIImage.SymbolConfiguration(scale: glassSymbolScale))
     }
 
     private static func button(
@@ -67,12 +89,12 @@ public enum NavigationBarButton {
     }
 
     private static func button(
-        systemName: String,
+        image: UIImage?,
         tintColor: UIColor?,
         action: @escaping @MainActor @Sendable () -> Void
     ) -> UIBarButtonItem {
         let button = UIBarButtonItem(
-            image: UIImage(systemName: systemName),
+            image: image,
             primaryAction: UIAction { _ in action() }
         )
         if let tintColor {

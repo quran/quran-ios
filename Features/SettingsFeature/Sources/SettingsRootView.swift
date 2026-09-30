@@ -147,7 +147,9 @@ private struct SettingsRootViewUI: View {
                 )
 
                 HStack {
-                    Image(systemName: "dot.radiowaves.left.and.right")
+                    NoorListIcon {
+                        Image(systemName: "dot.radiowaves.left.and.right")
+                    }
                     VStack(alignment: .leading, spacing: 2) {
                         Text(l("audio.streaming.title"))
                         Text(l("audio.streaming.description"))
@@ -220,6 +222,7 @@ private struct SettingsRootViewUI: View {
         .task { await refreshAuthenticationState() }
         #endif
         .errorAlert(error: $error)
+        .noorListIconColumn()
     }
 
     // MARK: Private

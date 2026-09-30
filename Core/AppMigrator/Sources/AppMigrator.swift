@@ -37,7 +37,10 @@ public final class AppMigrator {
 
     // MARK: Public
 
-    public var launchVersion: LaunchVersionUpdate { updater.launchVersion() }
+    /// How this launch relates to the previous one, snapshotted on first read so it stays
+    /// stable after `migrationStatus()` or `migrate()` commits the current version.
+    /// Lazy because the migrator is created before protected data is available.
+    public private(set) lazy var launchVersion: LaunchVersionUpdate = updater.launchVersion()
 
     public func register(migrator: Migrator, for version: AppVersion) {
         migrators.append((version, migrator))
@@ -56,7 +59,7 @@ public final class AppMigrator {
     }
 
     public func migrate() async {
-        let launchVersion = updater.launchVersion()
+        let launchVersion = launchVersion
         logger.notice("Version Update: \(launchVersion)")
 
         await withTaskGroup(of: Void.self) { taskGroup in

@@ -17,8 +17,9 @@ struct AudioOptionsButton: View {
     var body: some View {
         Button(action: action) {
             AudioControlLabel {
-                NoorSystemImage.more.image
-                    .foregroundStyle(.tint)
+                // Secondary to the transport controls, so it stays neutral and leaves the tint to them.
+                NoorSystemImage.audioOptions.image
+                    .foregroundStyle(.primary)
                     .overlay(alignment: .topTrailing) {
                         if summary.hasNonDefaultValues {
                             Circle()

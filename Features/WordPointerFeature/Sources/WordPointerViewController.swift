@@ -111,6 +111,7 @@ public final class WordPointerViewController: UIViewController {
         let isUpward = lookingUpward(point)
         let newPoint = CGPoint(x: point.x, y: point.y + (isUpward ? 70 : -70))
         let action = PopoverAction(image: nil, title: text, handler: nil)
+        popover.backgroundColor = view.tintColor
         popover.show(to: newPoint, isUpward: isUpward, with: [action])
     }
 
@@ -129,7 +130,12 @@ public final class WordPointerViewController: UIViewController {
     private let viewModel: WordPointerViewModel
 
     // For word translation
-    private lazy var popover: PopoverView = .init(view: container)
+    private lazy var popover: PopoverView = {
+        let popover = PopoverView(view: container)
+        popover.titleColor = .onAccent
+        popover.showsBorder = false
+        return popover
+    }()
 
     private var pointerTop: NSLayoutConstraint!
     private var pointerLeft: NSLayoutConstraint!

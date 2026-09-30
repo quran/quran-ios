@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mohamede1945/Popover",
       "state" : {
-        "branch" : "master",
-        "revision" : "9641cb324d61554f7e542acb58df2eba55b3a537"
+        "branch" : "feat/custom-colors",
+        "revision" : "2be6058e6325d8417c66c7369ee336baca3161e5"
       }
     },
     {

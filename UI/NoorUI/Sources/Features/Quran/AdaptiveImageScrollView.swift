@@ -186,8 +186,7 @@ private struct AnnotatedAyahImagePreview: View {
                 suraHeaders: [],
                 ayahNumbers: [],
                 drawsAyahNumbersAndSuraHeaders: false,
-                wordFrames: WordFrameCollection(frames: []),
-                highlights: [:]
+                wordFrames: WordFrameCollection(frames: [])
             )
         }
 
@@ -196,8 +195,7 @@ private struct AnnotatedAyahImagePreview: View {
             // Final glyph center for 112:1 on page 604 in hafs_1405_ayahinfo.db.
             ayahNumbers: [AyahNumberLocation(ayah: ayah, x: 768, y: 342)],
             drawsAyahNumbersAndSuraHeaders: false,
-            wordFrames: WordFrameCollection(frames: []),
-            highlights: [:]
+            wordFrames: WordFrameCollection(frames: [])
         )
     }
 

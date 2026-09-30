@@ -127,8 +127,7 @@ private struct ContentImageViewBody: View {
         suraHeaders: [],
         ayahNumbers: [],
         drawsAyahNumbersAndSuraHeaders: false,
-        wordFrames: WordFrameCollection(frames: []),
-        highlights: [:]
+        wordFrames: WordFrameCollection(frames: [])
     )
 
     ContentImageViewBody(

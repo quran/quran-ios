@@ -52,8 +52,7 @@ struct ReadingImageView: View {
             suraHeaders: suraHeaders,
             ayahNumbers: ayahNumbers,
             drawsAyahNumbersAndSuraHeaders: true,
-            wordFrames: WordFrameCollection(frames: []),
-            highlights: [:]
+            wordFrames: WordFrameCollection(frames: [])
         )
     }
 }

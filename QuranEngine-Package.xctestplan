@@ -63,6 +63,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "PreferencesTests",
+        "name" : "PreferencesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "BatchDownloaderTests",
         "name" : "BatchDownloaderTests"
       }

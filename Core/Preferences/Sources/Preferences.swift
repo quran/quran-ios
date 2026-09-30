@@ -11,7 +11,7 @@ import Foundation
 public final class Preferences {
     // MARK: Lifecycle
 
-    private init(userDefaults: UserDefaults) {
+    init(userDefaults: UserDefaults) {
         self.userDefaults = userDefaults
     }
 
@@ -24,7 +24,10 @@ public final class Preferences {
     }
 
     public func valueForKey<T>(_ key: PreferenceKey<T>) -> T {
-        let value = userDefaults.object(forKey: key.key)
+        // Check for a missing value first: when `T` is Optional, casting nil to `T` succeeds.
+        guard let value = userDefaults.object(forKey: key.key) else {
+            return key.defaultValue
+        }
         return (value as? T) ?? key.defaultValue
     }
 
@@ -33,7 +36,9 @@ public final class Preferences {
             notificationsSubject.send(key.key)
         }
 
-        guard let value else {
+        // `T` may itself be Optional (e.g. `PreferenceKey<String?>`), so a nil
+        // assignment can arrive wrapped as `.some(.none)`.
+        guard let value, !((value as? OptionalValue)?.isNil ?? false) else {
             userDefaults.removeObject(forKey: key.key)
             return
         }
@@ -63,4 +68,14 @@ public final class Preferences {
 
     private let userDefaults: UserDefaults
     private let notificationsSubject = PassthroughSubject<String, Never>()
+}
+
+private protocol OptionalValue {
+    var isNil: Bool { get }
+}
+
+extension Optional: OptionalValue {
+    fileprivate var isNil: Bool {
+        self == nil
+    }
 }

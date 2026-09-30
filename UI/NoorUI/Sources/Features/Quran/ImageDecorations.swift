@@ -3,6 +3,7 @@
 //
 
 import QuranGeometry
+import QuranKit
 import SwiftUI
 
 public struct ImageDecorations {
@@ -10,19 +11,22 @@ public struct ImageDecorations {
     public var ayahNumbers: [AyahNumberLocation]
     public var drawsAyahNumbersAndSuraHeaders: Bool
     public var wordFrames: WordFrameCollection
-    public var highlights: [WordFrame: Color]
+    public var verseHighlights: [AyahNumber: Color]
+    public var wordHighlight: Word?
 
     public init(
         suraHeaders: [SuraHeaderLocation],
         ayahNumbers: [AyahNumberLocation],
         drawsAyahNumbersAndSuraHeaders: Bool,
         wordFrames: WordFrameCollection,
-        highlights: [WordFrame: Color]
+        verseHighlights: [AyahNumber: Color] = [:],
+        wordHighlight: Word? = nil
     ) {
         self.suraHeaders = suraHeaders
         self.ayahNumbers = ayahNumbers
         self.drawsAyahNumbersAndSuraHeaders = drawsAyahNumbersAndSuraHeaders
         self.wordFrames = wordFrames
-        self.highlights = highlights
+        self.verseHighlights = verseHighlights
+        self.wordHighlight = wordHighlight
     }
 }

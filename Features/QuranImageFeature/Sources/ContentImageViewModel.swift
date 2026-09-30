@@ -57,30 +57,14 @@ class ContentImageViewModel: ObservableObject {
         reading.usesInvertedQuranImageRenderingInDarkMode ? .invertInDarkMode : .tinted
     }
 
-    private var frameHighlights: [WordFrame: Color] {
-        // Add verse highlights
-        var frameHighlights: [WordFrame: Color] = [:]
-        let versesByHighlights = overlays.versesByHighlights()
-        for (ayah, color) in versesByHighlights {
-            for frame in imagePage?.wordFrames.wordFramesForVerse(ayah) ?? [] {
-                frameHighlights[frame] = Color(color)
-            }
-        }
-
-        // Add word highlight
-        if let word = overlays.pointedWord, let frame = imagePage?.wordFrames.wordFrameForWord(word) {
-            frameHighlights[frame] = VerseOverlays.wordHighlightColor
-        }
-        return frameHighlights
-    }
-
     var decorations: ImageDecorations {
         return ImageDecorations(
             suraHeaders: suraHeaderLocations,
             ayahNumbers: ayahNumberLocations,
             drawsAyahNumbersAndSuraHeaders: reading.drawsAyahNumbersAndSuraHeaders,
             wordFrames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
-            highlights: frameHighlights
+            verseHighlights: overlays.versesByHighlights().mapValues { Color($0) },
+            wordHighlight: overlays.pointedWord
         )
     }
 

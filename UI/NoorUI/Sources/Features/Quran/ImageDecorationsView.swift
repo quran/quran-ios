@@ -21,9 +21,15 @@ struct ImageDecorationsView: View {
     // MARK: Private
 
     private var highlights: some View {
-        ForEach(layout.highlights) { placement in
-            placement.color
-                .placed(in: placement.frame)
+        ZStack(alignment: .topLeading) {
+            ForEach(layout.verseHighlights) { placement in
+                QuranHighlightShape(lineRects: placement.lineRects)
+                    .fill(placement.color)
+            }
+            if let word = layout.wordHighlight {
+                QuranHighlightShape.word(word.frame)
+                    .fill(word.color)
+            }
         }
     }
 

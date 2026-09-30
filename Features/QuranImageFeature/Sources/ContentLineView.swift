@@ -180,12 +180,15 @@ private struct ContentLineViewBody: View {
         }
     }
 
-    @ViewBuilder
     private func highlights(_ layout: LinePageLayout) -> some View {
-        ForEach(layout.highlightRects, id: \.self) { highlight in
-            if let color = highlightColorsByVerse[highlight.ayah] {
-                color
-                    .placed(in: highlight.rect)
+        let rectsByVerse = Dictionary(grouping: layout.highlightRects, by: \.ayah)
+        let verses = rectsByVerse.keys
+            .filter { highlightColorsByVerse[$0] != nil }
+            .sorted()
+        return ForEach(verses, id: \.self) { verse in
+            if let color = highlightColorsByVerse[verse], let rects = rectsByVerse[verse] {
+                QuranHighlightShape(lineRects: rects.map(\.rect))
+                    .fill(color)
             }
         }
     }

@@ -8,6 +8,7 @@
 import Analytics
 import AppIconFeature
 import AudioDownloadsFeature
+import Localization
 import ReadingSelectorFeature
 import SettingsService
 import SystemDependenciesFake
@@ -17,7 +18,8 @@ import XCTest
 @testable import NoorUI
 @testable import SettingsFeature
 
-/// Covers the Appearance section: the appearance mode picker and the App Icon row.
+/// Covers the Appearance section (the appearance mode picker and the App Icon row)
+/// and the Audio Playback row.
 @MainActor
 final class SettingsRootViewModelAppearanceTests: XCTestCase {
     // MARK: Internal
@@ -98,6 +100,18 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
         XCTAssertEqual(sut.appIconOption.name, "Blue")
     }
 
+    // MARK: Audio Playback
+
+    func test_audioPlaybackRow_pushesAudioPlayback() {
+        let navigationController = UINavigationController()
+        let sut = makeSUT(navigationController: navigationController)
+
+        sut.navigateToAudioPlayback()
+
+        XCTAssertEqual(navigationController.viewControllers.count, 1)
+        XCTAssertEqual(navigationController.topViewController?.title, l("audio.playback.title"))
+    }
+
     // MARK: Private
 
     private let navy = AppIconOption(
@@ -129,7 +143,8 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
 
     private func makeSUT(
         analytics: AnalyticsLibrary = NoopAnalytics(),
-        appIconService: AppIconService? = nil
+        appIconService: AppIconService? = nil,
+        navigationController: UINavigationController = UINavigationController()
     ) -> SettingsRootViewModel {
         let container = AppDependenciesStub(appIconCatalog: catalog)
         let appIconService = appIconService ?? makeService()
@@ -147,7 +162,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
             appIconService: appIconService,
             appIconBuilder: AppIconBuilder(container: container),
             quranProfileURL: container.quranProfileURL,
-            navigationController: UINavigationController()
+            navigationController: navigationController
         )
         #else
         return SettingsRootViewModel(
@@ -160,7 +175,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
             diagnosticsBuilder: DiagnosticsBuilder(container: container),
             appIconService: appIconService,
             appIconBuilder: AppIconBuilder(container: container),
-            navigationController: UINavigationController()
+            navigationController: navigationController
         )
         #endif
     }

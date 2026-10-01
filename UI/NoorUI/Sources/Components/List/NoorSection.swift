@@ -28,10 +28,23 @@ public struct NoorBasicSection<Content: View>: View {
 
     public var body: some View {
         if let isExpanded, #available(iOS 17.0, *) {
-            Section(isExpanded: isExpanded) {
-                content
-            } header: {
-                collapsibleHeader(isExpanded: isExpanded)
+            if let footer {
+                // `Section(isExpanded:)` has no footer, so collapse the rows by hand.
+                Section {
+                    if isExpanded.wrappedValue {
+                        content
+                    }
+                } header: {
+                    collapsibleHeader(isExpanded: isExpanded)
+                } footer: {
+                    Text(footer)
+                }
+            } else {
+                Section(isExpanded: isExpanded) {
+                    content
+                } header: {
+                    collapsibleHeader(isExpanded: isExpanded)
+                }
             }
         } else if let footer {
             if let title {

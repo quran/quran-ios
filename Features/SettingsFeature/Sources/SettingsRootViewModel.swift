@@ -10,7 +10,6 @@ import AppIconFeature
 import AudioDownloadsFeature
 import Combine
 import FeaturesSupport
-import Localization
 #if QURAN_SYNC
 import AuthenticationClient
 import LegacyDataMigration
@@ -22,7 +21,6 @@ import SafariServices
 import SettingsService
 import TranslationsFeature
 import UIKit
-import UIx
 import VLogging
 
 @MainActor

@@ -205,6 +205,7 @@ private func uiTargets() -> [[Target]] {
             .process("Images/Images.xcassets"),
         ], testDependencies: [
             "Localization",
+            "QuranAudio",
             "QuranKit",
             "QuranLocalization",
             "SystemDependenciesFake",
@@ -609,8 +610,6 @@ private func featuresTargets() -> [[Target]] {
             "Localization",
             "Analytics",
             "QuranAnnotations",
-            "QuranAudio",
-            "QuranAudioKit",
             "QuranTextKit",
             "NoorUI",
             "UIx",
@@ -687,7 +686,6 @@ private func featuresTargets() -> [[Target]] {
         ] + mobileSyncTargetDependencies),
 
         target(type, name: "AdvancedAudioOptionsFeature", dependencies: [
-            "FeaturesSupport",
             "QuranAudio",
             "NoorUI",
             "ReciterListFeature",

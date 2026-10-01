@@ -25,7 +25,6 @@ struct AudioPlaybackBuilder {
         let view = AudioPlaybackView(viewModel: viewModel)
         let viewController = UIHostingController(rootView: view)
         viewController.title = l("audio.playback.title")
-        viewController.navigationItem.largeTitleDisplayMode = .never
         return viewController
     }
 }

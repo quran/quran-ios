@@ -142,6 +142,16 @@ final class AudioPlaybackViewModelTests: XCTestCase {
         XCTAssertEqual(sut.reciter, .gaplessReciter)
     }
 
+    func test_reciter_fallsBackToTheFirstReciter_whenTheSavedOneIsMissing() async {
+        reciterPreferences.lastSelectedReciterId = 999
+        let sut = makeSUT()
+
+        await sut.start()
+
+        XCTAssertNotNil(sut.reciter)
+        XCTAssertEqual(sut.reciter, sut.reciters.first)
+    }
+
     func test_selectingReciter_savesItAndAddsItToRecents() async {
         reciterPreferences.lastSelectedReciterId = Reciter.gappedReciter.id
         reciterPreferences.recentReciterIds = [Reciter.gappedReciter.id]

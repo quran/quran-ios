@@ -19,6 +19,7 @@ struct AudioDownloadsView: View {
             editMode: $viewModel.editMode,
             error: $viewModel.error,
             items: viewModel.items.sorted(),
+            showsStreamHint: !viewModel.streamingEnabled,
             start: { await viewModel.start() },
             downloadAction: { await viewModel.startDownloading($0.reciter) },
             cancelAction: { await viewModel.cancelDownloading($0.reciter) },
@@ -31,6 +32,7 @@ private struct AudioDownloadsViewUI: View {
     @Binding var editMode: EditMode
     @Binding var error: Error?
     let items: [AudioDownloadItem]
+    let showsStreamHint: Bool
     let start: AsyncAction
     let downloadAction: AsyncItemAction<AudioDownloadItem>
     let cancelAction: AsyncItemAction<AudioDownloadItem>
@@ -38,8 +40,8 @@ private struct AudioDownloadsViewUI: View {
 
     var body: some View {
         let downloadedItems = items.filter(\.canDelete)
-        // The hint sits under the first section shown.
-        let streamHint = l("audio-manager.stream-hint")
+        // The hint sits under the first section shown, while streaming is off.
+        let streamHint = showsStreamHint ? l("audio-manager.stream-hint") : nil
         NoorList {
             AudioDownloadsSection(
                 title: l("reciters.downloaded"),
@@ -148,6 +150,7 @@ struct AudioDownloadsView_Previews: PreviewProvider {
                     editMode: $editMode,
                     error: $error,
                     items: items,
+                    showsStreamHint: true,
                     start: { },
                     downloadAction: { _ in },
                     cancelAction: { _ in },

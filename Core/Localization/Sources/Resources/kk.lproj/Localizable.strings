@@ -363,19 +363,20 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "Өшірулі";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.end-at" = "Аяқтау орны";
+"audio.play-up-to" = "Ойнату дейін";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Арнаулы";
 // Metadata: Translated by AI; human review required.
 "audio.end-at.description" = "Бет, Сүре, Пара және Құран «Жүктеу/Ойнату дейін» параметрін де жаңартады.";
 // Metadata: Translated by ChatGPT; human review required.
+"audio.reciter" = "Қари";
 "audio.playback-ayah-range" = "Аяттарды ойнату ауқымы";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-speed" = "Ойнату жылдамдығы";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repeat-count" = "Қайталау саны";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.repetition-delay" = "Қайталаулар арасындағы үзіліс (секунд)";
+"audio.repetition-delay" = "Қайталаулар арасындағы үзіліс";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.10s" = "10 с";
 // Metadata: Translated by ChatGPT; human review required.

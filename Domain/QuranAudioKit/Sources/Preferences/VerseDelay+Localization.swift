@@ -1,5 +1,5 @@
 //
-//  VerseDelay++.swift
+//  VerseDelay+Localization.swift
 //  Quran
 //
 //  Created by Abdirizak Hassan on 6/5/26.
@@ -11,11 +11,11 @@ import Localization
 import QueuePlayer
 
 extension VerseDelay {
-    static var sorted: [VerseDelay] {
+    public static var sorted: [VerseDelay] {
         VerseDelay.allCases.sorted()
     }
 
-    var localizedDescription: String {
+    public var localizedDescription: String {
         switch self {
         case .none:
             return l("audio.delay.off")

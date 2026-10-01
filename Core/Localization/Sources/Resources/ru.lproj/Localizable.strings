@@ -379,19 +379,20 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "Выкл.";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.end-at" = "Закончить на";
+"audio.play-up-to" = "Воспроизвести до";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Настроить";
 // Metadata: Translated by AI; human review required.
 "audio.end-at.description" = "Страница, Сура, Джуз и Коран также меняют настройку «Скачать/Воспроизвести до».";
 // Metadata: Translated by ChatGPT; human review required.
+"audio.reciter" = "Чтец";
 "audio.playback-ayah-range" = "Диапазон аятов для воспроизведения";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-speed" = "Скорость воспроизведения";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repeat-count" = "Количество повторов";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.repetition-delay" = "Пауза между повторами (секунды)";
+"audio.repetition-delay" = "Пауза между повторами";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.10s" = "10 с";
 // Metadata: Translated by ChatGPT; human review required.

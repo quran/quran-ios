@@ -46,6 +46,15 @@ public enum NoorSystemImage: String {
     case backward = "backward.fill"
     case forward = "forward.fill"
     case cancel = "xmark"
+    case reciter = "music.mic"
+    case playbackSpeed = "gauge.with.dots.needle.67percent"
+    case playUpTo = "arrow.right.to.line"
+    case rangeStart = "text.line.first.and.arrowtriangle.forward"
+    case rangeEnd = "text.line.last.and.arrowtriangle.forward"
+    case repeatVerse = "repeat.1"
+    case repeatRange = "repeat"
+    case pauseDelay = "timer"
+    case infinity
 
     // MARK: Public
 

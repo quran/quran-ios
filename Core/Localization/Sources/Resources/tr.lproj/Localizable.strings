@@ -322,19 +322,20 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "Kapalı";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.end-at" = "Şurada bitir";
+"audio.play-up-to" = "Oynatma limiti";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Özel";
 // Metadata: Translated by AI; human review required.
 "audio.end-at.description" = "Sayfa, Sure, Cüz ve Kur'an seçenekleri “İndir/Oynatma limiti” ayarınızı da günceller.";
 // Metadata: Translated by ChatGPT; human review required.
+"audio.reciter" = "Hafız";
 "audio.playback-ayah-range" = "Oynatılacak ayet aralığı";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-speed" = "Oynatma hızı";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repeat-count" = "Tekrar sayısı";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.repetition-delay" = "Tekrarlar arasındaki duraklama (saniye)";
+"audio.repetition-delay" = "Tekrarlar arasındaki duraklama";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.10s" = "10 sn";
 // Metadata: Translated by ChatGPT; human review required.

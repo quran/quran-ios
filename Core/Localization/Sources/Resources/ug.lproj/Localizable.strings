@@ -382,19 +382,20 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "تاقاق";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.end-at" = "ئاخىرلاشتۇرۇش ئورنى";
+"audio.play-up-to" = "قويۇشقا قەدەر";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "ئىختىيارىي";
 // Metadata: Translated by AI; human review required.
 "audio.end-at.description" = "بەت، سۈرە، پارە ۋە قۇرئان «چۈشۈرۈش/قويۇشقا قەدەر» تەڭشىكىڭىزنىمۇ يېڭىلايدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
+"audio.reciter" = "قارى";
 "audio.playback-ayah-range" = "قويۇلىدىغان ئايەت دائىرىسى";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-speed" = "قويۇش سۈرئىتى";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repeat-count" = "تەكرار سانى";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.repetition-delay" = "تەكرارلار ئارىسىدىكى توختاش (سېكۇنت)";
+"audio.repetition-delay" = "تەكرارلار ئارىسىدىكى توختاش";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.10s" = "10 سېكۇنت";
 // Metadata: Translated by ChatGPT; human review required.

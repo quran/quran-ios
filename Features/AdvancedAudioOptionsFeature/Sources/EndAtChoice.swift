@@ -27,7 +27,8 @@ enum EndAtChoice: Hashable, CaseIterable {
 
     // MARK: Internal
 
-    static let pickerChoices: [EndAtChoice] = [.custom, .page, .surah, .juz, .quran]
+    /// The choices the Play up to menu lists. Custom isn't one: editing To picks it.
+    static let menuChoices: [EndAtChoice] = [.page, .juz, .surah, .quran]
 
     var audioEnd: AudioEnd? {
         switch self {

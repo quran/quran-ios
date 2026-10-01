@@ -140,9 +140,10 @@
 "audio.select-start-verse" = "Select Starting Verse";
 "audio.select-end-verse" = "Select Ending Verse";
 
+"audio.reciter" = "Reciter";
 "audio.playback-ayah-range" = "Playback ayah range";
 "audio.playback-speed" = "Playback Speed";
-"audio.end-at" = "End at";
+"audio.play-up-to" = "Play up to";
 "audio.end-at.custom" = "Custom";
 "audio.end-at.description" = "Page, Surah, Juz' and Quran also update your Play up to setting.";
 
@@ -155,7 +156,7 @@
 "audio.repeat-count" = "Repeat Count";
 "audio.verse-delay" = "Pause After Each Verse";
 "audio.verse-delay.description" = "Choose how long to pause after each verse. 1× waits about as long as the verse took to play, giving you time to repeat or memorize before continuing.";
-"audio.repetition-delay" = "Pause Between Repetitions (seconds)";
+"audio.repetition-delay" = "Pause Between Repetitions";
 "audio.repetition-delay.description" = "Sets how long to pause before the next repetition starts.";
 "audio.repetition-delay.1s" = "1s";
 "audio.repetition-delay.2s" = "2s";
@@ -361,7 +362,7 @@
 /* Audio banner options summary */
 "audio.summary.verse" = "verse %@";
 "audio.summary.range" = "range %@";
-"audio.options" = "Audio options";
+"audio.options" = "Audio Options";
 
 // MARK: - Continue reading and reading bookmarks
 

@@ -9,6 +9,9 @@ import SwiftUI
 
 /// A list row's leading icon. In lists that opt in with `noorListIconColumn()`, the icon is
 /// centered in a fixed-width column so row titles line up regardless of each symbol's width.
+///
+/// The icon takes the app tint, which follows the app icon accent live, unless its content
+/// sets its own color.
 public struct NoorListIcon<Content: View>: View {
     // MARK: Lifecycle
 
@@ -19,12 +22,15 @@ public struct NoorListIcon<Content: View>: View {
     // MARK: Public
 
     public var body: some View {
-        if usesIconColumn {
-            content
-                .frame(width: width)
-        } else {
-            content
+        Group {
+            if usesIconColumn {
+                content
+                    .frame(width: width)
+            } else {
+                content
+            }
         }
+        .foregroundColor(.accentColor)
     }
 
     // MARK: Private

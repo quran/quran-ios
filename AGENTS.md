@@ -35,7 +35,8 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Prefer `NoorAnimation.standard` for SwiftUI animations and `NoorAnimation.animate` for UIKit animations unless there is a clear reason for different behavior. Preserve Reduce Motion handling and intentional animation suppression.
 - Do not add a NoorUI dependency to lower-level modules such as UIx.
 - Use NoorUI navigation-action components instead of constructing feature-local buttons.
-- Keep Edit, Close, overflow, and secondary navigation actions neutral. Reserve the app tint for Done and primary actions.
+- Keep Edit, Close, overflow, and secondary navigation-bar actions neutral. Reserve the app tint for Done and primary actions.
+- Leading icons in navigation and settings lists use the app tint. Icons that carry meaning (bookmark and collection colors) keep their color; search-suggestion glyphs use secondary. In navigation bars, reserve the tint for Done and primary actions.
 - Use Done only to commit or finish an editing/confirmation flow. Use a leading Close × for dismissal-only modals, with localized accessibility text.
 - Let pushed screens use the standard Back button; do not add Close or Done solely to pop them.
 - Match established layouts in analogous features before introducing a new visual pattern.

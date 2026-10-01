@@ -28,7 +28,8 @@ public struct AppearanceMenu: View {
                 }
             }
         } label: {
-            // Menu labels take the tint; keep the row neutral like its neighbors.
+            // Menu labels take the tint; keep the text neutral like its neighbors.
+            // `NoorListIcon` restores the tint on the icon.
             HStack {
                 NoorListIcon {
                     NoorSystemImage.appearance.image

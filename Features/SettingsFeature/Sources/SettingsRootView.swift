@@ -18,12 +18,10 @@ struct SettingsRootView: View {
         #if QURAN_SYNC
         SettingsRootViewUI(
             appearanceMode: appearanceMode,
-            streamingEnabled: $viewModel.streamingEnabled,
             error: $viewModel.error,
             appIcon: viewModel.isAppIconAvailable ? viewModel.appIconOption : nil,
-            audioEnd: viewModel.audioEnd.name,
             navigateToAppIcons: { viewModel.navigateToAppIcons() },
-            navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
+            navigateToAudioPlayback: { viewModel.navigateToAudioPlayback() },
             navigateToAudioManager: { viewModel.navigateToAudioManager() },
             navigateToTranslationsList: { viewModel.navigateToTranslationsList() },
             navigateToReadingSelector: { viewModel.navigateToReadingSelectors() },
@@ -42,12 +40,10 @@ struct SettingsRootView: View {
         #else
         SettingsRootViewUI(
             appearanceMode: appearanceMode,
-            streamingEnabled: $viewModel.streamingEnabled,
             error: $viewModel.error,
             appIcon: viewModel.isAppIconAvailable ? viewModel.appIconOption : nil,
-            audioEnd: viewModel.audioEnd.name,
             navigateToAppIcons: { viewModel.navigateToAppIcons() },
-            navigateToAudioEndSelector: { viewModel.navigateToAudioEndSelector() },
+            navigateToAudioPlayback: { viewModel.navigateToAudioPlayback() },
             navigateToAudioManager: { viewModel.navigateToAudioManager() },
             navigateToTranslationsList: { viewModel.navigateToTranslationsList() },
             navigateToReadingSelector: { viewModel.navigateToReadingSelectors() },
@@ -72,14 +68,12 @@ private struct SettingsRootViewUI: View {
     // MARK: Internal
 
     @Binding var appearanceMode: AppearanceMode
-    @Binding var streamingEnabled: Bool
     @Binding var error: Error?
 
     /// The icon iOS shows, or `nil` when the app can't change its icon.
     let appIcon: AppIconOption?
-    let audioEnd: String
     let navigateToAppIcons: Action
-    let navigateToAudioEndSelector: Action
+    let navigateToAudioPlayback: Action
     let navigateToAudioManager: Action
     let navigateToTranslationsList: Action
     let navigateToReadingSelector: Action
@@ -140,27 +134,10 @@ private struct SettingsRootViewUI: View {
             NoorBasicSection {
                 NoorListItem(
                     image: .init(.audio),
-                    title: .text(l("audio.download-play-amount")),
-                    subtitle: .init(text: .text(audioEnd), location: .trailing),
+                    title: .text(l("audio.playback.title")),
                     accessory: .disclosureIndicator,
-                    action: .sync { navigateToAudioEndSelector() }
+                    action: .sync { navigateToAudioPlayback() }
                 )
-
-                HStack {
-                    NoorListIcon {
-                        Image(systemName: "dot.radiowaves.left.and.right")
-                    }
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(l("audio.streaming.title"))
-                        Text(l("audio.streaming.description"))
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    Toggle(l("audio.streaming.title"), isOn: $streamingEnabled)
-                        .labelsHidden()
-                }
-                .padding(.vertical, 6)
 
                 NoorListItem(
                     image: .init(.downloads),
@@ -233,18 +210,15 @@ private struct SettingsRootViewUI: View {
 #Preview {
     struct Container: View {
         @State var appearanceMode = AppearanceMode.auto
-        @State var streamingEnabled = false
 
         var body: some View {
             #if QURAN_SYNC
             SettingsRootViewUI(
                 appearanceMode: $appearanceMode,
-                streamingEnabled: $streamingEnabled,
                 error: .constant(nil),
                 appIcon: previewAppIcon,
-                audioEnd: "Surah",
                 navigateToAppIcons: {},
-                navigateToAudioEndSelector: {},
+                navigateToAudioPlayback: {},
                 navigateToAudioManager: {},
                 navigateToTranslationsList: {},
                 navigateToReadingSelector: {},
@@ -263,12 +237,10 @@ private struct SettingsRootViewUI: View {
             #else
             SettingsRootViewUI(
                 appearanceMode: $appearanceMode,
-                streamingEnabled: $streamingEnabled,
                 error: .constant(nil),
                 appIcon: previewAppIcon,
-                audioEnd: "Surah",
                 navigateToAppIcons: {},
-                navigateToAudioEndSelector: {},
+                navigateToAudioPlayback: {},
                 navigateToAudioManager: {},
                 navigateToTranslationsList: {},
                 navigateToReadingSelector: {},

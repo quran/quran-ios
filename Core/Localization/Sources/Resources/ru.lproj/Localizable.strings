@@ -182,11 +182,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.select-end-verse" = "Выбрать конечный стих";
 
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount" = "Скачать/Воспроизвести до";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount.description" = "При воспроизведении аудио оно будет играть до конца";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.
@@ -383,7 +378,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Настроить";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Страница, Сура, Джуз и Коран также меняют настройку «Скачать/Воспроизвести до».";
+"audio.end-at.description" = "Страница, Сура, Джуз и Коран также меняют настройку «Воспроизвести до».";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Чтец";
 "audio.playback-ayah-range" = "Диапазон аятов для воспроизведения";
@@ -406,9 +401,19 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.description" = "Определяет длительность паузы перед началом следующего повтора.";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.streaming.description" = "Экономит место на устройстве за счёт потокового воспроизведения, но требует подключения к интернету.";
-// Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Потоковое аудио";
+// Metadata: Translated by AI; human review required.
+"audio.playback.title" = "Воспроизведение аудио";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.page" = "Воспроизведение продолжается до конца текущей страницы. Без потокового воспроизведения эти аяты сначала скачиваются; потоковое воспроизведение экономит место, но требует подключения к интернету.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.surah" = "Воспроизведение продолжается до конца текущей суры. Без потокового воспроизведения эти аяты сначала скачиваются; потоковое воспроизведение экономит место, но требует подключения к интернету.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.juz" = "Воспроизведение продолжается до конца текущего джуза. Без потокового воспроизведения эти аяты сначала скачиваются; потоковое воспроизведение экономит место, но требует подключения к интернету.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quran" = "Воспроизведение продолжается до конца Корана. Без потокового воспроизведения эти аяты сначала скачиваются; потоковое воспроизведение экономит место, но требует подключения к интернету.";
+// Metadata: Translated by AI; human review required.
+"audio-manager.stream-hint" = "Чтобы слушать без скачивания, включите «Потоковое аудио» в разделе «Воспроизведение аудио».";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Пауза после каждого аята";
 // Metadata: Translated by ChatGPT; human review required.

@@ -10,11 +10,19 @@ import QuranAudioKit
 import SwiftUI
 
 /// The repeat count as a list row that expands a wheel of Loop and 1× through 100×.
-struct RepeatCountRow: View {
-    let image: NoorSystemImage
-    @Binding var runs: Runs
+///
+/// Audio Options and Settings › Audio Playback share it, so both show the same row.
+public struct RepeatCountRow: View {
+    // MARK: Lifecycle
 
-    var body: some View {
+    public init(image: NoorSystemImage, runs: Binding<Runs>) {
+        self.image = image
+        _runs = runs
+    }
+
+    // MARK: Public
+
+    public var body: some View {
         NoorWheelPickerRow(
             title: l("audio.repeat-count"),
             image: image,
@@ -24,6 +32,12 @@ struct RepeatCountRow: View {
             RunsLabel(runs: runs)
         }
     }
+
+    // MARK: Private
+
+    @Binding private var runs: Runs
+
+    private let image: NoorSystemImage
 }
 
 private struct RunsLabel: View {

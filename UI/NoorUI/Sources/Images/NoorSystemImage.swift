@@ -54,6 +54,7 @@ public enum NoorSystemImage: String {
     case repeatVerse = "repeat.1"
     case repeatRange = "repeat"
     case pauseDelay = "timer"
+    case stream = "cloud"
     case infinity
 
     // MARK: Public

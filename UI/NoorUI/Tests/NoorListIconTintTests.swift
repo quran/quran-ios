@@ -57,6 +57,14 @@ final class NoorListIconTintTests: XCTestCase {
         XCTAssertTrue(window.renders(\.isDarkNeutral))
     }
 
+    func test_toggleRowIcon_usesTheWindowTintAndKeepsTheTitlePrimary() async {
+        let window = window(showing: NoorToggleRow(title: "Title", image: .stop, isOn: .constant(false)))
+        window.tintColor = .red
+
+        await waitUntil(window, renders: .red)
+        XCTAssertTrue(window.renders(\.isDarkNeutral))
+    }
+
     // MARK: Private
 
     private let size = CGSize(width: 200, height: 60)

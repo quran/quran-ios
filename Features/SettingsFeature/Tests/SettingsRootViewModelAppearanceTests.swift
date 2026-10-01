@@ -139,6 +139,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
             reviewService: ReviewService(analytics: NoopAnalytics()),
             authenticationClient: container.authenticationClient,
             legacyDataImportCoordinator: container.legacyDataImportCoordinator,
+            audioPlaybackBuilder: AudioPlaybackBuilder(),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
@@ -152,6 +153,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
         return SettingsRootViewModel(
             analytics: analytics,
             reviewService: ReviewService(analytics: NoopAnalytics()),
+            audioPlaybackBuilder: AudioPlaybackBuilder(),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),

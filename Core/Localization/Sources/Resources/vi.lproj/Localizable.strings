@@ -136,9 +136,6 @@
 "audio.select-start-verse" = "Chọn Câu Đầu";
 "audio.select-end-verse" = "Chọn Câu Cuối";
 
-"audio.download-play-amount" = "Tải xuống/Phát đến";
-"audio.download-play-amount.description" = "Khi phát âm thanh, nó sẽ phát đến cuối của";
-
 // MARK: - Bookmarks
 
 "bookmarks.no-data.title" = "Thêm Đánh dấu...";
@@ -293,7 +290,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Tùy chỉnh";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Trang, Surah, Juz' và Kinh Quran cũng cập nhật cài đặt “Tải xuống/Phát đến” của bạn.";
+"audio.end-at.description" = "Trang, Surah, Juz' và Kinh Quran cũng cập nhật cài đặt “Phát đến” của bạn.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Người xướng đọc";
 "audio.playback-ayah-range" = "Phạm vi ayah phát";
@@ -316,9 +313,19 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.description" = "Đặt thời gian tạm dừng trước khi lần lặp tiếp theo bắt đầu.";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.streaming.description" = "Tiết kiệm dung lượng bằng cách phát trực tuyến âm thanh nhưng cần kết nối internet.";
-// Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Phát trực tuyến âm thanh";
+// Metadata: Translated by AI; human review required.
+"audio.playback.title" = "Phát âm thanh";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.page" = "Phát tiếp đến cuối trang hiện tại. Khi tắt phát trực tuyến, các câu đó sẽ được tải xuống trước; phát trực tuyến tiết kiệm dung lượng nhưng cần kết nối internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.surah" = "Phát tiếp đến cuối surah hiện tại. Khi tắt phát trực tuyến, các câu đó sẽ được tải xuống trước; phát trực tuyến tiết kiệm dung lượng nhưng cần kết nối internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.juz" = "Phát tiếp đến cuối juz' hiện tại. Khi tắt phát trực tuyến, các câu đó sẽ được tải xuống trước; phát trực tuyến tiết kiệm dung lượng nhưng cần kết nối internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quran" = "Phát tiếp đến cuối Kinh Quran. Khi tắt phát trực tuyến, các câu đó sẽ được tải xuống trước; phát trực tuyến tiết kiệm dung lượng nhưng cần kết nối internet.";
+// Metadata: Translated by AI; human review required.
+"audio-manager.stream-hint" = "Để phát mà không cần tải xuống, hãy bật “Phát trực tuyến âm thanh” trong “Phát âm thanh”.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Tạm dừng sau mỗi ayah";
 // Metadata: Translated by ChatGPT; human review required.

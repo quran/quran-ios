@@ -182,11 +182,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.select-end-verse" = "ئاخىرقى ئايەتنى تاللاڭ";
 
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount" = "چۈشۈرۈش/قويۇشقا قەدەر";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount.description" = "ئاۋاز قويۇش ۋاقتىدا ئاخىرىغىچە قويۇلىدۇ";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.
@@ -386,7 +381,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "ئىختىيارىي";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "بەت، سۈرە، پارە ۋە قۇرئان «چۈشۈرۈش/قويۇشقا قەدەر» تەڭشىكىڭىزنىمۇ يېڭىلايدۇ.";
+"audio.end-at.description" = "بەت، سۈرە، پارە ۋە قۇرئان «قويۇش چېكى» تەڭشىكىڭىزنىمۇ يېڭىلايدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "قارى";
 "audio.playback-ayah-range" = "قويۇلىدىغان ئايەت دائىرىسى";
@@ -409,9 +404,19 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.description" = "كېيىنكى تەكرار باشلىنىشتىن بۇرۇن قانچىلىك توختاشنى بەلگىلەيدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.streaming.description" = "ئاۋازنى تور ئارقىلىق قويۇش ساقلاش بوشلۇقىنى تېجەيدۇ، ئەمما تور ئۇلىنىشىنى تەلەپ قىلىدۇ.";
-// Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "ئاۋازنى تور ئارقىلىق قويۇش";
+// Metadata: Translated by AI; human review required.
+"audio.playback.title" = "ئاۋاز قويۇش";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.page" = "قويۇش نۆۋەتتىكى بەتنىڭ ئاخىرىغىچە داۋاملىشىدۇ. تور ئارقىلىق قويۇش تاقالغاندا، ئۇ ئايەتلەر ئالدى بىلەن چۈشۈرۈلىدۇ؛ تور ئارقىلىق قويۇش بوشلۇق تېجەيدۇ، ئەمما تور ئۇلىنىشىنى تەلەپ قىلىدۇ.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.surah" = "قويۇش نۆۋەتتىكى سۈرىنىڭ ئاخىرىغىچە داۋاملىشىدۇ. تور ئارقىلىق قويۇش تاقالغاندا، ئۇ ئايەتلەر ئالدى بىلەن چۈشۈرۈلىدۇ؛ تور ئارقىلىق قويۇش بوشلۇق تېجەيدۇ، ئەمما تور ئۇلىنىشىنى تەلەپ قىلىدۇ.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.juz" = "قويۇش نۆۋەتتىكى پارىنىڭ ئاخىرىغىچە داۋاملىشىدۇ. تور ئارقىلىق قويۇش تاقالغاندا، ئۇ ئايەتلەر ئالدى بىلەن چۈشۈرۈلىدۇ؛ تور ئارقىلىق قويۇش بوشلۇق تېجەيدۇ، ئەمما تور ئۇلىنىشىنى تەلەپ قىلىدۇ.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quran" = "قويۇش قۇرئاننىڭ ئاخىرىغىچە داۋاملىشىدۇ. تور ئارقىلىق قويۇش تاقالغاندا، ئۇ ئايەتلەر ئالدى بىلەن چۈشۈرۈلىدۇ؛ تور ئارقىلىق قويۇش بوشلۇق تېجەيدۇ، ئەمما تور ئۇلىنىشىنى تەلەپ قىلىدۇ.";
+// Metadata: Translated by AI; human review required.
+"audio-manager.stream-hint" = "چۈشۈرمەي قويۇش ئۈچۈن، «ئاۋاز قويۇش» دا «ئاۋازنى تور ئارقىلىق قويۇش» نى ئېچىڭ.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "ھەر ئايەتتىن كېيىن توختاش";
 // Metadata: Translated by ChatGPT; human review required.

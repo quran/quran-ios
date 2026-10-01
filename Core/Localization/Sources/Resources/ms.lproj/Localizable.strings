@@ -165,11 +165,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.select-end-verse" = "Pilih ayat penutup";
 
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount" = "Muat turun/Main sehingga";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount.description" = "Ketika memainkan audio, ia akan dimainkan hingga akhir";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.
@@ -366,7 +361,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Tersuai";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Halaman, Surah, Juz' dan Al-Quran turut mengemas kini tetapan “Muat turun/Main sehingga” anda.";
+"audio.end-at.description" = "Halaman, Surah, Juz' dan Al-Quran turut mengemas kini tetapan “Main sehingga” anda.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Qari";
 "audio.playback-ayah-range" = "Julat ayat untuk dimainkan";
@@ -389,9 +384,19 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.description" = "Menetapkan tempoh jeda sebelum ulangan seterusnya bermula.";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.streaming.description" = "Menjimatkan ruang cakera dengan menstrim audio, tetapi memerlukan sambungan internet.";
-// Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Strim audio";
+// Metadata: Translated by AI; human review required.
+"audio.playback.title" = "Main balik audio";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.page" = "Main balik diteruskan hingga akhir halaman semasa. Jika penstriman dimatikan, ayat-ayat itu dimuat turun dahulu; penstriman menjimatkan ruang tetapi memerlukan sambungan internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.surah" = "Main balik diteruskan hingga akhir surah semasa. Jika penstriman dimatikan, ayat-ayat itu dimuat turun dahulu; penstriman menjimatkan ruang tetapi memerlukan sambungan internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.juz" = "Main balik diteruskan hingga akhir juz' semasa. Jika penstriman dimatikan, ayat-ayat itu dimuat turun dahulu; penstriman menjimatkan ruang tetapi memerlukan sambungan internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quran" = "Main balik diteruskan hingga akhir Al-Quran. Jika penstriman dimatikan, ayat-ayat itu dimuat turun dahulu; penstriman menjimatkan ruang tetapi memerlukan sambungan internet.";
+// Metadata: Translated by AI; human review required.
+"audio-manager.stream-hint" = "Untuk main tanpa memuat turun, hidupkan “Strim audio” dalam “Main balik audio”.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Jeda selepas setiap ayat";
 // Metadata: Translated by ChatGPT; human review required.

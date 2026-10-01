@@ -182,11 +182,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.select-end-verse" = "آیه پایانی را انتخاب کنید";
 
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount" = "دانلود/پخش تا";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount.description" = "هنگام پخش صوت، تا انتهای";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.
@@ -385,7 +380,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "سفارشی";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "صفحه، سوره، جزء و قرآن تنظیم «دانلود/پخش تا» را هم به‌روزرسانی می‌کنند.";
+"audio.end-at.description" = "صفحه، سوره، جزء و قرآن تنظیم «پخش تا» را هم به‌روزرسانی می‌کنند.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "قاری";
 "audio.playback-ayah-range" = "محدودهٔ آیات پخش";
@@ -408,9 +403,19 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.description" = "مدت مکث پیش از آغاز تکرار بعدی را تعیین می‌کند.";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.streaming.description" = "با پخش جریانی صوت در فضای ذخیره‌سازی صرفه‌جویی می‌کند، اما به اتصال اینترنت نیاز دارد.";
-// Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "پخش جریانی صوت";
+// Metadata: Translated by AI; human review required.
+"audio.playback.title" = "پخش صوت";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.page" = "پخش تا انتهای صفحهٔ فعلی ادامه می‌یابد. وقتی پخش جریانی خاموش است، آن آیه‌ها ابتدا دانلود می‌شوند؛ پخش جریانی در فضا صرفه‌جویی می‌کند اما به اتصال اینترنت نیاز دارد.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.surah" = "پخش تا انتهای سورهٔ فعلی ادامه می‌یابد. وقتی پخش جریانی خاموش است، آن آیه‌ها ابتدا دانلود می‌شوند؛ پخش جریانی در فضا صرفه‌جویی می‌کند اما به اتصال اینترنت نیاز دارد.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.juz" = "پخش تا انتهای جزء فعلی ادامه می‌یابد. وقتی پخش جریانی خاموش است، آن آیه‌ها ابتدا دانلود می‌شوند؛ پخش جریانی در فضا صرفه‌جویی می‌کند اما به اتصال اینترنت نیاز دارد.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quran" = "پخش تا انتهای قرآن ادامه می‌یابد. وقتی پخش جریانی خاموش است، آن آیه‌ها ابتدا دانلود می‌شوند؛ پخش جریانی در فضا صرفه‌جویی می‌کند اما به اتصال اینترنت نیاز دارد.";
+// Metadata: Translated by AI; human review required.
+"audio-manager.stream-hint" = "برای پخش بدون دانلود، «پخش جریانی صوت» را در «پخش صوت» روشن کنید.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "مکث پس از هر آیه";
 // Metadata: Translated by ChatGPT; human review required.

@@ -5,6 +5,7 @@
 
 import Localization
 import QuranAudio
+import QuranAudioKit
 import QuranKit
 
 enum EndAtChoice: Hashable {
@@ -28,7 +29,7 @@ enum EndAtChoice: Hashable {
     // MARK: Internal
 
     /// The choices the Play up to menu lists. Custom isn't one: editing To picks it.
-    static let menuChoices: [EndAtChoice] = [.page, .juz, .surah, .quran]
+    static let menuChoices: [EndAtChoice] = AudioEnd.playUpToChoices.map(EndAtChoice.init)
 
     var audioEnd: AudioEnd? {
         switch self {

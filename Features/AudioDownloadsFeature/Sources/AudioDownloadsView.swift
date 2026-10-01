@@ -37,10 +37,14 @@ private struct AudioDownloadsViewUI: View {
     let deleteAction: ItemDeletionAction<AudioDownloadItem>
 
     var body: some View {
+        let downloadedItems = items.filter(\.canDelete)
+        // The hint sits under the first section shown.
+        let streamHint = l("audio-manager.stream-hint")
         NoorList {
             AudioDownloadsSection(
                 title: l("reciters.downloaded"),
-                items: items.filter(\.canDelete),
+                footer: streamHint,
+                items: downloadedItems,
                 listItem: { item in
                     NoorListItem(
                         title: .text(item.reciter.localizedName),
@@ -53,6 +57,7 @@ private struct AudioDownloadsViewUI: View {
 
             AudioDownloadsSection(
                 title: l("reciters.all"),
+                footer: downloadedItems.isEmpty ? streamHint : nil,
                 items: items.filter { !$0.canDelete },
                 listItem: { item in
                     NoorListItem(
@@ -90,12 +95,13 @@ private struct AudioDownloadsViewUI: View {
 @MainActor
 private struct AudioDownloadsSection<ListItem: View>: View {
     let title: String
+    let footer: String?
     let items: [AudioDownloadItem]
     let listItem: (AudioDownloadItem) -> ListItem
     let onDelete: ItemDeletionAction<AudioDownloadItem>?
 
     var body: some View {
-        NoorSection(title: title, items, onDelete: onDelete) { item in
+        NoorSection(title: title, footer: footer, items, onDelete: onDelete) { item in
             listItem(item)
         }
     }

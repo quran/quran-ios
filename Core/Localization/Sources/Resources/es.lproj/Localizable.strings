@@ -182,11 +182,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.select-end-verse" = "Seleccionar verso final";
 
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount" = "Descargar/Reproducir hasta";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount.description" = "Al reproducir audio, se reproducirá hasta el final del";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.
@@ -383,7 +378,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Personalizado";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Página, Sura, Yuz y Corán también actualizan tu ajuste «Descargar/Reproducir hasta».";
+"audio.end-at.description" = "Página, Sura, Yuz y Corán también actualizan tu ajuste «Reproducir hasta».";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Recitador";
 "audio.playback-ayah-range" = "Rango de aleyas de reproducción";
@@ -406,9 +401,19 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.description" = "Define cuánto tiempo pausar antes de que comience la siguiente repetición.";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.streaming.description" = "Ahorra espacio en disco transmitiendo el audio, pero requiere conexión a internet.";
-// Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Transmitir audio";
+// Metadata: Translated by AI; human review required.
+"audio.playback.title" = "Reproducción de audio";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.page" = "La reproducción continúa hasta el final de la página actual. Sin transmisión, esos versos se descargan primero; transmitir ahorra espacio, pero requiere conexión a internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.surah" = "La reproducción continúa hasta el final de la sura actual. Sin transmisión, esos versos se descargan primero; transmitir ahorra espacio, pero requiere conexión a internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.juz" = "La reproducción continúa hasta el final del yuz actual. Sin transmisión, esos versos se descargan primero; transmitir ahorra espacio, pero requiere conexión a internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quran" = "La reproducción continúa hasta el final del Corán. Sin transmisión, esos versos se descargan primero; transmitir ahorra espacio, pero requiere conexión a internet.";
+// Metadata: Translated by AI; human review required.
+"audio-manager.stream-hint" = "Para reproducir sin descargar, activa «Transmitir audio» en «Reproducción de audio».";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Pausa después de cada aleya";
 // Metadata: Translated by ChatGPT; human review required.

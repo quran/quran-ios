@@ -195,6 +195,7 @@ final class SettingsRootViewModelTests: XCTestCase {
             reviewService: ReviewService(analytics: NoopAnalytics()),
             authenticationClient: authenticationClient ?? UnavailableAuthenticationClient(),
             legacyDataImportCoordinator: legacyDataImportCoordinator ?? container.legacyDataImportCoordinator,
+            audioPlaybackBuilder: AudioPlaybackBuilder(),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),

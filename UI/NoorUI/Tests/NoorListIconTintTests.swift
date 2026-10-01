@@ -12,30 +12,32 @@ import XCTest
 
 @MainActor
 final class NoorListIconTintTests: XCTestCase {
-    func test_iconWithoutColor_followsTheWindowTintLive() {
+    func test_iconWithoutColor_followsTheWindowTintLive() async {
         let window = window(showing: NoorListIcon { icon })
 
         window.tintColor = .red
-        XCTAssertTrue(renders(window, .red))
+        await waitUntil(window, renders: .red)
 
         window.tintColor = .blue
-        XCTAssertTrue(renders(window, .blue))
-        XCTAssertFalse(renders(window, .red))
+        await waitUntil(window, renders: .blue)
+        XCTAssertFalse(window.renders { $0.isClose(to: .red) })
     }
 
-    func test_listItemIconWithoutColor_usesTheWindowTint() {
+    func test_listItemIconWithoutColor_usesTheWindowTintAndKeepsTheTitlePrimary() async {
         let window = window(showing: NoorListItem(image: .init(icon), title: "Title"))
         window.tintColor = .red
 
-        XCTAssertTrue(renders(window, .red))
+        await waitUntil(window, renders: .red)
+        // A tinted title would draw no dark neutral pixels.
+        XCTAssertTrue(window.renders(\.isDarkNeutral))
     }
 
-    func test_listItemIconWithColor_keepsItsColor() {
+    func test_listItemIconWithColor_keepsItsColor() async {
         let window = window(showing: NoorListItem(image: .init(icon, color: Color(UIColor.green)), title: "Title"))
         window.tintColor = .red
 
-        XCTAssertTrue(renders(window, .green))
-        XCTAssertFalse(renders(window, .red))
+        await waitUntil(window, renders: .green)
+        XCTAssertFalse(window.renders { $0.isClose(to: .red) })
     }
 
     // MARK: Private
@@ -48,23 +50,40 @@ final class NoorListIconTintTests: XCTestCase {
 
     private func window(showing content: some View) -> UIWindow {
         let window = UIWindow(frame: CGRect(origin: .zero, size: size))
+        window.overrideUserInterfaceStyle = .light
         window.rootViewController = UIHostingController(rootView: content)
         window.isHidden = false
         addTeardownBlock { window.isHidden = true }
         return window
     }
 
-    /// Whether any rendered pixel is `color`.
-    private func renders(_ window: UIWindow, _ color: UIColor) -> Bool {
-        window.layoutIfNeeded()
-        RunLoop.main.run(until: Date().addingTimeInterval(0.05))
+    private func waitUntil(
+        _ window: UIWindow,
+        renders color: UIColor,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async {
+        let expectation = XCTNSPredicateExpectation(
+            predicate: NSPredicate { _, _ in
+                MainActor.assumeIsolated { window.renders { $0.isClose(to: color) } }
+            },
+            object: nil
+        )
+        let result = await XCTWaiter.fulfillment(of: [expectation], timeout: 5)
+        XCTAssertEqual(result, .completed, "Never rendered \(color)", file: file, line: line)
+    }
+}
 
+extension UIWindow {
+    /// Whether any rendered pixel matches `predicate`.
+    fileprivate func renders(_ predicate: (RGB) -> Bool) -> Bool {
+        layoutIfNeeded()
         let format = UIGraphicsImageRendererFormat()
-        format.scale = 1
-        let image = UIGraphicsImageRenderer(size: size, format: format).image { context in
-            window.layer.render(in: context.cgContext)
+        format.scale = 2
+        let image = UIGraphicsImageRenderer(size: bounds.size, format: format).image { context in
+            layer.render(in: context.cgContext)
         }
-        return pixels(of: image).contains { $0.isClose(to: color) }
+        return pixels(of: image).contains(where: predicate)
     }
 
     private func pixels(of image: UIImage) -> [RGB] {
@@ -92,6 +111,12 @@ private struct RGB {
     let red: UInt8
     let green: UInt8
     let blue: UInt8
+
+    /// Primary label text in light mode.
+    var isDarkNeutral: Bool {
+        let channels = [Int(red), Int(green), Int(blue)]
+        return channels.allSatisfy { $0 < 80 } && channels.max()! - channels.min()! <= 10
+    }
 
     func isClose(to color: UIColor) -> Bool {
         var red: CGFloat = 0

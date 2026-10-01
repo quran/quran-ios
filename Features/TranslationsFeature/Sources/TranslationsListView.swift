@@ -66,7 +66,7 @@ private struct TranslationsListViewUI: View {
                 title: l("translation.selectedTranslations"),
                 items: selectedTranslations,
                 listItem: { item in
-                    listItem(item, downloaded: true, image: NoorSystemImage.checkmark_checked) {
+                    listItem(item, downloaded: true, image: .init(.checkmark_checked)) {
                         await deselectAction(item)
                     }
                 },
@@ -78,7 +78,7 @@ private struct TranslationsListViewUI: View {
                 title: lAndroid("downloaded_translations"),
                 items: downloadedTranslations,
                 listItem: { item in
-                    listItem(item, downloaded: true, image: NoorSystemImage.checkmark_unchecked) {
+                    listItem(item, downloaded: true, image: .init(.checkmark_unchecked, color: .tertiaryLabel)) {
                         await selectAction(item)
                     }
                 },
@@ -150,13 +150,13 @@ private struct TranslationsListViewUI: View {
     func listItem(
         _ item: TranslationItem,
         downloaded: Bool,
-        image: NoorSystemImage? = nil,
+        image: NoorListItem.ItemImage? = nil,
         action: AsyncAction? = nil
     ) -> NoorListItem {
         let image = editMode == .active ? nil : image
         let action = editMode == .active ? nil : action
         return NoorListItem(
-            image: image.map { .init($0) },
+            image: image,
             heading: downloaded ? item.localizedLanguage : nil,
             title: .text(item.displayName),
             subtitle: subtitle(of: item.info),

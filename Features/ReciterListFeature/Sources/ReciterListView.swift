@@ -125,7 +125,7 @@ private struct ReciterListViewUI: View {
 
     private func listItem(_ reciter: Reciter, recent: Bool = false) -> some View {
         NoorListItem(
-            image: recent ? .init(NoorSystemImage.lastPage) : nil,
+            image: recent ? .init(NoorSystemImage.lastPage, color: .secondaryLabel) : nil,
             title: .text(reciter.localizedName),
             accessory: reciter == selectedReciter ? .image(.checkmark, color: .accentColor) : nil,
             action: .sync {

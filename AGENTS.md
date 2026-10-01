@@ -36,7 +36,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Do not add a NoorUI dependency to lower-level modules such as UIx.
 - Use NoorUI navigation-action components instead of constructing feature-local buttons.
 - Keep Edit, Close, overflow, and secondary navigation-bar actions neutral. Reserve the app tint for Done and primary actions.
-- Leading icons in navigation and settings lists use the app tint. Icons that carry meaning (bookmark and collection colors) keep their color; search-suggestion glyphs use secondary. In navigation bars, reserve the tint for Done and primary actions.
+- `NoorListIcon`/`NoorListItem` leading icons take the app tint by default. Pass an explicit color for icons that carry meaning (bookmark and collection colors) or state (unselected selection circles), and secondary label for search-suggestion and recents glyphs.
 - Use Done only to commit or finish an editing/confirmation flow. Use a leading Close × for dismissal-only modals, with localized accessibility text.
 - Let pushed screens use the standard Back button; do not add Close or Done solely to pop them.
 - Match established layouts in analogous features before introducing a new visual pattern.

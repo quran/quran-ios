@@ -10,30 +10,34 @@ import UIx
 
 /// A list row that shows its current value and opens a menu to pick another.
 ///
-/// A `nil` selection checks no item, so the row can show a value that isn't
-/// one of the menu items, such as "Custom".
+/// Each item is a toggle, so the menu checks the selected item natively. Tapping the
+/// checked item again does nothing.
 public struct NoorMenuRow<Item: Hashable, ItemLabel: View>: View {
     // MARK: Lifecycle
 
+    /// A menu row whose value may be none of its items, such as "Custom".
+    /// A `nil` `selectedItem` checks no item.
     public init(
         title: String,
-        image: NoorSystemImage,
+        image: NoorSystemImage? = nil,
         items: [Item],
-        selection: Binding<Item?>,
+        selectedItem: Item?,
         value: String,
+        onSelect: @escaping (Item) -> Void,
         @ViewBuilder itemLabel: @escaping (Item) -> ItemLabel
     ) {
         self.title = title
         self.image = image
         self.items = items
-        _selection = selection
+        self.selectedItem = selectedItem
         self.value = value
+        self.onSelect = onSelect
         self.itemLabel = itemLabel
     }
 
     public init(
         title: String,
-        image: NoorSystemImage,
+        image: NoorSystemImage? = nil,
         items: [Item],
         selection: Binding<Item>,
         value: String,
@@ -43,15 +47,9 @@ public struct NoorMenuRow<Item: Hashable, ItemLabel: View>: View {
             title: title,
             image: image,
             items: items,
-            selection: Binding<Item?>(
-                get: { selection.wrappedValue },
-                set: { newValue in
-                    if let newValue {
-                        selection.wrappedValue = newValue
-                    }
-                }
-            ),
+            selectedItem: selection.wrappedValue,
             value: value,
+            onSelect: { selection.wrappedValue = $0 },
             itemLabel: itemLabel
         )
     }
@@ -60,10 +58,9 @@ public struct NoorMenuRow<Item: Hashable, ItemLabel: View>: View {
 
     public var body: some View {
         Menu {
-            Picker(title, selection: $selection) {
-                ForEach(items, id: \.self) { item in
+            ForEach(items, id: \.self) { item in
+                Toggle(isOn: isSelected(item)) {
                     itemLabel(item)
-                        .tag(Optional(item))
                 }
             }
         } label: {
@@ -82,20 +79,32 @@ public struct NoorMenuRow<Item: Hashable, ItemLabel: View>: View {
 
     // MARK: Private
 
-    @Binding private var selection: Item?
-
     private let title: String
-    private let image: NoorSystemImage
+    private let image: NoorSystemImage?
     private let items: [Item]
+    private let selectedItem: Item?
     private let value: String
+    private let onSelect: (Item) -> Void
     private let itemLabel: (Item) -> ItemLabel
+
+    private func isSelected(_ item: Item) -> Binding<Bool> {
+        Binding(
+            get: { item == selectedItem },
+            set: { isOn in
+                // Unchecking the selected item would leave nothing selected; ignore it.
+                if isOn {
+                    onSelect(item)
+                }
+            }
+        )
+    }
 }
 
 extension NoorMenuRow where ItemLabel == Text {
     /// A menu row whose items and value are plain text.
     public init(
         title: String,
-        image: NoorSystemImage,
+        image: NoorSystemImage? = nil,
         items: [Item],
         selection: Binding<Item>,
         label: @escaping (Item) -> String
@@ -131,8 +140,9 @@ extension NoorMenuRow where ItemLabel == Text {
                         title: "Play up to",
                         image: .playUpTo,
                         items: ["Page", "Juz'", "Surah", "Quran"],
-                        selection: $end,
-                        value: end ?? "Custom"
+                        selectedItem: end,
+                        value: end ?? "Custom",
+                        onSelect: { end = $0 }
                     ) { item in
                         Text(item)
                     }

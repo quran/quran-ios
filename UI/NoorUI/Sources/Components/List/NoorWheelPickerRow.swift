@@ -17,13 +17,13 @@ public struct NoorWheelPickerRow<Item: Hashable, ItemLabel: View>: View {
         image: NoorSystemImage? = nil,
         items: [Item],
         selection: Binding<Item>,
-        @ViewBuilder label: @escaping (Item) -> ItemLabel
+        @ViewBuilder itemLabel: @escaping (Item) -> ItemLabel
     ) {
         self.title = title
         self.image = image
         self.items = items
         _selection = selection
-        self.label = label
+        self.itemLabel = itemLabel
     }
 
     // MARK: Public
@@ -36,13 +36,13 @@ public struct NoorWheelPickerRow<Item: Hashable, ItemLabel: View>: View {
                 isExpanded: isExpanded,
                 action: toggle
             ) {
-                label(selection)
+                itemLabel(selection)
             }
 
             if isExpanded {
                 Picker(title, selection: $selection) {
                     ForEach(items, id: \.self) { item in
-                        label(item)
+                        itemLabel(item)
                             .tag(item)
                     }
                 }
@@ -64,7 +64,7 @@ public struct NoorWheelPickerRow<Item: Hashable, ItemLabel: View>: View {
     private let title: String
     private let image: NoorSystemImage?
     private let items: [Item]
-    private let label: (Item) -> ItemLabel
+    private let itemLabel: (Item) -> ItemLabel
 
     private func toggle() {
         withAnimation(NoorAnimation.standard) {

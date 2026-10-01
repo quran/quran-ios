@@ -39,6 +39,7 @@ private struct AdvancedAudioOptionsRootView: View {
             fromVerse: viewModel.fromVerse,
             toVerse: viewModel.toVerse,
             endAt: viewModel.endAt,
+            playUpToSelection: viewModel.playUpToSelection,
             verseRuns: $viewModel.verseRuns,
             listRuns: $viewModel.listRuns,
             verseDelay: $viewModel.verseDelay,
@@ -48,7 +49,7 @@ private struct AdvancedAudioOptionsRootView: View {
             play: { viewModel.play() },
             updateFromVerseTo: { viewModel.updateFromVerseTo($0) },
             updateToVerseTo: { viewModel.updateToVerseTo($0) },
-            setEndAt: { viewModel.setEndAt($0) },
+            selectPlayUpTo: { viewModel.selectPlayUpTo($0) },
             updatePlaybackRate: { viewModel.updatePlaybackRate(to: $0) },
             recitersViewController: { viewModel.recitersViewController() }
         )
@@ -63,6 +64,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
     let fromVerse: AyahNumber
     let toVerse: AyahNumber
     let endAt: EndAtChoice
+    let playUpToSelection: EndAtChoice?
     @Binding var verseRuns: Runs
     @Binding var listRuns: Runs
     @Binding var verseDelay: VerseDelay
@@ -72,7 +74,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
     let play: @MainActor @Sendable () -> Void
     let updateFromVerseTo: ItemAction<AyahNumber>
     let updateToVerseTo: ItemAction<AyahNumber>
-    let setEndAt: (EndAtChoice) -> Void
+    let selectPlayUpTo: (EndAtChoice) -> Void
     let updatePlaybackRate: (Float) -> Void
     let recitersViewController: () -> UIViewController
 
@@ -117,8 +119,9 @@ struct AdvancedAudioOptionsRootViewUI: View {
                     title: l("audio.play-up-to"),
                     image: .playUpTo,
                     items: EndAtChoice.menuChoices,
-                    selection: endAtSelection,
-                    value: endAt.localizedName
+                    selectedItem: playUpToSelection,
+                    value: endAt.localizedName,
+                    onSelect: selectPlayUpTo
                 ) { choice in
                     Text(choice.localizedName)
                 }
@@ -160,12 +163,11 @@ struct AdvancedAudioOptionsRootViewUI: View {
         .toolbar {
             CloseToolbarItem(action: dismiss)
 
-            ToolbarItem(placement: .confirmationAction) {
-                Button(action: play) {
-                    NoorSystemImage.play.image
-                }
-                .accessibilityLabel(lAndroid("play"))
-            }
+            PrimaryActionToolbarItem(
+                image: .play,
+                accessibilityLabel: lAndroid("play"),
+                action: play
+            )
         }
     }
 
@@ -175,18 +177,6 @@ struct AdvancedAudioOptionsRootViewUI: View {
         Binding(
             get: { playbackRate },
             set: { updatePlaybackRate($0) }
-        )
-    }
-
-    /// Custom isn't a menu item, so it checks none of them.
-    private var endAtSelection: Binding<EndAtChoice?> {
-        Binding(
-            get: { endAt == .custom ? nil : endAt },
-            set: { choice in
-                if let choice {
-                    setEndAt(choice)
-                }
-            }
         )
     }
 

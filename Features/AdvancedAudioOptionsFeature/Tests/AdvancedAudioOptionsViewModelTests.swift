@@ -213,6 +213,51 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(sut.toVerse, originalEnd)
     }
 
+    // MARK: - Play up to menu
+
+    func test_playUpToSelection_isTheEndAtChoice_whenNotCustom() {
+        let alFatihah = quran.suras[0]
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.lastVerse)
+
+        XCTAssertEqual(sut.playUpToSelection, .surah)
+    }
+
+    func test_playUpToSelection_isNil_afterEditingTo() {
+        let alFatihah = quran.suras[0]
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.lastVerse)
+
+        sut.updateToVerseTo(alFatihah.firstVerse.next!)
+
+        XCTAssertEqual(sut.endAt, .custom)
+        XCTAssertNil(sut.playUpToSelection)
+    }
+
+    func test_selectPlayUpTo_newChoice_updatesToAndIsSavedOnPlay() {
+        let alFatihah = quran.suras[0]
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.firstVerse)
+
+        sut.selectPlayUpTo(.surah)
+        sut.play()
+
+        XCTAssertEqual(sut.toVerse, alFatihah.lastVerse)
+        XCTAssertEqual(AudioPreferences.shared.audioEnd, .sura)
+    }
+
+    func test_selectPlayUpTo_currentChoice_keepsToAndAudioEnd() {
+        // Al-Qadr ends mid-page, so choosing Surah again would move To to the end of its page.
+        let alQadr = quran.suras[96]
+        let suraEnd = SuraBasedLastAyahFinder().findLastAyah(startAyah: alQadr.firstVerse)
+        XCTAssertLessThan(suraEnd, PageBasedLastAyahFinder().findLastAyah(startAyah: alQadr.firstVerse))
+        let sut = makeSUT(start: alQadr.firstVerse, end: suraEnd)
+        XCTAssertEqual(sut.endAt, .surah)
+
+        sut.selectPlayUpTo(.surah)
+        sut.play()
+
+        XCTAssertEqual(sut.toVerse, suraEnd)
+        XCTAssertEqual(AudioPreferences.shared.audioEnd, .juz, "Re-selecting the deduced choice isn't choosing it.")
+    }
+
     // MARK: - Manual verse updates
 
     func test_updateToVerseTo_switchesEndAtToCustom() {
@@ -389,6 +434,10 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
     }
 
     // MARK: - EndAtChoice
+
+    func test_endAtChoice_menuChoices_listPageJuzSurahQuran() {
+        XCTAssertEqual(EndAtChoice.menuChoices, [.page, .juz, .surah, .quran])
+    }
 
     func test_endAtChoice_initFromAudioEnd_roundTrips() {
         for audioEnd in [AudioEnd.page, .sura, .juz, .quran] {

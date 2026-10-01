@@ -84,13 +84,13 @@ private struct BoundaryRow: View {
             title: title,
             image: image,
             isExpanded: isExpanded,
+            accessibilityValue: verse.localizedName,
             action: action
         ) {
             let reference: MultipartText = "\(ayah: verse)"
             reference
                 .view(ofSize: .body, allowsWrapping: false)
         }
-        .accessibilityValue(verse.localizedName)
     }
 }
 

@@ -40,6 +40,23 @@ final class NoorListIconTintTests: XCTestCase {
         XCTAssertFalse(window.renders { $0.isClose(to: .red) })
     }
 
+    func test_menuRowIcon_usesTheWindowTintAndKeepsTheTitlePrimary() async {
+        // Menu labels take the tint; only the icon should.
+        let window = window(
+            showing: NoorMenuRow(
+                title: "Title",
+                image: .stop,
+                items: ["Value"],
+                selection: .constant("Value"),
+                label: { $0 }
+            )
+        )
+        window.tintColor = .red
+
+        await waitUntil(window, renders: .red)
+        XCTAssertTrue(window.renders(\.isDarkNeutral))
+    }
+
     // MARK: Private
 
     private let size = CGSize(width: 200, height: 60)

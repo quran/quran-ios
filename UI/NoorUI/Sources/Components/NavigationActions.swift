@@ -161,3 +161,48 @@ public struct CloseToolbarItem: ToolbarContent {
 
     private let action: @MainActor @Sendable () -> Void
 }
+
+/// The screen's primary action, such as Play. Like Done, it inherits the window tint,
+/// so it follows the app icon accent live.
+public struct PrimaryActionToolbarItem: ToolbarContent {
+    public init(
+        image: NoorSystemImage,
+        accessibilityLabel: String,
+        action: @escaping @MainActor @Sendable () -> Void
+    ) {
+        self.image = image
+        self.accessibilityLabel = accessibilityLabel
+        self.action = action
+    }
+
+    public var body: some ToolbarContent {
+        ToolbarItem(placement: .confirmationAction) {
+            PrimaryActionButton(image: image, action: action)
+                .accessibilityLabel(accessibilityLabel)
+        }
+    }
+
+    private let image: NoorSystemImage
+    private let accessibilityLabel: String
+    private let action: @MainActor @Sendable () -> Void
+}
+
+private struct PrimaryActionButton: View {
+    let image: NoorSystemImage
+    let action: @MainActor @Sendable () -> Void
+
+    var body: some View {
+        if #available(iOS 26, *) {
+            // Liquid Glass draws the primary action as tinted glass, like Done.
+            Button(action: action) {
+                image.image
+            }
+            .buttonStyle(.glassProminent)
+        } else {
+            Button(action: action) {
+                image.image
+            }
+            .foregroundStyle(Color.accentColor)
+        }
+    }
+}

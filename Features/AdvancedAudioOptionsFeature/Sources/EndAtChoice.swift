@@ -7,7 +7,7 @@ import Localization
 import QuranAudio
 import QuranKit
 
-enum EndAtChoice: Hashable, CaseIterable {
+enum EndAtChoice: Hashable {
     case page
     case surah
     case juz

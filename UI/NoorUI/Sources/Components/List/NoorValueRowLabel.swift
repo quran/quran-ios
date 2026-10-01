@@ -44,6 +44,7 @@ struct NoorValueRowLabel<Value: View>: View {
             }
         }
         .foregroundColor(.primary)
+        .contentShape(Rectangle())
     }
 
     // MARK: Private

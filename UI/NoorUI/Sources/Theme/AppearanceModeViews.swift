@@ -55,10 +55,17 @@ private struct AppearanceModeThemeColors: ViewModifier {
     }
 }
 
+/// Reports the system interface style, which the theme's `overrideUserInterfaceStyle` hides from
+/// the app's windows. It must belong to a window scene: UIKit doesn't send trait changes to a
+/// window without one.
 class SystemUserInterfaceStyleObserverWindow: UIWindow {
+    // MARK: Internal
+
     static let shared: SystemUserInterfaceStyleObserverWindow = {
         let window = SystemUserInterfaceStyleObserverWindow(frame: .zero)
         window.isHidden = true
+        window.attachToConnectedSceneIfNeeded()
+        window.observeSceneConnections()
         return window
     }()
 
@@ -66,5 +73,29 @@ class SystemUserInterfaceStyleObserverWindow: UIWindow {
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         traitCollectionChangesPublisher.send(traitCollection)
+    }
+
+    // MARK: Private
+
+    private var sceneObservers: [NSObjectProtocol] = []
+
+    private func attachToConnectedSceneIfNeeded() {
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        if let windowScene, scenes.contains(windowScene) {
+            return
+        }
+        windowScene = scenes.first
+        traitCollectionChangesPublisher.send(traitCollection)
+    }
+
+    private func observeSceneConnections() {
+        let names = [UIScene.didActivateNotification, UIScene.didDisconnectNotification]
+        sceneObservers = names.map { name in
+            NotificationCenter.default.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                Task { @MainActor in
+                    self?.attachToConnectedSceneIfNeeded()
+                }
+            }
+        }
     }
 }

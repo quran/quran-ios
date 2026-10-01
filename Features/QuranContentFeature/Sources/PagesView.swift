@@ -44,6 +44,9 @@ struct PagesView: View {
             }
             .id(viewModel.quranMode)
         }
+        // Measure without the keyboard. A keyboard, even one shown by a presented editor,
+        // would make portrait look landscape and flip the reader to double pages.
+        .ignoresSafeArea(.keyboard)
         .collectGeometryActions($viewModel.geometryActions)
     }
 

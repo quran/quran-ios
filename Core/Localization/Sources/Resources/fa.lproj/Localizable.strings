@@ -230,6 +230,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "تا پایان صفحه";
 // Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quarter" = "تا پایان ربع حزب";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-hizb" = "تا پایان حزب";
+// Metadata: Translated by AI; human review required.
 "ayah.menu.play-end-quran" = "تا پایان قرآن";
 "ayah.menu.repeat" = "تکرار";
 // Metadata: Translated by ChatGPT; human review required.
@@ -377,10 +381,12 @@
 "audio.delay.off" = "خاموش";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.play-up-to" = "پخش تا";
+// Metadata: Translated by AI; human review required.
+"audio.play-up-to.quarter" = "ربع حزب";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "سفارشی";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "صفحه، سوره، جزء و قرآن تنظیم «پخش تا» را هم به‌روزرسانی می‌کنند.";
+"audio.end-at.description" = "انتخاب هر گزینه‌ای به‌جز «سفارشی» تنظیم «پخش تا» را هم به‌روزرسانی می‌کند.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "قاری";
 "audio.playback-ayah-range" = "محدودهٔ آیات پخش";
@@ -408,6 +414,10 @@
 "audio.playback.title" = "پخش صوت";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "پخش تا انتهای صفحهٔ فعلی ادامه می‌یابد. وقتی پخش جریانی خاموش است، آن آیه‌ها ابتدا دانلود می‌شوند؛ پخش جریانی در فضا صرفه‌جویی می‌کند اما به اتصال اینترنت نیاز دارد.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quarter" = "پخش تا انتهای ربع حزب فعلی ادامه می‌یابد. وقتی پخش جریانی خاموش است، آن آیه‌ها ابتدا دانلود می‌شوند؛ پخش جریانی در فضا صرفه‌جویی می‌کند اما به اتصال اینترنت نیاز دارد.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.hizb" = "پخش تا انتهای حزب فعلی ادامه می‌یابد. وقتی پخش جریانی خاموش است، آن آیه‌ها ابتدا دانلود می‌شوند؛ پخش جریانی در فضا صرفه‌جویی می‌کند اما به اتصال اینترنت نیاز دارد.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.surah" = "پخش تا انتهای سورهٔ فعلی ادامه می‌یابد. وقتی پخش جریانی خاموش است، آن آیه‌ها ابتدا دانلود می‌شوند؛ پخش جریانی در فضا صرفه‌جویی می‌کند اما به اتصال اینترنت نیاز دارد.";
 // Metadata: Translated by AI; human review required.

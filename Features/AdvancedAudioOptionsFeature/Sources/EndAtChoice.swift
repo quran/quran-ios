@@ -10,6 +10,8 @@ import QuranKit
 
 enum EndAtChoice: Hashable {
     case page
+    case quarter
+    case hizb
     case surah
     case juz
     case quran
@@ -20,6 +22,8 @@ enum EndAtChoice: Hashable {
     init(_ audioEnd: AudioEnd) {
         switch audioEnd {
         case .page: self = .page
+        case .quarter: self = .quarter
+        case .hizb: self = .hizb
         case .sura: self = .surah
         case .juz: self = .juz
         case .quran: self = .quran
@@ -34,6 +38,8 @@ enum EndAtChoice: Hashable {
     var audioEnd: AudioEnd? {
         switch self {
         case .page: return .page
+        case .quarter: return .quarter
+        case .hizb: return .hizb
         case .surah: return .sura
         case .juz: return .juz
         case .quran: return .quran

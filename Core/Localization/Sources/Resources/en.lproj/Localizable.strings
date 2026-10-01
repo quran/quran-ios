@@ -144,12 +144,15 @@
 "audio.playback-ayah-range" = "Playback ayah range";
 "audio.playback-speed" = "Playback Speed";
 "audio.play-up-to" = "Play up to";
+"audio.play-up-to.quarter" = "¼ Hizb";
 "audio.end-at.custom" = "Custom";
-"audio.end-at.description" = "Page, Surah, Juz' and Quran also update your Play up to setting.";
+"audio.end-at.description" = "Choosing an option other than Custom also updates your Play up to setting.";
 
 "audio.streaming.title" = "Stream Audio";
 "audio.playback.title" = "Audio Playback";
 "audio.playback.footer.page" = "Playback continues to the end of the current Page. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
+"audio.playback.footer.quarter" = "Playback continues to the end of the current ¼ Hizb. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
+"audio.playback.footer.hizb" = "Playback continues to the end of the current Hizb. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
 "audio.playback.footer.surah" = "Playback continues to the end of the current Surah. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
 "audio.playback.footer.juz" = "Playback continues to the end of the current Juz'. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
 "audio.playback.footer.quran" = "Playback continues to the end of the Quran. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
@@ -230,6 +233,8 @@
 "ayah.menu.play-end-juz" = "to the end of Juz'";
 "ayah.menu.play-end-surah" = "to the end of Surah";
 "ayah.menu.play-end-page" = "to the end of Page";
+"ayah.menu.play-end-quarter" = "to the end of ¼ Hizb";
+"ayah.menu.play-end-hizb" = "to the end of Hizb";
 "ayah.menu.play-end-quran" = "to the end of Quran";
 "ayah.menu.repeat" = "Repeat";
 "ayah.menu.selected-verse" = "selected verse";

@@ -130,14 +130,15 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     // sheet opens on the choice the banner used to fill it.
     //
     // Otherwise, an end ayah can coincide with multiple boundaries (end of
-    // Al-Fatihah is also end of page 1). We prefer surah → juz → page → quran
-    // to match how users mentally pick a range.
+    // Al-Fatihah is also end of page 1, and every juz' ends a hizb and a ¼ hizb).
+    // We prefer surah → juz → hizb → quarter → page → quran to match how users
+    // mentally pick a range, with the bigger unit winning when ends coincide.
     private static func deduceEndAt(from start: AyahNumber, to end: AyahNumber, preferred: AudioEnd) -> EndAtChoice {
         if matches(preferred, start: start, end: end) {
             return EndAtChoice(preferred)
         }
 
-        let priority: [EndAtChoice] = [.surah, .juz, .page, .quran]
+        let priority: [EndAtChoice] = [.surah, .juz, .hizb, .quarter, .page, .quran]
         for choice in priority {
             guard let audioEnd = choice.audioEnd else { continue }
             if matches(audioEnd, start: start, end: end) {
@@ -149,7 +150,8 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
 
     // Choices here and in the banner end on the page-floored boundary, while
     // ranges picked verse by verse (e.g. a whole surah from the ayah menu) can
-    // end on the boundary itself; both describe the choice.
+    // end on the boundary itself; both describe the choice. ¼ Hizb and Hizb
+    // aren't floored, so only their exact boundary matches.
     private static func matches(_ audioEnd: AudioEnd, start: AyahNumber, end: AyahNumber) -> Bool {
         end == audioEnd.boundaryLastAyahFinder.findLastAyah(startAyah: start)
             || end == AudioEndLastAyahFinder(audioEnd: audioEnd).findLastAyah(startAyah: start)

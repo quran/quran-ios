@@ -228,6 +228,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "hasta el final de la página";
 // Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quarter" = "hasta el final del ¼ de Hizb";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-hizb" = "hasta el final del Hizb";
+// Metadata: Translated by AI; human review required.
 "ayah.menu.play-end-quran" = "hasta el final del Corán";
 "ayah.menu.repeat" = "Repetir";
 // Metadata: Translated by ChatGPT; human review required.
@@ -375,10 +379,12 @@
 "audio.delay.off" = "Desactivado";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.play-up-to" = "Reproducir hasta";
+// Metadata: Translated by AI; human review required.
+"audio.play-up-to.quarter" = "¼ de Hizb";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Personalizado";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Página, Sura, Yuz y Corán también actualizan tu ajuste «Reproducir hasta».";
+"audio.end-at.description" = "Elegir una opción distinta de «Personalizado» también actualiza tu ajuste «Reproducir hasta».";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Recitador";
 "audio.playback-ayah-range" = "Rango de aleyas de reproducción";
@@ -406,6 +412,10 @@
 "audio.playback.title" = "Reproducción de audio";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "La reproducción continúa hasta el final de la página actual. Sin transmisión, esos versos se descargan primero; transmitir ahorra espacio, pero requiere conexión a internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quarter" = "La reproducción continúa hasta el final del ¼ de hizb actual. Sin transmisión, esos versos se descargan primero; transmitir ahorra espacio, pero requiere conexión a internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.hizb" = "La reproducción continúa hasta el final del hizb actual. Sin transmisión, esos versos se descargan primero; transmitir ahorra espacio, pero requiere conexión a internet.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.surah" = "La reproducción continúa hasta el final de la sura actual. Sin transmisión, esos versos se descargan primero; transmitir ahorra espacio, pero requiere conexión a internet.";
 // Metadata: Translated by AI; human review required.

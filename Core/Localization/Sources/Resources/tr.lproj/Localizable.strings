@@ -179,6 +179,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "Sayfanın sonuna kadar";
 // Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quarter" = "¼ Hizbin sonuna kadar";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-hizb" = "Hizbin sonuna kadar";
+// Metadata: Translated by AI; human review required.
 "ayah.menu.play-end-quran" = "Kur'an'ın sonuna kadar";
 "ayah.menu.repeat" = "Tekrarlamak";
 // Metadata: Translated by ChatGPT; human review required.
@@ -318,10 +322,12 @@
 "audio.delay.off" = "Kapalı";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.play-up-to" = "Oynatma limiti";
+// Metadata: Translated by AI; human review required.
+"audio.play-up-to.quarter" = "¼ Hizb";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Özel";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Sayfa, Sure, Cüz ve Kur'an seçenekleri “Oynatma limiti” ayarınızı da günceller.";
+"audio.end-at.description" = "“Özel” dışındaki bir seçenek “Oynatma limiti” ayarınızı da günceller.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Hafız";
 "audio.playback-ayah-range" = "Oynatılacak ayet aralığı";
@@ -349,6 +355,10 @@
 "audio.playback.title" = "Ses oynatma";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Oynatma, geçerli sayfanın sonuna kadar devam eder. Çevrimiçi oynatma kapalıyken bu ayetler önce indirilir; çevrimiçi oynatma yer tasarrufu sağlar ancak internet bağlantısı gerektirir.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quarter" = "Oynatma, geçerli ¼ hizbin sonuna kadar devam eder. Çevrimiçi oynatma kapalıyken bu ayetler önce indirilir; çevrimiçi oynatma yer tasarrufu sağlar ancak internet bağlantısı gerektirir.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.hizb" = "Oynatma, geçerli hizbin sonuna kadar devam eder. Çevrimiçi oynatma kapalıyken bu ayetler önce indirilir; çevrimiçi oynatma yer tasarrufu sağlar ancak internet bağlantısı gerektirir.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.surah" = "Oynatma, geçerli surenin sonuna kadar devam eder. Çevrimiçi oynatma kapalıyken bu ayetler önce indirilir; çevrimiçi oynatma yer tasarrufu sağlar ancak internet bağlantısı gerektirir.";
 // Metadata: Translated by AI; human review required.

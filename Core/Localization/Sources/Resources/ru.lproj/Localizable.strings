@@ -228,6 +228,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "до конца страницы";
 // Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quarter" = "до конца ¼ хизба";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-hizb" = "до конца хизба";
+// Metadata: Translated by AI; human review required.
 "ayah.menu.play-end-quran" = "до конца Корана";
 "ayah.menu.repeat" = "Повторение";
 // Metadata: Translated by ChatGPT; human review required.
@@ -375,10 +379,12 @@
 "audio.delay.off" = "Выкл.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.play-up-to" = "Воспроизвести до";
+// Metadata: Translated by AI; human review required.
+"audio.play-up-to.quarter" = "¼ хизба";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Настроить";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Страница, Сура, Джуз и Коран также меняют настройку «Воспроизвести до».";
+"audio.end-at.description" = "Любой вариант, кроме «Настроить», также меняет настройку «Воспроизвести до».";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Чтец";
 "audio.playback-ayah-range" = "Диапазон аятов для воспроизведения";
@@ -406,6 +412,10 @@
 "audio.playback.title" = "Воспроизведение аудио";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Воспроизведение продолжается до конца текущей страницы. Без потокового воспроизведения эти аяты сначала скачиваются; потоковое воспроизведение экономит место, но требует подключения к интернету.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quarter" = "Воспроизведение продолжается до конца текущей четверти хизба. Без потокового воспроизведения эти аяты сначала скачиваются; потоковое воспроизведение экономит место, но требует подключения к интернету.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.hizb" = "Воспроизведение продолжается до конца текущего хизба. Без потокового воспроизведения эти аяты сначала скачиваются; потоковое воспроизведение экономит место, но требует подключения к интернету.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.surah" = "Воспроизведение продолжается до конца текущей суры. Без потокового воспроизведения эти аяты сначала скачиваются; потоковое воспроизведение экономит место, но требует подключения к интернету.";
 // Metadata: Translated by AI; human review required.

@@ -213,6 +213,10 @@
 "ayah.menu.play-end-surah" = "Сүре соңына дейін";
 "ayah.menu.play-end-page" = "Бет соңына дейін";
 // Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quarter" = "¼ Хизб соңына дейін";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-hizb" = "Хизб соңына дейін";
+// Metadata: Translated by AI; human review required.
 "ayah.menu.play-end-quran" = "Құран соңына дейін";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.repeat" = "қайталаңыз";
@@ -359,10 +363,12 @@
 "audio.delay.off" = "Өшірулі";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.play-up-to" = "Тыңдау шегі";
+// Metadata: Translated by AI; human review required.
+"audio.play-up-to.quarter" = "¼ Хизб";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Арнаулы";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Бет, Сүре, Пара және Құран «Тыңдау шегі» параметрін де жаңартады.";
+"audio.end-at.description" = "«Арнаулы» нұсқасынан басқасын таңдау «Тыңдау шегі» параметрін де жаңартады.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Қари";
 "audio.playback-ayah-range" = "Аяттарды ойнату ауқымы";
@@ -390,6 +396,10 @@
 "audio.playback.title" = "Аудио ойнату";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Ойнату ағымдағы беттің соңына дейін жалғасады. Ағынмен ойнату өшірулі болса, ол аяттар алдымен жүктеледі; ағынмен ойнату орын үнемдейді, бірақ интернет байланысын қажет етеді.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quarter" = "Ойнату ағымдағы ¼ хизбтің соңына дейін жалғасады. Ағынмен ойнату өшірулі болса, ол аяттар алдымен жүктеледі; ағынмен ойнату орын үнемдейді, бірақ интернет байланысын қажет етеді.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.hizb" = "Ойнату ағымдағы хизбтің соңына дейін жалғасады. Ағынмен ойнату өшірулі болса, ол аяттар алдымен жүктеледі; ағынмен ойнату орын үнемдейді, бірақ интернет байланысын қажет етеді.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.surah" = "Ойнату ағымдағы сүренің соңына дейін жалғасады. Ағынмен ойнату өшірулі болса, ол аяттар алдымен жүктеледі; ағынмен ойнату орын үнемдейді, бірақ интернет байланысын қажет етеді.";
 // Metadata: Translated by AI; human review required.

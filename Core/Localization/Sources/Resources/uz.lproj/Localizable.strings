@@ -230,6 +230,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "Sahifa oxirigacha";
 // Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quarter" = "¼ Hizb oxirigacha";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-hizb" = "Hizb oxirigacha";
+// Metadata: Translated by AI; human review required.
 "ayah.menu.play-end-quran" = "Qur'on oxirigacha";
 "ayah.menu.repeat" = "Takrorlang";
 // Metadata: Translated by ChatGPT; human review required.
@@ -377,10 +381,12 @@
 "audio.delay.off" = "O‘chiq";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.play-up-to" = "Chalish chegarasi";
+// Metadata: Translated by AI; human review required.
+"audio.play-up-to.quarter" = "¼ Hizb";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Maxsus";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Sahifa, Sura, Juz va Qurʼon “Chalish chegarasi” sozlamangizni ham yangilaydi.";
+"audio.end-at.description" = "“Maxsus”dan boshqa variant “Chalish chegarasi” sozlamangizni ham yangilaydi.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Qori";
 "audio.playback-ayah-range" = "O‘qiladigan oyatlar oralig‘i";
@@ -408,6 +414,10 @@
 "audio.playback.title" = "Audio ijrosi";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Ijro joriy sahifa oxirigacha davom etadi. Internet orqali ijro oʻchiq boʻlsa, bu oyatlar avval yuklab olinadi; internet orqali ijro joyni tejaydi, ammo internet aloqasini talab qiladi.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quarter" = "Ijro joriy ¼ hizb oxirigacha davom etadi. Internet orqali ijro oʻchiq boʻlsa, bu oyatlar avval yuklab olinadi; internet orqali ijro joyni tejaydi, ammo internet aloqasini talab qiladi.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.hizb" = "Ijro joriy hizb oxirigacha davom etadi. Internet orqali ijro oʻchiq boʻlsa, bu oyatlar avval yuklab olinadi; internet orqali ijro joyni tejaydi, ammo internet aloqasini talab qiladi.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.surah" = "Ijro joriy sura oxirigacha davom etadi. Internet orqali ijro oʻchiq boʻlsa, bu oyatlar avval yuklab olinadi; internet orqali ijro joyni tejaydi, ammo internet aloqasini talab qiladi.";
 // Metadata: Translated by AI; human review required.

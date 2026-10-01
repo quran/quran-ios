@@ -97,6 +97,8 @@ final class AudioPlaybackViewModel: ObservableObject {
         case .sura: l("audio.playback.footer.surah")
         case .juz: l("audio.playback.footer.juz")
         case .quran: l("audio.playback.footer.quran")
+        case .quarter: l("audio.playback.footer.quarter")
+        case .hizb: l("audio.playback.footer.hizb")
         }
     }
 

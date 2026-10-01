@@ -177,32 +177,24 @@ public struct PrimaryActionToolbarItem: ToolbarContent {
 
     public var body: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
-            PrimaryActionButton(image: image, action: action)
+            if #available(iOS 26, *) {
+                // Liquid Glass draws the primary action as tinted glass, like Done.
+                Button(action: action) {
+                    image.image
+                }
+                .buttonStyle(.glassProminent)
                 .accessibilityLabel(accessibilityLabel)
+            } else {
+                Button(action: action) {
+                    image.image
+                }
+                .foregroundStyle(Color.accentColor)
+                .accessibilityLabel(accessibilityLabel)
+            }
         }
     }
 
     private let image: NoorSystemImage
     private let accessibilityLabel: String
     private let action: @MainActor @Sendable () -> Void
-}
-
-private struct PrimaryActionButton: View {
-    let image: NoorSystemImage
-    let action: @MainActor @Sendable () -> Void
-
-    var body: some View {
-        if #available(iOS 26, *) {
-            // Liquid Glass draws the primary action as tinted glass, like Done.
-            Button(action: action) {
-                image.image
-            }
-            .buttonStyle(.glassProminent)
-        } else {
-            Button(action: action) {
-                image.image
-            }
-            .foregroundStyle(Color.accentColor)
-        }
-    }
 }

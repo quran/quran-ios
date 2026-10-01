@@ -87,7 +87,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
                 }
             }
 
-            Section(header: Text(l("audio.playback-ayah-range"))) {
+            Section {
                 AyahRangePicker(
                     fromVerse: fromVerse,
                     toVerse: toVerse,
@@ -95,6 +95,10 @@ struct AdvancedAudioOptionsRootViewUI: View {
                     updateToVerseTo: updateToVerseTo
                 )
                 EndAtRow(selection: endAtBinding)
+            } header: {
+                Text(l("audio.playback-ayah-range"))
+            } footer: {
+                Text(l("audio.end-at.description"))
             }
 
             PlaybackSpeedSection(

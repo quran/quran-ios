@@ -292,6 +292,8 @@
 "audio.end-at" = "Kết thúc tại";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Tùy chỉnh";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "Trang, Surah, Juz' và Kinh Quran cũng cập nhật cài đặt “Tải xuống/Phát đến” của bạn.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "Phạm vi ayah phát";
 // Metadata: Translated by ChatGPT; human review required.

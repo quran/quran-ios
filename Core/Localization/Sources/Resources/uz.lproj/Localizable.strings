@@ -384,6 +384,8 @@
 "audio.end-at" = "Yakunlash joyi";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Maxsus";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "Sahifa, Sura, Juz va Qurʼon “Yuklash/O'ynashgacha” sozlamangizni ham yangilaydi.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "O‘qiladigan oyatlar oralig‘i";
 // Metadata: Translated by ChatGPT; human review required.

@@ -384,6 +384,8 @@
 "audio.end-at" = "پایان در";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "سفارشی";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "صفحه، سوره، جزء و قرآن تنظیم «دانلود/پخش تا» را هم به‌روزرسانی می‌کنند.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "محدودهٔ آیات پخش";
 // Metadata: Translated by ChatGPT; human review required.

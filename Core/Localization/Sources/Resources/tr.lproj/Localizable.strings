@@ -325,6 +325,8 @@
 "audio.end-at" = "Şurada bitir";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Özel";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "Sayfa, Sure, Cüz ve Kur'an seçenekleri “İndir/Oynatma limiti” ayarınızı da günceller.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "Oynatılacak ayet aralığı";
 // Metadata: Translated by ChatGPT; human review required.

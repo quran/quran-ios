@@ -41,7 +41,11 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
         verseDelay = options.verseDelay
         repetitionDelay = options.repetitionDelay
         playbackRate = AudioPreferences.shared.playbackRate
-        endAt = Self.deduceEndAt(from: options.start, to: normalizedEnd)
+        endAt = Self.deduceEndAt(
+            from: options.start,
+            to: normalizedEnd,
+            preferred: AudioPreferences.shared.audioEnd
+        )
     }
 
     // MARK: Internal
@@ -61,6 +65,9 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
 
     func play() {
         AudioPreferences.shared.playbackRate = playbackRate
+        if let audioEnd = endAt.audioEnd {
+            AudioPreferences.shared.audioEnd = audioEnd
+        }
         listener?.updateAudioOptions(to: currentOptions())
         dismiss()
     }
@@ -101,10 +108,21 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     private let options: AdvancedAudioOptions
     private let reciterListBuilder: ReciterListBuilder
 
-    // An end ayah can coincide with multiple boundaries (end of Al-Fatihah is
-    // also end of page 1). We prefer surah → juz → page → quran to match how
-    // users mentally pick a range.
-    private static func deduceEndAt(from start: AyahNumber, to end: AyahNumber) -> EndAtChoice {
+    // The saved Play up to preference wins when it explains the range, so
+    // opening the sheet and tapping Play never silently changes it. The banner
+    // fills the range with `PreferencesLastAyahFinder`, which never ends before
+    // the start page ends, so the page-floored end counts as a match too.
+    //
+    // Otherwise, an end ayah can coincide with multiple boundaries (end of
+    // Al-Fatihah is also end of page 1). We prefer surah → juz → page → quran
+    // to match how users mentally pick a range.
+    private static func deduceEndAt(from start: AyahNumber, to end: AyahNumber, preferred: AudioEnd) -> EndAtChoice {
+        let boundaryEnd = preferred.lastAyahFinder.findLastAyah(startAyah: start)
+        let pageEnd = PageBasedLastAyahFinder().findLastAyah(startAyah: start)
+        if end == boundaryEnd || end == max(boundaryEnd, pageEnd) {
+            return EndAtChoice(preferred)
+        }
+
         let priority: [EndAtChoice] = [.surah, .juz, .page, .quran]
         for choice in priority {
             guard let audioEnd = choice.audioEnd else { continue }

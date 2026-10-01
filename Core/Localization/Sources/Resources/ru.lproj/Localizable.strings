@@ -382,6 +382,8 @@
 "audio.end-at" = "Закончить на";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Настроить";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "Страница, Сура, Джуз и Коран также меняют настройку «Скачать/Воспроизвести до».";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "Диапазон аятов для воспроизведения";
 // Metadata: Translated by ChatGPT; human review required.

@@ -382,6 +382,8 @@
 "audio.end-at" = "Fin à";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Personnalisé";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "Page, Sourate, Juz' et Coran mettent aussi à jour votre réglage « Télécharger/Lire jusqu'à ».";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "Plage d’ayahs à lire";
 // Metadata: Translated by ChatGPT; human review required.

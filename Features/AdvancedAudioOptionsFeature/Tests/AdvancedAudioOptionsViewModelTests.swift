@@ -15,6 +15,19 @@ import XCTest
 final class AdvancedAudioOptionsViewModelTests: XCTestCase {
     // MARK: Internal
 
+    override func setUp() async throws {
+        try await super.setUp()
+        originalAudioEnd = AudioPreferences.shared.audioEnd
+        AudioPreferences.shared.audioEnd = .juz
+    }
+
+    override func tearDown() async throws {
+        if let originalAudioEnd {
+            AudioPreferences.shared.audioEnd = originalAudioEnd
+        }
+        try await super.tearDown()
+    }
+
     // MARK: - EndAt deduction on init
 
     func test_init_deducesEndAt_asSura_whenEndIsLastVerseOfSura() {
@@ -40,6 +53,96 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         let sut = makeSUT(start: alBaqarah.firstVerse, end: end)
 
         XCTAssertEqual(sut.endAt, .custom)
+    }
+
+    // MARK: - EndAt prefers the saved Play up to preference
+
+    func test_init_prefersSavedAudioEnd_whenEndMatchesSeveralBoundaries() {
+        // Al-Fatihah fills page 1, so its last verse ends both the surah and the page.
+        let alFatihah = quran.suras[0]
+        XCTAssertEqual(PageBasedLastAyahFinder().findLastAyah(startAyah: alFatihah.firstVerse), alFatihah.lastVerse)
+        AudioPreferences.shared.audioEnd = .page
+
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.lastVerse)
+
+        XCTAssertEqual(sut.endAt, .page)
+    }
+
+    func test_init_prefersSavedJuz_overSurah_whenJuzAndSurahEndTogether() {
+        // Juz' 29 ends with Al-Mursalat.
+        let alMursalat = quran.suras[76]
+        XCTAssertEqual(JuzBasedLastAyahFinder().findLastAyah(startAyah: alMursalat.firstVerse), alMursalat.lastVerse)
+        AudioPreferences.shared.audioEnd = .juz
+
+        let sut = makeSUT(start: alMursalat.firstVerse, end: alMursalat.lastVerse)
+
+        XCTAssertEqual(sut.endAt, .juz)
+    }
+
+    func test_init_prefersSavedAudioEnd_whenEndIsThePageFlooredBoundary() {
+        // Al-Qadr ends mid-page, so the banner's range runs to the end of its page.
+        let alQadr = quran.suras[96]
+        let suraEnd = SuraBasedLastAyahFinder().findLastAyah(startAyah: alQadr.firstVerse)
+        let pageEnd = PageBasedLastAyahFinder().findLastAyah(startAyah: alQadr.firstVerse)
+        XCTAssertLessThan(suraEnd, pageEnd)
+        AudioPreferences.shared.audioEnd = .sura
+
+        let sut = makeSUT(start: alQadr.firstVerse, end: pageEnd)
+
+        XCTAssertEqual(sut.endAt, .surah)
+    }
+
+    func test_init_fallsBackToDeduction_whenSavedAudioEndDoesNotMatch() {
+        let alFatihah = quran.suras[0]
+        AudioPreferences.shared.audioEnd = .quran
+
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.lastVerse)
+
+        XCTAssertEqual(sut.endAt, .surah)
+    }
+
+    // MARK: - Saving End at as the Play up to preference
+
+    func test_play_savesSelectedEndAt_asAudioEnd() {
+        let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
+
+        sut.setEndAt(.surah)
+        sut.play()
+
+        XCTAssertEqual(AudioPreferences.shared.audioEnd, .sura)
+    }
+
+    func test_play_savesEveryBoundaryChoice_asMatchingAudioEnd() {
+        let expected: [(EndAtChoice, AudioEnd)] = [(.page, .page), (.surah, .sura), (.juz, .juz), (.quran, .quran)]
+        for (choice, audioEnd) in expected {
+            AudioPreferences.shared.audioEnd = audioEnd == .juz ? .page : .juz
+            let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
+
+            sut.setEndAt(choice)
+            sut.play()
+
+            XCTAssertEqual(AudioPreferences.shared.audioEnd, audioEnd, "\(choice)")
+        }
+    }
+
+    func test_play_withCustomEndAt_keepsAudioEnd() {
+        AudioPreferences.shared.audioEnd = .page
+        let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse.next!)
+        XCTAssertEqual(sut.endAt, .custom)
+
+        sut.play()
+
+        XCTAssertEqual(AudioPreferences.shared.audioEnd, .page)
+    }
+
+    func test_dismiss_keepsAudioEnd_afterChangingEndAt() {
+        AudioPreferences.shared.audioEnd = .page
+        let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
+
+        sut.setEndAt(.quran)
+        sut.dismiss()
+
+        XCTAssertEqual(AudioPreferences.shared.audioEnd, .page)
     }
 
     // MARK: - setEndAt
@@ -251,6 +354,12 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
 
     // MARK: - EndAtChoice
 
+    func test_endAtChoice_initFromAudioEnd_roundTrips() {
+        for audioEnd in [AudioEnd.page, .sura, .juz, .quran] {
+            XCTAssertEqual(EndAtChoice(audioEnd).audioEnd, audioEnd)
+        }
+    }
+
     func test_endAtChoice_audioEndMapping() {
         XCTAssertEqual(EndAtChoice.page.audioEnd, .page)
         XCTAssertEqual(EndAtChoice.surah.audioEnd, .sura)
@@ -262,6 +371,7 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
     // MARK: Private
 
     private let quran = Quran.hafsMadani1405
+    private var originalAudioEnd: AudioEnd?
 
     private func makeSUT(start: AyahNumber, end: AyahNumber, verseDelay: VerseDelay = .none) -> AdvancedAudioOptionsViewModel {
         AdvancedAudioOptionsViewModel(

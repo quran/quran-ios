@@ -366,6 +366,8 @@
 "audio.end-at" = "Аяқтау орны";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Арнаулы";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "Бет, Сүре, Пара және Құран «Жүктеу/Ойнату дейін» параметрін де жаңартады.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "Аяттарды ойнату ауқымы";
 // Metadata: Translated by ChatGPT; human review required.

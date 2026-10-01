@@ -383,6 +383,8 @@
 "audio.end-at" = "Terminar em";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Personalizado";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "Página, Surata, Juz' e Alcorão também atualizam sua configuração “Baixar/Reproduzir até”.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "Intervalo de ayahs da reprodução";
 // Metadata: Translated by ChatGPT; human review required.

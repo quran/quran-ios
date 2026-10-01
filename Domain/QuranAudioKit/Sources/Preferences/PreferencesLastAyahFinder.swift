@@ -18,29 +18,10 @@ public struct PreferencesLastAyahFinder: LastAyahFinder {
     public static let shared = PreferencesLastAyahFinder()
 
     public func findLastAyah(startAyah: AyahNumber) -> AyahNumber {
-        let pageLastVerse = pageFinder.findLastAyah(startAyah: startAyah)
-        let lastVerse = finder.findLastAyah(startAyah: startAyah)
-        return max(lastVerse, pageLastVerse)
+        AudioEndLastAyahFinder(audioEnd: preferences.audioEnd).findLastAyah(startAyah: startAyah)
     }
 
     // MARK: Private
 
     private let preferences = AudioPreferences.shared
-
-    private var finder: LastAyahFinder {
-        switch preferences.audioEnd {
-        case .juz:
-            return JuzBasedLastAyahFinder()
-        case .sura:
-            return SuraBasedLastAyahFinder()
-        case .page:
-            return pageFinder
-        case .quran:
-            return QuranBasedLastAyahFinder()
-        }
-    }
-
-    private var pageFinder: LastAyahFinder {
-        PageBasedLastAyahFinder()
-    }
 }

@@ -125,6 +125,41 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         }
     }
 
+    func test_play_withoutChoosingEndAt_keepsAudioEnd_evenWhenDeducedChoiceDiffers() {
+        let alFatihah = quran.suras[0]
+        AudioPreferences.shared.audioEnd = .juz
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.lastVerse)
+        XCTAssertEqual(sut.endAt, .surah)
+
+        sut.play()
+
+        XCTAssertEqual(AudioPreferences.shared.audioEnd, .juz)
+    }
+
+    func test_play_afterChoosingPage_savesPage() {
+        let alFatihah = quran.suras[0]
+        AudioPreferences.shared.audioEnd = .juz
+        let sut = makeSUT(start: alFatihah.firstVerse, end: alFatihah.lastVerse)
+
+        sut.setEndAt(.page)
+        sut.play()
+
+        XCTAssertEqual(AudioPreferences.shared.audioEnd, .page)
+    }
+
+    func test_play_afterChoosingSurahThenEditingTo_keepsAudioEnd() {
+        let alBaqarah = quran.suras[1]
+        AudioPreferences.shared.audioEnd = .juz
+        let sut = makeSUT(start: alBaqarah.firstVerse, end: alBaqarah.firstVerse)
+
+        sut.setEndAt(.surah)
+        sut.updateToVerseTo(alBaqarah.firstVerse.next!)
+        sut.play()
+
+        XCTAssertEqual(sut.endAt, .custom)
+        XCTAssertEqual(AudioPreferences.shared.audioEnd, .juz)
+    }
+
     func test_play_withCustomEndAt_keepsAudioEnd() {
         AudioPreferences.shared.audioEnd = .page
         let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse.next!)
@@ -225,6 +260,25 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
             alBaqarah.lastVerse,
             "Switching surah while .surah is selected should re-end on the new surah"
         )
+    }
+
+    func test_updateFromVerseTo_floorsSurahEndToTheStartPage() {
+        // Al-Qadr ends mid-page, so Surah plays on to the end of that page, as
+        // the banner and the ayah menu do.
+        let alQadr = quran.suras[96]
+        let newStart = alQadr.firstVerse.next!.next!
+        let pageEnd = PageBasedLastAyahFinder().findLastAyah(startAyah: newStart)
+        XCTAssertLessThan(alQadr.lastVerse, pageEnd)
+        AudioPreferences.shared.audioEnd = .sura
+        let sut = makeSUT(
+            start: alQadr.firstVerse,
+            end: PageBasedLastAyahFinder().findLastAyah(startAyah: alQadr.firstVerse)
+        )
+        XCTAssertEqual(sut.endAt, .surah)
+
+        sut.updateFromVerseTo(newStart)
+
+        XCTAssertEqual(sut.toVerse, pageEnd)
     }
 
     func test_updateFromVerseTo_keepsCustomEnd_whenNotPastNewStart() {

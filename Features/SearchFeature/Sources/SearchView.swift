@@ -161,7 +161,8 @@ private struct SearchViewUI: View {
     }
 
     func searchResultText(of item: SearchResult) -> MultipartText {
-        let highlightRanges = item.ranges.map { HighlightingRange($0, fontWeight: .heavy) }
+        let footnoteRanges = item.footnoteRanges.map { HighlightingRange($0, foregroundColor: .secondaryLabel, fontSize: .footnote) }
+        let highlightRanges = footnoteRanges + item.ranges.map { HighlightingRange($0, fontWeight: .heavy) }
         switch item.text {
         case .plain(let text):
             return "\(text, highlighting: highlightRanges)"

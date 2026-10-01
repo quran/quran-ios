@@ -16,9 +16,15 @@ import UIx
 public struct HighlightingRange {
     // MARK: Lifecycle
 
-    public init(_ range: Range<String.Index>, foregroundColor: Color? = nil, fontWeight: Font.Weight? = nil) {
+    public init(
+        _ range: Range<String.Index>,
+        foregroundColor: Color? = nil,
+        fontSize: MultipartText.FontSize? = nil,
+        fontWeight: Font.Weight? = nil
+    ) {
         self.range = range
         self.foregroundColor = foregroundColor
+        self.fontSize = fontSize
         self.fontWeight = fontWeight
     }
 
@@ -26,7 +32,33 @@ public struct HighlightingRange {
 
     let range: Range<String.Index>
     let foregroundColor: Color?
+    let fontSize: MultipartText.FontSize?
     let fontWeight: Font.Weight?
+
+    /// Combines overlapping ranges, so a bold match inside smaller text keeps the smaller size.
+    static func attributedString(_ text: String, ranges: [HighlightingRange], size: MultipartText.FontSize) -> AttributedString {
+        var attributedString = AttributedString(text)
+        let boundaries = Set(ranges.flatMap { [$0.range.lowerBound, $0.range.upperBound] }).sorted()
+        for (lowerBound, upperBound) in zip(boundaries, boundaries.dropFirst()) {
+            let covering = ranges.filter { $0.range.lowerBound <= lowerBound && upperBound <= $0.range.upperBound }
+            guard !covering.isEmpty,
+                  let start = AttributedString.Index(lowerBound, within: attributedString),
+                  let end = AttributedString.Index(upperBound, within: attributedString)
+            else {
+                continue
+            }
+            if let foregroundColor = covering.last(where: { $0.foregroundColor != nil })?.foregroundColor {
+                attributedString[start ..< end].foregroundColor = foregroundColor
+            }
+            let fontSize = covering.last(where: { $0.fontSize != nil })?.fontSize
+            let fontWeight = covering.last(where: { $0.fontWeight != nil })?.fontWeight
+            if fontSize != nil || fontWeight != nil {
+                let font = (fontSize ?? size).plainFont
+                attributedString[start ..< end].font = fontWeight.map { font.weight($0) } ?? font
+            }
+        }
+        return attributedString
+    }
 }
 
 private struct TextPartView: View {
@@ -83,20 +115,7 @@ private struct TextPartView: View {
     @ScaledMetric private var quranTextPadding = 5
 
     private func highlighting(text: String, ranges: [HighlightingRange]) -> Text {
-        var attributedString = AttributedString(text)
-        for highlight in ranges {
-            if let start = AttributedString.Index(highlight.range.lowerBound, within: attributedString),
-               let end = AttributedString.Index(highlight.range.upperBound, within: attributedString)
-            {
-                if let foregroundColor = highlight.foregroundColor {
-                    attributedString[start ..< end].foregroundColor = foregroundColor
-                }
-                if let fontWeight = highlight.fontWeight {
-                    attributedString[start ..< end].font = size.plainFont.weight(fontWeight)
-                }
-            }
-        }
-        return Text(attributedString)
+        Text(HighlightingRange.attributedString(text, ranges: ranges, size: size))
     }
 }
 

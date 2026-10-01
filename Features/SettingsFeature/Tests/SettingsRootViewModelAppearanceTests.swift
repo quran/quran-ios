@@ -144,8 +144,9 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
     private func makeSUT(
         analytics: AnalyticsLibrary = NoopAnalytics(),
         appIconService: AppIconService? = nil,
-        navigationController: UINavigationController = UINavigationController()
+        navigationController: UINavigationController? = nil
     ) -> SettingsRootViewModel {
+        let navigationController = navigationController ?? UINavigationController()
         let container = AppDependenciesStub(appIconCatalog: catalog)
         let appIconService = appIconService ?? makeService()
         #if QURAN_SYNC

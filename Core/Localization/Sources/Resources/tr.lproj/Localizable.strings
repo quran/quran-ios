@@ -327,7 +327,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Özel";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "“Özel” dışındaki bir seçenek “Oynatma limiti” ayarınızı da günceller.";
+"audio.end-at.description" = "“Özel” dışında bir seçenek seçmek “Oynatma limiti” ayarınızı da günceller.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Hafız";
 "audio.playback-ayah-range" = "Oynatılacak ayet aralığı";

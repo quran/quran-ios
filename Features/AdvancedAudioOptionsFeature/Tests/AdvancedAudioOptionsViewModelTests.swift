@@ -147,6 +147,28 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(sut.endAt, .hizb)
     }
 
+    func test_init_fallsBackToQuarter_overPage_whenTheStartPageEndsTheQuarter() {
+        // Page 16 (Al-Baqarah 102–105) ends quarter 6, which runs from 92 to 105.
+        let start = ayah(2, 102)
+        XCTAssertEqual(PageBasedLastAyahFinder().findLastAyah(startAyah: start), ayah(2, 105))
+        AudioPreferences.shared.audioEnd = .quran
+
+        let sut = makeSUT(start: start, end: ayah(2, 105))
+
+        XCTAssertEqual(sut.endAt, .quarter)
+    }
+
+    func test_init_fallsBackToHizb_overQuarterAndPage_whenTheStartPageEndsTheHizb() {
+        // Page 31 (Al-Baqarah 197–202) ends quarter 12 and hizb 3, which runs from 142 to 202.
+        let start = ayah(2, 197)
+        XCTAssertEqual(PageBasedLastAyahFinder().findLastAyah(startAyah: start), ayah(2, 202))
+        AudioPreferences.shared.audioEnd = .quran
+
+        let sut = makeSUT(start: start, end: ayah(2, 202))
+
+        XCTAssertEqual(sut.endAt, .hizb)
+    }
+
     func test_init_fallsBackToQuarter_whenOnlyTheQuarterEnds() {
         AudioPreferences.shared.audioEnd = .quran
 

@@ -296,7 +296,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Tùy chỉnh";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Chọn một tùy chọn khác “Tùy chỉnh” cũng cập nhật cài đặt “Phát đến” của bạn.";
+"audio.end-at.description" = "Chọn một tùy chọn ngoài “Tùy chỉnh” cũng cập nhật cài đặt “Phát đến” của bạn.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Người xướng đọc";
 "audio.playback-ayah-range" = "Phạm vi ayah phát";

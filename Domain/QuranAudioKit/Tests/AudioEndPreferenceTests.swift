@@ -45,6 +45,13 @@ final class AudioEndPreferenceTests: XCTestCase {
         }
     }
 
+    func test_unknownSavedRawValue_readsBackAsJuz() {
+        // A value from a newer app version, read after a downgrade.
+        UserDefaults.standard.set(99, forKey: key)
+
+        XCTAssertEqual(AudioPreferences.shared.audioEnd, .juz)
+    }
+
     func test_writingQuarterAndHizb_savesTheirRawValues() {
         AudioPreferences.shared.audioEnd = .quarter
         XCTAssertEqual(UserDefaults.standard.integer(forKey: key), 4)

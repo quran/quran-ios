@@ -194,9 +194,15 @@ struct SearchTerm {
         var results: [SearchResult] = []
         for verse in verses {
             for text in [verse.text, verse.text.precomposedStringWithCanonicalMapping, verse.text.decomposedStringWithCompatibilityMapping] {
+                let (text, footnoteRanges) = text.removingFootnoteMarkers()
                 let ranges = text.split(separatedBy: queryRegex)
                 if !ranges.isEmpty {
-                    let result = SearchResult(text: transform(text), ranges: ranges, ayah: verse.verse)
+                    let result = SearchResult(
+                        text: transform(text),
+                        ranges: ranges,
+                        footnoteRanges: footnoteRanges,
+                        ayah: verse.verse
+                    )
                     results.append(result)
                     break
                 }
@@ -238,6 +244,40 @@ extension String {
         return matches.compactMap {
             Range($0.range, in: self)
         }
+    }
+
+    /// Removes the `[[…]]` markers around translator footnotes, keeping the footnote text,
+    /// and returns the ranges of that text so it can be styled as commentary.
+    func removingFootnoteMarkers() -> (text: String, footnoteRanges: [Range<String.Index>]) {
+        let markerRanges = ranges(of: QuranTextDataService.footnotesRegex)
+        if markerRanges.isEmpty {
+            return (self, [])
+        }
+
+        var text = ""
+        var footnoteOffsets: [Range<Int>] = []
+        var current = startIndex
+        for markerRange in markerRanges {
+            text += self[current ..< markerRange.lowerBound]
+            if let last = text.last, !last.isWhitespace {
+                text += " "
+            }
+            let start = text.utf16.count
+            text += self[markerRange].dropFirst(2).dropLast(2)
+            footnoteOffsets.append(start ..< text.utf16.count)
+            current = markerRange.upperBound
+            if current < endIndex, !self[current].isWhitespace {
+                text += " "
+            }
+        }
+        text += self[current...]
+
+        let footnoteRanges = footnoteOffsets.map { offsets in
+            let lowerBound = text.utf16.index(text.startIndex, offsetBy: offsets.lowerBound)
+            let upperBound = text.utf16.index(text.startIndex, offsetBy: offsets.upperBound)
+            return lowerBound ..< upperBound
+        }
+        return (text, footnoteRanges)
     }
 
     func containsArabic() -> Bool {

@@ -6,6 +6,7 @@ import NoorFont
 import QuranKit
 import QuranLocalization
 import QuranText
+import SwiftUI
 import UIKit
 import XCTest
 @testable import NoorUI
@@ -258,6 +259,26 @@ final class MultipartTextQuranTests: XCTestCase {
         let text: MultipartText = "\(value, highlighting: [HighlightingRange(range, fontWeight: .heavy)])"
 
         XCTAssertEqual(text.rawValue, value)
+    }
+
+    func test_highlighting_boldInsideSmallerRangeKeepsSmallerSize() throws {
+        let value = "Verse note"
+        let note = try XCTUnwrap(value.range(of: "note"))
+        let attributedString = HighlightingRange.attributedString(
+            value,
+            ranges: [
+                HighlightingRange(note, foregroundColor: .secondary, fontSize: .footnote),
+                HighlightingRange(value.startIndex ..< value.endIndex, fontWeight: .heavy),
+            ],
+            size: .body
+        )
+
+        let texts = attributedString.runs.map { String(attributedString[$0.range].characters) }
+        XCTAssertEqual(texts, ["Verse ", "note"])
+        let runs = Array(attributedString.runs)
+        XCTAssertEqual(runs[0].font, Font.body.weight(.heavy))
+        XCTAssertEqual(runs[1].font, Font.footnote.weight(.heavy))
+        XCTAssertEqual(runs[1].foregroundColor, .secondary)
     }
 
     private let sura = Quran.hafsMadani1405.suras[1]

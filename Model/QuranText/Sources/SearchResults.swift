@@ -34,9 +34,15 @@ public struct SearchResult: Hashable, Identifiable {
         self.init(text: .quran(text), ranges: ranges, ayah: ayah)
     }
 
-    public init(text: SearchText, ranges: [Range<String.Index>], ayah: AyahNumber) {
+    public init(
+        text: SearchText,
+        ranges: [Range<String.Index>],
+        footnoteRanges: [Range<String.Index>] = [],
+        ayah: AyahNumber
+    ) {
         self.text = text
         self.ranges = ranges
+        self.footnoteRanges = footnoteRanges
         self.ayah = ayah
     }
 
@@ -44,6 +50,8 @@ public struct SearchResult: Hashable, Identifiable {
 
     public let text: SearchText
     public let ranges: [Range<String.Index>]
+    /// Ranges of translator footnotes within `text`.
+    public let footnoteRanges: [Range<String.Index>]
     public let ayah: AyahNumber
 
     public var id: Self { self }

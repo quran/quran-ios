@@ -90,6 +90,25 @@ final class SearchTermTests: XCTestCase {
         }
     }
 
+    func testSearchResultsShowFootnotesWithoutMarkers() throws {
+        let term = try XCTUnwrap(SearchTerm("patience"))
+        let text = "Endure,[[With patience and hope.]] and be mindful.[[Lit., fear.]]"
+
+        let result = try XCTUnwrap(term.buildSearchResults(verses: [(verse: verse, text: text)]).first)
+
+        let displayText = result.text.text
+        XCTAssertEqual(displayText, "Endure, With patience and hope. and be mindful. Lit., fear.")
+        XCTAssertEqual(result.footnoteRanges.map { String(displayText[$0]) }, ["With patience and hope.", "Lit., fear."])
+        XCTAssertEqual(result.ranges.map { String(displayText[$0]) }, ["patience"])
+    }
+
+    func testFootnoteMarkersKeepExistingWhitespace() {
+        let (text, footnoteRanges) = "Endure [[In patience.]] and be mindful.".removingFootnoteMarkers()
+
+        XCTAssertEqual(text, "Endure In patience. and be mindful.")
+        XCTAssertEqual(footnoteRanges.map { String(text[$0]) }, ["In patience."])
+    }
+
     // MARK: Private
 
     private let verse = Quran.hafsMadani1405.firstVerse

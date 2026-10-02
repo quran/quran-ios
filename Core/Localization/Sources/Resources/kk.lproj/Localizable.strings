@@ -168,11 +168,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.select-end-verse" = "Соңғы аятты таңдаңыз";
 
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount" = "Жүктеу/Ойнату дейін";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount.description" = "Аудио ойнатқанда соңына дейін ойнатылады";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.
@@ -367,7 +362,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Арнаулы";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Бет, Сүре, Пара және Құран «Жүктеу/Ойнату дейін» параметрін де жаңартады.";
+"audio.end-at.description" = "Бет, Сүре, Пара және Құран «Тыңдау шегі» параметрін де жаңартады.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Қари";
 "audio.playback-ayah-range" = "Аяттарды ойнату ауқымы";
@@ -390,9 +385,19 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.description" = "Келесі қайталау басталғанға дейінгі үзіліс ұзақтығын белгілейді.";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.streaming.description" = "Дыбысты ағынмен ойнату арқылы құрылғы жадын үнемдейді, бірақ интернет байланысын қажет етеді.";
-// Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Дыбысты ағынмен ойнату";
+// Metadata: Translated by AI; human review required.
+"audio.playback.title" = "Аудио ойнату";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.page" = "Ойнату ағымдағы беттің соңына дейін жалғасады. Ағынмен ойнату өшірулі болса, ол аяттар алдымен жүктеледі; ағынмен ойнату орын үнемдейді, бірақ интернет байланысын қажет етеді.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.surah" = "Ойнату ағымдағы сүренің соңына дейін жалғасады. Ағынмен ойнату өшірулі болса, ол аяттар алдымен жүктеледі; ағынмен ойнату орын үнемдейді, бірақ интернет байланысын қажет етеді.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.juz" = "Ойнату ағымдағы параның соңына дейін жалғасады. Ағынмен ойнату өшірулі болса, ол аяттар алдымен жүктеледі; ағынмен ойнату орын үнемдейді, бірақ интернет байланысын қажет етеді.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quran" = "Ойнату Құранның соңына дейін жалғасады. Ағынмен ойнату өшірулі болса, ол аяттар алдымен жүктеледі; ағынмен ойнату орын үнемдейді, бірақ интернет байланысын қажет етеді.";
+// Metadata: Translated by AI; human review required.
+"audio-manager.stream-hint" = "Жүктемей тыңдау үшін «Аудио ойнату» бөлімінде «Дыбысты ағынмен ойнату» параметрін қосыңыз.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Әр аяттан кейінгі үзіліс";
 // Metadata: Translated by ChatGPT; human review required.

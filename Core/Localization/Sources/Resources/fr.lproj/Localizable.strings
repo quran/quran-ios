@@ -182,11 +182,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.select-end-verse" = "Sélectionner le verset final";
 
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount" = "Télécharger/Lire jusqu'à";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount.description" = "Lors de la lecture audio, cela jouera jusqu'à la fin du";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.
@@ -383,7 +378,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Personnalisé";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Page, Sourate, Juz' et Coran mettent aussi à jour votre réglage « Télécharger/Lire jusqu'à ».";
+"audio.end-at.description" = "Page, Sourate, Juz' et Coran mettent aussi à jour votre réglage « Lire jusqu'à ».";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Récitant";
 "audio.playback-ayah-range" = "Plage d’ayahs à lire";
@@ -406,9 +401,19 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.description" = "Définit la durée de la pause avant le début de la répétition suivante.";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.streaming.description" = "Économise de l’espace disque en diffusant l’audio, mais nécessite une connexion internet.";
-// Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Diffuser l’audio";
+// Metadata: Translated by AI; human review required.
+"audio.playback.title" = "Lecture audio";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.page" = "La lecture continue jusqu'à la fin de la page en cours. Sans diffusion, ces versets sont d'abord téléchargés ; la diffusion économise de l'espace mais nécessite une connexion internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.surah" = "La lecture continue jusqu'à la fin de la sourate en cours. Sans diffusion, ces versets sont d'abord téléchargés ; la diffusion économise de l'espace mais nécessite une connexion internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.juz" = "La lecture continue jusqu'à la fin du juz' en cours. Sans diffusion, ces versets sont d'abord téléchargés ; la diffusion économise de l'espace mais nécessite une connexion internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quran" = "La lecture continue jusqu'à la fin du Coran. Sans diffusion, ces versets sont d'abord téléchargés ; la diffusion économise de l'espace mais nécessite une connexion internet.";
+// Metadata: Translated by AI; human review required.
+"audio-manager.stream-hint" = "Pour écouter sans télécharger, activez « Diffuser l’audio » dans « Lecture audio ».";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Pause après chaque ayah";
 // Metadata: Translated by ChatGPT; human review required.

@@ -182,11 +182,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.select-end-verse" = "Endvers auswählen";
 
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount" = "Herunterladen/Abspielen bis zu";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount.description" = "Beim Abspielen von Audio wird bis zum Ende des";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.
@@ -383,7 +378,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Benutzerdefiniert";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Seite, Sure, Juz' und Koran aktualisieren auch deine Einstellung „Herunterladen/Abspielen bis zu“.";
+"audio.end-at.description" = "Seite, Sure, Juz' und Koran aktualisieren auch deine Einstellung „Abspielen bis“.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Rezitator";
 "audio.playback-ayah-range" = "Wiedergabebereich der Ayahs";
@@ -406,9 +401,19 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.description" = "Legt fest, wie lange vor Beginn der nächsten Wiederholung pausiert wird.";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.streaming.description" = "Spart Speicherplatz durch Audio-Streaming, erfordert aber eine Internetverbindung.";
-// Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Audio streamen";
+// Metadata: Translated by AI; human review required.
+"audio.playback.title" = "Audiowiedergabe";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.page" = "Die Wiedergabe läuft bis zum Ende der aktuellen Seite. Ohne Streaming werden diese Verse zuerst heruntergeladen; Streaming spart Speicherplatz, braucht aber eine Internetverbindung.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.surah" = "Die Wiedergabe läuft bis zum Ende der aktuellen Sure. Ohne Streaming werden diese Verse zuerst heruntergeladen; Streaming spart Speicherplatz, braucht aber eine Internetverbindung.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.juz" = "Die Wiedergabe läuft bis zum Ende des aktuellen Juz'. Ohne Streaming werden diese Verse zuerst heruntergeladen; Streaming spart Speicherplatz, braucht aber eine Internetverbindung.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quran" = "Die Wiedergabe läuft bis zum Ende des Korans. Ohne Streaming werden diese Verse zuerst heruntergeladen; Streaming spart Speicherplatz, braucht aber eine Internetverbindung.";
+// Metadata: Translated by AI; human review required.
+"audio-manager.stream-hint" = "Um ohne Herunterladen abzuspielen, aktiviere „Audio streamen“ unter „Audiowiedergabe“.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Pause nach jeder Ayah";
 // Metadata: Translated by ChatGPT; human review required.

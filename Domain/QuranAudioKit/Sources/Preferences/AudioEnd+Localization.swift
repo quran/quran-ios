@@ -9,6 +9,9 @@ import Localization
 import QuranAudio
 
 extension AudioEnd {
+    /// The Play up to menu's choices, in the order every Play up to menu lists them.
+    public static let playUpToChoices: [AudioEnd] = [.page, .juz, .sura, .quran]
+
     public var name: String {
         switch self {
         case .juz:

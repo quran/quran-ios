@@ -42,12 +42,17 @@ final class AudioDownloadsViewModel: ObservableObject {
             showError: { [weak self] error in self?.error = error }
         )
         self.downloadsObserver = downloadsObserver
+
+        AudioPreferences.shared.$streamingEnabled.assign(to: &$streamingEnabled)
     }
 
     // MARK: Internal
 
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
+
+    /// Whether audio streams instead of downloading. The Stream Audio hint shows only while it's off.
+    @Published private(set) var streamingEnabled = AudioPreferences.shared.streamingEnabled
 
     var items: [AudioDownloadItem] {
         reciters

@@ -19,6 +19,7 @@ struct AudioDownloadsView: View {
             editMode: $viewModel.editMode,
             error: $viewModel.error,
             items: viewModel.items.sorted(),
+            showsStreamHint: !viewModel.streamingEnabled,
             start: { await viewModel.start() },
             downloadAction: { await viewModel.startDownloading($0.reciter) },
             cancelAction: { await viewModel.cancelDownloading($0.reciter) },
@@ -31,16 +32,21 @@ private struct AudioDownloadsViewUI: View {
     @Binding var editMode: EditMode
     @Binding var error: Error?
     let items: [AudioDownloadItem]
+    let showsStreamHint: Bool
     let start: AsyncAction
     let downloadAction: AsyncItemAction<AudioDownloadItem>
     let cancelAction: AsyncItemAction<AudioDownloadItem>
     let deleteAction: ItemDeletionAction<AudioDownloadItem>
 
     var body: some View {
+        let downloadedItems = items.filter(\.canDelete)
+        // The hint sits under the first section shown, while streaming is off.
+        let streamHint = showsStreamHint ? l("audio-manager.stream-hint") : nil
         NoorList {
             AudioDownloadsSection(
                 title: l("reciters.downloaded"),
-                items: items.filter(\.canDelete),
+                footer: streamHint,
+                items: downloadedItems,
                 listItem: { item in
                     NoorListItem(
                         title: .text(item.reciter.localizedName),
@@ -53,6 +59,7 @@ private struct AudioDownloadsViewUI: View {
 
             AudioDownloadsSection(
                 title: l("reciters.all"),
+                footer: downloadedItems.isEmpty ? streamHint : nil,
                 items: items.filter { !$0.canDelete },
                 listItem: { item in
                     NoorListItem(
@@ -90,12 +97,13 @@ private struct AudioDownloadsViewUI: View {
 @MainActor
 private struct AudioDownloadsSection<ListItem: View>: View {
     let title: String
+    let footer: String?
     let items: [AudioDownloadItem]
     let listItem: (AudioDownloadItem) -> ListItem
     let onDelete: ItemDeletionAction<AudioDownloadItem>?
 
     var body: some View {
-        NoorSection(title: title, items, onDelete: onDelete) { item in
+        NoorSection(title: title, footer: footer, items, onDelete: onDelete) { item in
             listItem(item)
         }
     }
@@ -142,6 +150,7 @@ struct AudioDownloadsView_Previews: PreviewProvider {
                     editMode: $editMode,
                     error: $error,
                     items: items,
+                    showsStreamHint: true,
                     start: { },
                     downloadAction: { _ in },
                     cancelAction: { _ in },

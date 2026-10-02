@@ -10,21 +10,17 @@ import AppIconFeature
 import AudioDownloadsFeature
 import Combine
 import FeaturesSupport
-import Localization
 #if QURAN_SYNC
 import AuthenticationClient
 import LegacyDataMigration
 import MobileSync
 #endif
 import NoorUI
-import QuranAudio
-import QuranAudioKit
 import ReadingSelectorFeature
 import SafariServices
 import SettingsService
 import TranslationsFeature
 import UIKit
-import UIx
 import VLogging
 
 @MainActor
@@ -37,6 +33,7 @@ final class SettingsRootViewModel: ObservableObject {
         reviewService: ReviewService,
         authenticationClient: any AuthenticationClient,
         legacyDataImportCoordinator: LegacyDataImportCoordinator,
+        audioPlaybackBuilder: AudioPlaybackBuilder,
         audioDownloadsBuilder: AudioDownloadsBuilder,
         translationsListBuilder: TranslationsListBuilder,
         readingSelectorBuilder: ReadingSelectorBuilder,
@@ -47,14 +44,13 @@ final class SettingsRootViewModel: ObservableObject {
         navigationController: UINavigationController
     ) {
         appearanceMode = themeService.appearanceMode
-        audioEnd = audioPreferences.audioEnd
-        streamingEnabled = audioPreferences.streamingEnabled
         isAppIconAvailable = appIconService.isAvailable
         appIconOption = appIconService.currentOption
         self.analytics = analytics
         self.reviewService = reviewService
         self.authenticationClient = authenticationClient
         self.legacyDataImportCoordinator = legacyDataImportCoordinator
+        self.audioPlaybackBuilder = audioPlaybackBuilder
         self.audioDownloadsBuilder = audioDownloadsBuilder
         self.translationsListBuilder = translationsListBuilder
         self.readingSelectorBuilder = readingSelectorBuilder
@@ -64,14 +60,13 @@ final class SettingsRootViewModel: ObservableObject {
         self.navigationController = navigationController
 
         themeService.appearanceModePublisher.assign(to: &$appearanceMode)
-        audioPreferences.$audioEnd.assign(to: &$audioEnd)
-        audioPreferences.$streamingEnabled.assign(to: &$streamingEnabled)
         appIconService.currentOptionPublisher.assign(to: &$appIconOption)
     }
     #else
     init(
         analytics: AnalyticsLibrary,
         reviewService: ReviewService,
+        audioPlaybackBuilder: AudioPlaybackBuilder,
         audioDownloadsBuilder: AudioDownloadsBuilder,
         translationsListBuilder: TranslationsListBuilder,
         readingSelectorBuilder: ReadingSelectorBuilder,
@@ -81,12 +76,11 @@ final class SettingsRootViewModel: ObservableObject {
         navigationController: UINavigationController
     ) {
         appearanceMode = themeService.appearanceMode
-        audioEnd = audioPreferences.audioEnd
-        streamingEnabled = audioPreferences.streamingEnabled
         isAppIconAvailable = appIconService.isAvailable
         appIconOption = appIconService.currentOption
         self.analytics = analytics
         self.reviewService = reviewService
+        self.audioPlaybackBuilder = audioPlaybackBuilder
         self.audioDownloadsBuilder = audioDownloadsBuilder
         self.translationsListBuilder = translationsListBuilder
         self.readingSelectorBuilder = readingSelectorBuilder
@@ -95,8 +89,6 @@ final class SettingsRootViewModel: ObservableObject {
         self.navigationController = navigationController
 
         themeService.appearanceModePublisher.assign(to: &$appearanceMode)
-        audioPreferences.$audioEnd.assign(to: &$audioEnd)
-        audioPreferences.$streamingEnabled.assign(to: &$streamingEnabled)
         appIconService.currentOptionPublisher.assign(to: &$appIconOption)
     }
     #endif
@@ -105,6 +97,7 @@ final class SettingsRootViewModel: ObservableObject {
 
     let analytics: AnalyticsLibrary
     let reviewService: ReviewService
+    let audioPlaybackBuilder: AudioPlaybackBuilder
     let audioDownloadsBuilder: AudioDownloadsBuilder
     let translationsListBuilder: TranslationsListBuilder
     let readingSelectorBuilder: ReadingSelectorBuilder
@@ -116,23 +109,14 @@ final class SettingsRootViewModel: ObservableObject {
 
     let contactUsService = ContactUsService()
     let themeService = ThemeService.shared
-    let audioPreferences = AudioPreferences.shared
 
     weak var navigationController: UINavigationController?
 
-    @Published var audioEnd: AudioEnd
     @Published var error: Error? = nil
     #if QURAN_SYNC
     @Published var isAuthenticated: Bool = false
     @Published var loggedInUser: UserInfo? = nil
     #endif
-
-    @Published var streamingEnabled: Bool {
-        didSet {
-            guard streamingEnabled != audioPreferences.streamingEnabled else { return }
-            audioPreferences.streamingEnabled = streamingEnabled
-        }
-    }
 
     @Published var appearanceMode: AppearanceMode {
         didSet {
@@ -158,20 +142,10 @@ final class SettingsRootViewModel: ObservableObject {
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-    func navigateToAudioEndSelector() {
-        logger.info("Settings: presentAudioEndSelector")
-        showSingleChoiceSelector(
-            title: l("audio.download-play-amount"),
-            sections: [SingleChoiceSection(
-                header: l("audio.download-play-amount.description"),
-                items: [AudioEnd.juz, .sura, .page, .quran]
-            )],
-            selected: audioPreferences.audioEnd,
-            itemText: { $0.name },
-            onSelection: { [weak self] item in
-                self?.audioPreferences.audioEnd = item
-            }
-        )
+    func navigateToAudioPlayback() {
+        logger.info("Settings: navigateToAudioPlayback")
+        let viewController = audioPlaybackBuilder.build(navigationController: navigationController)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
     func navigateToAudioManager() {
@@ -288,26 +262,6 @@ final class SettingsRootViewModel: ObservableObject {
     private var authenticationClient: any AuthenticationClient
     private let legacyDataImportCoordinator: LegacyDataImportCoordinator
     #endif
-
-    private func showSingleChoiceSelector<T: Hashable>(
-        title: String,
-        sections: [SingleChoiceSection<T>],
-        selected: T?,
-        itemText: @escaping (T) -> String,
-        onSelection: @escaping (T) -> Void
-    ) {
-        let viewController = singleChoiceSelector(
-            sections: sections,
-            selected: selected,
-            itemText: itemText,
-            onSelection: { [weak self] item in
-                onSelection(item)
-                self?.navigationController?.popViewController(animated: true)
-            }
-        )
-        viewController.title = title
-        navigationController?.pushViewController(viewController, animated: true)
-    }
 }
 
 private extension AnalyticsLibrary {

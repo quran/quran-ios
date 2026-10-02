@@ -127,35 +127,21 @@ struct AdvancedAudioOptionsRootViewUI: View {
                 }
             }
 
-            NoorBasicSection(
-                title: sectionTitle(lAndroid("play_each_verse")),
-                footer: l("audio.verse-delay.description")
-            ) {
-                RepeatCountRow(image: .repeatVerse, runs: $verseRuns)
+            AudioRepeatSection(
+                .eachVerse,
+                runs: $verseRuns,
+                delays: VerseDelay.sorted,
+                delay: $verseDelay,
+                delayLabel: \.localizedDescription
+            )
 
-                NoorMenuRow(
-                    title: l("audio.verse-delay"),
-                    image: .pauseDelay,
-                    items: VerseDelay.sorted,
-                    selection: $verseDelay,
-                    label: \.localizedDescription
-                )
-            }
-
-            NoorBasicSection(
-                title: sectionTitle(lAndroid("play_verses_range")),
-                footer: l("audio.repetition-delay.description")
-            ) {
-                RepeatCountRow(image: .repeatRange, runs: $listRuns)
-
-                NoorMenuRow(
-                    title: l("audio.repetition-delay"),
-                    image: .pauseDelay,
-                    items: RepetitionDelay.sorted,
-                    selection: $repetitionDelay,
-                    label: \.localizedDescription
-                )
-            }
+            AudioRepeatSection(
+                .setOfVerses,
+                runs: $listRuns,
+                delays: RepetitionDelay.sorted,
+                delay: $repetitionDelay,
+                delayLabel: \.localizedDescription
+            )
         }
         .noorListIconColumn()
         .navigationTitle(l("audio.options"))
@@ -178,10 +164,5 @@ struct AdvancedAudioOptionsRootViewUI: View {
             get: { playbackRate },
             set: { updatePlaybackRate($0) }
         )
-    }
-
-    /// The Android section titles end with a colon.
-    private func sectionTitle(_ title: String) -> String {
-        title.replacingOccurrences(of: ":", with: "")
     }
 }

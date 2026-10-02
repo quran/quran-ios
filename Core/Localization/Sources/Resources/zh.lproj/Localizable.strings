@@ -182,11 +182,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.select-end-verse" = "选择结束经文";
 
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount" = "下载/播放到";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.download-play-amount.description" = "播放音频时，将播放至";
-
 // MARK: - Bookmarks
 
 // Metadata: Translated by ChatGPT; human review required.
@@ -384,7 +379,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "自定义";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "选择页、章、卷或古兰经时，也会更新“下载/播放到”设置。";
+"audio.end-at.description" = "选择页、章、卷或古兰经时，也会更新“播放到”设置。";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "诵经者";
 "audio.playback-ayah-range" = "播放经文范围";
@@ -407,9 +402,19 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.description" = "设置下一次重复开始前的暂停时长。";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.streaming.description" = "通过流式播放音频节省存储空间，但需要互联网连接。";
-// Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "流式播放音频";
+// Metadata: Translated by AI; human review required.
+"audio.playback.title" = "音频播放";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.page" = "播放将持续到当前页末尾。关闭流式播放时，这些经文会先下载；流式播放可节省空间，但需要互联网连接。";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.surah" = "播放将持续到当前章末尾。关闭流式播放时，这些经文会先下载；流式播放可节省空间，但需要互联网连接。";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.juz" = "播放将持续到当前卷末尾。关闭流式播放时，这些经文会先下载；流式播放可节省空间，但需要互联网连接。";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quran" = "播放将持续到古兰经末尾。关闭流式播放时，这些经文会先下载；流式播放可节省空间，但需要互联网连接。";
+// Metadata: Translated by AI; human review required.
+"audio-manager.stream-hint" = "如需不下载直接播放，请在“音频播放”中开启“流式播放音频”。";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "每节经文后暂停";
 // Metadata: Translated by ChatGPT; human review required.

@@ -147,10 +147,13 @@
 "audio.end-at.custom" = "Custom";
 "audio.end-at.description" = "Page, Surah, Juz' and Quran also update your Play up to setting.";
 
-"audio.download-play-amount" = "Download/Play up to";
 "audio.streaming.title" = "Stream Audio";
-"audio.streaming.description" = "Saves disk space by streaming audio, but requires an internet connection.";
-"audio.download-play-amount.description" = "When playing audio, it will play to the end of the";
+"audio.playback.title" = "Audio Playback";
+"audio.playback.footer.page" = "Playback continues to the end of the current Page. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
+"audio.playback.footer.surah" = "Playback continues to the end of the current Surah. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
+"audio.playback.footer.juz" = "Playback continues to the end of the current Juz'. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
+"audio.playback.footer.quran" = "Playback continues to the end of the Quran. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
+"audio-manager.stream-hint" = "To play without downloading, turn on Stream Audio in Audio Playback.";
 
 "audio.delay.off" = "Off";
 "audio.repeat-count" = "Repeat Count";

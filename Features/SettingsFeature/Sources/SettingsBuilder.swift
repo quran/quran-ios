@@ -33,6 +33,7 @@ public struct SettingsBuilder {
             reviewService: ReviewService(analytics: container.analytics),
             authenticationClient: container.authenticationClient,
             legacyDataImportCoordinator: container.legacyDataImportCoordinator,
+            audioPlaybackBuilder: AudioPlaybackBuilder(),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),
@@ -46,6 +47,7 @@ public struct SettingsBuilder {
         let viewModel = SettingsRootViewModel(
             analytics: container.analytics,
             reviewService: ReviewService(analytics: container.analytics),
+            audioPlaybackBuilder: AudioPlaybackBuilder(),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),
             readingSelectorBuilder: ReadingSelectorBuilder(container: container),

@@ -12,9 +12,9 @@ import QuranAudio
 
 extension Runs {
     /// The repeat counts users pick from: Loop first, then 1× through 100×.
-    public static let choices: [Runs] = [.indefinite] + (1 ... 100).map(Runs.finite)
+    static let choices: [Runs] = [.indefinite] + (1 ... 100).map(Runs.finite)
 
-    public var localizedDescription: String {
+    var localizedDescription: String {
         switch self {
         case .finite(let count): return NumberFormatter.shared.format(count) + "×"
         case .indefinite: return lAndroid("repeatValues[3]")

@@ -28,10 +28,23 @@ public struct NoorBasicSection<Content: View>: View {
 
     public var body: some View {
         if let isExpanded, #available(iOS 17.0, *) {
-            Section(isExpanded: isExpanded) {
-                content
-            } header: {
-                collapsibleHeader(isExpanded: isExpanded)
+            if let footer {
+                // `Section(isExpanded:)` has no footer, so collapse the rows by hand.
+                Section {
+                    if isExpanded.wrappedValue {
+                        content
+                    }
+                } header: {
+                    collapsibleHeader(isExpanded: isExpanded)
+                } footer: {
+                    Text(footer)
+                }
+            } else {
+                Section(isExpanded: isExpanded) {
+                    content
+                } header: {
+                    collapsibleHeader(isExpanded: isExpanded)
+                }
             }
         } else if let footer {
             if let title {
@@ -185,6 +198,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
 
     public init(
         title: String? = nil,
+        footer: String? = nil,
         isExpanded: Binding<Bool>? = nil,
         _ items: [Item],
         onDelete: ItemDeletionAction<Item>? = nil,
@@ -192,6 +206,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
         @ViewBuilder listItem: @escaping (Item) -> ListItem
     ) {
         self.title = title
+        self.footer = footer
         self.isExpanded = isExpanded
         isEmpty = items.isEmpty
         rows = NoorListRows(
@@ -206,7 +221,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
 
     public var body: some View {
         if !isEmpty {
-            NoorBasicSection(title: title, isExpanded: isExpanded) {
+            NoorBasicSection(title: title, footer: footer, isExpanded: isExpanded) {
                 rows
             }
         }
@@ -215,6 +230,7 @@ public struct NoorSection<Item: Identifiable, ListItem: View>: View {
     // MARK: Internal
 
     let title: String?
+    let footer: String?
     let isExpanded: Binding<Bool>?
     let isEmpty: Bool
     let rows: NoorListRows<Item, ListItem>

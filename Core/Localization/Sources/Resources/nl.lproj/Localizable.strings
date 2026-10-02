@@ -136,9 +136,6 @@
 "audio.select-start-verse" = "Selecteer Beginvers";
 "audio.select-end-verse" = "Selecteer Eindvers";
 
-"audio.download-play-amount" = "Downloaden/Afspelen tot";
-"audio.download-play-amount.description" = "Bij het afspelen van audio wordt deze afgespeeld tot het einde van de";
-
 // MARK: - Bookmarks
 
 "bookmarks.no-data.title" = "Bladwijzers toevoegen...";
@@ -296,7 +293,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Aangepast";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Pagina, Soera, Juz' en Koran passen ook je instelling ‘Downloaden/Afspelen tot’ aan.";
+"audio.end-at.description" = "Pagina, Soera, Juz' en Koran passen ook je instelling ‘Afspelen tot’ aan.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Reciteerder";
 "audio.playback-ayah-range" = "Bereik van ayahs afspelen";
@@ -319,9 +316,19 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.description" = "Stelt in hoe lang wordt gepauzeerd voordat de volgende herhaling begint.";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.streaming.description" = "Bespaart opslagruimte door audio te streamen, maar vereist een internetverbinding.";
-// Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Audio streamen";
+// Metadata: Translated by AI; human review required.
+"audio.playback.title" = "Audioweergave";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.page" = "Het afspelen gaat door tot het einde van de huidige pagina. Zonder streamen worden die verzen eerst gedownload; streamen bespaart ruimte, maar vereist een internetverbinding.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.surah" = "Het afspelen gaat door tot het einde van de huidige soera. Zonder streamen worden die verzen eerst gedownload; streamen bespaart ruimte, maar vereist een internetverbinding.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.juz" = "Het afspelen gaat door tot het einde van de huidige juz'. Zonder streamen worden die verzen eerst gedownload; streamen bespaart ruimte, maar vereist een internetverbinding.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quran" = "Het afspelen gaat door tot het einde van de Koran. Zonder streamen worden die verzen eerst gedownload; streamen bespaart ruimte, maar vereist een internetverbinding.";
+// Metadata: Translated by AI; human review required.
+"audio-manager.stream-hint" = "Zet ‘Audio streamen’ aan in ‘Audioweergave’ om af te spelen zonder te downloaden.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Pauze na elke ayah";
 // Metadata: Translated by ChatGPT; human review required.

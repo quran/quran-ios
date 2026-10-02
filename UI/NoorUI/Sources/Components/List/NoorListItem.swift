@@ -53,6 +53,7 @@ public struct NoorListItem: View {
         // MARK: Internal
 
         let image: Image
+        /// The symbol or image icon color; `nil` uses the app tint. App icon previews ignore it.
         let color: Color?
         let appIconLength: CGFloat?
     }

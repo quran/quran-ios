@@ -86,7 +86,7 @@ private struct SearchViewUI: View {
         NoorList(listType: .searching) {
             NoorSection(autocompletions.map(SelfIdentifiable.init)) { item in
                 NoorListItem(
-                    image: .init(.search),
+                    image: .init(.search, color: .secondaryLabel),
                     title: autocompletionText(of: item.value),
                     action: .sync { search(item.value.text) }
                 )
@@ -99,7 +99,7 @@ private struct SearchViewUI: View {
         NoorList {
             NoorSection(title: l("search.recents.title"), recents.map(SelfIdentifiable.init)) { item in
                 NoorListItem(
-                    image: .init(.search),
+                    image: .init(.search, color: .secondaryLabel),
                     title: .text(item.value),
                     action: .sync { search(item.value) }
                 )
@@ -107,7 +107,7 @@ private struct SearchViewUI: View {
 
             NoorSection(title: l("search.popular.title"), populars.map(SelfIdentifiable.init)) { item in
                 NoorListItem(
-                    image: .init(.search),
+                    image: .init(.search, color: .secondaryLabel),
                     title: .text(item.value),
                     action: .sync { search(item.value) }
                 )

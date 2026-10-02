@@ -327,6 +327,7 @@
 // Audio
 "audio.end-at" = "الانتهاء عند";
 "audio.end-at.custom" = "مخصص";
+"audio.end-at.description" = "اختيار الصفحة أو السورة أو الجزء أو القرآن يحدّث أيضًا إعداد «تحميل وتشغيل الصوت لنهاية».";
 "audio.playback-ayah-range" = "نطاق تشغيل الآيات";
 "audio.playback-speed" = "سرعة التشغيل";
 

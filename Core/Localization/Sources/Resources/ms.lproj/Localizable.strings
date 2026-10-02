@@ -365,6 +365,8 @@
 "audio.end-at" = "Tamat pada";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Tersuai";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "Halaman, Surah, Juz' dan Al-Quran turut mengemas kini tetapan “Muat turun/Main sehingga” anda.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "Julat ayat untuk dimainkan";
 // Metadata: Translated by ChatGPT; human review required.

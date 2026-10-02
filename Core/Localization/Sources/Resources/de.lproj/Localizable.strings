@@ -382,6 +382,8 @@
 "audio.end-at" = "Ende bei";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Benutzerdefiniert";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "Seite, Sure, Juz' und Koran aktualisieren auch deine Einstellung „Herunterladen/Abspielen bis zu“.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "Wiedergabebereich der Ayahs";
 // Metadata: Translated by ChatGPT; human review required.

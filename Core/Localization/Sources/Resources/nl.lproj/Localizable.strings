@@ -295,6 +295,8 @@
 "audio.end-at" = "Eindigen bij";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Aangepast";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "Pagina, Soera, Juz' en Koran passen ook je instelling ‘Downloaden/Afspelen tot’ aan.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "Bereik van ayahs afspelen";
 // Metadata: Translated by ChatGPT; human review required.

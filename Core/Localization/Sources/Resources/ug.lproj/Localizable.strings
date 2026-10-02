@@ -385,6 +385,8 @@
 "audio.end-at" = "ئاخىرلاشتۇرۇش ئورنى";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "ئىختىيارىي";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "بەت، سۈرە، پارە ۋە قۇرئان «چۈشۈرۈش/قويۇشقا قەدەر» تەڭشىكىڭىزنىمۇ يېڭىلايدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "قويۇلىدىغان ئايەت دائىرىسى";
 // Metadata: Translated by ChatGPT; human review required.

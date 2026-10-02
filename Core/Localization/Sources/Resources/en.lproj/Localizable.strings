@@ -144,6 +144,7 @@
 "audio.playback-speed" = "Playback Speed";
 "audio.end-at" = "End at";
 "audio.end-at.custom" = "Custom";
+"audio.end-at.description" = "Page, Surah, Juz' and Quran also update your Play up to setting.";
 
 "audio.download-play-amount" = "Download/Play up to";
 "audio.streaming.title" = "Stream Audio";

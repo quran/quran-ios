@@ -383,6 +383,8 @@
 "audio.end-at" = "结束于";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "自定义";
+// Metadata: Translated by AI; human review required.
+"audio.end-at.description" = "选择页、章、卷或古兰经时，也会更新“下载/播放到”设置。";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-ayah-range" = "播放经文范围";
 // Metadata: Translated by ChatGPT; human review required.

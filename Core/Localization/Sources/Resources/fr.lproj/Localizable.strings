@@ -228,6 +228,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "jusqu'à la fin de la page";
 // Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quarter" = "jusqu'à la fin du ¼ de Hizb";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-hizb" = "jusqu'à la fin du Hizb";
+// Metadata: Translated by AI; human review required.
 "ayah.menu.play-end-quran" = "jusqu'à la fin du Coran";
 "ayah.menu.repeat" = "Répéter";
 // Metadata: Translated by ChatGPT; human review required.
@@ -375,10 +379,12 @@
 "audio.delay.off" = "Désactivé";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.play-up-to" = "Lire jusqu'à";
+// Metadata: Translated by AI; human review required.
+"audio.play-up-to.quarter" = "¼ de Hizb";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Personnalisé";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Page, Sourate, Juz' et Coran mettent aussi à jour votre réglage « Lire jusqu'à ».";
+"audio.end-at.description" = "Choisir une option autre que « Personnalisé » met aussi à jour votre réglage « Lire jusqu'à ».";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Récitant";
 "audio.playback-ayah-range" = "Plage d’ayahs à lire";
@@ -406,6 +412,10 @@
 "audio.playback.title" = "Lecture audio";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "La lecture continue jusqu'à la fin de la page en cours. Sans diffusion, ces versets sont d'abord téléchargés ; la diffusion économise de l'espace mais nécessite une connexion internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quarter" = "La lecture continue jusqu'à la fin du ¼ de hizb en cours. Sans diffusion, ces versets sont d'abord téléchargés ; la diffusion économise de l'espace mais nécessite une connexion internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.hizb" = "La lecture continue jusqu'à la fin du hizb en cours. Sans diffusion, ces versets sont d'abord téléchargés ; la diffusion économise de l'espace mais nécessite une connexion internet.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.surah" = "La lecture continue jusqu'à la fin de la sourate en cours. Sans diffusion, ces versets sont d'abord téléchargés ; la diffusion économise de l'espace mais nécessite une connexion internet.";
 // Metadata: Translated by AI; human review required.

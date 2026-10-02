@@ -2,6 +2,7 @@
 import AnnotationsService
 import Localization
 import QuranAnnotations
+import QuranAudioKit
 import QuranKit
 import QuranTextKit
 import UIKit
@@ -122,6 +123,18 @@ final class AyahMenuViewModelTests: XCTestCase {
 
         XCTAssertEqual(listener.shownNoteVerses, verses)
         XCTAssertFalse(listener.isAddingNewNote)
+    }
+
+    func test_playSubtitle_followsSavedQuarterAndHizb() {
+        let originalAudioEnd = AudioPreferences.shared.audioEnd
+        defer { AudioPreferences.shared.audioEnd = originalAudioEnd }
+        let sut = makeSUT(verses: [verses[0]])
+
+        AudioPreferences.shared.audioEnd = .quarter
+        XCTAssertEqual(sut.playSubtitle, l("ayah.menu.play-end-quarter"))
+
+        AudioPreferences.shared.audioEnd = .hizb
+        XCTAssertEqual(sut.playSubtitle, l("ayah.menu.play-end-hizb"))
     }
 
     private var verses: [AyahNumber] {

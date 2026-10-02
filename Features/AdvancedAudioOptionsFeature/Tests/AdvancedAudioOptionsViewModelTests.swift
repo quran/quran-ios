@@ -92,6 +92,91 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(sut.endAt, .surah)
     }
 
+    func test_init_prefersSavedQuarter_whenEndIsTheExactQuarterEnd() {
+        // Quarter 9 ends at Al-Baqarah 157, mid-page.
+        AudioPreferences.shared.audioEnd = .quarter
+
+        let sut = makeSUT(start: ayah(2, 154), end: ayah(2, 157))
+
+        XCTAssertEqual(sut.endAt, .quarter)
+    }
+
+    func test_init_prefersSavedHizb_whenEndIsTheExactHizbEnd() {
+        // Hizb 1 ends at Al-Baqarah 74, mid-page.
+        AudioPreferences.shared.audioEnd = .hizb
+
+        let sut = makeSUT(start: ayah(2, 70), end: ayah(2, 74))
+
+        XCTAssertEqual(sut.endAt, .hizb)
+    }
+
+    func test_init_prefersSavedQuarter_overJuz_whenTheyEndTogether() {
+        // Juz' 1 ends at Al-Baqarah 141, which also ends its last hizb and quarter.
+        AudioPreferences.shared.audioEnd = .quarter
+
+        let sut = makeSUT(start: ayah(2, 124), end: ayah(2, 141))
+
+        XCTAssertEqual(sut.endAt, .quarter)
+    }
+
+    func test_init_doesNotMatchSavedQuarter_onThePageFlooredEnd() {
+        // Quarter and Hizb end exactly, so the end of the start page isn't a quarter end.
+        AudioPreferences.shared.audioEnd = .quarter
+        let start = ayah(2, 154)
+        let pageEnd = PageBasedLastAyahFinder().findLastAyah(startAyah: start)
+
+        let sut = makeSUT(start: start, end: pageEnd)
+
+        XCTAssertEqual(sut.endAt, .page)
+    }
+
+    func test_init_fallsBackToJuz_overHizbAndQuarter_whenTheyEndTogether() {
+        AudioPreferences.shared.audioEnd = .sura
+
+        let sut = makeSUT(start: ayah(2, 124), end: ayah(2, 141))
+
+        XCTAssertEqual(sut.endAt, .juz)
+    }
+
+    func test_init_fallsBackToHizb_overQuarter_whenTheyEndTogether() {
+        // Al-Baqarah 60 starts hizb 1's last quarter; both end at 74.
+        AudioPreferences.shared.audioEnd = .quran
+
+        let sut = makeSUT(start: ayah(2, 60), end: ayah(2, 74))
+
+        XCTAssertEqual(sut.endAt, .hizb)
+    }
+
+    func test_init_fallsBackToQuarter_overPage_whenTheStartPageEndsTheQuarter() {
+        // Page 16 (Al-Baqarah 102–105) ends quarter 6, which runs from 92 to 105.
+        let start = ayah(2, 102)
+        XCTAssertEqual(PageBasedLastAyahFinder().findLastAyah(startAyah: start), ayah(2, 105))
+        AudioPreferences.shared.audioEnd = .quran
+
+        let sut = makeSUT(start: start, end: ayah(2, 105))
+
+        XCTAssertEqual(sut.endAt, .quarter)
+    }
+
+    func test_init_fallsBackToHizb_overQuarterAndPage_whenTheStartPageEndsTheHizb() {
+        // Page 31 (Al-Baqarah 197–202) ends quarter 12 and hizb 3, which runs from 142 to 202.
+        let start = ayah(2, 197)
+        XCTAssertEqual(PageBasedLastAyahFinder().findLastAyah(startAyah: start), ayah(2, 202))
+        AudioPreferences.shared.audioEnd = .quran
+
+        let sut = makeSUT(start: start, end: ayah(2, 202))
+
+        XCTAssertEqual(sut.endAt, .hizb)
+    }
+
+    func test_init_fallsBackToQuarter_whenOnlyTheQuarterEnds() {
+        AudioPreferences.shared.audioEnd = .quran
+
+        let sut = makeSUT(start: ayah(2, 154), end: ayah(2, 157))
+
+        XCTAssertEqual(sut.endAt, .quarter)
+    }
+
     func test_init_fallsBackToDeduction_whenSavedAudioEndDoesNotMatch() {
         let alFatihah = quran.suras[0]
         AudioPreferences.shared.audioEnd = .quran
@@ -113,7 +198,9 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
     }
 
     func test_play_savesEveryBoundaryChoice_asMatchingAudioEnd() {
-        let expected: [(EndAtChoice, AudioEnd)] = [(.page, .page), (.surah, .sura), (.juz, .juz), (.quran, .quran)]
+        let expected: [(EndAtChoice, AudioEnd)] = [
+            (.page, .page), (.quarter, .quarter), (.hizb, .hizb), (.surah, .sura), (.juz, .juz), (.quran, .quran),
+        ]
         for (choice, audioEnd) in expected {
             AudioPreferences.shared.audioEnd = audioEnd == .juz ? .page : .juz
             let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
@@ -202,6 +289,24 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(sut.toVerse, PageBasedLastAyahFinder().findLastAyah(startAyah: start))
     }
 
+    func test_setEndAt_hizb_updatesToVerseToTheExactHizbEnd() {
+        let sut = makeSUT(start: ayah(2, 70), end: ayah(2, 70))
+
+        sut.setEndAt(.hizb)
+
+        XCTAssertEqual(sut.toVerse, ayah(2, 74))
+    }
+
+    func test_updateFromVerseTo_reAppliesQuarter_withoutThePageFloor() {
+        let sut = makeSUT(start: ayah(2, 142), end: ayah(2, 142))
+        sut.setEndAt(.quarter)
+        XCTAssertEqual(sut.toVerse, ayah(2, 157))
+
+        sut.updateFromVerseTo(ayah(2, 158))
+
+        XCTAssertEqual(sut.toVerse, ayah(2, 176))
+    }
+
     func test_setEndAt_custom_doesNotChangeToVerse() {
         let start = quran.suras[0].firstVerse
         let originalEnd = start.next!
@@ -241,6 +346,18 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
 
         XCTAssertEqual(sut.toVerse, alFatihah.lastVerse)
         XCTAssertEqual(AudioPreferences.shared.audioEnd, .sura)
+    }
+
+    func test_selectPlayUpTo_quarter_endsToExactlyAndIsSavedOnPlay() {
+        // Quarter 9 ends at Al-Baqarah 157, mid-page 24 (2:154–163).
+        let start = ayah(2, 154)
+        let sut = makeSUT(start: start, end: start)
+
+        sut.selectPlayUpTo(.quarter)
+        sut.play()
+
+        XCTAssertEqual(sut.toVerse, ayah(2, 157))
+        XCTAssertEqual(AudioPreferences.shared.audioEnd, .quarter)
     }
 
     func test_selectPlayUpTo_currentChoice_keepsToAndAudioEnd() {
@@ -435,18 +552,20 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
 
     // MARK: - EndAtChoice
 
-    func test_endAtChoice_menuChoices_listPageJuzSurahQuran() {
-        XCTAssertEqual(EndAtChoice.menuChoices, [.page, .juz, .surah, .quran])
+    func test_endAtChoice_menuChoices_goFromSmallestToLargest() {
+        XCTAssertEqual(EndAtChoice.menuChoices, [.page, .quarter, .hizb, .juz, .surah, .quran])
     }
 
     func test_endAtChoice_initFromAudioEnd_roundTrips() {
-        for audioEnd in [AudioEnd.page, .sura, .juz, .quran] {
+        for audioEnd in [AudioEnd.page, .quarter, .hizb, .sura, .juz, .quran] {
             XCTAssertEqual(EndAtChoice(audioEnd).audioEnd, audioEnd)
         }
     }
 
     func test_endAtChoice_audioEndMapping() {
         XCTAssertEqual(EndAtChoice.page.audioEnd, .page)
+        XCTAssertEqual(EndAtChoice.quarter.audioEnd, .quarter)
+        XCTAssertEqual(EndAtChoice.hizb.audioEnd, .hizb)
         XCTAssertEqual(EndAtChoice.surah.audioEnd, .sura)
         XCTAssertEqual(EndAtChoice.juz.audioEnd, .juz)
         XCTAssertEqual(EndAtChoice.quran.audioEnd, .quran)
@@ -457,6 +576,10 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
 
     private let quran = Quran.hafsMadani1405
     private var originalAudioEnd: AudioEnd?
+
+    private func ayah(_ sura: Int, _ ayah: Int) -> AyahNumber {
+        AyahNumber(quran: quran, sura: sura, ayah: ayah)!
+    }
 
     private func makeSUT(start: AyahNumber, end: AyahNumber, verseDelay: VerseDelay = .none) -> AdvancedAudioOptionsViewModel {
         AdvancedAudioOptionsViewModel(

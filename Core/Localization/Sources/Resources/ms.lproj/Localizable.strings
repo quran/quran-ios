@@ -211,6 +211,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "hingga akhir halaman";
 // Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quarter" = "hingga akhir ¼ Hizb";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-hizb" = "hingga akhir Hizb";
+// Metadata: Translated by AI; human review required.
 "ayah.menu.play-end-quran" = "hingga akhir Al-Quran";
 "ayah.menu.repeat" = "Ulang";
 // Metadata: Translated by ChatGPT; human review required.
@@ -358,10 +362,12 @@
 "audio.delay.off" = "Mati";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.play-up-to" = "Main sehingga";
+// Metadata: Translated by AI; human review required.
+"audio.play-up-to.quarter" = "¼ Hizb";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Tersuai";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Halaman, Surah, Juz' dan Al-Quran turut mengemas kini tetapan “Main sehingga” anda.";
+"audio.end-at.description" = "Memilih pilihan selain “Tersuai” turut mengemas kini tetapan “Main sehingga” anda.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Qari";
 "audio.playback-ayah-range" = "Julat ayat untuk dimainkan";
@@ -389,6 +395,10 @@
 "audio.playback.title" = "Main balik audio";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Main balik diteruskan hingga akhir halaman semasa. Jika penstriman dimatikan, ayat-ayat itu dimuat turun dahulu; penstriman menjimatkan ruang tetapi memerlukan sambungan internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quarter" = "Main balik diteruskan hingga akhir ¼ hizb semasa. Jika penstriman dimatikan, ayat-ayat itu dimuat turun dahulu; penstriman menjimatkan ruang tetapi memerlukan sambungan internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.hizb" = "Main balik diteruskan hingga akhir hizb semasa. Jika penstriman dimatikan, ayat-ayat itu dimuat turun dahulu; penstriman menjimatkan ruang tetapi memerlukan sambungan internet.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.surah" = "Main balik diteruskan hingga akhir surah semasa. Jika penstriman dimatikan, ayat-ayat itu dimuat turun dahulu; penstriman menjimatkan ruang tetapi memerlukan sambungan internet.";
 // Metadata: Translated by AI; human review required.

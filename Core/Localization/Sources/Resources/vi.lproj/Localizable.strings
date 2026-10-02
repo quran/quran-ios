@@ -170,6 +170,10 @@
 "ayah.menu.play-end-surah" = "đến cuối Surah";
 "ayah.menu.play-end-page" = "đến cuối Trang";
 // Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quarter" = "đến cuối ¼ Hizb";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-hizb" = "đến cuối Hizb";
+// Metadata: Translated by AI; human review required.
 "ayah.menu.play-end-quran" = "đến cuối Kinh Quran";
 "ayah.menu.repeat" = "Lặp lại";
 "ayah.menu.selected-verse" = "câu đã chọn";
@@ -287,10 +291,12 @@
 "audio.delay.off" = "Tắt";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.play-up-to" = "Phát đến";
+// Metadata: Translated by AI; human review required.
+"audio.play-up-to.quarter" = "¼ Hizb";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Tùy chỉnh";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Trang, Surah, Juz' và Kinh Quran cũng cập nhật cài đặt “Phát đến” của bạn.";
+"audio.end-at.description" = "Chọn một tùy chọn ngoài “Tùy chỉnh” cũng cập nhật cài đặt “Phát đến” của bạn.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Người xướng đọc";
 "audio.playback-ayah-range" = "Phạm vi ayah phát";
@@ -318,6 +324,10 @@
 "audio.playback.title" = "Phát âm thanh";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Phát tiếp đến cuối trang hiện tại. Khi tắt phát trực tuyến, các câu đó sẽ được tải xuống trước; phát trực tuyến tiết kiệm dung lượng nhưng cần kết nối internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quarter" = "Phát tiếp đến cuối ¼ hizb hiện tại. Khi tắt phát trực tuyến, các câu đó sẽ được tải xuống trước; phát trực tuyến tiết kiệm dung lượng nhưng cần kết nối internet.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.hizb" = "Phát tiếp đến cuối hizb hiện tại. Khi tắt phát trực tuyến, các câu đó sẽ được tải xuống trước; phát trực tuyến tiết kiệm dung lượng nhưng cần kết nối internet.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.surah" = "Phát tiếp đến cuối surah hiện tại. Khi tắt phát trực tuyến, các câu đó sẽ được tải xuống trước; phát trực tuyến tiết kiệm dung lượng nhưng cần kết nối internet.";
 // Metadata: Translated by AI; human review required.

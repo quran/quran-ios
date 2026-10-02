@@ -228,6 +228,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "bis zum Ende der Seite";
 // Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quarter" = "bis zum Ende des ¼ Hizb";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-hizb" = "bis zum Ende des Hizb";
+// Metadata: Translated by AI; human review required.
 "ayah.menu.play-end-quran" = "bis zum Ende des Korans";
 "ayah.menu.repeat" = "Wiederholen";
 // Metadata: Translated by ChatGPT; human review required.
@@ -375,10 +379,12 @@
 "audio.delay.off" = "Aus";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.play-up-to" = "Abspielen bis";
+// Metadata: Translated by AI; human review required.
+"audio.play-up-to.quarter" = "¼ Hizb";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Benutzerdefiniert";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Seite, Sure, Juz' und Koran aktualisieren auch deine Einstellung „Abspielen bis“.";
+"audio.end-at.description" = "Jede Option außer „Benutzerdefiniert“ aktualisiert auch deine Einstellung „Abspielen bis“.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Rezitator";
 "audio.playback-ayah-range" = "Wiedergabebereich der Ayahs";
@@ -406,6 +412,10 @@
 "audio.playback.title" = "Audiowiedergabe";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Die Wiedergabe läuft bis zum Ende der aktuellen Seite. Ohne Streaming werden diese Verse zuerst heruntergeladen; Streaming spart Speicherplatz, braucht aber eine Internetverbindung.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quarter" = "Die Wiedergabe läuft bis zum Ende des aktuellen ¼ Hizb. Ohne Streaming werden diese Verse zuerst heruntergeladen; Streaming spart Speicherplatz, braucht aber eine Internetverbindung.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.hizb" = "Die Wiedergabe läuft bis zum Ende des aktuellen Hizb. Ohne Streaming werden diese Verse zuerst heruntergeladen; Streaming spart Speicherplatz, braucht aber eine Internetverbindung.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.surah" = "Die Wiedergabe läuft bis zum Ende der aktuellen Sure. Ohne Streaming werden diese Verse zuerst heruntergeladen; Streaming spart Speicherplatz, braucht aber eine Internetverbindung.";
 // Metadata: Translated by AI; human review required.

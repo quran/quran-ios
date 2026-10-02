@@ -170,6 +170,10 @@
 "ayah.menu.play-end-surah" = "tot het einde van Soera";
 "ayah.menu.play-end-page" = "tot het einde van Pagina";
 // Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quarter" = "tot het einde van ¼ Hizb";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-hizb" = "tot het einde van Hizb";
+// Metadata: Translated by AI; human review required.
 "ayah.menu.play-end-quran" = "tot het einde van de Koran";
 "ayah.menu.repeat" = "Herhaal";
 "ayah.menu.selected-verse" = "geselecteerd vers";
@@ -290,10 +294,12 @@
 "audio.delay.off" = "Uit";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.play-up-to" = "Afspelen tot";
+// Metadata: Translated by AI; human review required.
+"audio.play-up-to.quarter" = "¼ Hizb";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Aangepast";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "Pagina, Soera, Juz' en Koran passen ook je instelling ‘Afspelen tot’ aan.";
+"audio.end-at.description" = "Een andere optie dan ‘Aangepast’ kiezen past ook je instelling ‘Afspelen tot’ aan.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "Reciteerder";
 "audio.playback-ayah-range" = "Bereik van ayahs afspelen";
@@ -321,6 +327,10 @@
 "audio.playback.title" = "Audioweergave";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Het afspelen gaat door tot het einde van de huidige pagina. Zonder streamen worden die verzen eerst gedownload; streamen bespaart ruimte, maar vereist een internetverbinding.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quarter" = "Het afspelen gaat door tot het einde van de huidige ¼ hizb. Zonder streamen worden die verzen eerst gedownload; streamen bespaart ruimte, maar vereist een internetverbinding.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.hizb" = "Het afspelen gaat door tot het einde van de huidige hizb. Zonder streamen worden die verzen eerst gedownload; streamen bespaart ruimte, maar vereist een internetverbinding.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.surah" = "Het afspelen gaat door tot het einde van de huidige soera. Zonder streamen worden die verzen eerst gedownload; streamen bespaart ruimte, maar vereist een internetverbinding.";
 // Metadata: Translated by AI; human review required.

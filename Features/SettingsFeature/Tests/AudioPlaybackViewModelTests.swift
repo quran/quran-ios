@@ -51,6 +51,17 @@ final class AudioPlaybackViewModelTests: XCTestCase {
         XCTAssertEqual(audioPreferences.audioEnd, .page)
     }
 
+    func test_playUpTo_savesQuarterAndHizb() {
+        audioPreferences.audioEnd = .juz
+        let sut = makeSUT()
+
+        sut.audioEnd = .quarter
+        XCTAssertEqual(audioPreferences.audioEnd, .quarter)
+
+        sut.audioEnd = .hizb
+        XCTAssertEqual(audioPreferences.audioEnd, .hizb)
+    }
+
     func test_streamAudio_savesThePreference() {
         audioPreferences.streamingEnabled = false
         let sut = makeSUT()
@@ -90,6 +101,8 @@ final class AudioPlaybackViewModelTests: XCTestCase {
         let sut = makeSUT()
         let expectedKeys: [AudioEnd: String] = [
             .page: "audio.playback.footer.page",
+            .quarter: "audio.playback.footer.quarter",
+            .hizb: "audio.playback.footer.hizb",
             .sura: "audio.playback.footer.surah",
             .juz: "audio.playback.footer.juz",
             .quran: "audio.playback.footer.quran",

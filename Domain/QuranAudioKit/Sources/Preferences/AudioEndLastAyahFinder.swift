@@ -9,8 +9,9 @@ import QuranAudio
 import QuranKit
 
 /// Finds where playback ends for an `AudioEnd`: the end of its boundary, but
-/// never before the end of the start page, so playback always covers the page
-/// it starts on.
+/// for page, surah, juz' and Quran never before the end of the start page, so
+/// playback covers the page it starts on. ¼ Hizb and Hizb end exactly on their
+/// boundary, since they often end mid-page.
 public struct AudioEndLastAyahFinder: LastAyahFinder {
     // MARK: Lifecycle
 
@@ -23,8 +24,11 @@ public struct AudioEndLastAyahFinder: LastAyahFinder {
     public let audioEnd: AudioEnd
 
     public func findLastAyah(startAyah: AyahNumber) -> AyahNumber {
-        let pageLastVerse = PageBasedLastAyahFinder().findLastAyah(startAyah: startAyah)
         let lastVerse = audioEnd.boundaryLastAyahFinder.findLastAyah(startAyah: startAyah)
+        guard audioEnd.floorsToStartPage else {
+            return lastVerse
+        }
+        let pageLastVerse = PageBasedLastAyahFinder().findLastAyah(startAyah: startAyah)
         return max(lastVerse, pageLastVerse)
     }
 }
@@ -37,6 +41,16 @@ extension AudioEnd {
         case .sura: return SuraBasedLastAyahFinder()
         case .page: return PageBasedLastAyahFinder()
         case .quran: return QuranBasedLastAyahFinder()
+        case .quarter: return QuarterBasedLastAyahFinder()
+        case .hizb: return HizbBasedLastAyahFinder()
+        }
+    }
+
+    /// Whether playback runs on to at least the end of the start page.
+    var floorsToStartPage: Bool {
+        switch self {
+        case .page, .sura, .juz, .quran: true
+        case .quarter, .hizb: false
         }
     }
 }

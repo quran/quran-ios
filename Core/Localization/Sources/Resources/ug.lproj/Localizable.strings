@@ -230,6 +230,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.play-end-page" = "بەت ئاخىرىغىچە";
 // Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-quarter" = "¼ ھىزب ئاخىرىغىچە";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.play-end-hizb" = "ھىزب ئاخىرىغىچە";
+// Metadata: Translated by AI; human review required.
 "ayah.menu.play-end-quran" = "قۇرئان ئاخىرىغىچە";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.repeat" = "تەكرارلاش";
@@ -378,10 +382,12 @@
 "audio.delay.off" = "تاقاق";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.play-up-to" = "قويۇش چېكى";
+// Metadata: Translated by AI; human review required.
+"audio.play-up-to.quarter" = "¼ ھىزب";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "ئىختىيارىي";
 // Metadata: Translated by AI; human review required.
-"audio.end-at.description" = "بەت، سۈرە، پارە ۋە قۇرئان «قويۇش چېكى» تەڭشىكىڭىزنىمۇ يېڭىلايدۇ.";
+"audio.end-at.description" = "«ئىختىيارىي»دىن باشقا تاللاش «قويۇش چېكى» تەڭشىكىڭىزنىمۇ يېڭىلايدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.reciter" = "قارى";
 "audio.playback-ayah-range" = "قويۇلىدىغان ئايەت دائىرىسى";
@@ -409,6 +415,10 @@
 "audio.playback.title" = "ئاۋاز قويۇش";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "قويۇش نۆۋەتتىكى بەتنىڭ ئاخىرىغىچە داۋاملىشىدۇ. تور ئارقىلىق قويۇش تاقالغاندا، ئۇ ئايەتلەر ئالدى بىلەن چۈشۈرۈلىدۇ؛ تور ئارقىلىق قويۇش بوشلۇق تېجەيدۇ، ئەمما تور ئۇلىنىشىنى تەلەپ قىلىدۇ.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.quarter" = "قويۇش نۆۋەتتىكى ¼ ھىزبنىڭ ئاخىرىغىچە داۋاملىشىدۇ. تور ئارقىلىق قويۇش تاقالغاندا، ئۇ ئايەتلەر ئالدى بىلەن چۈشۈرۈلىدۇ؛ تور ئارقىلىق قويۇش بوشلۇق تېجەيدۇ، ئەمما تور ئۇلىنىشىنى تەلەپ قىلىدۇ.";
+// Metadata: Translated by AI; human review required.
+"audio.playback.footer.hizb" = "قويۇش نۆۋەتتىكى ھىزبنىڭ ئاخىرىغىچە داۋاملىشىدۇ. تور ئارقىلىق قويۇش تاقالغاندا، ئۇ ئايەتلەر ئالدى بىلەن چۈشۈرۈلىدۇ؛ تور ئارقىلىق قويۇش بوشلۇق تېجەيدۇ، ئەمما تور ئۇلىنىشىنى تەلەپ قىلىدۇ.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.surah" = "قويۇش نۆۋەتتىكى سۈرىنىڭ ئاخىرىغىچە داۋاملىشىدۇ. تور ئارقىلىق قويۇش تاقالغاندا، ئۇ ئايەتلەر ئالدى بىلەن چۈشۈرۈلىدۇ؛ تور ئارقىلىق قويۇش بوشلۇق تېجەيدۇ، ئەمما تور ئۇلىنىشىنى تەلەپ قىلىدۇ.";
 // Metadata: Translated by AI; human review required.

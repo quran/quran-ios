@@ -380,19 +380,20 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "关闭";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.end-at" = "结束于";
+"audio.play-up-to" = "播放到";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "自定义";
 // Metadata: Translated by AI; human review required.
 "audio.end-at.description" = "选择页、章、卷或古兰经时，也会更新“下载/播放到”设置。";
 // Metadata: Translated by ChatGPT; human review required.
+"audio.reciter" = "诵经者";
 "audio.playback-ayah-range" = "播放经文范围";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-speed" = "播放速度";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repeat-count" = "重复次数";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.repetition-delay" = "重复间隔（秒）";
+"audio.repetition-delay" = "重复间隔";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.10s" = "10秒";
 // Metadata: Translated by ChatGPT; human review required.

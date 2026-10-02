@@ -381,19 +381,20 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "خاموش";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.end-at" = "پایان در";
+"audio.play-up-to" = "پخش تا";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "سفارشی";
 // Metadata: Translated by AI; human review required.
 "audio.end-at.description" = "صفحه، سوره، جزء و قرآن تنظیم «دانلود/پخش تا» را هم به‌روزرسانی می‌کنند.";
 // Metadata: Translated by ChatGPT; human review required.
+"audio.reciter" = "قاری";
 "audio.playback-ayah-range" = "محدودهٔ آیات پخش";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-speed" = "سرعت پخش";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repeat-count" = "تعداد تکرار";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.repetition-delay" = "مکث بین تکرارها (ثانیه)";
+"audio.repetition-delay" = "مکث بین تکرارها";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.10s" = "۱۰ ثانیه";
 // Metadata: Translated by ChatGPT; human review required.

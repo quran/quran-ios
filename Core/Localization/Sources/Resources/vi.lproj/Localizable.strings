@@ -289,19 +289,20 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "Tắt";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.end-at" = "Kết thúc tại";
+"audio.play-up-to" = "Phát đến";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Tùy chỉnh";
 // Metadata: Translated by AI; human review required.
 "audio.end-at.description" = "Trang, Surah, Juz' và Kinh Quran cũng cập nhật cài đặt “Tải xuống/Phát đến” của bạn.";
 // Metadata: Translated by ChatGPT; human review required.
+"audio.reciter" = "Người xướng đọc";
 "audio.playback-ayah-range" = "Phạm vi ayah phát";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-speed" = "Tốc độ phát";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repeat-count" = "Số lần lặp";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.repetition-delay" = "Khoảng nghỉ giữa các lần lặp (giây)";
+"audio.repetition-delay" = "Khoảng nghỉ giữa các lần lặp";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.10s" = "10 giây";
 // Metadata: Translated by ChatGPT; human review required.

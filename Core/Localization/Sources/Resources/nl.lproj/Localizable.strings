@@ -292,19 +292,20 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "Uit";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.end-at" = "Eindigen bij";
+"audio.play-up-to" = "Afspelen tot";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Aangepast";
 // Metadata: Translated by AI; human review required.
 "audio.end-at.description" = "Pagina, Soera, Juz' en Koran passen ook je instelling ‘Downloaden/Afspelen tot’ aan.";
 // Metadata: Translated by ChatGPT; human review required.
+"audio.reciter" = "Reciteerder";
 "audio.playback-ayah-range" = "Bereik van ayahs afspelen";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-speed" = "Afspeelsnelheid";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repeat-count" = "Aantal herhalingen";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.repetition-delay" = "Pauze tussen herhalingen (seconden)";
+"audio.repetition-delay" = "Pauze tussen herhalingen";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.10s" = "10 s";
 // Metadata: Translated by ChatGPT; human review required.

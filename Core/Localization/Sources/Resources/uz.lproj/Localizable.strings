@@ -381,19 +381,20 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "O‘chiq";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.end-at" = "Yakunlash joyi";
+"audio.play-up-to" = "Chalish chegarasi";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Maxsus";
 // Metadata: Translated by AI; human review required.
 "audio.end-at.description" = "Sahifa, Sura, Juz va Qurʼon “Yuklash/O'ynashgacha” sozlamangizni ham yangilaydi.";
 // Metadata: Translated by ChatGPT; human review required.
+"audio.reciter" = "Qori";
 "audio.playback-ayah-range" = "O‘qiladigan oyatlar oralig‘i";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-speed" = "Ijro tezligi";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repeat-count" = "Takrorlash soni";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.repetition-delay" = "Takrorlar orasidagi tanaffus (soniya)";
+"audio.repetition-delay" = "Takrorlar orasidagi tanaffus";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.10s" = "10 soniya";
 // Metadata: Translated by ChatGPT; human review required.

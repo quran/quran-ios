@@ -1,5 +1,5 @@
 //
-//  RepetitionDelay++.swift
+//  RepetitionDelay+Localization.swift
 //  Quran
 //
 
@@ -8,11 +8,11 @@ import Localization
 import QueuePlayer
 
 extension RepetitionDelay {
-    static var sorted: [RepetitionDelay] {
+    public static var sorted: [RepetitionDelay] {
         RepetitionDelay.allCases.sorted()
     }
 
-    var localizedDescription: String {
+    public var localizedDescription: String {
         switch self {
         case .none: return l("audio.delay.off")
         case .oneSecond: return l("audio.repetition-delay.1s")

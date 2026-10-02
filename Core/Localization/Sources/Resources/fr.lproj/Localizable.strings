@@ -379,19 +379,20 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.delay.off" = "Désactivé";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.end-at" = "Fin à";
+"audio.play-up-to" = "Lire jusqu'à";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.end-at.custom" = "Personnalisé";
 // Metadata: Translated by AI; human review required.
 "audio.end-at.description" = "Page, Sourate, Juz' et Coran mettent aussi à jour votre réglage « Télécharger/Lire jusqu'à ».";
 // Metadata: Translated by ChatGPT; human review required.
+"audio.reciter" = "Récitant";
 "audio.playback-ayah-range" = "Plage d’ayahs à lire";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playback-speed" = "Vitesse de lecture";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repeat-count" = "Nombre de répétitions";
 // Metadata: Translated by ChatGPT; human review required.
-"audio.repetition-delay" = "Pause entre les répétitions (secondes)";
+"audio.repetition-delay" = "Pause entre les répétitions";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.repetition-delay.10s" = "10 s";
 // Metadata: Translated by ChatGPT; human review required.

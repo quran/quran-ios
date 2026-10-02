@@ -23,6 +23,7 @@ struct AyahRangePicker: View {
         Group {
             BoundaryRow(
                 title: lAndroid("from"),
+                image: .rangeStart,
                 verse: fromVerse,
                 isExpanded: expandedBoundary == .from
             ) {
@@ -39,6 +40,7 @@ struct AyahRangePicker: View {
 
             BoundaryRow(
                 title: lAndroid("to"),
+                image: .rangeEnd,
                 verse: toVerse,
                 isExpanded: expandedBoundary == .to
             ) {
@@ -72,33 +74,23 @@ private extension AyahRangePicker {
 @MainActor
 private struct BoundaryRow: View {
     let title: String
+    let image: NoorSystemImage
     let verse: AyahNumber
     let isExpanded: Bool
     let action: @MainActor () -> Void
 
-    @ScaledMetric private var spacing: CGFloat = 8
-
     var body: some View {
-        Button(action: action) {
-            HStack(spacing: spacing) {
-                Text(title)
-                    .foregroundStyle(.primary)
-
-                Spacer(minLength: spacing)
-
-                let reference: MultipartText = "\(ayah: verse)"
-                reference
-                    .view(ofSize: .body, allowsWrapping: false)
-                    .foregroundStyle(isExpanded ? Color.accentColor : .secondary)
-
-                Image(systemName: "chevron.down")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(isExpanded ? Color.accentColor : Color(.tertiaryLabel))
-            }
-            .contentShape(Rectangle())
+        NoorExpandableRowHeader(
+            title: title,
+            image: image,
+            isExpanded: isExpanded,
+            accessibilityValue: verse.localizedName,
+            action: action
+        ) {
+            let reference: MultipartText = "\(ayah: verse)"
+            reference
+                .view(ofSize: .body, allowsWrapping: false)
         }
-        .buttonStyle(.plain)
-        .accessibilityValue(verse.localizedName)
     }
 }
 

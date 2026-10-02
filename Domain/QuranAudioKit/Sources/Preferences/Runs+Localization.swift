@@ -1,5 +1,5 @@
 //
-//  Runs++.swift
+//  Runs+Localization.swift
 //  Quran
 //
 //  Created by Afifi, Mohamed on 12/26/20.
@@ -11,7 +11,10 @@ import Localization
 import QuranAudio
 
 extension Runs {
-    var localizedDescription: String {
+    /// The repeat counts users pick from: Loop first, then 1× through 100×.
+    public static let choices: [Runs] = [.indefinite] + (1 ... 100).map(Runs.finite)
+
+    public var localizedDescription: String {
         switch self {
         case .finite(let count): return NumberFormatter.shared.format(count) + "×"
         case .indefinite: return lAndroid("repeatValues[3]")

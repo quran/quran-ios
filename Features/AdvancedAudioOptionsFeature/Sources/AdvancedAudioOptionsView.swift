@@ -10,6 +10,7 @@ import Localization
 import NoorUI
 import QueuePlayer
 import QuranAudio
+import QuranAudioKit
 import QuranKit
 import QuranLocalization
 import SwiftUI
@@ -37,7 +38,8 @@ private struct AdvancedAudioOptionsRootView: View {
             reciterName: viewModel.reciter.localizedName,
             fromVerse: viewModel.fromVerse,
             toVerse: viewModel.toVerse,
-            endAt: $viewModel.endAt,
+            endAt: viewModel.endAt,
+            playUpToSelection: viewModel.playUpToSelection,
             verseRuns: $viewModel.verseRuns,
             listRuns: $viewModel.listRuns,
             verseDelay: $viewModel.verseDelay,
@@ -47,7 +49,7 @@ private struct AdvancedAudioOptionsRootView: View {
             play: { viewModel.play() },
             updateFromVerseTo: { viewModel.updateFromVerseTo($0) },
             updateToVerseTo: { viewModel.updateToVerseTo($0) },
-            setEndAt: { viewModel.setEndAt($0) },
+            selectPlayUpTo: { viewModel.selectPlayUpTo($0) },
             updatePlaybackRate: { viewModel.updatePlaybackRate(to: $0) },
             recitersViewController: { viewModel.recitersViewController() }
         )
@@ -61,7 +63,8 @@ struct AdvancedAudioOptionsRootViewUI: View {
     let reciterName: String
     let fromVerse: AyahNumber
     let toVerse: AyahNumber
-    @Binding var endAt: EndAtChoice
+    let endAt: EndAtChoice
+    let playUpToSelection: EndAtChoice?
     @Binding var verseRuns: Runs
     @Binding var listRuns: Runs
     @Binding var verseDelay: VerseDelay
@@ -71,317 +74,114 @@ struct AdvancedAudioOptionsRootViewUI: View {
     let play: @MainActor @Sendable () -> Void
     let updateFromVerseTo: ItemAction<AyahNumber>
     let updateToVerseTo: ItemAction<AyahNumber>
-    let setEndAt: (EndAtChoice) -> Void
+    let selectPlayUpTo: (EndAtChoice) -> Void
     let updatePlaybackRate: (Float) -> Void
     let recitersViewController: () -> UIViewController
 
     @Environment(\.navigator) var navigator: Navigator?
 
     var body: some View {
-        Form {
-            Section {
-                ReciterRow(name: reciterName) {
-                    navigator?.push {
-                        StaticViewControllerRepresentable(viewController: recitersViewController())
+        NoorList {
+            NoorBasicSection {
+                NoorListItem(
+                    image: .init(.reciter),
+                    title: .text(l("audio.reciter")),
+                    subtitle: .init(text: .text(reciterName), location: .trailing),
+                    accessory: .disclosureIndicator,
+                    action: .sync {
+                        navigator?.push {
+                            StaticViewControllerRepresentable(viewController: recitersViewController())
+                        }
                     }
-                }
+                )
+
+                NoorMenuRow(
+                    title: l("audio.playback-speed"),
+                    image: .playbackSpeed,
+                    items: PlaybackSpeed.supportedRates,
+                    selection: playbackRateBinding,
+                    label: PlaybackSpeed.formatted
+                )
             }
 
-            Section {
+            NoorBasicSection(
+                title: l("audio.playback-ayah-range"),
+                footer: l("audio.end-at.description")
+            ) {
                 AyahRangePicker(
                     fromVerse: fromVerse,
                     toVerse: toVerse,
                     updateFromVerseTo: updateFromVerseTo,
                     updateToVerseTo: updateToVerseTo
                 )
-                EndAtRow(selection: endAtBinding)
-            } header: {
-                Text(l("audio.playback-ayah-range"))
-            } footer: {
-                Text(l("audio.end-at.description"))
+
+                NoorMenuRow(
+                    title: l("audio.play-up-to"),
+                    image: .playUpTo,
+                    items: EndAtChoice.menuChoices,
+                    selectedItem: playUpToSelection,
+                    value: endAt.localizedName,
+                    onSelect: selectPlayUpTo
+                ) { choice in
+                    Text(choice.localizedName)
+                }
             }
 
-            PlaybackSpeedSection(
-                rate: playbackRate,
-                onSelect: updatePlaybackRate
-            )
+            NoorBasicSection(
+                title: sectionTitle(lAndroid("play_each_verse")),
+                footer: l("audio.verse-delay.description")
+            ) {
+                RepeatCountRow(image: .repeatVerse, runs: $verseRuns)
 
-            PlayEachVerseSection(
-                verseRuns: $verseRuns,
-                verseDelay: $verseDelay
-            )
-            PlaySetChoicesSection(
-                listRuns: $listRuns,
-                repetitionDelay: $repetitionDelay
-            )
+                NoorMenuRow(
+                    title: l("audio.verse-delay"),
+                    image: .pauseDelay,
+                    items: VerseDelay.sorted,
+                    selection: $verseDelay,
+                    label: \.localizedDescription
+                )
+            }
+
+            NoorBasicSection(
+                title: sectionTitle(lAndroid("play_verses_range")),
+                footer: l("audio.repetition-delay.description")
+            ) {
+                RepeatCountRow(image: .repeatRange, runs: $listRuns)
+
+                NoorMenuRow(
+                    title: l("audio.repetition-delay"),
+                    image: .pauseDelay,
+                    items: RepetitionDelay.sorted,
+                    selection: $repetitionDelay,
+                    label: \.localizedDescription
+                )
+            }
         }
+        .noorListIconColumn()
+        .navigationTitle(l("audio.options"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: dismiss) {
-                    Text(lAndroid("cancel"))
-                }
-            }
+            CloseToolbarItem(action: dismiss)
 
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: play) {
-                    NoorSystemImage.play.image
-                }
-            }
+            PrimaryActionToolbarItem(
+                image: .play,
+                accessibilityLabel: lAndroid("play"),
+                action: play
+            )
         }
     }
 
     // MARK: Private
 
-    private var endAtBinding: Binding<EndAtChoice> {
+    private var playbackRateBinding: Binding<Float> {
         Binding(
-            get: { endAt },
-            set: { setEndAt($0) }
+            get: { playbackRate },
+            set: { updatePlaybackRate($0) }
         )
     }
-}
 
-// MARK: - Sections
-
-private struct PlaybackSpeedSection: View {
-    let rate: Float
-    let onSelect: (Float) -> Void
-
-    var body: some View {
-        Section(header: Text(l("audio.playback-speed"))) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(PlaybackSpeed.supportedRates, id: \.self) { value in
-                        ChoicePill(
-                            label: PlaybackSpeed.formatted(value),
-                            isSelected: value == rate
-                        ) {
-                            onSelect(value)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-private struct PlayEachVerseSection: View {
-    @Binding var verseRuns: Runs
-    @Binding var verseDelay: VerseDelay
-
-    var body: some View {
-        Section(header: Text(lAndroid("play_each_verse").replacingOccurrences(of: ":", with: ""))) {
-            RunsPicker(runs: $verseRuns)
-
-            VStack(alignment: .leading, spacing: 10) {
-                Text(l("audio.verse-delay"))
-                    .font(.footnote.weight(.medium))
-                    .foregroundStyle(.secondary)
-
-                SegmentedChoicesPicker(title: l("audio.verse-delay"), items: VerseDelay.sorted, selection: $verseDelay) {
-                    $0.localizedDescription
-                }
-
-                Text(l("audio.verse-delay.description"))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.vertical, 6)
-        }
-    }
-}
-
-private struct PlaySetChoicesSection: View {
-    @Binding var listRuns: Runs
-    @Binding var repetitionDelay: RepetitionDelay
-
-    var body: some View {
-        Section(header: Text(lAndroid("play_verses_range").replacingOccurrences(of: ":", with: ""))) {
-            RunsPicker(runs: $listRuns)
-
-            VStack(alignment: .leading, spacing: 10) {
-                Text(l("audio.repetition-delay"))
-                    .font(.footnote.weight(.medium))
-                    .foregroundStyle(.secondary)
-
-                SegmentedChoicesPicker(title: l("audio.repetition-delay"), items: RepetitionDelay.sorted, selection: $repetitionDelay) {
-                    $0.localizedDescription
-                }
-
-                Text(l("audio.repetition-delay.description"))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.vertical, 6)
-        }
-    }
-}
-
-private struct RunsPicker: View {
-    // MARK: Internal
-
-    @Binding var runs: Runs
-
-    @State private var isExpanded = false
-
-    @ScaledMetric private var pickerHeight: CGFloat = 150
-    @ScaledMetric private var spacing: CGFloat = 8
-
-    var body: some View {
-        Group {
-            Button {
-                withAnimation(NoorAnimation.standard) {
-                    isExpanded.toggle()
-                }
-            } label: {
-                HStack(spacing: spacing) {
-                    Text(l("audio.repeat-count"))
-                        .foregroundStyle(.primary)
-
-                    Spacer(minLength: spacing)
-
-                    selectedRunsLabel
-                        .foregroundStyle(isExpanded ? Color.accentColor : .secondary)
-
-                    Image(systemName: "chevron.down")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(isExpanded ? Color.accentColor : Color(.tertiaryLabel))
-                }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-
-            if isExpanded {
-                picker
-            }
-        }
-    }
-
-    // MARK: Private
-
-    @ViewBuilder
-    private var selectedRunsLabel: some View {
-        switch runs {
-        case .finite:
-            Text(runs.localizedDescription)
-        case .indefinite:
-            HStack {
-                Text(runs.localizedDescription.capitalized)
-                Image(systemName: "infinity")
-            }
-        }
-    }
-
-    private var picker: some View {
-        Picker(l("audio.repeat-count"), selection: $runs) {
-            HStack {
-                Text(Runs.indefinite.localizedDescription.capitalized)
-                Image(systemName: "infinity")
-            }
-            .tag(Runs.indefinite)
-
-            ForEach(1 ... 100, id: \.self) { count in
-                let option = Runs.finite(count)
-                Text(option.localizedDescription.capitalized)
-                    .tag(option)
-            }
-        }
-        .pickerStyle(.wheel)
-        .labelsHidden()
-        .frame(maxWidth: .infinity)
-        .frame(height: pickerHeight)
-        .clipped()
-    }
-}
-
-// MARK: - Rows
-
-private struct ReciterRow: View {
-    let name: String
-    let action: Action
-
-    var body: some View {
-        NoorListItem(
-            title: .text(name),
-            accessory: .disclosureIndicator,
-            action: .sync { action() }
-        )
-    }
-}
-
-private struct EndAtRow: View {
-    @Binding var selection: EndAtChoice
-
-    @ScaledMetric private var spacing: CGFloat = 8
-
-    var body: some View {
-        HStack(spacing: spacing) {
-            Text(l("audio.end-at"))
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .fixedSize()
-
-            SegmentedChoicesPicker(
-                title: l("audio.end-at"),
-                items: EndAtChoice.pickerChoices,
-                selection: $selection
-            ) { choice in
-                choice.localizedName
-            }
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-            .labelsHidden()
-            .controlSize(.small)
-            .tint(Color.secondary)
-            .opacity(0.75)
-            .frame(maxWidth: .infinity)
-        }
-        .padding(.vertical, spacing)
-    }
-}
-
-// MARK: - Pills
-
-private struct PillChoicesRow<Item: Hashable>: View {
-    let items: [Item]
-    @Binding var selection: Item
-    let label: (Item) -> String
-
-    var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack {
-                ForEach(items, id: \.self) { item in
-                    ChoicePill(label: label(item), isSelected: item == selection) {
-                        selection = item
-                    }
-                }
-            }
-        }
-    }
-}
-
-private struct ChoicePill: View {
-    let label: String
-    let isSelected: Bool
-    let action: () -> Void
-
-    @ScaledMetric private var verticalPadding: CGFloat = 8
-    @ScaledMetric private var horizontalPadding: CGFloat = 16
-
-    var body: some View {
-        Button(action: action) {
-            Text(label)
-                .font(.subheadline.weight(.medium))
-                .foregroundColor(isSelected ? .onAccent : .primary)
-                .padding(.vertical, verticalPadding)
-                .padding(.horizontal, horizontalPadding)
-                .background(
-                    Capsule(style: .continuous)
-                        .fill(isSelected ? Color.accentColor.opacity(0.85) : Color(.secondarySystemFill))
-                )
-        }
-        .buttonStyle(.plain)
+    /// The Android section titles end with a colon.
+    private func sectionTitle(_ title: String) -> String {
+        title.replacingOccurrences(of: ":", with: "")
     }
 }

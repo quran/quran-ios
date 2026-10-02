@@ -100,6 +100,20 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
         applyEndAt()
     }
 
+    // MARK: - Play up to Menu
+
+    /// The Play up to menu's checked choice. Custom isn't a menu item, so it checks none.
+    var playUpToSelection: EndAtChoice? {
+        endAt == .custom ? nil : endAt
+    }
+
+    /// Picks a Play up to menu choice. Picking the current choice again changes nothing:
+    /// it neither counts as choosing it nor moves To.
+    func selectPlayUpTo(_ choice: EndAtChoice) {
+        guard choice != endAt else { return }
+        setEndAt(choice)
+    }
+
     // MARK: - Updating Playback Rate
 
     func updatePlaybackRate(to rate: Float) {

@@ -14,6 +14,7 @@ import NoorUI
 import QuranKit
 import ReadingService
 import SettingsService
+import SwiftUI
 import UIKit
 import VLogging
 
@@ -23,6 +24,7 @@ public final class LaunchStartup {
 
     init(
         appBuilder: AppBuilder,
+        launchStores: LaunchStores,
         downloadBackupMigrator: DownloadBackupMigrator,
         audioUpdater: AudioUpdater,
         fileSystemMigrator: FileSystemMigrator,
@@ -31,6 +33,7 @@ public final class LaunchStartup {
         appIconService: AppIconService
     ) {
         self.appBuilder = appBuilder
+        self.launchStores = launchStores
         self.downloadBackupMigrator = downloadBackupMigrator
         self.audioUpdater = audioUpdater
         self.fileSystemMigrator = fileSystemMigrator
@@ -42,6 +45,9 @@ public final class LaunchStartup {
     deinit {
         if let protectedDataObserver {
             notificationCenter.removeObserver(protectedDataObserver)
+        }
+        if let foregroundObserver {
+            notificationCenter.removeObserver(foregroundObserver)
         }
     }
 
@@ -81,6 +87,7 @@ public final class LaunchStartup {
     private let fileSystemMigrator: FileSystemMigrator
     private let recitersPathMigrator: RecitersPathMigrator
     private let appBuilder: AppBuilder
+    private let launchStores: LaunchStores
     private let downloadBackupMigrator: DownloadBackupMigrator
     private let audioUpdater: AudioUpdater
     private let reviewService: ReviewService
@@ -93,16 +100,15 @@ public final class LaunchStartup {
     private var pendingDeepLink: QuranDeepLink?
     private var protectedDataObserver: NSObjectProtocol?
     private var protectedDataStartupState = ProtectedDataStartupState()
+    private var storeOpenStartupState = StoreOpenStartupState()
+    private var foregroundObserver: NSObjectProtocol?
 
     private func perform(_ action: ProtectedDataStartupState.Action, window: UIWindow) {
         switch action {
         case .start:
             stopObservingProtectedData()
             crashContext.setProtectedDataAvailable(UIApplication.shared.isProtectedDataAvailable)
-            #if QURAN_SYNC
-            startLegacyDataImport()
-            #endif
-            upgradeIfNeeded(window: window)
+            openStores(window: window)
         case .wait:
             waitForProtectedData(window: window)
         case .none:
@@ -139,6 +145,86 @@ public final class LaunchStartup {
         guard let protectedDataObserver else { return }
         notificationCenter.removeObserver(protectedDataObserver)
         self.protectedDataObserver = nil
+    }
+
+    /// Opens the stores before anything reads them, so a device that's out of storage shows
+    /// a screen it can recover from instead of crashing on every launch.
+    private func openStores(window: UIWindow) {
+        crashContext.setStartupPhase("opening_stores")
+        logger.info("Crash context: startup phase opening_stores")
+        switch launchStores.open() {
+        case .success:
+            handleStoreOpen(storeOpenStartupState.storesOpened(), window: window)
+        case let .failure(.storageFull(store, error)):
+            crashContext.setStartupPhase("storage_full")
+            logger.error("Crash context: startup phase storage_full. The \(store) store failed to open. Error: \(error)")
+            handleStoreOpen(storeOpenStartupState.storageFull(), window: window) {
+                crasher.recordError(
+                    StoreStorageFullError(store: store, underlying: error),
+                    reason: "Launch couldn't open the \(store) store because the device is out of storage"
+                )
+            }
+        case let .failure(.failed(message)):
+            fatalError(message)
+        }
+    }
+
+    /// - Parameter reportStorageFull: Records the storage-full failure; called once per launch.
+    private func handleStoreOpen(
+        _ action: StoreOpenStartupState.Action,
+        window: UIWindow,
+        reportStorageFull: () -> Void = {}
+    ) {
+        switch action {
+        case .continueLaunch:
+            stopObservingForeground()
+            #if QURAN_SYNC
+            startLegacyDataImport()
+            #endif
+            upgradeIfNeeded(window: window)
+        case .showStorageFull:
+            reportStorageFull()
+            showStorageFull(window: window)
+            observeForeground(window: window)
+        case .keepWaiting, .none:
+            break
+        }
+    }
+
+    private func retryOpeningStores(window: UIWindow) {
+        guard storeOpenStartupState.isWaitingForStorage else { return }
+        logger.info("Launch: opening the stores again")
+        openStores(window: window)
+    }
+
+    private func showStorageFull(window: UIWindow) {
+        let view = StorageFullView { [weak self, weak window] in
+            guard let self, let window else { return }
+            retryOpeningStores(window: window)
+        }
+        window.rootViewController = UIHostingController(rootView: view)
+        window.makeKeyAndVisible()
+    }
+
+    /// The app may have launched in the background, so it tries again each time the user returns to it.
+    private func observeForeground(window: UIWindow) {
+        guard foregroundObserver == nil else { return }
+        foregroundObserver = notificationCenter.addObserver(
+            forName: UIApplication.willEnterForegroundNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self, weak window] _ in
+            Task { @MainActor in
+                guard let self, let window else { return }
+                self.retryOpeningStores(window: window)
+            }
+        }
+    }
+
+    private func stopObservingForeground() {
+        guard let foregroundObserver else { return }
+        notificationCenter.removeObserver(foregroundObserver)
+        self.foregroundObserver = nil
     }
 
     private func upgradeIfNeeded(window: UIWindow) {

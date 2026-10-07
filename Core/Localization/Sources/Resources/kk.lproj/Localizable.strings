@@ -19,6 +19,10 @@
 // Metadata: Translated by ChatGPT; human review required.
 "error.message.general" = "Кешіріңіз! Бірдеңе дұрыс болмады. Қайталап көріңіз.";
 "error.message.no_disk_space" = "Жүктеулерді сақтау үшін бос жад орны жоқ.";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "Жад жеткіліксіз";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "Құрылғыңыздың жады толып қалғандықтан, Құран қолданбасы бетбелгілеріңіз бен жазбаларыңызды аша алмайды. Біраз орын босатып, қайталап көріңіз.";
 
 // MARK: - Quran
 

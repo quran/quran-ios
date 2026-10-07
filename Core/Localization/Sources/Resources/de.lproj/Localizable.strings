@@ -21,6 +21,10 @@
 "error.message.general" = "Hoppla! Etwas ist schief gelaufen. Bitte versuchen Sie es erneut.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.message.no_disk_space" = "Kein verfügbarer Speicherplatz auf der Festplatte, um die Downloads zu speichern.";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "Nicht genügend Speicherplatz";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "Die Quran-App kann deine Lesezeichen und Notizen nicht öffnen, weil auf deinem Gerät kein Speicherplatz mehr frei ist. Gib etwas Speicherplatz frei und versuche es dann erneut.";
 
 // MARK: - Quran
 

@@ -21,6 +21,10 @@
 "error.message.general" = "Xo'p! Nimadir noto'g'ri bo'ldi. Iltimos, qayta urinib ko'ring.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.message.no_disk_space" = "Yuklamalarni saqlash uchun bo'sh disk maydoni yo'q.";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "Xotira yetarli emas";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "Qurilmangiz xotirasi toʻlgani uchun Qur’on ilovasi xatchoʻplaringiz va eslatmalaringizni ocha olmayapti. Biroz joy boʻshating, soʻng qaytadan urinib koʻring.";
 
 // MARK: - Quran
 

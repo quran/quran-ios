@@ -947,6 +947,7 @@ private func featuresTargets() -> [[Target]] {
         target(type, name: "AppStructureFeature", dependencies: [
             "AppIconFeature",
             "AppMigrator",
+            "CoreDataPersistence",
             "Crashing",
             "FeaturesSupport",
             "NoorUI",
@@ -961,6 +962,8 @@ private func featuresTargets() -> [[Target]] {
             "WhatsNewFeature",
             "AudioUpdater",
             "AppMigrationFeature",
+        ] + mobileSyncTargetDependencies, testDependencies: [
+            "CoreDataModel",
         ]),
     ]
 }

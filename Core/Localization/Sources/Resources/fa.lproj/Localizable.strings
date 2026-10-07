@@ -21,6 +21,10 @@
 "error.message.general" = "اوه! اشتباهی رخ داد. لطفا دوباره امتحان کنید.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.message.no_disk_space" = "فضای خالی دیسک برای ذخیره‌سازی دانلودها وجود ندارد.";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "فضای ذخیره‌سازی کافی نیست";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "برنامهٔ قرآن نمی‌تواند نشانک‌ها و یادداشت‌های شما را باز کند، چون فضای ذخیره‌سازی دستگاهتان پر شده است. مقداری فضا آزاد کنید و دوباره تلاش کنید.";
 
 // MARK: - Quran
 

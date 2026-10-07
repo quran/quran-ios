@@ -18,6 +18,10 @@
 "error.message.not_connected_to_internet" = "Niet verbonden met het internet. Schakel Wifi aan, of mobiele dataverbinding.";
 "error.message.general" = "Oeps! Er is iets verkeerd gegaan. Probeer het opnieuw.";
 "error.message.no_disk_space" = "Er is geen opslagruimte meer beschikbaar. Downloaden mislukt.";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "Onvoldoende opslagruimte";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "De Quran-app kan je bladwijzers en notities niet openen omdat je apparaat geen opslagruimte meer heeft. Maak wat ruimte vrij en probeer het daarna opnieuw.";
 
 // MARK: - Quran
 

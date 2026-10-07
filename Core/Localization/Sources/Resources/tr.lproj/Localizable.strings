@@ -18,6 +18,10 @@
 "error.message.not_connected_to_internet" = "İnternet bağlantısı bulunamadı. Kablosuz bağlantıyı veya hücresel ağ bağlantısını etkinleştirin.";
 "error.message.general" = "Hay aksi! Bir sorun oluştu. Lütfen tekrar deneyin.";
 "error.message.no_disk_space" = "İndirilenleri kaydetmek için disk alanı yetersiz.";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "Yeterli Depolama Alanı Yok";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "Cihazınızın depolama alanı dolduğu için Kur’an uygulaması ayraçlarınızı ve notlarınızı açamıyor. Biraz yer açın, ardından tekrar deneyin.";
 
 // MARK: - Quran
 

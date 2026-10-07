@@ -82,9 +82,7 @@ public class ThemeService {
             .compactMap { $0 as? UIWindowScene }
             .flatMap(\.windows)
         for window in windows {
-            if !(window is SystemUserInterfaceStyleObserverWindow) {
-                window.overrideUserInterfaceStyle = newInterfaceStyle
-            }
+            window.overrideUserInterfaceStyle = newInterfaceStyle
         }
     }
 }

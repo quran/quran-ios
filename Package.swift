@@ -662,11 +662,14 @@ private func featuresTargets() -> [[Target]] {
             "AppMigrator",
         ]),
 
-        target(type, name: "WordPointerFeature", hasTests: false, dependencies: [
+        target(type, name: "WordPointerFeature", dependencies: [
             "AppDependencies",
             "WordTextService",
             "NoorUI",
             .product(name: "Popover_OC", package: "Popover"),
+        ], testDependencies: [
+            "QuranKit",
+            "TestResources",
         ]),
 
         target(type, name: "AppMigrationFeature", dependencies: [

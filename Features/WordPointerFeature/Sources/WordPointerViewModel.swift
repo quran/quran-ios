@@ -21,7 +21,7 @@ public protocol WordPointerListener: AnyObject {
 
 @MainActor
 final class WordPointerViewModel {
-    enum PanResult {
+    enum PanResult: Equatable {
         case none
         case hidePopover
         case showPopover(text: String)
@@ -55,7 +55,13 @@ final class WordPointerViewModel {
             return .none
         }
         do {
-            if let text = try await service.textForWord(word) {
+            let text = try await service.textForWord(word)
+            // A newer pan event or the end of the drag superseded this lookup.
+            guard !Task.isCancelled else {
+                logger.debug("Dropping stale text lookup for word \(word)")
+                return .none
+            }
+            if let text {
                 logger.debug("Found text '\(text)' for word \(word)")
                 selectedWord = word
                 return .showPopover(text: text)
@@ -64,6 +70,9 @@ final class WordPointerViewModel {
                 return .hidePopover
             }
         } catch {
+            guard !Task.isCancelled else {
+                return .none
+            }
             crasher.recordError(error, reason: "Error calling WordTextService")
             return .hidePopover
         }

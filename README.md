@@ -82,14 +82,14 @@ The library is split into 6 layers, each a top-level directory:
 
 ```mermaid
 flowchart TD
-    Apps["Apps<br>QuranEngineApp (Example) and the Quran.com iOS app"] --> Features
+    Apps["QuranEngineApp (Example)<br>Quran.com iOS app"] --> Features
     Features --> Domain
     Features --> UI
     Domain --> Data
     Data --> Model
     UI --> Model
     Model --> Core
-    Data -.-> Sync[("mobile-sync-spm<br>QURAN_SYNC builds only")]
+    Data -.-> Sync["mobile-sync-spm<br>QURAN_SYNC builds only"]
     Domain -.-> Sync
     Features -.-> Sync
 ```

@@ -9,6 +9,7 @@ import Analytics
 import AnnotationsService
 import AuthenticationClient
 import BatchDownloader
+import CoreDataPersistence
 import Foundation
 import LastPagePersistence
 #if QURAN_SYNC
@@ -40,6 +41,9 @@ public protocol AppDependencies {
     var readingResources: ReadingResourcesService { get }
     var remoteResources: ReadingRemoteResources? { get }
 
+    /// The Core Data store behind the persistence services. Launch opens it before
+    /// building the app, so a device that's out of storage can recover instead of crashing.
+    var coreDataStack: CoreDataStack { get }
     var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }

@@ -21,6 +21,10 @@
 "error.message.general" = "Ой! Что-то пошло не так. Пожалуйста, попробуйте снова.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.message.no_disk_space" = "Недостаточно места на диске для сохранения загрузок.";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "Недостаточно места";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "Приложение «Коран» не может открыть ваши закладки и заметки, потому что на устройстве закончилось место. Освободите немного места и повторите попытку.";
 
 // MARK: - Quran
 

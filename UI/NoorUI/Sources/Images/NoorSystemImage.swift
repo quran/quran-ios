@@ -56,6 +56,7 @@ public enum NoorSystemImage: String {
     case pauseDelay = "timer"
     case stream = "cloud"
     case infinity
+    case storageFull = "externaldrive.badge.exclamationmark"
 
     // MARK: Public
 

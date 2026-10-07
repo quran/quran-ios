@@ -19,6 +19,10 @@
 "error.message.not_connected_to_internet" = "Tiada sambungan internet. Hidupkan Wi-Fi atau hidupkan sambungan data selular.";
 "error.message.general" = "Maaf! sesuatu yang tidak diingini terjadi. Sila cuba lagi.";
 "error.message.no_disk_space" = "Ruang storan tidak mencukupi untuk memuat turun.";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "Storan Tidak Mencukupi";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "Aplikasi Quran tidak dapat membuka penanda buku dan nota anda kerana storan peranti anda sudah penuh. Kosongkan sedikit ruang, kemudian cuba lagi.";
 
 // MARK: - Quran
 

@@ -18,6 +18,10 @@
 "error.message.not_connected_to_internet" = "Không được kết nối với internet. Bật Wi-Fi hoặc cho phép kết nối dữ liệu di động.";
 "error.message.general" = "Ối! Đã xảy ra sự cố. Vui lòng thử lại.";
 "error.message.no_disk_space" = "Không đủ dung lượng trống để lưu các bản tải xuống.";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "Không đủ dung lượng";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "Ứng dụng Quran không thể mở các đánh dấu và ghi chú của bạn vì thiết bị đã hết dung lượng lưu trữ. Hãy giải phóng bớt dung lượng rồi thử lại.";
 
 // MARK: - Quran
 

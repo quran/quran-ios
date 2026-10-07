@@ -21,6 +21,10 @@
 "error.message.general" = "¡Ups! Algo salió mal. Por favor, inténtelo de nuevo.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.message.no_disk_space" = "No hay espacio disponible en el disco para guardar las descargas.";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "Almacenamiento insuficiente";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "La app del Corán no puede abrir tus marcadores y notas porque tu dispositivo se ha quedado sin almacenamiento. Libera algo de espacio y vuelve a intentarlo.";
 
 // MARK: - Quran
 

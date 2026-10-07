@@ -21,6 +21,10 @@
 "error.message.general" = "Oups ! Quelque chose a mal tourné. Veuillez réessayer.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.message.no_disk_space" = "Pas d'espace disque disponible pour enregistrer les téléchargements.";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "Stockage insuffisant";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "L’app Coran ne peut pas ouvrir vos signets et vos notes, car le stockage de votre appareil est saturé. Libérez de l’espace, puis réessayez.";
 
 // MARK: - Quran
 

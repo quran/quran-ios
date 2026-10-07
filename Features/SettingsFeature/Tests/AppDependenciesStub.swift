@@ -8,6 +8,7 @@
 import Analytics
 import AppDependencies
 import BatchDownloader
+import CoreDataPersistence
 import Foundation
 import LastPagePersistence
 import NoorUI
@@ -17,7 +18,6 @@ import ReadingService
 #if QURAN_SYNC
 import AuthenticationClient
 import AuthenticationClientFake
-import CoreDataPersistence
 import CoreDataPersistenceTestSupport
 import LegacyDataMigration
 import LegacyDataPersistence
@@ -60,6 +60,7 @@ struct AppDependenciesStub: AppDependencies {
     var analytics: AnalyticsLibrary { NoopAnalytics() }
     var readingResources: ReadingResourcesService { fatalError("Unused in tests") }
     var remoteResources: ReadingRemoteResources? { nil }
+    var coreDataStack: CoreDataStack { fatalError("Unused in tests") }
     var lastPagePersistence: LastPagePersistence { fatalError("Unused in tests") }
     var notePersistence: NotePersistence { fatalError("Unused in tests") }
     var pageBookmarkPersistence: PageBookmarkPersistence { fatalError("Unused in tests") }

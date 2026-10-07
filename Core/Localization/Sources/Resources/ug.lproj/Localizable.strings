@@ -21,6 +21,10 @@
 "error.message.general" = "ھەي! بىرەر نەرسە خاتا بولدى. قايتا سىناپ بېقىڭ.";
 // Metadata: Translated by ChatGPT; human review required.
 "error.message.no_disk_space" = "چۈشۈرۈشلەرنى ساقلاش ۈچۈن بوش دىسكا ئورنى يوق.";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "ساقلاش بوشلۇقى يېتەرلىك ئەمەس";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "ئۈسكۈنىڭىزنىڭ ساقلاش بوشلۇقى توشۇپ كەتكەچكە، قۇرئان ئەپى خەتكۈچ ۋە ئىزاھاتلىرىڭىزنى ئاچالمايدۇ. ئازراق بوشلۇق بىكارلاپ، ئاندىن قايتا سىناڭ.";
 
 // MARK: - Quran
 

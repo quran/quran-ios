@@ -40,6 +40,15 @@ class Container: AppDependencies {
 
     let analytics: AnalyticsLibrary = LoggingAnalyticsLibrary()
 
+    private(set) lazy var coreDataStack: CoreDataStack = {
+        let stack = CoreDataStack(name: "Quran", modelUrl: CoreDataModelResources.quranModel) {
+            let lastPage = CoreDataLastPageUniquifier()
+            let pageBookmark = CoreDataPageBookmarkUniquifier()
+            return [lastPage, pageBookmark]
+        }
+        return stack
+    }()
+
     private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
     private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
 
@@ -142,15 +151,6 @@ class Container: AppDependencies {
         return SynchronizationEnvironment(endPointURL: endpoint)
     }
     #endif
-
-    private lazy var coreDataStack: CoreDataStack = {
-        let stack = CoreDataStack(name: "Quran", modelUrl: CoreDataModelResources.quranModel) {
-            let lastPage = CoreDataLastPageUniquifier()
-            let pageBookmark = CoreDataPageBookmarkUniquifier()
-            return [lastPage, pageBookmark]
-        }
-        return stack
-    }()
 
     private static func nonEmptyEnvironmentValue(_ key: String) -> String? {
         guard let value = ProcessInfo.processInfo.environment[key]?.trimmingCharacters(in: .whitespacesAndNewlines), !value.isEmpty else {

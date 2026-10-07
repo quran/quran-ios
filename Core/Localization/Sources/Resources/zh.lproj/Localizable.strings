@@ -21,6 +21,10 @@
 "error.message.general" = "哎呀！出错了。请再试一次。";
 // Metadata: Translated by ChatGPT; human review required.
 "error.message.no_disk_space" = "没有可用的磁盘空间来保存下载内容。";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.title" = "存储空间不足";
+// Metadata: Translated by AI; human review required.
+"error.storage-full.message" = "由于设备存储空间已满，《古兰经》应用无法打开你的书签和笔记。请释放一些空间，然后重试。";
 
 // MARK: - Quran
 

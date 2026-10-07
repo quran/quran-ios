@@ -1,6 +1,6 @@
 
 <p align="center">
-    <img src="https://github.com/quran/quran-ios/assets/5665498/636ff859-78e9-40aa-96ea-db013197b6fc" width="350pt">
+    <img src="https://github.com/user-attachments/assets/ea445141-24a8-4c9e-a996-cd8f3e2a74b0" width="350pt">
 </p>
 
 QuranEngine

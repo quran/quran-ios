@@ -124,6 +124,40 @@ class CoreDataStackTests: XCTestCase {
         XCTAssertIdentical(try stack.openBackgroundContext().persistentStoreCoordinator, context.persistentStoreCoordinator)
     }
 
+    func test_openStore_throwsStorageFull() {
+        stack = makeStack { _ in Self.storageFullError }
+
+        XCTAssertThrowsError(try stack.openStore()) { error in
+            XCTAssertTrue(PersistentStoreFailure.isStorageFull(error))
+        }
+    }
+
+    func test_openStore_opensOnRetryOnceTheLoaderStopsFailing() throws {
+        var isStorageFull = true
+        stack = makeStack { container in
+            isStorageFull ? Self.storageFullError : Self.loadInMemory(container)
+        }
+        XCTAssertThrowsError(try stack.openStore())
+
+        isStorageFull = false
+        try stack.openStore()
+
+        XCTAssertEqual(stack.viewContext.persistentStoreCoordinator?.persistentStores.count, 1)
+    }
+
+    func test_openStore_reusesTheLoadedStore() throws {
+        var attempts = 0
+        stack = makeStack { container in
+            attempts += 1
+            return Self.loadInMemory(container)
+        }
+        try stack.openStore()
+
+        try stack.openStore()
+
+        XCTAssertEqual(attempts, 1)
+    }
+
     func test_changes_emitsWhenTheStoreChanges() throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("CoreDataStackChangesTests-\(UUID().uuidString)", isDirectory: true)
@@ -177,5 +211,31 @@ class CoreDataStackTests: XCTestCase {
             NSError(domain: NSCocoaErrorDomain, code: 256),
             attempt: 1
         ))
+    }
+
+    // MARK: Private
+
+    /// The shape Core Data reports when SQLite can't write to a full device.
+    private static let storageFullError = NSError(domain: NSCocoaErrorDomain, code: NSFileReadUnknownError, userInfo: [
+        NSFilePathErrorKey: "/var/mobile/Containers/Data/Application/Library/Application Support/Quran.sqlite",
+        "NSSQLiteErrorDomain": 13,
+    ])
+
+    private static func loadInMemory(_ container: NSPersistentContainer) -> NSError? {
+        container.persistentStoreDescriptions.first?.type = NSInMemoryStoreType
+        var loadError: NSError?
+        container.loadPersistentStores { _, error in
+            loadError = error as NSError?
+        }
+        return loadError
+    }
+
+    private func makeStack(persistentStoreLoader: @escaping (NSPersistentContainer) -> NSError?) -> CoreDataStack {
+        CoreDataStack(
+            name: "CoreDataStackOpenStoreTests-\(UUID().uuidString)",
+            modelUrl: CoreDataModelResources.quranModel,
+            lazyUniquifiers: { [] },
+            persistentStoreLoader: persistentStoreLoader
+        )
     }
 }

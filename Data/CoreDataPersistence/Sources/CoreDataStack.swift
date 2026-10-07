@@ -52,6 +52,15 @@ public class CoreDataStack {
         makeBackgroundContext(in: persistentContainer)
     }
 
+    /// Loads the store if needed.
+    ///
+    /// Unlike ``viewContext`` and ``newBackgroundContext()``, a load failure, such as the
+    /// device being out of storage, is thrown instead of crashing, and the next call tries
+    /// to load again. Use ``PersistentStoreFailure/isStorageFull(_:)`` to classify it.
+    public func openStore() throws {
+        _ = try loadedPersistentContainer()
+    }
+
     /// Loads the store if needed and creates a background context.
     ///
     /// Unlike ``newBackgroundContext()``, a load failure, such as protected data being

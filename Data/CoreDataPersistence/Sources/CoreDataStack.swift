@@ -16,7 +16,8 @@ import VLogging
 ///
 /// Creating a stack loads its store, so a stack always has an open store and never changes
 /// afterward. Nothing can read the store before it opens, and any thread can use the stack
-/// without a lock.
+/// without a lock. Every read and write goes through a background context, so the stack never
+/// touches the main-queue `viewContext` and can load on any thread.
 public final class CoreDataStack: @unchecked Sendable {
     // MARK: Lifecycle
 
@@ -55,10 +56,6 @@ public final class CoreDataStack: @unchecked Sendable {
     }
 
     // MARK: Public
-
-    public var viewContext: NSManagedObjectContext {
-        persistentContainer.viewContext
-    }
 
     public class func removePersistentFiles() {
         let dataDirectory = NSPersistentContainer.defaultDirectoryURL()
@@ -144,24 +141,6 @@ public final class CoreDataStack: @unchecked Sendable {
         let container = try loadPersistentContainer(name: name, modelUrl: modelUrl, persistentStoreLoader: persistentStoreLoader)
         crashContext.setPersistence(store: name, operation: "load_store", phase: "ready")
         logger.info("Core Data store loaded: \(name)")
-
-        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        container.viewContext.transactionAuthor = appTransactionAuthorName
-
-        // Pin the viewContext to the current generation token and set it to keep itself up to date with local changes.
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        do {
-            try container.viewContext.setQueryGenerationFrom(.current)
-        } catch {
-            crashContext.setPersistence(store: name, operation: "pin_generation", phase: "failed")
-            logger.error("Core Data failed to pin the view context generation: \(name). Error: \(error)")
-            // Close the discarded stores, so a retry never opens the file with a second coordinator.
-            let coordinator = container.persistentStoreCoordinator
-            for store in coordinator.persistentStores {
-                try? coordinator.remove(store)
-            }
-            throw error
-        }
 
         return container
     }

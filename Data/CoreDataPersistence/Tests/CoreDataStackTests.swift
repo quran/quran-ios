@@ -28,12 +28,9 @@ class CoreDataStackTests: XCTestCase {
     }
 
     func test_persistentContainerCreated() {
-        XCTAssertIdentical(stack.viewContext.mergePolicy as AnyObject, NSMergeByPropertyObjectTrumpMergePolicy)
-        XCTAssertEqual(stack.viewContext.transactionAuthor, "app")
-        XCTAssertTrue(stack.viewContext.automaticallyMergesChangesFromParent)
-
         let context = stack.newBackgroundContext()
         XCTAssertEqual(context.transactionAuthor, "app")
+        XCTAssertIdentical(context.mergePolicy as AnyObject, NSMergeByPropertyObjectTrumpMergePolicy)
 
         let descriptions = stack.persistentContainer.persistentStoreDescriptions
         XCTAssertFalse(descriptions.isEmpty)

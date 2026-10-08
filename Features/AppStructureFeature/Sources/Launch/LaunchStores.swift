@@ -26,7 +26,7 @@ final class LaunchStores {
     #if QURAN_SYNC
     init(
         host: AppHostDependencies,
-        loadCoreDataStack: @escaping () throws -> CoreDataStack = AppDependencies.loadCoreDataStack,
+        loadCoreDataStack: @escaping @Sendable () throws -> CoreDataStack = AppDependencies.loadCoreDataStack,
         openMobileSyncDatabase: @escaping () throws(MobileSyncDatabaseError) -> Void = {
             // The containers create the graph with `DriverFactory()` too, and the database is shared.
             try SharedDependencyGraph.shared.openDatabase(using: DriverFactory())
@@ -39,7 +39,7 @@ final class LaunchStores {
     #else
     init(
         host: AppHostDependencies,
-        loadCoreDataStack: @escaping () throws -> CoreDataStack = AppDependencies.loadCoreDataStack
+        loadCoreDataStack: @escaping @Sendable () throws -> CoreDataStack = AppDependencies.loadCoreDataStack
     ) {
         self.host = host
         self.loadCoreDataStack = loadCoreDataStack
@@ -50,35 +50,19 @@ final class LaunchStores {
 
     /// Opens every store, stopping at the first one that fails. A failed open isn't kept, so
     /// calling again retries it. Once every store opens, later calls return the same dependencies.
-    func open() -> Result<AppDependencies, LaunchStoreError> {
+    /// A call made while an open is in progress waits for that open.
+    func open() async -> Result<AppDependencies, LaunchStoreError> {
         if let dependencies {
             return .success(dependencies)
         }
-        let coreDataStack: CoreDataStack
-        if let openedCoreDataStack {
-            coreDataStack = openedCoreDataStack
-        } else {
-            do {
-                coreDataStack = try loadCoreDataStack()
-            } catch {
-                return .failure(LaunchStoreError(coreDataError: error, availableCapacity: Self.availableCapacity()))
-            }
-            // Kept, so retrying a later store never opens this file with a second coordinator.
-            openedCoreDataStack = coreDataStack
+        if let openTask {
+            return await openTask.value
         }
-        #if QURAN_SYNC
-        do {
-            try openMobileSyncDatabase()
-        } catch {
-            crashContext.setPersistence(store: "mobile_sync", operation: "open", phase: "failed")
-            return .failure(LaunchStoreError(mobileSyncError: error, availableCapacity: Self.availableCapacity()))
-        }
-        // Clears a failure recorded by an earlier attempt.
-        crashContext.setPersistence(store: "mobile_sync", operation: "open", phase: "ready")
-        #endif
-        let dependencies = AppDependencies(host: host, coreDataStack: coreDataStack)
-        self.dependencies = dependencies
-        return .success(dependencies)
+        let task = Task { await openStores() }
+        openTask = task
+        let result = await task.value
+        openTask = nil
+        return result
     }
 
     /// The free space on the volume holding `directory`, measured at its nearest existing
@@ -105,12 +89,55 @@ final class LaunchStores {
     // MARK: Private
 
     private let host: AppHostDependencies
-    private let loadCoreDataStack: () throws -> CoreDataStack
+    private let loadCoreDataStack: @Sendable () throws -> CoreDataStack
     #if QURAN_SYNC
     private let openMobileSyncDatabase: () throws(MobileSyncDatabaseError) -> Void
     #endif
     private var openedCoreDataStack: CoreDataStack?
     private var dependencies: AppDependencies?
+    private var openTask: Task<Result<AppDependencies, LaunchStoreError>, Never>?
+
+    private func openStores() async -> Result<AppDependencies, LaunchStoreError> {
+        let coreDataStack: CoreDataStack
+        if let openedCoreDataStack {
+            coreDataStack = openedCoreDataStack
+        } else {
+            switch await Self.loadCoreDataStack(using: loadCoreDataStack) {
+            case let .success(stack):
+                coreDataStack = stack
+            case let .failure(error):
+                return .failure(error)
+            }
+            // Kept, so retrying a later store never opens this file with a second coordinator.
+            openedCoreDataStack = coreDataStack
+        }
+        #if QURAN_SYNC
+        do {
+            try openMobileSyncDatabase()
+        } catch {
+            crashContext.setPersistence(store: "mobile_sync", operation: "open", phase: "failed")
+            return .failure(LaunchStoreError(mobileSyncError: error, availableCapacity: Self.availableCapacity()))
+        }
+        // Clears a failure recorded by an earlier attempt.
+        crashContext.setPersistence(store: "mobile_sync", operation: "open", phase: "ready")
+        #endif
+        let dependencies = AppDependencies(host: host, coreDataStack: coreDataStack)
+        self.dependencies = dependencies
+        return .success(dependencies)
+    }
+
+    /// Loads the store off the main thread. The first launch after a model change migrates the
+    /// store inside the load, which can take seconds.
+    @concurrent
+    private nonisolated static func loadCoreDataStack(
+        using load: @Sendable () throws -> CoreDataStack
+    ) async -> Result<CoreDataStack, LaunchStoreError> {
+        do {
+            return .success(try load())
+        } catch {
+            return .failure(LaunchStoreError(coreDataError: error, availableCapacity: availableCapacity()))
+        }
+    }
 
     /// The free space on the volume holding the stores, which all live under Application Support.
     private nonisolated static func availableCapacity() -> Int? {

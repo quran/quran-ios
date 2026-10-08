@@ -7,6 +7,7 @@ import CoreDataPersistence
 import CoreDataPersistenceTestSupport
 import NoorUI
 import ReadingService
+import Utilities
 import XCTest
 @testable import AppStructureFeature
 #if QURAN_SYNC
@@ -27,59 +28,91 @@ final class LaunchStoresTests: XCTestCase {
 
     // MARK: Opening
 
-    func testUnreadableCoreDataStoreFailsLaunch() throws {
+    func testUnreadableCoreDataStoreFailsLaunch() async throws {
         let name = "LaunchStoresTests-\(UUID().uuidString)"
         try writeUnreadableStore(named: name)
         let sut = makeSUT(loadCoreDataStack: {
             try CoreDataStack(name: name, modelUrl: CoreDataModelResources.quranModel, lazyUniquifiers: { [] })
         })
 
-        guard case let .failure(.failed(message)) = sut.open() else {
+        guard case let .failure(.failed(message)) = await sut.open() else {
             return XCTFail("Expected launch to fail")
         }
         XCTAssertTrue(message.hasPrefix("###openStore(): Failed to load persistent store: "), message)
     }
 
-    func testOpeningAgainReusesTheOpenStores() throws {
-        var loads = 0
+    func testCoreDataStoreLoadsOffTheMainThread() async throws {
+        let store = store
+        let loadedOnMainThread = ManagedCriticalState<Bool?>(nil)
         let sut = makeSUT(loadCoreDataStack: {
-            loads += 1
-            return try self.store.stack()
+            loadedOnMainThread.withCriticalRegion { $0 = Thread.isMainThread }
+            return try store.stack()
         })
 
-        let first = try sut.open().get()
-        let second = try sut.open().get()
+        _ = try await sut.open().get()
 
-        XCTAssertIdentical(first, second)
-        XCTAssertEqual(loads, 1)
+        XCTAssertEqual(loadedOnMainThread.withCriticalRegion { $0 }, false)
     }
 
-    func testFailedCoreDataOpenIsRetried() throws {
-        var isStorageFull = true
+    func testOpeningAgainReusesTheOpenStores() async throws {
+        let store = store
+        let loads = ManagedCriticalState(0)
         let sut = makeSUT(loadCoreDataStack: {
-            if isStorageFull {
+            loads.withCriticalRegion { $0 += 1 }
+            return try store.stack()
+        })
+
+        let first = try await sut.open().get()
+        let second = try await sut.open().get()
+
+        XCTAssertIdentical(first, second)
+        XCTAssertEqual(loads.withCriticalRegion { $0 }, 1)
+    }
+
+    func testOpensInProgressShareOneLoad() async throws {
+        let store = store
+        let loads = ManagedCriticalState(0)
+        let sut = makeSUT(loadCoreDataStack: {
+            loads.withCriticalRegion { $0 += 1 }
+            return try store.stack()
+        })
+
+        async let first = sut.open()
+        async let second = sut.open()
+        let results = await [first, second]
+
+        XCTAssertIdentical(try results[0].get(), try results[1].get())
+        XCTAssertEqual(loads.withCriticalRegion { $0 }, 1)
+    }
+
+    func testFailedCoreDataOpenIsRetried() async throws {
+        let store = store
+        let isStorageFull = ManagedCriticalState(true)
+        let sut = makeSUT(loadCoreDataStack: {
+            if isStorageFull.withCriticalRegion({ $0 }) {
                 throw Self.sqliteError(code: 13)
             }
-            return try self.store.stack()
+            return try store.stack()
         })
-        guard case .failure(.storageFull) = sut.open() else {
+        guard case .failure(.storageFull) = await sut.open() else {
             return XCTFail("Expected the store to be full")
         }
 
-        isStorageFull = false
+        isStorageFull.withCriticalRegion { $0 = false }
 
-        XCTAssertNoThrow(try sut.open().get())
+        _ = try await sut.open().get()
     }
 
     #if QURAN_SYNC
-    func testRetryAfterMobileSyncFailsKeepsTheOpenCoreDataStore() throws {
-        var loads = 0
+    func testRetryAfterMobileSyncFailsKeepsTheOpenCoreDataStore() async throws {
+        let store = store
+        let loads = ManagedCriticalState(0)
         var isStorageFull = true
         let sut = LaunchStores(
             host: UnusedHostDependencies(),
             loadCoreDataStack: {
-                loads += 1
-                return try self.store.stack()
+                loads.withCriticalRegion { $0 += 1 }
+                return try store.stack()
             },
             openMobileSyncDatabase: { () throws(MobileSyncDatabaseError) in
                 if isStorageFull {
@@ -87,14 +120,14 @@ final class LaunchStoresTests: XCTestCase {
                 }
             }
         )
-        guard case .failure(.storageFull) = sut.open() else {
+        guard case .failure(.storageFull) = await sut.open() else {
             return XCTFail("Expected the database to be full")
         }
 
         isStorageFull = false
 
-        XCTAssertNoThrow(try sut.open().get())
-        XCTAssertEqual(loads, 1)
+        _ = try await sut.open().get()
+        XCTAssertEqual(loads.withCriticalRegion { $0 }, 1)
     }
     #endif
 
@@ -207,7 +240,7 @@ final class LaunchStoresTests: XCTestCase {
     private var createdFiles: [URL] = []
 
     /// Opens MobileSync without touching a database, so only the Core Data store is real.
-    private func makeSUT(loadCoreDataStack: @escaping () throws -> CoreDataStack) -> LaunchStores {
+    private func makeSUT(loadCoreDataStack: @escaping @Sendable () throws -> CoreDataStack) -> LaunchStores {
         #if QURAN_SYNC
         LaunchStores(host: UnusedHostDependencies(), loadCoreDataStack: loadCoreDataStack, openMobileSyncDatabase: {})
         #else

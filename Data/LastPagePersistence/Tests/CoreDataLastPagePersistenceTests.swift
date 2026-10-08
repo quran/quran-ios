@@ -125,9 +125,9 @@ final class CoreDataLastPagePersistenceTests: XCTestCase {
     }
 
     func testLastPagesIgnoreInvalidStoredPages() async throws {
-        let context = stack.viewContext
-        _ = context.newLastPage(page: 605, modifiedOn: 1)
-        try context.save()
+        try stack.write { context in
+            _ = context.newLastPage(page: 605, modifiedOn: 1)
+        }
 
         let lastPages = try await persistence.retrieveAll()
 

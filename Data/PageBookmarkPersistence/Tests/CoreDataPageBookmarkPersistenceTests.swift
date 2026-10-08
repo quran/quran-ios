@@ -107,9 +107,9 @@ final class CoreDataPageBookmarkPersistenceTests: XCTestCase {
     }
 
     func testPageBookmarksIgnoreInvalidStoredPages() throws {
-        let context = stack.viewContext
-        _ = context.newPageBookmark(page: 605, modifiedOn: 1)
-        try context.save()
+        try stack.write { context in
+            _ = context.newPageBookmark(page: 605, modifiedOn: 1)
+        }
 
         let collector = PublisherCollector(persistence.pageBookmarks())
 

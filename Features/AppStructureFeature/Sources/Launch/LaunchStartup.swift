@@ -147,10 +147,22 @@ public final class LaunchStartup {
 
     /// Opens the stores before anything reads them, so a device that's out of storage shows
     /// a screen it can recover from instead of crashing on every launch.
+    ///
+    /// The stores open off the main thread, so a slow open, such as the first launch after a model
+    /// change migrating the store, keeps the launch screen up instead of freezing the app.
     private func openStores(window: UIWindow) {
         crashContext.setStartupPhase("opening_stores")
         logger.info("Crash context: startup phase opening_stores")
-        switch launchStores.open() {
+        Task { [weak self, weak window] in
+            guard let self else { return }
+            let result = await launchStores.open()
+            guard let window else { return }
+            handleOpenedStores(result, window: window)
+        }
+    }
+
+    private func handleOpenedStores(_ result: Result<AppDependencies, LaunchStoreError>, window: UIWindow) {
+        switch result {
         case let .success(dependencies):
             guard storeOpenStartupState.storesOpened() == .continueLaunch else { return }
             stopObservingForeground()

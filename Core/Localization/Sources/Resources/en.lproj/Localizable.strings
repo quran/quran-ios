@@ -89,6 +89,7 @@
 "menu.verticalScrolling" = "Vertical scrolling";
 "menu.linePageDividers" = "Line dividers";
 "menu.linePageSidelines" = "Side lines";
+"menu.arabicText" = "Arabic text";
 "menu.theme_settings" = "Themes & Settings";
 
 // MARK: - Theme

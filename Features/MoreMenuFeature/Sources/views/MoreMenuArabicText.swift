@@ -12,7 +12,7 @@ struct MoreMenuArabicText: View {
     @Binding var enabled: Bool
 
     var body: some View {
-        Toggle(lAndroid("prefs_ayah_before_translation_title"), isOn: $enabled)
+        Toggle(l("menu.arabicText"), isOn: $enabled)
             .padding()
     }
 }

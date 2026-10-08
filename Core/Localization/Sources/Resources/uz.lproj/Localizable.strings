@@ -102,6 +102,7 @@
 "menu.verticalScrolling" = "Vertikal aylantirish";
 "menu.linePageDividers" = "Qator ajratgichlari";
 "menu.linePageSidelines" = "Yon chiziqlar";
+"menu.arabicText" = "Arabcha matn";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Mavzular va sozlamalar";
 

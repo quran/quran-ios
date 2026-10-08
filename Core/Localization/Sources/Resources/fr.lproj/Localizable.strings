@@ -102,6 +102,7 @@
 "menu.verticalScrolling" = "Défilement vertical";
 "menu.linePageDividers" = "Séparateurs de lignes";
 "menu.linePageSidelines" = "Lignes latérales";
+"menu.arabicText" = "Texte arabe";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Thèmes et paramètres";
 

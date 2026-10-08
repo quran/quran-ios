@@ -190,30 +190,15 @@ public final class LaunchStartup {
         case let .failure(.storageFull(store, error)):
             crashContext.setStartupPhase("storage_full")
             logger.error("Crash context: startup phase storage_full. The \(store) store failed to open. Error: \(error)")
-            handleStorageFull(storeOpenStartupState.storageFull(), window: window) {
-                crasher.recordError(
-                    StoreStorageFullError(store: store, underlying: error),
-                    reason: "Launch couldn't open the \(store) store because the device is out of storage"
-                )
-            }
-        case let .failure(.failed(message)):
-            fatalError(message)
-        }
-    }
-
-    /// - Parameter reportStorageFull: Records the storage-full failure; called once per launch.
-    private func handleStorageFull(
-        _ action: StoreOpenStartupState.Action,
-        window: UIWindow,
-        reportStorageFull: () -> Void
-    ) {
-        switch action {
-        case .showStorageFull:
-            reportStorageFull()
+            guard storeOpenStartupState.storageFull() == .showStorageFull else { return }
+            crasher.recordError(
+                StoreStorageFullError(store: store, underlying: error),
+                reason: "Launch couldn't open the \(store) store because the device is out of storage"
+            )
             showStorageFull(window: window)
             observeForeground(window: window)
-        case .continueLaunch, .keepWaiting, .none:
-            break
+        case let .failure(.failed(message)):
+            fatalError(message)
         }
     }
 

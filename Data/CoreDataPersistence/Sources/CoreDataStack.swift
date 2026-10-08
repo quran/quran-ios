@@ -106,7 +106,6 @@ public final class CoreDataStack: @unchecked Sendable {
 
     private let name: String
 
-    /// Separate from history processing, so subscribing never waits for a merge.
     private let changeContinuations = ManagedCriticalState<[UUID: AsyncStream<Void>.Continuation]>([:])
 
     private let lazyUniquifiers: () -> [CoreDataEntityUniquifier]

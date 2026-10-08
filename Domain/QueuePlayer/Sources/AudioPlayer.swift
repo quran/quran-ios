@@ -21,6 +21,9 @@ class AudioPlayer {
         player.onRateChanged = { [weak self] in
             self?.rateChanged(to: $0)
         }
+        player.onDurationLoaded = { [weak self] in
+            self?.durationLoaded()
+        }
         interruptionMonitor.onAudioInterruption = { [weak self] in
             self?.onAudioInterruption(type: $0)
         }
@@ -47,11 +50,13 @@ class AudioPlayer {
     }
 
     func resume() {
+        isPaused = false
         timer?.resume()
         player.play(rate: playbackRate)
     }
 
     func pause() {
+        isPaused = true
         cancelVerseDelay()
         timer?.pause()
         player.pause()
@@ -59,6 +64,7 @@ class AudioPlayer {
 
     func stop() {
         cancelVerseDelay()
+        durationWaitStartTime = nil
         timer?.cancel()
         player.stop()
         actions?.playbackEnded()
@@ -105,10 +111,20 @@ class AudioPlayer {
     // True while waiting out a between-verse delay (player paused, no frame playing).
     private var isDelaying = false
 
+    // True while paused by `pause()`, so a frame-end timer scheduled meanwhile starts paused.
+    private var isPaused = false
+
+    // Set while the frame ends with its file and the file's duration is still loading:
+    // the media time the frame-end wait started from.
+    private var durationWaitStartTime: TimeInterval?
+
     private var player: Player {
         didSet {
             player.onRateChanged = { [weak self] in
                 self?.rateChanged(to: $0)
+            }
+            player.onDurationLoaded = { [weak self] in
+                self?.durationLoaded()
             }
         }
     }
@@ -158,7 +174,7 @@ class AudioPlayer {
         let time = getDurationToFrameEnd()
         // make sure we reached the end of the frame
         // don't use `abs` since we could be notified a little bit after
-        guard time < 0.2 else {
+        guard let time, time < 0.2 else {
             // audio is 200 ms behind, reschedule the timer
             waitUntilFrameEnds()
             return
@@ -221,7 +237,8 @@ class AudioPlayer {
             return 0
         }
         let frameStart = audioPlaying.frame.startTime
-        let frameEnd = audioPlaying.frameEndTime ?? player.duration
+        // The end is known by now: the frame-end timer only fires once it is.
+        let frameEnd = audioPlaying.frameEndTime ?? player.duration ?? frameStart
         let recitedMediaDuration = max(0, frameEnd - frameStart)
         // Convert media duration to wall-clock recited time before scaling.
         return recitedMediaDuration / Double(playbackRate) * multiplier
@@ -256,8 +273,20 @@ class AudioPlayer {
             return
         }
 
+        guard let mediaDelta = getDurationToFrameEnd(currentTime: currentTime) else {
+            // The frame ends with its file, whose duration is still loading.
+            // `durationLoaded()` schedules the timer instead of blocking on it.
+            timer = nil
+            durationWaitStartTime = currentTime ?? player.currentTime
+            return
+        }
+        durationWaitStartTime = nil
+        scheduleFrameEndTimer(after: mediaDelta)
+    }
+
+    private func scheduleFrameEndTimer(after mediaDelta: TimeInterval) {
         // max with 100ms since sometimes the returned value could be negative
-        let mediaDelta = max(0, getDurationToFrameEnd(currentTime: currentTime))
+        let mediaDelta = max(0, mediaDelta)
         // Convert media time to wall-clock time
         let interval = max(0.05, mediaDelta / Double(playbackRate)) // small floor for stability
         timer = Timer(interval: interval, queue: .main) { [weak self] in
@@ -267,6 +296,21 @@ class AudioPlayer {
     }
 
     // MARK: - PlayerDelegate
+
+    private func durationLoaded() {
+        // Playback went on while the duration loaded, but a seek may still be
+        // in flight: don't measure from before where the wait started.
+        guard let startTime = durationWaitStartTime,
+              let mediaDelta = getDurationToFrameEnd(currentTime: max(startTime, player.currentTime))
+        else {
+            return
+        }
+        durationWaitStartTime = nil
+        scheduleFrameEndTimer(after: mediaDelta)
+        if isPaused {
+            timer?.pause()
+        }
+    }
 
     private func rateChanged(to rate: Float) {
         // Ignore the pause/resume we trigger ourselves while waiting out a delay.
@@ -282,9 +326,12 @@ class AudioPlayer {
 
     // MARK: - Utilities
 
-    private func getDurationToFrameEnd(currentTime: TimeInterval? = nil) -> TimeInterval {
+    /// `nil` while the frame ends with its file and the file's duration is still loading.
+    private func getDurationToFrameEnd(currentTime: TimeInterval? = nil) -> TimeInterval? {
+        guard let frameEndTime = audioPlaying.frameEndTime ?? player.duration else {
+            return nil
+        }
         let currentTimeInSeconds = currentTime ?? player.currentTime
-        let frameEndTime = audioPlaying.frameEndTime ?? player.duration
         return frameEndTime - currentTimeInSeconds
     }
 }

@@ -14,10 +14,11 @@ final class Player {
 
     deinit {
         rateObservation?.invalidate()
+        durationTask?.cancel()
     }
 
     init(url: URL) {
-        asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
+        let asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
         playerItem = AVPlayerItem(asset: asset)
         playerItem.audioTimePitchAlgorithm = .spectral
         player = AVPlayer(playerItem: playerItem)
@@ -31,20 +32,32 @@ final class Player {
                 }
             }
         }
+
+        // With precise timing, AVFoundation may scan (or download) the whole file
+        // to answer the duration, so never read it synchronously on the main thread.
+        durationTask = Task { [weak self] in
+            // A failed load reports zero, like the synchronous `AVAsset.duration`.
+            let duration = (try? await asset.load(.duration))?.seconds ?? 0
+            guard !Task.isCancelled, let self else {
+                return
+            }
+            self.duration = duration
+            onDurationLoaded?()
+        }
     }
 
     // MARK: Internal
 
     var onRateChanged: (@Sendable @MainActor (Float) -> Void)?
+    var onDurationLoaded: (@Sendable @MainActor () -> Void)?
 
     let playerItem: AVPlayerItem
 
+    /// The file's duration, or `nil` while it loads.
+    private(set) var duration: TimeInterval?
+
     var currentTime: TimeInterval {
         player.currentTime().seconds
-    }
-
-    var duration: TimeInterval {
-        asset.duration.seconds
     }
 
     // MARK: Internal helpers (read-only)
@@ -77,12 +90,13 @@ final class Player {
 
     // MARK: Private
 
-    private let asset: AVURLAsset
     private let player: AVPlayer
 
     private var rateObservation: NSKeyValueObservation? {
         didSet { oldValue?.invalidate() }
     }
+
+    private var durationTask: Task<Void, Never>?
 }
 
 private extension AVPlayer {

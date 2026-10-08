@@ -130,9 +130,14 @@ public class QuranAudioPlayer {
     private let gaplessAudioRequestBuilder: QuranAudioRequestBuilder = GaplessAudioRequestBuilder()
     private var audioRequest: QuranAudioRequest?
 
+    private var durationTask: Task<Void, Never>? {
+        didSet { oldValue?.cancel() }
+    }
+
     // MARK: - AudioPlayerActions
 
     private func playbackEnded() {
+        durationTask = nil
         nowPlaying.clear()
         actions?.playbackEnded()
         // not interested to get more notifications
@@ -157,14 +162,27 @@ public class QuranAudioPlayer {
         let info = audioRequest.getPlayerInfo(for: fileIndex)
         nowPlaying.update(info: info)
         nowPlaying.update(playingIndex: fileIndex)
-        nowPlaying.update(duration: playerItem.asset.duration.seconds)
+        updateDuration(of: playerItem.asset)
         nowPlaying.update(elapsedTime: playerItem.currentTime().seconds)
 
         let ayah = audioRequest.getAyahNumberFrom(fileIndex: fileIndex, frameIndex: frameIndex)
         actions?.playing(ayah)
     }
 
+    /// Loads the duration in the background: with precise timing, AVFoundation may
+    /// scan (or download) the whole file to answer it. A newer frame or the end of
+    /// playback cancels the update.
+    private func updateDuration(of asset: AVAsset) {
+        durationTask = Task { [weak self] in
+            guard let duration = try? await asset.load(.duration), !Task.isCancelled else {
+                return
+            }
+            self?.nowPlaying.update(duration: duration.seconds)
+        }
+    }
+
     private func willPlay(_ request: AudioRequest) {
+        durationTask = nil
         nowPlaying.clear()
         nowPlaying.update(count: request.files.count)
     }

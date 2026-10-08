@@ -217,6 +217,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "WordPointerFeatureTests",
+        "name" : "WordPointerFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "QuranGeometryTests",
         "name" : "QuranGeometryTests"
       }

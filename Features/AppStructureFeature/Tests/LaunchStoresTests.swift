@@ -69,16 +69,24 @@ final class LaunchStoresTests: XCTestCase {
         XCTAssertEqual(loads.withCriticalRegion { $0 }, 1)
     }
 
-    func testOpensInProgressShareOneLoad() async throws {
+    func testOpenInProgressIsShared() async throws {
         let store = store
         let loads = ManagedCriticalState(0)
+        let loading = expectation(description: "The store starts loading")
+        let finishLoading = DispatchSemaphore(value: 0)
         let sut = makeSUT(loadCoreDataStack: {
             loads.withCriticalRegion { $0 += 1 }
+            loading.fulfill()
+            finishLoading.wait()
             return try store.stack()
         })
 
         async let first = sut.open()
+        await fulfillment(of: [loading], timeout: 5)
         async let second = sut.open()
+        // Frees the main actor, so the second open joins the first while its load is blocked.
+        try await Task.sleep(nanoseconds: 100_000_000)
+        finishLoading.signal()
         let results = await [first, second]
 
         XCTAssertIdentical(try results[0].get(), try results[1].get())
@@ -249,7 +257,7 @@ final class LaunchStoresTests: XCTestCase {
     }
 
     /// The shape Core Data reports when SQLite fails to open a store.
-    private static func sqliteError(code: Int) -> NSError {
+    private nonisolated static func sqliteError(code: Int) -> NSError {
         NSError(domain: NSCocoaErrorDomain, code: NSFileReadUnknownError, userInfo: [
             NSFilePathErrorKey: "/var/mobile/Containers/Data/Application/Library/Application Support/Quran.sqlite",
             "NSSQLiteErrorDomain": code,

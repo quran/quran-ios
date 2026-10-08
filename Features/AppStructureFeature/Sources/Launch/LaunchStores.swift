@@ -58,11 +58,13 @@ final class LaunchStores {
         if let openTask {
             return await openTask.value
         }
-        let task = Task { await openStores() }
+        let task = Task {
+            let result = await openStores()
+            openTask = nil
+            return result
+        }
         openTask = task
-        let result = await task.value
-        openTask = nil
-        return result
+        return await task.value
     }
 
     /// The free space on the volume holding `directory`, measured at its nearest existing
@@ -132,6 +134,12 @@ final class LaunchStores {
     private nonisolated static func loadCoreDataStack(
         using load: @Sendable () throws -> CoreDataStack
     ) async -> Result<CoreDataStack, LaunchStoreError> {
+        let start = Date()
+        defer {
+            // Hang reports no longer cover a slow open, so the logs do.
+            let seconds = Date().timeIntervalSince(start)
+            logger.notice("Launch stores: the Core Data store took \(String(format: "%.2f", seconds)) s to load")
+        }
         do {
             return .success(try load())
         } catch {

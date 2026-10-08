@@ -7,7 +7,7 @@ final class NoorAnimationTests: XCTestCase {
     // MARK: Internal
 
     func test_animate_runsChangesWithCoreAnimation() {
-        let (window, view) = makeVisibleView()
+        let view = makeVisibleView()
 
         NoorAnimation.animate {
             view.alpha = 0
@@ -18,11 +18,10 @@ final class NoorAnimationTests: XCTestCase {
         let animation = view.layer.animation(forKey: "opacity")
         XCTAssertNotNil(animation)
         XCTAssertEqual(animation?.duration, 0.3)
-        window.isHidden = true
     }
 
     func test_animate_callsCompletion() {
-        let (window, view) = makeVisibleView()
+        let view = makeVisibleView()
         let completed = expectation(description: "Animation completed")
 
         NoorAnimation.animate {
@@ -32,16 +31,16 @@ final class NoorAnimationTests: XCTestCase {
         }
 
         wait(for: [completed], timeout: 2)
-        window.isHidden = true
     }
 
     // MARK: Private
 
-    private func makeVisibleView() -> (UIWindow, UIView) {
+    private func makeVisibleView() -> UIView {
         let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         window.addSubview(view)
-        window.makeKeyAndVisible()
-        return (window, view)
+        window.isHidden = false
+        addTeardownBlock { window.isHidden = true }
+        return view
     }
 }

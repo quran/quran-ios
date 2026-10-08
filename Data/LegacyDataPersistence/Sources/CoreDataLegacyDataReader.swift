@@ -19,8 +19,6 @@ import QuranKit
 /// The reader never saves. It bypasses the note publisher and uniquifiers and reads every record from
 /// one query generation. Records that cannot be mapped yet, such as a note whose verses have not arrived,
 /// are left out, so a later read imports them. Repeated reads of the same store produce the same import.
-///
-/// The reader uses a new background context per read, touched only inside `perform`.
 public struct CoreDataLegacyDataReader: Sendable {
     // MARK: Lifecycle
 

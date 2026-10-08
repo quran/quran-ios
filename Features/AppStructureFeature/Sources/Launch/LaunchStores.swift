@@ -17,9 +17,8 @@ import VLogging
 
 /// Opens the stores the app reads at launch and creates the app's dependencies from them.
 ///
-/// Building the app reads them right away, and a read that can't open its store crashes. Opening
-/// them first lets launch tell a device that's out of storage, which the user can fix, from any
-/// other failure.
+/// Opening them before building the app lets launch tell a device that's out of storage, which the
+/// user can fix, from any other failure.
 @MainActor
 final class LaunchStores {
     // MARK: Lifecycle
@@ -133,8 +132,8 @@ enum LaunchStoreError: Error {
         if PersistentStoreFailure.isStorageFull(error, availableCapacity: availableCapacity) {
             self = .storageFull(store: "core_data", underlying: error)
         } else {
-            // Matches the message `CoreDataStack` crashed with before launch opened the store,
-            // so crash reports stay comparable.
+            // Keeps the message the app crashed with before launch opened the store, so crash
+            // reports stay comparable.
             self = .failed(message: "###openStore(): Failed to load persistent store: \(error)")
         }
     }

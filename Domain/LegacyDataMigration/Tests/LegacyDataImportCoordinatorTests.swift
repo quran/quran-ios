@@ -103,7 +103,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
         XCTAssertEqual(notes.map(\.body), ["Arrives in parts"])
     }
 
-    func test_importNow_throwsWhenTheStoreCannotOpen_thenRetrySucceeds() async throws {
+    func test_importNow_throwsWhenTheStoreCannotBeRead_andReadsAgainNextTime() async throws {
         try store.corrupt()
 
         do {
@@ -111,8 +111,11 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
             XCTFail("A failed read must not complete as an empty import")
         } catch {}
 
-        store.removeStoreFiles()
-        try await sut.importNow()
+        // The failure isn't recorded as a finished import, so the next request reads again.
+        do {
+            try await sut.importNow()
+            XCTFail("A retry must read the store again")
+        } catch {}
     }
 
     func test_start_importsLaterStoreChanges() async throws {
@@ -157,6 +160,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
 
         // A relaunch opens a new stack, reader, and coordinator on the same store.
         sut = nil
+        stack = nil
         stack = try store.stack()
         sut = makeCoordinator()
         try await sut.importNow()

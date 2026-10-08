@@ -99,20 +99,6 @@ class CoreDataStackTests: XCTestCase {
         }
     }
 
-    func test_init_opensOnRetryOnceTheLoaderStopsFailing() throws {
-        var isStorageFull = true
-        let loader: (NSPersistentContainer) -> NSError? = { container in
-            isStorageFull ? Self.storageFullError : Self.loadInMemory(container)
-        }
-        XCTAssertThrowsError(try makeStack(persistentStoreLoader: loader))
-
-        isStorageFull = false
-        stack = try makeStack(persistentStoreLoader: loader)
-
-        XCTAssertEqual(stack.persistentContainer.persistentStoreCoordinator.persistentStores.count, 1)
-        XCTAssertEqual(stack.newBackgroundContext().transactionAuthor, "app")
-    }
-
     func test_changes_emitsWhenTheStoreChanges() throws {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent("CoreDataStackChangesTests-\(UUID().uuidString)", isDirectory: true)
@@ -174,15 +160,6 @@ class CoreDataStackTests: XCTestCase {
         NSFilePathErrorKey: "/var/mobile/Containers/Data/Application/Library/Application Support/Quran.sqlite",
         "NSSQLiteErrorDomain": 13,
     ])
-
-    private static func loadInMemory(_ container: NSPersistentContainer) -> NSError? {
-        container.persistentStoreDescriptions.first?.type = NSInMemoryStoreType
-        var loadError: NSError?
-        container.loadPersistentStores { _, error in
-            loadError = error as NSError?
-        }
-        return loadError
-    }
 
     private func makeStack(persistentStoreLoader: @escaping (NSPersistentContainer) -> NSError?) throws -> CoreDataStack {
         try CoreDataStack(

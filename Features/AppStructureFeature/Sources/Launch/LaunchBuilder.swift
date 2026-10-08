@@ -50,5 +50,6 @@ public struct LaunchBuilder {
 
     /// Shared by every launch in the process. iOS can disconnect the scene in the background and
     /// connect a new one later; that launch reuses the open stores instead of opening them again.
+    /// The stores keep the first launch's host, so the host must be the app's single container.
     private static var launchStores: LaunchStores?
 }

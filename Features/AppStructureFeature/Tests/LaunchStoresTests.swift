@@ -76,7 +76,7 @@ final class LaunchStoresTests: XCTestCase {
         var loads = 0
         var isStorageFull = true
         let sut = LaunchStores(
-            host: HostDependenciesStub(),
+            host: UnusedHostDependencies(),
             loadCoreDataStack: {
                 loads += 1
                 return try self.store.stack()
@@ -209,9 +209,9 @@ final class LaunchStoresTests: XCTestCase {
     /// Opens MobileSync without touching a database, so only the Core Data store is real.
     private func makeSUT(loadCoreDataStack: @escaping () throws -> CoreDataStack) -> LaunchStores {
         #if QURAN_SYNC
-        LaunchStores(host: HostDependenciesStub(), loadCoreDataStack: loadCoreDataStack, openMobileSyncDatabase: {})
+        LaunchStores(host: UnusedHostDependencies(), loadCoreDataStack: loadCoreDataStack, openMobileSyncDatabase: {})
         #else
-        LaunchStores(host: HostDependenciesStub(), loadCoreDataStack: loadCoreDataStack)
+        LaunchStores(host: UnusedHostDependencies(), loadCoreDataStack: loadCoreDataStack)
         #endif
     }
 
@@ -234,7 +234,7 @@ final class LaunchStoresTests: XCTestCase {
 }
 
 /// Opening the stores never reads the host dependencies.
-private struct HostDependenciesStub: AppHostDependencies {
+private struct UnusedHostDependencies: AppHostDependencies {
     var databasesURL: URL { fatalError("Unused in tests") }
     var wordsDatabase: URL { fatalError("Unused in tests") }
     var appHost: URL { fatalError("Unused in tests") }

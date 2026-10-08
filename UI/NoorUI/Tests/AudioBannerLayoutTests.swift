@@ -60,7 +60,10 @@ final class AudioBannerLayoutTests: XCTestCase {
 
     // MARK: Private
 
-    private let contentSizes: [UIContentSizeCategory] = [.large, .extraExtraExtraLarge, .accessibilityExtraExtraLarge]
+    /// On first show, the old playing banner looped only at the largest size, so keep it in the list.
+    private let contentSizes: [UIContentSizeCategory] = [
+        .large, .extraExtraExtraLarge, .accessibilityExtraExtraLarge, .accessibilityExtraExtraExtraLarge,
+    ]
     private let options = AudioOptionsSummary(rate: 1.25, verseRuns: .finite(3))
 
     private func fittingSize(_ view: some View, _ dynamicTypeSize: DynamicTypeSize) -> CGSize {

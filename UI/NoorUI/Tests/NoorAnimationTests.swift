@@ -13,8 +13,6 @@ final class NoorAnimationTests: XCTestCase {
             view.alpha = 0
         }
 
-        // A SwiftUI animation adds no Core Animation animation. UIKit advances it on its in-process
-        // animation thread, which can lay out SwiftUI hosting views off the main thread.
         let animation = view.layer.animation(forKey: "opacity")
         XCTAssertNotNil(animation)
         XCTAssertEqual(animation?.duration, 0.3)

@@ -274,8 +274,7 @@ class AudioPlayer {
         }
 
         guard let mediaDelta = getDurationToFrameEnd(currentTime: currentTime) else {
-            // The frame ends with its file, whose duration is still loading.
-            // `durationLoaded()` schedules the timer instead of blocking on it.
+            // The file's duration is still loading; `durationLoaded()` schedules the timer.
             timer = nil
             durationWaitStartTime = currentTime ?? player.currentTime
             return
@@ -298,8 +297,7 @@ class AudioPlayer {
     // MARK: - PlayerDelegate
 
     private func durationLoaded() {
-        // Playback went on while the duration loaded, but a seek may still be
-        // in flight: don't measure from before where the wait started.
+        // A seek may still be in flight, so don't measure from before where the wait started.
         guard let startTime = durationWaitStartTime,
               let mediaDelta = getDurationToFrameEnd(currentTime: max(startTime, player.currentTime))
         else {

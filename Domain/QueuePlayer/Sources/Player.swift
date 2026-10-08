@@ -36,9 +36,7 @@ final class Player {
         // With precise timing, AVFoundation may scan (or download) the whole file
         // to answer the duration, so never read it synchronously on the main thread.
         durationTask = Task { [weak self] in
-            // A player discarded before this runs (like the one `AudioPlayer` replaces
-            // right after creating it) is cancelled already. `load(_:)` ignores
-            // cancellation, so don't start a scan nobody will use.
+            // `load(_:)` ignores cancellation, so a player discarded before this runs skips the scan.
             guard !Task.isCancelled else {
                 return
             }

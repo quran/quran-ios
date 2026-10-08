@@ -169,9 +169,7 @@ public class QuranAudioPlayer {
         actions?.playing(ayah)
     }
 
-    /// Loads the duration in the background: with precise timing, AVFoundation may
-    /// scan (or download) the whole file to answer it. A newer frame or the end of
-    /// playback cancels the update.
+    /// Loads the duration off the main thread. A newer frame or the end of playback cancels the update.
     private func updateDuration(of asset: AVAsset) {
         durationTask = Task { [weak self] in
             guard let duration = try? await asset.load(.duration), !Task.isCancelled else {

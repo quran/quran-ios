@@ -355,9 +355,8 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     private func setOuterTabBarHiddenForIPadOS26(_ hidden: Bool, animated: Bool) {
         // On iPadOS 26, UIKit can leave the top tab bar visible despite hidesBottomBarWhenPushed.
         // Explicitly hiding the active tab bar works around that UIKit regression.
-        // iPhone relies on hidesBottomBarWhenPushed alone: calling this there would drive the tab bar
-        // controller mid-push (and mid-pop), competing with UIKit's own bottom-bar transition.
-        // The trait collection's idiom can be unspecified during transitions, so this asks the device.
+        // iPhone relies on hidesBottomBarWhenPushed alone. The device idiom is used because the trait
+        // collection's idiom can be unspecified during transitions.
         guard #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .pad else { return }
         tabBarController?.setTabBarHidden(hidden, animated: animated)
     }

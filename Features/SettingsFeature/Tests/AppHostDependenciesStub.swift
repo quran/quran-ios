@@ -1,5 +1,5 @@
 //
-//  AppDependenciesStub.swift
+//  AppHostDependenciesStub.swift
 //
 //
 //  Created by Mohamed Afifi on 2026-09-29.

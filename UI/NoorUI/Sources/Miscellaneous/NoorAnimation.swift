@@ -16,20 +16,21 @@ public enum NoorAnimation {
         }
     }
 
+    /// Animates UIKit changes with a critically damped spring that approximates `standard`.
+    ///
+    /// Don't use `UIView.animate(_:changes:completion:)` with a SwiftUI animation here. UIKit advances it on its
+    /// in-process animation thread, which can lay out SwiftUI hosting views off the main thread and crash on iOS 18.
     @MainActor
     public static func animate(changes: @escaping () -> Void, completion: (() -> Void)? = nil) {
-        if #available(iOS 18.0, *) {
-            // Keep UIKit transitions consistent with SwiftUI.
-            UIView.animate(standard, changes: changes, completion: completion)
-        } else {
-            UIView.animate(
-                withDuration: duration,
-                delay: 0,
-                options: [.curveEaseInOut, .beginFromCurrentState],
-                animations: changes,
-                completion: { _ in completion?() }
-            )
-        }
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            usingSpringWithDamping: 1,
+            initialSpringVelocity: 0,
+            options: [.beginFromCurrentState],
+            animations: changes,
+            completion: { _ in completion?() }
+        )
     }
 
     private static let duration: TimeInterval = 0.3

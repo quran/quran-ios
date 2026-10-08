@@ -15,8 +15,7 @@ import VLogging
 /// A loaded Core Data store, including history processing.
 ///
 /// ``CoreDataStore`` creates it once the store loads, and nothing in it changes afterward, so any
-/// thread can use it. Every read and write goes through a background context, so it never touches
-/// the main-queue `viewContext` and can load on any thread.
+/// thread can use it.
 public final class CoreDataStack: @unchecked Sendable {
     // MARK: Lifecycle
 

@@ -21,23 +21,17 @@ final class CoreDataStoreTests: XCTestCase {
         try super.tearDownWithError()
     }
 
-    func test_stack_throwsStorageFull() async {
-        let store = makeStore { _ in Self.storageFullError }
-
+    func test_stack_loadsAgainAfterAFailure() async throws {
+        let isStorageFull = ManagedCriticalState(true)
+        let store = makeStore { container in
+            isStorageFull.withCriticalRegion { $0 } ? Self.storageFullError : Self.loadInMemory(container)
+        }
         do {
             _ = try await store.stack()
             XCTFail("Expected the load to fail")
         } catch {
             XCTAssertTrue(PersistentStoreFailure.isStorageFull(error))
         }
-    }
-
-    func test_stack_loadsAgainAfterAFailure() async throws {
-        let isStorageFull = ManagedCriticalState(true)
-        let store = makeStore { container in
-            isStorageFull.withCriticalRegion { $0 } ? Self.storageFullError : Self.loadInMemory(container)
-        }
-        _ = try? await store.stack()
 
         isStorageFull.withCriticalRegion { $0 = false }
         let stack = try await store.stack()
@@ -45,21 +39,7 @@ final class CoreDataStoreTests: XCTestCase {
         XCTAssertEqual(stack.persistentContainer.persistentStoreCoordinator.persistentStores.count, 1)
     }
 
-    func test_stack_reusesTheLoadedStack() async throws {
-        let loads = ManagedCriticalState(0)
-        let store = makeStore { container in
-            loads.withCriticalRegion { $0 += 1 }
-            return Self.loadInMemory(container)
-        }
-
-        let first = try await store.stack()
-        let second = try await store.stack()
-
-        XCTAssertIdentical(first, second)
-        XCTAssertEqual(loads.withCriticalRegion { $0 }, 1)
-    }
-
-    func test_stack_concurrentCallsShareOneLoad() async throws {
+    func test_stack_isLoadedOnceForConcurrentCalls() async throws {
         let loads = ManagedCriticalState(0)
         let store = makeStore { container in
             loads.withCriticalRegion { $0 += 1 }

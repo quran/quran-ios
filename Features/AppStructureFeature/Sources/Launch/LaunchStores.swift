@@ -25,7 +25,7 @@ struct LaunchStores {
     let coreDataStore: CoreDataStore
 
     /// Opens every store, stopping at the first one that fails. A failed open isn't cached, so
-    /// calling again retries it. The Core Data store loads off the main thread.
+    /// calling again retries it.
     func open() async -> Result<Void, LaunchStoreError> {
         do {
             _ = try await coreDataStore.stack()

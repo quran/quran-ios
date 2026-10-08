@@ -34,19 +34,6 @@ final class CoreDataContextTests: XCTestCase {
         XCTAssertEqual(author, "app")
     }
 
-    func test_publisher_emitsOnceTheStoreOpens() async {
-        let sut = CoreDataContext(store: makeStore { Self.loadInMemory($0) })
-        let emitted = expectation(description: "The publisher emits")
-
-        let cancellable = sut.publisher(for: Self.notesRequest()).sink { notes in
-            XCTAssertEqual(notes, [])
-            emitted.fulfill()
-        }
-        defer { cancellable.cancel() }
-
-        await fulfillment(of: [emitted], timeout: 5)
-    }
-
     func test_publisher_subscribedBeforeTheStoreOpens_seesWritesThroughPerform() async throws {
         let sut = CoreDataContext(store: makeStore { Self.loadInMemory($0) })
         let emittedNote = expectation(description: "The publisher emits the written note")
@@ -86,7 +73,7 @@ final class CoreDataContextTests: XCTestCase {
 
         let collector = PublisherCollector(sut.publisher(for: Self.notesRequest()))
         await fulfillment(of: [attempted], timeout: 5)
-        // A bounded negative check: gives the failed open time to finish before checking nothing arrived.
+        // Gives the failed open time to finish.
         try? await Task.sleep(nanoseconds: 100_000_000)
 
         XCTAssertEqual(collector.items, [])

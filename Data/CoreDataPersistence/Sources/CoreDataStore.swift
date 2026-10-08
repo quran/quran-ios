@@ -8,7 +8,6 @@
 import CoreData
 import Foundation
 import Utilities
-import VLogging
 
 /// Opens the Core Data store once and hands out the loaded stack.
 ///
@@ -46,7 +45,6 @@ public actor CoreDataStore {
         if let loadedStack = loadedStack() {
             return loadedStack
         }
-        let start = Date()
         let changeContinuations = changeContinuations
         let stack = try CoreDataStack(
             name: name,
@@ -59,7 +57,6 @@ public actor CoreDataStore {
                 }
             }
         )
-        logger.notice("Core Data store \(name) took \(String(format: "%.2f", Date().timeIntervalSince(start))) s to load")
         openedStack.withCriticalRegion { $0 = stack }
         return stack
     }

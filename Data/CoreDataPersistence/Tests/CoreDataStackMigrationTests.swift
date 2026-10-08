@@ -28,12 +28,12 @@ final class CoreDataStackMigrationTests: XCTestCase {
 
     func testAddingMushafIDMigratesExistingPagesToMadani() throws {
         let sourceModelURL = CoreDataModelResources.quranModel.appendingPathComponent("Quran.mom")
-        var sourceStack: CoreDataStack? = makeStack(modelURL: sourceModelURL)
+        var sourceStack: CoreDataStack? = try makeStack(modelURL: sourceModelURL)
         try insertLegacyPage(entityName: "MO_PageBookmark", page: 300, into: try XCTUnwrap(sourceStack))
         try insertLegacyPage(entityName: "MO_LastPage", page: 400, into: try XCTUnwrap(sourceStack))
         sourceStack = nil
 
-        let migratedStack = makeStack(modelURL: CoreDataModelResources.quranModel)
+        let migratedStack = try makeStack(modelURL: CoreDataModelResources.quranModel)
 
         XCTAssertEqual(try storedValues(entityName: "MO_PageBookmark", in: migratedStack), [
             StoredValues(page: 300, mushafID: 0),
@@ -53,8 +53,8 @@ final class CoreDataStackMigrationTests: XCTestCase {
     private var temporaryDirectory: URL!
     private var storeURL: URL!
 
-    private func makeStack(modelURL: URL) -> CoreDataStack {
-        CoreDataStack(
+    private func makeStack(modelURL: URL) throws -> CoreDataStack {
+        try CoreDataStack(
             name: "QuranMigrationTest",
             modelUrl: modelURL,
             lazyUniquifiers: { [] },

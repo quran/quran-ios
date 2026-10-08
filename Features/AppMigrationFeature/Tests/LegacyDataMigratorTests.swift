@@ -24,7 +24,7 @@ final class LegacyDataMigratorTests: XCTestCase {
         try await database.reset()
         LegacyImportPreferences.reset()
         store = TemporaryCoreDataStore()
-        stack = store.stack()
+        stack = try store.stack()
     }
 
     override func tearDown() async throws {

@@ -18,10 +18,10 @@ class CoreDataPublisherTests: XCTestCase {
     var cancellables = Set<AnyCancellable>()
     var request: NSFetchRequest<MO_Note>!
 
-    override func setUp() {
-        super.setUp()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
         // Instantiating your CoreDataStack
-        coreDataStack = CoreDataStack.testingStack()
+        coreDataStack = try CoreDataStack.testingStack()
         context = coreDataStack.newBackgroundContext()
 
         request = MO_Note.fetchRequest()

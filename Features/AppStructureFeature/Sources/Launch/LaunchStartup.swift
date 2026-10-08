@@ -6,6 +6,7 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
+import AppDependencies
 import AppMigrationFeature
 import AppMigrator
 import AudioUpdater
@@ -23,7 +24,6 @@ public final class LaunchStartup {
     // MARK: Lifecycle
 
     init(
-        appBuilder: AppBuilder,
         launchStores: LaunchStores,
         downloadBackupMigrator: DownloadBackupMigrator,
         audioUpdater: AudioUpdater,
@@ -32,7 +32,6 @@ public final class LaunchStartup {
         reviewService: ReviewService,
         appIconService: AppIconService
     ) {
-        self.appBuilder = appBuilder
         self.launchStores = launchStores
         self.downloadBackupMigrator = downloadBackupMigrator
         self.audioUpdater = audioUpdater
@@ -86,7 +85,6 @@ public final class LaunchStartup {
 
     private let fileSystemMigrator: FileSystemMigrator
     private let recitersPathMigrator: RecitersPathMigrator
-    private let appBuilder: AppBuilder
     private let launchStores: LaunchStores
     private let downloadBackupMigrator: DownloadBackupMigrator
     private let audioUpdater: AudioUpdater
@@ -153,12 +151,17 @@ public final class LaunchStartup {
         crashContext.setStartupPhase("opening_stores")
         logger.info("Crash context: startup phase opening_stores")
         switch launchStores.open() {
-        case .success:
-            handleStoreOpen(storeOpenStartupState.storesOpened(), window: window)
+        case let .success(dependencies):
+            guard storeOpenStartupState.storesOpened() == .continueLaunch else { return }
+            stopObservingForeground()
+            #if QURAN_SYNC
+            startLegacyDataImport(dependencies: dependencies)
+            #endif
+            upgradeIfNeeded(window: window, dependencies: dependencies)
         case let .failure(.storageFull(store, error)):
             crashContext.setStartupPhase("storage_full")
             logger.error("Crash context: startup phase storage_full. The \(store) store failed to open. Error: \(error)")
-            handleStoreOpen(storeOpenStartupState.storageFull(), window: window) {
+            handleStorageFull(storeOpenStartupState.storageFull(), window: window) {
                 crasher.recordError(
                     StoreStorageFullError(store: store, underlying: error),
                     reason: "Launch couldn't open the \(store) store because the device is out of storage"
@@ -170,23 +173,17 @@ public final class LaunchStartup {
     }
 
     /// - Parameter reportStorageFull: Records the storage-full failure; called once per launch.
-    private func handleStoreOpen(
+    private func handleStorageFull(
         _ action: StoreOpenStartupState.Action,
         window: UIWindow,
-        reportStorageFull: () -> Void = {}
+        reportStorageFull: () -> Void
     ) {
         switch action {
-        case .continueLaunch:
-            stopObservingForeground()
-            #if QURAN_SYNC
-            startLegacyDataImport()
-            #endif
-            upgradeIfNeeded(window: window)
         case .showStorageFull:
             reportStorageFull()
             showStorageFull(window: window)
             observeForeground(window: window)
-        case .keepWaiting, .none:
+        case .continueLaunch, .keepWaiting, .none:
             break
         }
     }
@@ -227,13 +224,13 @@ public final class LaunchStartup {
         self.foregroundObserver = nil
     }
 
-    private func upgradeIfNeeded(window: UIWindow) {
-        registerMigrators()
+    private func upgradeIfNeeded(window: UIWindow, dependencies: AppDependencies) {
+        registerMigrators(dependencies: dependencies)
         // Read before `migrationStatus()` or `migrate()` commits the current version.
         let launchVersion = appMigrator.launchVersion
         switch appMigrator.migrationStatus() {
         case .noMigration:
-            showApp(window: window, launchVersion: launchVersion)
+            showApp(window: window, launchVersion: launchVersion, dependencies: dependencies)
         case let .migrate(blocksUI, titles):
             crashContext.setStartupPhase("migrating")
             logger.info("Crash context: startup phase migrating")
@@ -246,12 +243,12 @@ public final class LaunchStartup {
             }
             Task {
                 await appMigrator.migrate()
-                showApp(window: window, launchVersion: launchVersion)
+                showApp(window: window, launchVersion: launchVersion, dependencies: dependencies)
             }
         }
     }
 
-    private func showApp(window: UIWindow, launchVersion: LaunchVersionUpdate) {
+    private func showApp(window: UIWindow, launchVersion: LaunchVersionUpdate, dependencies: AppDependencies) {
         if self.appViewController != nil {
             return
         }
@@ -262,7 +259,7 @@ public final class LaunchStartup {
 
         let wasUpdated = window.rootViewController != nil
 
-        let appViewController = appBuilder.build(launchVersion: launchVersion)
+        let appViewController = AppBuilder(container: dependencies).build(launchVersion: launchVersion)
         self.appViewController = appViewController
 
         if wasUpdated {
@@ -290,14 +287,14 @@ public final class LaunchStartup {
         appViewController.navigate(to: deepLink)
     }
 
-    private func registerMigrators() {
+    private func registerMigrators(dependencies: AppDependencies) {
         appMigrator.register(migrator: fileSystemMigrator, for: "1.16.0")
         appMigrator.register(migrator: recitersPathMigrator, for: "1.19.1")
         appMigrator.register(migrator: downloadBackupMigrator, for: "2.6.9")
         #if QURAN_SYNC
         // Upgrades import legacy data once before showing the UI.
         appMigrator.register(
-            migrator: LegacyDataMigrator(coordinator: appBuilder.container.legacyDataImportCoordinator),
+            migrator: LegacyDataMigrator(coordinator: dependencies.legacyDataImportCoordinator),
             for: "3.1.0"
         )
         #endif
@@ -306,8 +303,8 @@ public final class LaunchStartup {
     #if QURAN_SYNC
     /// Imports legacy data on every launch and after each change to the legacy store.
     /// Resolving the coordinator opens MobileSync, which needs protected data.
-    private func startLegacyDataImport() {
-        let coordinator = appBuilder.container.legacyDataImportCoordinator
+    private func startLegacyDataImport(dependencies: AppDependencies) {
+        let coordinator = dependencies.legacyDataImportCoordinator
         Task { await coordinator.start() }
     }
     #endif

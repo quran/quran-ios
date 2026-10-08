@@ -29,7 +29,7 @@ class CoreDataNotePersistenceTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        stack = CoreDataStack.testingStack()
+        stack = try CoreDataStack.testingStack()
         time = SystemTimeFake()
 
         verse1 = VersePersistenceModel(ayah: 1, sura: 1)

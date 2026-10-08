@@ -1,12 +1,20 @@
+import Analytics
+import AppDependencies
+import BatchDownloader
 import CoreData
 import CoreDataModel
 import CoreDataPersistence
+import CoreDataPersistenceTestSupport
+import NoorUI
+import ReadingService
 import XCTest
 @testable import AppStructureFeature
 #if QURAN_SYNC
+import AuthenticationClient
 import MobileSync
 #endif
 
+@MainActor
 final class LaunchStoresTests: XCTestCase {
     // MARK: Internal
 
@@ -22,17 +30,73 @@ final class LaunchStoresTests: XCTestCase {
     func testUnreadableCoreDataStoreFailsLaunch() throws {
         let name = "LaunchStoresTests-\(UUID().uuidString)"
         try writeUnreadableStore(named: name)
-        let sut = LaunchStores(coreDataStack: CoreDataStack(
-            name: name,
-            modelUrl: CoreDataModelResources.quranModel,
-            lazyUniquifiers: { [] }
-        ))
+        let sut = makeSUT(loadCoreDataStack: {
+            try CoreDataStack(name: name, modelUrl: CoreDataModelResources.quranModel, lazyUniquifiers: { [] })
+        })
 
         guard case let .failure(.failed(message)) = sut.open() else {
             return XCTFail("Expected launch to fail")
         }
         XCTAssertTrue(message.hasPrefix("###openStore(): Failed to load persistent store: "), message)
     }
+
+    func testOpeningAgainReusesTheOpenStores() throws {
+        var loads = 0
+        let sut = makeSUT(loadCoreDataStack: {
+            loads += 1
+            return try self.store.stack()
+        })
+
+        let first = try sut.open().get()
+        let second = try sut.open().get()
+
+        XCTAssertIdentical(first, second)
+        XCTAssertEqual(loads, 1)
+    }
+
+    func testFailedCoreDataOpenIsRetried() throws {
+        var isStorageFull = true
+        let sut = makeSUT(loadCoreDataStack: {
+            if isStorageFull {
+                throw Self.sqliteError(code: 13)
+            }
+            return try self.store.stack()
+        })
+        guard case .failure(.storageFull) = sut.open() else {
+            return XCTFail("Expected the store to be full")
+        }
+
+        isStorageFull = false
+
+        XCTAssertNoThrow(try sut.open().get())
+    }
+
+    #if QURAN_SYNC
+    func testRetryAfterMobileSyncFailsKeepsTheOpenCoreDataStore() throws {
+        var loads = 0
+        var isStorageFull = true
+        let sut = LaunchStores(
+            host: HostDependenciesStub(),
+            loadCoreDataStack: {
+                loads += 1
+                return try self.store.stack()
+            },
+            openMobileSyncDatabase: { () throws(MobileSyncDatabaseError) in
+                if isStorageFull {
+                    throw .storageFull(underlying: Self.sqliteError(code: 13))
+                }
+            }
+        )
+        guard case .failure(.storageFull) = sut.open() else {
+            return XCTFail("Expected the database to be full")
+        }
+
+        isStorageFull = false
+
+        XCTAssertNoThrow(try sut.open().get())
+        XCTAssertEqual(loads, 1)
+    }
+    #endif
 
     // MARK: Available capacity
 
@@ -139,7 +203,17 @@ final class LaunchStoresTests: XCTestCase {
     private static let lowCapacity = PersistentStoreFailure.lowAvailableCapacity - 1
     private static let plentyOfCapacity = 10 * PersistentStoreFailure.lowAvailableCapacity
 
+    private let store = TemporaryCoreDataStore()
     private var createdFiles: [URL] = []
+
+    /// Opens MobileSync without touching a database, so only the Core Data store is real.
+    private func makeSUT(loadCoreDataStack: @escaping () throws -> CoreDataStack) -> LaunchStores {
+        #if QURAN_SYNC
+        LaunchStores(host: HostDependenciesStub(), loadCoreDataStack: loadCoreDataStack, openMobileSyncDatabase: {})
+        #else
+        LaunchStores(host: HostDependenciesStub(), loadCoreDataStack: loadCoreDataStack)
+        #endif
+    }
 
     /// The shape Core Data reports when SQLite fails to open a store.
     private static func sqliteError(code: Int) -> NSError {
@@ -157,6 +231,27 @@ final class LaunchStoresTests: XCTestCase {
         createdFiles += ["", "-shm", "-wal"].map { URL(fileURLWithPath: store.path + $0) }
         try Data(repeating: 0x2A, count: 4096).write(to: store)
     }
+}
+
+/// Opening the stores never reads the host dependencies.
+private struct HostDependenciesStub: AppHostDependencies {
+    var databasesURL: URL { fatalError("Unused in tests") }
+    var wordsDatabase: URL { fatalError("Unused in tests") }
+    var appHost: URL { fatalError("Unused in tests") }
+    var filesAppHost: URL { fatalError("Unused in tests") }
+    var quranProfileURL: URL { fatalError("Unused in tests") }
+    var logsDirectory: URL { fatalError("Unused in tests") }
+    var databasesDirectory: URL { fatalError("Unused in tests") }
+    var supportsCloudKit: Bool { fatalError("Unused in tests") }
+    var downloadManager: DownloadManager { fatalError("Unused in tests") }
+    var analytics: AnalyticsLibrary { fatalError("Unused in tests") }
+    var readingResources: ReadingResourcesService { fatalError("Unused in tests") }
+    var remoteResources: ReadingRemoteResources? { fatalError("Unused in tests") }
+    var appIconCatalog: AppIconCatalog { fatalError("Unused in tests") }
+    #if QURAN_SYNC
+    var authenticationClient: any AuthenticationClient { fatalError("Unused in tests") }
+    var quranDataService: QuranDataService { fatalError("Unused in tests") }
+    #endif
 }
 
 private extension LaunchStoreError {

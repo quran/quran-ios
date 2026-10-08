@@ -6,8 +6,11 @@
 //
 
 import Analytics
+import AppDependencies
 import AppIconFeature
 import AudioDownloadsFeature
+import CoreDataPersistence
+import CoreDataPersistenceTestSupport
 import Localization
 import ReadingSelectorFeature
 import SettingsService
@@ -26,6 +29,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
 
     override func setUp() async throws {
         try await super.setUp()
+        coreDataStack = try store.stack()
         iconAccess = AlternateIconAccessFake()
         bundle = SystemBundleFake()
         bundle.info["CFBundleIcons"] = [
@@ -35,6 +39,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
     }
 
     override func tearDown() async throws {
+        coreDataStack = nil
         ThemeService.shared.appearanceMode = originalAppearanceMode
         AppIconAccent.setCurrent(nil)
         try await super.tearDown()
@@ -129,6 +134,8 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
         accent: AppIconAccent(light: .systemBlue, dark: .systemBlue, onDark: .black)
     )
 
+    private let store = TemporaryCoreDataStore()
+    private var coreDataStack: CoreDataStack!
     private var iconAccess: AlternateIconAccessFake!
     private var bundle: SystemBundleFake!
     private var originalAppearanceMode = AppearanceMode.auto
@@ -147,7 +154,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
         navigationController: UINavigationController? = nil
     ) -> SettingsRootViewModel {
         let navigationController = navigationController ?? UINavigationController()
-        let container = AppDependenciesStub(appIconCatalog: catalog)
+        let container = AppDependencies(host: AppHostDependenciesStub(appIconCatalog: catalog), coreDataStack: coreDataStack)
         let appIconService = appIconService ?? makeService()
         #if QURAN_SYNC
         return SettingsRootViewModel(

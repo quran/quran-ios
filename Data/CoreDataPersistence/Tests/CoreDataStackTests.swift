@@ -14,9 +14,9 @@ class CoreDataStackTests: XCTestCase {
     var stack: CoreDataStack!
     var temporaryDirectory: URL?
 
-    override func setUp() {
-        super.setUp()
-        stack = CoreDataStack.testingStack()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        stack = try CoreDataStack.testingStack()
     }
 
     override func tearDown() {
@@ -28,8 +28,6 @@ class CoreDataStackTests: XCTestCase {
     }
 
     func test_persistentContainerCreated() {
-        XCTAssertNotNil(stack.persistentContainer)
-
         XCTAssertIdentical(stack.viewContext.mergePolicy as AnyObject, NSMergeByPropertyObjectTrumpMergePolicy)
         XCTAssertEqual(stack.viewContext.transactionAuthor, "app")
         XCTAssertTrue(stack.viewContext.automaticallyMergesChangesFromParent)
@@ -57,7 +55,7 @@ class CoreDataStackTests: XCTestCase {
         ]
         container.persistentStoreDescriptions.forEach { $0.shouldAddStoreAsynchronously = true }
 
-        stack.configurePersistentStores(in: container)
+        CoreDataStack.configurePersistentStores(in: container, name: "ConfigurationTests")
 
         XCTAssertTrue(container.persistentStoreDescriptions.allSatisfy { description in
             !description.shouldAddStoreAsynchronously &&
@@ -66,10 +64,10 @@ class CoreDataStackTests: XCTestCase {
         })
     }
 
-    func test_sqliteMisuseReloadsStoreWithFreshContainer() {
+    func test_sqliteMisuseReloadsStoreWithFreshContainer() throws {
         var attempts = 0
         var containers: [NSPersistentContainer] = []
-        stack = CoreDataStack(
+        stack = try CoreDataStack(
             name: "CoreDataStackRetryTests-\(UUID().uuidString)",
             modelUrl: CoreDataModelResources.quranModel,
             lazyUniquifiers: { [] },
@@ -89,73 +87,30 @@ class CoreDataStackTests: XCTestCase {
             }
         )
 
-        XCTAssertNotNil(stack.persistentContainer)
         XCTAssertEqual(attempts, 2)
         XCTAssertEqual(containers.count, 2)
         XCTAssertFalse(containers[0] === containers[1])
+        XCTAssertIdentical(stack.persistentContainer, containers[1])
     }
 
-    func test_openBackgroundContext_throwsLoadFailureAndLoadsOnRetry() throws {
-        var isProtectedDataAvailable = false
-        stack = CoreDataStack(
-            name: "CoreDataStackRecoverableTests-\(UUID().uuidString)",
-            modelUrl: CoreDataModelResources.quranModel,
-            lazyUniquifiers: { [] },
-            persistentStoreLoader: { container in
-                guard isProtectedDataAvailable else {
-                    return NSError(domain: NSCocoaErrorDomain, code: NSFileReadNoPermissionError)
-                }
-                container.persistentStoreDescriptions.first?.type = NSInMemoryStoreType
-                var loadError: NSError?
-                container.loadPersistentStores { _, error in
-                    loadError = error as NSError?
-                }
-                return loadError
-            }
-        )
-
-        XCTAssertThrowsError(try stack.openBackgroundContext()) { error in
-            XCTAssertEqual((error as NSError).code, NSFileReadNoPermissionError)
-        }
-
-        isProtectedDataAvailable = true
-        let context = try stack.openBackgroundContext()
-        XCTAssertEqual(context.transactionAuthor, "app")
-        XCTAssertIdentical(try stack.openBackgroundContext().persistentStoreCoordinator, context.persistentStoreCoordinator)
-    }
-
-    func test_openStore_throwsStorageFull() {
-        stack = makeStack { _ in Self.storageFullError }
-
-        XCTAssertThrowsError(try stack.openStore()) { error in
+    func test_init_throwsStorageFull() {
+        XCTAssertThrowsError(try makeStack { _ in Self.storageFullError }) { error in
             XCTAssertTrue(PersistentStoreFailure.isStorageFull(error))
         }
     }
 
-    func test_openStore_opensOnRetryOnceTheLoaderStopsFailing() throws {
+    func test_init_opensOnRetryOnceTheLoaderStopsFailing() throws {
         var isStorageFull = true
-        stack = makeStack { container in
+        let loader: (NSPersistentContainer) -> NSError? = { container in
             isStorageFull ? Self.storageFullError : Self.loadInMemory(container)
         }
-        XCTAssertThrowsError(try stack.openStore())
+        XCTAssertThrowsError(try makeStack(persistentStoreLoader: loader))
 
         isStorageFull = false
-        try stack.openStore()
+        stack = try makeStack(persistentStoreLoader: loader)
 
-        XCTAssertEqual(stack.viewContext.persistentStoreCoordinator?.persistentStores.count, 1)
-    }
-
-    func test_openStore_reusesTheLoadedStore() throws {
-        var attempts = 0
-        stack = makeStack { container in
-            attempts += 1
-            return Self.loadInMemory(container)
-        }
-        try stack.openStore()
-
-        try stack.openStore()
-
-        XCTAssertEqual(attempts, 1)
+        XCTAssertEqual(stack.persistentContainer.persistentStoreCoordinator.persistentStores.count, 1)
+        XCTAssertEqual(stack.newBackgroundContext().transactionAuthor, "app")
     }
 
     func test_changes_emitsWhenTheStoreChanges() throws {
@@ -163,7 +118,7 @@ class CoreDataStackTests: XCTestCase {
             .appendingPathComponent("CoreDataStackChangesTests-\(UUID().uuidString)", isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         temporaryDirectory = directory
-        stack = CoreDataStack(
+        stack = try CoreDataStack(
             name: "CoreDataStackChangesTests",
             modelUrl: CoreDataModelResources.quranModel,
             lazyUniquifiers: { [] },
@@ -177,7 +132,6 @@ class CoreDataStackTests: XCTestCase {
             }
         )
 
-        // Subscribe before the store loads.
         let changes = stack.changes()
         let changed = expectation(description: "The store reports a change")
         let task = Task {
@@ -230,8 +184,8 @@ class CoreDataStackTests: XCTestCase {
         return loadError
     }
 
-    private func makeStack(persistentStoreLoader: @escaping (NSPersistentContainer) -> NSError?) -> CoreDataStack {
-        CoreDataStack(
+    private func makeStack(persistentStoreLoader: @escaping (NSPersistentContainer) -> NSError?) throws -> CoreDataStack {
+        try CoreDataStack(
             name: "CoreDataStackOpenStoreTests-\(UUID().uuidString)",
             modelUrl: CoreDataModelResources.quranModel,
             lazyUniquifiers: { [] },

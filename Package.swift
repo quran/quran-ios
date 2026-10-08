@@ -591,8 +591,11 @@ private func featuresTargets() -> [[Target]] {
     let type = TargetType.features
     return [
         target(type, name: "AppDependencies", hasTests: false, dependencies: [
+            "CoreDataModel",
             "CoreDataPersistence",
             "NotePersistence",
+            "PageBookmarkPersistence",
+            "LegacyDataPersistence",
             "QuranTextKit",
             "Analytics",
             "AnnotationsService",
@@ -965,8 +968,17 @@ private func featuresTargets() -> [[Target]] {
             "WhatsNewFeature",
             "AudioUpdater",
             "AppMigrationFeature",
+            "AppDependencies",
         ] + mobileSyncTargetDependencies, testDependencies: [
+            "Analytics",
+            "AppDependencies",
+            "AuthenticationClient",
+            "BatchDownloader",
             "CoreDataModel",
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
+            "NoorUI",
+            "ReadingService",
         ]),
     ]
 }

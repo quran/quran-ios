@@ -21,9 +21,9 @@ class CoreDataInsertedEntitiesRetrieverTests: XCTestCase {
     var object2: MO_LastPage!
     var object3: MO_LastPage!
 
-    override func setUp() {
-        super.setUp()
-        stack = CoreDataStack.testingStack()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        stack = try CoreDataStack.testingStack()
         context = stack.newBackgroundContext()
 
         object1 = MO_LastPage(context: context)

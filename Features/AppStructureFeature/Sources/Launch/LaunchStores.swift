@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2026-10-07.
 //
 
+import AppDependencies
 import CoreData
 import CoreDataPersistence
 import Crashing
@@ -14,28 +15,61 @@ import MobileSync
 #endif
 import VLogging
 
-/// Opens the stores the app reads at launch, before anything resolves them.
+/// Opens the stores the app reads at launch and creates the app's dependencies from them.
 ///
 /// Building the app reads them right away, and a read that can't open its store crashes. Opening
 /// them first lets launch tell a device that's out of storage, which the user can fix, from any
 /// other failure.
-struct LaunchStores {
+@MainActor
+final class LaunchStores {
+    // MARK: Lifecycle
+
+    #if QURAN_SYNC
+    init(
+        host: AppHostDependencies,
+        loadCoreDataStack: @escaping () throws -> CoreDataStack = AppDependencies.loadCoreDataStack,
+        openMobileSyncDatabase: @escaping () throws(MobileSyncDatabaseError) -> Void = {
+            // The containers create the graph with `DriverFactory()` too, and the database is shared.
+            try SharedDependencyGraph.shared.openDatabase(using: DriverFactory())
+        }
+    ) {
+        self.host = host
+        self.loadCoreDataStack = loadCoreDataStack
+        self.openMobileSyncDatabase = openMobileSyncDatabase
+    }
+    #else
+    init(
+        host: AppHostDependencies,
+        loadCoreDataStack: @escaping () throws -> CoreDataStack = AppDependencies.loadCoreDataStack
+    ) {
+        self.host = host
+        self.loadCoreDataStack = loadCoreDataStack
+    }
+    #endif
+
     // MARK: Internal
 
-    let coreDataStack: CoreDataStack
-
-    /// Opens every store, stopping at the first one that fails. A failed open isn't cached, so
-    /// calling again retries it.
-    func open() -> Result<Void, LaunchStoreError> {
-        do {
-            try coreDataStack.openStore()
-        } catch {
-            return .failure(LaunchStoreError(coreDataError: error, availableCapacity: Self.availableCapacity()))
+    /// Opens every store, stopping at the first one that fails. A failed open isn't kept, so
+    /// calling again retries it. Once every store opens, later calls return the same dependencies.
+    func open() -> Result<AppDependencies, LaunchStoreError> {
+        if let dependencies {
+            return .success(dependencies)
+        }
+        let coreDataStack: CoreDataStack
+        if let openedCoreDataStack {
+            coreDataStack = openedCoreDataStack
+        } else {
+            do {
+                coreDataStack = try loadCoreDataStack()
+            } catch {
+                return .failure(LaunchStoreError(coreDataError: error, availableCapacity: Self.availableCapacity()))
+            }
+            // Kept, so retrying a later store never opens this file with a second coordinator.
+            openedCoreDataStack = coreDataStack
         }
         #if QURAN_SYNC
         do {
-            // The containers create the graph with `DriverFactory()` too, and the database is shared.
-            try SharedDependencyGraph.shared.openDatabase(using: DriverFactory())
+            try openMobileSyncDatabase()
         } catch {
             crashContext.setPersistence(store: "mobile_sync", operation: "open", phase: "failed")
             return .failure(LaunchStoreError(mobileSyncError: error, availableCapacity: Self.availableCapacity()))
@@ -43,7 +77,9 @@ struct LaunchStores {
         // Clears a failure recorded by an earlier attempt.
         crashContext.setPersistence(store: "mobile_sync", operation: "open", phase: "ready")
         #endif
-        return .success(())
+        let dependencies = AppDependencies(host: host, coreDataStack: coreDataStack)
+        self.dependencies = dependencies
+        return .success(dependencies)
     }
 
     /// The free space on the volume holding `directory`, measured at its nearest existing
@@ -51,7 +87,7 @@ struct LaunchStores {
     ///
     /// Reads real free space rather than the "important usage" capacity, which counts space
     /// the system could purge but SQLite can't write to yet.
-    static func availableCapacity(at directory: URL) -> Int? {
+    nonisolated static func availableCapacity(at directory: URL) -> Int? {
         var existingDirectory = directory.standardizedFileURL
         while !FileManager.default.fileExists(atPath: existingDirectory.path), existingDirectory.pathComponents.count > 1 {
             existingDirectory = existingDirectory.deletingLastPathComponent()
@@ -69,8 +105,16 @@ struct LaunchStores {
 
     // MARK: Private
 
+    private let host: AppHostDependencies
+    private let loadCoreDataStack: () throws -> CoreDataStack
+    #if QURAN_SYNC
+    private let openMobileSyncDatabase: () throws(MobileSyncDatabaseError) -> Void
+    #endif
+    private var openedCoreDataStack: CoreDataStack?
+    private var dependencies: AppDependencies?
+
     /// The free space on the volume holding the stores, which all live under Application Support.
-    private static func availableCapacity() -> Int? {
+    private nonisolated static func availableCapacity() -> Int? {
         availableCapacity(at: NSPersistentContainer.defaultDirectoryURL())
     }
 }

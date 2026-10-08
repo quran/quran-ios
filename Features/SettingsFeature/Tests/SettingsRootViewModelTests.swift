@@ -33,9 +33,11 @@ final class SettingsRootViewModelTests: XCTestCase {
         try await super.setUp()
         try await database.reset()
         LegacyImportPreferences.reset()
+        coreDataStack = try store.stack()
     }
 
     override func tearDown() async throws {
+        coreDataStack = nil
         try await database.reset()
         LegacyImportPreferences.reset()
         try await super.tearDown()
@@ -153,7 +155,7 @@ final class SettingsRootViewModelTests: XCTestCase {
 
     func test_logout_disablesLegacyImport() async throws {
         let store = TemporaryCoreDataStore()
-        let stack = store.stack()
+        let stack = try store.stack()
         try stack.write { context in
             let note = context.newNote("Legacy note", modifiedOn: 1)
             note.addToVerses(context.newVerse(sura: 1, ayah: 1))
@@ -189,7 +191,10 @@ final class SettingsRootViewModelTests: XCTestCase {
         navigationController: UINavigationController? = nil
     ) -> SettingsRootViewModel {
         let navigationController = navigationController ?? UINavigationController()
-        let container = AppDependenciesStub(authenticationClient: authenticationClient ?? UnavailableAuthenticationClient())
+        let container = AppDependencies(
+            host: AppHostDependenciesStub(authenticationClient: authenticationClient ?? UnavailableAuthenticationClient()),
+            coreDataStack: coreDataStack
+        )
         return SettingsRootViewModel(
             analytics: analytics,
             reviewService: ReviewService(analytics: NoopAnalytics()),
@@ -208,6 +213,8 @@ final class SettingsRootViewModelTests: XCTestCase {
     }
 
     private let database = MobileSyncTestDatabase.shared
+    private let store = TemporaryCoreDataStore()
+    private var coreDataStack: CoreDataStack!
 
     private func assertClientIsNotAuthenticated(_ error: Error?, file: StaticString = #filePath, line: UInt = #line) {
         guard case .notAuthenticated = error as? AuthenticationClientError else {

@@ -8,25 +8,18 @@
 import Analytics
 import AppDependencies
 import BatchDownloader
-import CoreDataPersistence
 import Foundation
-import LastPagePersistence
 import NoorUI
-import NotePersistence
-import PageBookmarkPersistence
 import ReadingService
 #if QURAN_SYNC
 import AuthenticationClient
 import AuthenticationClientFake
-import CoreDataPersistenceTestSupport
-import LegacyDataMigration
-import LegacyDataPersistence
 import MobileSync
 import MobileSyncTestSupport
 #endif
 
-/// The dependencies the Settings builders read; the rest are unused in these tests.
-struct AppDependenciesStub: AppDependencies {
+/// The host dependencies the Settings builders read; the rest are unused in these tests.
+struct AppHostDependenciesStub: AppHostDependencies {
     var appIconCatalog = AppIconCatalog(sections: [
         .init(id: "all", title: "All", previewSize: .large, options: [
             AppIconOption(
@@ -41,10 +34,6 @@ struct AppDependenciesStub: AppDependencies {
 
     #if QURAN_SYNC
     var authenticationClient: any AuthenticationClient = AuthenticationClientFake()
-    let legacyDataImportCoordinator = LegacyDataImportCoordinator(
-        reader: CoreDataLegacyDataReader(stack: CoreDataStack.testingStack()),
-        quranDataService: MobileSyncTestDatabase.shared.quranDataService
-    )
     var quranDataService: QuranDataService { MobileSyncTestDatabase.shared.quranDataService }
     #endif
 
@@ -60,10 +49,6 @@ struct AppDependenciesStub: AppDependencies {
     var analytics: AnalyticsLibrary { NoopAnalytics() }
     var readingResources: ReadingResourcesService { fatalError("Unused in tests") }
     var remoteResources: ReadingRemoteResources? { nil }
-    var coreDataStack: CoreDataStack { fatalError("Unused in tests") }
-    var lastPagePersistence: LastPagePersistence { fatalError("Unused in tests") }
-    var notePersistence: NotePersistence { fatalError("Unused in tests") }
-    var pageBookmarkPersistence: PageBookmarkPersistence { fatalError("Unused in tests") }
 }
 
 struct NoopAnalytics: AnalyticsLibrary {

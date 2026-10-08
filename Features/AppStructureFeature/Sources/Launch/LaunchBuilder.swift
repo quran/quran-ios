@@ -17,7 +17,7 @@ import UIKit
 public struct LaunchBuilder {
     // MARK: Lifecycle
 
-    public init(container: AppDependencies) {
+    public init(container: AppHostDependencies) {
         self.container = container
     }
 
@@ -29,9 +29,10 @@ public struct LaunchBuilder {
             databasesURL: container.databasesURL,
             recitersRetreiver: ReciterDataRetriever()
         )
+        let launchStores = Self.launchStores ?? LaunchStores(host: container)
+        Self.launchStores = launchStores
         return LaunchStartup(
-            appBuilder: AppBuilder(container: container),
-            launchStores: LaunchStores(coreDataStack: container.coreDataStack),
+            launchStores: launchStores,
             downloadBackupMigrator: DownloadBackupMigrator(),
             audioUpdater: audioUpdater,
             fileSystemMigrator: fileSystemMigrator,
@@ -43,5 +44,11 @@ public struct LaunchBuilder {
 
     // MARK: Internal
 
-    let container: AppDependencies
+    let container: AppHostDependencies
+
+    // MARK: Private
+
+    /// Shared by every launch in the process. iOS can disconnect the scene in the background and
+    /// connect a new one later; that launch reuses the open stores instead of opening them again.
+    private static var launchStores: LaunchStores?
 }

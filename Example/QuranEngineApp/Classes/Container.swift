@@ -8,25 +8,18 @@
 import Analytics
 import AppDependencies
 import BatchDownloader
-import CoreDataModel
-import CoreDataPersistence
 import Foundation
-import LastPagePersistence
 #if QURAN_SYNC
 import AuthenticationClient
-import LegacyDataMigration
-import LegacyDataPersistence
 import MobileSync
 #endif
 import NoorUI
-import NotePersistence
-import PageBookmarkPersistence
 import ReadingService
 import UIKit
 import VLogging
 
 /// Hosts singleton dependencies
-class Container: AppDependencies {
+class Container: AppHostDependencies {
     // MARK: Lifecycle
 
     private init() {}
@@ -40,20 +33,6 @@ class Container: AppDependencies {
 
     let analytics: AnalyticsLibrary = LoggingAnalyticsLibrary()
 
-    private(set) lazy var coreDataStack: CoreDataStack = {
-        let stack = CoreDataStack(name: "Quran", modelUrl: CoreDataModelResources.quranModel) {
-            let lastPage = CoreDataLastPageUniquifier()
-            let pageBookmark = CoreDataPageBookmarkUniquifier()
-            return [lastPage, pageBookmark]
-        }
-        return stack
-    }()
-
-    private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
-    private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
-
-    private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
-
     let appIconCatalog = AppIconCatalog.example
 
     #if QURAN_SYNC
@@ -63,11 +42,6 @@ class Container: AppDependencies {
         let authService = syncAppGraph.authService
         return AuthenticationClientMobileSyncImpl(authService: authService)
     }()
-
-    private(set) lazy var legacyDataImportCoordinator = LegacyDataImportCoordinator(
-        reader: CoreDataLegacyDataReader(stack: coreDataStack),
-        quranDataService: quranDataService
-    )
     #endif
 
     private(set) lazy var downloadManager: DownloadManager = {

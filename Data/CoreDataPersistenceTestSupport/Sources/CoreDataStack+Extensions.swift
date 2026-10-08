@@ -11,8 +11,8 @@ import CoreDataPersistence
 import SystemDependenciesFake
 
 extension CoreDataStack {
-    public static func testingStack() -> CoreDataStack {
-        CoreDataStack(name: "TestApp", modelUrl: CoreDataModelResources.quranModel, lazyUniquifiers: { [] })
+    public static func testingStack() throws -> CoreDataStack {
+        try CoreDataStack(name: "TestApp", modelUrl: CoreDataModelResources.quranModel, lazyUniquifiers: { [] })
     }
 
     /// Runs `body` on a new background context and saves it.

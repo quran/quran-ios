@@ -20,9 +20,8 @@ import QuranKit
 /// one query generation. Records that cannot be mapped yet, such as a note whose verses have not arrived,
 /// are left out, so a later read imports them. Repeated reads of the same store produce the same import.
 ///
-/// `CoreDataStack` is not `Sendable`, but the reader only loads the store through its lock and uses a new
-/// background context per read, touched only inside `perform`.
-public struct CoreDataLegacyDataReader: @unchecked Sendable {
+/// The reader uses a new background context per read, touched only inside `perform`.
+public struct CoreDataLegacyDataReader: Sendable {
     // MARK: Lifecycle
 
     public init(stack: CoreDataStack) {
@@ -33,9 +32,9 @@ public struct CoreDataLegacyDataReader: @unchecked Sendable {
 
     /// Reads every page bookmark, last page, and note.
     ///
-    /// Throws when the store cannot be opened or fetched; a failure is never reported as an empty import.
+    /// Throws when the store cannot be fetched; a failure is never reported as an empty import.
     public func importData() async throws -> PersistenceImportData {
-        let context = try stack.openBackgroundContext()
+        let context = stack.newBackgroundContext()
         return try await context.perform { context in
             // Pin the generation so all fetches observe the same store state.
             try context.setQueryGenerationFrom(.current)
@@ -57,7 +56,7 @@ public struct CoreDataLegacyDataReader: @unchecked Sendable {
 
     /// Emits whenever the store changes, including CloudKit arrivals.
     ///
-    /// The subscription is active when this method returns, even before the store loads.
+    /// The subscription is active when this method returns.
     public func changes() -> AsyncStream<Void> {
         stack.changes()
     }

@@ -23,7 +23,7 @@ final class QueuePlayerTests: XCTestCase {
 
     override func tearDown() async throws {
         player = nil
-        try audioFiles.removeAll()
+        try audioFiles?.removeAll()
         try await super.tearDown()
     }
 

@@ -18,7 +18,7 @@ final class PlayerTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        try audioFiles.removeAll()
+        try audioFiles?.removeAll()
         try await super.tearDown()
     }
 

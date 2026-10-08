@@ -36,6 +36,12 @@ final class Player {
         // With precise timing, AVFoundation may scan (or download) the whole file
         // to answer the duration, so never read it synchronously on the main thread.
         durationTask = Task { [weak self] in
+            // A player discarded before this runs (like the one `AudioPlayer` replaces
+            // right after creating it) is cancelled already. `load(_:)` ignores
+            // cancellation, so don't start a scan nobody will use.
+            guard !Task.isCancelled else {
+                return
+            }
             // A failed load reports zero, like the synchronous `AVAsset.duration`.
             let duration = (try? await asset.load(.duration))?.seconds ?? 0
             guard !Task.isCancelled, let self else {

@@ -56,6 +56,7 @@ public final class LaunchStartup {
     public func launch(from window: UIWindow) {
         // The accent follows the icon iOS shows, before any screen reads it.
         appIconService.applyAccent(to: window)
+        showLaunchScreenIfNeeded(window: window)
         crashApplicationObserver.start()
         crashContext.setStartupPhase("launching")
         #if QURAN_SYNC
@@ -153,7 +154,6 @@ public final class LaunchStartup {
     private func openStores(window: UIWindow) {
         crashContext.setStartupPhase("opening_stores")
         logger.info("Crash context: startup phase opening_stores")
-        showLaunchScreenIfNeeded(window: window)
         let launchStores = launchStores
         Task { [weak self, weak window] in
             let result = await launchStores.open()
@@ -163,7 +163,7 @@ public final class LaunchStartup {
     }
 
     /// Shows the app's launch screen until the app is built, so the window isn't black while
-    /// the stores open.
+    /// launch waits for protected data or the stores.
     private func showLaunchScreenIfNeeded(window: UIWindow) {
         guard window.rootViewController == nil,
               let name = Bundle.main.object(forInfoDictionaryKey: "UILaunchStoryboardName") as? String,

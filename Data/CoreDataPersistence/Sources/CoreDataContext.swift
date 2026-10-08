@@ -31,10 +31,10 @@ public final class CoreDataContext: @unchecked Sendable {
 
     /// Emits the request's results whenever they change. Emits nothing if the store can't open.
     public func publisher<Result: NSFetchRequestResult>(for request: NSFetchRequest<Result>) -> AnyPublisher<[Result], Never> {
-        if let context = openedContext() {
-            return CoreDataPublisher(request: request, context: context).eraseToAnyPublisher()
-        }
-        return Deferred {
+        Deferred {
+            if let context = self.openedContext() {
+                return Just(context).eraseToAnyPublisher()
+            }
             let opened = CurrentValueSubject<NSManagedObjectContext?, Never>(nil)
             Task {
                 do {
@@ -44,7 +44,7 @@ public final class CoreDataContext: @unchecked Sendable {
                     crasher.recordError(error, reason: "A Core Data publisher couldn't open its store")
                 }
             }
-            return opened.compactMap { $0 }.first()
+            return opened.compactMap { $0 }.first().eraseToAnyPublisher()
         }
         .flatMap { context in
             CoreDataPublisher(request: request, context: context)

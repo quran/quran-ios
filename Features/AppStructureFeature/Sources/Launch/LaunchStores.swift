@@ -16,9 +16,8 @@ import VLogging
 
 /// Opens the stores the app reads at launch, before anything resolves them.
 ///
-/// Building the app reads them right away, and a read that can't open its store crashes. Opening
-/// them first lets launch tell a device that's out of storage, which the user can fix, from any
-/// other failure.
+/// Opening them first lets launch tell a device that's out of storage, which the user can fix,
+/// from any other failure.
 @MainActor
 struct LaunchStores {
     // MARK: Internal

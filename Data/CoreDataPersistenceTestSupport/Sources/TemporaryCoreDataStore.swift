@@ -34,7 +34,7 @@ public final class TemporaryCoreDataStore {
     }
 
     /// Opens the store without uniquifiers. Pass ``firstModelURL`` to create a first-version store.
-    public func store(modelUrl: URL = CoreDataModelResources.quranModel) -> CoreDataStore {
+    public func makeStore(modelUrl: URL = CoreDataModelResources.quranModel) -> CoreDataStore {
         CoreDataStore(name: name, modelUrl: modelUrl, lazyUniquifiers: { [] })
     }
 

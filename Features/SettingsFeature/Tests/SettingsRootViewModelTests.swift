@@ -153,7 +153,7 @@ final class SettingsRootViewModelTests: XCTestCase {
 
     func test_logout_disablesLegacyImport() async throws {
         let store = TemporaryCoreDataStore()
-        let coreDataStore = store.store()
+        let coreDataStore = store.makeStore()
         try await coreDataStore.stack().write { context in
             let note = context.newNote("Legacy note", modifiedOn: 1)
             note.addToVerses(context.newVerse(sura: 1, ayah: 1))

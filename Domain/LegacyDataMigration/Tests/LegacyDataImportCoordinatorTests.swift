@@ -23,7 +23,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
         LegacyImportPreferences.reset()
         try await database.reset()
         store = TemporaryCoreDataStore()
-        coreDataStore = store.store()
+        coreDataStore = store.makeStore()
         sut = makeCoordinator()
     }
 
@@ -157,7 +157,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
 
         // A relaunch opens a new store, reader, and coordinator on the same file.
         sut = nil
-        coreDataStore = store.store()
+        coreDataStore = store.makeStore()
         sut = makeCoordinator()
         try await sut.importNow()
 

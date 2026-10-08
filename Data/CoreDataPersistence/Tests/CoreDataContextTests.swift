@@ -47,6 +47,26 @@ final class CoreDataContextTests: XCTestCase {
         await fulfillment(of: [emitted], timeout: 5)
     }
 
+    func test_publisher_subscribedBeforeTheStoreOpens_seesWritesThroughPerform() async throws {
+        let sut = CoreDataContext(store: makeStore { Self.loadInMemory($0) })
+        let emittedNote = expectation(description: "The publisher emits the written note")
+        let cancellable = sut.publisher(for: Self.notesRequest()).sink { notes in
+            if notes.map(\.note) == ["Written"] {
+                emittedNote.fulfill()
+            }
+        }
+        defer { cancellable.cancel() }
+
+        try await sut.perform { context in
+            let note = MO_Note(context: context)
+            note.note = "Written"
+            note.modifiedOn = Date()
+            try context.save()
+        }
+
+        await fulfillment(of: [emittedNote], timeout: 5)
+    }
+
     func test_publisher_emitsRightAwayWhenTheStoreIsOpen() async throws {
         let store = makeStore { Self.loadInMemory($0) }
         _ = try await store.stack()
@@ -66,7 +86,7 @@ final class CoreDataContextTests: XCTestCase {
 
         let collector = PublisherCollector(sut.publisher(for: Self.notesRequest()))
         await fulfillment(of: [attempted], timeout: 5)
-        // Lets the failed open finish before checking.
+        // A bounded negative check: gives the failed open time to finish before checking nothing arrived.
         try? await Task.sleep(nanoseconds: 100_000_000)
 
         XCTAssertEqual(collector.items, [])

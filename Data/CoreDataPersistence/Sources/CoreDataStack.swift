@@ -42,7 +42,7 @@ public final class CoreDataStack: @unchecked Sendable {
     ) throws {
         self.name = name
         self.lazyUniquifiers = lazyUniquifiers
-        persistentContainer = try Self.makeLoadedPersistentContainer(
+        persistentContainer = try Self.loadPersistentContainer(
             name: name,
             modelUrl: modelUrl,
             persistentStoreLoader: persistentStoreLoader
@@ -130,31 +130,21 @@ public final class CoreDataStack: @unchecked Sendable {
         return NSPersistentCloudKitContainer(name: name, managedObjectModel: model)
     }
 
-    private static func makeLoadedPersistentContainer(
+    private static func loadPersistentContainer(
         name: String,
         modelUrl: URL,
         persistentStoreLoader: (NSPersistentContainer) -> NSError?
     ) throws -> NSPersistentContainer {
         crashContext.setPersistence(store: name, operation: "load_store", phase: "starting")
         logger.info("Core Data store load starting: \(name)")
-        let container = try loadPersistentContainer(name: name, modelUrl: modelUrl, persistentStoreLoader: persistentStoreLoader)
-        crashContext.setPersistence(store: name, operation: "load_store", phase: "ready")
-        logger.info("Core Data store loaded: \(name)")
-
-        return container
-    }
-
-    private static func loadPersistentContainer(
-        name: String,
-        modelUrl: URL,
-        persistentStoreLoader: (NSPersistentContainer) -> NSError?
-    ) throws -> NSPersistentContainer {
         var attempt = 1
         while true {
             let container = newPersistenceContainer(name: name, modelUrl: modelUrl)
             configurePersistentStores(in: container, name: name)
 
             guard let error = persistentStoreLoader(container) else {
+                crashContext.setPersistence(store: name, operation: "load_store", phase: "ready")
+                logger.info("Core Data store loaded: \(name)")
                 return container
             }
             guard PersistentStoreLoadRecovery.shouldRetry(error, attempt: attempt) else {

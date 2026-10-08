@@ -136,7 +136,6 @@ final class LaunchStores {
     ) async -> Result<CoreDataStack, LaunchStoreError> {
         let start = Date()
         defer {
-            // Hang reports no longer cover a slow open, so the logs do.
             let seconds = Date().timeIntervalSince(start)
             logger.notice("Launch stores: the Core Data store took \(String(format: "%.2f", seconds)) s to load")
         }

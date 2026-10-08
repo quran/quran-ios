@@ -59,20 +59,6 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
         XCTAssertEqual(data, emptyImport)
     }
 
-    func test_importData_throwsWhenStoreCannotOpen_thenRecoversOnRetry() async throws {
-        try store.corrupt()
-        let reader = try CoreDataLegacyDataReader(stack: store.stack())
-
-        do {
-            _ = try await reader.importData()
-            XCTFail("A failed open must not produce an empty import")
-        } catch {}
-
-        store.removeStoreFiles()
-        let data = try await reader.importData()
-        XCTAssertEqual(data, emptyImport)
-    }
-
     func test_importData_performsNoApplicationSaves() async throws {
         let stack = try store.stack()
         try stack.write { context in

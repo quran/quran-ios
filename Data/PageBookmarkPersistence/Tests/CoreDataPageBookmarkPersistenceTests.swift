@@ -18,11 +18,12 @@ final class CoreDataPageBookmarkPersistenceTests: XCTestCase {
     var stack: CoreDataStack!
     var subscriptions = Set<AnyCancellable>()
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
-        stack = CoreDataStack.testingStack()
-        persistence = CoreDataPageBookmarkPersistence(stack: stack)
+        let store = CoreDataStore.testingStore()
+        stack = try await store.stack()
+        persistence = CoreDataPageBookmarkPersistence(store: store)
     }
 
     override func tearDown() {
@@ -107,9 +108,9 @@ final class CoreDataPageBookmarkPersistenceTests: XCTestCase {
     }
 
     func testPageBookmarksIgnoreInvalidStoredPages() throws {
-        let context = stack.viewContext
-        _ = context.newPageBookmark(page: 605, modifiedOn: 1)
-        try context.save()
+        try stack.write { context in
+            _ = context.newPageBookmark(page: 605, modifiedOn: 1)
+        }
 
         let collector = PublisherCollector(persistence.pageBookmarks())
 

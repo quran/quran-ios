@@ -43,7 +43,7 @@ public protocol AppDependencies {
 
     /// The Core Data store behind the persistence services. Launch opens it before
     /// building the app, so a device that's out of storage can recover instead of crashing.
-    var coreDataStack: CoreDataStack { get }
+    var coreDataStore: CoreDataStore { get }
     var lastPagePersistence: LastPagePersistence { get }
     var notePersistence: NotePersistence { get }
     var pageBookmarkPersistence: PageBookmarkPersistence { get }

@@ -16,8 +16,8 @@ import QuranKit
 public final class CoreDataLastPagePersistence: LastPagePersistence {
     // MARK: Lifecycle
 
-    public init(stack: CoreDataStack) {
-        context = stack.newBackgroundContext()
+    public init(store: CoreDataStore) {
+        context = CoreDataContext(store: store)
     }
 
     // MARK: Public
@@ -25,7 +25,7 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
     public func lastPages() -> AnyPublisher<[LastPagePersistenceModel], Never> {
         let request: NSFetchRequest<MO_LastPage> = MO_LastPage.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: Schema.LastPage.modifiedOn, ascending: false)]
-        return CoreDataPublisher(request: request, context: context)
+        return context.publisher(for: request)
             .map { lastPages in
                 lastPages.prefix(Self.maxNumberOfLastPages).compactMap { LastPagePersistenceModel($0) }
             }
@@ -86,7 +86,7 @@ public final class CoreDataLastPagePersistence: LastPagePersistence {
 
     private static let maxNumberOfLastPages = 10
 
-    private let context: NSManagedObjectContext
+    private let context: CoreDataContext
     private let overflowHandler = CoreDataLastPageOverflowHandler()
 
     private func add(

@@ -31,7 +31,7 @@ public struct LaunchBuilder {
         )
         return LaunchStartup(
             appBuilder: AppBuilder(container: container),
-            launchStores: LaunchStores(coreDataStack: container.coreDataStack),
+            launchStores: LaunchStores(coreDataStore: container.coreDataStore),
             downloadBackupMigrator: DownloadBackupMigrator(),
             audioUpdater: audioUpdater,
             fileSystemMigrator: fileSystemMigrator,

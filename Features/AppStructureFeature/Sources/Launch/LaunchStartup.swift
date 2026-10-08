@@ -97,6 +97,7 @@ public final class LaunchStartup {
 
     private let appMigrator = AppMigrator()
     private var appViewController: AppViewController?
+    private var launchScreen: UIViewController?
     private var pendingDeepLink: QuranDeepLink?
     private var protectedDataObserver: NSObjectProtocol?
     private var protectedDataStartupState = ProtectedDataStartupState()
@@ -152,7 +153,32 @@ public final class LaunchStartup {
     private func openStores(window: UIWindow) {
         crashContext.setStartupPhase("opening_stores")
         logger.info("Crash context: startup phase opening_stores")
-        switch launchStores.open() {
+        showLaunchScreenIfNeeded(window: window)
+        let launchStores = launchStores
+        Task { [weak self, weak window] in
+            let result = await launchStores.open()
+            guard let self, let window else { return }
+            handleOpenedStores(result, window: window)
+        }
+    }
+
+    /// Shows the app's launch screen until the app is built, so the window isn't black while
+    /// the stores open.
+    private func showLaunchScreenIfNeeded(window: UIWindow) {
+        guard window.rootViewController == nil,
+              let name = Bundle.main.object(forInfoDictionaryKey: "UILaunchStoryboardName") as? String,
+              Bundle.main.path(forResource: name, ofType: "storyboardc") != nil,
+              let launchScreen = UIStoryboard(name: name, bundle: .main).instantiateInitialViewController()
+        else {
+            return
+        }
+        self.launchScreen = launchScreen
+        window.rootViewController = launchScreen
+        window.makeKeyAndVisible()
+    }
+
+    private func handleOpenedStores(_ result: Result<Void, LaunchStoreError>, window: UIWindow) {
+        switch result {
         case .success:
             handleStoreOpen(storeOpenStartupState.storesOpened(), window: window)
         case let .failure(.storageFull(store, error)):
@@ -260,7 +286,9 @@ public final class LaunchStartup {
         crashContext.setStartupPhase("building_ui")
         logger.info("Crash context: startup phase building_ui")
 
-        let wasUpdated = window.rootViewController != nil
+        // Replacing the launch screen looks like a normal launch; replacing any other screen cross-fades.
+        let wasUpdated = window.rootViewController.map { $0 !== launchScreen } ?? false
+        launchScreen = nil
 
         let appViewController = appBuilder.build(launchVersion: launchVersion)
         self.appViewController = appViewController

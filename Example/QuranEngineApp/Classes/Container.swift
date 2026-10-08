@@ -40,19 +40,16 @@ class Container: AppDependencies {
 
     let analytics: AnalyticsLibrary = LoggingAnalyticsLibrary()
 
-    private(set) lazy var coreDataStack: CoreDataStack = {
-        let stack = CoreDataStack(name: "Quran", modelUrl: CoreDataModelResources.quranModel) {
-            let lastPage = CoreDataLastPageUniquifier()
-            let pageBookmark = CoreDataPageBookmarkUniquifier()
-            return [lastPage, pageBookmark]
-        }
-        return stack
-    }()
+    let coreDataStore = CoreDataStore(name: "Quran", modelUrl: CoreDataModelResources.quranModel) {
+        let lastPage = CoreDataLastPageUniquifier()
+        let pageBookmark = CoreDataPageBookmarkUniquifier()
+        return [lastPage, pageBookmark]
+    }
 
-    private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(stack: coreDataStack)
-    private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(stack: coreDataStack)
+    private(set) lazy var lastPagePersistence: LastPagePersistence = CoreDataLastPagePersistence(store: coreDataStore)
+    private(set) lazy var pageBookmarkPersistence: PageBookmarkPersistence = CoreDataPageBookmarkPersistence(store: coreDataStore)
 
-    private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(stack: coreDataStack)
+    private(set) lazy var notePersistence: NotePersistence = CoreDataNotePersistence(store: coreDataStore)
 
     let appIconCatalog = AppIconCatalog.example
 
@@ -65,7 +62,7 @@ class Container: AppDependencies {
     }()
 
     private(set) lazy var legacyDataImportCoordinator = LegacyDataImportCoordinator(
-        reader: CoreDataLegacyDataReader(stack: coreDataStack),
+        reader: CoreDataLegacyDataReader(store: coreDataStore),
         quranDataService: quranDataService
     )
     #endif

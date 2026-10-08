@@ -24,11 +24,11 @@ final class LegacyDataMigratorTests: XCTestCase {
         try await database.reset()
         LegacyImportPreferences.reset()
         store = TemporaryCoreDataStore()
-        stack = store.stack()
+        coreDataStore = store.store()
     }
 
     override func tearDown() async throws {
-        stack = nil
+        coreDataStore = nil
         store = nil
         try await database.reset()
         LegacyImportPreferences.reset()
@@ -36,7 +36,7 @@ final class LegacyDataMigratorTests: XCTestCase {
     }
 
     func test_execute_importsLegacyData() async throws {
-        try stack.write { context in
+        try await coreDataStore.stack().write { context in
             let note = context.newNote("Legacy note", modifiedOn: 1)
             note.addToVerses(context.newVerse(sura: 1, ayah: 1))
         }
@@ -60,11 +60,11 @@ final class LegacyDataMigratorTests: XCTestCase {
 
     private let database = MobileSyncTestDatabase.shared
     private var store: TemporaryCoreDataStore!
-    private var stack: CoreDataStack!
+    private var coreDataStore: CoreDataStore!
 
     private func makeMigrator() -> LegacyDataMigrator {
         let coordinator = LegacyDataImportCoordinator(
-            reader: CoreDataLegacyDataReader(stack: stack),
+            reader: CoreDataLegacyDataReader(store: coreDataStore),
             quranDataService: database.quranDataService
         )
         return LegacyDataMigrator(coordinator: coordinator, retryDelay: 0)

@@ -34,8 +34,8 @@ public final class TemporaryCoreDataStore {
     }
 
     /// Opens the store without uniquifiers. Pass ``firstModelURL`` to create a first-version store.
-    public func stack(modelUrl: URL = CoreDataModelResources.quranModel) -> CoreDataStack {
-        CoreDataStack(name: name, modelUrl: modelUrl, lazyUniquifiers: { [] })
+    public func store(modelUrl: URL = CoreDataModelResources.quranModel) -> CoreDataStore {
+        CoreDataStore(name: name, modelUrl: modelUrl, lazyUniquifiers: { [] })
     }
 
     /// Replaces the store with a file that SQLite cannot open.

@@ -26,7 +26,7 @@ final class LaunchStores {
     #if QURAN_SYNC
     init(
         host: AppHostDependencies,
-        loadCoreDataStack: @escaping @Sendable () throws -> CoreDataStack = AppDependencies.loadCoreDataStack,
+        loadCoreDataStack: @escaping @Sendable () throws -> CoreDataStack = { try AppDependencies.loadCoreDataStack() },
         openMobileSyncDatabase: @escaping () throws(MobileSyncDatabaseError) -> Void = {
             // The containers create the graph with `DriverFactory()` too, and the database is shared.
             try SharedDependencyGraph.shared.openDatabase(using: DriverFactory())
@@ -39,7 +39,7 @@ final class LaunchStores {
     #else
     init(
         host: AppHostDependencies,
-        loadCoreDataStack: @escaping @Sendable () throws -> CoreDataStack = AppDependencies.loadCoreDataStack
+        loadCoreDataStack: @escaping @Sendable () throws -> CoreDataStack = { try AppDependencies.loadCoreDataStack() }
     ) {
         self.host = host
         self.loadCoreDataStack = loadCoreDataStack

@@ -112,14 +112,14 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         crashContext.setScreen("quran")
         UIApplication.shared.isIdleTimerDisabled = true
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        setOuterTabBarHiddenForIOS26(true, animated: animated)
+        setOuterTabBarHiddenForIPadOS26(true, animated: animated)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         crashContext.clearActiveList(owner: "quran_translation")
         navigationController?.setNavigationBarHidden(false, animated: animated)
-        setOuterTabBarHiddenForIOS26(false, animated: animated)
+        setOuterTabBarHiddenForIPadOS26(false, animated: animated)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -352,10 +352,13 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         barsTimer = nil
     }
 
-    private func setOuterTabBarHiddenForIOS26(_ hidden: Bool, animated: Bool) {
+    private func setOuterTabBarHiddenForIPadOS26(_ hidden: Bool, animated: Bool) {
         // On iPadOS 26, UIKit can leave the top tab bar visible despite hidesBottomBarWhenPushed.
         // Explicitly hiding the active tab bar works around that UIKit regression.
-        guard #available(iOS 26.0, *) else { return }
+        // iPhone relies on hidesBottomBarWhenPushed alone: calling this there would drive the tab bar
+        // controller mid-push (and mid-pop), competing with UIKit's own bottom-bar transition.
+        // The trait collection's idiom can be unspecified during transitions, so this asks the device.
+        guard #available(iOS 26.0, *), UIDevice.current.userInterfaceIdiom == .pad else { return }
         tabBarController?.setTabBarHidden(hidden, animated: animated)
     }
 

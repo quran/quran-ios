@@ -41,6 +41,7 @@ public final class ContentTranslationViewModel: ObservableObject {
         reading = ReadingPreferences.shared.reading
         arabicFontSize = fontSizePreferences.arabicFontSize
         translationFontSize = fontSizePreferences.translationFontSize
+        showArabicText = contentStatePreferences.showArabicInTranslation
         selectedTranslations = selectedTranslationsPreferences.selectedTranslationIds
         highlights = [:]
 
@@ -84,6 +85,10 @@ public final class ContentTranslationViewModel: ObservableObject {
             .sink { [weak self] in self?.arabicFontSize = $0 }
             .store(in: &cancellables)
 
+        contentStatePreferences.$showArabicInTranslation
+            .sink { [weak self] in self?.showArabicText = $0 }
+            .store(in: &cancellables)
+
         selectedTranslationsPreferences.$selectedTranslationIds
             .sink { [weak self] in self?.selectedTranslations = $0 }
             .store(in: &cancellables)
@@ -125,6 +130,10 @@ public final class ContentTranslationViewModel: ObservableObject {
     @Published var translationFontSize: FontSize
     @Published var arabicFontSize: FontSize
 
+    @Published var showArabicText: Bool {
+        didSet { recordListUpdate(reason: "arabic_text_visibility_changed") }
+    }
+
     @Published var highlights: [AyahNumber: Color]
 
     #if QURAN_SYNC
@@ -151,6 +160,9 @@ public final class ContentTranslationViewModel: ObservableObject {
             return []
         }
 
+        // Never leave a page with verse numbers only.
+        let showsArabicText = showArabicText || translations.isEmpty
+
         var items: [TranslationItem] = []
 
         for (verse, verseText) in verseTexts.sorted(by: { $0.key < $1.key }) {
@@ -162,6 +174,7 @@ public final class ContentTranslationViewModel: ObservableObject {
                     .suraName(
                         TranslationSuraName(
                             sura: verse.sura,
+                            showsBesmAllah: showsArabicText,
                             quranFont: quranFont,
                             arabicFontSize: arabicFontSize
                         ),
@@ -170,26 +183,11 @@ public final class ContentTranslationViewModel: ObservableObject {
                 )
             }
 
-            // Add arabic quran text
-            let arabicVerseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
-            let arabicText = QuranText(verseText.arabicText.text + " " + arabicVerseNumber)
-            #if QURAN_SYNC
-            let arabicItem = TranslationArabicText(
-                verse: verse,
-                text: arabicText,
-                quranFont: quranFont,
-                arabicFontSize: arabicFontSize,
-                annotations: annotationsByVerse[verse, default: []]
-            )
-            #else
-            let arabicItem = TranslationArabicText(
-                verse: verse,
-                text: arabicText,
-                quranFont: quranFont,
-                arabicFontSize: arabicFontSize
-            )
-            #endif
-            items.append(.arabicText(arabicItem, color))
+            if showsArabicText {
+                items.append(.arabicText(arabicText(verse: verse, verseText: verseText, quranFont: quranFont), color))
+            } else {
+                items.append(.verseNumber(verseNumber(verse: verse), color))
+            }
 
             for (index, translation) in translations.enumerated() {
                 let text = verseText.translations[index]
@@ -341,7 +339,37 @@ public final class ContentTranslationViewModel: ObservableObject {
     private let localTranslationsRetriever: LocalTranslationsRetriever
     private let readingPreferences = ReadingPreferences.shared
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
+    private let contentStatePreferences = QuranContentStatePreferences.shared
     private let fontSizePreferences = FontSizePreferences.shared
+
+    private func arabicText(verse: AyahNumber, verseText: VerseText, quranFont: QuranFont) -> TranslationArabicText {
+        let arabicVerseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
+        let text = QuranText(verseText.arabicText.text + " " + arabicVerseNumber)
+        #if QURAN_SYNC
+        return TranslationArabicText(
+            verse: verse,
+            text: text,
+            quranFont: quranFont,
+            arabicFontSize: arabicFontSize,
+            annotations: annotationsByVerse[verse, default: []]
+        )
+        #else
+        return TranslationArabicText(
+            verse: verse,
+            text: text,
+            quranFont: quranFont,
+            arabicFontSize: arabicFontSize
+        )
+        #endif
+    }
+
+    private func verseNumber(verse: AyahNumber) -> TranslationVerseNumber {
+        #if QURAN_SYNC
+        TranslationVerseNumber(verse: verse, annotations: annotationsByVerse[verse, default: []])
+        #else
+        TranslationVerseNumber(verse: verse)
+        #endif
+    }
 
     private func recordListUpdate(reason: String) {
         let rowsBefore = recordedRowCount

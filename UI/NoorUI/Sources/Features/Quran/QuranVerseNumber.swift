@@ -1,0 +1,98 @@
+//
+//  QuranVerseNumber.swift
+//
+//
+//  Created by Mohamed Afifi on 2026-10-08.
+//
+
+import Localization
+import QuranAnnotations
+import QuranKit
+import SwiftUI
+import UIx
+
+public struct QuranVerseNumber: View {
+    @ScaledMetric(relativeTo: .footnote) private var horizontalPadding = 12
+    @ScaledMetric(relativeTo: .footnote) private var verticalPadding = 6
+    @ScaledMetric(relativeTo: .footnote) private var spacing = 8
+    @ScaledMetric(relativeTo: .footnote) private var annotationSize = 13
+
+    let verse: AyahNumber
+
+    #if QURAN_SYNC
+    private let annotations: Set<AyahAnnotation>
+    private let onTapped: (CGPoint) -> Void
+    @State private var capsuleFrame: CGRect = .zero
+
+    public init(verse: AyahNumber, annotations: Set<AyahAnnotation>, onTapped: @escaping (CGPoint) -> Void) {
+        self.verse = verse
+        self.annotations = annotations
+        self.onTapped = onTapped
+    }
+    #else
+    public init(verse: AyahNumber) {
+        self.verse = verse
+    }
+    #endif
+
+    public var body: some View {
+        #if QURAN_SYNC
+        Button {
+            onTapped(CGPoint(x: capsuleFrame.midX, y: capsuleFrame.midY))
+        } label: {
+            capsule
+                .onGlobalFrameChanged { capsuleFrame = $0 }
+                .minimumTouchTarget()
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("translation-ayah-number-\(verse.sura.suraNumber)-\(verse.ayah)")
+        #else
+        capsule
+        #endif
+    }
+
+    private var capsule: some View {
+        HStack(spacing: spacing) {
+            Text(lFormat("translation.text.ayah-number", verse.sura.suraNumber, verse.ayah))
+            #if QURAN_SYNC
+            if !annotations.isEmpty {
+                Divider()
+                    .frame(height: annotationSize)
+                ForEach(annotations.ordered) { annotation in
+                    AyahAnnotationIcon(annotation: annotation, size: annotationSize)
+                }
+            }
+            #endif
+        }
+        .font(.footnote)
+        .fixedSize()
+        .padding(.horizontal, horizontalPadding)
+        .padding(.vertical, verticalPadding)
+        .themedSecondaryForeground()
+        .themedSecondaryBackground()
+        .clipShape(Capsule())
+        .accessibilityElement(children: .combine)
+    }
+}
+
+#if QURAN_SYNC
+#Preview("Verse number and annotations") {
+    VStack(alignment: .leading) {
+        ForEach([Set<AyahAnnotation>(), [.note], [.readingBookmark(.teal), .readingBookmark(.orange), .collection, .note]], id: \.self) { annotations in
+            QuranVerseNumber(
+                verse: Quran.hafsMadani1405.suras[1].verses[7],
+                annotations: annotations,
+                onTapped: { _ in }
+            )
+        }
+    }
+    .padding()
+    .themedBackground()
+}
+#else
+#Preview("Verse number") {
+    QuranVerseNumber(verse: Quran.hafsMadani1405.suras[1].verses[7])
+        .padding()
+        .themedBackground()
+}
+#endif

@@ -34,6 +34,7 @@ public struct MoreMenuControlsState {
 
     public var mode = ConfigState.conditional
     public var translationsSelection = ConfigState.conditional
+    public var arabicText = ConfigState.conditional
     public var wordPointer = ConfigState.conditional
     public var linePageDisplay = ConfigState.alwaysOff
     public var orientation = ConfigState.conditional

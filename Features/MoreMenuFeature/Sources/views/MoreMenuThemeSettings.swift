@@ -43,6 +43,7 @@ final class ThemeSettingsController<V: View>: UIHostingController<V> {
 
 struct MoreMenuThemeSettingsMenuItem: View {
     let showFontSize: Bool
+    let showArabicFontSize: Bool
 
     @Environment(\.navigator) private var navigator
     @State private var viewController: UIViewController?
@@ -72,7 +73,7 @@ struct MoreMenuThemeSettingsMenuItem: View {
     }
 
     private func themeSettingsView() -> some View {
-        MoreMenuThemeSettingsView(showFontSize: showFontSize)
+        MoreMenuThemeSettingsView(showFontSize: showFontSize, showArabicFontSize: showArabicFontSize)
     }
 }
 
@@ -117,6 +118,7 @@ private struct MoreMenuThemeSettingsView: View {
     @StateObject var viewModel = MoreMenuThemeSettingsViewModel()
 
     let showFontSize: Bool
+    let showArabicFontSize: Bool
 
     @State private var arabicLabelSize: CGSize = .zero
     @State private var translationLabelSize: CGSize = .zero
@@ -140,15 +142,17 @@ private struct MoreMenuThemeSettingsView: View {
                     }
 
                     if showFontSize {
-                        FontSizeView(
-                            label: l("menu.arabicFontSize"),
-                            labelWidth: fontSizeLabelWidth,
-                            size: $viewModel.arabicFontSize,
-                            labelSize: $arabicLabelSize
-                        )
+                        if showArabicFontSize {
+                            FontSizeView(
+                                label: l("menu.arabicFontSize"),
+                                labelWidth: fontSizeLabelWidth,
+                                size: $viewModel.arabicFontSize,
+                                labelSize: $arabicLabelSize
+                            )
 
-                        Divider()
-                            .padding(.vertical, compactVerticalPadding)
+                            Divider()
+                                .padding(.vertical, compactVerticalPadding)
+                        }
 
                         FontSizeView(
                             label: l("menu.translationFontSize"),
@@ -183,9 +187,9 @@ private struct MoreMenuThemeSettingsView: View {
 #Preview {
     VStack {
         Section {
-            MoreMenuThemeSettingsMenuItem(showFontSize: true)
+            MoreMenuThemeSettingsMenuItem(showFontSize: true, showArabicFontSize: true)
         }
 
-        MoreMenuThemeSettingsView(showFontSize: false)
+        MoreMenuThemeSettingsView(showFontSize: false, showArabicFontSize: true)
     }
 }

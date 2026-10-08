@@ -52,6 +52,12 @@ private struct MoreMenuRootView: View {
                         empty
                     }
 
+                    viewBasedOn(state.arabicText, customCondition: store.mode == .translation) {
+                        MoreMenuArabicText(enabled: $store.showArabicText)
+                            .background(Color.systemBackground)
+                        empty
+                    }
+
                     viewBasedOn(state.wordPointer, customCondition: store.mode == .arabic) {
                         MoreMenuWordPointer(enabled: $store.wordPointerEnabled)
                             .background(Color.systemBackground)
@@ -96,7 +102,10 @@ private struct MoreMenuRootView: View {
                     }
 
                     viewBasedOn(state.theme) {
-                        MoreMenuThemeSettingsMenuItem(showFontSize: isVisible(state.fontSize, customCondition: store.mode == .translation))
+                        MoreMenuThemeSettingsMenuItem(
+                            showFontSize: isVisible(state.fontSize, customCondition: store.mode == .translation),
+                            showArabicFontSize: store.showArabicText
+                        )
                     }
                 }
             }

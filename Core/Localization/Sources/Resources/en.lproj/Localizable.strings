@@ -99,6 +99,18 @@
 "theme.match_device" = "Match Device";
 "theme.auto.message" = "Quran app will adhere to your iPhone's appearance setting";
 "theme.appearance" = "Appearance";
+// Heading for the reading theme choices.
+"theme.styles" = "Themes";
+// Reading theme with a light gray, paper-like background.
+"theme.style.paper" = "Paper";
+// Reading theme with the original white (or black) background.
+"theme.style.original" = "Original";
+// Reading theme with a muted dark gray background.
+"theme.style.quiet" = "Quiet";
+// Reading theme with a warm sepia background.
+"theme.style.calm" = "Calm";
+// Reading theme with a soft cream background.
+"theme.style.focus" = "Focus";
 
 // MARK: - App Icon
 

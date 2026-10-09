@@ -87,6 +87,18 @@
 "theme.match_device" = "مطابقة الجهاز";
 "theme.auto.message" = "سوف يلتزم تطبيق القرآن بإعداد مظهر iPhone الخاص بك";
 "theme.appearance" = "المظهر";
+// Heading for the reading theme choices.
+"theme.styles" = "السمات";
+// Reading theme with a light gray, paper-like background.
+"theme.style.paper" = "ورقي";
+// Reading theme with the original white (or black) background.
+"theme.style.original" = "أصلي";
+// Reading theme with a muted dark gray background.
+"theme.style.quiet" = "ساكن";
+// Reading theme with a warm sepia background.
+"theme.style.calm" = "هادئ";
+// Reading theme with a soft cream background.
+"theme.style.focus" = "تركيز";
 
 // MARK: - App Icon
 

@@ -118,6 +118,24 @@
 "theme.auto.message" = "Qur'on ilovasi iPhone-ning ko'rinish sozlamalariga rioya qiladi";
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Ko'rinish";
+// Heading for the reading theme choices.
+// Metadata: Translated by AI; human review required.
+"theme.styles" = "Mavzular";
+// Reading theme with a light gray, paper-like background.
+// Metadata: Translated by AI; human review required.
+"theme.style.paper" = "Qog‘oz";
+// Reading theme with the original white (or black) background.
+// Metadata: Translated by AI; human review required.
+"theme.style.original" = "Asl";
+// Reading theme with a muted dark gray background.
+// Metadata: Translated by AI; human review required.
+"theme.style.quiet" = "Sokin";
+// Reading theme with a warm sepia background.
+// Metadata: Translated by AI; human review required.
+"theme.style.calm" = "Osuda";
+// Reading theme with a soft cream background.
+// Metadata: Translated by AI; human review required.
+"theme.style.focus" = "Diqqat";
 
 // MARK: - App Icon
 

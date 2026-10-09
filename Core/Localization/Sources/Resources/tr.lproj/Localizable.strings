@@ -90,6 +90,24 @@
 "theme.auto.message" = "Kur'an uygulamasının teması iPhone ayarlarına göre belirlenecek";
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Görünüm";
+// Heading for the reading theme choices.
+// Metadata: Translated by AI; human review required.
+"theme.styles" = "Temalar";
+// Reading theme with a light gray, paper-like background.
+// Metadata: Translated by AI; human review required.
+"theme.style.paper" = "Kâğıt";
+// Reading theme with the original white (or black) background.
+// Metadata: Translated by AI; human review required.
+"theme.style.original" = "Orijinal";
+// Reading theme with a muted dark gray background.
+// Metadata: Translated by AI; human review required.
+"theme.style.quiet" = "Sessiz";
+// Reading theme with a warm sepia background.
+// Metadata: Translated by AI; human review required.
+"theme.style.calm" = "Sakin";
+// Reading theme with a soft cream background.
+// Metadata: Translated by AI; human review required.
+"theme.style.focus" = "Odak";
 
 // MARK: - App Icon
 

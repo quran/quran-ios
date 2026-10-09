@@ -67,7 +67,7 @@ final class PlayerTests: XCTestCase {
 
     private func waitForDuration(of player: Player) async {
         let loaded = expectation(description: "Duration loaded")
-        player.onDurationLoaded = { loaded.fulfill() }
+        player.onDurationLoaded = { _ in loaded.fulfill() }
         await fulfillment(of: [loaded], timeout: 5)
     }
 }

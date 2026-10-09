@@ -126,8 +126,13 @@ class AudioPlayer {
         player.onRateChanged = { [weak self] in
             self?.rateChanged(to: $0)
         }
-        player.onDurationLoaded = { [weak self] in
-            self?.durationLoaded()
+        player.onDurationLoaded = { [weak self, weak player] duration in
+            // Only the current player reports: a replaced one can stay alive briefly,
+            // e.g. while its pending rate callback runs.
+            guard let self, let player, player === self.player else {
+                return
+            }
+            durationLoaded(duration)
         }
         return player
     }
@@ -162,7 +167,7 @@ class AudioPlayer {
         waitUntilFrameEnds(currentTime: currentTime)
 
         // inform the delegate of a frame changed
-        actions?.audioFrameChanged(fileIndex, frameIndex, player.playerItem)
+        actions?.audioFrameChanged(fileIndex, frameIndex, player.playerItem, player.duration)
     }
 
     private func onFrameEnded() {
@@ -288,7 +293,8 @@ class AudioPlayer {
 
     // MARK: - PlayerDelegate
 
-    private func durationLoaded() {
+    private func durationLoaded(_ duration: TimeInterval) {
+        actions?.durationLoaded(duration)
         guard isWaitingForDuration, let mediaDelta = getDurationToFrameEnd() else {
             return
         }

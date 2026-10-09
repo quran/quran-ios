@@ -49,14 +49,14 @@ final class Player {
                 return
             }
             self.duration = duration
-            onDurationLoaded?()
+            onDurationLoaded?(duration)
         }
     }
 
     // MARK: Internal
 
     var onRateChanged: (@Sendable @MainActor (Float) -> Void)?
-    var onDurationLoaded: (@Sendable @MainActor () -> Void)?
+    var onDurationLoaded: (@Sendable @MainActor (TimeInterval) -> Void)?
 
     let playerItem: AVPlayerItem
 

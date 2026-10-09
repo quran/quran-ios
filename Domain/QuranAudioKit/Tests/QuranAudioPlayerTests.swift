@@ -6,6 +6,7 @@
 //
 
 import AVFoundation
+import MediaPlayer
 import QuranAudio
 import QuranKit
 import SnapshotTesting
@@ -202,7 +203,7 @@ class QuranAudioPlayerTests: XCTestCase {
             // frame update
             let playerItem = AVPlayerItem(url: FileManager.documentsURL)
             let frameChange = frameChanges[i]
-            queuePlayer.actions?.audioFrameChanged(frameChange.file, frameChange.frame, playerItem)
+            queuePlayer.actions?.audioFrameChanged(frameChange.file, frameChange.frame, playerItem, nil)
             XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaying(AyahNumber(quran: quran, sura: 1, ayah: 3)!)])
 
             // end playback
@@ -215,6 +216,56 @@ class QuranAudioPlayerTests: XCTestCase {
         }
     }
 
+    @MainActor
+    func test_nowPlaying_publishesAKnownDurationWithTheFrameChange() async throws {
+        try await runDownloadedTestCase(gapless: false)
+
+        queuePlayer.actions?.audioFrameChanged(0, 0, makePlayerItem(), 3)
+
+        XCTAssertEqual(nowPlayingDuration, 3)
+    }
+
+    @MainActor
+    func test_nowPlaying_publishesZeroUntilTheDurationLoads() async throws {
+        try await runDownloadedTestCase(gapless: false)
+
+        queuePlayer.actions?.audioFrameChanged(0, 0, makePlayerItem(), nil)
+        XCTAssertEqual(nowPlayingDuration, 0)
+
+        queuePlayer.actions?.durationLoaded(4)
+        XCTAssertEqual(nowPlayingDuration, 4)
+    }
+
+    @MainActor
+    func test_nowPlaying_dropsThePreviousFilesDurationWhileTheNextLoads() async throws {
+        try await runDownloadedTestCase(gapless: false)
+        queuePlayer.actions?.audioFrameChanged(0, 0, makePlayerItem(), 3)
+
+        queuePlayer.actions?.audioFrameChanged(1, 0, makePlayerItem(), nil)
+
+        XCTAssertEqual(nowPlayingDuration, 0)
+    }
+
+    @MainActor
+    func test_nowPlaying_playbackEndClearsTheDuration() async throws {
+        try await runDownloadedTestCase(gapless: false)
+        queuePlayer.actions?.audioFrameChanged(0, 0, makePlayerItem(), 3)
+
+        queuePlayer.actions?.playbackEnded()
+
+        XCTAssertNil(nowPlayingDuration)
+    }
+
+    @MainActor
+    func test_nowPlaying_newRequestClearsTheDuration() async throws {
+        try await runDownloadedTestCase(gapless: false)
+        queuePlayer.actions?.audioFrameChanged(0, 0, makePlayerItem(), 3)
+
+        try await runDownloadedTestCase(gapless: false)
+
+        XCTAssertNil(nowPlayingDuration)
+    }
+
     // MARK: Private
 
     private var player: QuranAudioPlayer!
@@ -225,6 +276,15 @@ class QuranAudioPlayerTests: XCTestCase {
     private let suras = Quran.hafsMadani1405.suras
     private let gappedReciter: Reciter = .gappedReciter
     private let gaplessReciter: Reciter = .gaplessReciter
+
+    @MainActor
+    private var nowPlayingDuration: TimeInterval? {
+        MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] as? TimeInterval
+    }
+
+    private func makePlayerItem() -> AVPlayerItem {
+        AVPlayerItem(url: FileManager.documentsURL)
+    }
 
     private func runDownloadedTestCase(gapless: Bool) async throws {
         if gapless {

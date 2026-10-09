@@ -130,14 +130,9 @@ public class QuranAudioPlayer {
     private let gaplessAudioRequestBuilder: QuranAudioRequestBuilder = GaplessAudioRequestBuilder()
     private var audioRequest: QuranAudioRequest?
 
-    private var durationTask: Task<Void, Never>? {
-        didSet { oldValue?.cancel() }
-    }
-
     // MARK: - AudioPlayerActions
 
     private func playbackEnded() {
-        durationTask = nil
         nowPlaying.clear()
         actions?.playbackEnded()
         // not interested to get more notifications
@@ -154,7 +149,7 @@ public class QuranAudioPlayer {
         }
     }
 
-    private func audioFrameChanged(fileIndex: Int, frameIndex: Int, playerItem: AVPlayerItem) {
+    private func audioFrameChanged(fileIndex: Int, frameIndex: Int, playerItem: AVPlayerItem, duration: TimeInterval?) {
         guard let audioRequest else {
             return
         }
@@ -162,25 +157,23 @@ public class QuranAudioPlayer {
         let info = audioRequest.getPlayerInfo(for: fileIndex)
         nowPlaying.update(info: info)
         nowPlaying.update(playingIndex: fileIndex)
-        updateDuration(of: playerItem.asset)
+        // Zero while the file's duration loads, so the previous file's never shows.
+        // `durationLoaded(_:)` then publishes the loaded value.
+        nowPlaying.update(duration: duration ?? 0)
         nowPlaying.update(elapsedTime: playerItem.currentTime().seconds)
 
         let ayah = audioRequest.getAyahNumberFrom(fileIndex: fileIndex, frameIndex: frameIndex)
         actions?.playing(ayah)
     }
 
-    /// Loads the duration off the main thread. A newer frame or the end of playback cancels the update.
-    private func updateDuration(of asset: AVAsset) {
-        durationTask = Task { [weak self] in
-            guard let duration = try? await asset.load(.duration), !Task.isCancelled else {
-                return
-            }
-            self?.nowPlaying.update(duration: duration.seconds)
+    private func durationLoaded(_ duration: TimeInterval) {
+        guard audioRequest != nil else {
+            return
         }
+        nowPlaying.update(duration: duration)
     }
 
     private func willPlay(_ request: AudioRequest) {
-        durationTask = nil
         nowPlaying.clear()
         nowPlaying.update(count: request.files.count)
     }
@@ -201,7 +194,10 @@ public class QuranAudioPlayer {
                 self?.playbackRateChanged(rate: rate)
             },
             audioFrameChanged: { [weak self] in
-                self?.audioFrameChanged(fileIndex: $0, frameIndex: $1, playerItem: $2)
+                self?.audioFrameChanged(fileIndex: $0, frameIndex: $1, playerItem: $2, duration: $3)
+            },
+            durationLoaded: { [weak self] in
+                self?.durationLoaded($0)
             }
         )
     }

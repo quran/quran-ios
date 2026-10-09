@@ -52,6 +52,29 @@ final class QueuePlayerTests: XCTestCase {
         XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(1, 0), .playbackEnded])
     }
 
+    func test_durationLoaded_reportsEachPlayingFilesDuration() async throws {
+        let request = try makeGappedRequest(durations: [0.1, 0.15])
+
+        player.play(request: request, rate: 1)
+
+        await fulfillment(of: [actions.playbackEnded], timeout: 5)
+        XCTAssertEqual(actions.durationsLoaded.count, 2)
+        XCTAssertEqual(actions.durationsLoaded[0], 0.1, accuracy: 0.01)
+        XCTAssertEqual(actions.durationsLoaded[1], 0.15, accuracy: 0.01)
+    }
+
+    func test_durationLoaded_ignoresAReplacedPlayersFile() async throws {
+        let request = try makeGappedRequest(durations: [0.1, 0.15])
+
+        player.play(request: request, rate: 1)
+        // Replaces the first file's player before its duration loads.
+        player.stepForward()
+
+        await fulfillment(of: [actions.playbackEnded], timeout: 5)
+        XCTAssertEqual(actions.durationsLoaded.count, 1)
+        XCTAssertEqual(actions.durationsLoaded[0], 0.15, accuracy: 0.01)
+    }
+
     // MARK: Private
 
     private var audioFiles: SilentAudioFiles!
@@ -60,11 +83,11 @@ final class QueuePlayerTests: XCTestCase {
 
     /// Like a gapped reciter's request: every frame ends with its file, so its end
     /// comes from the file's duration.
-    private func makeGappedRequest() throws -> AudioRequest {
-        let files = try (0 ..< 2).map { _ in
-            // Shorter than the 200 ms frame-end tolerance, so frames end even where
-            // the simulator doesn't advance playback.
-            let url = try audioFiles.make(duration: 0.1)
+    /// Durations stay shorter than the 200 ms frame-end tolerance, so frames end
+    /// even where the simulator doesn't advance playback.
+    private func makeGappedRequest(durations: [TimeInterval] = [0.1, 0.1]) throws -> AudioRequest {
+        let files = try durations.map { duration in
+            let url = try audioFiles.make(duration: duration)
             return AudioFile(url: url, frames: [AudioFrame(startTime: 0, endTime: nil)])
         }
         return AudioRequest(files: files, endTime: nil, frameRuns: .finite(1), requestRuns: .finite(1))
@@ -80,6 +103,7 @@ private final class QueuePlayerActionsSpy {
 
     let playbackEnded = XCTestExpectation(description: "Playback ended")
     private(set) var events: [Event] = []
+    private(set) var durationsLoaded: [TimeInterval] = []
 
     func makeActions() -> QueuePlayerActions {
         QueuePlayerActions(
@@ -88,8 +112,11 @@ private final class QueuePlayerActionsSpy {
                 self?.playbackEnded.fulfill()
             },
             playbackRateChanged: { _ in },
-            audioFrameChanged: { [weak self] fileIndex, frameIndex, _ in
+            audioFrameChanged: { [weak self] fileIndex, frameIndex, _, _ in
                 self?.events.append(.frameChanged(fileIndex, frameIndex))
+            },
+            durationLoaded: { [weak self] in
+                self?.durationsLoaded.append($0)
             }
         )
     }

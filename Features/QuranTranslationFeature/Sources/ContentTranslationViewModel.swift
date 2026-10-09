@@ -188,6 +188,8 @@ public final class ContentTranslationViewModel: ObservableObject {
                 items.append(.arabicText(arabicText(verse: verse, verseText: verseText, quranFont: quranFont), color))
             }
 
+            let hidesPlaceholders = Self.hidesPlaceholderTranslations(of: verseText, showsArabicText: showsArabicText)
+
             for (index, translation) in translations.enumerated() {
                 let text = verseText.translations[index]
 
@@ -204,6 +206,10 @@ public final class ContentTranslationViewModel: ObservableObject {
                         )
                     )
                 case .string(let string):
+                    if hidesPlaceholders, Self.isPlaceholder(string.text) {
+                        continue
+                    }
+
                     let chunks: [Range<String.Index>]
                     let readMore: Bool
                     if let cutoffChunk = cutoffChunkIfTruncationNeeded(string.text) {
@@ -340,6 +346,24 @@ public final class ContentTranslationViewModel: ObservableObject {
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     private let contentStatePreferences = QuranContentStatePreferences.shared
     private let fontSizePreferences = FontSizePreferences.shared
+
+    /// Whether a translation's text is a placeholder for a verse without its own entry,
+    /// such as the "..." that Asbab al-Nuzul stores for most verses.
+    private static func isPlaceholder(_ text: String) -> Bool {
+        text.allSatisfy { $0 == "." || $0 == "…" || $0.isWhitespace }
+    }
+
+    /// Placeholder translations are hidden when the verse shows other text: its Arabic text or another translation.
+    /// Otherwise they stay, so the verse shows that it has no text instead of its number alone.
+    private static func hidesPlaceholderTranslations(of verseText: VerseText, showsArabicText: Bool) -> Bool {
+        showsArabicText || verseText.translations.contains { text in
+            if case .string(let string) = text {
+                !isPlaceholder(string.text)
+            } else {
+                true
+            }
+        }
+    }
 
     private func arabicText(verse: AyahNumber, verseText: VerseText, quranFont: QuranFont) -> TranslationArabicText {
         let arabicVerseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)

@@ -173,6 +173,75 @@ final class ContentTranslationViewModelTests: XCTestCase {
         XCTAssertTrue(sut.items(quranFont: .uthmanicHafs).contains { $0.id == .verseNumber(verse) })
     }
 
+    func testPlaceholderTranslationsShowNoRows() {
+        let verse = Quran.hafsMadani1405.suras[1].firstVerse
+        let translations = (1 ... 5).map(makeTranslation)
+        let sut = makeSUT()
+        sut.commitLoadedContent(
+            verses: [verse],
+            translations: translations,
+            verseTexts: [verse: makeVerseText(["Translation", "...", " … \n", "", " . . "])]
+        )
+
+        XCTAssertEqual(verseIds(in: sut), [
+            .suraName(verse.sura),
+            .verseNumber(verse),
+            .arabic(verse),
+            .translationTextChunk(verse, translationId: 1, chunkIndex: 0),
+            .translator(verse, translationId: 1),
+        ])
+    }
+
+    func testPlaceholderIsHiddenBesideTheArabicText() {
+        let verse = Quran.hafsMadani1405.suras[1].firstVerse
+        let sut = makeSUT()
+        sut.commitLoadedContent(
+            verses: [verse],
+            translations: [makeTranslation(id: 1)],
+            verseTexts: [verse: makeVerseText(["..."])]
+        )
+
+        XCTAssertEqual(verseIds(in: sut), [.suraName(verse.sura), .verseNumber(verse), .arabic(verse)])
+    }
+
+    func testHiddenArabicTextHidesPlaceholderBesideAnotherTranslation() {
+        hideArabicText()
+        let verse = Quran.hafsMadani1405.suras[1].firstVerse
+        let sut = makeSUT()
+        sut.commitLoadedContent(
+            verses: [verse],
+            translations: [makeTranslation(id: 1), makeTranslation(id: 2)],
+            verseTexts: [verse: makeVerseText(["...", "Translation"])]
+        )
+
+        XCTAssertEqual(verseIds(in: sut), [
+            .suraName(verse.sura),
+            .verseNumber(verse),
+            .translationTextChunk(verse, translationId: 2, chunkIndex: 0),
+            .translator(verse, translationId: 2),
+        ])
+    }
+
+    func testHiddenArabicTextKeepsPlaceholdersWhenTheyAreTheVerseOnlyText() {
+        hideArabicText()
+        let verse = Quran.hafsMadani1405.suras[1].firstVerse
+        let sut = makeSUT()
+        sut.commitLoadedContent(
+            verses: [verse],
+            translations: [makeTranslation(id: 1), makeTranslation(id: 2)],
+            verseTexts: [verse: makeVerseText(["...", "…"])]
+        )
+
+        XCTAssertEqual(verseIds(in: sut), [
+            .suraName(verse.sura),
+            .verseNumber(verse),
+            .translationTextChunk(verse, translationId: 1, chunkIndex: 0),
+            .translator(verse, translationId: 1),
+            .translationTextChunk(verse, translationId: 2, chunkIndex: 0),
+            .translator(verse, translationId: 2),
+        ])
+    }
+
     func testHighlightsFollowChangesToDisplayedVerses() {
         let first = Quran.hafsMadani1405.pages[0].firstVerse
         let second = Quran.hafsMadani1405.pages[1].firstVerse
@@ -301,19 +370,25 @@ final class ContentTranslationViewModelTests: XCTestCase {
         )
     }
 
+    /// The ids of the rows of verses, without the page header and footer.
+    private func verseIds(in viewModel: ContentTranslationViewModel) -> [TranslationItemId] {
+        viewModel.items(quranFont: .uthmanicHafs).map(\.id).filter { $0.ayah != nil }
+    }
+
     private func makeVerseText(translationCount: Int) -> VerseText {
+        makeVerseText((0 ..< translationCount).map { "Translation \($0)" })
+    }
+
+    private func makeVerseText(_ texts: [String]) -> VerseText {
         VerseText(
             arabicText: "Arabic",
-            translations: (0 ..< translationCount).map { index in
-                .string(.init(
-                    text: "Translation \(index)",
-                    quranRanges: [],
-                    footnoteRanges: [],
-                    footnotes: []
-                ))
-            },
+            translations: texts.map { .string(makeTranslationString($0)) },
             arabicPrefix: [],
             arabicSuffix: []
         )
+    }
+
+    private func makeTranslationString(_ text: String) -> TranslationString {
+        TranslationString(text: text, quranRanges: [], footnoteRanges: [], footnotes: [])
     }
 }

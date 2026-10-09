@@ -48,8 +48,7 @@ final class Player {
             guard !Task.isCancelled else {
                 return
             }
-            // A failed load reports zero, like the synchronous `AVAsset.duration`.
-            let duration = (try? await asset.load(.duration))?.seconds ?? 0
+            let duration = Self.seconds(ofLoadedDuration: try? await asset.load(.duration))
             guard !Task.isCancelled, let self else {
                 return
             }
@@ -70,6 +69,16 @@ final class Player {
 
     var currentTime: TimeInterval {
         player.currentTime().seconds
+    }
+
+    /// A failed or non-numeric load reports zero, so playback moves past the file.
+    /// The load returns `.indefinite` without throwing when, for example, a server
+    /// doesn't answer AVFoundation's byte-range probe with a 206.
+    static func seconds(ofLoadedDuration duration: CMTime?) -> TimeInterval {
+        guard let duration, duration.isNumeric else {
+            return 0
+        }
+        return duration.seconds
     }
 
     // MARK: Internal helpers (read-only)

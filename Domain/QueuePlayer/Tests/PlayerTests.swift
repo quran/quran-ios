@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2026-10-07.
 //
 
+import AVFoundation
 import XCTest
 @testable import QueuePlayer
 
@@ -39,6 +40,25 @@ final class PlayerTests: XCTestCase {
 
         await waitForDuration(of: player)
         XCTAssertEqual(player.duration, 0)
+    }
+
+    func test_secondsOfLoadedDuration_reportsANumericDuration() {
+        let duration = CMTime(seconds: 1.5, preferredTimescale: 1000)
+        XCTAssertEqual(Player.seconds(ofLoadedDuration: duration), 1.5)
+    }
+
+    func test_secondsOfLoadedDuration_reportsAFailedLoadAsZero() {
+        XCTAssertEqual(Player.seconds(ofLoadedDuration: nil), 0)
+    }
+
+    func test_secondsOfLoadedDuration_reportsAnIndefiniteDurationAsZero() {
+        // What `load(.duration)` returns, without throwing, when a server
+        // answers the byte-range probe with anything but a 206.
+        XCTAssertEqual(Player.seconds(ofLoadedDuration: .indefinite), 0)
+    }
+
+    func test_secondsOfLoadedDuration_reportsAnInvalidDurationAsZero() {
+        XCTAssertEqual(Player.seconds(ofLoadedDuration: .invalid), 0)
     }
 
     // MARK: Private

@@ -249,6 +249,13 @@ extension _PageViewController {
             }
         }
 
+        func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+            // A drag released without momentum never decelerates, so end the transition here.
+            if !decelerate {
+                parent.userDraggingStartedTransitionInProgress = false
+            }
+        }
+
         func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
             parent.userDraggingStartedTransitionInProgress = false
         }

@@ -26,29 +26,26 @@ public struct ReadingBookmarkIcon: View {
     public static func image(style: Style, badge: Badge? = nil) -> UIImage {
         let size = CGSize(width: defaultSize, height: defaultSize)
         let bounds = CGRect(origin: .zero, size: size)
+        let iconBounds = badge == nil
+            ? bounds
+            : bounds.offsetBy(dx: -2, dy: -1)
+        let configuration = UIImage.SymbolConfiguration(pointSize: defaultSymbolPointSize)
+        let symbol = UIImage(systemName: style.systemImage.rawValue, withConfiguration: configuration)?
+            .withTintColor(.black, renderingMode: .alwaysOriginal)
         let renderer = UIGraphicsImageRenderer(size: size)
         let image = renderer.image { context in
-            let context = context.cgContext
-            let iconBounds = badge == nil
-                ? bounds
-                : bounds.offsetBy(dx: -2, dy: -1)
-            context.addPath(ReadingBookmarkShape().path(in: iconBounds).cgPath)
-            context.setFillColor(UIColor.black.cgColor)
-            context.setStrokeColor(UIColor.black.cgColor)
-
-            switch style {
-            case .outline:
-                context.setLineWidth(defaultLineWidth)
-                context.setLineCap(.round)
-                context.setLineJoin(.round)
-                context.strokePath()
-            case .filled:
-                context.fillPath()
+            if let symbol {
+                symbol.draw(in: CGRect(
+                    x: iconBounds.midX - symbol.size.width / 2,
+                    y: iconBounds.midY - symbol.size.height / 2,
+                    width: symbol.size.width,
+                    height: symbol.size.height
+                ))
             }
 
             switch badge {
             case .ellipsis:
-                drawEllipsisBadge(in: context)
+                drawEllipsisBadge(in: context.cgContext)
             case nil:
                 break
             }
@@ -57,26 +54,18 @@ public struct ReadingBookmarkIcon: View {
     }
 
     public var body: some View {
-        Group {
-            switch style {
-            case .outline:
-                ReadingBookmarkShape()
-                    .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
-            case .filled:
-                ReadingBookmarkShape()
-                    .fill()
-            }
-        }
-        .frame(width: size, height: size)
+        style.systemImage.image
+            .font(.system(size: symbolPointSize))
+            .frame(width: size, height: size)
     }
 
     // MARK: Private
 
     private let style: Style
-    private static let defaultLineWidth: CGFloat = 1.8
+    private static let defaultSymbolPointSize: CGFloat = 17
     private static let defaultSize: CGFloat = 24
     private static let badgeBounds = CGRect(x: 13, y: 13, width: 11, height: 11)
-    @ScaledMetric private var lineWidth = defaultLineWidth
+    @ScaledMetric private var symbolPointSize = defaultSymbolPointSize
     @ScaledMetric private var size = defaultSize
 
     private static func drawEllipsisBadge(in context: CGContext) {
@@ -96,27 +85,12 @@ public struct ReadingBookmarkIcon: View {
     }
 }
 
-private struct ReadingBookmarkShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        let scaleX = rect.width / 24
-        let scaleY = rect.height / 24
-        func point(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
-            CGPoint(x: rect.minX + x * scaleX, y: rect.minY + y * scaleY)
+extension ReadingBookmarkIcon.Style {
+    fileprivate var systemImage: NoorSystemImage {
+        switch self {
+        case .outline: .bookmarkOutline
+        case .filled: .bookmark
         }
-
-        // A ribbon with rounded top corners and a notched tail.
-        var path = Path()
-        path.move(to: point(6, 5))
-        path.addQuadCurve(to: point(8.5, 2.5), control: point(6, 2.5))
-        path.addLine(to: point(15.5, 2.5))
-        path.addQuadCurve(to: point(18, 5), control: point(18, 2.5))
-        path.addLine(to: point(18, 20.4))
-        path.addQuadCurve(to: point(16.9, 20.9), control: point(18, 21.6))
-        path.addLine(to: point(12, 16.5))
-        path.addLine(to: point(7.1, 20.9))
-        path.addQuadCurve(to: point(6, 20.4), control: point(6, 21.6))
-        path.closeSubpath()
-        return path
     }
 }
 
@@ -125,5 +99,6 @@ private struct ReadingBookmarkShape: Shape {
         ReadingBookmarkIcon(style: .outline)
         ReadingBookmarkIcon(style: .filled)
             .foregroundColor(.accentColor)
+        Image(uiImage: ReadingBookmarkIcon.image(style: .outline, badge: .ellipsis))
     }
 }

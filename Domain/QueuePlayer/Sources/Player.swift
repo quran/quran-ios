@@ -14,10 +14,17 @@ final class Player {
 
     deinit {
         rateObservation?.invalidate()
+        durationTask?.cancel()
+        // `load(_:)` ignores Task cancellation, so stop a remote load here. Not a local one: releasing
+        // a mid-scan local asset on the main actor blocks in `AVURLAsset`'s dealloc until the scan ends.
+        if !asset.url.isFileURL {
+            asset.cancelLoading()
+        }
     }
 
-    init(url: URL) {
-        asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
+    init(url: URL, knownDuration: TimeInterval? = nil) {
+        let asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
+        self.asset = asset
         playerItem = AVPlayerItem(asset: asset)
         playerItem.audioTimePitchAlgorithm = .spectral
         player = AVPlayer(playerItem: playerItem)
@@ -31,20 +38,45 @@ final class Player {
                 }
             }
         }
+
+        if let knownDuration {
+            duration = knownDuration
+            return
+        }
+
+        // With precise timing, AVFoundation may scan (or download) the whole file
+        // to answer the duration, so never read it synchronously on the main thread.
+        durationTask = Task { [weak self] in
+            let duration = Self.seconds(ofLoadedDuration: try? await asset.load(.duration))
+            guard !Task.isCancelled, let self else {
+                return
+            }
+            self.duration = duration
+            onDurationLoaded?(duration)
+        }
     }
 
     // MARK: Internal
 
     var onRateChanged: (@Sendable @MainActor (Float) -> Void)?
+    var onDurationLoaded: (@Sendable @MainActor (TimeInterval) -> Void)?
 
     let playerItem: AVPlayerItem
+
+    /// The file's duration, or `nil` while it loads.
+    private(set) var duration: TimeInterval?
 
     var currentTime: TimeInterval {
         player.currentTime().seconds
     }
 
-    var duration: TimeInterval {
-        asset.duration.seconds
+    /// Zero for a failed or non-numeric load, so playback moves past the file. The load returns
+    /// `.indefinite` without throwing, e.g. when a server doesn't answer the byte-range probe with a 206.
+    static func seconds(ofLoadedDuration duration: CMTime?) -> TimeInterval {
+        guard let duration, duration.isNumeric else {
+            return 0
+        }
+        return duration.seconds
     }
 
     // MARK: Internal helpers (read-only)
@@ -83,6 +115,8 @@ final class Player {
     private var rateObservation: NSKeyValueObservation? {
         didSet { oldValue?.invalidate() }
     }
+
+    private var durationTask: Task<Void, Never>?
 }
 
 private extension AVPlayer {

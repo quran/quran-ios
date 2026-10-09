@@ -149,7 +149,7 @@ public class QuranAudioPlayer {
         }
     }
 
-    private func audioFrameChanged(fileIndex: Int, frameIndex: Int, playerItem: AVPlayerItem) {
+    private func audioFrameChanged(fileIndex: Int, frameIndex: Int, playerItem: AVPlayerItem, duration: TimeInterval?) {
         guard let audioRequest else {
             return
         }
@@ -157,11 +157,19 @@ public class QuranAudioPlayer {
         let info = audioRequest.getPlayerInfo(for: fileIndex)
         nowPlaying.update(info: info)
         nowPlaying.update(playingIndex: fileIndex)
-        nowPlaying.update(duration: playerItem.asset.duration.seconds)
+        // Zero until `durationLoaded(_:)`, so the previous file's duration never shows.
+        nowPlaying.update(duration: duration ?? 0)
         nowPlaying.update(elapsedTime: playerItem.currentTime().seconds)
 
         let ayah = audioRequest.getAyahNumberFrom(fileIndex: fileIndex, frameIndex: frameIndex)
         actions?.playing(ayah)
+    }
+
+    private func durationLoaded(_ duration: TimeInterval) {
+        guard audioRequest != nil else {
+            return
+        }
+        nowPlaying.update(duration: duration)
     }
 
     private func willPlay(_ request: AudioRequest) {
@@ -185,7 +193,10 @@ public class QuranAudioPlayer {
                 self?.playbackRateChanged(rate: rate)
             },
             audioFrameChanged: { [weak self] in
-                self?.audioFrameChanged(fileIndex: $0, frameIndex: $1, playerItem: $2)
+                self?.audioFrameChanged(fileIndex: $0, frameIndex: $1, playerItem: $2, duration: $3)
+            },
+            durationLoaded: { [weak self] in
+                self?.durationLoaded($0)
             }
         )
     }

@@ -381,6 +381,13 @@
         "identifier" : "WhatsNewFeatureTests",
         "name" : "WhatsNewFeatureTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "QueuePlayerTests",
+        "name" : "QueuePlayerTests"
+      }
     }
   ],
   "version" : 1

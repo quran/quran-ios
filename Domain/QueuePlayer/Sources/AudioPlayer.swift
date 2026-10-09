@@ -17,10 +17,6 @@ class AudioPlayer {
         self.request = request
         playbackRate = rate
         audioPlaying = AudioPlaying(request: request, fileIndex: 0, frameIndex: 0)
-        player = Player(url: request.files[0].url)
-        player.onRateChanged = { [weak self] in
-            self?.rateChanged(to: $0)
-        }
         interruptionMonitor.onAudioInterruption = { [weak self] in
             self?.onAudioInterruption(type: $0)
         }
@@ -47,11 +43,13 @@ class AudioPlayer {
     }
 
     func resume() {
+        isPaused = false
         timer?.resume()
         player.play(rate: playbackRate)
     }
 
     func pause() {
+        isPaused = true
         cancelVerseDelay()
         timer?.pause()
         player.pause()
@@ -59,6 +57,7 @@ class AudioPlayer {
 
     func stop() {
         cancelVerseDelay()
+        isWaitingForDuration = false
         timer?.cancel()
         player.stop()
         actions?.playbackEnded()
@@ -105,13 +104,18 @@ class AudioPlayer {
     // True while waiting out a between-verse delay (player paused, no frame playing).
     private var isDelaying = false
 
-    private var player: Player {
-        didSet {
-            player.onRateChanged = { [weak self] in
-                self?.rateChanged(to: $0)
-            }
-        }
-    }
+    // True while paused by `pause()`, so a frame-end timer scheduled meanwhile starts paused.
+    private var isPaused = false
+
+    // True while the frame ends with its file and the file's duration is still loading.
+    private var isWaitingForDuration = false
+
+    // Durations loaded so far, by file index, reused when a seek reloads the file.
+    // Failed loads (zero) aren't kept, so they're retried.
+    private var loadedDurations: [Int: TimeInterval] = [:]
+
+    // `startPlaying()` replaces it before anything reads it, so the initial value is never built.
+    private lazy var player = makePlayer(fileIndex: 0)
 
     private var timer: Timing.Timer? {
         didSet { oldValue?.cancel() }
@@ -119,6 +123,24 @@ class AudioPlayer {
 
     private var delayTask: Task<Void, Never>? {
         didSet { oldValue?.cancel() }
+    }
+
+    private func makePlayer(fileIndex: Int) -> Player {
+        let player = Player(url: request.files[fileIndex].url, knownDuration: loadedDurations[fileIndex])
+        player.onRateChanged = { [weak self] in
+            self?.rateChanged(to: $0)
+        }
+        player.onDurationLoaded = { [weak self, weak player] duration in
+            // A replaced player can stay alive briefly, e.g. while its pending rate callback runs.
+            guard let self, let player, player === self.player else {
+                return
+            }
+            if duration > 0 {
+                loadedDurations[fileIndex] = duration
+            }
+            durationLoaded(duration)
+        }
+        return player
     }
 
     // MARK: - Repeat Logic
@@ -134,7 +156,7 @@ class AudioPlayer {
 
         // reload player if the seek will change
         if shouldSeek {
-            player = Player(url: request.files[fileIndex].url)
+            player = makePlayer(fileIndex: fileIndex)
         }
 
         // if not a continuous play, adjust the seek
@@ -151,14 +173,15 @@ class AudioPlayer {
         waitUntilFrameEnds(currentTime: currentTime)
 
         // inform the delegate of a frame changed
-        actions?.audioFrameChanged(fileIndex, frameIndex, player.playerItem)
+        actions?.audioFrameChanged(fileIndex, frameIndex, player.playerItem, player.duration)
     }
 
     private func onFrameEnded() {
-        let time = getDurationToFrameEnd()
         // make sure we reached the end of the frame
         // don't use `abs` since we could be notified a little bit after
-        guard time < 0.2 else {
+        guard let frameEnd = audioPlaying.frameEndTime ?? player.duration,
+              frameEnd - player.currentTime < 0.2
+        else {
             // audio is 200 ms behind, reschedule the timer
             waitUntilFrameEnds()
             return
@@ -172,7 +195,7 @@ class AudioPlayer {
         //  1.2 else Run next frame
         // 2. else Repeat the frame
         // Delay before the next playback, scaled by the verse that just finished.
-        let delay = verseDelayDuration()
+        let delay = verseDelayDuration(frameEnd: frameEnd)
 
         if audioPlaying.isLastPlayForCurrentFrame() {
             if let next = audioPlaying.nextFrame() {
@@ -215,13 +238,12 @@ class AudioPlayer {
     /// Duration to wait before the next playback, computed from the verse that
     /// just finished: its recited (wall-clock) length times the selected
     /// multiplier. Returns 0 when no delay is configured.
-    private func verseDelayDuration() -> TimeInterval {
+    private func verseDelayDuration(frameEnd: TimeInterval) -> TimeInterval {
         let multiplier = request.verseDelay.multiplier
         guard multiplier > 0 else {
             return 0
         }
         let frameStart = audioPlaying.frame.startTime
-        let frameEnd = audioPlaying.frameEndTime ?? player.duration
         let recitedMediaDuration = max(0, frameEnd - frameStart)
         // Convert media duration to wall-clock recited time before scaling.
         return recitedMediaDuration / Double(playbackRate) * multiplier
@@ -256,10 +278,19 @@ class AudioPlayer {
             return
         }
 
-        // max with 100ms since sometimes the returned value could be negative
-        let mediaDelta = max(0, getDurationToFrameEnd(currentTime: currentTime))
-        // Convert media time to wall-clock time
-        let interval = max(0.05, mediaDelta / Double(playbackRate)) // small floor for stability
+        guard let mediaDelta = getDurationToFrameEnd(currentTime: currentTime) else {
+            // The file's duration is still loading; `durationLoaded()` schedules the timer.
+            timer = nil
+            isWaitingForDuration = true
+            return
+        }
+        isWaitingForDuration = false
+        scheduleFrameEndTimer(after: mediaDelta)
+    }
+
+    private func scheduleFrameEndTimer(after mediaDelta: TimeInterval) {
+        // Convert media time to wall-clock time; the 50 ms floor also covers negative deltas.
+        let interval = max(0.05, mediaDelta / Double(playbackRate))
         timer = Timer(interval: interval, queue: .main) { [weak self] in
             self?.timer = nil
             self?.onFrameEnded()
@@ -267,6 +298,18 @@ class AudioPlayer {
     }
 
     // MARK: - PlayerDelegate
+
+    private func durationLoaded(_ duration: TimeInterval) {
+        actions?.durationLoaded(duration)
+        guard isWaitingForDuration, let mediaDelta = getDurationToFrameEnd() else {
+            return
+        }
+        isWaitingForDuration = false
+        scheduleFrameEndTimer(after: mediaDelta)
+        if isPaused {
+            timer?.pause()
+        }
+    }
 
     private func rateChanged(to rate: Float) {
         // Ignore the pause/resume we trigger ourselves while waiting out a delay.
@@ -282,9 +325,12 @@ class AudioPlayer {
 
     // MARK: - Utilities
 
-    private func getDurationToFrameEnd(currentTime: TimeInterval? = nil) -> TimeInterval {
+    /// `nil` while the frame ends with its file and the file's duration is still loading.
+    private func getDurationToFrameEnd(currentTime: TimeInterval? = nil) -> TimeInterval? {
+        guard let frameEndTime = audioPlaying.frameEndTime ?? player.duration else {
+            return nil
+        }
         let currentTimeInSeconds = currentTime ?? player.currentTime
-        let frameEndTime = audioPlaying.frameEndTime ?? player.duration
         return frameEndTime - currentTimeInSeconds
     }
 }

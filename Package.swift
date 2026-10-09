@@ -393,9 +393,11 @@ private func dataTargets() -> [[Target]] {
 private func domainTargets() -> [[Target]] {
     let type = TargetType.domain
     return [
-        target(type, name: "QueuePlayer", hasTests: false, dependencies: [
+        target(type, name: "QueuePlayer", dependencies: [
             "QuranAudio",
             "Timing",
+        ], testDependencies: [
+            "QuranAudio",
         ]),
 
         target(type, name: "QuranResources", hasTests: false, resources: [

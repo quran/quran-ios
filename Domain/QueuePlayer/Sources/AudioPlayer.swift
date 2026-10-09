@@ -133,9 +133,16 @@ class AudioPlayer {
     // True while the frame ends with its file and the file's duration is still loading.
     private var isWaitingForDuration = false
 
-    // Durations loaded so far, by file index, reused when a seek reloads the file.
+    // Durations loaded so far, by file index. A file's new player starts with its duration instead
+    // of reporting none until it loads: even a shared asset answers only asynchronously, and a file
+    // played again after another one (a request repeat, a step back) gets a new asset that rescans.
     // Failed loads (zero) aren't kept, so they're retried.
     private var loadedDurations: [Int: TimeInterval] = [:]
+
+    // The current player's asset. A seek within its file (step, repeat, verse delay) builds the
+    // new player on it instead of on a new asset that must rescan, or redownload, the file.
+    // Weak, so only players keep an asset, and its remote load stops with the last of them.
+    private weak var currentAsset: PlayerAsset?
 
     // `startPlaying()` replaces it before anything reads it, so the initial value is never built.
     private lazy var player = makePlayer(fileIndex: 0)
@@ -149,7 +156,10 @@ class AudioPlayer {
     }
 
     private func makePlayer(fileIndex: Int) -> Player {
-        let player = Player(url: request.files[fileIndex].url, knownDuration: loadedDurations[fileIndex])
+        let url = request.files[fileIndex].url
+        let asset = currentAsset.flatMap { $0.url == url ? $0 : nil } ?? PlayerAsset(url: url)
+        currentAsset = asset
+        let player = Player(asset: asset, knownDuration: loadedDurations[fileIndex])
         player.onRateChanged = { [weak self] in
             self?.rateChanged(to: $0)
         }

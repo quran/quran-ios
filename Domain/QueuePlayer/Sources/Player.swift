@@ -15,17 +15,12 @@ final class Player {
     deinit {
         rateObservation?.invalidate()
         durationTask?.cancel()
-        // `load(_:)` ignores Task cancellation, so stop a remote load here. Not a local one: releasing
-        // a mid-scan local asset on the main actor blocks in `AVURLAsset`'s dealloc until the scan ends.
-        if !asset.url.isFileURL {
-            asset.cancelLoading()
-        }
+        // Releasing `asset` stops its remote load once no other player shares it.
     }
 
-    init(url: URL, knownDuration: TimeInterval? = nil) {
-        let asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
+    init(asset: PlayerAsset, knownDuration: TimeInterval? = nil) {
         self.asset = asset
-        playerItem = AVPlayerItem(asset: asset)
+        playerItem = AVPlayerItem(asset: asset.urlAsset)
         playerItem.audioTimePitchAlgorithm = .spectral
         player = AVPlayer(playerItem: playerItem)
         player.automaticallyWaitsToMinimizeStalling = false
@@ -46,8 +41,12 @@ final class Player {
 
         // With precise timing, AVFoundation may scan (or download) the whole file
         // to answer the duration, so never read it synchronously on the main thread.
+        // A shared asset that already loaded it answers at once.
+        // Capture the `AVURLAsset` only: the Task outlives the player until the load returns,
+        // and holding `asset` would keep its remote load from ever being cancelled.
+        let urlAsset = asset.urlAsset
         durationTask = Task { [weak self] in
-            let duration = Self.seconds(ofLoadedDuration: try? await asset.load(.duration))
+            let duration = Self.seconds(ofLoadedDuration: try? await urlAsset.load(.duration))
             guard !Task.isCancelled, let self else {
                 return
             }
@@ -61,6 +60,7 @@ final class Player {
     var onRateChanged: (@Sendable @MainActor (Float) -> Void)?
     var onDurationLoaded: (@Sendable @MainActor (TimeInterval) -> Void)?
 
+    let asset: PlayerAsset
     let playerItem: AVPlayerItem
 
     /// The file's duration, or `nil` while it loads.
@@ -109,7 +109,6 @@ final class Player {
 
     // MARK: Private
 
-    private let asset: AVURLAsset
     private let player: AVPlayer
 
     private var rateObservation: NSKeyValueObservation? {

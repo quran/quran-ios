@@ -592,7 +592,7 @@
 // Reading bookmark row subtitle with the bookmark's ayah or page.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.location" = "%@ konumunda";
-// Button that moves a reading bookmark to the current ayah or page.
+// Action that moves a reading bookmark to the current ayah or page; also the Ayah menu's subtitle when this ayah has no reading bookmark.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.move-here" = "Buraya taşı";
 // Button that places an unplaced reading bookmark at the current ayah or page.

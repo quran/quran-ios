@@ -409,7 +409,7 @@
 "bookmarks.reading.not-placed" = "لم توضع بعد";
 // Reading bookmark row subtitle with the bookmark's ayah or page.
 "bookmarks.reading.location" = "عند %@";
-// Button that moves a reading bookmark to the current ayah or page.
+// Action that moves a reading bookmark to the current ayah or page; also the Ayah menu's subtitle when this ayah has no reading bookmark.
 "bookmarks.reading.move-here" = "انقل إلى هنا";
 // Button that places an unplaced reading bookmark at the current ayah or page.
 "bookmarks.reading.set-here" = "ضع هنا";

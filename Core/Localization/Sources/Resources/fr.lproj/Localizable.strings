@@ -462,13 +462,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Balayez un signet pour le supprimer.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "Les ayahs que vous surlignez avec un signet %@ pendant la lecture apparaîtront ici.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "Les ayahs que vous surlignez en %@ pendant la lecture apparaîtront ici.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "Les ayahs que vous ajoutez aux signets pendant la lecture apparaîtront ici.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "Ouvre cette ayah dans le Coran.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "Signets colorés";
+"bookmarks.highlights" = "Surlignages";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "Cette collection contient des signets. Voulez-vous vraiment la supprimer ?";
 // Metadata: Translated by ChatGPT; human review required.

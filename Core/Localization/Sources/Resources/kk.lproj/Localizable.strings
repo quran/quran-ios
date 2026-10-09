@@ -446,13 +446,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Бетбелгіні жою үшін оны сырғытыңыз.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "Оқу кезінде %@ түсті бетбелгімен белгілеген аяттарыңыз осында көрсетіледі.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "Оқу кезінде %@ түспен бөлектеген аяттарыңыз осында көрсетіледі.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "Оқу кезінде бетбелгі қойған аяттарыңыз осында көрсетіледі.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "Осы аятты Құранда ашады.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "Түрлі түсті бетбелгілер";
+"bookmarks.highlights" = "Бөлектеулер";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "Бұл жинақта бетбелгілер бар. Оны жойғыңыз келетініне сенімдісіз бе?";
 // Metadata: Translated by ChatGPT; human review required.

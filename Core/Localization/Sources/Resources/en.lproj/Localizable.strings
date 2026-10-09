@@ -186,7 +186,7 @@
 
 "bookmarks.collections" = "Collections";
 "bookmarks.collections.add" = "Add Collection";
-"bookmarks.collections.colored" = "Colored Bookmarks";
+"bookmarks.highlights" = "Highlights";
 "bookmarks.collections.favorites" = "Favorites";
 "bookmarks.collections.mine" = "My Collections";
 "bookmarks.collections.new" = "New Collection...";
@@ -199,7 +199,7 @@
 "bookmarks.collections.ayahs.delete-hint" = "Swipe a bookmark to delete it.";
 "bookmarks.collections.ayahs.open-hint" = "Opens this ayah in the Quran.";
 "bookmarks.collections.ayahs.no-data.text" = "Ayahs you bookmark while reading will appear here.";
-"bookmarks.collections.ayahs.no-data.colored.text" = "Ayahs you highlight with a %@ bookmark while reading will appear here.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "Ayahs you highlight in %@ while reading will appear here.";
 "bookmarks.editor.collection.unselected" = "Not selected";
 "bookmarks.editor.collection.mixed" = "Partially selected";
 "bookmarks.editor.collection.selected" = "Selected";

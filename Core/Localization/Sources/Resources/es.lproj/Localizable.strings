@@ -462,13 +462,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Desliza un marcador para eliminarlo.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "Las aleyas que resaltes con un marcador de color %@ mientras lees aparecerán aquí.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "Las aleyas que resaltes de color %@ mientras lees aparecerán aquí.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "Las aleyas que marques mientras lees aparecerán aquí.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "Abre esta aleya en el Corán.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "Marcadores de colores";
+"bookmarks.highlights" = "Resaltados";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "Esta colección contiene marcadores. ¿Seguro que quieres eliminarla?";
 // Metadata: Translated by ChatGPT; human review required.

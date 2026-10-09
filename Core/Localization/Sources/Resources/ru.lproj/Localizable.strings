@@ -462,13 +462,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Смахните закладку, чтобы удалить её.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "Аяты, выделенные во время чтения закладкой цвета %@, появятся здесь.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "Аяты, выделенные во время чтения цветом %@, появятся здесь.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "Аяты, добавленные в закладки во время чтения, появятся здесь.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "Открывает этот аят в Коране.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "Цветные закладки";
+"bookmarks.highlights" = "Выделения";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "В этой коллекции есть закладки. Вы уверены, что хотите удалить её?";
 // Metadata: Translated by ChatGPT; human review required.

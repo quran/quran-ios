@@ -52,7 +52,7 @@ private struct BookmarkCollectionsContent: View {
                 selectLastPage: { _ in }
             )
 
-            NoorBasicSection(title: l("bookmarks.collections.colored")) {
+            NoorBasicSection(title: l("bookmarks.highlights")) {
                 ColoredBookmarksView(items: coloredBookmarks) { viewModel.showHighlights($0) }
             }
 

@@ -465,13 +465,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "خەتكۈچنى ئۆچۈرۈش ئۈچۈن سىيرىڭ.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "ئوقۇش جەريانىدا %@ رەڭلىك خەتكۈچ بىلەن يورۇتقان ئايەتلىرىڭىز بۇ يەردە كۆرۈنىدۇ.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "ئوقۇش جەريانىدا %@ رەڭ بىلەن يورۇتقان ئايەتلىرىڭىز بۇ يەردە كۆرۈنىدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "ئوقۇش جەريانىدا خەتكۈچلىگەن ئايەتلىرىڭىز بۇ يەردە كۆرۈنىدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "بۇ ئايەتنى قۇرئاندا ئاچىدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "رەڭلىك خەتكۈچلەر";
+"bookmarks.highlights" = "يورۇتۇشلار";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "بۇ توپلامدا خەتكۈچلەر بار. ئۇنى ئۆچۈرمەكچى بولغىنىڭىزغا ئىشىنەمسىز؟";
 // Metadata: Translated by ChatGPT; human review required.

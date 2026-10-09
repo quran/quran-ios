@@ -231,12 +231,13 @@ private struct AyahMenuViewList: View {
     @ViewBuilder private var bookmarkIcon: some View {
         switch dataObject.bookmarkState {
         case .unhighlighted:
-            NoorSystemImage.bookmarkOutline.image
-        case .bookmarked, .partiallyHighlighted:
-            NoorSystemImage.bookmark.image
+            NoorSystemImage.folderBadgePlus.image
+        case .bookmarked:
+            NoorSystemImage.folder.image
+        case .partiallyHighlighted:
+            HighlightPaletteIcon()
         case .highlighted(let color):
-            NoorSystemImage.bookmark.image
-                .foregroundColor(color.color)
+            IconCircle(color: color)
         }
     }
     #endif
@@ -425,7 +426,6 @@ private struct MenuGroup<Content: View>: View {
     }
 }
 
-#if !QURAN_SYNC
 private struct IconCircle: View {
     @ScaledMetric private var minLength = 20.0
 
@@ -436,6 +436,7 @@ private struct IconCircle: View {
     }
 }
 
+#if !QURAN_SYNC
 private struct NoteCircles: View {
     let selectedColor: HighlightColor?
     let tapped: @Sendable (HighlightColor) async -> Void

@@ -464,13 +464,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "برای حذف نشانک، آن را بکشید.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "آیاتی که هنگام مطالعه با نشانک %@ برجسته می‌کنید، اینجا نمایش داده می‌شوند.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "آیاتی که هنگام مطالعه با رنگ %@ برجسته می‌کنید، اینجا نمایش داده می‌شوند.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "آیاتی که هنگام مطالعه نشانک‌گذاری می‌کنید، اینجا نمایش داده می‌شوند.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "این آیه را در قرآن باز می‌کند.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "نشانک‌های رنگی";
+"bookmarks.highlights" = "برجسته‌سازی‌ها";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "این مجموعه شامل نشانک است. آیا از حذف آن مطمئن هستید؟";
 // Metadata: Translated by ChatGPT; human review required.

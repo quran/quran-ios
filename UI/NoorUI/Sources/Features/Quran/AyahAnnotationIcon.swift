@@ -15,7 +15,7 @@ struct AyahAnnotationIcon: View {
                     .scaledToFit()
                     .foregroundStyle(bookmark.swiftUIColor)
             case .collection:
-                NoorSystemImage.bookmark.image
+                NoorSystemImage.folder.image
                     .themedSecondaryForeground()
             case .note:
                 NoorSystemImage.note.image

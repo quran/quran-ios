@@ -445,13 +445,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Leret penanda halaman untuk memadamkannya.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "Ayat yang anda serlahkan dengan penanda halaman berwarna %@ semasa membaca akan muncul di sini.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "Ayat yang anda serlahkan dengan warna %@ semasa membaca akan muncul di sini.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "Ayat yang anda tandai semasa membaca akan muncul di sini.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "Membuka ayat ini dalam Quran.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "Penanda halaman berwarna";
+"bookmarks.highlights" = "Sorotan";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "Koleksi ini mengandungi penanda halaman. Adakah anda pasti mahu memadamkannya?";
 // Metadata: Translated by ChatGPT; human review required.

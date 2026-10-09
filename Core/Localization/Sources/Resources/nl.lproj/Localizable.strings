@@ -377,13 +377,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Veeg over een bladwijzer om deze te verwijderen.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "Ayahs die je tijdens het lezen met een %@ bladwijzer markeert, verschijnen hier.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "Ayahs die je tijdens het lezen met de kleur %@ markeert, verschijnen hier.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "Ayahs die je tijdens het lezen als bladwijzer opslaat, verschijnen hier.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "Opent deze ayah in de Quran.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "Gekleurde bladwijzers";
+"bookmarks.highlights" = "Markeringen";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "Deze verzameling bevat bladwijzers. Weet je zeker dat je deze wilt verwijderen?";
 // Metadata: Translated by ChatGPT; human review required.

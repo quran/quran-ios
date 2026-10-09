@@ -462,13 +462,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Wische über ein Lesezeichen, um es zu löschen.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "Ayahs, die du beim Lesen mit einem Lesezeichen der Farbe %@ hervorhebst, erscheinen hier.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "Ayahs, die du beim Lesen in der Farbe %@ hervorhebst, erscheinen hier.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "Ayahs, die du beim Lesen mit einem Lesezeichen versiehst, erscheinen hier.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "Öffnet diese Ayah im Quran.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "Farbige Lesezeichen";
+"bookmarks.highlights" = "Hervorhebungen";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "Diese Sammlung enthält Lesezeichen. Möchtest du sie wirklich löschen?";
 // Metadata: Translated by ChatGPT; human review required.

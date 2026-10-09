@@ -27,6 +27,7 @@ public struct ColoredBookmarksView: View {
     @ScaledMetric private var spacing = 8
     @ScaledMetric private var inset = 12
     @ScaledMetric private var iconSize = 24
+    @ScaledMetric private var swatchSize = 20
     @ScaledMetric private var cornerRadius = 18
 
     public var body: some View {
@@ -95,11 +96,8 @@ public struct ColoredBookmarksView: View {
     }
 
     private func icon(_ item: Item, width: CGFloat? = nil) -> some View {
-        Image(systemName: "bookmark.fill")
-            .resizable()
-            .scaledToFit()
+        ColoredCircle(color: item.color.color, selected: false, minLength: min(swatchSize, width ?? swatchSize))
             .frame(width: width ?? iconSize, height: iconSize)
-            .foregroundColor(item.color.color)
     }
 
     private func count(_ item: Item) -> some View {
@@ -136,7 +134,7 @@ public struct ColoredBookmarksView: View {
     }
 }
 
-#Preview("Adaptive colored bookmarks") {
+#Preview("Adaptive highlight colors") {
     let items: [ColoredBookmarksView.Item] = [
         .init(color: .green, count: 10),
         .init(color: .purple, count: 3),

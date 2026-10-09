@@ -159,7 +159,7 @@
 "bookmarks.no-data.text" = "عندما تقرأ القرآن، اضغط على زر الإشارة المرجعية لإضافة الصفحة.";
 "bookmarks.collections" = "المجموعات";
 "bookmarks.collections.add" = "إضافة مجموعة";
-"bookmarks.collections.colored" = "الإشارات المرجعية الملونة";
+"bookmarks.highlights" = "التحديدات";
 "bookmarks.collections.favorites" = "المفضلة";
 "bookmarks.collections.mine" = "مجموعاتي";
 "bookmarks.collections.new" = "مجموعة جديدة...";
@@ -172,7 +172,7 @@
 "bookmarks.collections.ayahs.delete-hint" = "اسحب الإشارة المرجعية لحذفها.";
 "bookmarks.collections.ayahs.open-hint" = "يفتح هذه الآية في القرآن.";
 "bookmarks.collections.ayahs.no-data.text" = "ستظهر هنا الآيات التي تضيف لها إشارة مرجعية أثناء القراءة.";
-"bookmarks.collections.ayahs.no-data.colored.text" = "ستظهر هنا الآيات التي تميّزها أثناء القراءة بإشارة مرجعية باللون %@.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "ستظهر هنا الآيات التي تميّزها باللون %@ أثناء القراءة.";
 "bookmarks.old-page-bookmarks" = "إشارات الصفحات المرجعية القديمة";
 
 "bookmarks.sync.title" = "زامن مجموعاتك";

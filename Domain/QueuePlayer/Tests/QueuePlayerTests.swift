@@ -88,6 +88,22 @@ final class QueuePlayerTests: XCTestCase {
         XCTAssertEqual(actions.durationsLoaded.count, 1)
     }
 
+    func test_resume_afterChangingTheRateWhilePausedEndsTheFrameAtTheNewRate() async throws {
+        let request = try makeGappedRequest(durations: [0.15, 0.15])
+
+        // At this rate the frame takes 3 s of wall-clock time to end.
+        player.play(request: request, rate: 0.05)
+        player.pause()
+        await fulfillment(of: [actions.firstDurationLoaded], timeout: 5)
+
+        // Under 0.1 s at this rate; a frame end still timed for the old rate misses the timeout.
+        player.setRate(2)
+        player.resume()
+
+        await fulfillment(of: [actions.playbackEnded], timeout: 2.5)
+        XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(1, 0), .playbackEnded])
+    }
+
     // MARK: - Verse Delay
 
     func test_resume_afterPausingDuringAVerseDelayPlaysTheNextVerse() async throws {

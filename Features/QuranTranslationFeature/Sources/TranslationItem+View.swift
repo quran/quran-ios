@@ -27,21 +27,27 @@ extension TranslationSuraName: View {
     var body: some View {
         QuranSuraName(
             sura: sura,
-            besmAllah: QuranText(sura.startsWithBesmAllah ? sura.quran.arabicBesmAllah : ""),
+            besmAllah: QuranText(showsBesmAllah && sura.startsWithBesmAllah ? sura.quran.arabicBesmAllah : ""),
             quranFont: quranFont,
             besmAllahFontSize: arabicFontSize
         )
     }
 }
 
-extension TranslationArabicText {
+extension TranslationArabicText: View {
+    var body: some View {
+        QuranArabicText(verse: verse, text: text, quranFont: quranFont, fontSize: arabicFontSize)
+    }
+}
+
+extension TranslationVerseNumber {
     #if QURAN_SYNC
     func view(onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) -> some View {
-        QuranArabicText(verse: verse, text: text, quranFont: quranFont, fontSize: arabicFontSize, annotations: annotations, onAyahNumberTapped: { point in onAyahNumberTapped(verse, point) })
+        QuranVerseNumber(verse: verse, annotations: annotations, onTapped: { point in onAyahNumberTapped(verse, point) })
     }
     #else
     func view() -> some View {
-        QuranArabicText(verse: verse, text: text, quranFont: quranFont, fontSize: arabicFontSize)
+        QuranVerseNumber(verse: verse)
     }
     #endif
 }
@@ -103,7 +109,7 @@ extension TranslationItem {
     }
     #endif
 
-    private func content(@ViewBuilder arabicTextView: (TranslationArabicText) -> some View) -> some View {
+    private func content(@ViewBuilder verseNumberView: (TranslationVerseNumber) -> some View) -> some View {
         VStack {
             switch self {
             case .pageHeader(let pageHeader):
@@ -115,7 +121,9 @@ extension TranslationItem {
             case .suraName(let suraName, _):
                 suraName
             case .arabicText(let arabicText, _):
-                arabicTextView(arabicText)
+                arabicText
+            case .verseNumber(let verseNumber, _):
+                verseNumberView(verseNumber)
             case .translationTextChunk(let translationTextChunk, _):
                 translationTextChunk
             case .translationReferenceVerse(let translationReferenceVerse, _):
@@ -183,25 +191,20 @@ private struct ContentTranslationPreview: View {
             List {
                 itemView(TranslationItem.pageHeader(.init(page: quran.pages[0])))
                 itemView(TranslationItem.suraName(
-                    .init(sura: quran.firstSura, quranFont: .uthmanicHafs, arabicFontSize: fontSize),
+                    .init(sura: quran.firstSura, showsBesmAllah: true, quranFont: .uthmanicHafs, arabicFontSize: fontSize),
                     nil
                 ))
                 #if QURAN_SYNC
-                itemView(TranslationItem.arabicText(.init(
-                    verse: quran.firstVerse,
-                    text: QuranText(quran.arabicBesmAllah),
-                    quranFont: .uthmanicHafs,
-                    arabicFontSize: fontSize,
-                    annotations: []
-                ), nil))
+                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse, annotations: []), nil))
                 #else
+                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse), nil))
+                #endif
                 itemView(TranslationItem.arabicText(.init(
                     verse: quran.firstVerse,
                     text: QuranText(quran.arabicBesmAllah),
                     quranFont: .uthmanicHafs,
                     arabicFontSize: fontSize
                 ), nil))
-                #endif
                 ForEach(0 ..< (readMore ? 1 : chunks.count), id: \.self) { chunkIndex in
                     itemView(TranslationItem.translationTextChunk(
                         .init(

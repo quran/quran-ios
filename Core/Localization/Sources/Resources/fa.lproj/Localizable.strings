@@ -102,6 +102,7 @@
 "menu.verticalScrolling" = "اسکرول عمودی";
 "menu.linePageDividers" = "جداکننده‌های سطر";
 "menu.linePageSidelines" = "خطوط کناری";
+"menu.arabicText" = "متن عربی";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "پوسته‌ها و تنظیمات";
 

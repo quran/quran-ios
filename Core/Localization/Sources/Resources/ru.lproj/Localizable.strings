@@ -102,6 +102,7 @@
 "menu.verticalScrolling" = "Вертикальная прокрутка";
 "menu.linePageDividers" = "Разделители строк";
 "menu.linePageSidelines" = "Боковые линии";
+"menu.arabicText" = "Арабский текст";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Темы и настройки";
 

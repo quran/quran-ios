@@ -102,6 +102,7 @@
 "menu.verticalScrolling" = "垂直滚动";
 "menu.linePageDividers" = "行分隔线";
 "menu.linePageSidelines" = "侧边线";
+"menu.arabicText" = "阿拉伯语原文";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "主题和设置";
 

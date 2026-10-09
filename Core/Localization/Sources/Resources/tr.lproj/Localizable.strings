@@ -77,6 +77,7 @@
 "menu.verticalScrolling" = "Dikey kaydırma";
 "menu.linePageDividers" = "Satır ayırıcıları";
 "menu.linePageSidelines" = "Yan çizgiler";
+"menu.arabicText" = "Arapça metin";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Temalar ve ayarlar";
 

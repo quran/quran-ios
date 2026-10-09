@@ -7,6 +7,7 @@ import Combine
 import QuranAnnotations
 import QuranKit
 import QuranText
+import QuranTextKit
 import ReadingService
 import XCTest
 @testable import QuranTranslationFeature
@@ -14,7 +15,7 @@ import XCTest
 @MainActor
 final class ContentTranslationViewModelTests: XCTestCase {
     #if QURAN_SYNC
-    func testArabicItemsIncludeLiveAnnotationsAndRemoveClearedBadges() throws {
+    func testVerseNumberItemsIncludeLiveAnnotationsAndRemoveClearedBadges() throws {
         let verse = Quran.hafsMadani1405.firstVerse
         let service = VerseOverlayService()
         let sut = makeSUT(overlayService: service)
@@ -24,7 +25,7 @@ final class ContentTranslationViewModelTests: XCTestCase {
             translations: [makeTranslation(id: 1)],
             verseTexts: [verse: makeVerseText(translationCount: 1)]
         )
-        let originalItem = try arabicItem(in: sut)
+        let originalItem = try verseNumberItem(in: sut)
 
         service.overlays.notedVerses = [verse]
         service.overlays.collectionVerses = [verse]
@@ -34,7 +35,7 @@ final class ContentTranslationViewModelTests: XCTestCase {
             .init(id: "page", slot: .red, placement: .page(verse.page), modifiedOn: .distantPast),
         ]
 
-        let annotatedItem = try arabicItem(in: sut)
+        let annotatedItem = try verseNumberItem(in: sut)
         XCTAssertEqual(annotatedItem.annotations, [.note, .collection, .readingBookmark(.teal), .readingBookmark(.orange)])
         XCTAssertEqual(annotatedItem.id, originalItem.id)
         XCTAssertNotEqual(annotatedItem, originalItem)
@@ -43,7 +44,7 @@ final class ContentTranslationViewModelTests: XCTestCase {
         service.overlays.collectionVerses = []
         service.overlays.readingBookmarks = []
 
-        XCTAssertEqual(try arabicItem(in: sut), originalItem)
+        XCTAssertEqual(try verseNumberItem(in: sut), originalItem)
     }
 
     func testAnnotationsFollowChangesToDisplayedVerses() {
@@ -84,13 +85,93 @@ final class ContentTranslationViewModelTests: XCTestCase {
         XCTAssertEqual(sut.annotationsByVerse, [verse: [.note]])
     }
 
-    private func arabicItem(in viewModel: ContentTranslationViewModel) throws -> TranslationArabicText {
-        try XCTUnwrap(viewModel.items(quranFont: .uthmanicHafs).compactMap { item in
-            guard case .arabicText(let text, _) = item else { return nil }
-            return text
-        }.first)
+    func testHiddenArabicTextKeepsAnnotationsOnVerseNumber() throws {
+        hideArabicText()
+        let verse = Quran.hafsMadani1405.firstVerse
+        let service = VerseOverlayService()
+        service.overlays.notedVerses = [verse]
+        let sut = makeSUT(overlayService: service)
+        sut.verses = [verse]
+        sut.commitLoadedContent(
+            verses: [verse],
+            translations: [makeTranslation(id: 1)],
+            verseTexts: [verse: makeVerseText(translationCount: 1)]
+        )
+
+        let verseNumber = try XCTUnwrap(verseNumbers(in: sut).first)
+
+        XCTAssertEqual(verseNumber.annotations, [.note])
+    }
+
+    private func verseNumberItem(in viewModel: ContentTranslationViewModel) throws -> TranslationVerseNumber {
+        try XCTUnwrap(verseNumbers(in: viewModel).first)
     }
     #endif
+
+    func testVerseNumberPrecedesArabicText() {
+        let verse = Quran.hafsMadani1405.firstVerse
+        let sut = makeSUT()
+        sut.commitLoadedContent(
+            verses: [verse],
+            translations: [makeTranslation(id: 1)],
+            verseTexts: [verse: makeVerseText(translationCount: 1)]
+        )
+
+        let ids = sut.items(quranFont: .uthmanicHafs).map(\.id)
+
+        XCTAssertEqual(ids.firstIndex(of: .verseNumber(verse)).map { $0 + 1 }, ids.firstIndex(of: .arabic(verse)))
+    }
+
+    func testHiddenArabicTextShowsVerseNumbersWithoutBesmAllah() throws {
+        hideArabicText()
+        let verse = Quran.hafsMadani1405.suras[1].firstVerse
+        let sut = makeSUT()
+        sut.commitLoadedContent(
+            verses: [verse],
+            translations: [makeTranslation(id: 1)],
+            verseTexts: [verse: makeVerseText(translationCount: 1)]
+        )
+
+        let items = sut.items(quranFont: .uthmanicHafs)
+
+        XCTAssertFalse(items.contains { $0.id == .arabic(verse) })
+        XCTAssertEqual(verseNumbers(in: sut).map(\.verse), [verse])
+        XCTAssertEqual(try suraName(in: items).showsBesmAllah, false)
+    }
+
+    func testArabicTextStaysVisibleWithoutTranslations() throws {
+        hideArabicText()
+        let verse = Quran.hafsMadani1405.suras[1].firstVerse
+        let sut = makeSUT()
+        sut.commitLoadedContent(
+            verses: [verse],
+            translations: [],
+            verseTexts: [verse: makeVerseText(translationCount: 0)]
+        )
+
+        let items = sut.items(quranFont: .uthmanicHafs)
+
+        XCTAssertTrue(items.contains { $0.id == .arabic(verse) })
+        XCTAssertEqual(verseNumbers(in: sut).map(\.verse), [verse])
+        XCTAssertEqual(try suraName(in: items).showsBesmAllah, true)
+    }
+
+    func testArabicTextVisibilityFollowsPreference() {
+        let verse = Quran.hafsMadani1405.firstVerse
+        let sut = makeSUT()
+        sut.commitLoadedContent(
+            verses: [verse],
+            translations: [makeTranslation(id: 1)],
+            verseTexts: [verse: makeVerseText(translationCount: 1)]
+        )
+        XCTAssertTrue(sut.items(quranFont: .uthmanicHafs).contains { $0.id == .arabic(verse) })
+
+        hideArabicText()
+
+        XCTAssertFalse(sut.showArabicText)
+        XCTAssertFalse(sut.items(quranFont: .uthmanicHafs).contains { $0.id == .arabic(verse) })
+        XCTAssertTrue(sut.items(quranFont: .uthmanicHafs).contains { $0.id == .verseNumber(verse) })
+    }
 
     func testHighlightsFollowChangesToDisplayedVerses() {
         let first = Quran.hafsMadani1405.pages[0].firstVerse
@@ -168,6 +249,34 @@ final class ContentTranslationViewModelTests: XCTestCase {
 
         XCTAssertEqual(snapshots, [[2, 2]])
         withExtendedLifetime(cancellable) { }
+    }
+
+    override func setUp() {
+        super.setUp()
+        QuranContentStatePreferences.shared.showArabicInTranslation = true
+    }
+
+    override func tearDown() {
+        QuranContentStatePreferences.shared.showArabicInTranslation = true
+        super.tearDown()
+    }
+
+    private func hideArabicText() {
+        QuranContentStatePreferences.shared.showArabicInTranslation = false
+    }
+
+    private func verseNumbers(in viewModel: ContentTranslationViewModel) -> [TranslationVerseNumber] {
+        viewModel.items(quranFont: .uthmanicHafs).compactMap { item in
+            guard case .verseNumber(let verseNumber, _) = item else { return nil }
+            return verseNumber
+        }
+    }
+
+    private func suraName(in items: [TranslationItem]) throws -> TranslationSuraName {
+        try XCTUnwrap(items.compactMap { item in
+            guard case .suraName(let suraName, _) = item else { return nil }
+            return suraName
+        }.first)
     }
 
     private func makeSUT(overlayService: VerseOverlayService = .init()) -> ContentTranslationViewModel {

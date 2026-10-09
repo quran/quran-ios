@@ -36,6 +36,7 @@ final class MoreMenuViewModel: ObservableObject {
         verticalScrollingEnabled = preferences.verticalScrollingEnabled
         showLinePageDividers = preferences.showLinePageDividers
         showLinePageSidelines = preferences.showLinePageSidelines
+        showArabicText = preferences.showArabicInTranslation
         appearanceMode = themeService.appearanceMode
 
         state.twoPages = (model.state.twoPages == .conditional && TwoPagesUtils.hasEnoughHorizontalSpace()) ? .conditional : .alwaysOff
@@ -112,6 +113,14 @@ final class MoreMenuViewModel: ObservableObject {
             }
             .store(in: &cancellables)
 
+        $showArabicText
+            .dropFirst()
+            .sink { [weak self] newValue in
+                logger.info("More Menu: set arabic text in translation visible \(newValue)")
+                self?.preferences.showArabicInTranslation = newValue
+            }
+            .store(in: &cancellables)
+
         $appearanceMode
             .dropFirst()
             .sink { [weak self] newValue in
@@ -146,6 +155,7 @@ final class MoreMenuViewModel: ObservableObject {
     @Published var verticalScrollingEnabled: Bool
     @Published var showLinePageDividers: Bool
     @Published var showLinePageSidelines: Bool
+    @Published var showArabicText: Bool
 
     @Published var appearanceMode: AppearanceMode
 

@@ -77,6 +77,7 @@
 "menu.verticalScrolling" = "تمرير رأسي";
 "menu.linePageDividers" = "فواصل الأسطر";
 "menu.linePageSidelines" = "الخطوط الجانبية";
+"menu.arabicText" = "نص الآيات";
 "menu.theme_settings" = "المظهر والإعدادات";
 
 // MARK: - Theme

@@ -17,6 +17,7 @@ enum TranslationItemId: Hashable, Sendable {
     case separator(AyahNumber)
     case suraName(Sura)
     case arabic(AyahNumber)
+    case verseNumber(AyahNumber)
     case translator(AyahNumber, translationId: Translation.ID)
     case translationReference(AyahNumber, translationId: Translation.ID)
     case translationTextChunk(AyahNumber, translationId: Translation.ID, chunkIndex: Int)
@@ -29,6 +30,7 @@ enum TranslationItemId: Hashable, Sendable {
             sura.firstVerse
         case .separator(let ayahNumber),
              .arabic(let ayahNumber),
+             .verseNumber(let ayahNumber),
              .translator(let ayahNumber, _),
              .translationReference(let ayahNumber, _),
              .translationTextChunk(let ayahNumber, _, _):
@@ -57,6 +59,7 @@ struct TranslationVerseSeparator: Identifiable & Hashable {
 
 struct TranslationSuraName: Identifiable & Hashable {
     let sura: Sura
+    let showsBesmAllah: Bool
     let quranFont: QuranFont
     let arabicFontSize: FontSize
 
@@ -69,11 +72,17 @@ struct TranslationArabicText: Identifiable & Hashable {
     let quranFont: QuranFont
     let arabicFontSize: FontSize
 
+    var id: TranslationItemId { .arabic(verse) }
+}
+
+struct TranslationVerseNumber: Identifiable & Hashable {
+    let verse: AyahNumber
+
     #if QURAN_SYNC
     let annotations: Set<AyahAnnotation>
     #endif
 
-    var id: TranslationItemId { .arabic(verse) }
+    var id: TranslationItemId { .verseNumber(verse) }
 }
 
 struct TranslationTextChunk: Identifiable & Hashable {
@@ -115,6 +124,7 @@ enum TranslationItem: Identifiable & Hashable {
     case verseSeparator(TranslationVerseSeparator, Color?)
     case suraName(TranslationSuraName, Color?)
     case arabicText(TranslationArabicText, Color?)
+    case verseNumber(TranslationVerseNumber, Color?)
     case translationTextChunk(TranslationTextChunk, Color?)
     case translationReferenceVerse(TranslationReferenceVerse, Color?)
     case translatorText(TranslatorText, Color?)
@@ -126,6 +136,7 @@ enum TranslationItem: Identifiable & Hashable {
         case .verseSeparator(let item, _): return item.id
         case .suraName(let item, _): return item.id
         case .arabicText(let item, _): return item.id
+        case .verseNumber(let item, _): return item.id
         case .translationTextChunk(let item, _): return item.id
         case .translationReferenceVerse(let item, _): return item.id
         case .translatorText(let item, _): return item.id
@@ -139,6 +150,7 @@ enum TranslationItem: Identifiable & Hashable {
         case .verseSeparator(_, let color),
              .suraName(_, let color),
              .arabicText(_, let color),
+             .verseNumber(_, let color),
              .translationTextChunk(_, let color),
              .translationReferenceVerse(_, let color),
              .translatorText(_, let color):

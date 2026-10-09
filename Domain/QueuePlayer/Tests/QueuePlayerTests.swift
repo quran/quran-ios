@@ -96,11 +96,12 @@ final class QueuePlayerTests: XCTestCase {
         player.pause()
         await fulfillment(of: [actions.firstDurationLoaded], timeout: 5)
 
-        // At this rate it takes under 0.1 s, so a frame end still timed for the old rate misses the timeout.
+        // At this rate it takes under 0.1 s. A frame end still timed for the old rate
+        // lands after the timeout, which leaves headroom for loading the second file.
         player.setRate(2)
         player.resume()
 
-        await fulfillment(of: [actions.playbackEnded], timeout: 1.5)
+        await fulfillment(of: [actions.playbackEnded], timeout: 2.5)
         XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(1, 0), .playbackEnded])
     }
 

@@ -57,7 +57,7 @@ class AudioPlayer {
 
     func stop() {
         cancelVerseDelay()
-        durationWaitStartTime = nil
+        isWaitingForDuration = false
         timer?.cancel()
         player.stop()
         actions?.playbackEnded()
@@ -107,9 +107,8 @@ class AudioPlayer {
     // True while paused by `pause()`, so a frame-end timer scheduled meanwhile starts paused.
     private var isPaused = false
 
-    // Set while the frame ends with its file and the file's duration is still loading:
-    // the media time the frame-end wait started from.
-    private var durationWaitStartTime: TimeInterval?
+    // True while the frame ends with its file and the file's duration is still loading.
+    private var isWaitingForDuration = false
 
     // `startPlaying()` replaces it before anything reads it, so the initial value is never built.
     private lazy var player = makePlayer(url: request.files[0].url)
@@ -272,10 +271,10 @@ class AudioPlayer {
         guard let mediaDelta = getDurationToFrameEnd(currentTime: currentTime) else {
             // The file's duration is still loading; `durationLoaded()` schedules the timer.
             timer = nil
-            durationWaitStartTime = currentTime ?? player.currentTime
+            isWaitingForDuration = true
             return
         }
-        durationWaitStartTime = nil
+        isWaitingForDuration = false
         scheduleFrameEndTimer(after: mediaDelta)
     }
 
@@ -293,13 +292,10 @@ class AudioPlayer {
     // MARK: - PlayerDelegate
 
     private func durationLoaded() {
-        // A seek may still be in flight, so don't measure from before where the wait started.
-        guard let startTime = durationWaitStartTime,
-              let mediaDelta = getDurationToFrameEnd(currentTime: max(startTime, player.currentTime))
-        else {
+        guard isWaitingForDuration, let mediaDelta = getDurationToFrameEnd() else {
             return
         }
-        durationWaitStartTime = nil
+        isWaitingForDuration = false
         scheduleFrameEndTimer(after: mediaDelta)
         if isPaused {
             timer?.pause()

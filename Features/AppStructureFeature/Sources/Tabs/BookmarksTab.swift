@@ -54,13 +54,8 @@ private final class BookmarksTabInteractor: TabInteractor {
 
 private class BookmarksTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
-        #if QURAN_SYNC
-        let title = l("bookmarks.collections")
-        #else
-        let title = lAndroid("menu_bookmarks")
-        #endif
-        return UITabBarItem(
-            title: title,
+        UITabBarItem(
+            title: lAndroid("menu_bookmarks"),
             image: .symbol("bookmark"),
             selectedImage: .symbol("bookmark.fill")
         )

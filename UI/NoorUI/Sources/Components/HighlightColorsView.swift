@@ -1,3 +1,4 @@
+import Localization
 import QuranAnnotations
 import SwiftUI
 import UIx
@@ -26,8 +27,7 @@ public struct HighlightColorsView: View {
     @State private var labelWidth: CGFloat = 0
     @ScaledMetric private var spacing = 8
     @ScaledMetric private var inset = 12
-    @ScaledMetric private var iconSize = 24
-    @ScaledMetric private var swatchSize = 20
+    @ScaledMetric private var circleSize = 36
     @ScaledMetric private var cornerRadius = 18
 
     public var body: some View {
@@ -45,9 +45,8 @@ public struct HighlightColorsView: View {
                                 if horizontal {
                                     horizontalContent(item)
                                 } else {
-                                    VStack(spacing: spacing / 2) {
-                                        icon(item, width: min(iconSize, contentWidth))
-                                        count(item)
+                                    VStack(spacing: spacing * 0.75) {
+                                        countCircle(item, size: min(circleSize, contentWidth))
                                         if showsLabel {
                                             label(item)
                                         }
@@ -85,28 +84,31 @@ public struct HighlightColorsView: View {
 
     private func horizontalContent(_ item: Item) -> some View {
         HStack(spacing: spacing) {
-            icon(item)
+            countCircle(item, size: circleSize)
             Text(item.color.localizedName)
                 .font(.body.weight(.semibold))
                 .foregroundColor(.label)
                 .lineLimit(1)
             Spacer(minLength: 0)
-            count(item)
         }
     }
 
-    private func icon(_ item: Item, width: CGFloat? = nil) -> some View {
-        ColoredCircle(color: item.color.color, selected: false, minLength: min(swatchSize, width ?? swatchSize))
-            .frame(width: width ?? iconSize, height: iconSize)
-    }
-
-    private func count(_ item: Item) -> some View {
-        Text(item.count.formatted())
-            .font(.body.weight(.semibold))
-            // swiftformat:disable:next isEmpty
-            .foregroundColor(item.count > 0 ? .label : .tertiaryLabel)
-            .lineLimit(1)
-            .minimumScaleFactor(0.5)
+    /// The highlight color as a dot with its count inside.
+    private func countCircle(_ item: Item, size: CGFloat) -> some View {
+        ColoredCircle(color: item.color.color, selected: false, minLength: size)
+            .overlay {
+                // Size the count from the dot, which already scales with Dynamic Type and shrinks to fit the tile.
+                Text(Self.compactCount(item.count))
+                    .font(.system(size: size * 0.42, weight: .semibold))
+                    .monospacedDigit()
+                    // The highlight colors are light in both appearances, so the count stays dark.
+                    // Zero is faded but keeps at least 4.5:1 contrast on the lightest color.
+                    // swiftformat:disable:next isEmpty
+                    .foregroundColor(.black.opacity(item.count > 0 ? 0.85 : 0.55))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                    .padding(size * 0.12)
+            }
     }
 
     private func label(_ item: Item) -> some View {
@@ -114,6 +116,11 @@ public struct HighlightColorsView: View {
             .font(.caption)
             .foregroundColor(.secondaryLabel)
             .lineLimit(1)
+    }
+
+    /// Formats a count to fit inside the dot: 1,204 becomes "1.2K".
+    nonisolated static func compactCount(_ count: Int, locale: Locale = .fixedCurrentLocaleNumbers) -> String {
+        count.formatted(.number.notation(.compactName).locale(locale))
     }
 
     // Measure SwiftUI's actual text, including localization and Dynamic Type, on iOS 15 too.
@@ -136,11 +143,11 @@ public struct HighlightColorsView: View {
 
 #Preview("Adaptive highlight colors") {
     let items: [HighlightColorsView.Item] = [
-        .init(color: .green, count: 10),
+        .init(color: .green, count: 1204),
+        .init(color: .yellow, count: 128),
         .init(color: .purple, count: 3),
         .init(color: .blue, count: 0),
         .init(color: .pink, count: 0),
-        .init(color: .yellow, count: 0),
     ]
     ScrollView([.horizontal, .vertical]) {
         VStack(alignment: .leading) {

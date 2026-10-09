@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2026-10-07.
 //
 
+import AVFoundation
 import QuranAudio
 import XCTest
 @testable import QueuePlayer
@@ -66,15 +67,7 @@ final class QueuePlayerTests: XCTestCase {
     }
 
     func test_reloadingAFile_reusesItsLoadedDuration() async throws {
-        // Like a gapless reciter's sura: two frames in one file, the last ending with the file.
-        let url = try audioFiles.make(duration: 0.15)
-        let frames = [AudioFrame(startTime: 0, endTime: 0.05), AudioFrame(startTime: 0.05, endTime: nil)]
-        let request = AudioRequest(
-            files: [AudioFile(url: url, frames: frames)],
-            endTime: nil,
-            frameRuns: .finite(1),
-            requestRuns: .finite(1)
-        )
+        let request = try makeSingleFileRequest()
         player.play(request: request, rate: 1)
         player.pause()
         await fulfillment(of: [actions.firstDurationLoaded], timeout: 5)
@@ -102,6 +95,29 @@ final class QueuePlayerTests: XCTestCase {
 
         await fulfillment(of: [actions.playbackEnded], timeout: 2.5)
         XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(1, 0), .playbackEnded])
+    }
+
+    // MARK: - Asset Reuse
+
+    func test_stepForward_withinAFileReusesItsAsset() async throws {
+        let request = try makeSingleFileRequest()
+
+        player.play(request: request, rate: 1)
+        player.stepForward()
+
+        await fulfillment(of: [actions.playbackEnded], timeout: 5)
+        XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(0, 1), .playbackEnded])
+        XCTAssertTrue(actions.playerItems[0].asset === actions.playerItems[1].asset)
+    }
+
+    func test_movingToAnotherFile_usesANewAsset() async throws {
+        let request = try makeGappedRequest()
+
+        player.play(request: request, rate: 1)
+
+        await fulfillment(of: [actions.playbackEnded], timeout: 5)
+        XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(1, 0), .playbackEnded])
+        XCTAssertFalse(actions.playerItems[0].asset === actions.playerItems[1].asset)
     }
 
     // MARK: - Verse Delay
@@ -238,6 +254,13 @@ final class QueuePlayerTests: XCTestCase {
         return AudioRequest(files: files, endTime: nil, frameRuns: .finite(1), requestRuns: .finite(1), verseDelay: verseDelay)
     }
 
+    /// Like a gapless reciter's sura: two frames in one 0.15 s file, the last ending with the file.
+    private func makeSingleFileRequest() throws -> AudioRequest {
+        let url = try audioFiles.make(duration: 0.15)
+        let frames = [AudioFrame(startTime: 0, endTime: 0.05), AudioFrame(startTime: 0.05, endTime: nil)]
+        return AudioRequest(files: [AudioFile(url: url, frames: frames)], endTime: nil, frameRuns: .finite(1), requestRuns: .finite(1))
+    }
+
     /// Waits until a verse ends and the player starts waiting out the delay after it.
     private func waitForVerseDelay() async {
         let started = expectation(description: "Verse delay started")
@@ -300,6 +323,8 @@ private final class QueuePlayerActionsSpy {
     private(set) var durationsLoaded: [TimeInterval] = []
     /// The duration each `audioFrameChanged` carried, in order.
     private(set) var frameDurations: [TimeInterval?] = []
+    /// The player item each `audioFrameChanged` carried, in order.
+    private(set) var playerItems: [AVPlayerItem] = []
     var onRateChanged: ((Float) -> Void)?
 
     func makeActions() -> QueuePlayerActions {
@@ -311,9 +336,10 @@ private final class QueuePlayerActionsSpy {
             playbackRateChanged: { [weak self] in
                 self?.onRateChanged?($0)
             },
-            audioFrameChanged: { [weak self] fileIndex, frameIndex, _, duration in
+            audioFrameChanged: { [weak self] fileIndex, frameIndex, playerItem, duration in
                 self?.events.append(.frameChanged(fileIndex, frameIndex))
                 self?.frameDurations.append(duration)
+                self?.playerItems.append(playerItem)
             },
             durationLoaded: { [weak self] in
                 self?.durationsLoaded.append($0)

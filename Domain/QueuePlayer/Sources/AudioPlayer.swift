@@ -137,6 +137,10 @@ class AudioPlayer {
     // Failed loads (zero) aren't kept, so they're retried.
     private var loadedDurations: [Int: TimeInterval] = [:]
 
+    // Reused by a seek within the same file, so it isn't scanned again. Weak, so a remote load
+    // stops with the last player using it.
+    private weak var currentAsset: PlayerAsset?
+
     // `startPlaying()` replaces it before anything reads it, so the initial value is never built.
     private lazy var player = makePlayer(fileIndex: 0)
 
@@ -149,7 +153,10 @@ class AudioPlayer {
     }
 
     private func makePlayer(fileIndex: Int) -> Player {
-        let player = Player(url: request.files[fileIndex].url, knownDuration: loadedDurations[fileIndex])
+        let url = request.files[fileIndex].url
+        let asset = currentAsset.flatMap { $0.url == url ? $0 : nil } ?? PlayerAsset(url: url)
+        currentAsset = asset
+        let player = Player(asset: asset, knownDuration: loadedDurations[fileIndex])
         player.onRateChanged = { [weak self] in
             self?.rateChanged(to: $0)
         }

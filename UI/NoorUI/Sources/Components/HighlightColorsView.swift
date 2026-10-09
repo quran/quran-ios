@@ -1,3 +1,4 @@
+import Localization
 import QuranAnnotations
 import SwiftUI
 import UIx
@@ -96,12 +97,14 @@ public struct HighlightColorsView: View {
     private func countCircle(_ item: Item, size: CGFloat) -> some View {
         ColoredCircle(color: item.color.color, selected: false, minLength: size)
             .overlay {
+                // Size the count from the dot, which already scales with Dynamic Type and shrinks to fit the tile.
                 Text(Self.compactCount(item.count))
-                    .font(.subheadline.weight(.semibold))
+                    .font(.system(size: size * 0.42, weight: .semibold))
                     .monospacedDigit()
                     // The highlight colors are light in both appearances, so the count stays dark.
+                    // Zero is faded but keeps at least 4.5:1 contrast on the lightest color.
                     // swiftformat:disable:next isEmpty
-                    .foregroundColor(.black.opacity(item.count > 0 ? 0.85 : 0.35))
+                    .foregroundColor(.black.opacity(item.count > 0 ? 0.85 : 0.55))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                     .padding(size * 0.12)
@@ -116,7 +119,7 @@ public struct HighlightColorsView: View {
     }
 
     /// Formats a count to fit inside the dot: 1,204 becomes "1.2K".
-    nonisolated static func compactCount(_ count: Int, locale: Locale = .autoupdatingCurrent) -> String {
+    nonisolated static func compactCount(_ count: Int, locale: Locale = .fixedCurrentLocaleNumbers) -> String {
         count.formatted(.number.notation(.compactName).locale(locale))
     }
 

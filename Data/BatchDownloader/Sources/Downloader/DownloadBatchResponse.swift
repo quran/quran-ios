@@ -67,22 +67,15 @@ public actor DownloadBatchResponse {
         batchId = batch.id
         requests = batch.downloads.map(\.request)
 
+        // Start every download in progress so completing the saved ones below
+        // also finishes the batch when all of them were saved as completed.
         for download in batch.downloads {
             let request = download.request
-            let state: ResponseData.State = switch download.status {
-            case .completed:
-                .finished
-            case .downloading:
-                .inProgress
-            }
-            responses[request] = ResponseData(request: request, state: state, taskId: download.taskId, task: nil)
+            responses[request] = ResponseData(request: request, state: .inProgress, taskId: download.taskId, task: nil)
         }
 
-        for download in batch.downloads {
-            // if it was saved as completed, then fulfill it
-            if download.status == .completed {
-                complete(download.request, result: .success(()))
-            }
+        for download in batch.downloads where download.status == .completed {
+            complete(download.request, result: .success(()))
         }
     }
 

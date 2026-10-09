@@ -51,6 +51,8 @@ class AudioPlayer {
         // Keep the player paused through the rest of the delay; the next frame plays after it.
         if isDelaying {
             startVerseDelayCountdown()
+            // The player stays paused, so it reports no rate change of its own.
+            actions?.playbackRateChanged(playbackRate)
             return
         }
         timer?.resume()
@@ -59,6 +61,10 @@ class AudioPlayer {
 
     func pause() {
         isPaused = true
+        if isDelaying {
+            // `rateChanged` ignores the player during a delay, so report the pause here.
+            actions?.playbackRateChanged(0)
+        }
         pauseVerseDelayCountdown()
         timer?.pause()
         player.pause()

@@ -17,7 +17,7 @@ final class QueuePlayerTests: XCTestCase {
         try await super.setUp()
         audioFiles = try SilentAudioFiles()
         actions = QueuePlayerActionsSpy()
-        clock = VerseDelayClock()
+        clock = VerseDelayClockFake()
         player = QueuePlayer(sleep: { [clock] in await clock?.sleep($0) })
         player.actions = actions.makeActions()
     }
@@ -165,11 +165,51 @@ final class QueuePlayerTests: XCTestCase {
         await fulfillment(of: [resumed], timeout: 5)
     }
 
+    func test_pause_duringAVerseDelayReportsThatPlaybackPaused() async throws {
+        let request = try makeGappedRequest(verseDelay: .full)
+
+        player.play(request: request, rate: 1)
+        await waitForVerseDelay()
+
+        let paused = expectation(description: "Playback paused")
+        actions.onRateChanged = { [weak actions] rate in
+            guard rate == 0 else {
+                return
+            }
+            actions?.onRateChanged = nil
+            paused.fulfill()
+        }
+        player.pause()
+
+        await fulfillment(of: [paused], timeout: 5)
+    }
+
+    func test_resume_duringAVerseDelayReportsThatPlaybackResumed() async throws {
+        let request = try makeGappedRequest(verseDelay: .full)
+
+        player.play(request: request, rate: 1)
+        await waitForVerseDelay()
+        player.pause()
+
+        let resumed = expectation(description: "Playback resumed")
+        actions.onRateChanged = { [weak actions] rate in
+            guard rate > 0 else {
+                return
+            }
+            actions?.onRateChanged = nil
+            resumed.fulfill()
+        }
+        // The rest of the delay stays pending, so the report comes before the next verse plays.
+        player.resume()
+
+        await fulfillment(of: [resumed], timeout: 5)
+    }
+
     // MARK: Private
 
     private var audioFiles: SilentAudioFiles!
     private var actions: QueuePlayerActionsSpy!
-    private var clock: VerseDelayClock!
+    private var clock: VerseDelayClockFake!
     private var player: QueuePlayer!
 
     /// Like a gapped reciter's request: every frame ends with its file. Durations stay under the
@@ -192,7 +232,7 @@ final class QueuePlayerTests: XCTestCase {
 
 /// Holds each between-verse delay until the test lets it elapse.
 @MainActor
-private final class VerseDelayClock {
+private final class VerseDelayClockFake {
     // MARK: Internal
 
     /// Every delay the player waited out, in seconds.

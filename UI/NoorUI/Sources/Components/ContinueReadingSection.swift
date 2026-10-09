@@ -136,7 +136,7 @@ public struct ContinueReadingSection: View {
             HStack {
                 Image(systemName: "clock")
                     .accessibilityHidden(true)
-                Text(lFormat("home.recent-pages.title", lastPages.count.formatted()))
+                Text(lFormat("home.recent-pages.title", NumberFormatter.shared.format(lastPages.count)))
             }
             .font(.subheadline.weight(.semibold))
             .foregroundColor(.secondaryLabel)

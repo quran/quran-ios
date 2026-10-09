@@ -9,13 +9,17 @@
 import Foundation
 import Timing
 
+/// Waits out a between-verse delay of the given wall-clock seconds.
+typealias VerseDelaySleep = @Sendable @MainActor (TimeInterval) async -> Void
+
 @MainActor
 class AudioPlayer {
     // MARK: Lifecycle
 
-    init(request: AudioRequest, rate: Float) {
+    init(request: AudioRequest, rate: Float, sleep: @escaping VerseDelaySleep) {
         self.request = request
         playbackRate = rate
+        self.sleep = sleep
         audioPlaying = AudioPlaying(request: request, fileIndex: 0, frameIndex: 0)
         interruptionMonitor.onAudioInterruption = { [weak self] in
             self?.onAudioInterruption(type: $0)
@@ -44,13 +48,24 @@ class AudioPlayer {
 
     func resume() {
         isPaused = false
+        // Keep the player paused through the rest of the delay; the next frame plays after it.
+        if isDelaying {
+            startVerseDelayCountdown()
+            // The player stays paused, so it reports no rate change of its own.
+            actions?.playbackRateChanged(playbackRate)
+            return
+        }
         timer?.resume()
         player.play(rate: playbackRate)
     }
 
     func pause() {
         isPaused = true
-        cancelVerseDelay()
+        if isDelaying {
+            // `rateChanged` ignores the player during a delay, so report the pause here.
+            actions?.playbackRateChanged(0)
+        }
+        pauseVerseDelayCountdown()
         timer?.pause()
         player.pause()
     }
@@ -98,11 +113,16 @@ class AudioPlayer {
 
     private let interruptionMonitor = AudioInterruptionMonitor()
     private let request: AudioRequest
+    private let sleep: VerseDelaySleep
     private var audioPlaying: AudioPlaying
     private var playbackRate: Float
 
-    // True while waiting out a between-verse delay (player paused, no frame playing).
-    private var isDelaying = false
+    // Set while waiting out a between-verse delay (player paused, no frame playing).
+    private var verseDelayWait: VerseDelayWait?
+
+    private var isDelaying: Bool {
+        verseDelayWait != nil
+    }
 
     // True while paused by `pause()`, so a frame-end timer scheduled meanwhile starts paused.
     private var isPaused = false
@@ -146,6 +166,9 @@ class AudioPlayer {
     // MARK: - Repeat Logic
 
     private func play(fileIndex: Int, frameIndex: Int, forceSeek: Bool) {
+        // Playing a frame, such as after stepping, supersedes a pending delay's advance.
+        cancelVerseDelay()
+
         let oldFileIndex = audioPlaying.filePlaying.fileIndex
         let oldFrameIndex = audioPlaying.framePlaying.frameIndex
 
@@ -256,20 +279,40 @@ class AudioPlayer {
             action()
             return
         }
-        isDelaying = true
         player.pause()
-        delayTask = Task { [weak self] in
-            try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
-            guard !Task.isCancelled, let self else {
-                return
-            }
-            isDelaying = false
-            action()
+        verseDelayWait = VerseDelayWait(advance: action, remaining: delay)
+        if !isPaused {
+            startVerseDelayCountdown()
         }
     }
 
+    private func startVerseDelayCountdown() {
+        guard let wait = verseDelayWait, wait.countdownStart == nil else {
+            return
+        }
+        verseDelayWait?.countdownStart = Date()
+        delayTask = Task { [weak self, sleep] in
+            await sleep(wait.remaining)
+            guard !Task.isCancelled, let self else {
+                return
+            }
+            verseDelayWait = nil
+            wait.advance()
+        }
+    }
+
+    private func pauseVerseDelayCountdown() {
+        guard var wait = verseDelayWait, let countdownStart = wait.countdownStart else {
+            return
+        }
+        delayTask = nil
+        wait.remaining = max(0, wait.remaining - Date().timeIntervalSince(countdownStart))
+        wait.countdownStart = nil
+        verseDelayWait = wait
+    }
+
     private func cancelVerseDelay() {
-        isDelaying = false
+        verseDelayWait = nil
         delayTask = nil
     }
 
@@ -333,4 +376,13 @@ class AudioPlayer {
         let currentTimeInSeconds = currentTime ?? player.currentTime
         return frameEndTime - currentTimeInSeconds
     }
+}
+
+/// A between-verse delay being waited out, and the advance to run once it elapses.
+private struct VerseDelayWait {
+    let advance: @MainActor () -> Void
+    /// Wall-clock seconds left as of `countdownStart`.
+    var remaining: TimeInterval
+    /// When the countdown last started, or `nil` while paused.
+    var countdownStart: Date?
 }

@@ -148,6 +148,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Verde";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Grafito";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "Azul marino y dorado";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "Naranja";
@@ -159,6 +161,8 @@
 "app_icon.name.teal_white" = "Verde azulado y blanco";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Colores";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Iconos";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "Emblemáticos";
 // Metadata: Translated by AI; human review required.

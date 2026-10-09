@@ -148,6 +148,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Yashil";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Grafit";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "To‘q ko‘k va oltin";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "To‘q sariq";
@@ -159,6 +161,8 @@
 "app_icon.name.teal_white" = "Moviy-yashil va oq";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Ranglar";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Belgilar";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "Maxsus";
 // Metadata: Translated by AI; human review required.

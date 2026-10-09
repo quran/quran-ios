@@ -106,6 +106,7 @@
 "app_icon.default" = "الافتراضية";
 "app_icon.section.signature" = "المميزة";
 "app_icon.section.colors" = "الألوان";
+"app_icon.section.icons" = "الأيقونات";
 "app_icon.name.navy_gold" = "كُحلي وذهبي";
 "app_icon.name.teal_white" = "أزرق مخضر وأبيض";
 "app_icon.name.black_gold" = "أسود وذهبي";
@@ -114,6 +115,7 @@
 "app_icon.name.red" = "أحمر";
 "app_icon.name.orange" = "برتقالي";
 "app_icon.name.green" = "أخضر";
+"app_icon.name.graphite" = "جرافيت";
 
 // MARK: - Tabs
 

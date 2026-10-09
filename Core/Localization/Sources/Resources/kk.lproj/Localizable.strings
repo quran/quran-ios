@@ -134,6 +134,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Жасыл";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Графит";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "Қою көк және алтын";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "Қызғылт сары";
@@ -145,6 +147,8 @@
 "app_icon.name.teal_white" = "Көкшіл жасыл және ақ";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Түстер";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Белгішелер";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "Фирмалық";
 // Metadata: Translated by AI; human review required.

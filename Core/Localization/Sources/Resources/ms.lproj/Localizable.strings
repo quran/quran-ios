@@ -131,6 +131,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Hijau";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Grafit";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "Biru laut & emas";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "Oren";
@@ -142,6 +144,8 @@
 "app_icon.name.teal_white" = "Hijau kebiruan & putih";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Warna";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Ikon";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "Istimewa";
 // Metadata: Translated by AI; human review required.

@@ -148,6 +148,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "绿色";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "石墨";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "藏青与金色";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "橙色";
@@ -159,6 +161,8 @@
 "app_icon.name.teal_white" = "蓝绿与白色";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "颜色";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "图标";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "经典";
 // Metadata: Translated by AI; human review required.

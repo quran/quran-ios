@@ -115,6 +115,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Groen";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Grafiet";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "Marineblauw en goud";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "Oranje";
@@ -126,6 +128,8 @@
 "app_icon.name.teal_white" = "Blauwgroen en wit";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Kleuren";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Iconen";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "Signatuur";
 // Metadata: Translated by AI; human review required.

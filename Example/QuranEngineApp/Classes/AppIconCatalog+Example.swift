@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2026-09-29.
 //
 
+import Localization
 import NoorUI
 import UIKit
 import UIx
@@ -14,7 +15,7 @@ extension AppIconCatalog {
     static let example = AppIconCatalog(sections: [
         Section(
             id: "quran-engine",
-            title: "Icons",
+            title: l("app_icon.section.icons"),
             previewSize: .large,
             options: [.quranEngine, .graphite]
         ),
@@ -33,7 +34,7 @@ extension AppIconOption {
     static let graphite = AppIconOption(
         id: "engine-graphite",
         alternateIconName: "AppIcon-Graphite",
-        name: "Graphite",
+        name: l("app_icon.name.graphite"),
         previewImageName: "app-icon-engine-graphite",
         accent: .amber
     )

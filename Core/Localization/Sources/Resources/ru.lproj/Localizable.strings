@@ -148,6 +148,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Зелёный";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Графит";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "Тёмно-синий и золотой";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "Оранжевый";
@@ -159,6 +161,8 @@
 "app_icon.name.teal_white" = "Бирюзовый и белый";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Цвета";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Иконки";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "Фирменные";
 // Metadata: Translated by AI; human review required.

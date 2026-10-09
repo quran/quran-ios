@@ -120,6 +120,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Yeşil";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Grafit";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "Lacivert ve altın";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "Turuncu";
@@ -131,6 +133,8 @@
 "app_icon.name.teal_white" = "Petrol mavisi ve beyaz";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Renkler";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Simgeler";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "İmza";
 // Metadata: Translated by AI; human review required.

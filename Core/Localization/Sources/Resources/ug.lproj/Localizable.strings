@@ -148,6 +148,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "يېشىل";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "گرافىت";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "قېنىق كۆك ۋە ئالتۇن رەڭ";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "قىزغۇچ سېرىق";
@@ -159,6 +161,8 @@
 "app_icon.name.teal_white" = "كۆكۈش يېشىل ۋە ئاق";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "رەڭلەر";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "سىنبەلگىلەر";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "ئالاھىدە";
 // Metadata: Translated by AI; human review required.

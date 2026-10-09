@@ -118,6 +118,7 @@
 "app_icon.default" = "Default";
 "app_icon.section.signature" = "Signature";
 "app_icon.section.colors" = "Colors";
+"app_icon.section.icons" = "Icons";
 "app_icon.name.navy_gold" = "Navy & Gold";
 "app_icon.name.teal_white" = "Teal & White";
 "app_icon.name.black_gold" = "Black & Gold";
@@ -126,6 +127,7 @@
 "app_icon.name.red" = "Red";
 "app_icon.name.orange" = "Orange";
 "app_icon.name.green" = "Green";
+"app_icon.name.graphite" = "Graphite";
 
 // MARK: - Tabs
 

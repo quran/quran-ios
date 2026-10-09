@@ -148,6 +148,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "سبز";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "گرافیت";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "سرمه‌ای و طلایی";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "نارنجی";
@@ -159,6 +161,8 @@
 "app_icon.name.teal_white" = "سبزآبی و سفید";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "رنگ‌ها";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "نمادها";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "ویژه";
 // Metadata: Translated by AI; human review required.

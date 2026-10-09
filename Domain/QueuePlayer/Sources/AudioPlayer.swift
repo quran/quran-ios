@@ -278,10 +278,8 @@ class AudioPlayer {
     }
 
     private func scheduleFrameEndTimer(after mediaDelta: TimeInterval) {
-        // max with 100ms since sometimes the returned value could be negative
-        let mediaDelta = max(0, mediaDelta)
-        // Convert media time to wall-clock time
-        let interval = max(0.05, mediaDelta / Double(playbackRate)) // small floor for stability
+        // Convert media time to wall-clock time; the 50 ms floor also covers negative deltas.
+        let interval = max(0.05, mediaDelta / Double(playbackRate))
         timer = Timer(interval: interval, queue: .main) { [weak self] in
             self?.timer = nil
             self?.onFrameEnded()

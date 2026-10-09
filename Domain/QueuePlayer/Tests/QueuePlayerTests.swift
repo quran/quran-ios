@@ -17,7 +17,8 @@ final class QueuePlayerTests: XCTestCase {
         try await super.setUp()
         audioFiles = try SilentAudioFiles()
         actions = QueuePlayerActionsSpy()
-        player = QueuePlayer()
+        clock = VerseDelayClock()
+        player = QueuePlayer(sleep: { [clock] in await clock?.sleep($0) })
         player.actions = actions.makeActions()
     }
 
@@ -87,21 +88,147 @@ final class QueuePlayerTests: XCTestCase {
         XCTAssertEqual(actions.durationsLoaded.count, 1)
     }
 
+    // MARK: - Verse Delay
+
+    func test_resume_afterPausingDuringAVerseDelayPlaysTheNextVerse() async throws {
+        let request = try makeGappedRequest(verseDelay: .full)
+
+        player.play(request: request, rate: 1)
+        await waitForVerseDelay()
+        player.pause()
+
+        // The delay's time passing while paused doesn't advance playback.
+        clock.elapse()
+        try await Task.sleep(nanoseconds: 200_000_000)
+        XCTAssertEqual(actions.events, [.frameChanged(0, 0)])
+
+        player.resume()
+        clock.elapseAll()
+
+        await fulfillment(of: [actions.playbackEnded], timeout: 5)
+        XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(1, 0), .playbackEnded])
+        // Resuming waits out only what was left of the delay.
+        XCTAssertEqual(clock.delays.count, 2)
+        if let delay = clock.delays.first, let remainingDelay = clock.delays.last {
+            XCTAssertLessThan(remainingDelay, delay)
+        }
+    }
+
+    func test_stepForward_duringAVerseDelayDoesNotReplayTheVerse() async throws {
+        let request = try makeGappedRequest(durations: [0.1, 0.1, 0.1], verseDelay: .full)
+
+        player.play(request: request, rate: 1)
+        await waitForVerseDelay()
+        player.stepForward()
+        // Includes the delay that was pending when stepping.
+        clock.elapseAll()
+
+        await fulfillment(of: [actions.playbackEnded], timeout: 5)
+        XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(1, 0), .frameChanged(2, 0), .playbackEnded])
+    }
+
+    func test_stepBackward_duringAVerseDelayDoesNotJumpAhead() async throws {
+        let request = try makeGappedRequest(durations: [0.1, 0.1, 0.1], verseDelay: .full)
+
+        player.play(request: request, rate: 1)
+        await waitForVerseDelay()
+        clock.elapse()
+        await waitForVerseDelay()
+        player.stepBackward()
+        // Includes the delay that was pending when stepping.
+        clock.elapseAll()
+
+        await fulfillment(of: [actions.playbackEnded], timeout: 5)
+        XCTAssertEqual(actions.events, [
+            .frameChanged(0, 0), .frameChanged(1, 0),
+            .frameChanged(0, 0), .frameChanged(1, 0), .frameChanged(2, 0),
+            .playbackEnded,
+        ])
+    }
+
+    func test_stepForward_duringAVerseDelayReportsThatPlaybackResumed() async throws {
+        let request = try makeGappedRequest(verseDelay: .full)
+
+        player.play(request: request, rate: 1)
+        await waitForVerseDelay()
+
+        let resumed = expectation(description: "Playback resumed")
+        actions.onRateChanged = { [weak actions] rate in
+            guard rate > 0 else {
+                return
+            }
+            actions?.onRateChanged = nil
+            resumed.fulfill()
+        }
+        player.stepForward()
+
+        await fulfillment(of: [resumed], timeout: 5)
+    }
+
     // MARK: Private
 
     private var audioFiles: SilentAudioFiles!
     private var actions: QueuePlayerActionsSpy!
+    private var clock: VerseDelayClock!
     private var player: QueuePlayer!
 
     /// Like a gapped reciter's request: every frame ends with its file. Durations stay under the
     /// 200 ms frame-end tolerance, so frames end even where the simulator doesn't advance playback.
-    private func makeGappedRequest(durations: [TimeInterval] = [0.1, 0.1]) throws -> AudioRequest {
+    private func makeGappedRequest(durations: [TimeInterval] = [0.1, 0.1], verseDelay: VerseDelay = .none) throws -> AudioRequest {
         let files = try durations.map { duration in
             let url = try audioFiles.make(duration: duration)
             return AudioFile(url: url, frames: [AudioFrame(startTime: 0, endTime: nil)])
         }
-        return AudioRequest(files: files, endTime: nil, frameRuns: .finite(1), requestRuns: .finite(1))
+        return AudioRequest(files: files, endTime: nil, frameRuns: .finite(1), requestRuns: .finite(1), verseDelay: verseDelay)
     }
+
+    /// Waits until a verse ends and the player starts waiting out the delay after it.
+    private func waitForVerseDelay() async {
+        let started = expectation(description: "Verse delay started")
+        clock.onNextDelay = { started.fulfill() }
+        await fulfillment(of: [started], timeout: 5)
+    }
+}
+
+/// Holds each between-verse delay until the test lets it elapse.
+@MainActor
+private final class VerseDelayClock {
+    // MARK: Internal
+
+    /// Every delay the player waited out, in seconds.
+    private(set) var delays: [TimeInterval] = []
+    var onNextDelay: (() -> Void)?
+
+    func sleep(_ delay: TimeInterval) async {
+        delays.append(delay)
+        guard !elapsesImmediately else {
+            return
+        }
+        await withCheckedContinuation { continuation in
+            pending.append(continuation)
+            let onNextDelay = onNextDelay
+            self.onNextDelay = nil
+            onNextDelay?()
+        }
+    }
+
+    /// Lets the pending delays elapse.
+    func elapse() {
+        let pending = pending
+        self.pending = []
+        pending.forEach { $0.resume() }
+    }
+
+    /// Lets the pending delays, and every later one, elapse.
+    func elapseAll() {
+        elapsesImmediately = true
+        elapse()
+    }
+
+    // MARK: Private
+
+    private var pending: [CheckedContinuation<Void, Never>] = []
+    private var elapsesImmediately = false
 }
 
 @MainActor
@@ -117,6 +244,7 @@ private final class QueuePlayerActionsSpy {
     private(set) var durationsLoaded: [TimeInterval] = []
     /// The duration each `audioFrameChanged` carried, in order.
     private(set) var frameDurations: [TimeInterval?] = []
+    var onRateChanged: ((Float) -> Void)?
 
     func makeActions() -> QueuePlayerActions {
         QueuePlayerActions(
@@ -124,7 +252,9 @@ private final class QueuePlayerActionsSpy {
                 self?.events.append(.playbackEnded)
                 self?.playbackEnded.fulfill()
             },
-            playbackRateChanged: { _ in },
+            playbackRateChanged: { [weak self] in
+                self?.onRateChanged?($0)
+            },
             audioFrameChanged: { [weak self] fileIndex, frameIndex, _, duration in
                 self?.events.append(.frameChanged(fileIndex, frameIndex))
                 self?.frameDurations.append(duration)

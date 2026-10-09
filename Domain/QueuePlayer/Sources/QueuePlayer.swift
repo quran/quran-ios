@@ -37,14 +37,19 @@ public struct QueuePlayerActions: Sendable {
 public class QueuePlayer {
     // MARK: Lifecycle
 
-    public init() {
+    public convenience init() {
+        self.init(sleep: { try? await Task.sleep(nanoseconds: UInt64($0 * 1_000_000_000)) })
+    }
+
+    init(sleep: @escaping VerseDelaySleep) {
+        self.sleep = sleep
         try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.defaultToSpeaker, .allowBluetoothHFP])
     }
 
     // MARK: Open
 
     open func play(request: AudioRequest, rate: Float) {
-        player = AudioPlayer(request: request, rate: rate)
+        player = AudioPlayer(request: request, rate: rate, sleep: sleep)
         player?.actions = newPlayerActions()
         player?.startPlaying()
     }
@@ -78,6 +83,8 @@ public class QueuePlayer {
     }
 
     // MARK: Private
+
+    private let sleep: VerseDelaySleep
 
     private var player: AudioPlayer? {
         didSet {

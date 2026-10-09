@@ -42,8 +42,9 @@ final class QueuePlayerTests: XCTestCase {
         player.play(request: request, rate: 1)
         player.pause()
 
-        // Long enough for the duration to load and the frame to end, were it not paused.
-        try await Task.sleep(nanoseconds: 500_000_000)
+        await fulfillment(of: [actions.firstDurationLoaded], timeout: 5)
+        // Longer than the 0.1 s frame, so a frame-end timer left running would have ended it.
+        try await Task.sleep(nanoseconds: 300_000_000)
         XCTAssertEqual(actions.events, [.frameChanged(0, 0)])
 
         player.resume()
@@ -102,6 +103,7 @@ private final class QueuePlayerActionsSpy {
     }
 
     let playbackEnded = XCTestExpectation(description: "Playback ended")
+    let firstDurationLoaded = XCTestExpectation(description: "First duration loaded")
     private(set) var events: [Event] = []
     private(set) var durationsLoaded: [TimeInterval] = []
 
@@ -117,6 +119,9 @@ private final class QueuePlayerActionsSpy {
             },
             durationLoaded: { [weak self] in
                 self?.durationsLoaded.append($0)
+                if self?.durationsLoaded.count == 1 {
+                    self?.firstDurationLoaded.fulfill()
+                }
             }
         )
     }

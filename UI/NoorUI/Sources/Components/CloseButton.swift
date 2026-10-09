@@ -5,7 +5,9 @@
 //  Created by Mohamed Afifi on 2025-03-26.
 //
 
+import Localization
 import SwiftUI
+import UIx
 
 public struct CloseButton: View {
     @Environment(\.dismiss) private var dismiss
@@ -21,6 +23,6 @@ public struct CloseButton: View {
                 .font(.title)
                 .foregroundStyle(Color.systemGray, Color.systemGray5)
         }
-        .accessibilityLabel("Close")
+        .accessibilityLabel(l("button.close"))
     }
 }

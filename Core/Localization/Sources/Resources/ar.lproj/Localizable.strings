@@ -411,5 +411,9 @@
 "accessibility.expanded" = "موسّع";
 // VoiceOver state when the additional reading bookmarks are hidden.
 "accessibility.collapsed" = "مطوي";
+// VoiceOver hint for an expanded collapsible section header.
+"accessibility.section.collapse" = "طي القسم";
+// VoiceOver hint for a collapsed collapsible section header.
+"accessibility.section.expand" = "توسيع القسم";
 // Recent pages heading with a localized page count.
 "home.recent-pages.title" = "الصفحات الأخيرة (%@)";

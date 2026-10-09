@@ -111,6 +111,11 @@
 "menu.verticalScrolling" = "Rolagem vertical";
 "menu.linePageDividers" = "Separadores de linha";
 "menu.linePageSidelines" = "Linhas laterais";
+"menu.ayahIndicators" = "Indicadores de ayas";
+"menu.ayahIndicators.all" = "Todos";
+"menu.ayahIndicators.all.detail" = "Marcador de leitura, notas e coleções";
+"menu.ayahIndicators.readingBookmark" = "Marcador de leitura";
+"menu.ayahIndicators.none" = "Nenhum";
 "menu.arabicText" = "Texto árabe";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Temas e configurações";

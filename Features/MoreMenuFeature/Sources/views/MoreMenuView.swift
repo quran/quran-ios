@@ -85,6 +85,14 @@ private struct MoreMenuRootView: View {
                         empty
                     }
 
+                    #if QURAN_SYNC
+                    viewBasedOn(state.ayahIndicators) {
+                        MoreMenuAyahIndicators(indicators: $store.ayahIndicators)
+                            .background(Color.systemBackground)
+                        empty
+                    }
+                    #endif
+
                     viewBasedOn(state.orientation, customCondition: store.mode == .arabic) {
                         MoreMenuDeviceRotation()
                             .background(Color.systemBackground)

@@ -183,6 +183,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         var state = MoreMenuControlsState()
         state.wordPointer = readingPreferences.reading.supportsWordPositions ? .conditional : .alwaysOff
         state.linePageDisplay = readingPreferences.reading == .indoPak ? .conditional : .alwaysOff
+        #if QURAN_SYNC
+        state.ayahIndicators = .alwaysOn
+        #endif
         // TODO: Enable vertical scrolling.
         state.verticalScrolling = .alwaysOff
         let model = MoreMenuModel(isWordPointerActive: isWordPointerActive, state: state)

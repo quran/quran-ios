@@ -35,6 +35,11 @@ public struct QuranContentStatePreferences {
     @Preference(showArabicInTranslation)
     public var showArabicInTranslation: Bool
 
+    #if QURAN_SYNC
+    @TransformedPreference(ayahIndicators, transformer: .rawRepresentable(defaultValue: .readingBookmark))
+    public var ayahIndicators: AyahIndicators
+    #endif
+
     // MARK: Private
 
     private static let showQuranTranslationView = PreferenceKey<Bool>(key: "showQuranTranslationView", defaultValue: false)
@@ -43,6 +48,9 @@ public struct QuranContentStatePreferences {
     private static let showLinePageDividers = PreferenceKey<Bool>(key: "showLinePageDividers", defaultValue: true)
     private static let showLinePageSidelines = PreferenceKey<Bool>(key: "showLinePageSidelines", defaultValue: true)
     private static let showArabicInTranslation = PreferenceKey<Bool>(key: "showArabicInTranslation", defaultValue: true)
+    #if QURAN_SYNC
+    private static let ayahIndicators = PreferenceKey<String>(key: "ayahIndicators", defaultValue: AyahIndicators.readingBookmark.rawValue)
+    #endif
 
     private static let quranModeTransfomer = PreferenceTransformer<Bool, QuranMode>(
         rawToValue: { $0 ? .translation : .arabic },

@@ -111,6 +111,11 @@
 "menu.verticalScrolling" = "垂直滚动";
 "menu.linePageDividers" = "行分隔线";
 "menu.linePageSidelines" = "侧边线";
+"menu.ayahIndicators" = "经文标识";
+"menu.ayahIndicators.all" = "全部";
+"menu.ayahIndicators.all.detail" = "阅读书签、笔记和收藏集";
+"menu.ayahIndicators.readingBookmark" = "阅读书签";
+"menu.ayahIndicators.none" = "无";
 "menu.arabicText" = "阿拉伯语原文";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "主题和设置";

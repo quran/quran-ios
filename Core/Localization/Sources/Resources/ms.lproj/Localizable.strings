@@ -94,6 +94,11 @@
 "menu.verticalScrolling" = "Skrol menegak";
 "menu.linePageDividers" = "Pemisah baris";
 "menu.linePageSidelines" = "Garis sisi";
+"menu.ayahIndicators" = "Penunjuk ayat";
+"menu.ayahIndicators.all" = "Semua";
+"menu.ayahIndicators.all.detail" = "Penanda bacaan, nota dan koleksi";
+"menu.ayahIndicators.readingBookmark" = "Penanda bacaan";
+"menu.ayahIndicators.none" = "Tiada";
 "menu.arabicText" = "Teks Arab";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Tema & Tetapan";

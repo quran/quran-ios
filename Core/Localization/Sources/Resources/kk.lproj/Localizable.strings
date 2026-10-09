@@ -97,6 +97,11 @@
 "menu.verticalScrolling" = "Тік жылжыту";
 "menu.linePageDividers" = "Жол бөлгіштері";
 "menu.linePageSidelines" = "Бүйір сызықтар";
+"menu.ayahIndicators" = "Аят белгішелері";
+"menu.ayahIndicators.all" = "Барлығы";
+"menu.ayahIndicators.all.detail" = "Оқу бетбелгісі, жазбалар және жинақтар";
+"menu.ayahIndicators.readingBookmark" = "Оқу бетбелгісі";
+"menu.ayahIndicators.none" = "Ешқайсысы";
 "menu.arabicText" = "Араб мәтіні";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Тақырыптар мен параметрлер";

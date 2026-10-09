@@ -4,6 +4,8 @@ import Combine
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
+import QuranText
+import QuranTextKit
 import XCTest
 @testable import QuranViewFeature
 
@@ -16,9 +18,11 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         highlightService = MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
         collectionService = AyahBookmarkCollectionService(quranDataService: database.quranDataService)
         readingBookmarkService = MobileSyncReadingBookmarkService(quranDataService: database.quranDataService)
+        QuranContentStatePreferences.shared.ayahIndicators = .all
     }
 
     override func tearDown() async throws {
+        QuranContentStatePreferences.shared.ayahIndicators = .readingBookmark
         try await database.reset()
         noteService = nil
         highlightService = nil
@@ -259,6 +263,37 @@ final class QuranAnnotationsObserverTests: XCTestCase {
     private var highlightService: MobileSyncAyahHighlightService!
     private var collectionService: AyahBookmarkCollectionService!
     private var readingBookmarkService: MobileSyncReadingBookmarkService!
+
+    func test_start_appliesAyahIndicatorsPreference() async throws {
+        QuranContentStatePreferences.shared.ayahIndicators = .readingBookmark
+        try await noteService.createNote(body: "Hidden note", startAyah: ayah(5), endAyah: ayah(5))
+        try await readingBookmarkService.addReadingBookmark(at: .ayah(ayah(5)), slot: .teal)
+        let overlayService = VerseOverlayService()
+        let observer = makeObserver(overlayService: overlayService)
+        defer { observer.stop() }
+
+        observer.start()
+        await waitForOverlays(overlayService) {
+            $0.notedVerses == [self.ayah(5)] && $0.readingBookmarks.map(\.slot) == [.teal]
+        }
+
+        XCTAssertEqual(overlayService.overlays.annotationsByVerse, [ayah(5): [.readingBookmark(.teal)]])
+    }
+
+    func test_ayahIndicatorsPreferenceChange_updatesAnnotations() async throws {
+        try await noteService.createNote(body: "Note", startAyah: ayah(5), endAyah: ayah(5))
+        let overlayService = VerseOverlayService()
+        let observer = makeObserver(overlayService: overlayService)
+        defer { observer.stop() }
+        observer.start()
+        await waitForOverlays(overlayService) { $0.annotationsByVerse == [self.ayah(5): [.note]] }
+
+        QuranContentStatePreferences.shared.ayahIndicators = .none
+
+        XCTAssertEqual(overlayService.overlays.ayahIndicators, .none)
+        XCTAssertTrue(overlayService.overlays.annotationsByVerse.isEmpty)
+        XCTAssertEqual(overlayService.overlays.notedVerses, [ayah(5)])
+    }
 
     private func makeObserver(overlayService: VerseOverlayService) -> QuranAnnotationsObserver {
         QuranAnnotationsObserver(

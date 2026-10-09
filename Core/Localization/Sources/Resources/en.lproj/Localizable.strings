@@ -95,6 +95,11 @@
 "menu.verticalScrolling" = "Vertical scrolling";
 "menu.linePageDividers" = "Line dividers";
 "menu.linePageSidelines" = "Side lines";
+"menu.ayahIndicators" = "Ayah indicators";
+"menu.ayahIndicators.all" = "All";
+"menu.ayahIndicators.all.detail" = "Reading bookmark, notes, and collections";
+"menu.ayahIndicators.readingBookmark" = "Reading bookmark";
+"menu.ayahIndicators.none" = "None";
 "menu.arabicText" = "Arabic text";
 "menu.theme_settings" = "Themes & Settings";
 

@@ -111,6 +111,11 @@
 "menu.verticalScrolling" = "Vertikal aylantirish";
 "menu.linePageDividers" = "Qator ajratgichlari";
 "menu.linePageSidelines" = "Yon chiziqlar";
+"menu.ayahIndicators" = "Oyat belgilari";
+"menu.ayahIndicators.all" = "Hammasi";
+"menu.ayahIndicators.all.detail" = "O‘qish xatcho‘pi, eslatmalar va to‘plamlar";
+"menu.ayahIndicators.readingBookmark" = "O‘qish xatcho‘pi";
+"menu.ayahIndicators.none" = "Hech biri";
 "menu.arabicText" = "Arabcha matn";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Mavzular va sozlamalar";

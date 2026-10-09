@@ -12,12 +12,14 @@ final class PlayerAsset {
     // MARK: Lifecycle
 
     init(url: URL) {
-        urlAsset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
+        // No precise timing: it makes an item wait for a full scan (or download) of the MP3. Leave the
+        // key out rather than passing `false`, which makes loading a CAF file's duration fail.
+        urlAsset = AVURLAsset(url: url)
     }
 
     deinit {
         // `load(_:)` ignores Task cancellation, so stop a remote load here. Not a local one: releasing
-        // a mid-scan local asset on the main actor blocks in `AVURLAsset`'s dealloc until the scan ends.
+        // a mid-load local asset on the main actor blocks in `AVURLAsset`'s dealloc until the load ends.
         if !urlAsset.url.isFileURL {
             urlAsset.cancelLoading()
         }

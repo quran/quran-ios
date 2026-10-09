@@ -34,6 +34,25 @@ struct SilentAudioFiles {
         return url
     }
 
+    /// A constant-bitrate MP3 of silent frames, then `trailingBytes` zero bytes that hold no audio
+    /// but stretch AVFoundation's size-based duration estimate past it.
+    func makeMP3(duration: TimeInterval, trailingBytes: Int = 0) throws -> URL {
+        // MPEG-1 Layer III, 128 kbps, 48 kHz, mono, no CRC: 384-byte frames of 24 ms each.
+        // A zeroed side info and main data decode as silence.
+        var frame = [UInt8](repeating: 0, count: 384)
+        frame[0 ..< 4] = [0xFF, 0xFB, 0x94, 0xC0]
+        let frameCount = Int((duration / 0.024).rounded())
+        var data = Data(capacity: frameCount * frame.count + trailingBytes)
+        for _ in 0 ..< frameCount {
+            data.append(contentsOf: frame)
+        }
+        data.append(Data(count: trailingBytes))
+
+        let url = directory.appendingPathComponent(UUID().uuidString).appendingPathExtension("mp3")
+        try data.write(to: url)
+        return url
+    }
+
     func removeAll() throws {
         try FileManager.default.removeItem(at: directory)
     }

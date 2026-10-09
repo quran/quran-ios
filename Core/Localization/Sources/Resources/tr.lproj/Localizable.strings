@@ -8,6 +8,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "button.close" = "Kapat";
 "button.delete" = "Sil";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "Daha fazla";
 
 // MARK: - Errors
 
@@ -40,6 +43,12 @@
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.see-referenced-verse" = "%d ayeti görün.";
 "translation.text.read-more" = "Daha fazlası";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "Sonraki ayet";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "Önceki ayet";
 "error.translation.text-retrieval" = "Hay aksi! Bir sorun çıktı. Meali bulamadık.";
 "error.translation.text-not-available" = "Bu Ayetin meali bulunmamaktadır.";
 
@@ -450,6 +459,12 @@
 "bookmarks.delete-all" = "Tümünü sil";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "Tüm yer imlerini silmek istediğinizden emin misiniz?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "Sayfayı işaretle";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "Sayfa işaretini kaldır";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "Kısmen seçili";
 // Metadata: Translated by ChatGPT; human review required.
@@ -604,3 +619,6 @@
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "Son sayfalar (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "Sıralamayı ters çevir";

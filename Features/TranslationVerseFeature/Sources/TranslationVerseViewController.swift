@@ -7,6 +7,7 @@
 //
 
 import Combine
+import Localization
 import MoreMenuFeature
 import NoorUI
 import QuranLocalization
@@ -84,10 +85,16 @@ class TranslationVerseViewController: UIHostingController<TranslationVerseView> 
         let overflow = NavigationBarButton.overflow { [weak self] in
             self?.settingsTapped()
         }
-        let next = NavigationBarButton.secondary(systemName: "chevron.left") { [weak self] in
+        let next = NavigationBarButton.secondary(
+            systemName: "chevron.left",
+            accessibilityLabel: l("translation.verse.next")
+        ) { [weak self] in
             self?.viewModel.next()
         }
-        let previous = NavigationBarButton.secondary(systemName: "chevron.right") { [weak self] in
+        let previous = NavigationBarButton.secondary(
+            systemName: "chevron.right",
+            accessibilityLabel: l("translation.verse.previous")
+        ) { [weak self] in
             self?.viewModel.previous()
         }
 

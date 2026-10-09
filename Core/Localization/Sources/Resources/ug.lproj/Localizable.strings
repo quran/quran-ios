@@ -6,6 +6,9 @@
 "button.close" = "تاقاش";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "ئۆچۈرۈش";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "تېخىمۇ كۆپ";
 
 // MARK: - Errors
 
@@ -49,6 +52,12 @@
 "translation.text.see-referenced-verse" = "%d ئايەتنى كۆرۈڭ.";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.read-more" = "تېخىمۇ كۆپ ئوقۇڭ";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "كېيىنكى ئايەت";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "ئالدىنقى ئايەت";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "ھەي! بىرەر نەرسە خاتا بولدى. تەرجىمىنى قايتۇرالمىدۇق.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -510,6 +519,12 @@
 "bookmarks.delete-all" = "ھەممىسىنى ئۆچۈرۈش";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "بارلىق خەتكۈچلەرنى ئۆچۈرمەكچى بولغىنىڭىزغا ئىشىنەمسىز؟";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "بۇ بەتنى خەتكۈچلە";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "بەت خەتكۈچىنى ئۆچۈرۈش";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "قىسمەن تاللانغان";
 // Metadata: Translated by ChatGPT; human review required.
@@ -664,3 +679,6 @@
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "يېقىنقى بەتلەر (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "تەرتىپنى ئەكسىچە قىلىش";

@@ -6,6 +6,9 @@
 "button.close" = "关闭";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "删除";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "更多";
 
 // MARK: - Errors
 
@@ -49,6 +52,12 @@
 "translation.text.see-referenced-verse" = "查看经文 %d。";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.read-more" = "阅读更多";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "下一节";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "上一节";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "哎呀！出错了。我们无法检索翻译。";
 // Metadata: Translated by ChatGPT; human review required.
@@ -508,6 +517,12 @@
 "bookmarks.delete-all" = "全部删除";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "确定要删除所有书签吗？";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "收藏此页";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "取消收藏此页";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "部分选中";
 // Metadata: Translated by ChatGPT; human review required.
@@ -662,3 +677,6 @@
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "最近的页面 (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "倒序排列";

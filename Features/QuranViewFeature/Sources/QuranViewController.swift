@@ -315,12 +315,16 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     // MARK: - Navigation Bar
 
-    private lazy var moreNavigationButton = UIBarButtonItem(
-        image: NavigationBarButton.overflowImage,
-        style: .plain,
-        target: self,
-        action: #selector(onMoreBarButtonTapped(_:))
-    )
+    private lazy var moreNavigationButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: NavigationBarButton.overflowImage,
+            style: .plain,
+            target: self,
+            action: #selector(onMoreBarButtonTapped(_:))
+        )
+        button.accessibilityLabel = l("button.more")
+        return button
+    }()
 
     #if QURAN_SYNC
     private lazy var readingBookmarkMenuNavigationButton: UIBarButtonItem = {
@@ -447,6 +451,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     private func updateRightBarItems(animated: Bool, isBookmarked: Bool) {
         let bookmarkImage = UIImage.symbol(isBookmarked ? "bookmark.fill" : "bookmark")
         let bookmark = UIBarButtonItem(image: bookmarkImage, style: .plain, target: self, action: #selector(onBookmarkButtonTapped))
+        bookmark.accessibilityLabel = l(isBookmarked ? "bookmarks.page.remove" : "bookmarks.page.add")
         if isBookmarked {
             bookmark.tintColor = .systemRed
         }

@@ -35,10 +35,13 @@ public enum NavigationBarButton {
     /// Liquid Glass draws each bar button inside a 44pt circle, which they crowd at the default scale.
     public static func secondary(
         systemName: String,
+        accessibilityLabel: String,
         glassSymbolScale: UIImage.SymbolScale? = nil,
         action: @escaping @MainActor @Sendable () -> Void
     ) -> UIBarButtonItem {
-        button(image: symbol(systemName, glassSymbolScale: glassSymbolScale), tintColor: .label, action: action)
+        let item = button(image: symbol(systemName, glassSymbolScale: glassSymbolScale), tintColor: .label, action: action)
+        item.accessibilityLabel = accessibilityLabel
+        return item
     }
 
     public static func overflow(action: @escaping @MainActor @Sendable () -> Void) -> UIBarButtonItem {

@@ -6,6 +6,9 @@
 "button.close" = "بستن";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "حذف";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "بیشتر";
 
 // MARK: - Errors
 
@@ -49,6 +52,12 @@
 "translation.text.see-referenced-verse" = "آیه %d را ببینید.";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.read-more" = "بیشتر بخوانید";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "آیه بعدی";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "آیه قبلی";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "اوه! مشکلی پیش آمد. نتوانستیم ترجمه را بازیابی کنیم.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -509,6 +518,12 @@
 "bookmarks.delete-all" = "حذف همه";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "آیا از حذف همهٔ نشانک‌ها مطمئن هستید؟";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "نشانک‌گذاری صفحه";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "حذف نشانک صفحه";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "تا حدی انتخاب شده";
 // Metadata: Translated by ChatGPT; human review required.
@@ -663,3 +678,6 @@
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "آخرین صفحات (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "معکوس کردن ترتیب";

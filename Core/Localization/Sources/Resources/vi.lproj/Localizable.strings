@@ -8,6 +8,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "button.close" = "Đóng";
 "button.delete" = "Xóa";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "Thêm";
 
 // MARK: - Errors
 
@@ -39,6 +42,12 @@
 "translation.translator" = "Dịch giả: ";
 "translation.text.see-referenced-verse" = "Xem ayah %d.";
 "translation.text.read-more" = "Xem thêm";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "Ayah tiếp theo";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "Ayah trước";
 "error.translation.text-retrieval" = "Ối! Đã xảy ra sự cố. Chúng tôi không thể truy xuất bản dịch.";
 "error.translation.text-not-available" = "Không có bản dịch nào cho Ayah này.";
 
@@ -419,6 +428,12 @@
 "bookmarks.delete-all" = "Xóa tất cả";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "Bạn có chắc muốn xóa tất cả dấu trang không?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "Đánh dấu trang này";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "Bỏ đánh dấu trang này";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "Đã chọn một phần";
 // Metadata: Translated by ChatGPT; human review required.
@@ -573,3 +588,6 @@
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "Vừa Đọc (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "Đảo ngược thứ tự";

@@ -6,6 +6,9 @@
 "button.close" = "Жабу";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "Жою";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "Тағы";
 
 // MARK: - Errors
 
@@ -39,6 +42,12 @@
 "translation.translator" = "Аудармашы: ";
 "translation.text.see-referenced-verse" = "%d аятты көріңіз.";
 "translation.text.read-more" = "Көбірек оқу";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "Келесі аят";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "Алдыңғы аят";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Кешіріңіз! Бірдеңе дұрыс болмады. Аударманы қайтара алмадық.";
 "error.translation.text-not-available" = "Бұл аят үшін аударма жоқ.";
@@ -491,6 +500,12 @@
 "bookmarks.delete-all" = "Барлығын жою";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "Барлық бетбелгілерді жойғыңыз келетініне сенімдісіз бе?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "Бетке бетбелгі қою";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "Бет бетбелгісін алып тастау";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "Ішінара таңдалды";
 // Metadata: Translated by ChatGPT; human review required.
@@ -645,3 +660,6 @@
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "Соңғы беттер (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "Ретін кері ауыстыру";

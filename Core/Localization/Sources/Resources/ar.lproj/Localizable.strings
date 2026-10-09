@@ -4,6 +4,8 @@
 
 "button.close" = "إغلاق";
 "button.delete" = "حذف";
+// VoiceOver label for an overflow (…) button that opens more options.
+"button.more" = "المزيد";
 
 // MARK: - Errors
 
@@ -37,6 +39,10 @@
 "translation.translator" = "المفسر: ";
 "translation.text.see-referenced-verse" = "انظر آية رقم %d.";
 "translation.text.read-more" = "اقرأ المزيد";
+// VoiceOver label for the button that shows the next ayah's translation.
+"translation.verse.next" = "الآية التالية";
+// VoiceOver label for the button that shows the previous ayah's translation.
+"translation.verse.previous" = "الآية السابقة";
 "error.translation.text-retrieval" = "عفوا. حدث خطأ، حاول مرة اخرى.";
 "error.translation.text-not-available" = "لا توجد ترجمة متاحة لهذه الآية.";
 
@@ -367,6 +373,10 @@
 // Bookmarks
 "bookmarks.delete-all" = "حذف الكل";
 "bookmarks.delete-all.confirmation" = "هل أنت متأكد من رغبتك في حذف جميع الإشارات المرجعية؟";
+// VoiceOver label for the reader's button that bookmarks the current page.
+"bookmarks.page.add" = "أضف الصفحة إلى المرجعيات";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+"bookmarks.page.remove" = "أزل الصفحة من المرجعيات";
 
 // Reading selector
 "reading.indopak.description" = "مصحف برواية حفص بخط النسخ الهندي الباكستاني، الشائع في جنوب آسيا. صور الصفحات من مجمع الملك فهد لطباعة المصحف الشريف.";
@@ -417,3 +427,5 @@
 "accessibility.section.expand" = "توسيع القسم";
 // Recent pages heading with a localized page count.
 "home.recent-pages.title" = "الصفحات الأخيرة (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+"home.sort-order.reverse" = "عكس الترتيب";

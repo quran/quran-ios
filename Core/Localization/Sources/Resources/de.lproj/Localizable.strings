@@ -6,6 +6,9 @@
 "button.close" = "Schließen";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "Löschen";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "Mehr";
 
 // MARK: - Errors
 
@@ -49,6 +52,12 @@
 "translation.text.see-referenced-verse" = "Siehe Ayah %d.";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.read-more" = "Mehr lesen";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "Nächste Ayah";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "Vorherige Ayah";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Hoppla! Etwas ist schiefgelaufen. Wir konnten die Übersetzung nicht abrufen.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -507,6 +516,12 @@
 "bookmarks.delete-all" = "Alle löschen";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "Möchtest du wirklich alle Lesezeichen löschen?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "Lesezeichen für diese Seite hinzufügen";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "Seiten-Lesezeichen entfernen";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "Teilweise ausgewählt";
 // Metadata: Translated by ChatGPT; human review required.
@@ -661,3 +676,6 @@
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "Neueste Seiten (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "Reihenfolge umkehren";

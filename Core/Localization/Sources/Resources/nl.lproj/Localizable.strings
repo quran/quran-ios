@@ -8,6 +8,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "button.close" = "Sluiten";
 "button.delete" = "Verwijderen";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "Meer";
 
 // MARK: - Errors
 
@@ -39,6 +42,12 @@
 "translation.translator" = "Vertaler: ";
 "translation.text.see-referenced-verse" = "Zie ayah %d.";
 "translation.text.read-more" = "Lees Meer";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "Volgende ayah";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "Vorige ayah";
 "error.translation.text-retrieval" = "Oeps! Er is iets fout gegaan. We konden de vertaling niet ophalen.";
 "error.translation.text-not-available" = "Er is geen vertaling beschikbaar voor deze ayah.";
 
@@ -422,6 +431,12 @@
 "bookmarks.delete-all" = "Alles verwijderen";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "Weet je zeker dat je alle bladwijzers wilt verwijderen?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "Bladwijzer voor deze pagina toevoegen";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "Paginabladwijzer verwijderen";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "Gedeeltelijk geselecteerd";
 // Metadata: Translated by ChatGPT; human review required.
@@ -576,3 +591,6 @@
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "Recente pagina\\'s (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "Volgorde omkeren";

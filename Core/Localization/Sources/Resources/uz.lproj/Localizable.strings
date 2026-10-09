@@ -6,6 +6,9 @@
 "button.close" = "Yopish";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "O'chirish";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "Ko‘proq";
 
 // MARK: - Errors
 
@@ -49,6 +52,12 @@
 "translation.text.see-referenced-verse" = "%d-oyatni ko'ring.";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.read-more" = "Ko'proq o'qing";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "Keyingi oyat";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "Oldingi oyat";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Xo'p! Nimadir noto'g'ri bo'ldi. Tarjimani qayta olmadik.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -509,6 +518,12 @@
 "bookmarks.delete-all" = "Hammasini o‘chirish";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "Barcha xatcho‘plarni o‘chirmoqchi ekaningizga ishonchingiz komilmi?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "Sahifani xatchoʻplash";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "Sahifa xatchoʻpini oʻchirish";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "Qisman tanlangan";
 // Metadata: Translated by ChatGPT; human review required.
@@ -663,3 +678,6 @@
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "Soʻnggi sahifalar (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "Tartibni teskari qilish";

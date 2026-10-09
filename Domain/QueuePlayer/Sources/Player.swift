@@ -70,7 +70,6 @@ final class Player {
 
     var onRateChanged: (@Sendable @MainActor (Float) -> Void)?
     var onDurationLoaded: (@Sendable @MainActor (TimeInterval) -> Void)?
-    /// Called when playback reaches the end of the item.
     var onPlayedToEnd: (@Sendable @MainActor () -> Void)?
 
     let asset: PlayerAsset

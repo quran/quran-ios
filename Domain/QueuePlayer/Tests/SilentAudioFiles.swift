@@ -34,9 +34,8 @@ struct SilentAudioFiles {
         return url
     }
 
-    /// A constant-bitrate MP3 of silent frames, then `trailingBytes` zero bytes that hold no audio.
-    /// Without precise timing, AVFoundation estimates the duration from the file's size and
-    /// bitrate, so the trailing bytes make the estimate run past the audio.
+    /// A constant-bitrate MP3 of silent frames, then `trailingBytes` zero bytes that hold no audio
+    /// but stretch AVFoundation's size-based duration estimate past it.
     func makeMP3(duration: TimeInterval, trailingBytes: Int = 0) throws -> URL {
         // MPEG-1 Layer III, 128 kbps, 48 kHz, mono, no CRC: 384-byte frames of 24 ms each.
         // A zeroed side info and main data decode as silence.

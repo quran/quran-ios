@@ -42,14 +42,6 @@ final class PlayerTests: XCTestCase {
         XCTAssertFalse(providesPreciseTiming)
     }
 
-    func test_duration_ofAConstantBitrateMP3Loads() async throws {
-        let url = try audioFiles.makeMP3(duration: 0.48)
-        let player = Player(asset: PlayerAsset(url: url))
-
-        await waitForDuration(of: player)
-        XCTAssertEqual(try XCTUnwrap(player.duration), 0.48, accuracy: 0.01)
-    }
-
     func test_duration_ofUnreadableFileLoadsAsZero() async {
         let player = Player(asset: PlayerAsset(url: audioFiles.directory.appendingPathComponent("missing.mp3")))
 

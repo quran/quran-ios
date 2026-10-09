@@ -368,15 +368,11 @@ class AudioPlayer {
 
     // MARK: - PlayerDelegate
 
-    /// Ends a frame that ends with its file when the player reaches the file's end. Its estimated
-    /// duration can run past the audio; the frame-end timer would then find the player stopped
-    /// short of it and wait for playback that never comes.
+    /// Ends a frame that ends with its file when the file ends, since its estimated duration can
+    /// run past the audio and leave the frame-end timer waiting for playback that never comes.
     private func playedToEnd() {
-        // A frame ending mid-file ends by its timer before the file does. With no timer or
-        // duration wait pending, the frame already ended: playback stopped or waits out a delay.
-        // While paused, the frame stays until resumed. Should the file end just as playback
-        // pauses, `resume()` re-arms the timer, but replaying at the item's end doesn't post its
-        // end again (iOS 27 simulator), so a long estimate could still hold that frame.
+        // With no timer or duration wait pending, the frame already ended (stopped, or in a delay).
+        // A paused frame stays until resumed.
         guard audioPlaying.frameEndTime == nil, timer != nil || isWaitingForDuration, !isPaused else {
             return
         }

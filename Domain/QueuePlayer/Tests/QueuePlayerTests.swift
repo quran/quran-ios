@@ -107,7 +107,7 @@ final class QueuePlayerTests: XCTestCase {
         player.play(request: request, rate: 1)
         await fulfillment(of: [actions.firstDurationLoaded], timeout: 5)
         XCTAssertGreaterThan(try XCTUnwrap(actions.durationsLoaded.first), 3)
-        // The frame-end timer waits for 3.12 s, and finding the player stopped short of that, for good.
+        // Without the file end, the frame-end timer waits 3.12 s and then stalls.
         try postEndOfFirstFile()
 
         await fulfillment(of: [actions.playbackEnded], timeout: 5)
@@ -121,8 +121,7 @@ final class QueuePlayerTests: XCTestCase {
         await waitForVerseDelay()
         try postEndOfFirstFile()
 
-        // Ending the frame again would skip the rest of the delay (the second end measures no
-        // recited time), or wait out another one.
+        // Ending the frame again would cut the delay short or wait out a second one.
         XCTAssertEqual(actions.events, [.frameChanged(0, 0)])
         clock.elapseAll()
         await fulfillment(of: [actions.playbackEnded], timeout: 5)
@@ -336,21 +335,18 @@ final class QueuePlayerTests: XCTestCase {
         return AudioRequest(files: [AudioFile(url: url, frames: frames)], endTime: nil, frameRuns: .finite(1), requestRuns: .finite(1))
     }
 
-    /// A 0.1 s gapped file played twice, with a delay between the runs, so the first run ends
-    /// into a delay that keeps its player.
+    /// A 0.1 s gapped file played twice, with a delay between the runs that keeps the first run's player.
     private func makeRepeatedRequest() throws -> AudioRequest {
         try makeGappedRequest(durations: [0.1], requestRuns: .finite(2), repetitionDelay: .oneSecond)
     }
 
-    /// Posts the end of the first frame's file, as AVPlayer does when playback reaches it.
-    /// Tests post it themselves, since the simulator may not play the audio.
+    /// Posts the first file's end-of-item notification, since the simulator may not play the audio.
     private func postEndOfFirstFile() throws {
         let item = try XCTUnwrap(actions.playerItems.first)
         NotificationCenter.default.post(name: AVPlayerItem.didPlayToEndTimeNotification, object: item)
     }
 
-    /// Expects the first run, now waiting out the delay after it, to end only once: nothing left
-    /// pending (a duration load, a frame-end timer) ends it again.
+    /// Expects the first run, now waiting out its delay, to have ended only once.
     private func assertTheFirstRunEndedOnce() async throws {
         // Longer than the 0.1 s frame, so a frame-end timer left running would have ended it again.
         try await Task.sleep(nanoseconds: 300_000_000)

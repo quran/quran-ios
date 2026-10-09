@@ -166,10 +166,11 @@ class AudioPlayer {
     }
 
     private func onFrameEnded() {
-        let time = getDurationToFrameEnd()
         // make sure we reached the end of the frame
         // don't use `abs` since we could be notified a little bit after
-        guard let time, time < 0.2 else {
+        guard let frameEnd = audioPlaying.frameEndTime ?? player.duration,
+              frameEnd - player.currentTime < 0.2
+        else {
             // audio is 200 ms behind, reschedule the timer
             waitUntilFrameEnds()
             return
@@ -183,7 +184,7 @@ class AudioPlayer {
         //  1.2 else Run next frame
         // 2. else Repeat the frame
         // Delay before the next playback, scaled by the verse that just finished.
-        let delay = verseDelayDuration()
+        let delay = verseDelayDuration(frameEnd: frameEnd)
 
         if audioPlaying.isLastPlayForCurrentFrame() {
             if let next = audioPlaying.nextFrame() {
@@ -226,14 +227,12 @@ class AudioPlayer {
     /// Duration to wait before the next playback, computed from the verse that
     /// just finished: its recited (wall-clock) length times the selected
     /// multiplier. Returns 0 when no delay is configured.
-    private func verseDelayDuration() -> TimeInterval {
+    private func verseDelayDuration(frameEnd: TimeInterval) -> TimeInterval {
         let multiplier = request.verseDelay.multiplier
         guard multiplier > 0 else {
             return 0
         }
         let frameStart = audioPlaying.frame.startTime
-        // The end is known by now: the frame-end timer only fires once it is.
-        let frameEnd = audioPlaying.frameEndTime ?? player.duration ?? frameStart
         let recitedMediaDuration = max(0, frameEnd - frameStart)
         // Convert media duration to wall-clock recited time before scaling.
         return recitedMediaDuration / Double(playbackRate) * multiplier

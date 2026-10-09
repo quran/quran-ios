@@ -32,26 +32,22 @@ class TranslationVerseViewModel: ObservableObject {
 
     init(startingVerse: AyahNumber, localTranslationsRetriever: LocalTranslationsRetriever, dataService: QuranTextDataService, actions: TranslationVerseActions) {
         currentVerse = startingVerse
+        verses = startingVerse.quran.verses
+        self.localTranslationsRetriever = localTranslationsRetriever
         self.dataService = dataService
         self.actions = actions
-
-        let overlayService = VerseOverlayService()
-        translationViewModel = ContentTranslationViewModel(
-            localTranslationsRetriever: localTranslationsRetriever,
-            dataService: dataService,
-            overlayService: overlayService
-        )
-        translationViewModel.showHeaderAndFooter = false
-        translationViewModel.verses = [startingVerse]
     }
 
     // MARK: Internal
 
-    let translationViewModel: ContentTranslationViewModel
+    let verses: [AyahNumber]
 
     @Published var currentVerse: AyahNumber {
         didSet {
-            translationViewModel.verses = [currentVerse]
+            guard currentVerse != oldValue else {
+                return
+            }
+            logger.info("Verse Translation: current verse changed to \(currentVerse.nonLocalizedDescription)")
             actions.updateCurrentVerseTo(currentVerse)
         }
     }
@@ -70,8 +66,21 @@ class TranslationVerseViewModel: ObservableObject {
         }
     }
 
+    func translationViewModel(for verse: AyahNumber) -> ContentTranslationViewModel {
+        let viewModel = ContentTranslationViewModel(
+            localTranslationsRetriever: localTranslationsRetriever,
+            dataService: dataService,
+            overlayService: overlayService
+        )
+        viewModel.showHeaderAndFooter = false
+        viewModel.verses = [verse]
+        return viewModel
+    }
+
     // MARK: Private
 
+    private let localTranslationsRetriever: LocalTranslationsRetriever
     private let dataService: QuranTextDataService
+    private let overlayService = VerseOverlayService()
     private let actions: TranslationVerseActions
 }

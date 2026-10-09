@@ -1,4 +1,5 @@
 import SwiftUI
+import UIx
 import XCTest
 @testable import NoorUI
 
@@ -31,6 +32,47 @@ final class PageViewControllerTests: XCTestCase {
         wait(for: [changedPageVisible], timeout: 1)
         window.isHidden = true
     }
+
+    func test_showsProgrammaticPageAfterDragEndsWithoutDeceleration() throws {
+        let pages = [Page(id: 1), Page(id: 2)]
+        let model = PageSelectionModel(selection: pages[0])
+        let initialPageVisible = expectation(description: "Initial page visible")
+        let changedPageVisible = expectation(description: "Changed page visible")
+        var callbackCount = 0
+        let view = PageViewControllerTestView(model: model, pages: pages) {
+            callbackCount += 1
+            if callbackCount == 1 {
+                initialPageVisible.fulfill()
+            } else if callbackCount == 2 {
+                changedPageVisible.fulfill()
+            }
+        }
+        let hostingController = UIHostingController(rootView: view)
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
+        window.rootViewController = hostingController
+        window.makeKeyAndVisible()
+        window.layoutIfNeeded()
+        wait(for: [initialPageVisible], timeout: 1)
+
+        let pageViewController = try XCTUnwrap(hostingController.findViewController(ofType: UIPageViewController.self))
+        let pagingScrollView = try XCTUnwrap(pageViewController.view.subviews.compactMap { $0 as? UIScrollView }.first)
+        let scrollDelegate = try XCTUnwrap(pagingScrollView.delegate)
+        let draggingScrollView = TrackingScrollView()
+        scrollDelegate.scrollViewDidScroll?(draggingScrollView)
+        scrollDelegate.scrollViewDidEndDragging?(draggingScrollView, willDecelerate: false)
+        window.layoutIfNeeded()
+
+        model.selection = pages[1]
+        window.layoutIfNeeded()
+
+        wait(for: [changedPageVisible], timeout: 1)
+        window.isHidden = true
+    }
+}
+
+/// Reports an active drag, which a real scroll view only does under a touch.
+private final class TrackingScrollView: UIScrollView {
+    override var isTracking: Bool { true }
 }
 
 private struct PageViewControllerTestView: View {

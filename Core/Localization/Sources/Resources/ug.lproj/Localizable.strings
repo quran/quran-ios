@@ -441,17 +441,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "خاتىرىلەر (%d)";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.move-here" = "%@ دا • بۇ يەرگە يۆتكەش";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "ئوقۇش خەتكۈچى %@ دىن %@ غا يۆتكەلدى";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "%@ دىكى ئوقۇش خەتكۈچى ئۆچۈرۈلدى";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.save-here" = "ئوقۇش ئورنىڭىزنى بۇ يەرگە ساقلاڭ";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "ئوقۇش خەتكۈچى %@ دا ساقلاندى";
-// Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.saved-here" = "بۇ يەردە ساقلاندى • ئۆچۈرۈش ئۈچۈن چېكىڭ";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "بىر ئايەتنى تاللاڭ";
 // Metadata: Translated by ChatGPT; human review required.
@@ -609,6 +603,30 @@
 // Button that collapses the additional reading bookmarks.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.show-less" = "ئازراق كۆرسىتىش";
+// Reading bookmarks menu explanation below its title.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.description" = "ھەر بىر ئوقۇش ئۈچۈن بىرنى ئىشلىتىڭ، مەسىلەن خەتمە ياكى يادلاش ئۈچۈن.";
+// Reading bookmark row subtitle when the bookmark is at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.saved-here" = "بۇ يەردە ساقلاندى";
+// Reading bookmark row subtitle when the bookmark has no position.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.not-placed" = "تېخى قويۇلمىدى";
+// Reading bookmark row subtitle with the bookmark's ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.location" = "%@ دا";
+// Button that moves a reading bookmark to the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.move-here" = "بۇ يەرگە يۆتكەش";
+// Button that places an unplaced reading bookmark at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.set-here" = "بۇ يەرگە قويۇش";
+// VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.name.accessibility-label" = "%@ خەتكۈچنىڭ نامى";
+// VoiceOver label for the reader's reading bookmarks button.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.choose.accessibility-label" = "ئوقۇش خەتكۈچى تاللاش";
 // VoiceOver state when the additional reading bookmarks are visible.
 // Metadata: Translated by AI; human review required.
 "accessibility.expanded" = "كېڭەيتىلگەن";

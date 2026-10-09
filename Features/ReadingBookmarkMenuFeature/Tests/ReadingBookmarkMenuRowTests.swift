@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import Localization
 import NoorUI
 import QuranAnnotations
 import QuranKit
@@ -12,21 +13,24 @@ final class ReadingBookmarkMenuRowTests: XCTestCase {
         let row = makeRow(placement: .unplaced, target: .ayah(ayah(2)))
 
         XCTAssertEqual(row.action, .setHere)
-        XCTAssertEqual(row.subtitle.accessibilityText, "Not placed yet")
+        XCTAssertEqual(row.subtitle.accessibilityText, l("bookmarks.reading.not-placed"))
     }
 
     func test_bookmarkAtCurrentAyah_offersRemove() {
         let row = makeRow(placement: .ayah(ayah(2)), target: .ayah(ayah(2)))
 
         XCTAssertEqual(row.action, .remove)
-        XCTAssertEqual(row.subtitle.accessibilityText, "Saved here")
+        XCTAssertEqual(row.subtitle.accessibilityText, l("bookmarks.reading.saved-here"))
     }
 
     func test_bookmarkAtAnotherAyah_offersMoveHere() {
         let row = makeRow(placement: .ayah(ayah(3)), target: .ayah(ayah(2)))
 
         XCTAssertEqual(row.action, .moveHere)
-        XCTAssertEqual(row.subtitle.accessibilityText, "at Al-Fātihah, Ayah 3")
+        XCTAssertEqual(
+            row.subtitle.accessibilityText,
+            lFormat("bookmarks.reading.location", "Al-Fātihah, Ayah 3")
+        )
     }
 
     func test_bookmarkAtCurrentPage_offersRemove() {
@@ -34,7 +38,7 @@ final class ReadingBookmarkMenuRowTests: XCTestCase {
         let row = makeRow(placement: .page(page), target: .page(page))
 
         XCTAssertEqual(row.action, .remove)
-        XCTAssertEqual(row.subtitle.accessibilityText, "Saved here")
+        XCTAssertEqual(row.subtitle.accessibilityText, l("bookmarks.reading.saved-here"))
     }
 
     func test_pageBookmarkAtAyahTarget_offersMoveHere() {
@@ -42,7 +46,7 @@ final class ReadingBookmarkMenuRowTests: XCTestCase {
         let row = makeRow(placement: .page(page), target: .ayah(ayah(2)))
 
         XCTAssertEqual(row.action, .moveHere)
-        XCTAssertEqual(row.subtitle.accessibilityText, "at \(page.localizedName)")
+        XCTAssertEqual(row.subtitle.accessibilityText, lFormat("bookmarks.reading.location", page.localizedName))
     }
 
     private func makeRow(

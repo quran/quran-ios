@@ -330,7 +330,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             target: self,
             action: #selector(onReadingBookmarkMenuButtonTapped)
         )
-        button.accessibilityLabel = "Choose reading bookmark"
+        button.accessibilityLabel = l("bookmarks.reading.choose.accessibility-label")
         return button
     }()
     #endif

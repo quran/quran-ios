@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import Localization
 import NoorUI
 import QuranAnnotations
 import QuranKit
@@ -98,7 +99,7 @@ private struct ReadingBookmarkMenuContent: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text("Reading bookmarks")
+                Text(l("bookmarks.reading.title"))
                     .font(.headline.bold())
                     .foregroundStyle(Color.label)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -109,7 +110,7 @@ private struct ReadingBookmarkMenuContent: View {
             }
             .font(.subheadline.weight(.semibold))
             Divider()
-            Text("Use one for each reading, like your khatmah or memorization.")
+            Text(l("bookmarks.reading.description"))
                 .font(.footnote)
                 .foregroundStyle(Color.secondaryLabel)
                 .multilineTextAlignment(.leading)

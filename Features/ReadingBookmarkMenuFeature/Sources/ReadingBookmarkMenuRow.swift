@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import Localization
 import NoorUI
 import QuranAnnotations
 import QuranKit
@@ -41,17 +42,17 @@ struct ReadingBookmarkMenuRow: View {
     var subtitle: MultipartText {
         switch action {
         case .remove:
-            return .text("Saved here")
+            return .text(l("bookmarks.reading.saved-here"))
         case .setHere:
-            return .text("Not placed yet")
+            return .text(l("bookmarks.reading.not-placed"))
         case .moveHere:
             switch item.placement {
             case .ayah(let ayah):
-                return "at \(ayah: ayah, nameStyle: .text)"
+                return .localizedFormat("bookmarks.reading.location", "\(ayah: ayah, nameStyle: .text)")
             case .page(let page):
-                return "at \(page.localizedName)"
+                return .localizedFormat("bookmarks.reading.location", .text(page.localizedName))
             case .unplaced:
-                return .text("Not placed yet")
+                return .text(l("bookmarks.reading.not-placed"))
             }
         }
     }
@@ -83,7 +84,7 @@ struct ReadingBookmarkMenuRow: View {
                         }
                     }
                 }
-                .accessibilityLabel("\(item.slot.displayName) bookmark name")
+                .accessibilityLabel(lFormat("bookmarks.reading.name.accessibility-label", item.slot.displayName))
         }
         .padding(.horizontal)
         .padding(.vertical, verticalPadding)
@@ -160,11 +161,11 @@ private extension ReadingBookmarkMenuRow.Action {
     var title: String {
         switch self {
         case .remove:
-            "Remove"
+            lAndroid("remove_button")
         case .moveHere:
-            "Move here"
+            l("bookmarks.reading.move-here")
         case .setHere:
-            "Set here"
+            l("bookmarks.reading.set-here")
         }
     }
 }

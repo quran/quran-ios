@@ -15,16 +15,13 @@ final class Player {
     deinit {
         rateObservation?.invalidate()
         durationTask?.cancel()
-        // `load(_:)` ignores Task cancellation, so stop a remote load (and its download) here.
-        // Not for local files: their scan can't be interrupted, and a cancelled load would make
-        // the Task drop the last asset reference on the main actor, where `AVURLAsset`'s dealloc
-        // blocks until the scan ends.
+        // `load(_:)` ignores Task cancellation, so stop a remote load here. Not a local one: releasing
+        // a mid-scan local asset on the main actor blocks in `AVURLAsset`'s dealloc until the scan ends.
         if !asset.url.isFileURL {
             asset.cancelLoading()
         }
     }
 
-    /// Pass `knownDuration` when the file's duration was already loaded, to skip loading it again.
     init(url: URL, knownDuration: TimeInterval? = nil) {
         let asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
         self.asset = asset
@@ -73,9 +70,8 @@ final class Player {
         player.currentTime().seconds
     }
 
-    /// A failed or non-numeric load reports zero, so playback moves past the file.
-    /// The load returns `.indefinite` without throwing when, for example, a server
-    /// doesn't answer AVFoundation's byte-range probe with a 206.
+    /// Zero for a failed or non-numeric load, so playback moves past the file. The load returns
+    /// `.indefinite` without throwing, e.g. when a server doesn't answer the byte-range probe with a 206.
     static func seconds(ofLoadedDuration duration: CMTime?) -> TimeInterval {
         guard let duration, duration.isNumeric else {
             return 0

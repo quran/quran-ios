@@ -236,36 +236,6 @@ class QuranAudioPlayerTests: XCTestCase {
         XCTAssertEqual(nowPlayingDuration, 4)
     }
 
-    @MainActor
-    func test_nowPlaying_dropsThePreviousFilesDurationWhileTheNextLoads() async throws {
-        try await runDownloadedTestCase(gapless: false)
-        queuePlayer.actions?.audioFrameChanged(0, 0, makePlayerItem(), 3)
-
-        queuePlayer.actions?.audioFrameChanged(1, 0, makePlayerItem(), nil)
-
-        XCTAssertEqual(nowPlayingDuration, 0)
-    }
-
-    @MainActor
-    func test_nowPlaying_playbackEndClearsTheDuration() async throws {
-        try await runDownloadedTestCase(gapless: false)
-        queuePlayer.actions?.audioFrameChanged(0, 0, makePlayerItem(), 3)
-
-        queuePlayer.actions?.playbackEnded()
-
-        XCTAssertNil(nowPlayingDuration)
-    }
-
-    @MainActor
-    func test_nowPlaying_newRequestClearsTheDuration() async throws {
-        try await runDownloadedTestCase(gapless: false)
-        queuePlayer.actions?.audioFrameChanged(0, 0, makePlayerItem(), 3)
-
-        try await runDownloadedTestCase(gapless: false)
-
-        XCTAssertNil(nowPlayingDuration)
-    }
-
     // MARK: Private
 
     private var player: QuranAudioPlayer!

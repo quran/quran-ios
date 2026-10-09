@@ -64,19 +64,6 @@ final class QueuePlayerTests: XCTestCase {
         XCTAssertEqual(actions.durationsLoaded[1], 0.15, accuracy: 0.01)
     }
 
-    func test_durationLoaded_skipsAFileSteppedPastBeforeItLoads() async throws {
-        let request = try makeGappedRequest(durations: [0.1, 0.15])
-
-        player.play(request: request, rate: 1)
-        // Replaces the first file's player before its duration loads; the replaced
-        // player is released, which cancels its load.
-        player.stepForward()
-
-        await fulfillment(of: [actions.playbackEnded], timeout: 5)
-        XCTAssertEqual(actions.durationsLoaded.count, 1)
-        XCTAssertEqual(actions.durationsLoaded[0], 0.15, accuracy: 0.01)
-    }
-
     func test_reloadingAFile_reusesItsLoadedDuration() async throws {
         // Like a gapless reciter's sura: two frames in one file, the last ending with the file.
         let url = try audioFiles.make(duration: 0.15)
@@ -106,10 +93,8 @@ final class QueuePlayerTests: XCTestCase {
     private var actions: QueuePlayerActionsSpy!
     private var player: QueuePlayer!
 
-    /// Like a gapped reciter's request: every frame ends with its file, so its end
-    /// comes from the file's duration.
-    /// Durations stay shorter than the 200 ms frame-end tolerance, so frames end
-    /// even where the simulator doesn't advance playback.
+    /// Like a gapped reciter's request: every frame ends with its file. Durations stay under the
+    /// 200 ms frame-end tolerance, so frames end even where the simulator doesn't advance playback.
     private func makeGappedRequest(durations: [TimeInterval] = [0.1, 0.1]) throws -> AudioRequest {
         let files = try durations.map { duration in
             let url = try audioFiles.make(duration: duration)

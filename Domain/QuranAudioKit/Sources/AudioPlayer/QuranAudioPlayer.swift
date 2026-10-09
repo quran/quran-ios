@@ -157,8 +157,7 @@ public class QuranAudioPlayer {
         let info = audioRequest.getPlayerInfo(for: fileIndex)
         nowPlaying.update(info: info)
         nowPlaying.update(playingIndex: fileIndex)
-        // Zero while the file's duration loads, so the previous file's never shows.
-        // `durationLoaded(_:)` then publishes the loaded value.
+        // Zero until `durationLoaded(_:)`, so the previous file's duration never shows.
         nowPlaying.update(duration: duration ?? 0)
         nowPlaying.update(elapsedTime: playerItem.currentTime().seconds)
 

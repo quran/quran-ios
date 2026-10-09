@@ -110,9 +110,8 @@ class AudioPlayer {
     // True while the frame ends with its file and the file's duration is still loading.
     private var isWaitingForDuration = false
 
-    // Durations loaded so far, by file index. A file reloads on every seek (step, repeat,
-    // verse delay), and its new player reuses the duration instead of reporting none
-    // until a fresh scan finishes. Failed loads (zero) aren't kept, so they're retried.
+    // Durations loaded so far, by file index, reused when a seek reloads the file.
+    // Failed loads (zero) aren't kept, so they're retried.
     private var loadedDurations: [Int: TimeInterval] = [:]
 
     // `startPlaying()` replaces it before anything reads it, so the initial value is never built.
@@ -132,8 +131,7 @@ class AudioPlayer {
             self?.rateChanged(to: $0)
         }
         player.onDurationLoaded = { [weak self, weak player] duration in
-            // Only the current player reports: a replaced one can stay alive briefly,
-            // e.g. while its pending rate callback runs.
+            // A replaced player can stay alive briefly, e.g. while its pending rate callback runs.
             guard let self, let player, player === self.player else {
                 return
             }

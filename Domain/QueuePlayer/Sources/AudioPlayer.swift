@@ -56,9 +56,8 @@ class AudioPlayer {
             return
         }
         startPlayback()
-        // Measure the rest of the frame afresh, from where the player is and at the current
-        // rate: a timer paused by `pause()` is stale once the rate changes, and a system pause
-        // (a route change or a stall) can leave no timer at all.
+        // Re-measure the frame end: a paused timer is stale after a rate change, and a system
+        // pause (a route change or a stall) can leave no timer at all.
         timer = nil
         waitUntilFrameEnds()
     }

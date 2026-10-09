@@ -96,8 +96,7 @@ final class QueuePlayerTests: XCTestCase {
         player.pause()
         await fulfillment(of: [actions.firstDurationLoaded], timeout: 5)
 
-        // At this rate it takes under 0.1 s. A frame end still timed for the old rate
-        // lands after the timeout, which leaves headroom for loading the second file.
+        // Under 0.1 s at this rate; a frame end still timed for the old rate misses the timeout.
         player.setRate(2)
         player.resume()
 

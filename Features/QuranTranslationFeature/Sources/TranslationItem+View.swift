@@ -34,22 +34,28 @@ extension TranslationSuraName: View {
     }
 }
 
-extension TranslationArabicText: View {
-    var body: some View {
+extension TranslationArabicText {
+    var view: QuranArabicText {
         QuranArabicText(verse: verse, text: text, quranFont: quranFont, fontSize: arabicFontSize)
     }
 }
 
 extension TranslationVerseNumber {
     #if QURAN_SYNC
-    func view(onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) -> some View {
+    func view(onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) -> QuranVerseNumber {
         QuranVerseNumber(verse: verse, annotations: annotations, onTapped: { point in onAyahNumberTapped(verse, point) })
     }
     #else
-    func view() -> some View {
+    func view() -> QuranVerseNumber {
         QuranVerseNumber(verse: verse)
     }
     #endif
+}
+
+extension TranslationVerseHeader {
+    func view(verseNumber: QuranVerseNumber) -> some View {
+        QuranVerseHeader(verseNumber: verseNumber, arabicText: arabicText.view)
+    }
 }
 
 extension TranslationTextChunk {
@@ -62,8 +68,8 @@ extension TranslationTextChunk {
     }
 }
 
-extension TranslationTextChunk: View {
-    var body: some View {
+extension TranslationTextChunk {
+    func view(verseNumber: QuranVerseNumber?) -> some View {
         QuranTranslationTextChunk(
             text: text.text,
             chunk: chunks[chunkIndex],
@@ -81,14 +87,20 @@ extension TranslationTextChunk: View {
             },
             font: translation.textFont,
             fontSize: translationFontSize,
-            characterDirection: translation.characterDirection
+            characterDirection: translation.characterDirection,
+            verseNumber: verseNumber
         )
     }
 }
 
-extension TranslationReferenceVerse: View {
-    var body: some View {
-        QuranTranslationReferenceVerse(reference: reference, fontSize: translationFontSize, characterDirection: translation.characterDirection)
+extension TranslationReferenceVerse {
+    func view(verseNumber: QuranVerseNumber?) -> some View {
+        QuranTranslationReferenceVerse(
+            reference: reference,
+            fontSize: translationFontSize,
+            characterDirection: translation.characterDirection,
+            verseNumber: verseNumber
+        )
     }
 }
 
@@ -109,7 +121,7 @@ extension TranslationItem {
     }
     #endif
 
-    private func content(@ViewBuilder verseNumberView: (TranslationVerseNumber) -> some View) -> some View {
+    private func content(verseNumberView: (TranslationVerseNumber) -> QuranVerseNumber) -> some View {
         VStack {
             switch self {
             case .pageHeader(let pageHeader):
@@ -120,14 +132,12 @@ extension TranslationItem {
                 QuranVerseSeparator()
             case .suraName(let suraName, _):
                 suraName
-            case .arabicText(let arabicText, _):
-                arabicText
-            case .verseNumber(let verseNumber, _):
-                verseNumberView(verseNumber)
+            case .verseHeader(let verseHeader, _):
+                verseHeader.view(verseNumber: verseNumberView(verseHeader.verseNumber))
             case .translationTextChunk(let translationTextChunk, _):
-                translationTextChunk
+                translationTextChunk.view(verseNumber: translationTextChunk.verseNumber.map(verseNumberView))
             case .translationReferenceVerse(let translationReferenceVerse, _):
-                translationReferenceVerse
+                translationReferenceVerse.view(verseNumber: translationReferenceVerse.verseNumber.map(verseNumberView))
             case .translatorText(let translatorText, _):
                 translatorText
             }
@@ -182,6 +192,18 @@ private struct ContentTranslationPreview: View {
         #endif
     }
 
+    var secondVerse: AyahNumber {
+        quran.firstVerse.next!
+    }
+
+    private func verseNumber(_ verse: AyahNumber) -> TranslationVerseNumber {
+        #if QURAN_SYNC
+        TranslationVerseNumber(verse: verse, annotations: [])
+        #else
+        TranslationVerseNumber(verse: verse)
+        #endif
+    }
+
     var chunks: [Range<String.Index>] {
         translationText.chunkRanges(maxChunkSize: 70)
     }
@@ -194,17 +216,18 @@ private struct ContentTranslationPreview: View {
                     .init(sura: quran.firstSura, showsBesmAllah: true, quranFont: .uthmanicHafs, arabicFontSize: fontSize),
                     nil
                 ))
-                #if QURAN_SYNC
-                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse, annotations: []), nil))
-                #else
-                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse), nil))
-                #endif
-                itemView(TranslationItem.arabicText(.init(
-                    verse: quran.firstVerse,
-                    text: QuranText(quran.arabicBesmAllah),
-                    quranFont: .uthmanicHafs,
-                    arabicFontSize: fontSize
-                ), nil))
+                itemView(TranslationItem.verseHeader(
+                    .init(
+                        verseNumber: verseNumber(quran.firstVerse),
+                        arabicText: .init(
+                            verse: quran.firstVerse,
+                            text: QuranText(quran.arabicBesmAllah),
+                            quranFont: .uthmanicHafs,
+                            arabicFontSize: fontSize
+                        )
+                    ),
+                    nil
+                ))
                 ForEach(0 ..< (readMore ? 1 : chunks.count), id: \.self) { chunkIndex in
                     itemView(TranslationItem.translationTextChunk(
                         .init(
@@ -214,6 +237,7 @@ private struct ContentTranslationPreview: View {
                             chunks: chunks,
                             chunkIndex: chunkIndex,
                             readMore: readMore && chunkIndex == 0,
+                            verseNumber: nil,
                             translationFontSize: fontSize
                         ), nil
                     ))
@@ -221,8 +245,17 @@ private struct ContentTranslationPreview: View {
                 itemView(TranslationItem.translatorText(.init(verse: quran.firstVerse, translation: translation, translationFontSize: fontSize), nil))
                 itemView(TranslationItem.verseSeparator(.init(verse: quran.firstVerse), nil))
 
-                itemView(TranslationItem.translationReferenceVerse(.init(verse: quran.firstVerse, translation: translation, reference: quran.lastVerse, translationFontSize: .medium), nil))
-                itemView(TranslationItem.verseSeparator(.init(verse: quran.firstVerse), nil))
+                itemView(TranslationItem.translationReferenceVerse(
+                    .init(
+                        verse: secondVerse,
+                        translation: translation,
+                        reference: quran.lastVerse,
+                        verseNumber: verseNumber(secondVerse),
+                        translationFontSize: .medium
+                    ),
+                    nil
+                ))
+                itemView(TranslationItem.verseSeparator(.init(verse: secondVerse), nil))
 
                 itemView(TranslationItem.pageFooter(.init(page: quran.firstVerse.page)))
             }

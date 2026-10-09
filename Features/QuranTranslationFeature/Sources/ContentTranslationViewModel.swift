@@ -183,10 +183,18 @@ public final class ContentTranslationViewModel: ObservableObject {
                 )
             }
 
-            items.append(.verseNumber(verseNumber(verse: verse), color))
+            // The verse number starts the verse: next to its Arabic text, or at the start of its
+            // first translation row when the Arabic text is hidden.
+            let verseNumber = verseNumber(verse: verse)
+            var pendingVerseNumber: TranslationVerseNumber?
             if showsArabicText {
-                items.append(.arabicText(arabicText(verse: verse, verseText: verseText, quranFont: quranFont), color))
+                let arabicText = arabicText(verse: verse, verseText: verseText, quranFont: quranFont)
+                items.append(.verseHeader(TranslationVerseHeader(verseNumber: verseNumber, arabicText: arabicText), color))
+            } else {
+                pendingVerseNumber = verseNumber
             }
+
+            let hidesPlaceholders = Self.hidesPlaceholderTranslations(of: verseText, showsArabicText: showsArabicText)
 
             for (index, translation) in translations.enumerated() {
                 let text = verseText.translations[index]
@@ -199,11 +207,17 @@ public final class ContentTranslationViewModel: ObservableObject {
                                 verse: verse,
                                 translation: translation,
                                 reference: reference,
+                                verseNumber: pendingVerseNumber,
                                 translationFontSize: translationFontSize
                             ), color
                         )
                     )
+                    pendingVerseNumber = nil
                 case .string(let string):
+                    if hidesPlaceholders, Self.isPlaceholder(string.text) {
+                        continue
+                    }
+
                     let chunks: [Range<String.Index>]
                     let readMore: Bool
                     if let cutoffChunk = cutoffChunkIfTruncationNeeded(string.text) {
@@ -229,11 +243,13 @@ public final class ContentTranslationViewModel: ObservableObject {
                                     chunks: chunks,
                                     chunkIndex: chunkIndex,
                                     readMore: chunkIndex == chunks.count - 1 ? readMore : false, // Add read more to the last chunk.
+                                    verseNumber: chunkIndex == 0 ? pendingVerseNumber : nil,
                                     translationFontSize: translationFontSize
                                 ), color
                             )
                         )
                     }
+                    pendingVerseNumber = nil
                 }
 
                 // Show translator if showing more than a single translation.
@@ -340,6 +356,24 @@ public final class ContentTranslationViewModel: ObservableObject {
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     private let contentStatePreferences = QuranContentStatePreferences.shared
     private let fontSizePreferences = FontSizePreferences.shared
+
+    /// Whether a translation's text is a placeholder for a verse without its own entry,
+    /// such as the "..." that Asbab al-Nuzul stores for most verses.
+    private static func isPlaceholder(_ text: String) -> Bool {
+        text.allSatisfy { $0 == "." || $0 == "…" || $0.isWhitespace }
+    }
+
+    /// Placeholder translations are hidden when the verse shows other text: its Arabic text or another translation.
+    /// Otherwise they stay, so the verse shows that it has no text instead of its number alone.
+    private static func hidesPlaceholderTranslations(of verseText: VerseText, showsArabicText: Bool) -> Bool {
+        showsArabicText || verseText.translations.contains { text in
+            if case .string(let string) = text {
+                !isPlaceholder(string.text)
+            } else {
+                true
+            }
+        }
+    }
 
     private func arabicText(verse: AyahNumber, verseText: VerseText, quranFont: QuranFont) -> TranslationArabicText {
         let arabicVerseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)

@@ -16,7 +16,6 @@ enum TranslationItemId: Hashable, Sendable {
     case pageFooter(Page)
     case separator(AyahNumber)
     case suraName(Sura)
-    case arabic(AyahNumber)
     case verseNumber(AyahNumber)
     case translator(AyahNumber, translationId: Translation.ID)
     case translationReference(AyahNumber, translationId: Translation.ID)
@@ -29,7 +28,6 @@ enum TranslationItemId: Hashable, Sendable {
         case .suraName(let sura):
             sura.firstVerse
         case .separator(let ayahNumber),
-             .arabic(let ayahNumber),
              .verseNumber(let ayahNumber),
              .translator(let ayahNumber, _),
              .translationReference(let ayahNumber, _),
@@ -66,21 +64,29 @@ struct TranslationSuraName: Identifiable & Hashable {
     var id: TranslationItemId { .suraName(sura) }
 }
 
-struct TranslationArabicText: Identifiable & Hashable {
+struct TranslationArabicText: Hashable {
     let verse: AyahNumber
     let text: QuranText
     let quranFont: QuranFont
     let arabicFontSize: FontSize
-
-    var id: TranslationItemId { .arabic(verse) }
 }
 
-struct TranslationVerseNumber: Identifiable & Hashable {
+/// The verse-number capsule. It starts each verse: in the verse header, or in the first
+/// translation row when the Arabic text is hidden.
+struct TranslationVerseNumber: Hashable {
     let verse: AyahNumber
 
     #if QURAN_SYNC
     let annotations: Set<AyahAnnotation>
     #endif
+}
+
+/// A verse's anchor row when the Arabic text is shown: its verse number and Arabic text.
+struct TranslationVerseHeader: Identifiable & Hashable {
+    let verseNumber: TranslationVerseNumber
+    let arabicText: TranslationArabicText
+
+    var verse: AyahNumber { verseNumber.verse }
 
     var id: TranslationItemId { .verseNumber(verse) }
 }
@@ -92,6 +98,7 @@ struct TranslationTextChunk: Identifiable & Hashable {
     let chunks: [Range<String.Index>]
     let chunkIndex: Int
     let readMore: Bool
+    let verseNumber: TranslationVerseNumber?
 
     let translationFontSize: FontSize
 
@@ -103,6 +110,7 @@ struct TranslationReferenceVerse: Identifiable & Hashable {
 
     let translation: Translation
     let reference: AyahNumber
+    let verseNumber: TranslationVerseNumber?
 
     let translationFontSize: FontSize
 
@@ -123,8 +131,7 @@ enum TranslationItem: Identifiable & Hashable {
     case pageFooter(TranslationPageFooter)
     case verseSeparator(TranslationVerseSeparator, Color?)
     case suraName(TranslationSuraName, Color?)
-    case arabicText(TranslationArabicText, Color?)
-    case verseNumber(TranslationVerseNumber, Color?)
+    case verseHeader(TranslationVerseHeader, Color?)
     case translationTextChunk(TranslationTextChunk, Color?)
     case translationReferenceVerse(TranslationReferenceVerse, Color?)
     case translatorText(TranslatorText, Color?)
@@ -135,8 +142,7 @@ enum TranslationItem: Identifiable & Hashable {
         case .pageFooter(let item): return item.id
         case .verseSeparator(let item, _): return item.id
         case .suraName(let item, _): return item.id
-        case .arabicText(let item, _): return item.id
-        case .verseNumber(let item, _): return item.id
+        case .verseHeader(let item, _): return item.id
         case .translationTextChunk(let item, _): return item.id
         case .translationReferenceVerse(let item, _): return item.id
         case .translatorText(let item, _): return item.id
@@ -149,8 +155,7 @@ enum TranslationItem: Identifiable & Hashable {
             return nil
         case .verseSeparator(_, let color),
              .suraName(_, let color),
-             .arabicText(_, let color),
-             .verseNumber(_, let color),
+             .verseHeader(_, let color),
              .translationTextChunk(_, let color),
              .translationReferenceVerse(_, let color),
              .translatorText(_, let color):

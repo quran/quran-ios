@@ -44,10 +44,6 @@ final class Player {
         // With precise timing, AVFoundation may scan (or download) the whole file
         // to answer the duration, so never read it synchronously on the main thread.
         durationTask = Task { [weak self] in
-            // `load(_:)` ignores cancellation, so a player discarded before this runs skips the scan.
-            guard !Task.isCancelled else {
-                return
-            }
             let duration = Self.seconds(ofLoadedDuration: try? await asset.load(.duration))
             guard !Task.isCancelled, let self else {
                 return

@@ -17,13 +17,6 @@ class AudioPlayer {
         self.request = request
         playbackRate = rate
         audioPlaying = AudioPlaying(request: request, fileIndex: 0, frameIndex: 0)
-        player = Player(url: request.files[0].url)
-        player.onRateChanged = { [weak self] in
-            self?.rateChanged(to: $0)
-        }
-        player.onDurationLoaded = { [weak self] in
-            self?.durationLoaded()
-        }
         interruptionMonitor.onAudioInterruption = { [weak self] in
             self?.onAudioInterruption(type: $0)
         }
@@ -118,16 +111,8 @@ class AudioPlayer {
     // the media time the frame-end wait started from.
     private var durationWaitStartTime: TimeInterval?
 
-    private var player: Player {
-        didSet {
-            player.onRateChanged = { [weak self] in
-                self?.rateChanged(to: $0)
-            }
-            player.onDurationLoaded = { [weak self] in
-                self?.durationLoaded()
-            }
-        }
-    }
+    // `startPlaying()` replaces it before anything reads it, so the initial value is never built.
+    private lazy var player = makePlayer(url: request.files[0].url)
 
     private var timer: Timing.Timer? {
         didSet { oldValue?.cancel() }
@@ -135,6 +120,17 @@ class AudioPlayer {
 
     private var delayTask: Task<Void, Never>? {
         didSet { oldValue?.cancel() }
+    }
+
+    private func makePlayer(url: URL) -> Player {
+        let player = Player(url: url)
+        player.onRateChanged = { [weak self] in
+            self?.rateChanged(to: $0)
+        }
+        player.onDurationLoaded = { [weak self] in
+            self?.durationLoaded()
+        }
+        return player
     }
 
     // MARK: - Repeat Logic
@@ -150,7 +146,7 @@ class AudioPlayer {
 
         // reload player if the seek will change
         if shouldSeek {
-            player = Player(url: request.files[fileIndex].url)
+            player = makePlayer(url: request.files[fileIndex].url)
         }
 
         // if not a continuous play, adjust the seek

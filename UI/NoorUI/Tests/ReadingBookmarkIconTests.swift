@@ -1,10 +1,10 @@
 import XCTest
 @testable import NoorUI
 
-final class ReadingBookmarkPinTests: XCTestCase {
+final class ReadingBookmarkIconTests: XCTestCase {
     func test_images_areTemplateRenderedAtNavigationBarSize() throws {
-        let outline = ReadingBookmarkPin.image(style: .outline)
-        let filled = ReadingBookmarkPin.image(style: .filled)
+        let outline = ReadingBookmarkIcon.image(style: .outline)
+        let filled = ReadingBookmarkIcon.image(style: .filled)
 
         XCTAssertEqual(outline.size, CGSize(width: 24, height: 24))
         XCTAssertEqual(filled.size, CGSize(width: 24, height: 24))

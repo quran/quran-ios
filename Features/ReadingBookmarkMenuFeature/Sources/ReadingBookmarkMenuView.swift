@@ -109,7 +109,7 @@ private struct ReadingBookmarkMenuContent: View {
             }
             .font(.subheadline.weight(.semibold))
             Divider()
-            Text("Each pin marks one place — move it as you go")
+            Text("Each bookmark marks one place — move it as you go")
                 .font(.footnote)
                 .foregroundStyle(Color.secondaryLabel)
                 .multilineTextAlignment(.leading)

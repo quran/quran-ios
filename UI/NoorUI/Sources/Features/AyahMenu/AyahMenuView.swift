@@ -253,7 +253,7 @@ private struct AyahMenuViewList: View {
                 isEnabled: false,
                 action: dataObject.actions.showReadingBookmarkMenu
             ) {
-                Image(uiImage: ReadingBookmarkPin.image(style: .outline, badge: .ellipsis))
+                Image(uiImage: ReadingBookmarkIcon.image(style: .outline, badge: .ellipsis))
             }
         case .available(let bookmark):
             Row(
@@ -262,7 +262,7 @@ private struct AyahMenuViewList: View {
                 subtitlePlacement: .below,
                 action: dataObject.actions.showReadingBookmarkMenu
             ) {
-                Image(uiImage: ReadingBookmarkPin.image(
+                Image(uiImage: ReadingBookmarkIcon.image(
                     style: bookmark == nil ? .outline : .filled,
                     badge: .ellipsis
                 ))

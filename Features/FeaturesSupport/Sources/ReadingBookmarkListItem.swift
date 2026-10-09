@@ -27,7 +27,7 @@ public struct ReadingBookmarkListItem: View {
     public var body: some View {
         NoorListItem(
             image: .init(
-                Image(uiImage: ReadingBookmarkPin.image(style: .filled)),
+                Image(uiImage: ReadingBookmarkIcon.image(style: .filled)),
                 color: bookmark.slot.swiftUIColor
             ),
             title: "\(bookmark.displayName) · \(sura: bookmark.sura)",

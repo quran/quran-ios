@@ -10,7 +10,7 @@ struct AyahAnnotationIcon: View {
         Group {
             switch annotation {
             case .readingBookmark(let bookmark):
-                Image(uiImage: ReadingBookmarkPin.image(style: .filled))
+                Image(uiImage: ReadingBookmarkIcon.image(style: .filled))
                     .resizable()
                     .scaledToFit()
                     .foregroundStyle(bookmark.swiftUIColor)

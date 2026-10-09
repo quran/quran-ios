@@ -19,7 +19,7 @@ public struct ContinueReadingBookmarkRow: View {
     public var body: some View {
         Button(action: action) {
             NoorListItem(
-                image: .init(Image(uiImage: ReadingBookmarkPin.image(style: .filled)), color: bookmark.slot.swiftUIColor),
+                image: .init(Image(uiImage: ReadingBookmarkIcon.image(style: .filled)), color: bookmark.slot.swiftUIColor),
                 title: title,
                 titleAllowsWrapping: false,
                 subtitle: .init(text: "\(bookmark.modifiedOn.timeAgo())", location: .bottom),

@@ -15,10 +15,18 @@ final class Player {
     deinit {
         rateObservation?.invalidate()
         durationTask?.cancel()
+        // `load(_:)` ignores Task cancellation, so stop a remote load (and its download) here.
+        // Not for local files: their scan can't be interrupted, and a cancelled load would make
+        // the Task drop the last asset reference on the main actor, where `AVURLAsset`'s dealloc
+        // blocks until the scan ends.
+        if !asset.url.isFileURL {
+            asset.cancelLoading()
+        }
     }
 
     init(url: URL) {
         let asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
+        self.asset = asset
         playerItem = AVPlayerItem(asset: asset)
         playerItem.audioTimePitchAlgorithm = .spectral
         player = AVPlayer(playerItem: playerItem)
@@ -94,6 +102,7 @@ final class Player {
 
     // MARK: Private
 
+    private let asset: AVURLAsset
     private let player: AVPlayer
 
     private var rateObservation: NSKeyValueObservation? {

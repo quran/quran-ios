@@ -102,13 +102,14 @@ actor DownloadBatchDataController {
         await startPendingTasksIfNeeded()
     }
 
-    func waitUntilBatchesRemoved(batchIds: Set<Int64>) async {
-        guard !batchIds.isEmpty else {
-            return
+    func cancel(_ responses: [DownloadBatchResponse]) async {
+        for response in responses {
+            await response.cancel()
         }
 
-        while batches.contains(where: { batchIds.contains($0.batchId) }) {
-            try? await Task.sleep(nanoseconds: 50_000_000)
+        // Cancelling completes each batch, so remove it now instead of waiting for its cleanup task.
+        for response in responses {
+            await cleanUpForCompletedBatch(response)
         }
     }
 
@@ -175,8 +176,10 @@ actor DownloadBatchDataController {
     }
 
     private func cleanUpForCompletedBatch(_ response: DownloadBatchResponse) async {
-        // delete the completed response
-        batches.remove(response)
+        // delete the completed response, unless cancel(_:) already did
+        guard batches.remove(response) != nil else {
+            return
+        }
         await run("DeleteBatch") { try await $0.delete(batchIds: [response.batchId]) }
 
         // Start pending tasks

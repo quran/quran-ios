@@ -63,7 +63,7 @@ public struct HighlightColorsView: View {
                         .accessibilityElement(children: .ignore)
                         .accessibilityAddTraits(.isButton)
                         .accessibilityLabel(item.color.localizedName)
-                        .accessibilityValue(item.count.formatted())
+                        .accessibilityValue(NumberFormatter.shared.format(item.count))
                         .accessibilityIdentifier("collections.color.\(item.color)")
                     }
                 }

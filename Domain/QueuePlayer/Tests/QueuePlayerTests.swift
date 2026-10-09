@@ -76,6 +76,29 @@ final class QueuePlayerTests: XCTestCase {
         XCTAssertEqual(actions.durationsLoaded[0], 0.15, accuracy: 0.01)
     }
 
+    func test_reloadingAFile_reusesItsLoadedDuration() async throws {
+        // Like a gapless reciter's sura: two frames in one file, the last ending with the file.
+        let url = try audioFiles.make(duration: 0.15)
+        let frames = [AudioFrame(startTime: 0, endTime: 0.05), AudioFrame(startTime: 0.05, endTime: nil)]
+        let request = AudioRequest(
+            files: [AudioFile(url: url, frames: frames)],
+            endTime: nil,
+            frameRuns: .finite(1),
+            requestRuns: .finite(1)
+        )
+        player.play(request: request, rate: 1)
+        player.pause()
+        await fulfillment(of: [actions.firstDurationLoaded], timeout: 5)
+
+        // Seeks within the same file, which builds a new player for it.
+        player.stepForward()
+
+        await fulfillment(of: [actions.playbackEnded], timeout: 5)
+        XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(0, 1), .playbackEnded])
+        XCTAssertEqual(try XCTUnwrap(actions.frameDurations[1]), 0.15, accuracy: 0.01)
+        XCTAssertEqual(actions.durationsLoaded.count, 1)
+    }
+
     // MARK: Private
 
     private var audioFiles: SilentAudioFiles!
@@ -106,6 +129,8 @@ private final class QueuePlayerActionsSpy {
     let firstDurationLoaded = XCTestExpectation(description: "First duration loaded")
     private(set) var events: [Event] = []
     private(set) var durationsLoaded: [TimeInterval] = []
+    /// The duration each `audioFrameChanged` carried, in order.
+    private(set) var frameDurations: [TimeInterval?] = []
 
     func makeActions() -> QueuePlayerActions {
         QueuePlayerActions(
@@ -114,8 +139,9 @@ private final class QueuePlayerActionsSpy {
                 self?.playbackEnded.fulfill()
             },
             playbackRateChanged: { _ in },
-            audioFrameChanged: { [weak self] fileIndex, frameIndex, _, _ in
+            audioFrameChanged: { [weak self] fileIndex, frameIndex, _, duration in
                 self?.events.append(.frameChanged(fileIndex, frameIndex))
+                self?.frameDurations.append(duration)
             },
             durationLoaded: { [weak self] in
                 self?.durationsLoaded.append($0)

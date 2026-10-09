@@ -24,7 +24,8 @@ final class Player {
         }
     }
 
-    init(url: URL) {
+    /// Pass `knownDuration` when the file's duration was already loaded, to skip loading it again.
+    init(url: URL, knownDuration: TimeInterval? = nil) {
         let asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
         self.asset = asset
         playerItem = AVPlayerItem(asset: asset)
@@ -39,6 +40,11 @@ final class Player {
                     await self.onRateChanged?(rate)
                 }
             }
+        }
+
+        if let knownDuration {
+            duration = knownDuration
+            return
         }
 
         // With precise timing, AVFoundation may scan (or download) the whole file

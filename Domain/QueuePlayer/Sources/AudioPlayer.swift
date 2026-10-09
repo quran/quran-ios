@@ -110,8 +110,13 @@ class AudioPlayer {
     // True while the frame ends with its file and the file's duration is still loading.
     private var isWaitingForDuration = false
 
+    // Durations loaded so far, by file index. A file reloads on every seek (step, repeat,
+    // verse delay), and its new player reuses the duration instead of reporting none
+    // until a fresh scan finishes. Failed loads (zero) aren't kept, so they're retried.
+    private var loadedDurations: [Int: TimeInterval] = [:]
+
     // `startPlaying()` replaces it before anything reads it, so the initial value is never built.
-    private lazy var player = makePlayer(url: request.files[0].url)
+    private lazy var player = makePlayer(fileIndex: 0)
 
     private var timer: Timing.Timer? {
         didSet { oldValue?.cancel() }
@@ -121,8 +126,8 @@ class AudioPlayer {
         didSet { oldValue?.cancel() }
     }
 
-    private func makePlayer(url: URL) -> Player {
-        let player = Player(url: url)
+    private func makePlayer(fileIndex: Int) -> Player {
+        let player = Player(url: request.files[fileIndex].url, knownDuration: loadedDurations[fileIndex])
         player.onRateChanged = { [weak self] in
             self?.rateChanged(to: $0)
         }
@@ -131,6 +136,9 @@ class AudioPlayer {
             // e.g. while its pending rate callback runs.
             guard let self, let player, player === self.player else {
                 return
+            }
+            if duration > 0 {
+                loadedDurations[fileIndex] = duration
             }
             durationLoaded(duration)
         }
@@ -150,7 +158,7 @@ class AudioPlayer {
 
         // reload player if the seek will change
         if shouldSeek {
-            player = makePlayer(url: request.files[fileIndex].url)
+            player = makePlayer(fileIndex: fileIndex)
         }
 
         // if not a continuous play, adjust the seek

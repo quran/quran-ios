@@ -18,8 +18,9 @@ public enum NoorAnimation {
 
     /// Animates UIKit changes with a critically damped spring that approximates `standard`.
     ///
-    /// Never animate UIKit views with `UIView.animate(_:changes:completion:)` and a SwiftUI animation. UIKit advances
-    /// those on its in-process animation thread, which can lay out SwiftUI hosting views off the main thread.
+    /// Avoid animating UIKit views with `UIView.animate(_:changes:completion:)` and a SwiftUI animation. UIKit may
+    /// advance those on its in-process animation thread, the likely source of 3.0.1's iOS 18 crashes laying out
+    /// SwiftUI hosting views off the main thread.
     @MainActor
     public static func animate(changes: @escaping () -> Void, completion: (() -> Void)? = nil) {
         UIView.animate(

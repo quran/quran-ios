@@ -464,13 +464,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Xatcho‘pni o‘chirish uchun uni suring.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "O‘qish paytida %@ xatcho‘p bilan ajratgan oyatlaringiz shu yerda ko‘rinadi.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "O‘qish paytida %@ rang bilan ajratgan oyatlaringiz shu yerda ko‘rinadi.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "O‘qish paytida xatcho‘p qo‘ygan oyatlaringiz shu yerda ko‘rinadi.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "Bu oyatni Qur’onda ochadi.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "Rangli xatcho‘plar";
+"bookmarks.highlights" = "Ajratilganlar";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "Bu to‘plamda xatcho‘plar bor. Uni o‘chirmoqchi ekaningizga ishonchingiz komilmi?";
 // Metadata: Translated by ChatGPT; human review required.

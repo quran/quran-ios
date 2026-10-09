@@ -463,13 +463,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "向左轻扫书签即可删除。";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "阅读时使用 %@ 书签高亮的经文会显示在这里。";
+"bookmarks.collections.ayahs.no-data.colored.text" = "阅读时使用 %@ 高亮的经文会显示在这里。";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "阅读时加入书签的经文会显示在这里。";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "在《古兰经》中打开这节经文。";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "彩色书签";
+"bookmarks.highlights" = "高亮";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "此收藏集包含书签。确定要删除吗？";
 // Metadata: Translated by ChatGPT; human review required.

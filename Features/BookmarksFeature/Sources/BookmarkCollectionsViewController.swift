@@ -13,7 +13,7 @@ final class BookmarkCollectionsViewController: UIHostingController<BookmarkColle
     init(viewModel: BookmarkCollectionsViewModel) {
         self.viewModel = viewModel
         super.init(rootView: BookmarkCollectionsView(viewModel: viewModel))
-        title = l("bookmarks.collections")
+        title = lAndroid("menu_bookmarks")
         configureEditButton()
     }
 

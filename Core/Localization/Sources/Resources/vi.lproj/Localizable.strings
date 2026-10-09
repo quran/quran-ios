@@ -374,13 +374,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Vuốt dấu trang sang trái để xóa.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "Các ayah bạn tô sáng bằng dấu trang màu %@ khi đọc sẽ xuất hiện ở đây.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "Các ayah bạn tô sáng bằng màu %@ khi đọc sẽ xuất hiện ở đây.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "Các ayah bạn đánh dấu khi đọc sẽ xuất hiện ở đây.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "Mở ayah này trong Quran.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "Dấu trang có màu";
+"bookmarks.highlights" = "Tô sáng";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "Bộ sưu tập này chứa dấu trang. Bạn có chắc muốn xóa không?";
 // Metadata: Translated by ChatGPT; human review required.

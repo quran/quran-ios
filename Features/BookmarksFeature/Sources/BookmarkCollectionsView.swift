@@ -52,8 +52,8 @@ private struct BookmarkCollectionsContent: View {
                 selectLastPage: { _ in }
             )
 
-            NoorBasicSection(title: l("bookmarks.collections.colored")) {
-                ColoredBookmarksView(items: coloredBookmarks) { viewModel.showHighlights($0) }
+            NoorBasicSection(title: l("bookmarks.highlights")) {
+                HighlightColorsView(items: highlightColors) { viewModel.showHighlights($0) }
             }
 
             NoorBasicSection(title: l("bookmarks.collections.mine")) {
@@ -100,10 +100,10 @@ private struct BookmarkCollectionsContent: View {
         .environment(\.editMode, $viewModel.editMode)
     }
 
-    private var coloredBookmarks: [ColoredBookmarksView.Item] {
+    private var highlightColors: [HighlightColorsView.Item] {
         HighlightColor.alphabeticallySortedColors
             .map { color in
-                ColoredBookmarksView.Item(color: color, count: viewModel.highlights.values.count { $0 == color })
+                HighlightColorsView.Item(color: color, count: viewModel.highlights.values.count { $0 == color })
             }
             .sorted { $0.count > $1.count }
     }

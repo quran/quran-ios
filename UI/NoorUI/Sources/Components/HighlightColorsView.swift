@@ -3,7 +3,7 @@ import SwiftUI
 import UIx
 
 @MainActor
-public struct ColoredBookmarksView: View {
+public struct HighlightColorsView: View {
     public struct Item: Identifiable {
         public init(color: HighlightColor, count: Int) {
             self.color = color
@@ -27,6 +27,7 @@ public struct ColoredBookmarksView: View {
     @ScaledMetric private var spacing = 8
     @ScaledMetric private var inset = 12
     @ScaledMetric private var iconSize = 24
+    @ScaledMetric private var swatchSize = 20
     @ScaledMetric private var cornerRadius = 18
 
     public var body: some View {
@@ -95,11 +96,8 @@ public struct ColoredBookmarksView: View {
     }
 
     private func icon(_ item: Item, width: CGFloat? = nil) -> some View {
-        Image(systemName: "bookmark.fill")
-            .resizable()
-            .scaledToFit()
+        ColoredCircle(color: item.color.color, selected: false, minLength: min(swatchSize, width ?? swatchSize))
             .frame(width: width ?? iconSize, height: iconSize)
-            .foregroundColor(item.color.color)
     }
 
     private func count(_ item: Item) -> some View {
@@ -136,8 +134,8 @@ public struct ColoredBookmarksView: View {
     }
 }
 
-#Preview("Adaptive colored bookmarks") {
-    let items: [ColoredBookmarksView.Item] = [
+#Preview("Adaptive highlight colors") {
+    let items: [HighlightColorsView.Item] = [
         .init(color: .green, count: 10),
         .init(color: .purple, count: 3),
         .init(color: .blue, count: 0),
@@ -147,7 +145,7 @@ public struct ColoredBookmarksView: View {
     ScrollView([.horizontal, .vertical]) {
         VStack(alignment: .leading) {
             ForEach([320.0, 440, 900], id: \.self) { width in
-                ColoredBookmarksView(items: items, selectColor: { _ in })
+                HighlightColorsView(items: items, selectColor: { _ in })
                     .frame(width: width)
                     .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 24))
             }

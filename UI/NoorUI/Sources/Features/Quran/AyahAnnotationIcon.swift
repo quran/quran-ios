@@ -10,12 +10,12 @@ struct AyahAnnotationIcon: View {
         Group {
             switch annotation {
             case .readingBookmark(let bookmark):
-                Image(uiImage: ReadingBookmarkPin.image(style: .filled))
+                Image(uiImage: ReadingBookmarkIcon.image(style: .filled))
                     .resizable()
                     .scaledToFit()
                     .foregroundStyle(bookmark.swiftUIColor)
             case .collection:
-                NoorSystemImage.bookmark.image
+                NoorSystemImage.folder.image
                     .themedSecondaryForeground()
             case .note:
                 NoorSystemImage.note.image

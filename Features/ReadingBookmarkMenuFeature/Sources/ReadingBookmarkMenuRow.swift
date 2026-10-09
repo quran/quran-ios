@@ -69,7 +69,7 @@ struct ReadingBookmarkMenuRow: View {
 
     private var editingRow: some View {
         HStack {
-            pin
+            icon
             TextField(item.slot.displayName, text: $name)
                 .focused($isNameFocused)
                 .textFieldStyle(.roundedBorder)
@@ -83,7 +83,7 @@ struct ReadingBookmarkMenuRow: View {
                         }
                     }
                 }
-                .accessibilityLabel("\(item.slot.displayName) pin name")
+                .accessibilityLabel("\(item.slot.displayName) bookmark name")
         }
         .padding(.horizontal)
         .padding(.vertical, verticalPadding)
@@ -94,7 +94,7 @@ struct ReadingBookmarkMenuRow: View {
             await select()
         } label: {
             HStack {
-                pin
+                icon
                 VStack(alignment: .leading, spacing: 1) {
                     Text(item.displayName)
                         .fontWeight(.semibold)
@@ -115,8 +115,8 @@ struct ReadingBookmarkMenuRow: View {
         .buttonStyle(BackgroundHighlightingStyle())
     }
 
-    private var pin: some View {
-        ReadingBookmarkPin(style: item.placement == .unplaced ? .outline : .filled)
+    private var icon: some View {
+        ReadingBookmarkIcon(style: item.placement == .unplaced ? .outline : .filled)
             .foregroundColor(isEnabled ? item.slot.swiftUIColor : .tertiaryLabel)
             .accessibilityHidden(true)
     }

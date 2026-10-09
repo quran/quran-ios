@@ -281,8 +281,8 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     #if QURAN_SYNC
     func updateReadingBookmark(_ bookmark: PlacedReadingBookmark?) {
-        let style: ReadingBookmarkPin.Style = bookmark == nil ? .outline : .filled
-        readingBookmarkMenuNavigationButton.image = ReadingBookmarkPin.image(
+        let style: ReadingBookmarkIcon.Style = bookmark == nil ? .outline : .filled
+        readingBookmarkMenuNavigationButton.image = ReadingBookmarkIcon.image(
             style: style,
             badge: .ellipsis
         )
@@ -325,7 +325,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     #if QURAN_SYNC
     private lazy var readingBookmarkMenuNavigationButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
-            image: ReadingBookmarkPin.image(style: .outline, badge: .ellipsis),
+            image: ReadingBookmarkIcon.image(style: .outline, badge: .ellipsis),
             style: .plain,
             target: self,
             action: #selector(onReadingBookmarkMenuButtonTapped)

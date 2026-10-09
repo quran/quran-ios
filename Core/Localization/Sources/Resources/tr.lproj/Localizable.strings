@@ -405,13 +405,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Silmek için yer imini kaydırın.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.ayahs.no-data.colored.text" = "Okurken %@ yer imiyle vurguladığınız ayetler burada görünür.";
+"bookmarks.collections.ayahs.no-data.colored.text" = "Okurken %@ renkle vurguladığınız ayetler burada görünür.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.no-data.text" = "Okurken yer imi eklediğiniz ayetler burada görünür.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.open-hint" = "Bu ayeti Kur’an’da açar.";
 // Metadata: Translated by ChatGPT; human review required.
-"bookmarks.collections.colored" = "Renkli yer imleri";
+"bookmarks.highlights" = "Vurgular";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.delete.confirmation.message" = "Bu koleksiyonda yer imleri var. Silmek istediğinizden emin misiniz?";
 // Metadata: Translated by ChatGPT; human review required.

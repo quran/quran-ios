@@ -54,6 +54,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - When adding or removing a supported language, update `supportedLocalizations` in `Core/Localization/Tests/LocalizationCatalogTests.swift`.
 - When adding, renaming, or removing an Android localization key used by iOS, update `requiredAndroidKeys` in `Core/Localization/Tests/LocalizationCatalogTests.swift`.
 - Run `make test-no-sync TARGET=LocalizationTests` and `make test-sync TARGET=LocalizationTests` after localization catalog changes.
+- Format user-facing numbers with `NumberFormatter.shared`, `lFormat`, or `MultipartText`, or give the formatter `Locale.fixedCurrentLocaleNumbers`, so every screen uses the same digits. Do not use `.formatted()`, `Locale.current`, or `.autoupdatingCurrent` for displayed numbers. A number passed to `lFormat` as `%@` must already be formatted one of these ways.
 
 ## Concurrency
 

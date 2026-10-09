@@ -955,6 +955,7 @@ private func featuresTargets() -> [[Target]] {
             "FeaturesSupport",
             "NoorUI",
             "QuranKit",
+            "QuranAudio",
             "ReadingService",
             "HomeFeature",
             "BookmarksFeature",

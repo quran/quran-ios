@@ -64,11 +64,12 @@ final class QueuePlayerTests: XCTestCase {
         XCTAssertEqual(actions.durationsLoaded[1], 0.15, accuracy: 0.01)
     }
 
-    func test_durationLoaded_ignoresAReplacedPlayersFile() async throws {
+    func test_durationLoaded_skipsAFileSteppedPastBeforeItLoads() async throws {
         let request = try makeGappedRequest(durations: [0.1, 0.15])
 
         player.play(request: request, rate: 1)
-        // Replaces the first file's player before its duration loads.
+        // Replaces the first file's player before its duration loads; the replaced
+        // player is released, which cancels its load.
         player.stepForward()
 
         await fulfillment(of: [actions.playbackEnded], timeout: 5)

@@ -41,7 +41,7 @@ final class PlayerTests: XCTestCase {
     }
 
     func test_releasingAPlayerOfASharedRemoteAsset_keepsTheOtherPlayersLoadGoing() async throws {
-        let loader = PendingResourceLoader()
+        let loader = UnresponsiveResourceLoaderFake()
         var replaced: Player? = try Player(asset: makePendingRemoteAsset(loader: loader))
         let current = try Player(asset: XCTUnwrap(replaced).asset)
         await fulfillment(of: [loader.requested], timeout: 5)
@@ -54,7 +54,7 @@ final class PlayerTests: XCTestCase {
     }
 
     func test_releasingTheLastPlayerOfARemoteAsset_stopsItsLoad() async throws {
-        let loader = PendingResourceLoader()
+        let loader = UnresponsiveResourceLoaderFake()
         var player: Player? = try Player(asset: makePendingRemoteAsset(loader: loader))
         await fulfillment(of: [loader.requested], timeout: 5)
         let urlAsset = try XCTUnwrap(player).asset.urlAsset
@@ -78,7 +78,7 @@ final class PlayerTests: XCTestCase {
     private var audioFiles: SilentAudioFiles!
 
     /// A remote asset whose data never arrives. Builds it in a helper so the test holds only its players.
-    private func makePendingRemoteAsset(loader: PendingResourceLoader) throws -> PlayerAsset {
+    private func makePendingRemoteAsset(loader: UnresponsiveResourceLoaderFake) throws -> PlayerAsset {
         let asset = try PlayerAsset(url: XCTUnwrap(URL(string: "pending://reciter/002.mp3")))
         // Before any player exists: a player item starts loading its asset as soon as it's created.
         asset.urlAsset.resourceLoader.setDelegate(loader, queue: .main)
@@ -93,7 +93,7 @@ final class PlayerTests: XCTestCase {
 }
 
 /// Serves a remote asset whose data never arrives, so its loads stay in flight until cancelled.
-private final class PendingResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
+private final class UnresponsiveResourceLoaderFake: NSObject, AVAssetResourceLoaderDelegate {
     // MARK: Lifecycle
 
     override init() {

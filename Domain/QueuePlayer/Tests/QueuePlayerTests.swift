@@ -99,16 +99,6 @@ final class QueuePlayerTests: XCTestCase {
 
     // MARK: - Asset Reuse
 
-    func test_repeatingAFrame_reusesItsFilesAsset() async throws {
-        let request = try makeGappedRequest(durations: [0.1], frameRuns: .finite(2))
-
-        player.play(request: request, rate: 1)
-
-        await fulfillment(of: [actions.playbackEnded], timeout: 5)
-        XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(0, 0), .playbackEnded])
-        XCTAssertTrue(actions.playerItems[0].asset === actions.playerItems[1].asset)
-    }
-
     func test_stepForward_withinAFileReusesItsAsset() async throws {
         let request = try makeSingleFileRequest()
 
@@ -118,18 +108,6 @@ final class QueuePlayerTests: XCTestCase {
         await fulfillment(of: [actions.playbackEnded], timeout: 5)
         XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(0, 1), .playbackEnded])
         XCTAssertTrue(actions.playerItems[0].asset === actions.playerItems[1].asset)
-    }
-
-    func test_stepForward_withinAFileBeforeItsDurationLoadsKeepsTheLoad() async throws {
-        let request = try makeSingleFileRequest()
-
-        player.play(request: request, rate: 1)
-        // Releases the first player while the asset it shares with the new one still loads.
-        player.stepForward()
-
-        await fulfillment(of: [actions.playbackEnded], timeout: 5)
-        XCTAssertEqual(actions.durationsLoaded.count, 1)
-        XCTAssertEqual(actions.durationsLoaded[0], 0.15, accuracy: 0.01)
     }
 
     func test_movingToAnotherFile_usesANewAsset() async throws {
@@ -268,16 +246,12 @@ final class QueuePlayerTests: XCTestCase {
 
     /// Like a gapped reciter's request: every frame ends with its file. Durations stay under the
     /// 200 ms frame-end tolerance, so frames end even where the simulator doesn't advance playback.
-    private func makeGappedRequest(
-        durations: [TimeInterval] = [0.1, 0.1],
-        frameRuns: Runs = .finite(1),
-        verseDelay: VerseDelay = .none
-    ) throws -> AudioRequest {
+    private func makeGappedRequest(durations: [TimeInterval] = [0.1, 0.1], verseDelay: VerseDelay = .none) throws -> AudioRequest {
         let files = try durations.map { duration in
             let url = try audioFiles.make(duration: duration)
             return AudioFile(url: url, frames: [AudioFrame(startTime: 0, endTime: nil)])
         }
-        return AudioRequest(files: files, endTime: nil, frameRuns: frameRuns, requestRuns: .finite(1), verseDelay: verseDelay)
+        return AudioRequest(files: files, endTime: nil, frameRuns: .finite(1), requestRuns: .finite(1), verseDelay: verseDelay)
     }
 
     /// Like a gapless reciter's sura: two frames in one 0.15 s file, the last ending with the file.

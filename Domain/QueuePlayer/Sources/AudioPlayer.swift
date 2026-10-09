@@ -133,15 +133,12 @@ class AudioPlayer {
     // True while the frame ends with its file and the file's duration is still loading.
     private var isWaitingForDuration = false
 
-    // Durations loaded so far, by file index. A file's new player starts with its duration instead
-    // of reporting none until it loads: even a shared asset answers only asynchronously, and a file
-    // played again after another one (a request repeat, a step back) gets a new asset that rescans.
+    // Durations loaded so far, by file index, reused when a seek reloads the file.
     // Failed loads (zero) aren't kept, so they're retried.
     private var loadedDurations: [Int: TimeInterval] = [:]
 
-    // The current player's asset. A seek within its file (step, repeat, verse delay) builds the
-    // new player on it instead of on a new asset that must rescan, or redownload, the file.
-    // Weak, so only players keep an asset, and its remote load stops with the last of them.
+    // Reused by a seek within the same file, so it isn't scanned again. Weak, so a remote load
+    // stops with the last player using it.
     private weak var currentAsset: PlayerAsset?
 
     // `startPlaying()` replaces it before anything reads it, so the initial value is never built.

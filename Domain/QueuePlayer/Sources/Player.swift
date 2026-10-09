@@ -41,9 +41,7 @@ final class Player {
 
         // With precise timing, AVFoundation may scan (or download) the whole file
         // to answer the duration, so never read it synchronously on the main thread.
-        // A shared asset that already loaded it answers at once.
-        // Capture the `AVURLAsset` only: the Task outlives the player until the load returns,
-        // and holding `asset` would keep its remote load from ever being cancelled.
+        // Capture only the `AVURLAsset`: holding `asset` would keep its remote load from being cancelled.
         let urlAsset = asset.urlAsset
         durationTask = Task { [weak self] in
             let duration = Self.seconds(ofLoadedDuration: try? await urlAsset.load(.duration))

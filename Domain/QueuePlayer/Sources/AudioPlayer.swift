@@ -55,8 +55,12 @@ class AudioPlayer {
             actions?.playbackRateChanged(playbackRate)
             return
         }
-        timer?.resume()
-        player.play(rate: playbackRate)
+        startPlayback()
+        // Measure the rest of the frame afresh, from where the player is and at the current
+        // rate: a timer paused by `pause()` is stale once the rate changes, and a system pause
+        // (a route change or a stall) can leave no timer at all.
+        timer = nil
+        waitUntilFrameEnds()
     }
 
     func pause() {
@@ -190,13 +194,19 @@ class AudioPlayer {
         }
 
         // start playing
-        resume()
+        startPlayback()
 
-        // wait until frame ends
+        // wait until frame ends; after a seek, measure from its target since it may not have landed yet
         waitUntilFrameEnds(currentTime: currentTime)
 
         // inform the delegate of a frame changed
         actions?.audioFrameChanged(fileIndex, frameIndex, player.playerItem, player.duration)
+    }
+
+    /// Plays the current frame without scheduling its end; callers wait for the frame end themselves.
+    private func startPlayback() {
+        isPaused = false
+        player.play(rate: playbackRate)
     }
 
     private func onFrameEnded() {

@@ -12,6 +12,7 @@ import SwiftUI
 import UIx
 
 public struct QuranVerseNumber: View {
+    @ScaledMetric private var topPadding = 10
     @ScaledMetric(relativeTo: .footnote) private var horizontalPadding = 12
     @ScaledMetric(relativeTo: .footnote) private var verticalPadding = 6
     @ScaledMetric(relativeTo: .footnote) private var spacing = 8
@@ -36,6 +37,14 @@ public struct QuranVerseNumber: View {
     #endif
 
     public var body: some View {
+        content
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, topPadding)
+            .readableInsetsPadding(.horizontal)
+    }
+
+    @ViewBuilder
+    private var content: some View {
         #if QURAN_SYNC
         Button {
             onTapped(CGPoint(x: capsuleFrame.midX, y: capsuleFrame.midY))
@@ -77,7 +86,7 @@ public struct QuranVerseNumber: View {
 
 #if QURAN_SYNC
 #Preview("Verse number and annotations") {
-    VStack(alignment: .leading) {
+    VStack(spacing: 0) {
         ForEach([Set<AyahAnnotation>(), [.note], [.readingBookmark(.teal), .readingBookmark(.orange), .collection, .note]], id: \.self) { annotations in
             QuranVerseNumber(
                 verse: Quran.hafsMadani1405.suras[1].verses[7],

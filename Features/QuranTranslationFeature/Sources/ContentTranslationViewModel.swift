@@ -183,10 +183,9 @@ public final class ContentTranslationViewModel: ObservableObject {
                 )
             }
 
+            items.append(.verseNumber(verseNumber(verse: verse), color))
             if showsArabicText {
                 items.append(.arabicText(arabicText(verse: verse, verseText: verseText, quranFont: quranFont), color))
-            } else {
-                items.append(.verseNumber(verseNumber(verse: verse), color))
             }
 
             for (index, translation) in translations.enumerated() {
@@ -344,23 +343,12 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     private func arabicText(verse: AyahNumber, verseText: VerseText, quranFont: QuranFont) -> TranslationArabicText {
         let arabicVerseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
-        let text = QuranText(verseText.arabicText.text + " " + arabicVerseNumber)
-        #if QURAN_SYNC
         return TranslationArabicText(
             verse: verse,
-            text: text,
-            quranFont: quranFont,
-            arabicFontSize: arabicFontSize,
-            annotations: annotationsByVerse[verse, default: []]
-        )
-        #else
-        return TranslationArabicText(
-            verse: verse,
-            text: text,
+            text: QuranText(verseText.arabicText.text + " " + arabicVerseNumber),
             quranFont: quranFont,
             arabicFontSize: arabicFontSize
         )
-        #endif
     }
 
     private func verseNumber(verse: AyahNumber) -> TranslationVerseNumber {

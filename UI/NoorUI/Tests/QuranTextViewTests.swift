@@ -19,14 +19,8 @@ final class QuranTextViewTests: XCTestCase {
     func test_ayahNumber_withoutAnnotations_keepsTheSameTouchTargetHeight() async {
         let sizes = await MainActor.run {
             let verse = Quran.hafsMadani1405.firstVerse
-            let plain = QuranArabicText(
-                verse: verse, text: "بِسْمِ اللَّهِ", quranFont: .uthmanicHafs, fontSize: .medium,
-                annotations: [], onAyahNumberTapped: { _ in }
-            )
-            let annotated = QuranArabicText(
-                verse: verse, text: "بِسْمِ اللَّهِ", quranFont: .uthmanicHafs, fontSize: .medium,
-                annotations: [.note], onAyahNumberTapped: { _ in }
-            )
+            let plain = QuranVerseNumber(verse: verse, annotations: [], onTapped: { _ in })
+            let annotated = QuranVerseNumber(verse: verse, annotations: [.note], onTapped: { _ in })
             return (fittingSize(plain), fittingSize(annotated))
         }
         XCTAssertEqual(sizes.0.height, sizes.1.height, accuracy: 1)
@@ -42,11 +36,7 @@ final class QuranTextViewTests: XCTestCase {
         let verse = Quran.hafsIndoPak.firstVerse
         let marker = NumberFormatter.arabicNumberFormatter.format(verse.ayah)
         let text = QuranText("IndoPak verse \(marker)")
-        #if QURAN_SYNC
-        let view = QuranArabicText(verse: verse, text: text, quranFont: .indoPak, fontSize: .medium, annotations: [], onAyahNumberTapped: { _ in })
-        #else
         let view = QuranArabicText(verse: verse, text: text, quranFont: .indoPak, fontSize: .medium)
-        #endif
 
         let override = try XCTUnwrap(view.ayahMarkerFontOverrides.first)
         XCTAssertEqual(view.ayahMarkerFontOverrides.count, 1)

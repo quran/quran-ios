@@ -34,38 +34,22 @@ extension TranslationSuraName: View {
     }
 }
 
-extension TranslationArabicText {
-    #if QURAN_SYNC
-    func view(onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) -> some View {
-        QuranArabicText(verse: verse, text: text, quranFont: quranFont, fontSize: arabicFontSize, annotations: annotations, onAyahNumberTapped: { point in onAyahNumberTapped(verse, point) })
-    }
-    #else
-    func view() -> some View {
+extension TranslationArabicText: View {
+    var body: some View {
         QuranArabicText(verse: verse, text: text, quranFont: quranFont, fontSize: arabicFontSize)
     }
-    #endif
 }
 
 extension TranslationVerseNumber {
     #if QURAN_SYNC
     func view(onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) -> some View {
         QuranVerseNumber(verse: verse, annotations: annotations, onTapped: { point in onAyahNumberTapped(verse, point) })
-            .verseNumberRow()
     }
     #else
     func view() -> some View {
         QuranVerseNumber(verse: verse)
-            .verseNumberRow()
     }
     #endif
-}
-
-private extension View {
-    func verseNumberRow() -> some View {
-        frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top)
-            .readableInsetsPadding(.horizontal)
-    }
 }
 
 extension TranslationTextChunk {
@@ -117,21 +101,15 @@ extension TranslatorText: View {
 extension TranslationItem {
     #if QURAN_SYNC
     func view(onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) -> some View {
-        content(
-            arabicTextView: { $0.view(onAyahNumberTapped: onAyahNumberTapped) },
-            verseNumberView: { $0.view(onAyahNumberTapped: onAyahNumberTapped) }
-        )
+        content { $0.view(onAyahNumberTapped: onAyahNumberTapped) }
     }
     #else
     func view() -> some View {
-        content(arabicTextView: { $0.view() }, verseNumberView: { $0.view() })
+        content { $0.view() }
     }
     #endif
 
-    private func content(
-        @ViewBuilder arabicTextView: (TranslationArabicText) -> some View,
-        @ViewBuilder verseNumberView: (TranslationVerseNumber) -> some View
-    ) -> some View {
+    private func content(@ViewBuilder verseNumberView: (TranslationVerseNumber) -> some View) -> some View {
         VStack {
             switch self {
             case .pageHeader(let pageHeader):
@@ -143,7 +121,7 @@ extension TranslationItem {
             case .suraName(let suraName, _):
                 suraName
             case .arabicText(let arabicText, _):
-                arabicTextView(arabicText)
+                arabicText
             case .verseNumber(let verseNumber, _):
                 verseNumberView(verseNumber)
             case .translationTextChunk(let translationTextChunk, _):
@@ -217,21 +195,16 @@ private struct ContentTranslationPreview: View {
                     nil
                 ))
                 #if QURAN_SYNC
-                itemView(TranslationItem.arabicText(.init(
-                    verse: quran.firstVerse,
-                    text: QuranText(quran.arabicBesmAllah),
-                    quranFont: .uthmanicHafs,
-                    arabicFontSize: fontSize,
-                    annotations: []
-                ), nil))
+                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse, annotations: []), nil))
                 #else
+                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse), nil))
+                #endif
                 itemView(TranslationItem.arabicText(.init(
                     verse: quran.firstVerse,
                     text: QuranText(quran.arabicBesmAllah),
                     quranFont: .uthmanicHafs,
                     arabicFontSize: fontSize
                 ), nil))
-                #endif
                 ForEach(0 ..< (readMore ? 1 : chunks.count), id: \.self) { chunkIndex in
                     itemView(TranslationItem.translationTextChunk(
                         .init(

@@ -7,15 +7,20 @@
 
 import SwiftUI
 
+/// A hairline between two verses in translation mode, inset to the readable text column.
 public struct QuranVerseSeparator: View {
+    @Environment(\.themeColors) private var themeColors
+    @Environment(\.displayScale) private var displayScale
+    @ScaledMetric private var topPadding = QuranTranslationSpacing.separatorTop
+
     public init() { }
 
     public var body: some View {
-        Spacer()
-            .frame(height: 1)
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .themedSecondaryBackground()
-            .padding(.top, ContentDimension.interSpacing)
+        Rectangle()
+            .fill(themeColors.pageSeparatorLine)
+            .frame(height: 1 / displayScale)
+            .padding(.top, topPadding)
+            .readableInsetsPadding(.horizontal)
     }
 }
 
@@ -23,5 +28,6 @@ public struct QuranVerseSeparator: View {
     VStack {
         QuranVerseSeparator()
     }
+    .populateReadableInsets()
     .environment(\.themeStyle, .original)
 }

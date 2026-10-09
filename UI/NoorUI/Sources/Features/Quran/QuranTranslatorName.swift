@@ -10,7 +10,7 @@ import SwiftUI
 import UIx
 
 public struct QuranTranslatorName: View {
-    @ScaledMetric var bottomPadding = 10
+    @ScaledMetric var topPadding = QuranTranslationSpacing.translatorNameTop
 
     let name: String
     let fontSize: FontSize
@@ -28,7 +28,7 @@ public struct QuranTranslatorName: View {
             .font(.footnote)
             .dynamicTypeSize(fontSize.dynamicTypeSize)
             .textAlignment(follows: characterDirection)
-            .padding(.bottom, bottomPadding)
+            .padding(.top, topPadding)
             .readableInsetsPadding(.horizontal)
     }
 }

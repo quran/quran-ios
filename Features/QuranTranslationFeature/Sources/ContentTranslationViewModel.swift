@@ -183,9 +183,15 @@ public final class ContentTranslationViewModel: ObservableObject {
                 )
             }
 
-            items.append(.verseNumber(verseNumber(verse: verse), color))
+            // The verse number starts the verse: next to its Arabic text, or at the start of its
+            // first translation row when the Arabic text is hidden.
+            let verseNumber = verseNumber(verse: verse)
+            var pendingVerseNumber: TranslationVerseNumber?
             if showsArabicText {
-                items.append(.arabicText(arabicText(verse: verse, verseText: verseText, quranFont: quranFont), color))
+                let arabicText = arabicText(verse: verse, verseText: verseText, quranFont: quranFont)
+                items.append(.verseHeader(TranslationVerseHeader(verseNumber: verseNumber, arabicText: arabicText), color))
+            } else {
+                pendingVerseNumber = verseNumber
             }
 
             let hidesPlaceholders = Self.hidesPlaceholderTranslations(of: verseText, showsArabicText: showsArabicText)
@@ -201,10 +207,12 @@ public final class ContentTranslationViewModel: ObservableObject {
                                 verse: verse,
                                 translation: translation,
                                 reference: reference,
+                                verseNumber: pendingVerseNumber,
                                 translationFontSize: translationFontSize
                             ), color
                         )
                     )
+                    pendingVerseNumber = nil
                 case .string(let string):
                     if hidesPlaceholders, Self.isPlaceholder(string.text) {
                         continue
@@ -235,11 +243,13 @@ public final class ContentTranslationViewModel: ObservableObject {
                                     chunks: chunks,
                                     chunkIndex: chunkIndex,
                                     readMore: chunkIndex == chunks.count - 1 ? readMore : false, // Add read more to the last chunk.
+                                    verseNumber: chunkIndex == 0 ? pendingVerseNumber : nil,
                                     translationFontSize: translationFontSize
                                 ), color
                             )
                         )
                     }
+                    pendingVerseNumber = nil
                 }
 
                 // Show translator if showing more than a single translation.

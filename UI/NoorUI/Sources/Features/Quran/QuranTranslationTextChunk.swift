@@ -11,7 +11,9 @@ import SwiftUI
 import UIx
 
 public struct QuranTranslationTextChunk: View {
-    @ScaledMetric var topPadding = 10
+    @Environment(\.layoutDirection) private var layoutDirection
+    @ScaledMetric var verseTopPadding = QuranTranslationSpacing.verseTop
+    @ScaledMetric var translationTopPadding = QuranTranslationSpacing.translationTop
     @ScaledMetric var baselineOffset = 5
 
     let text: String
@@ -26,8 +28,11 @@ public struct QuranTranslationTextChunk: View {
     let font: Font
     let fontSize: FontSize
     let characterDirection: Locale.LanguageDirection
+    let verseNumber: QuranVerseNumber?
 
-    public init(text: String, chunk: Range<String.Index>, footnoteRanges: [Range<String.Index>], quranRanges: [Range<String.Index>], firstChunk: Bool, readMoreURL: URL?, footnoteURL: @escaping (Int) -> URL, font: Font, fontSize: FontSize, characterDirection: Locale.LanguageDirection) {
+    /// - Parameter verseNumber: The verse-number capsule that starts the verse, shown at the start of the first line.
+    ///   Pass it only to the first chunk of the verse's first translation.
+    public init(text: String, chunk: Range<String.Index>, footnoteRanges: [Range<String.Index>], quranRanges: [Range<String.Index>], firstChunk: Bool, readMoreURL: URL?, footnoteURL: @escaping (Int) -> URL, font: Font, fontSize: FontSize, characterDirection: Locale.LanguageDirection, verseNumber: QuranVerseNumber? = nil) {
         self.text = text
         self.chunk = chunk
         self.footnoteRanges = footnoteRanges
@@ -38,15 +43,31 @@ public struct QuranTranslationTextChunk: View {
         self.font = font
         self.fontSize = fontSize
         self.characterDirection = characterDirection
+        self.verseNumber = verseNumber
     }
 
     public var body: some View {
-        Text(string)
-            .font(font)
-            .dynamicTypeSize(fontSize.dynamicTypeSize)
-            .textAlignment(follows: characterDirection)
-            .padding(.top, firstChunk ? topPadding : 0)
-            .readableInsetsPadding(.horizontal)
+        QuranVerseNumberText(
+            text: string,
+            verseNumber: verseNumber,
+            characterDirection: characterDirection,
+            verseNumberLayoutDirection: layoutDirection
+        )
+        .font(font)
+        .dynamicTypeSize(fontSize.dynamicTypeSize)
+        .textAlignment(follows: characterDirection)
+        .padding(.top, topPadding)
+        .readableInsetsPadding(.horizontal)
+    }
+
+    private var topPadding: CGFloat {
+        if verseNumber != nil {
+            verseTopPadding
+        } else if firstChunk {
+            translationTopPadding
+        } else {
+            0
+        }
     }
 
     private var string: AttributedString {

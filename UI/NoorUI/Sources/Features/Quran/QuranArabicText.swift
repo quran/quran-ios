@@ -10,11 +10,9 @@ import NoorFont
 import QuranKit
 import QuranText
 import SwiftUI
-import UIx
 
+/// A verse's Quran text in translation mode, without layout. `QuranVerseHeader` places it.
 public struct QuranArabicText: View {
-    @ScaledMetric var bottomPadding = 5
-
     let verse: AyahNumber
     let text: QuranText
     let quranFont: QuranFont
@@ -34,9 +32,6 @@ public struct QuranArabicText: View {
             fontOverrides: ayahMarkerFontOverrides
         )
         .dynamicTypeSize(fontSize.dynamicTypeSize)
-        .textAlignment(follows: .rightToLeft)
-        .padding(.bottom, bottomPadding)
-        .readableInsetsPadding(.horizontal)
     }
 
     var ayahMarkerFontOverrides: [QuranTextFontOverride] {

@@ -6,6 +6,9 @@
 "button.close" = "بستن";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "حذف";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "بیشتر";
 
 // MARK: - Errors
 
@@ -49,6 +52,12 @@
 "translation.text.see-referenced-verse" = "آیه %d را ببینید.";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.read-more" = "بیشتر بخوانید";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "آیه بعدی";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "آیه قبلی";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "اوه! مشکلی پیش آمد. نتوانستیم ترجمه را بازیابی کنیم.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -118,6 +127,24 @@
 "theme.auto.message" = "برنامه قرآن به تنظیمات ظاهری آیفون شما احترام می‌گذارد";
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "ظاهر";
+// Heading for the reading theme choices.
+// Metadata: Translated by AI; human review required.
+"theme.styles" = "پوسته‌ها";
+// Reading theme with a light gray, paper-like background.
+// Metadata: Translated by AI; human review required.
+"theme.style.paper" = "کاغذی";
+// Reading theme with the original white (or black) background.
+// Metadata: Translated by AI; human review required.
+"theme.style.original" = "اصلی";
+// Reading theme with a muted dark gray background.
+// Metadata: Translated by AI; human review required.
+"theme.style.quiet" = "ساکت";
+// Reading theme with a warm sepia background.
+// Metadata: Translated by AI; human review required.
+"theme.style.calm" = "آرام";
+// Reading theme with a soft cream background.
+// Metadata: Translated by AI; human review required.
+"theme.style.focus" = "تمرکز";
 
 // MARK: - App Icon
 
@@ -130,6 +157,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "سبز";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "گرافیت";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "سرمه‌ای و طلایی";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "نارنجی";
@@ -141,6 +170,8 @@
 "app_icon.name.teal_white" = "سبزآبی و سفید";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "رنگ‌ها";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "نمادها";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "ویژه";
 // Metadata: Translated by AI; human review required.
@@ -440,17 +471,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "یادداشت‌ها (%d)";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.move-here" = "در %@ • انتقال به اینجا";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "نشانک مطالعه از %@ به %@ منتقل شد";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "نشانک مطالعه از %@ حذف شد";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.save-here" = "جای مطالعه را اینجا ذخیره کنید";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "نشانک مطالعه در %@ ذخیره شد";
-// Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.saved-here" = "اینجا ذخیره شده • برای حذف ضربه بزنید";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "یک آیه را انتخاب کنید";
 // Metadata: Translated by ChatGPT; human review required.
@@ -493,6 +518,12 @@
 "bookmarks.delete-all" = "حذف همه";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "آیا از حذف همهٔ نشانک‌ها مطمئن هستید؟";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "نشانک‌گذاری صفحه";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "حذف نشانک صفحه";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "تا حدی انتخاب شده";
 // Metadata: Translated by ChatGPT; human review required.
@@ -608,12 +639,45 @@
 // Button that collapses the additional reading bookmarks.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.show-less" = "نمایش کمتر";
+// Reading bookmarks menu explanation below its title.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.description" = "برای هر خوانش یکی را به کار ببرید، مثل ختم قرآن یا حفظ.";
+// Reading bookmark row subtitle when the bookmark is at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.saved-here" = "اینجا ذخیره شده";
+// Reading bookmark row subtitle when the bookmark has no position.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.not-placed" = "هنوز قرار داده نشده";
+// Reading bookmark row subtitle with the bookmark's ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.location" = "در %@";
+// Action that moves a reading bookmark to the current ayah or page; also the Ayah menu's subtitle when this ayah has no reading bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.move-here" = "انتقال به اینجا";
+// Button that places an unplaced reading bookmark at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.set-here" = "قرار دادن در اینجا";
+// VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.name.accessibility-label" = "نام نشانک %@";
+// VoiceOver label for the reader's reading bookmarks button.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.choose.accessibility-label" = "انتخاب نشانک مطالعه";
 // VoiceOver state when the additional reading bookmarks are visible.
 // Metadata: Translated by AI; human review required.
 "accessibility.expanded" = "بازشده";
 // VoiceOver state when the additional reading bookmarks are hidden.
 // Metadata: Translated by AI; human review required.
 "accessibility.collapsed" = "جمع‌شده";
+// VoiceOver hint for an expanded collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.collapse" = "جمع کردن بخش";
+// VoiceOver hint for a collapsed collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.expand" = "باز کردن بخش";
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "آخرین صفحات (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "معکوس کردن ترتیب";

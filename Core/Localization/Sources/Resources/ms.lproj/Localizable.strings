@@ -9,6 +9,9 @@
 "button.close" = "Tutup";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "Padam";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "Lagi";
 
 // MARK: - Errors
 
@@ -44,6 +47,12 @@
 "translation.text.see-referenced-verse" = "Lihat ayat %d.";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.read-more" = "Baca lagi";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "Ayat seterusnya";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "Ayat sebelumnya";
 "error.translation.text-retrieval" = "Maaf! Sesuatu yang tidak diingini terjadi. Kami tidak dapat menjumpai terjemahannya.";
 "error.translation.text-not-available" = "Tiada terjemahan untuk Ayat ini.";
 
@@ -101,6 +110,24 @@
 "theme.auto.message" = "Aplikasi Quran akan mematuhi tetapan penampilan iPhone anda";
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Penampilan";
+// Heading for the reading theme choices.
+// Metadata: Translated by AI; human review required.
+"theme.styles" = "Tema";
+// Reading theme with a light gray, paper-like background.
+// Metadata: Translated by AI; human review required.
+"theme.style.paper" = "Kertas";
+// Reading theme with the original white (or black) background.
+// Metadata: Translated by AI; human review required.
+"theme.style.original" = "Asal";
+// Reading theme with a muted dark gray background.
+// Metadata: Translated by AI; human review required.
+"theme.style.quiet" = "Senyap";
+// Reading theme with a warm sepia background.
+// Metadata: Translated by AI; human review required.
+"theme.style.calm" = "Tenang";
+// Reading theme with a soft cream background.
+// Metadata: Translated by AI; human review required.
+"theme.style.focus" = "Fokus";
 
 // MARK: - App Icon
 
@@ -113,6 +140,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Hijau";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Grafit";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "Biru laut & emas";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "Oren";
@@ -124,6 +153,8 @@
 "app_icon.name.teal_white" = "Hijau kebiruan & putih";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Warna";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Ikon";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "Istimewa";
 // Metadata: Translated by AI; human review required.
@@ -421,17 +452,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "Nota (%d)";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.move-here" = "Pada %@ • Alih ke sini";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Penanda bacaan dialihkan dari %@ ke %@";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Penanda bacaan pada %@ telah dialih keluar";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.save-here" = "Simpan tempat bacaan anda di sini";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Penanda bacaan disimpan pada %@";
-// Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.saved-here" = "Disimpan di sini • Ketik untuk memadam";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Pilih satu ayat sahaja";
 // Metadata: Translated by ChatGPT; human review required.
@@ -474,6 +499,12 @@
 "bookmarks.delete-all" = "Padam semua";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "Adakah anda pasti mahu memadam semua penanda halaman?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "Tanda halaman ini";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "Alih keluar penanda halaman";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "Dipilih sebahagian";
 // Metadata: Translated by ChatGPT; human review required.
@@ -589,12 +620,45 @@
 // Button that collapses the additional reading bookmarks.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.show-less" = "Tunjukkan kurang";
+// Reading bookmarks menu explanation below its title.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.description" = "Gunakan satu untuk setiap bacaan, seperti khatam atau hafazan anda.";
+// Reading bookmark row subtitle when the bookmark is at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.saved-here" = "Disimpan di sini";
+// Reading bookmark row subtitle when the bookmark has no position.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.not-placed" = "Belum diletakkan";
+// Reading bookmark row subtitle with the bookmark's ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.location" = "pada %@";
+// Action that moves a reading bookmark to the current ayah or page; also the Ayah menu's subtitle when this ayah has no reading bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.move-here" = "Alih ke sini";
+// Button that places an unplaced reading bookmark at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.set-here" = "Letak di sini";
+// VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.name.accessibility-label" = "Nama penanda %@";
+// VoiceOver label for the reader's reading bookmarks button.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.choose.accessibility-label" = "Pilih penanda bacaan";
 // VoiceOver state when the additional reading bookmarks are visible.
 // Metadata: Translated by AI; human review required.
 "accessibility.expanded" = "Dikembangkan";
 // VoiceOver state when the additional reading bookmarks are hidden.
 // Metadata: Translated by AI; human review required.
 "accessibility.collapsed" = "Dikecilkan";
+// VoiceOver hint for an expanded collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.collapse" = "Kecilkan bahagian";
+// VoiceOver hint for a collapsed collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.expand" = "Kembangkan bahagian";
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "Muka surat terkini (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "Terbalikkan susunan";

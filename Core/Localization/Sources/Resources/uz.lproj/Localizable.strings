@@ -6,6 +6,9 @@
 "button.close" = "Yopish";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "O'chirish";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "Ko‘proq";
 
 // MARK: - Errors
 
@@ -49,6 +52,12 @@
 "translation.text.see-referenced-verse" = "%d-oyatni ko'ring.";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.read-more" = "Ko'proq o'qing";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "Keyingi oyat";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "Oldingi oyat";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Xo'p! Nimadir noto'g'ri bo'ldi. Tarjimani qayta olmadik.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -118,6 +127,24 @@
 "theme.auto.message" = "Qur'on ilovasi iPhone-ning ko'rinish sozlamalariga rioya qiladi";
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Ko'rinish";
+// Heading for the reading theme choices.
+// Metadata: Translated by AI; human review required.
+"theme.styles" = "Mavzular";
+// Reading theme with a light gray, paper-like background.
+// Metadata: Translated by AI; human review required.
+"theme.style.paper" = "Qog‘oz";
+// Reading theme with the original white (or black) background.
+// Metadata: Translated by AI; human review required.
+"theme.style.original" = "Asl";
+// Reading theme with a muted dark gray background.
+// Metadata: Translated by AI; human review required.
+"theme.style.quiet" = "Sokin";
+// Reading theme with a warm sepia background.
+// Metadata: Translated by AI; human review required.
+"theme.style.calm" = "Osuda";
+// Reading theme with a soft cream background.
+// Metadata: Translated by AI; human review required.
+"theme.style.focus" = "Diqqat";
 
 // MARK: - App Icon
 
@@ -130,6 +157,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Yashil";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Grafit";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "To‘q ko‘k va oltin";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "To‘q sariq";
@@ -141,6 +170,8 @@
 "app_icon.name.teal_white" = "Moviy-yashil va oq";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Ranglar";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Belgilar";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "Maxsus";
 // Metadata: Translated by AI; human review required.
@@ -440,17 +471,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "Eslatmalar (%d)";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.move-here" = "%@ da • Bu yerga ko‘chirish";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "O‘qish xatcho‘pi %@ dan %@ ga ko‘chirildi";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "%@ dagi o‘qish xatcho‘pi olib tashlandi";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.save-here" = "O‘qish joyingizni shu yerda saqlang";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "O‘qish xatcho‘pi %@ da saqlandi";
-// Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.saved-here" = "Shu yerda saqlangan • O‘chirish uchun bosing";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Bitta oyatni tanlang";
 // Metadata: Translated by ChatGPT; human review required.
@@ -493,6 +518,12 @@
 "bookmarks.delete-all" = "Hammasini o‘chirish";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "Barcha xatcho‘plarni o‘chirmoqchi ekaningizga ishonchingiz komilmi?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "Sahifani xatchoʻplash";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "Sahifa xatchoʻpini oʻchirish";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "Qisman tanlangan";
 // Metadata: Translated by ChatGPT; human review required.
@@ -608,12 +639,45 @@
 // Button that collapses the additional reading bookmarks.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.show-less" = "Kamroq koʻrsatish";
+// Reading bookmarks menu explanation below its title.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.description" = "Har bir o‘qish uchun bittasini ishlating, masalan, xatm yoki yodlash uchun.";
+// Reading bookmark row subtitle when the bookmark is at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.saved-here" = "Shu yerda saqlangan";
+// Reading bookmark row subtitle when the bookmark has no position.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.not-placed" = "Hali qo‘yilmagan";
+// Reading bookmark row subtitle with the bookmark's ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.location" = "%@ da";
+// Action that moves a reading bookmark to the current ayah or page; also the Ayah menu's subtitle when this ayah has no reading bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.move-here" = "Bu yerga ko‘chirish";
+// Button that places an unplaced reading bookmark at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.set-here" = "Shu yerga qo‘yish";
+// VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.name.accessibility-label" = "%@ xatcho‘pi nomi";
+// VoiceOver label for the reader's reading bookmarks button.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.choose.accessibility-label" = "O‘qish xatcho‘pini tanlash";
 // VoiceOver state when the additional reading bookmarks are visible.
 // Metadata: Translated by AI; human review required.
 "accessibility.expanded" = "Kengaytirilgan";
 // VoiceOver state when the additional reading bookmarks are hidden.
 // Metadata: Translated by AI; human review required.
 "accessibility.collapsed" = "Yigʻilgan";
+// VoiceOver hint for an expanded collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.collapse" = "Bo‘limni yig‘ish";
+// VoiceOver hint for a collapsed collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.expand" = "Bo‘limni yoyish";
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "Soʻnggi sahifalar (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "Tartibni teskari qilish";

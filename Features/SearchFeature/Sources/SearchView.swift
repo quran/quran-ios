@@ -145,7 +145,7 @@ private struct SearchViewUI: View {
         case .translation(let translation):
             return translation.translationName
         case .quran:
-            return (Bundle.main.localizedInfoDictionary?["CFBundleName"] as? String) ?? "Quran"
+            return l("quran_alquran")
         }
     }
 

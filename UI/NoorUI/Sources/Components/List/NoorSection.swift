@@ -108,7 +108,7 @@ public struct NoorBasicSection<Content: View>: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(title ?? "")
-        .accessibilityHint(isExpanded.wrappedValue ? "Collapse section" : "Expand section")
+        .accessibilityHint(l(isExpanded.wrappedValue ? "accessibility.section.collapse" : "accessibility.section.expand"))
     }
 }
 

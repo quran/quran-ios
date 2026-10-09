@@ -6,6 +6,9 @@
 "button.close" = "Fermer";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "Supprimer";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "Plus";
 
 // MARK: - Errors
 
@@ -49,6 +52,12 @@
 "translation.text.see-referenced-verse" = "Voir l'ayah %d.";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.read-more" = "Lire plus";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "Ayah suivante";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "Ayah précédente";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Oups ! Quelque chose a mal tourné. Nous n'avons pas pu récupérer la traduction.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -118,6 +127,24 @@
 "theme.auto.message" = "L'application Coran adhérera aux paramètres d'apparence de votre iPhone";
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Apparence";
+// Heading for the reading theme choices.
+// Metadata: Translated by AI; human review required.
+"theme.styles" = "Thèmes";
+// Reading theme with a light gray, paper-like background.
+// Metadata: Translated by AI; human review required.
+"theme.style.paper" = "Papier";
+// Reading theme with the original white (or black) background.
+// Metadata: Translated by AI; human review required.
+"theme.style.original" = "Original";
+// Reading theme with a muted dark gray background.
+// Metadata: Translated by AI; human review required.
+"theme.style.quiet" = "Discret";
+// Reading theme with a warm sepia background.
+// Metadata: Translated by AI; human review required.
+"theme.style.calm" = "Calme";
+// Reading theme with a soft cream background.
+// Metadata: Translated by AI; human review required.
+"theme.style.focus" = "Concentration";
 
 // MARK: - App Icon
 
@@ -130,6 +157,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Vert";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Graphite";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "Bleu marine et or";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "Orange";
@@ -141,6 +170,8 @@
 "app_icon.name.teal_white" = "Bleu sarcelle et blanc";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Couleurs";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Icônes";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "Signature";
 // Metadata: Translated by AI; human review required.
@@ -438,17 +469,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "Notes (%d)";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.move-here" = "À %@ • Déplacer ici";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Signet de lecture déplacé de %@ vers %@";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Signet de lecture supprimé de %@";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.save-here" = "Enregistrer votre position ici";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Signet de lecture enregistré à %@";
-// Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.saved-here" = "Enregistré ici • Touchez pour supprimer";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Sélectionnez une seule ayah";
 // Metadata: Translated by ChatGPT; human review required.
@@ -491,6 +516,12 @@
 "bookmarks.delete-all" = "Tout supprimer";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "Voulez-vous vraiment supprimer tous les signets ?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "Ajouter la page aux favoris";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "Retirer la page des favoris";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "Partiellement sélectionné";
 // Metadata: Translated by ChatGPT; human review required.
@@ -606,12 +637,45 @@
 // Button that collapses the additional reading bookmarks.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.show-less" = "Afficher moins";
+// Reading bookmarks menu explanation below its title.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.description" = "Utilisez-en un pour chaque lecture, comme votre khatma ou votre mémorisation.";
+// Reading bookmark row subtitle when the bookmark is at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.saved-here" = "Enregistré ici";
+// Reading bookmark row subtitle when the bookmark has no position.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.not-placed" = "Pas encore placé";
+// Reading bookmark row subtitle with the bookmark's ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.location" = "à %@";
+// Action that moves a reading bookmark to the current ayah or page; also the Ayah menu's subtitle when this ayah has no reading bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.move-here" = "Déplacer ici";
+// Button that places an unplaced reading bookmark at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.set-here" = "Placer ici";
+// VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.name.accessibility-label" = "Nom du signet %@";
+// VoiceOver label for the reader's reading bookmarks button.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.choose.accessibility-label" = "Choisir un signet de lecture";
 // VoiceOver state when the additional reading bookmarks are visible.
 // Metadata: Translated by AI; human review required.
 "accessibility.expanded" = "Développé";
 // VoiceOver state when the additional reading bookmarks are hidden.
 // Metadata: Translated by AI; human review required.
 "accessibility.collapsed" = "Réduit";
+// VoiceOver hint for an expanded collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.collapse" = "Réduire la section";
+// VoiceOver hint for a collapsed collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.expand" = "Développer la section";
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "Pages récente (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "Inverser l’ordre";

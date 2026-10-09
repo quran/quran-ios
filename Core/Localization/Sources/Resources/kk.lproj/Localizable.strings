@@ -6,6 +6,9 @@
 "button.close" = "Жабу";
 // Metadata: Translated by ChatGPT; human review required.
 "button.delete" = "Жою";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "Тағы";
 
 // MARK: - Errors
 
@@ -39,6 +42,12 @@
 "translation.translator" = "Аудармашы: ";
 "translation.text.see-referenced-verse" = "%d аятты көріңіз.";
 "translation.text.read-more" = "Көбірек оқу";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "Келесі аят";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "Алдыңғы аят";
 // Metadata: Translated by ChatGPT; human review required.
 "error.translation.text-retrieval" = "Кешіріңіз! Бірдеңе дұрыс болмады. Аударманы қайтара алмадық.";
 "error.translation.text-not-available" = "Бұл аят үшін аударма жоқ.";
@@ -104,6 +113,24 @@
 "theme.auto.message" = "Құран қосымшасы iPhone-ның көрініс параметрлеріне сәйкес келеді";
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Көрініс";
+// Heading for the reading theme choices.
+// Metadata: Translated by AI; human review required.
+"theme.styles" = "Тақырыптар";
+// Reading theme with a light gray, paper-like background.
+// Metadata: Translated by AI; human review required.
+"theme.style.paper" = "Қағаз";
+// Reading theme with the original white (or black) background.
+// Metadata: Translated by AI; human review required.
+"theme.style.original" = "Түпнұсқа";
+// Reading theme with a muted dark gray background.
+// Metadata: Translated by AI; human review required.
+"theme.style.quiet" = "Тыныш";
+// Reading theme with a warm sepia background.
+// Metadata: Translated by AI; human review required.
+"theme.style.calm" = "Байсалды";
+// Reading theme with a soft cream background.
+// Metadata: Translated by AI; human review required.
+"theme.style.focus" = "Назар";
 
 // MARK: - App Icon
 
@@ -116,6 +143,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Жасыл";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Графит";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "Қою көк және алтын";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "Қызғылт сары";
@@ -127,6 +156,8 @@
 "app_icon.name.teal_white" = "Көкшіл жасыл және ақ";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Түстер";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Белгішелер";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "Фирмалық";
 // Metadata: Translated by AI; human review required.
@@ -422,17 +453,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "Жазбалар (%d)";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.move-here" = "%@ жерінде • Осында жылжыту";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Оқу бетбелгісі %@ жерінен %@ жеріне жылжытылды";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "%@ жеріндегі оқу бетбелгісі жойылды";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.save-here" = "Оқу орнын осында сақтаңыз";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Оқу бетбелгісі %@ жерінде сақталды";
-// Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.saved-here" = "Осында сақталды • Жою үшін түртіңіз";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Бір аятты таңдаңыз";
 // Metadata: Translated by ChatGPT; human review required.
@@ -475,6 +500,12 @@
 "bookmarks.delete-all" = "Барлығын жою";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "Барлық бетбелгілерді жойғыңыз келетініне сенімдісіз бе?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "Бетке бетбелгі қою";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "Бет бетбелгісін алып тастау";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "Ішінара таңдалды";
 // Metadata: Translated by ChatGPT; human review required.
@@ -590,12 +621,45 @@
 // Button that collapses the additional reading bookmarks.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.show-less" = "Азырақ көрсету";
+// Reading bookmarks menu explanation below its title.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.description" = "Әр оқу үшін біреуін пайдаланыңыз, мысалы, хатым немесе жаттау үшін.";
+// Reading bookmark row subtitle when the bookmark is at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.saved-here" = "Осында сақталды";
+// Reading bookmark row subtitle when the bookmark has no position.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.not-placed" = "Әлі қойылмаған";
+// Reading bookmark row subtitle with the bookmark's ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.location" = "%@ жерінде";
+// Action that moves a reading bookmark to the current ayah or page; also the Ayah menu's subtitle when this ayah has no reading bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.move-here" = "Осында жылжыту";
+// Button that places an unplaced reading bookmark at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.set-here" = "Осында қою";
+// VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.name.accessibility-label" = "%@ бетбелгісінің атауы";
+// VoiceOver label for the reader's reading bookmarks button.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.choose.accessibility-label" = "Оқу бетбелгісін таңдау";
 // VoiceOver state when the additional reading bookmarks are visible.
 // Metadata: Translated by AI; human review required.
 "accessibility.expanded" = "Жайылған";
 // VoiceOver state when the additional reading bookmarks are hidden.
 // Metadata: Translated by AI; human review required.
 "accessibility.collapsed" = "Жиылған";
+// VoiceOver hint for an expanded collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.collapse" = "Бөлімді жию";
+// VoiceOver hint for a collapsed collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.expand" = "Бөлімді жаю";
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "Соңғы беттер (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "Ретін кері ауыстыру";

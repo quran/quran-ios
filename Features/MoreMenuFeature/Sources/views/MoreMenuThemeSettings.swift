@@ -167,7 +167,7 @@ private struct MoreMenuThemeSettingsView: View {
 
                     VStack(spacing: 0) {
                         HStack {
-                            SectionHeader(header: "Themes") // TODO: Localize
+                            SectionHeader(header: l("theme.styles"))
                             Spacer()
 
                             AppearanceModeSelectorButton(selectedAppearance: $viewModel.appearanceMode)

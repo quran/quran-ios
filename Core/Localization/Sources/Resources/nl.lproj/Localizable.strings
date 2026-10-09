@@ -8,6 +8,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "button.close" = "Sluiten";
 "button.delete" = "Verwijderen";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "Meer";
 
 // MARK: - Errors
 
@@ -39,6 +42,12 @@
 "translation.translator" = "Vertaler: ";
 "translation.text.see-referenced-verse" = "Zie ayah %d.";
 "translation.text.read-more" = "Lees Meer";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "Volgende ayah";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "Vorige ayah";
 "error.translation.text-retrieval" = "Oeps! Er is iets fout gegaan. We konden de vertaling niet ophalen.";
 "error.translation.text-not-available" = "Er is geen vertaling beschikbaar voor deze ayah.";
 
@@ -85,6 +94,24 @@
 "theme.auto.message" = "De Koran-app houdt zich aan de weergave-instelling van uw iPhone";
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Weergave";
+// Heading for the reading theme choices.
+// Metadata: Translated by AI; human review required.
+"theme.styles" = "Thema's";
+// Reading theme with a light gray, paper-like background.
+// Metadata: Translated by AI; human review required.
+"theme.style.paper" = "Papier";
+// Reading theme with the original white (or black) background.
+// Metadata: Translated by AI; human review required.
+"theme.style.original" = "Origineel";
+// Reading theme with a muted dark gray background.
+// Metadata: Translated by AI; human review required.
+"theme.style.quiet" = "Rustig";
+// Reading theme with a warm sepia background.
+// Metadata: Translated by AI; human review required.
+"theme.style.calm" = "Kalm";
+// Reading theme with a soft cream background.
+// Metadata: Translated by AI; human review required.
+"theme.style.focus" = "Focus";
 
 // MARK: - App Icon
 
@@ -97,6 +124,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Groen";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Grafiet";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "Marineblauw en goud";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "Oranje";
@@ -108,6 +137,8 @@
 "app_icon.name.teal_white" = "Blauwgroen en wit";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Kleuren";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Iconen";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "Signatuur";
 // Metadata: Translated by AI; human review required.
@@ -353,17 +384,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "Notities (%d)";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.move-here" = "Bij %@ • Hierheen verplaatsen";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Leesbladwijzer verplaatst van %@ naar %@";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Leesbladwijzer verwijderd van %@";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.save-here" = "Je leespositie hier opslaan";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Leesbladwijzer opgeslagen bij %@";
-// Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.saved-here" = "Hier opgeslagen • Tik om te verwijderen";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Selecteer één ayah";
 // Metadata: Translated by ChatGPT; human review required.
@@ -406,6 +431,12 @@
 "bookmarks.delete-all" = "Alles verwijderen";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "Weet je zeker dat je alle bladwijzers wilt verwijderen?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "Bladwijzer voor deze pagina toevoegen";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "Paginabladwijzer verwijderen";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "Gedeeltelijk geselecteerd";
 // Metadata: Translated by ChatGPT; human review required.
@@ -521,12 +552,45 @@
 // Button that collapses the additional reading bookmarks.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.show-less" = "Minder tonen";
+// Reading bookmarks menu explanation below its title.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.description" = "Gebruik er een voor elke lezing, zoals je khatmah of memorisatie.";
+// Reading bookmark row subtitle when the bookmark is at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.saved-here" = "Hier opgeslagen";
+// Reading bookmark row subtitle when the bookmark has no position.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.not-placed" = "Nog niet geplaatst";
+// Reading bookmark row subtitle with the bookmark's ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.location" = "bij %@";
+// Action that moves a reading bookmark to the current ayah or page; also the Ayah menu's subtitle when this ayah has no reading bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.move-here" = "Hierheen verplaatsen";
+// Button that places an unplaced reading bookmark at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.set-here" = "Hier plaatsen";
+// VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.name.accessibility-label" = "Naam van bladwijzer %@";
+// VoiceOver label for the reader's reading bookmarks button.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.choose.accessibility-label" = "Leesbladwijzer kiezen";
 // VoiceOver state when the additional reading bookmarks are visible.
 // Metadata: Translated by AI; human review required.
 "accessibility.expanded" = "Uitgeklapt";
 // VoiceOver state when the additional reading bookmarks are hidden.
 // Metadata: Translated by AI; human review required.
 "accessibility.collapsed" = "Ingeklapt";
+// VoiceOver hint for an expanded collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.collapse" = "Sectie inklappen";
+// VoiceOver hint for a collapsed collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.expand" = "Sectie uitklappen";
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "Recente pagina\\'s (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "Volgorde omkeren";

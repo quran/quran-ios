@@ -7,6 +7,8 @@
 
 "button.close" = "Close";
 "button.delete" = "Delete";
+// VoiceOver label for an overflow (…) button that opens more options.
+"button.more" = "More";
 
 // MARK: - Errors
 
@@ -46,6 +48,10 @@
 "translation.translator" = "Translator: ";
 "translation.text.see-referenced-verse" = "See ayah %d.";
 "translation.text.read-more" = "Read more";
+// VoiceOver label for the button that shows the next ayah's translation.
+"translation.verse.next" = "Next ayah";
+// VoiceOver label for the button that shows the previous ayah's translation.
+"translation.verse.previous" = "Previous ayah";
 "translation.text.ayah-number" = "%d:%d";
 "translation.text.footnote-number" = "[%d]";
 "translation.text.footnote-title" = "Footnote #%d";
@@ -99,6 +105,18 @@
 "theme.match_device" = "Match Device";
 "theme.auto.message" = "Quran app will adhere to your iPhone's appearance setting";
 "theme.appearance" = "Appearance";
+// Heading for the reading theme choices.
+"theme.styles" = "Themes";
+// Reading theme with a light gray, paper-like background.
+"theme.style.paper" = "Paper";
+// Reading theme with the original white (or black) background.
+"theme.style.original" = "Original";
+// Reading theme with a muted dark gray background.
+"theme.style.quiet" = "Quiet";
+// Reading theme with a warm sepia background.
+"theme.style.calm" = "Calm";
+// Reading theme with a soft cream background.
+"theme.style.focus" = "Focus";
 
 // MARK: - App Icon
 
@@ -106,6 +124,7 @@
 "app_icon.default" = "Default";
 "app_icon.section.signature" = "Signature";
 "app_icon.section.colors" = "Colors";
+"app_icon.section.icons" = "Icons";
 "app_icon.name.navy_gold" = "Navy & Gold";
 "app_icon.name.teal_white" = "Teal & White";
 "app_icon.name.black_gold" = "Black & Gold";
@@ -114,6 +133,7 @@
 "app_icon.name.red" = "Red";
 "app_icon.name.orange" = "Orange";
 "app_icon.name.green" = "Green";
+"app_icon.name.graphite" = "Graphite";
 
 // MARK: - Tabs
 
@@ -179,6 +199,10 @@
 "bookmarks.no-data.text" = "When you're reading the Quran, tap the Bookmark button to mark the current page.";
 "bookmarks.delete-all" = "Delete All";
 "bookmarks.delete-all.confirmation" = "Are you sure you want to delete all bookmarks?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+"bookmarks.page.add" = "Bookmark page";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+"bookmarks.page.remove" = "Remove page bookmark";
 
 "bookmarks.sync.title" = "Sync your collections";
 "bookmarks.sync.body" = "Sign in to Quran.com to keep your collections available across devices.";
@@ -251,9 +275,6 @@
 "ayah.menu.delete-highlight" = "Delete Highlight";
 "ayah.menu.reading-bookmark.title" = "Reading Bookmark";
 "ayah.menu.reading-bookmark.single-ayah-only" = "Select a single Ayah";
-"ayah.menu.reading-bookmark.move-here" = "At %@ • Move here";
-"ayah.menu.reading-bookmark.save-here" = "Save your place here";
-"ayah.menu.reading-bookmark.saved-here" = "Saved here • Tap to delete";
 "ayah.menu.reading-bookmark.saved" = "Reading bookmark saved at %@";
 "ayah.menu.reading-bookmark.moved" = "Reading bookmark moved from %@ to %@";
 "ayah.menu.reading-bookmark.removed" = "Reading bookmark removed from %@";
@@ -383,9 +404,31 @@
 "bookmarks.reading.title" = "Reading bookmarks";
 // Button that collapses the additional reading bookmarks.
 "bookmarks.reading.show-less" = "Show less";
+// Reading bookmarks menu explanation below its title.
+"bookmarks.reading.description" = "Use one for each reading, like your khatmah or memorization.";
+// Reading bookmark row subtitle when the bookmark is at the current ayah or page.
+"bookmarks.reading.saved-here" = "Saved here";
+// Reading bookmark row subtitle when the bookmark has no position.
+"bookmarks.reading.not-placed" = "Not placed yet";
+// Reading bookmark row subtitle with the bookmark's ayah or page.
+"bookmarks.reading.location" = "at %@";
+// Action that moves a reading bookmark to the current ayah or page; also the Ayah menu's subtitle when this ayah has no reading bookmark.
+"bookmarks.reading.move-here" = "Move here";
+// Button that places an unplaced reading bookmark at the current ayah or page.
+"bookmarks.reading.set-here" = "Set here";
+// VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
+"bookmarks.reading.name.accessibility-label" = "%@ bookmark name";
+// VoiceOver label for the reader's reading bookmarks button.
+"bookmarks.reading.choose.accessibility-label" = "Choose reading bookmark";
 // VoiceOver state when the additional reading bookmarks are visible.
 "accessibility.expanded" = "Expanded";
 // VoiceOver state when the additional reading bookmarks are hidden.
 "accessibility.collapsed" = "Collapsed";
+// VoiceOver hint for an expanded collapsible section header.
+"accessibility.section.collapse" = "Collapse section";
+// VoiceOver hint for a collapsed collapsible section header.
+"accessibility.section.expand" = "Expand section";
 // Recent pages heading with a localized page count.
 "home.recent-pages.title" = "Recent pages (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+"home.sort-order.reverse" = "Reverse order";

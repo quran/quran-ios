@@ -4,6 +4,7 @@
 //
 //  Created by Mohamed Afifi on 2025-03-25.
 //
+import Localization
 import SwiftUI
 
 private struct ThemeStyleOptionView: View {
@@ -71,19 +72,18 @@ public struct ThemeStyleSelector: View {
 }
 
 private extension ThemeStyle {
-    // TODO: Add localization
     var localizedName: String {
         switch self {
         case .paper:
-            return "Paper"
+            return l("theme.style.paper")
         case .calm:
-            return "Calm"
+            return l("theme.style.calm")
         case .focus:
-            return "Focus"
+            return l("theme.style.focus")
         case .original:
-            return "Original"
+            return l("theme.style.original")
         case .quiet:
-            return "Quiet"
+            return l("theme.style.quiet")
         }
     }
 }

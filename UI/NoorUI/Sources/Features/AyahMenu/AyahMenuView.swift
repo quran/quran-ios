@@ -259,7 +259,7 @@ private struct AyahMenuViewList: View {
         case .available(let bookmark):
             Row(
                 title: l("ayah.menu.reading-bookmark.title"),
-                subtitle: .text(bookmark?.displayName ?? "Move here"),
+                subtitle: .text(bookmark?.displayName ?? l("bookmarks.reading.move-here")),
                 subtitlePlacement: .below,
                 action: dataObject.actions.showReadingBookmarkMenu
             ) {

@@ -40,7 +40,7 @@ extension UIViewController {
         crasher.recordError(error, reason: "showErrorAlert")
         let message = error.getErrorDescription()
         let controller = UIAlertController(title: l("error.dialog.title"), message: message, preferredStyle: .alert)
-        controller.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+        controller.addAction(UIAlertAction(title: lAndroid("dialog_ok"), style: .cancel, handler: nil))
         present(controller, animated: true)
     }
 }

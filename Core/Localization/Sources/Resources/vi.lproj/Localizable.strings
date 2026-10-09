@@ -8,6 +8,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "button.close" = "Đóng";
 "button.delete" = "Xóa";
+// VoiceOver label for an overflow (…) button that opens more options.
+// Metadata: Translated by AI; human review required.
+"button.more" = "Thêm";
 
 // MARK: - Errors
 
@@ -39,6 +42,12 @@
 "translation.translator" = "Dịch giả: ";
 "translation.text.see-referenced-verse" = "Xem ayah %d.";
 "translation.text.read-more" = "Xem thêm";
+// VoiceOver label for the button that shows the next ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.next" = "Ayah tiếp theo";
+// VoiceOver label for the button that shows the previous ayah's translation.
+// Metadata: Translated by AI; human review required.
+"translation.verse.previous" = "Ayah trước";
 "error.translation.text-retrieval" = "Ối! Đã xảy ra sự cố. Chúng tôi không thể truy xuất bản dịch.";
 "error.translation.text-not-available" = "Không có bản dịch nào cho Ayah này.";
 
@@ -85,6 +94,24 @@
 "theme.auto.message" = "Ứng dụng Kinh Quran sẽ tự theo cài đặt giao diện trên iPhone của bạn";
 // Metadata: Translated by AI; human review required.
 "theme.appearance" = "Giao diện";
+// Heading for the reading theme choices.
+// Metadata: Translated by AI; human review required.
+"theme.styles" = "Chủ đề";
+// Reading theme with a light gray, paper-like background.
+// Metadata: Translated by AI; human review required.
+"theme.style.paper" = "Giấy";
+// Reading theme with the original white (or black) background.
+// Metadata: Translated by AI; human review required.
+"theme.style.original" = "Nguyên bản";
+// Reading theme with a muted dark gray background.
+// Metadata: Translated by AI; human review required.
+"theme.style.quiet" = "Yên tĩnh";
+// Reading theme with a warm sepia background.
+// Metadata: Translated by AI; human review required.
+"theme.style.calm" = "Êm dịu";
+// Reading theme with a soft cream background.
+// Metadata: Translated by AI; human review required.
+"theme.style.focus" = "Tập trung";
 
 // MARK: - App Icon
 
@@ -97,6 +124,8 @@
 // Metadata: Translated by AI; human review required.
 "app_icon.name.green" = "Xanh lá";
 // Metadata: Translated by AI; human review required.
+"app_icon.name.graphite" = "Than chì";
+// Metadata: Translated by AI; human review required.
 "app_icon.name.navy_gold" = "Xanh hải quân & vàng kim";
 // Metadata: Translated by AI; human review required.
 "app_icon.name.orange" = "Cam";
@@ -108,6 +137,8 @@
 "app_icon.name.teal_white" = "Xanh mòng két & trắng";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.colors" = "Màu sắc";
+// Metadata: Translated by AI; human review required.
+"app_icon.section.icons" = "Biểu tượng";
 // Metadata: Translated by AI; human review required.
 "app_icon.section.signature" = "Đặc trưng";
 // Metadata: Translated by AI; human review required.
@@ -350,17 +381,11 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "Ghi chú (%d)";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.move-here" = "Tại %@ • Chuyển đến đây";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Dấu trang đọc đã được chuyển từ %@ đến %@";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Dấu trang đọc tại %@ đã được xóa";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.save-here" = "Lưu vị trí đọc của bạn tại đây";
-// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Dấu trang đọc đã được lưu tại %@";
-// Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.saved-here" = "Đã lưu tại đây • Chạm để xóa";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Chọn một ayah";
 // Metadata: Translated by ChatGPT; human review required.
@@ -403,6 +428,12 @@
 "bookmarks.delete-all" = "Xóa tất cả";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.delete-all.confirmation" = "Bạn có chắc muốn xóa tất cả dấu trang không?";
+// VoiceOver label for the reader's button that bookmarks the current page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.add" = "Đánh dấu trang này";
+// VoiceOver label for the reader's button that removes the current page bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.page.remove" = "Bỏ đánh dấu trang này";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.collection.mixed" = "Đã chọn một phần";
 // Metadata: Translated by ChatGPT; human review required.
@@ -518,12 +549,45 @@
 // Button that collapses the additional reading bookmarks.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.show-less" = "Hiển thị ít hơn";
+// Reading bookmarks menu explanation below its title.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.description" = "Dùng một dấu trang cho mỗi lần đọc, như khatmah hoặc học thuộc lòng của bạn.";
+// Reading bookmark row subtitle when the bookmark is at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.saved-here" = "Đã lưu tại đây";
+// Reading bookmark row subtitle when the bookmark has no position.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.not-placed" = "Chưa đặt";
+// Reading bookmark row subtitle with the bookmark's ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.location" = "tại %@";
+// Action that moves a reading bookmark to the current ayah or page; also the Ayah menu's subtitle when this ayah has no reading bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.move-here" = "Chuyển đến đây";
+// Button that places an unplaced reading bookmark at the current ayah or page.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.set-here" = "Đặt tại đây";
+// VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.name.accessibility-label" = "Tên dấu trang %@";
+// VoiceOver label for the reader's reading bookmarks button.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.choose.accessibility-label" = "Chọn dấu trang đọc";
 // VoiceOver state when the additional reading bookmarks are visible.
 // Metadata: Translated by AI; human review required.
 "accessibility.expanded" = "Đã mở rộng";
 // VoiceOver state when the additional reading bookmarks are hidden.
 // Metadata: Translated by AI; human review required.
 "accessibility.collapsed" = "Đã thu gọn";
+// VoiceOver hint for an expanded collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.collapse" = "Thu gọn mục";
+// VoiceOver hint for a collapsed collapsible section header.
+// Metadata: Translated by AI; human review required.
+"accessibility.section.expand" = "Mở rộng mục";
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
 "home.recent-pages.title" = "Vừa Đọc (%@)";
+// VoiceOver label for the Home button that reverses the surah and juz list order.
+// Metadata: Translated by AI; human review required.
+"home.sort-order.reverse" = "Đảo ngược thứ tự";

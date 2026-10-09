@@ -14,6 +14,9 @@ final class Player {
 
     deinit {
         rateObservation?.invalidate()
+        if let endObservation {
+            NotificationCenter.default.removeObserver(endObservation)
+        }
         durationTask?.cancel()
         // Releasing `asset` stops its remote load once no other player shares it.
     }
@@ -34,13 +37,23 @@ final class Player {
             }
         }
 
+        endObservation = NotificationCenter.default.addObserver(
+            forName: AVPlayerItem.didPlayToEndTimeNotification,
+            object: playerItem,
+            queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                self?.onPlayedToEnd?()
+            }
+        }
+
         if let knownDuration {
             duration = knownDuration
             return
         }
 
-        // With precise timing, AVFoundation may scan (or download) the whole file
-        // to answer the duration, so never read it synchronously on the main thread.
+        // Even an estimated duration reads the file's start (streaming, over the network),
+        // so never read it synchronously on the main thread.
         // Capture only the `AVURLAsset`: holding `asset` would keep its remote load from being cancelled.
         let urlAsset = asset.urlAsset
         durationTask = Task { [weak self] in
@@ -57,6 +70,8 @@ final class Player {
 
     var onRateChanged: (@Sendable @MainActor (Float) -> Void)?
     var onDurationLoaded: (@Sendable @MainActor (TimeInterval) -> Void)?
+    /// Called when playback reaches the end of the item.
+    var onPlayedToEnd: (@Sendable @MainActor () -> Void)?
 
     let asset: PlayerAsset
     let playerItem: AVPlayerItem
@@ -112,6 +127,8 @@ final class Player {
     private var rateObservation: NSKeyValueObservation? {
         didSet { oldValue?.invalidate() }
     }
+
+    private var endObservation: NSObjectProtocol?
 
     private var durationTask: Task<Void, Never>?
 }

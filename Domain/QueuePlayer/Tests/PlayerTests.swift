@@ -33,6 +33,23 @@ final class PlayerTests: XCTestCase {
         XCTAssertEqual(try XCTUnwrap(player.duration), 0.5, accuracy: 0.01)
     }
 
+    func test_asset_doesNotRequestPreciseTiming() async throws {
+        let url = try audioFiles.makeMP3(duration: 0.48)
+        let asset = PlayerAsset(url: url)
+
+        // An MP3 asset reports precise timing only when asked for it.
+        let providesPreciseTiming = try await asset.urlAsset.load(.providesPreciseDurationAndTiming)
+        XCTAssertFalse(providesPreciseTiming)
+    }
+
+    func test_duration_ofAConstantBitrateMP3Loads() async throws {
+        let url = try audioFiles.makeMP3(duration: 0.48)
+        let player = Player(asset: PlayerAsset(url: url))
+
+        await waitForDuration(of: player)
+        XCTAssertEqual(try XCTUnwrap(player.duration), 0.48, accuracy: 0.01)
+    }
+
     func test_duration_ofUnreadableFileLoadsAsZero() async {
         let player = Player(asset: PlayerAsset(url: audioFiles.directory.appendingPathComponent("missing.mp3")))
 

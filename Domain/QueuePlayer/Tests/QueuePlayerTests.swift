@@ -97,6 +97,61 @@ final class QueuePlayerTests: XCTestCase {
         XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(1, 0), .playbackEnded])
     }
 
+    // MARK: - Frame End
+
+    func test_fileEnd_endsAFrameWhoseEstimatedDurationRunsPastItsAudio() async throws {
+        // 0.12 s of audio that AVFoundation estimates at 3.12 s.
+        let url = try audioFiles.makeMP3(duration: 0.12, trailingBytes: 48000)
+        let request = try makeGappedRequest(firstFile: url)
+
+        player.play(request: request, rate: 1)
+        await fulfillment(of: [actions.firstDurationLoaded], timeout: 5)
+        XCTAssertGreaterThan(try XCTUnwrap(actions.durationsLoaded.first), 3)
+        // The frame-end timer waits for 3.12 s, and finding the player stopped short of that, for good.
+        try postEndOfFirstFile()
+
+        await fulfillment(of: [actions.playbackEnded], timeout: 5)
+        XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(1, 0), .playbackEnded])
+    }
+
+    func test_fileEnd_afterTheTimerEndedTheFrameDoesNotEndItAgain() async throws {
+        let request = try makeGappedRequest(verseDelay: .full)
+
+        player.play(request: request, rate: 1)
+        await waitForVerseDelay()
+        try postEndOfFirstFile()
+
+        // Ending the frame again would skip the rest of the delay (the second end measures no
+        // recited time), or wait out another one.
+        XCTAssertEqual(actions.events, [.frameChanged(0, 0)])
+        clock.elapseAll()
+        await fulfillment(of: [actions.playbackEnded], timeout: 5)
+        XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(1, 0), .playbackEnded])
+        XCTAssertEqual(clock.delays.count, 1)
+    }
+
+    func test_fileEnd_beforeTheDurationLoadsEndsTheFrameOnce() async throws {
+        let request = try makeRepeatedRequest()
+
+        player.play(request: request, rate: 1)
+        try postEndOfFirstFile()
+        await waitForVerseDelay()
+        await fulfillment(of: [actions.firstDurationLoaded], timeout: 5)
+
+        try await assertTheFirstRunEndedOnce()
+    }
+
+    func test_fileEnd_beforeTheFrameEndTimerEndsTheFrameOnce() async throws {
+        let request = try makeRepeatedRequest()
+
+        player.play(request: request, rate: 1)
+        await fulfillment(of: [actions.firstDurationLoaded], timeout: 5)
+        try postEndOfFirstFile()
+        await waitForVerseDelay()
+
+        try await assertTheFirstRunEndedOnce()
+    }
+
     // MARK: - Asset Reuse
 
     func test_stepForward_withinAFileReusesItsAsset() async throws {
@@ -246,12 +301,32 @@ final class QueuePlayerTests: XCTestCase {
 
     /// Like a gapped reciter's request: every frame ends with its file. Durations stay under the
     /// 200 ms frame-end tolerance, so frames end even where the simulator doesn't advance playback.
-    private func makeGappedRequest(durations: [TimeInterval] = [0.1, 0.1], verseDelay: VerseDelay = .none) throws -> AudioRequest {
+    private func makeGappedRequest(
+        durations: [TimeInterval] = [0.1, 0.1],
+        requestRuns: Runs = .finite(1),
+        verseDelay: VerseDelay = .none,
+        repetitionDelay: RepetitionDelay = .none
+    ) throws -> AudioRequest {
         let files = try durations.map { duration in
             let url = try audioFiles.make(duration: duration)
             return AudioFile(url: url, frames: [AudioFrame(startTime: 0, endTime: nil)])
         }
-        return AudioRequest(files: files, endTime: nil, frameRuns: .finite(1), requestRuns: .finite(1), verseDelay: verseDelay)
+        return AudioRequest(
+            files: files,
+            endTime: nil,
+            frameRuns: .finite(1),
+            requestRuns: requestRuns,
+            verseDelay: verseDelay,
+            repetitionDelay: repetitionDelay
+        )
+    }
+
+    /// A gapped request whose first frame plays `firstFile`, followed by a 0.1 s file.
+    private func makeGappedRequest(firstFile: URL) throws -> AudioRequest {
+        let files = try [firstFile, audioFiles.make(duration: 0.1)].map { url in
+            AudioFile(url: url, frames: [AudioFrame(startTime: 0, endTime: nil)])
+        }
+        return AudioRequest(files: files, endTime: nil, frameRuns: .finite(1), requestRuns: .finite(1))
     }
 
     /// Like a gapless reciter's sura: two frames in one 0.15 s file, the last ending with the file.
@@ -259,6 +334,31 @@ final class QueuePlayerTests: XCTestCase {
         let url = try audioFiles.make(duration: 0.15)
         let frames = [AudioFrame(startTime: 0, endTime: 0.05), AudioFrame(startTime: 0.05, endTime: nil)]
         return AudioRequest(files: [AudioFile(url: url, frames: frames)], endTime: nil, frameRuns: .finite(1), requestRuns: .finite(1))
+    }
+
+    /// A 0.1 s gapped file played twice, with a delay between the runs, so the first run ends
+    /// into a delay that keeps its player.
+    private func makeRepeatedRequest() throws -> AudioRequest {
+        try makeGappedRequest(durations: [0.1], requestRuns: .finite(2), repetitionDelay: .oneSecond)
+    }
+
+    /// Posts the end of the first frame's file, as AVPlayer does when playback reaches it.
+    /// Tests post it themselves, since the simulator may not play the audio.
+    private func postEndOfFirstFile() throws {
+        let item = try XCTUnwrap(actions.playerItems.first)
+        NotificationCenter.default.post(name: AVPlayerItem.didPlayToEndTimeNotification, object: item)
+    }
+
+    /// Expects the first run, now waiting out the delay after it, to end only once: nothing left
+    /// pending (a duration load, a frame-end timer) ends it again.
+    private func assertTheFirstRunEndedOnce() async throws {
+        // Longer than the 0.1 s frame, so a frame-end timer left running would have ended it again.
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        clock.elapseAll()
+        await fulfillment(of: [actions.playbackEnded], timeout: 5)
+        XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(0, 0), .playbackEnded])
+        XCTAssertEqual(clock.delays, [1])
     }
 
     /// Waits until a verse ends and the player starts waiting out the delay after it.

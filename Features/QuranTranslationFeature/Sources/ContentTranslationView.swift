@@ -17,9 +17,10 @@ public struct ContentTranslationView: View {
     @StateObject var viewModel: ContentTranslationViewModel
 
     #if QURAN_SYNC
-    private let onAyahNumberTapped: (AyahNumber, CGPoint) -> Void
+    private let onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?
 
-    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel, onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) {
+    /// A `nil` `onAyahNumberTapped` shows the verse numbers without making them tappable.
+    public init(viewModel: @autoclosure @escaping () -> ContentTranslationViewModel, onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?) {
         _viewModel = StateObject(wrappedValue: viewModel())
         self.onAyahNumberTapped = onAyahNumberTapped
     }
@@ -85,7 +86,7 @@ private struct ContentTranslationViewBody: View {
 
     let openURL: (TranslationURL) -> Void
     #if QURAN_SYNC
-    let onAyahNumberTapped: (AyahNumber, CGPoint) -> Void
+    let onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?
     #endif
 
     var body: some View {

@@ -23,12 +23,11 @@ public struct ReadingBookmarkIcon: View {
         case ellipsis
     }
 
-    public static func image(style: Style, badge: Badge? = nil) -> UIImage {
+    /// Draws the bookmark with a badge, which SF Symbols can't compose.
+    /// Use `NoorSystemImage.bookmark` or `.bookmarkOutline` for a plain bookmark.
+    public static func image(style: Style, badge: Badge) -> UIImage {
         let size = CGSize(width: defaultSize, height: defaultSize)
-        let bounds = CGRect(origin: .zero, size: size)
-        let iconBounds = badge == nil
-            ? bounds
-            : bounds.offsetBy(dx: -2, dy: -1)
+        let iconBounds = CGRect(origin: .zero, size: size).offsetBy(dx: -2, dy: -1)
         let configuration = UIImage.SymbolConfiguration(pointSize: defaultSymbolPointSize)
         let symbol = UIImage(systemName: style.systemImage.rawValue, withConfiguration: configuration)?
             .withTintColor(.black, renderingMode: .alwaysOriginal)
@@ -46,8 +45,6 @@ public struct ReadingBookmarkIcon: View {
             switch badge {
             case .ellipsis:
                 drawEllipsisBadge(in: context.cgContext)
-            case nil:
-                break
             }
         }
         return image.withRenderingMode(.alwaysTemplate)

@@ -148,7 +148,7 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
         let placed = try await iterator.next()
 
         XCTAssertEqual(placed?.first?.placement, .page(expectedPage))
-        XCTAssertEqual(placed?.first?.sura, expectedPage.firstVerse.sura)
+        XCTAssertEqual(placed?.first?.suras, expectedPage.suras)
     }
 
     func test_renameReadingBookmark_preservesPlacedBookmark() async throws {

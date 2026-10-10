@@ -51,6 +51,11 @@ public struct Page: QuranValueGroup {
         Sura(quran: quran, suraNumber: quran.raw.startSuraOfPage[pageNumber - 1])!
     }
 
+    /// Every sura with verses on this page, in reading order.
+    public var suras: [Sura] {
+        Array(quran.suras[startSura.suraNumber - 1 ... lastVerse.sura.suraNumber - 1])
+    }
+
     public var startJuz: Juz {
         quran.juzs.binarySearchFirst { self >= $0.page }
     }

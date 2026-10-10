@@ -20,7 +20,7 @@ struct RecentPageCapsule: View {
                     .frame(minWidth: badgeSize, minHeight: badgeSize)
                     .background(Color(uiColor: .secondarySystemGroupedBackground), in: Circle())
                 VStack(alignment: .leading, spacing: 0) {
-                    MultipartText("\(sura: page.firstVerse.sura, nameStyle: .compact)")
+                    MultipartText("\(suras: page.suras, nameStyle: .compact)")
                         .view(ofSize: .subheadline, allowsWrapping: false)
                     Text(timestamp)
                         .font(.caption)
@@ -34,7 +34,7 @@ struct RecentPageCapsule: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(page.firstVerse.sura.localizedName()), \(page.localizedName), \(timestamp)")
+        .accessibilityLabel("\(page.suras.map { $0.localizedName() }.joined(separator: ", ")), \(page.localizedName), \(timestamp)")
     }
 }
 

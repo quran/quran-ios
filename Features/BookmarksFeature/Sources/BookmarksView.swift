@@ -75,10 +75,9 @@ private struct BookmarksViewUI: View {
     }
 
     private func listItem(_ bookmark: PageBookmark) -> some View {
-        let ayah = bookmark.page.firstVerse
-        return NoorListItem(
+        NoorListItem(
             image: .init(.bookmark, color: .red),
-            title: "\(sura: ayah.sura)",
+            title: "\(suras: bookmark.page.suras)",
             subtitle: .init(text: .text(bookmark.creationDate.timeAgo()), location: .bottom),
             accessory: .text(bookmark.page.localizedNumber, accessibilityLabel: bookmark.page.localizedName),
             action: .sync { selectAction(bookmark) }

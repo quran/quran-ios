@@ -69,6 +69,13 @@ final class PageTests: XCTestCase {
         XCTAssertEqual(pages[395].lastVerse.ayah, 6)
     }
 
+    func testSurasListsEverySuraOnThePage() {
+        let pages = quran.pages
+        XCTAssertEqual(pages[0].suras.map(\.suraNumber), [1])
+        XCTAssertEqual(pages[292].suras.map(\.suraNumber), [17, 18])
+        XCTAssertEqual(pages[603].suras.map(\.suraNumber), [112, 113, 114])
+    }
+
     // MARK: Private
 
     private let quran = Quran.hafsMadani1405

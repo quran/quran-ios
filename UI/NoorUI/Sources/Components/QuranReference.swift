@@ -234,6 +234,40 @@ struct QuranReferenceView: View {
     }
 }
 
+/// Sura names separated by " · ". Text-only names render as a single `Text`, so a one-line
+/// title truncates the last name instead of overflowing its row.
+struct SuraNamesView: View {
+    // MARK: Internal
+
+    static let separator = " · "
+
+    let suras: [Sura]
+    let nameStyle: SuraNameStyle
+    let size: MultipartText.FontSize
+
+    var body: some View {
+        let references = suras.map { QuranReference.sura($0, nameStyle: nameStyle) }
+        if references.contains(where: { $0.showsArabicName(locale: locale) }) {
+            HStack(spacing: 0) {
+                ForEach(Array(references.enumerated()), id: \.offset) { index, reference in
+                    if index > 0 {
+                        Text(Self.separator)
+                            .font(size.plainFont)
+                    }
+                    QuranReferenceView(reference: reference, size: size)
+                }
+            }
+        } else {
+            Text(references.compactMap { $0.localizedName(locale: locale) }.joined(separator: Self.separator))
+                .font(size.plainFont)
+        }
+    }
+
+    // MARK: Private
+
+    @Environment(\.locale) private var locale
+}
+
 extension MultipartText.FontSize {
     var plainUIFont: UIFont {
         UIFont.preferredFont(forTextStyle: uiTextStyle)

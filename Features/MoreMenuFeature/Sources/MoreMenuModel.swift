@@ -37,6 +37,9 @@ public struct MoreMenuControlsState {
     public var arabicText = ConfigState.conditional
     public var wordPointer = ConfigState.conditional
     public var linePageDisplay = ConfigState.alwaysOff
+    #if QURAN_SYNC
+    public var ayahIndicators = ConfigState.alwaysOff
+    #endif
     public var orientation = ConfigState.conditional
     public var fontSize = ConfigState.conditional
     public var twoPages = ConfigState.conditional

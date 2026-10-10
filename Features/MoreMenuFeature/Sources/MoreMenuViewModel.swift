@@ -37,6 +37,9 @@ final class MoreMenuViewModel: ObservableObject {
         showLinePageDividers = preferences.showLinePageDividers
         showLinePageSidelines = preferences.showLinePageSidelines
         showArabicText = preferences.showArabicInTranslation
+        #if QURAN_SYNC
+        ayahIndicators = preferences.ayahIndicators
+        #endif
         appearanceMode = themeService.appearanceMode
 
         state.twoPages = (model.state.twoPages == .conditional && TwoPagesUtils.hasEnoughHorizontalSpace()) ? .conditional : .alwaysOff
@@ -121,6 +124,16 @@ final class MoreMenuViewModel: ObservableObject {
             }
             .store(in: &cancellables)
 
+        #if QURAN_SYNC
+        $ayahIndicators
+            .dropFirst()
+            .sink { [weak self] newValue in
+                logger.info("More Menu: set ayah indicators \(newValue)")
+                self?.preferences.ayahIndicators = newValue
+            }
+            .store(in: &cancellables)
+        #endif
+
         $appearanceMode
             .dropFirst()
             .sink { [weak self] newValue in
@@ -156,6 +169,9 @@ final class MoreMenuViewModel: ObservableObject {
     @Published var showLinePageDividers: Bool
     @Published var showLinePageSidelines: Bool
     @Published var showArabicText: Bool
+    #if QURAN_SYNC
+    @Published var ayahIndicators: AyahIndicators
+    #endif
 
     @Published var appearanceMode: AppearanceMode
 

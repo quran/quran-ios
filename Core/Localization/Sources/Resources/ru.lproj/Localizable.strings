@@ -111,6 +111,11 @@
 "menu.verticalScrolling" = "Вертикальная прокрутка";
 "menu.linePageDividers" = "Разделители строк";
 "menu.linePageSidelines" = "Боковые линии";
+"menu.ayahIndicators" = "Значки аятов";
+"menu.ayahIndicators.all" = "Все";
+"menu.ayahIndicators.all.detail" = "Закладка чтения, заметки и коллекции";
+"menu.ayahIndicators.readingBookmark" = "Закладка чтения";
+"menu.ayahIndicators.none" = "Нет";
 "menu.arabicText" = "Арабский текст";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Темы и настройки";

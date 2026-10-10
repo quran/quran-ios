@@ -83,6 +83,11 @@
 "menu.verticalScrolling" = "تمرير رأسي";
 "menu.linePageDividers" = "فواصل الأسطر";
 "menu.linePageSidelines" = "الخطوط الجانبية";
+"menu.ayahIndicators" = "مؤشرات الآيات";
+"menu.ayahIndicators.all" = "الكل";
+"menu.ayahIndicators.all.detail" = "علامة موضع القراءة والملاحظات والمجموعات";
+"menu.ayahIndicators.readingBookmark" = "علامة موضع القراءة";
+"menu.ayahIndicators.none" = "لا شيء";
 "menu.arabicText" = "نص الآيات";
 "menu.theme_settings" = "المظهر والإعدادات";
 

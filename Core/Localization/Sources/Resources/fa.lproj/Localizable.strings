@@ -111,6 +111,11 @@
 "menu.verticalScrolling" = "اسکرول عمودی";
 "menu.linePageDividers" = "جداکننده‌های سطر";
 "menu.linePageSidelines" = "خطوط کناری";
+"menu.ayahIndicators" = "نشانگرهای آیه";
+"menu.ayahIndicators.all" = "همه";
+"menu.ayahIndicators.all.detail" = "نشانک مطالعه، یادداشت‌ها و مجموعه‌ها";
+"menu.ayahIndicators.readingBookmark" = "نشانک مطالعه";
+"menu.ayahIndicators.none" = "هیچ‌کدام";
 "menu.arabicText" = "متن عربی";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "پوسته‌ها و تنظیمات";

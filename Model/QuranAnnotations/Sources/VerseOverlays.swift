@@ -6,6 +6,7 @@
 //
 
 import QuranKit
+import QuranText
 
 public struct VerseOverlays: Equatable {
     // MARK: Lifecycle
@@ -23,6 +24,8 @@ public struct VerseOverlays: Equatable {
     #if QURAN_SYNC
     public var collectionVerses: Set<AyahNumber> = []
     public var readingBookmarks: [PlacedReadingBookmark] = []
+    /// The reader's indicator preference, applied by `annotationTypes(for:)` and `annotationsByVerse`.
+    public var ayahIndicators = AyahIndicators.all
     #endif
 
     public var pointedWord: Word?
@@ -53,24 +56,34 @@ extension VerseOverlays {
     #if QURAN_SYNC
     public func annotationTypes(for verse: AyahNumber) -> Set<AyahAnnotation> {
         var annotations: Set<AyahAnnotation> = []
-        if notedVerses.contains(verse) {
-            annotations.insert(.note)
+        if ayahIndicators.showsNotesAndCollections {
+            if notedVerses.contains(verse) {
+                annotations.insert(.note)
+            }
+            if collectionVerses.contains(verse) {
+                annotations.insert(.collection)
+            }
         }
-        if collectionVerses.contains(verse) {
-            annotations.insert(.collection)
-        }
-        for bookmark in readingBookmarks where bookmark.isAt(verse) {
-            annotations.insert(.readingBookmark(bookmark.slot))
+        if ayahIndicators.showsReadingBookmarks {
+            for bookmark in readingBookmarks where bookmark.isAt(verse) {
+                annotations.insert(.readingBookmark(bookmark.slot))
+            }
         }
         return annotations
     }
 
     public var annotationsByVerse: [AyahNumber: Set<AyahAnnotation>] {
-        let bookmarkedVerses = readingBookmarks.compactMap { bookmark -> AyahNumber? in
-            guard case .ayah(let ayah) = bookmark.placement else { return nil }
-            return ayah
+        var verses: Set<AyahNumber> = []
+        if ayahIndicators.showsNotesAndCollections {
+            verses.formUnion(notedVerses)
+            verses.formUnion(collectionVerses)
         }
-        let verses = notedVerses.union(collectionVerses).union(bookmarkedVerses)
+        if ayahIndicators.showsReadingBookmarks {
+            verses.formUnion(readingBookmarks.compactMap { bookmark -> AyahNumber? in
+                guard case .ayah(let ayah) = bookmark.placement else { return nil }
+                return ayah
+            })
+        }
         return Dictionary(uniqueKeysWithValues: verses.map { ($0, annotationTypes(for: $0)) })
     }
     #endif

@@ -81,6 +81,11 @@
 "menu.verticalScrolling" = "Verticaal scrollen";
 "menu.linePageDividers" = "Regelscheiding";
 "menu.linePageSidelines" = "Zijlijnen";
+"menu.ayahIndicators" = "Ayah-indicatoren";
+"menu.ayahIndicators.all" = "Alle";
+"menu.ayahIndicators.all.detail" = "Leesbladwijzer, notities en verzamelingen";
+"menu.ayahIndicators.readingBookmark" = "Leesbladwijzer";
+"menu.ayahIndicators.none" = "Geen";
 "menu.arabicText" = "Arabische tekst";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Thema's en instellingen";

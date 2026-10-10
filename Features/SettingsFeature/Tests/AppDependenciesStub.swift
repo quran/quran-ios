@@ -42,7 +42,7 @@ struct AppDependenciesStub: AppDependencies {
     #if QURAN_SYNC
     var authenticationClient: any AuthenticationClient = AuthenticationClientFake()
     let legacyDataImportCoordinator = LegacyDataImportCoordinator(
-        reader: CoreDataLegacyDataReader(stack: CoreDataStack.testingStack()),
+        reader: CoreDataLegacyDataReader(store: CoreDataStore.testingStore()),
         quranDataService: MobileSyncTestDatabase.shared.quranDataService
     )
     var quranDataService: QuranDataService { MobileSyncTestDatabase.shared.quranDataService }
@@ -60,7 +60,7 @@ struct AppDependenciesStub: AppDependencies {
     var analytics: AnalyticsLibrary { NoopAnalytics() }
     var readingResources: ReadingResourcesService { fatalError("Unused in tests") }
     var remoteResources: ReadingRemoteResources? { nil }
-    var coreDataStack: CoreDataStack { fatalError("Unused in tests") }
+    var coreDataStore: CoreDataStore { fatalError("Unused in tests") }
     var lastPagePersistence: LastPagePersistence { fatalError("Unused in tests") }
     var notePersistence: NotePersistence { fatalError("Unused in tests") }
     var pageBookmarkPersistence: PageBookmarkPersistence { fatalError("Unused in tests") }

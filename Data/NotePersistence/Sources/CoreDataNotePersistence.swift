@@ -16,8 +16,8 @@ import SystemDependencies
 public struct CoreDataNotePersistence: NotePersistence {
     // MARK: Lifecycle
 
-    public init(stack: CoreDataStack, time: SystemTime = DefaultSystemTime()) {
-        context = stack.newBackgroundContext()
+    public init(store: CoreDataStore, time: SystemTime = DefaultSystemTime()) {
+        context = CoreDataContext(store: store)
         self.time = time
     }
 
@@ -29,7 +29,7 @@ public struct CoreDataNotePersistence: NotePersistence {
         request.relationshipKeyPathsForPrefetching = ["verses"]
         request.sortDescriptors = [NSSortDescriptor(key: Schema.Note.modifiedOn, ascending: false)]
 
-        return CoreDataPublisher(request: request, context: context)
+        return context.publisher(for: request)
             .map { notes in notes.map { NotePersistenceModel($0) } }
             .eraseToAnyPublisher()
     }
@@ -70,7 +70,7 @@ public struct CoreDataNotePersistence: NotePersistence {
 
     // MARK: Private
 
-    private let context: NSManagedObjectContext
+    private let context: CoreDataContext
     private let time: SystemTime
 
     private func createOrUpdateNoteHighlight(

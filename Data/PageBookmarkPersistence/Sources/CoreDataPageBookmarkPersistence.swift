@@ -16,8 +16,8 @@ import QuranKit
 public struct CoreDataPageBookmarkPersistence: PageBookmarkPersistence {
     // MARK: Lifecycle
 
-    public init(stack: CoreDataStack) {
-        context = stack.newBackgroundContext()
+    public init(store: CoreDataStore) {
+        context = CoreDataContext(store: store)
     }
 
     // MARK: Public
@@ -25,7 +25,7 @@ public struct CoreDataPageBookmarkPersistence: PageBookmarkPersistence {
     public func pageBookmarks() -> AnyPublisher<[PageBookmarkPersistenceModel], Never> {
         let request: NSFetchRequest<MO_PageBookmark> = MO_PageBookmark.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: Schema.PageBookmark.createdOn, ascending: false)]
-        return CoreDataPublisher(request: request, context: context)
+        return context.publisher(for: request)
             .map { bookmarks in bookmarks.compactMap { PageBookmarkPersistenceModel($0) } }
             .eraseToAnyPublisher()
     }
@@ -67,7 +67,7 @@ public struct CoreDataPageBookmarkPersistence: PageBookmarkPersistence {
 
     // MARK: Private
 
-    private let context: NSManagedObjectContext
+    private let context: CoreDataContext
 
     private func fetchRequest(for pages: Set<Page>) -> NSFetchRequest<MO_PageBookmark> {
         let request: NSFetchRequest<MO_PageBookmark> = MO_PageBookmark.fetchRequest()

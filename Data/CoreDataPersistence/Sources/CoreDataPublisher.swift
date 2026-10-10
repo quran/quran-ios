@@ -24,10 +24,6 @@ public final class CoreDataPublisher<Result>: Publisher where Result: NSFetchReq
         self.context = context
     }
 
-    public convenience init(request: NSFetchRequest<Result>, stack: CoreDataStack) {
-        self.init(request: request, context: stack.viewContext)
-    }
-
     // MARK: Public
 
     public func receive<S>(subscriber: S) where S: Subscriber, S.Failure == Failure, S.Input == Output {

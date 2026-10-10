@@ -14,6 +14,7 @@ import XCTest
 
 class CoreDataNotePersistenceTests: XCTestCase {
     var sut: CoreDataNotePersistence!
+    var store: CoreDataStore!
     var stack: CoreDataStack!
     var time: SystemTimeFake!
 
@@ -29,7 +30,8 @@ class CoreDataNotePersistenceTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        stack = CoreDataStack.testingStack()
+        store = CoreDataStore.testingStore()
+        stack = try await store.stack()
         time = SystemTimeFake()
 
         verse1 = VersePersistenceModel(ayah: 1, sura: 1)
@@ -41,13 +43,14 @@ class CoreDataNotePersistenceTests: XCTestCase {
         note2 = NotePersistenceModel("", color: 2, modifiedDate: Date(timeIntervalSince1970: 200))
         note3 = NotePersistenceModel("Note 3", color: 3, modifiedDate: Date(timeIntervalSince1970: 300))
 
-        sut = CoreDataNotePersistence(stack: stack, time: time)
+        sut = CoreDataNotePersistence(store: store, time: time)
     }
 
     override func tearDown() {
         CoreDataStack.removePersistentFiles()
         sut = nil
         stack = nil
+        store = nil
         super.tearDown()
     }
 
@@ -124,7 +127,7 @@ class CoreDataNotePersistenceTests: XCTestCase {
             try context.save()
         }
 
-        let notes = PublisherCollector(CoreDataNotePersistence(stack: stack, time: time).notes()).items.last
+        let notes = PublisherCollector(CoreDataNotePersistence(store: store, time: time).notes()).items.last
         XCTAssertEqual(notes?.map(\.note), ["Verses arrive later"])
         XCTAssertEqual(notes?.map(\.verses), [[verse1]])
     }

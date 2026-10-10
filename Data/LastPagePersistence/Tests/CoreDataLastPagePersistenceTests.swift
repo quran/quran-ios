@@ -18,11 +18,12 @@ final class CoreDataLastPagePersistenceTests: XCTestCase {
     var stack: CoreDataStack!
     var subscriptions = Set<AnyCancellable>()
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
 
-        stack = CoreDataStack.testingStack()
-        persistence = CoreDataLastPagePersistence(stack: stack)
+        let store = CoreDataStore.testingStore()
+        stack = try await store.stack()
+        persistence = CoreDataLastPagePersistence(store: store)
     }
 
     override func tearDown() {
@@ -125,9 +126,9 @@ final class CoreDataLastPagePersistenceTests: XCTestCase {
     }
 
     func testLastPagesIgnoreInvalidStoredPages() async throws {
-        let context = stack.viewContext
-        _ = context.newLastPage(page: 605, modifiedOn: 1)
-        try context.save()
+        try stack.write { context in
+            _ = context.newLastPage(page: 605, modifiedOn: 1)
+        }
 
         let lastPages = try await persistence.retrieveAll()
 

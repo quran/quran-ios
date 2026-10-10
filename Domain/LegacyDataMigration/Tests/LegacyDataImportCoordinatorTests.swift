@@ -23,7 +23,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
         LegacyImportPreferences.reset()
         try await database.reset()
         store = TemporaryCoreDataStore()
-        stack = store.stack()
+        coreDataStore = store.makeStore()
         sut = makeCoordinator()
     }
 
@@ -33,7 +33,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
         // Wait for any scan before resetting the database it imports into.
         await sut?.disable()
         sut = nil
-        stack = nil
+        coreDataStore = nil
         store = nil
         try await database.reset()
         LegacyImportPreferences.reset()
@@ -41,7 +41,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
     }
 
     func test_importNow_importsLegacyDataIntoMobileSync() async throws {
-        try stack.write { context in
+        try await coreDataStore.stack().write { context in
             // Page 121 is 5:77 in Madani 1405 (also the unknown-mushaf default) and 5:78 in Madani 1440.
             for (page, mushafID): (Int32, Int16) in [(2, 0), (121, 0), (121, 1), (121, 7)] {
                 _ = context.newPageBookmark(page: page, mushafID: mushafID, modifiedOn: 100)
@@ -71,7 +71,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
     }
 
     func test_repeatedImport_doesNotRecreateDeletedNote() async throws {
-        try stack.write { context in
+        try await coreDataStore.stack().write { context in
             context.note("Delete me", color: 0, verses: [(1, 1)], modifiedOn: 10)
         }
         try await sut.importNow()
@@ -86,14 +86,14 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
     }
 
     func test_importNow_importsNoteOnceItsVersesArrive() async throws {
-        try stack.write { context in
+        try await coreDataStore.stack().write { context in
             _ = context.newNote("Arrives in parts", modifiedOn: 10)
         }
         try await sut.importNow()
         let notesBeforeArrival = try await storedNotes()
         XCTAssertEqual(notesBeforeArrival, [])
 
-        try stack.write { context in
+        try await coreDataStore.stack().write { context in
             let note = try XCTUnwrap(try context.allNotes().first)
             note.addToVerses(context.newVerse(sura: 2, ayah: 255))
         }
@@ -121,7 +121,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
         let imported = expectation(forNotes: ["Late CloudKit arrival"])
 
         // Only the change subscription can import this; the test requests no scan.
-        try stack.write { context in
+        try await coreDataStore.stack().write { context in
             context.note("Late CloudKit arrival", color: 0, verses: [(18, 10)], modifiedOn: 10)
         }
 
@@ -129,7 +129,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
     }
 
     func test_disable_stopsLaterImports() async throws {
-        try stack.write { context in
+        try await coreDataStore.stack().write { context in
             context.note("Written before logout", color: 0, verses: [(1, 1)], modifiedOn: 10)
         }
 
@@ -149,15 +149,15 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
     }
 
     func test_reopenedStore_keepsImportedContentAfterRelaunch() async throws {
-        try stack.write { context in
+        try await coreDataStore.stack().write { context in
             context.note("Imported once", color: 1, verses: [(2, 1), (2, 2)], modifiedOn: 20)
         }
         try await sut.importNow()
         let notesBefore = try await storedNotes()
 
-        // A relaunch opens a new stack, reader, and coordinator on the same store.
+        // A relaunch opens a new store, reader, and coordinator on the same file.
         sut = nil
-        stack = store.stack()
+        coreDataStore = store.makeStore()
         sut = makeCoordinator()
         try await sut.importNow()
 
@@ -169,12 +169,12 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
 
     private let database = MobileSyncTestDatabase.shared
     private var store: TemporaryCoreDataStore!
-    private var stack: CoreDataStack!
+    private var coreDataStore: CoreDataStore!
     private var sut: LegacyDataImportCoordinator!
     private var observation: Task<Void, Never>?
 
     private func makeCoordinator() -> LegacyDataImportCoordinator {
-        LegacyDataImportCoordinator(reader: CoreDataLegacyDataReader(stack: stack), quranDataService: database.quranDataService)
+        LegacyDataImportCoordinator(reader: CoreDataLegacyDataReader(store: coreDataStore), quranDataService: database.quranDataService)
     }
 
     private func storedNotes() async throws -> [Note_] {

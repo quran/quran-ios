@@ -33,7 +33,7 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
     // MARK: - Store
 
     func test_importData_readsFirstModelVersionStoreAfterMigration() async throws {
-        var firstVersionStack: CoreDataStack? = store.stack(modelUrl: TemporaryCoreDataStore.firstModelURL)
+        var firstVersionStack: CoreDataStack? = try await store.makeStore(modelUrl: TemporaryCoreDataStore.firstModelURL).stack()
         try XCTUnwrap(firstVersionStack).write { context in
             context.insert("MO_PageBookmark", ["page": 3, "createdOn": date(10), "modifiedOn": date(20)])
             context.insert("MO_LastPage", ["page": 3, "createdOn": date(30), "modifiedOn": date(40)])
@@ -61,7 +61,7 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
 
     func test_importData_throwsWhenStoreCannotOpen_thenRecoversOnRetry() async throws {
         try store.corrupt()
-        let reader = CoreDataLegacyDataReader(stack: store.stack())
+        let reader = CoreDataLegacyDataReader(store: store.makeStore())
 
         do {
             _ = try await reader.importData()
@@ -74,24 +74,25 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
     }
 
     func test_importData_performsNoApplicationSaves() async throws {
-        let stack = store.stack()
+        let coreDataStore = store.makeStore()
+        let stack = try await coreDataStore.stack()
         try stack.write { context in
             context.note("No verses", verses: [])
         }
         let writesBeforeReading = try historyTransactionCount(in: stack)
 
-        _ = try await CoreDataLegacyDataReader(stack: stack).importData()
-        _ = try await CoreDataLegacyDataReader(stack: stack).importData()
+        _ = try await CoreDataLegacyDataReader(store: coreDataStore).importData()
+        _ = try await CoreDataLegacyDataReader(store: coreDataStore).importData()
 
         XCTAssertEqual(try historyTransactionCount(in: stack), writesBeforeReading)
     }
 
     func test_changes_subscribesBeforeTheStoreLoads() async throws {
-        let stack = store.stack()
-        let changed = expectation(forChangeOf: CoreDataLegacyDataReader(stack: stack))
+        let coreDataStore = store.makeStore()
+        let changed = expectation(forChangeOf: CoreDataLegacyDataReader(store: coreDataStore))
 
         // Writing loads the store after the subscription was created.
-        try stack.write { context in
+        try await coreDataStore.stack().write { context in
             context.insert("MO_PageBookmark", ["page": 1, "modifiedOn": date(1)])
         }
 
@@ -99,13 +100,14 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
     }
 
     func test_importData_isDeterministic() async throws {
-        let stack = store.stack()
+        let coreDataStore = store.makeStore()
+        let stack = try await coreDataStore.stack()
         try stack.write { context in
             context.insert("MO_PageBookmark", ["page": 10])
             context.insert("MO_LastPage", ["page": 10, "mushafID": 1, "modifiedOn": date(1)])
             context.note("Stable", verses: [(2, 2), (2, 1)])
         }
-        let reader = CoreDataLegacyDataReader(stack: stack)
+        let reader = CoreDataLegacyDataReader(store: coreDataStore)
 
         let first = try await reader.importData()
         let second = try await reader.importData()
@@ -298,9 +300,10 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
 
     /// Writes the records to a real store and reads them back.
     private func importData(_ records: (NSManagedObjectContext) -> Void = { _ in }) async throws -> PersistenceImportData {
-        let stack = store.stack()
+        let coreDataStore = store.makeStore()
+        let stack = try await coreDataStore.stack()
         try stack.write { records($0) }
-        return try await CoreDataLegacyDataReader(stack: stack).importData()
+        return try await CoreDataLegacyDataReader(store: coreDataStore).importData()
     }
 
     private func expectation(forChangeOf reader: CoreDataLegacyDataReader) -> XCTestExpectation {
@@ -316,7 +319,7 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
     }
 
     private func historyTransactionCount(in stack: CoreDataStack) throws -> Int {
-        let context = try stack.openBackgroundContext()
+        let context = stack.newBackgroundContext()
         return try context.performAndWait {
             let request = NSPersistentHistoryChangeRequest.fetchHistory(after: .distantPast)
             let result = try context.execute(request) as? NSPersistentHistoryResult

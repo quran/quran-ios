@@ -433,7 +433,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         try await service.addReadingBookmark(at: .page(page), slot: .orange)
         await waitUntil { sut.readingBookmarks.first { $0.slot == .orange }?.placement == .page(page) }
 
-        XCTAssertEqual(sut.readingBookmarks.first { $0.slot == .orange }?.sura, page.firstVerse.sura)
+        XCTAssertEqual(sut.readingBookmarks.first { $0.slot == .orange }?.suras, page.suras)
         task.cancel()
     }
 

@@ -55,12 +55,13 @@ public struct PlacedReadingBookmark: Hashable, Sendable {
         }
     }
 
-    public var sura: Sura {
+    /// The bookmarked ayah's sura, or every sura on the bookmarked page.
+    public var suras: [Sura] {
         switch placement {
         case .ayah(let ayah):
-            ayah.sura
+            [ayah.sura]
         case .page(let page):
-            page.firstVerse.sura
+            page.suras
         }
     }
 

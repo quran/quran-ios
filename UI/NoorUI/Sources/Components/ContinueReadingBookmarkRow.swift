@@ -22,7 +22,7 @@ public struct ContinueReadingBookmarkRow: View {
                 image: .init(.bookmark, color: bookmark.slot.swiftUIColor),
                 title: title,
                 titleAllowsWrapping: false,
-                subtitle: .init(text: "\(bookmark.modifiedOn.timeAgo())", location: .bottom),
+                subtitle: .init(text: subtitle, location: .bottom),
                 accessory: .disclosureIndicator
             )
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -39,7 +39,18 @@ public struct ContinueReadingBookmarkRow: View {
         case .ayah(let ayah):
             "\(ayah: ayah, nameStyle: .compact)"
         case .page(let page):
-            "\(sura: bookmark.sura, nameStyle: .compact) · \(page.localizedName)"
+            "\(suras: page.suras, nameStyle: .compact)"
+        }
+    }
+
+    /// Keeps the page number out of the title so long sura names never truncate it.
+    private var subtitle: MultipartText {
+        let timeAgo = bookmark.modifiedOn.timeAgo()
+        switch bookmark.placement {
+        case .ayah:
+            return .text(timeAgo)
+        case .page(let page):
+            return "\(page.localizedName) · \(timeAgo)"
         }
     }
 
@@ -80,6 +91,9 @@ private struct ContinueReadingBookmarkRowPreview: View {
             .environment(\.locale, Locale(identifier: "en"))
 
         ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[22]), slot: .teal)
+            .environment(\.locale, Locale(identifier: "en"))
+
+        ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[574]), slot: .teal)
             .environment(\.locale, Locale(identifier: "en"))
 
         ContinueReadingBookmarkRowPreview(placement: .ayah(Quran.hafsMadani1405.suras[35].verses[57]), slot: .red)

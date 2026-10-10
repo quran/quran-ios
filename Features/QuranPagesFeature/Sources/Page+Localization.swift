@@ -12,18 +12,7 @@ import QuranTextKit
 
 extension Page {
     public func suraNames() -> MultipartText {
-        let suras = verses.map(\.sura).orderedUnique()
-        let textArray: [MultipartText] = suras.map { "\(sura: $0)" }
-
-        var result: MultipartText = ""
-        for (index, text) in textArray.enumerated() {
-            if index == 0 {
-                result.append(text)
-            } else {
-                result.append(" · \(text)")
-            }
-        }
-        return result
+        "\(suras: suras)"
     }
 }
 

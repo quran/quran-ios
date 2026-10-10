@@ -610,12 +610,8 @@ private func featuresTargets() -> [[Target]] {
 
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [
             "BatchDownloader",
-            "Localization",
             "Analytics",
             "QuranAnnotations",
-            "QuranTextKit",
-            "NoorUI",
-            "UIx",
         ]),
 
         target(type, name: "ReciterListFeature", hasTests: false, dependencies: [

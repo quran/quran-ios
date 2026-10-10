@@ -40,4 +40,11 @@ final class MultipartTextLocalizationTests: XCTestCase {
 
         XCTAssertEqual(result.rawValue(locale: Locale(identifier: "en")), "second / first / second")
     }
+
+    func test_surasInterpolation_separatesEverySuraName() {
+        let suras = Quran.hafsMadani1405.pages[292].suras
+        let text: MultipartText = "\(suras: suras, nameStyle: .compact)"
+
+        XCTAssertEqual(text.rawValue(locale: Locale(identifier: "en")), "Al-Isrāʾ · Al-Kahf")
+    }
 }

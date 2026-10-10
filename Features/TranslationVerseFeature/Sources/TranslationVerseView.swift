@@ -64,7 +64,7 @@ struct TranslationVerseView: View {
     private func content(for verse: AyahNumber) -> some View {
         #if QURAN_SYNC
         // This standalone verse sheet has no ayah-menu presentation.
-        ContentTranslationView(viewModel: viewModel.translationViewModel(for: verse), onAyahNumberTapped: { _, _ in })
+        ContentTranslationView(viewModel: viewModel.translationViewModel(for: verse), onAyahNumberTapped: nil)
         #else
         ContentTranslationView(viewModel: viewModel.translationViewModel(for: verse))
         #endif

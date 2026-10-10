@@ -16,16 +16,17 @@ public struct QuranVerseNumber: View {
     @ScaledMetric(relativeTo: .footnote) private var horizontalPadding = 12
     @ScaledMetric(relativeTo: .footnote) private var verticalPadding = 6
     @ScaledMetric(relativeTo: .footnote) private var spacing = 8
-    @ScaledMetric(relativeTo: .footnote) private var annotationSize = 13
+    @ScaledMetric(relativeTo: .footnote) private var dividerHeight = 13
 
     let verse: AyahNumber
 
     #if QURAN_SYNC
     private let annotations: Set<AyahAnnotation>
-    private let onTapped: (CGPoint) -> Void
+    private let onTapped: ((CGPoint) -> Void)?
     @State private var capsuleFrame: CGRect = .zero
 
-    public init(verse: AyahNumber, annotations: Set<AyahAnnotation>, onTapped: @escaping (CGPoint) -> Void) {
+    /// A `nil` `onTapped` shows the capsule as a plain label.
+    public init(verse: AyahNumber, annotations: Set<AyahAnnotation>, onTapped: ((CGPoint) -> Void)?) {
         self.verse = verse
         self.annotations = annotations
         self.onTapped = onTapped
@@ -46,15 +47,19 @@ public struct QuranVerseNumber: View {
     @ViewBuilder
     private var content: some View {
         #if QURAN_SYNC
-        Button {
-            onTapped(CGPoint(x: capsuleFrame.midX, y: capsuleFrame.midY))
-        } label: {
+        if let onTapped {
+            Button {
+                onTapped(CGPoint(x: capsuleFrame.midX, y: capsuleFrame.midY))
+            } label: {
+                capsule
+                    .onGlobalFrameChanged { capsuleFrame = $0 }
+                    .minimumTouchTarget()
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("translation-ayah-number-\(verse.sura.suraNumber)-\(verse.ayah)")
+        } else {
             capsule
-                .onGlobalFrameChanged { capsuleFrame = $0 }
-                .minimumTouchTarget()
         }
-        .buttonStyle(.plain)
-        .accessibilityIdentifier("translation-ayah-number-\(verse.sura.suraNumber)-\(verse.ayah)")
         #else
         capsule
         #endif
@@ -66,9 +71,9 @@ public struct QuranVerseNumber: View {
             #if QURAN_SYNC
             if !annotations.isEmpty {
                 Divider()
-                    .frame(height: annotationSize)
+                    .frame(height: dividerHeight)
                 ForEach(annotations.ordered) { annotation in
-                    AyahAnnotationIcon(annotation: annotation, size: annotationSize)
+                    AyahAnnotationIcon(annotation: annotation)
                 }
             }
             #endif

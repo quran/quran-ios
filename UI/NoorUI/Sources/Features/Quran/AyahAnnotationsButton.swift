@@ -43,7 +43,7 @@ private struct AyahAnnotationsLabel: View {
     var body: some View {
         HStack(spacing: height * 0.14) {
             ForEach(annotations.ordered) { annotation in
-                AyahAnnotationIcon(annotation: annotation, size: height * 0.7)
+                AyahAnnotationIcon(annotation: annotation)
             }
         }
         .font(.system(size: height * 0.48, weight: .semibold))

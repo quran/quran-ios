@@ -2,17 +2,15 @@
 import QuranAnnotations
 import SwiftUI
 
+/// An annotation's SF Symbol, sized by the surrounding font so every annotation matches.
 struct AyahAnnotationIcon: View {
     let annotation: AyahAnnotation
-    let size: CGFloat
 
     var body: some View {
         Group {
             switch annotation {
             case .readingBookmark(let bookmark):
-                Image(uiImage: ReadingBookmarkIcon.image(style: .filled))
-                    .resizable()
-                    .scaledToFit()
+                NoorSystemImage.bookmark.image
                     .foregroundStyle(bookmark.swiftUIColor)
             case .collection:
                 NoorSystemImage.folder.image
@@ -23,7 +21,6 @@ struct AyahAnnotationIcon: View {
             }
         }
         .symbolRenderingMode(.monochrome)
-        .frame(width: size, height: size)
         .accessibilityLabel(annotation.accessibilityLabel)
     }
 }

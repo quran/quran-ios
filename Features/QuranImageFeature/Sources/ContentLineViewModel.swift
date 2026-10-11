@@ -87,6 +87,10 @@ final class ContentLineViewModel: ObservableObject {
         overlays.versesByHighlights().mapValues { Color($0) }
     }
 
+    var focusedVerses: Set<AyahNumber>? {
+        overlays.focusedVerses
+    }
+
     #if QURAN_SYNC
     var annotationsHidden: Bool { overlays.annotationsHidden }
 

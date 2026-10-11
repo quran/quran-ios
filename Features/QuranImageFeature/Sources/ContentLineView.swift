@@ -30,6 +30,7 @@ struct ContentLineView: View {
             scrollToVerse: viewModel.scrollToVerse,
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
+            focusedVerses: viewModel.focusedVerses,
             ayahAnnotations: viewModel.ayahAnnotations,
             annotationsHidden: viewModel.annotationsHidden,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
@@ -47,6 +48,7 @@ struct ContentLineView: View {
             scrollToVerse: viewModel.scrollToVerse,
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
+            focusedVerses: viewModel.focusedVerses,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
             chromeStyle: viewModel.chromeStyle,
             imageRenderingMode: viewModel.imageRenderingMode,
@@ -77,6 +79,7 @@ private struct ContentLineViewBody: View {
     let scrollToVerse: AyahNumber?
     let wordFrames: WordFrameCollection
     let highlightColorsByVerse: [AyahNumber: Color]
+    let focusedVerses: Set<AyahNumber>?
     #if QURAN_SYNC
     let ayahAnnotations: [AyahNumber: Set<AyahAnnotation>]
     let annotationsHidden: Bool
@@ -132,6 +135,7 @@ private struct ContentLineViewBody: View {
 
                 sidelines(layout)
                 suraHeaders(layout)
+                focusDim(layout)
                 highlights(layout)
                 ayahMarkers(layout)
             }
@@ -177,6 +181,17 @@ private struct ContentLineViewBody: View {
                 SuraHeaderView(tint: chromePalette.header.foreground)
                     .placed(in: placement.frame)
             }
+        }
+    }
+
+    @ViewBuilder
+    private func focusDim(_ layout: LinePageLayout) -> some View {
+        if let focusedVerses {
+            QuranFocusDim(
+                cutouts: layout.highlightRects
+                    .filter { focusedVerses.contains($0.ayah) }
+                    .map(\.rect)
+            )
         }
     }
 

@@ -135,9 +135,9 @@ private struct ContentLineViewBody: View {
 
                 sidelines(layout)
                 suraHeaders(layout)
-                focusDim(layout)
                 highlights(layout)
                 ayahMarkers(layout)
+                focusDim(layout)
             }
         }
         .frame(

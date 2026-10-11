@@ -102,6 +102,15 @@ extension TranslatorText: View {
     }
 }
 
+extension TranslationItemId {
+    func isDimmed(by focusedVerses: Set<AyahNumber>?) -> Bool {
+        guard let focusedVerses, let ayah else {
+            return false
+        }
+        return !focusedVerses.contains(ayah)
+    }
+}
+
 extension TranslationItem {
     #if QURAN_SYNC
     func view(
@@ -117,16 +126,6 @@ extension TranslationItem {
     #endif
 
     private static let dimmedOpacity = 0.25
-
-    private func isDimmed(by focusedVerses: Set<AyahNumber>?) -> Bool {
-        guard let focusedVerses else {
-            return false
-        }
-        guard let ayah = id.ayah else {
-            return true
-        }
-        return !focusedVerses.contains(ayah)
-    }
 
     private func content(
         focusedVerses: Set<AyahNumber>?,
@@ -159,7 +158,7 @@ extension TranslationItem {
         .listRowInsets(.zero)
         .listRowBackground(Color.clear)
         .background(color)
-        .opacity(isDimmed(by: focusedVerses) ? Self.dimmedOpacity : 1)
+        .opacity(id.isDimmed(by: focusedVerses) ? Self.dimmedOpacity : 1)
         .trackingTarget(item: id)
     }
 }

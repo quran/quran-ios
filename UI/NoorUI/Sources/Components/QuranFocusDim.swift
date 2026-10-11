@@ -4,7 +4,6 @@
 
 import SwiftUI
 
-/// Covers a Quran page with its theme background, leaving the `cutouts` fully visible.
 public struct QuranFocusDim: View {
     // MARK: Lifecycle
 
@@ -13,8 +12,6 @@ public struct QuranFocusDim: View {
     }
 
     // MARK: Public
-
-    public static let opacity = 0.75
 
     public var body: some View {
         Rectangle()
@@ -28,6 +25,8 @@ public struct QuranFocusDim: View {
     }
 
     // MARK: Private
+
+    private static let opacity = 0.75
 
     @Environment(\.themeColors) private var themeColors
 

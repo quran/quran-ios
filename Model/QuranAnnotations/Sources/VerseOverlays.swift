@@ -41,10 +41,6 @@ public struct VerseOverlays: Equatable {
         return playingVerses.isEmpty ? nil : Set(playingVerses)
     }
 
-    public func isDimmed(_ verse: AyahNumber) -> Bool {
-        focusedVerses.map { !$0.contains(verse) } ?? false
-    }
-
     // MARK: Private
 
     private var restrictedFocusedVerses: Set<AyahNumber>?

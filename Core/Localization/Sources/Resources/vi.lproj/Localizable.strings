@@ -79,7 +79,7 @@
 "menu.arabicFontSize" = "Cỡ chữ Quran";
 "menu.twoPages" = "2 trang cạnh nhau (xoay ngang)";
 "menu.verticalScrolling" = "Cuộn dọc";
-"menu.focusMode" = "Tập trung vào ayah đang đọc";
+"menu.focusMode" = "Làm mờ các ayah khác khi đang đọc";
 "menu.linePageDividers" = "Đường phân cách dòng";
 "menu.linePageSidelines" = "Đường bên";
 "menu.ayahIndicators" = "Chỉ báo Ayah";

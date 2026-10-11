@@ -95,7 +95,7 @@
 "menu.twoPages" = "2 бет жанасып (альбомдық бетте)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Тік жылжыту";
-"menu.focusMode" = "Оқылып жатқан аятқа назар аудару";
+"menu.focusMode" = "Оқу кезінде басқа аяттарды күңгірттеу";
 "menu.linePageDividers" = "Жол бөлгіштері";
 "menu.linePageSidelines" = "Бүйір сызықтар";
 "menu.ayahIndicators" = "Аят белгішелері";

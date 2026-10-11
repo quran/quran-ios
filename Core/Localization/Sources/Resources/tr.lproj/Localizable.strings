@@ -84,7 +84,7 @@
 "menu.twoPages" = "Yan yana 2 sayfa (yatayda)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Dikey kaydırma";
-"menu.focusMode" = "Okunan ayete odaklan";
+"menu.focusMode" = "Okuma sırasında diğer ayetleri soluklaştır";
 "menu.linePageDividers" = "Satır ayırıcıları";
 "menu.linePageSidelines" = "Yan çizgiler";
 "menu.ayahIndicators" = "Âyet göstergeleri";

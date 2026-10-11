@@ -127,7 +127,7 @@
 "menu.twoPages" = "Yonma-yon 2 sahifa (gorizontal formatda)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Vertikal aylantirish";
-"menu.focusMode" = "O‘qilayotgan oyatga e’tibor qaratish";
+"menu.focusMode" = "Tilovat paytida boshqa oyatlarni xiralashtirish";
 "menu.linePageDividers" = "Qator ajratgichlari";
 "menu.linePageSidelines" = "Yon chiziqlar";
 "menu.ayahIndicators" = "Oyat belgilari";

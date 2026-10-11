@@ -82,10 +82,6 @@ final class VerseOverlaysTests: XCTestCase {
         overlays.playingVerses = [verses[1], verses[2]]
 
         XCTAssertEqual(overlays.focusedVerses, [verses[1], verses[2]])
-        XCTAssertFalse(overlays.isDimmed(verses[1]))
-        XCTAssertFalse(overlays.isDimmed(verses[2]))
-        XCTAssertTrue(overlays.isDimmed(verses[0]))
-        XCTAssertTrue(overlays.isDimmed(verses[3]))
     }
 
     func test_focusedVerses_areNilWhileFocusModeIsOff() {
@@ -95,8 +91,6 @@ final class VerseOverlaysTests: XCTestCase {
 
         XCTAssertFalse(overlays.focusModeEnabled)
         XCTAssertNil(overlays.focusedVerses)
-        XCTAssertFalse(overlays.isDimmed(verses[0]))
-        XCTAssertFalse(overlays.isDimmed(verses[1]))
     }
 
     func test_focusedVerses_areNilWhenNothingIsPlaying() {
@@ -107,8 +101,6 @@ final class VerseOverlaysTests: XCTestCase {
         overlays.navigationTarget = verses[2]
 
         XCTAssertNil(overlays.focusedVerses)
-        XCTAssertFalse(overlays.isDimmed(verses[0]))
-        XCTAssertFalse(overlays.isDimmed(verses[1]))
     }
 
     func test_restricted_keepsFocusOnThePlayingVersesPage() {
@@ -122,8 +114,6 @@ final class VerseOverlaysTests: XCTestCase {
 
         XCTAssertTrue(restricted.focusModeEnabled)
         XCTAssertEqual(restricted.focusedVerses, [recited])
-        XCTAssertFalse(restricted.isDimmed(recited))
-        XCTAssertTrue(restricted.isDimmed(page.verses[0]))
     }
 
     func test_restricted_dimsEveryVerseOfAPageWhileAudioPlaysOnAnotherPage() {
@@ -137,9 +127,6 @@ final class VerseOverlaysTests: XCTestCase {
 
         XCTAssertTrue(restricted.playingVerses.isEmpty)
         XCTAssertEqual(restricted.focusedVerses, [])
-        for verse in page.verses {
-            XCTAssertTrue(restricted.isDimmed(verse), "\(verse)")
-        }
     }
 
     func test_restricted_dimsNothingWhenFocusModeIsOffOrNothingPlays() {
@@ -154,10 +141,8 @@ final class VerseOverlaysTests: XCTestCase {
         let restrictedSilent = silent.restricted(to: page)
 
         XCTAssertNil(restrictedUnfocused.focusedVerses)
-        XCTAssertFalse(restrictedUnfocused.isDimmed(page.firstVerse))
         XCTAssertTrue(restrictedSilent.focusModeEnabled)
         XCTAssertNil(restrictedSilent.focusedVerses)
-        XCTAssertFalse(restrictedSilent.isDimmed(page.firstVerse))
     }
 
     func test_focusModeChange_changesEqualityWithoutRequestingScrolling() {

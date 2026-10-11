@@ -74,7 +74,7 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         selectedIndex = 0
         homeTab.popToRootViewController(animated: false)
 
-        switch deepLink {
+        switch deepLink.target {
         case .sura(let sura):
             homeTab.quranNavigator.navigateTo(page: sura.page, lastPage: nil)
         case .ayah(let ayah):

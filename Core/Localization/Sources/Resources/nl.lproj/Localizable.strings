@@ -79,6 +79,7 @@
 "menu.arabicFontSize" = "Koran Grootte";
 "menu.twoPages" = "2 pagina's naast elkaar (liggend)";
 "menu.verticalScrolling" = "Verticaal scrollen";
+"menu.focusMode" = "Focus op de gereciteerde ayah";
 "menu.linePageDividers" = "Regelscheiding";
 "menu.linePageSidelines" = "Zijlijnen";
 "menu.ayahIndicators" = "Ayah-indicatoren";

@@ -109,6 +109,7 @@
 "menu.twoPages" = "2 صفحه کنار هم (در حالت افقی)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "اسکرول عمودی";
+"menu.focusMode" = "تمرکز بر آیه در حال تلاوت";
 "menu.linePageDividers" = "جداکننده‌های سطر";
 "menu.linePageSidelines" = "خطوط کناری";
 "menu.ayahIndicators" = "نشانگرهای آیه";

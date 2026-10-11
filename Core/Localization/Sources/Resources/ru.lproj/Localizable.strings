@@ -109,6 +109,7 @@
 "menu.twoPages" = "2 страницы рядом (в альбомном формате)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Вертикальная прокрутка";
+"menu.focusMode" = "Фокус на читаемом аяте";
 "menu.linePageDividers" = "Разделители строк";
 "menu.linePageSidelines" = "Боковые линии";
 "menu.ayahIndicators" = "Значки аятов";

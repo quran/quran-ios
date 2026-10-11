@@ -93,6 +93,7 @@
 "menu.arabicFontSize" = "Quran Size";
 "menu.twoPages" = "2 pages side-by-side (in landscape)";
 "menu.verticalScrolling" = "Vertical scrolling";
+"menu.focusMode" = "Focus on recited ayah";
 "menu.linePageDividers" = "Line dividers";
 "menu.linePageSidelines" = "Side lines";
 "menu.ayahIndicators" = "Ayah indicators";

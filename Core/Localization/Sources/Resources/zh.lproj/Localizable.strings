@@ -132,6 +132,7 @@
 "menu.twoPages" = "2页并排（横向模式）";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "垂直滚动";
+"menu.focusMode" = "聚焦正在诵读的经文";
 "menu.linePageDividers" = "行分隔线";
 "menu.linePageSidelines" = "侧边线";
 "menu.ayahIndicators" = "经文标识";

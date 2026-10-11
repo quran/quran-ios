@@ -127,6 +127,7 @@
 "menu.twoPages" = "2 páginas una al lado de la otra (en paisaje)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Desplazamiento vertical";
+"menu.focusMode" = "Enfocar la aleya recitada";
 "menu.linePageDividers" = "Separadores de línea";
 "menu.linePageSidelines" = "Líneas laterales";
 "menu.ayahIndicators" = "Indicadores de versículos";

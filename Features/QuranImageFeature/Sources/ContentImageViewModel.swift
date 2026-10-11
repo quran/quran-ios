@@ -64,7 +64,8 @@ class ContentImageViewModel: ObservableObject {
             drawsAyahNumbersAndSuraHeaders: reading.drawsAyahNumbersAndSuraHeaders,
             wordFrames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
             verseHighlights: overlays.versesByHighlights().mapValues { Color($0) },
-            wordHighlight: overlays.pointedWord
+            wordHighlight: overlays.pointedWord,
+            focusedVerses: overlays.focusedVerses
         )
     }
 

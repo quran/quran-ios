@@ -29,12 +29,6 @@ final class TranslationPageSectionTests: XCTestCase {
         XCTAssertNil(section.scrollTarget(for: .arabic(otherPage.firstVerse)))
     }
 
-    func testScrollTargetIsNilWithoutTarget() {
-        let section = makeSection(page: Quran.hafsMadani1405.pages[1])
-
-        XCTAssertNil(section.scrollTarget(for: nil))
-    }
-
     func testScrollTargetIsNilForEmptySection() {
         let page = Quran.hafsMadani1405.pages[1]
         let section = TranslationPageSection(page: page, items: [])
@@ -76,6 +70,35 @@ final class TranslationPageSectionTests: XCTestCase {
         let sut = makeSUT()
 
         XCTAssertNil(sut.pageSection(quranFont: .uthmanicHafs))
+    }
+
+    func testPageSectionIsNilWhenLoadedTranslationsMismatchSelection() {
+        let verse = Quran.hafsMadani1405.pages[1].firstVerse
+        let sut = makeSUT()
+        sut.verses = [verse]
+        sut.commitLoadedContent(
+            verses: [verse],
+            translations: [makeTranslation(id: 1), makeTranslation(id: 2)],
+            verseTexts: [verse: makeVerseText(translationCount: 1)]
+        )
+
+        XCTAssertNil(sut.pageSection(quranFont: .uthmanicHafs))
+    }
+
+    func testPageSectionWithoutHeaderAndFooterKeepsVerseRows() throws {
+        let verse = Quran.hafsMadani1405.pages[1].firstVerse
+        let sut = makeLoadedSUT(verse: verse)
+        sut.showHeaderAndFooter = false
+
+        let section = try XCTUnwrap(sut.pageSection(quranFont: .uthmanicHafs))
+
+        XCTAssertEqual(section.page, verse.page)
+        XCTAssertFalse(section.items.isEmpty)
+        XCTAssertFalse(section.items.contains { $0.id == .pageHeader(verse.page) })
+        XCTAssertFalse(section.items.contains { $0.id == .pageFooter(verse.page) })
+        XCTAssertNotEqual(section.items.first?.id, .pageHeader(verse.page))
+        XCTAssertEqual(section.scrollTarget(for: .arabic(verse)), .arabic(verse))
+        XCTAssertNil(section.scrollTarget(for: .pageHeader(verse.page)))
     }
 
     func testPageSectionsOfDifferentPagesHaveDifferentIds() throws {

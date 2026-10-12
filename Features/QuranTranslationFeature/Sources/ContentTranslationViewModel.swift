@@ -266,6 +266,17 @@ public final class ContentTranslationViewModel: ObservableObject {
         return items
     }
 
+    func pageSection(quranFont: QuranFont) -> TranslationPageSection? {
+        guard let page = verseTexts.first?.key.page else {
+            return nil
+        }
+        let pageItems = items(quranFont: quranFont)
+        guard !pageItems.isEmpty else {
+            return nil
+        }
+        return TranslationPageSection(page: page, items: pageItems)
+    }
+
     func load() async {
         do {
             let requestedVerses = verses

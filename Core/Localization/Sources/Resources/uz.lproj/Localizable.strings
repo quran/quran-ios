@@ -364,6 +364,7 @@
 "diagnostics.enable_debug_logs" = "Tuzatish qaydini yoqish";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "Bu sozlama ilovani keyingi qayta ishga tushirilganda amalga oshadi.";
+"diagnostics.enable_debug_logs.always_on" = "Bu versiyada tuzatish qaydi doim yoqilgan.";
 
 
 // MARK: - What's new

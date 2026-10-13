@@ -322,6 +322,7 @@
 "diagnostics.share_app_logs" = "مشاركة سجلات التطبيق";
 "diagnostics.enable_debug_logs" = "تمكين تسجيل التصحيح";
 "diagnostics.enable_debug_logs.details" = "سيكون للإعداد تأثير عند إعادة تشغيل التطبيق التالية.";
+"diagnostics.enable_debug_logs.always_on" = "تسجيل التصحيح مفعّل دائمًا في هذا الإصدار.";
 
 
 // MARK: - What's new

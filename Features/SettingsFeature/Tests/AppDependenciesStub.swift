@@ -54,6 +54,7 @@ struct AppDependenciesStub: AppDependencies {
     var filesAppHost: URL { URL(string: "https://files.quran.com")! }
     var quranProfileURL: URL { URL(string: "https://quran.com/profile")! }
     var logsDirectory: URL { URL(fileURLWithPath: "/tmp/logs") }
+    var isDebugLoggingAlwaysEnabled: Bool { false }
     var databasesDirectory: URL { URL(fileURLWithPath: "/tmp") }
     var supportsCloudKit: Bool { false }
     var downloadManager: DownloadManager { fatalError("Unused in tests") }

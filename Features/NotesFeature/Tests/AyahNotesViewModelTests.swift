@@ -25,14 +25,14 @@ final class AyahNotesViewModelTests: XCTestCase {
     }
 
     func test_start_observesEveryNoteIntersectingTheSelectedAyahs() async throws {
-        try await noteService.createNote(body: "First", startAyah: ayah(1), endAyah: ayah(2))
+        try await noteService.createNote(body: "First note", startAyah: ayah(1), endAyah: ayah(2))
         try await noteService.createNote(body: "Second", startAyah: ayah(2), endAyah: ayah(3))
         try await noteService.createNote(body: "Unrelated", startAyah: ayah(4), endAyah: ayah(4))
         let sut = makeSUT(verses: [ayah(2)])
         let observed = expectation(description: "Observes intersecting notes")
         var didFulfill = false
         let observation = sut.$notes.sink { notes in
-            guard !didFulfill, Set(notes.map(\.text)) == ["First", "Second"] else {
+            guard !didFulfill, Set(notes.map(\.text)) == ["First note", "Second"] else {
                 return
             }
             didFulfill = true
@@ -42,13 +42,13 @@ final class AyahNotesViewModelTests: XCTestCase {
         let task = Task { await sut.start() }
         await fulfillment(of: [observed], timeout: 2)
 
-        XCTAssertEqual(Set(sut.notes.map(\.text)), ["First", "Second"])
+        XCTAssertEqual(Set(sut.notes.map(\.text)), ["First note", "Second"])
         task.cancel()
         observation.cancel()
     }
 
     func test_deleteNote_removesOnlyTheSelectedNote() async throws {
-        try await noteService.createNote(body: "Keep", startAyah: ayah(1), endAyah: ayah(1))
+        try await noteService.createNote(body: "Keep this note", startAyah: ayah(1), endAyah: ayah(1))
         try await noteService.createNote(body: "Delete", startAyah: ayah(1), endAyah: ayah(1))
         let notes = try await storedNotes()
         let noteToDelete = try XCTUnwrap(notes.first { $0.text == "Delete" })
@@ -67,7 +67,7 @@ final class AyahNotesViewModelTests: XCTestCase {
         await operation()
 
         let remainingNotes = try await storedNotes()
-        XCTAssertEqual(remainingNotes.map(\.text), ["Keep"])
+        XCTAssertEqual(remainingNotes.map(\.text), ["Keep this note"])
         XCTAssertNil(sut.error)
         startTask.cancel()
         observation.cancel()

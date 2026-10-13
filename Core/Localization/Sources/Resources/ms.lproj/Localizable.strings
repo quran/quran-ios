@@ -345,6 +345,7 @@
 "diagnostics.enable_debug_logs" = "Aktifkan pencatatan penyahpepijatan";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "Tetapan akan berkuatkuasa pada mulanya semula aplikasi seterusnya.";
+"diagnostics.enable_debug_logs.always_on" = "Pencatatan penyahpepijatan sentiasa aktif dalam binaan ini.";
 
 
 // MARK: - What's new

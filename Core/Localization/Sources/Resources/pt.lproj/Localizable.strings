@@ -363,6 +363,7 @@
 "diagnostics.enable_debug_logs" = "Habilitar registro de depuração";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "A configuração entrará em vigor no próximo reinício do aplicativo.";
+"diagnostics.enable_debug_logs.always_on" = "O registro de depuração está sempre ativado nesta versão.";
 
 
 // MARK: - What's new

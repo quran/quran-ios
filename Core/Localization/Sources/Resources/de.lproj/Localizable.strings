@@ -362,6 +362,7 @@
 "diagnostics.enable_debug_logs" = "Debug-Logging aktivieren";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "Die Einstellung wird beim nächsten Neustart der App wirksam.";
+"diagnostics.enable_debug_logs.always_on" = "Debug-Logging ist in diesem Build immer aktiv.";
 
 
 // MARK: - What's new

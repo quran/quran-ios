@@ -17,6 +17,7 @@ struct DiagnosticsView: View {
         DiagnosticsViewUI(
             error: $viewModel.error,
             enableDebugLogging: $viewModel.enableDebugLogging,
+            enableDebugLoggingFooter: viewModel.enableDebugLoggingFooter,
             shareLog: { viewModel.shareLogs() }
         )
     }
@@ -25,6 +26,7 @@ struct DiagnosticsView: View {
 private struct DiagnosticsViewUI: View {
     @Binding var error: Error?
     @Binding var enableDebugLogging: Bool
+    let enableDebugLoggingFooter: String
     let shareLog: Action
 
     var body: some View {
@@ -35,7 +37,7 @@ private struct DiagnosticsViewUI: View {
                     .listRowBackground(Color.clear)
             }
 
-            NoorBasicSection(footer: l("diagnostics.enable_debug_logs.details")) {
+            NoorBasicSection(footer: enableDebugLoggingFooter) {
                 Toggle(isOn: $enableDebugLogging) {
                     Text(l("diagnostics.enable_debug_logs"))
                 }
@@ -52,7 +54,7 @@ private struct DiagnosticsViewUI: View {
     }
 }
 
-struct DiagnosticsView_Previews: PreviewProvider {
+#Preview {
     struct Container: View {
         @State var error: Error?
         @State var enableDebugLogging = true
@@ -61,16 +63,10 @@ struct DiagnosticsView_Previews: PreviewProvider {
             DiagnosticsViewUI(
                 error: $error,
                 enableDebugLogging: $enableDebugLogging,
+                enableDebugLoggingFooter: l("diagnostics.enable_debug_logs.details"),
                 shareLog: {}
             )
         }
     }
-
-    // MARK: Internal
-
-    static var previews: some View {
-        VStack {
-            Container()
-        }
-    }
+    return Container()
 }

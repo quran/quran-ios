@@ -26,6 +26,7 @@ public struct DiagnosticsBuilder {
         )
         let viewModel = DiagnosticsViewModel(
             diagnosticsService: service,
+            isDebugLoggingAlwaysEnabled: container.isDebugLoggingAlwaysEnabled,
             navigationController: navigationController
         )
         let view = DiagnosticsView(viewModel: viewModel)

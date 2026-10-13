@@ -307,6 +307,7 @@
 "diagnostics.enable_debug_logs" = "Hata ayıklama kaydını etkinleştir";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "Ayar, uygulamanın bir sonraki yeniden başlatılmasında etkili olacak.";
+"diagnostics.enable_debug_logs.always_on" = "Bu derlemede hata ayıklama kaydı her zaman açıktır.";
 
 
 // MARK: - What's new

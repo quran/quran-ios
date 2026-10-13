@@ -363,6 +363,7 @@
 "diagnostics.enable_debug_logs" = "启用调试日志";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "该设置将在应用程序下次重启时生效。";
+"diagnostics.enable_debug_logs.always_on" = "此版本始终启用调试日志。";
 
 
 // MARK: - What's new

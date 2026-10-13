@@ -276,6 +276,7 @@
 "diagnostics.enable_debug_logs" = "Kích hoạt ghi nhật ký gỡ lỗi";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "Cài đặt này sẽ có hiệu lực khi ứng dụng được khởi động lại lần tiếp theo.";
+"diagnostics.enable_debug_logs.always_on" = "Ghi nhật ký gỡ lỗi luôn được bật trong bản dựng này.";
 
 
 // MARK: - What's new

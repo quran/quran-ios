@@ -279,6 +279,7 @@
 "diagnostics.enable_debug_logs" = "Debug-logging inschakelen";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "De instelling wordt van kracht bij de volgende herstart van de app.";
+"diagnostics.enable_debug_logs.always_on" = "Debug-logging staat in deze build altijd aan.";
 
 
 // MARK: - What's new

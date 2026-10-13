@@ -346,6 +346,7 @@
 "diagnostics.enable_debug_logs" = "Қателерді түзету журналын қосу";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "Бұл параметр қосымшаны келесі қайта іске қосқанда іске асады.";
+"diagnostics.enable_debug_logs.always_on" = "Бұл нұсқада қателерді түзету журналы әрқашан қосулы.";
 
 
 // MARK: - What's new

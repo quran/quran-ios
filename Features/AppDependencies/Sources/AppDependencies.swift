@@ -32,6 +32,7 @@ public protocol AppDependencies {
     var filesAppHost: URL { get }
     var quranProfileURL: URL { get }
     var logsDirectory: URL { get }
+    var isDebugLoggingAlwaysEnabled: Bool { get }
     var databasesDirectory: URL { get }
 
     var supportsCloudKit: Bool { get }

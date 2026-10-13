@@ -362,6 +362,7 @@
 "diagnostics.enable_debug_logs" = "Activer la journalisation de débogage";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "Le paramètre prendra effet lors du prochain redémarrage de l'application.";
+"diagnostics.enable_debug_logs.always_on" = "La journalisation de débogage est toujours activée dans cette version.";
 
 
 // MARK: - What's new

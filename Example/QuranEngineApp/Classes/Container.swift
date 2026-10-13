@@ -87,6 +87,7 @@ class Container: AppDependencies {
     var appHost: URL { Constant.appHost }
     var databasesDirectory: URL { Constant.databasesURL }
     var logsDirectory: URL { FileManager.documentsURL.appendingPathComponent("logs") }
+    var isDebugLoggingAlwaysEnabled: Bool { true }
 
     var supportsCloudKit: Bool { false }
 

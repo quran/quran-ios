@@ -220,6 +220,8 @@
 "bookmarks.collections.mine" = "My Collections";
 "bookmarks.collections.new" = "New Collection...";
 "bookmarks.collections.new.placeholder" = "Collection name";
+"bookmarks.collections.name.empty" = "Collection names can't be empty.";
+"bookmarks.collections.name.too-long" = "Collection names can't be longer than %d characters.";
 "bookmarks.collections.rename" = "Rename";
 "bookmarks.collections.delete.confirmation.title" = "Delete Collection?";
 "bookmarks.collections.delete.confirmation.message" = "This collection contains bookmarks. Are you sure you want to delete it?";
@@ -396,6 +398,8 @@
 
 "notes.minimum-length.alert.title" = "Note is too short";
 "notes.minimum-length.alert.body" = "Notes must be at least %d characters.";
+"notes.maximum-length.alert.title" = "Note is too long";
+"notes.maximum-length.alert.body" = "Notes can't be longer than %d characters.";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "verse %@";

@@ -515,6 +515,8 @@
 "bookmarks.collections.new" = "يېڭى توپلام...";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.new.placeholder" = "توپلام نامى";
+"bookmarks.collections.name.empty" = "توپلام نامى بوش بولسا بولمايدۇ.";
+"bookmarks.collections.name.too-long" = "توپلام نامى %d ھەرپتىن ئېشىپ كەتمەسلىكى كېرەك.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "ئايەتلەرنى تېما، دۇئا ياكى يادلاش پىلانى بويىچە رەتلەش ئۈچۈن توپلام قۇرۇڭ.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -581,6 +583,8 @@
 "notes.minimum-length.alert.body" = "خاتىرە كەم دېگەندە %d ھەرپ بولۇشى كېرەك.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.minimum-length.alert.title" = "خاتىرە بەك قىسقا";
+"notes.maximum-length.alert.title" = "خاتىرە بەك ئۇزۇن";
+"notes.maximum-length.alert.body" = "خاتىرە %d ھەرپتىن ئېشىپ كەتمەسلىكى كېرەك.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.new" = "يېڭى خاتىرە";
 

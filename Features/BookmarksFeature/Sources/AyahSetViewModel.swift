@@ -1,5 +1,6 @@
 #if QURAN_SYNC
 import Combine
+import QuranAnnotations
 import QuranKit
 import QuranText
 import QuranTextKit
@@ -37,6 +38,7 @@ final class AyahSetViewModel: ObservableObject {
     @Published var isPresentingDeleteConfirmation = false
     @Published var isPresentingRename = false
     @Published var pendingName = ""
+    @Published private(set) var pendingNameError: TextLengthLimitError?
 
     func start() async {
         do {
@@ -70,6 +72,7 @@ final class AyahSetViewModel: ObservableObject {
             return
         }
         pendingName = content.title
+        pendingNameError = nil
         isPresentingRename = true
     }
 
@@ -86,6 +89,11 @@ final class AyahSetViewModel: ObservableObject {
 
         do {
             try await dataSource.rename(to: name)
+            pendingNameError = nil
+        } catch let error as TextLengthLimitError {
+            logger.info("Bookmarks: collection name rejected. Bound: \(error.bound), limit: \(error.limit)")
+            pendingNameError = error
+            isPresentingRename = true
         } catch {
             self.error = error
         }

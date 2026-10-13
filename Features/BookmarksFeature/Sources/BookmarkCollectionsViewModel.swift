@@ -54,6 +54,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     @Published var isPresentingAddCollection = false
     @Published var isSyncBannerDismissed: Bool
     @Published var newCollectionName = ""
+    @Published private(set) var newCollectionNameError: TextLengthLimitError?
     @Published var readingBookmarks: [PlacedReadingBookmark] = []
 
     var shouldShowSyncBanner: Bool {
@@ -141,6 +142,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     func presentAddCollection() {
         newCollectionName = ""
+        newCollectionNameError = nil
         isPresentingAddCollection = true
     }
 
@@ -152,6 +154,11 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
         do {
             try await ayahBookmarkCollectionService.createCollection(named: name)
+            newCollectionNameError = nil
+        } catch let error as TextLengthLimitError {
+            logger.info("Quran Sync: bookmark collection name rejected. Bound: \(error.bound), limit: \(error.limit)")
+            newCollectionNameError = error
+            isPresentingAddCollection = true
         } catch {
             logger.error("Quran Sync: failed to create bookmark collection: \(error)")
             self.error = error

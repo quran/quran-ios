@@ -67,6 +67,7 @@ final class NoteEditorViewModel {
 
     weak var listener: NoteEditorListener?
     @Published private(set) var reading: Reading
+    @Published private(set) var textLengthLimitError: TextLengthLimitError?
 
     var minimumNoteBodyLength: Int { Self.minimumNoteBodyLength }
 
@@ -100,6 +101,11 @@ final class NoteEditorViewModel {
 
     var shouldAutoSaveOnDismiss: Bool {
         canSubmitNote && hasChanges
+    }
+
+    /// Unsaved text blocks swipe-to-dismiss so the save runs on screen and a rejected save can't lose the text.
+    var allowsInteractiveDismissal: Bool {
+        canDismissNote && !shouldAutoSaveOnDismiss
     }
 
     func fetchNote() async throws -> EditableNote {
@@ -176,6 +182,10 @@ final class NoteEditorViewModel {
                 listener?.dismissNoteEditor()
             }
             return true
+        } catch let error as TextLengthLimitError {
+            logger.info("NoteEditor: note length rejected. Bound: \(error.bound), limit: \(error.limit)")
+            textLengthLimitError = error
+            return false
         } catch {
             crasher.recordError(error, reason: "Failed to set note")
             return false

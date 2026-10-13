@@ -26,7 +26,9 @@ public struct AyahBookmarkCollectionService {
     // MARK: Public
 
     public func createCollection(named name: String) async throws {
-        _ = try await quranDataService.createCollection(named: name)
+        _ = try await mapTextLengthLimit {
+            try await quranDataService.createCollection(named: name)
+        }
     }
 
     public func addAyahBookmarkToCollection(collectionId: String, ayah: AyahNumber) async throws {
@@ -42,7 +44,9 @@ public struct AyahBookmarkCollectionService {
     }
 
     public func renameCollection(id: String, to name: String) async throws {
-        _ = try await quranDataService.updateCollection(id: id, name: name)
+        _ = try await mapTextLengthLimit {
+            try await quranDataService.updateCollection(id: id, name: name)
+        }
     }
 
     public func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {

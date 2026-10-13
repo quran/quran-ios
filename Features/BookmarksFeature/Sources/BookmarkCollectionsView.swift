@@ -149,6 +149,10 @@ private extension View {
             Button(l("bookmarks.collections.add")) {
                 Task { await viewModel.createPendingCollection() }
             }
+        } message: {
+            if let error = viewModel.newCollectionNameError {
+                Text(error.localizedMessage)
+            }
         }
     }
 }

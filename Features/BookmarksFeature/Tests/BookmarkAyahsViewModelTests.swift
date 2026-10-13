@@ -143,6 +143,32 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         ]
     }
 
+    func test_createPendingCollection_keepsTooLongNameAndShowsLimit() async throws {
+        let sut = BookmarkAyahsViewModel(
+            verses: verses,
+            collections: [],
+            analytics: AnalyticsRecorder(),
+            ayahBookmarkCollectionService: makeCollectionService(),
+            ayahHighlightService: makeHighlightService()
+        )
+        let longName = String(repeating: "a", count: 256)
+        sut.presentAddCollection()
+        sut.isPresentingAddCollection = false
+        sut.newCollectionName = longName
+
+        await sut.createPendingCollection()
+
+        XCTAssertEqual(
+            sut.newCollectionNameError,
+            TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)
+        )
+        XCTAssertTrue(sut.isPresentingAddCollection)
+        XCTAssertEqual(sut.newCollectionName, longName)
+        XCTAssertNil(sut.error)
+        let collections = try await storedCollections()
+        XCTAssertEqual(collections.count, 1)
+    }
+
     private func makeFixture() async throws -> (
         collectionService: AyahBookmarkCollectionService,
         highlightService: MobileSyncAyahHighlightService,

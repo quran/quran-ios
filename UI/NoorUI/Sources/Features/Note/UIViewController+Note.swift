@@ -7,6 +7,7 @@
 //
 
 import Localization
+import QuranAnnotations
 import UIKit
 import UIx
 
@@ -42,13 +43,18 @@ extension UIViewController {
     }
 
     public func showNoteMinimumLengthAlert(minimumLength: Int) {
-        let alert = UIAlertController(
+        showNoteLengthAlert(
             title: l("notes.minimum-length.alert.title"),
-            message: lFormat("notes.minimum-length.alert.body", minimumLength),
-            preferredStyle: .alert
+            message: lFormat("notes.minimum-length.alert.body", minimumLength)
         )
-        alert.addAction(UIAlertAction(title: lAndroid("dialog_ok"), style: .default, handler: nil))
-        present(alert, animated: true)
+    }
+
+    public func showNoteLengthLimitAlert(_ error: TextLengthLimitError) {
+        let title = switch error.bound {
+        case .tooShort: l("notes.minimum-length.alert.title")
+        case .tooLong: l("notes.maximum-length.alert.title")
+        }
+        showNoteLengthAlert(title: title, message: error.localizedMessage)
     }
 
     public func addCloudSyncInfo() {
@@ -59,6 +65,12 @@ extension UIViewController {
         ) { [weak self] in
             self?.presentCloudSyncInfo()
         }
+    }
+
+    private func showNoteLengthAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: lAndroid("dialog_ok"), style: .default, handler: nil))
+        present(alert, animated: true)
     }
 
     private func presentCloudSyncInfo() {

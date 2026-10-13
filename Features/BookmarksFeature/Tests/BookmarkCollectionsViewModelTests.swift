@@ -333,6 +333,31 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_createPendingCollection_keepsTooLongNameAndShowsLimit() async throws {
+        let sut = makeSUT()
+        let longName = String(repeating: "a", count: 256)
+        sut.presentAddCollection()
+        sut.isPresentingAddCollection = false
+        sut.newCollectionName = longName
+
+        await sut.createPendingCollection()
+
+        XCTAssertEqual(
+            sut.newCollectionNameError,
+            TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)
+        )
+        XCTAssertTrue(sut.isPresentingAddCollection)
+        XCTAssertEqual(sut.newCollectionName, longName)
+        XCTAssertNil(sut.error)
+        let collections = try await storedCollections()
+        XCTAssertEqual(collections.count, 1)
+
+        sut.presentAddCollection()
+
+        XCTAssertNil(sut.newCollectionNameError)
+        XCTAssertEqual(sut.newCollectionName, "")
+    }
+
     func test_requestDeleteCollection_deletesEmptyCollectionWithoutConfirmation() async throws {
         let service = makeService()
         try await service.createCollection(named: "Personal")

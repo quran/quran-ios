@@ -355,6 +355,7 @@
 "diagnostics.share_app_logs" = "Share app logs";
 "diagnostics.enable_debug_logs" = "Enable debug logging";
 "diagnostics.enable_debug_logs.details" = "The setting will take effect upon the next restart of the app.";
+"diagnostics.enable_debug_logs.always_on" = "Debug logging is always on in this build.";
 
 
 // MARK: - What's new

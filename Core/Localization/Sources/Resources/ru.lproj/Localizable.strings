@@ -362,6 +362,7 @@
 "diagnostics.enable_debug_logs" = "Включить журналирование отладки";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "Настройка вступит в силу при следующем перезапуске приложения.";
+"diagnostics.enable_debug_logs.always_on" = "В этой сборке журналирование отладки всегда включено.";
 
 
 // MARK: - What's new

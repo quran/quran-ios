@@ -365,6 +365,7 @@
 "diagnostics.enable_debug_logs" = "تەكشۈرۈش خاتىرىسىنى يولغا قويۇش";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "بۇ تەڭشەك كىيىنكى قېتىم ئەپ قايتا باشلاشتا ئىشقا ئاشىدۇ.";
+"diagnostics.enable_debug_logs.always_on" = "بۇ نەشرىدە تەكشۈرۈش خاتىرىسى ھەمىشە قوزغىتىلغان.";
 
 
 // MARK: - What's new

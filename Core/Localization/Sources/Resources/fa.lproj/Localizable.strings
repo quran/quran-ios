@@ -364,6 +364,7 @@
 "diagnostics.enable_debug_logs" = "فعال‌سازی ثبت خطاها";
 // Metadata: Translated by ChatGPT; human review required.
 "diagnostics.enable_debug_logs.details" = "این تنظیم در راه‌اندازی مجدد بعدی برنامه اعمال خواهد شد.";
+"diagnostics.enable_debug_logs.always_on" = "ثبت خطاها در این نسخه همیشه فعال است.";
 
 
 // MARK: - What's new

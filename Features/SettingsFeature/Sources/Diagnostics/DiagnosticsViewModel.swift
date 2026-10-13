@@ -6,20 +6,32 @@
 //
 
 import Combine
+import Localization
 import UIKit
 
 @MainActor
 final class DiagnosticsViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(diagnosticsService: DiagnosticsService, navigationController: UINavigationController?) {
+    init(
+        diagnosticsService: DiagnosticsService,
+        isDebugLoggingAlwaysEnabled: Bool,
+        navigationController: UINavigationController?
+    ) {
         self.diagnosticsService = diagnosticsService
+        self.isDebugLoggingAlwaysEnabled = isDebugLoggingAlwaysEnabled
         self.navigationController = navigationController
     }
 
     // MARK: Internal
 
     @Published var error: Error? = nil
+
+    var enableDebugLoggingFooter: String {
+        isDebugLoggingAlwaysEnabled
+            ? l("diagnostics.enable_debug_logs.always_on")
+            : l("diagnostics.enable_debug_logs.details")
+    }
 
     @Published var enableDebugLogging = DiagnosticsPreferences.shared.enableDebugLogging {
         didSet {
@@ -41,5 +53,6 @@ final class DiagnosticsViewModel: ObservableObject {
     // MARK: Private
 
     private let diagnosticsService: DiagnosticsService
+    private let isDebugLoggingAlwaysEnabled: Bool
     private weak var navigationController: UINavigationController?
 }

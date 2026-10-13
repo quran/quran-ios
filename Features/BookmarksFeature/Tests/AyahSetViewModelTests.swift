@@ -124,6 +124,29 @@ final class AyahSetViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_renamePending_keepsTooLongNameAndShowsLimit() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Personal")
+        let collection = try await firstCollection()
+        let sut = makeSUT(collection: collection, service: service)
+        let longName = String(repeating: "a", count: 256)
+        sut.presentRename()
+        sut.isPresentingRename = false
+        sut.pendingName = longName
+
+        await sut.renamePending()
+
+        XCTAssertEqual(
+            sut.pendingNameError,
+            TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)
+        )
+        XCTAssertTrue(sut.isPresentingRename)
+        XCTAssertEqual(sut.pendingName, longName)
+        XCTAssertNil(sut.error)
+        let storedCollection = try await firstCollection()
+        XCTAssertEqual(storedCollection.name, "Personal")
+    }
+
     func test_requestDeleteCollection_deletesEmptyCollectionAndNotifiesListener() async throws {
         let service = makeService()
         try await service.createCollection(named: "Personal")

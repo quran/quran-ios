@@ -513,6 +513,8 @@
 "bookmarks.collections.new" = "新建收藏集…";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.new.placeholder" = "收藏集名称";
+"bookmarks.collections.name.empty" = "收藏集名称不能为空。";
+"bookmarks.collections.name.too-long" = "收藏集名称不能超过 %d 个字符。";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "创建收藏集，按主题、杜阿或背诵计划整理经文。";
 // Metadata: Translated by ChatGPT; human review required.
@@ -579,6 +581,8 @@
 "notes.minimum-length.alert.body" = "笔记至少需要 %d 个字符。";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.minimum-length.alert.title" = "笔记太短";
+"notes.maximum-length.alert.title" = "笔记太长";
+"notes.maximum-length.alert.body" = "笔记不能超过 %d 个字符。";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.new" = "新建笔记";
 

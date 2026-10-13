@@ -125,6 +125,10 @@ private extension View {
             Button(l("bookmarks.collections.rename")) {
                 Task { await viewModel.renamePending() }
             }
+        } message: {
+            if let error = viewModel.pendingNameError {
+                Text(error.localizedMessage)
+            }
         }
     }
 }

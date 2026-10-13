@@ -1,6 +1,7 @@
 #if QURAN_SYNC
 import MobileSync
 import MobileSyncTestSupport
+import QuranAnnotations
 import QuranKit
 import XCTest
 @testable import AnnotationsService
@@ -107,6 +108,38 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
 
         XCTAssertEqual(collections.count, 1)
         XCTAssertTrue(collections[0].isDefault)
+    }
+
+    func test_createCollection_throwsTextLengthLimitErrorForBlankName() async {
+        await assertThrows(TextLengthLimitError(field: .collectionName, bound: .tooShort, limit: 1)) {
+            try await service.createCollection(named: "   ")
+        }
+    }
+
+    func test_renameCollection_throwsTextLengthLimitErrorAndKeepsName() async throws {
+        try await service.createCollection(named: "Personal")
+        let collection = try await storedCollection(named: "Personal")
+
+        await assertThrows(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)) {
+            try await service.renameCollection(id: collection.collection.id, to: String(repeating: "a", count: 256))
+        }
+
+        let stored = try await storedCollection(named: "Personal")
+        XCTAssertEqual(stored.collection.id, collection.collection.id)
+    }
+
+    private func assertThrows(
+        _ expected: TextLengthLimitError,
+        file: StaticString = #filePath,
+        line: UInt = #line,
+        _ operation: () async throws -> Void
+    ) async {
+        do {
+            try await operation()
+            XCTFail("Expected \(expected)", file: file, line: line)
+        } catch {
+            XCTAssertEqual(error as? TextLengthLimitError, expected, file: file, line: line)
+        }
     }
 
     private func storedCollection(

@@ -455,6 +455,8 @@
 "bookmarks.collections.new" = "Yeni koleksiyon...";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.new.placeholder" = "Koleksiyon adı";
+"bookmarks.collections.name.empty" = "Koleksiyon adı boş olamaz.";
+"bookmarks.collections.name.too-long" = "Koleksiyon adları en fazla %d karakter olabilir.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Ayetleri konuya, duaya veya ezber planına göre düzenlemek için bir koleksiyon oluşturun.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -521,6 +523,8 @@
 "notes.minimum-length.alert.body" = "Notlar en az %d karakter olmalıdır.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.minimum-length.alert.title" = "Not çok kısa";
+"notes.maximum-length.alert.title" = "Not çok uzun";
+"notes.maximum-length.alert.body" = "Notlar en fazla %d karakter olabilir.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.new" = "Yeni not";
 

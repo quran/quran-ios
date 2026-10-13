@@ -512,6 +512,8 @@
 "bookmarks.collections.new" = "Nueva colección...";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.new.placeholder" = "Nombre de la colección";
+"bookmarks.collections.name.empty" = "El nombre de la colección no puede estar vacío.";
+"bookmarks.collections.name.too-long" = "Los nombres de las colecciones no pueden tener más de %d caracteres.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Crea una colección para organizar las aleyas por tema, dua o plan de memorización.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -578,6 +580,8 @@
 "notes.minimum-length.alert.body" = "Las notas deben tener al menos %d caracteres.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.minimum-length.alert.title" = "La nota es demasiado corta";
+"notes.maximum-length.alert.title" = "La nota es demasiado larga";
+"notes.maximum-length.alert.body" = "Las notas no pueden tener más de %d caracteres.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.new" = "Nueva nota";
 

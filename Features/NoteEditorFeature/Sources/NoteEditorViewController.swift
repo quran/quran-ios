@@ -6,6 +6,7 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
+import Combine
 import NoorUI
 import SwiftUI
 import UIKit
@@ -34,6 +35,7 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
         super.viewDidLoad()
 
         presentationController?.delegate = self
+        observeTextLengthLimitErrors()
 
         Task {
             do {
@@ -46,27 +48,26 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
     }
 
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-        viewModel.canDismissNote
+        viewModel.allowsInteractiveDismissal
     }
 
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-        showMinimumLengthAlert()
-    }
-
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        guard !suppressesDismissalAutoSave, viewModel.shouldAutoSaveOnDismiss else {
-            return
-        }
-
-        Task {
-            await viewModel.commitEditsAndExit(dismissOnSave: false)
-        }
+        done()
     }
 
     // MARK: Private
 
     private let viewModel: NoteEditorViewModel
-    private var suppressesDismissalAutoSave = false
+    private var cancellables: Set<AnyCancellable> = []
+
+    private func observeTextLengthLimitErrors() {
+        viewModel.$textLengthLimitError
+            .compactMap { $0 }
+            .sink { [weak self] error in
+                self?.showNoteLengthLimitAlert(error)
+            }
+            .store(in: &cancellables)
+    }
 
     private func setNote(_ note: EditableNote) {
         let noteEditor = NoteEditorView(
@@ -115,12 +116,8 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
             return
         }
 
-        suppressesDismissalAutoSave = true
         Task {
-            let didSave = await viewModel.commitEditsAndExit(dismissOnSave: true)
-            if !didSave {
-                suppressesDismissalAutoSave = false
-            }
+            await viewModel.commitEditsAndExit(dismissOnSave: true)
         }
     }
 
@@ -131,14 +128,12 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
             confirmDeleteNote()
         } else {
             // delete highlight
-            suppressesDismissalAutoSave = true
             await viewModel.forceDelete()
         }
     }
 
     private func confirmDeleteNote() {
         let delete = {
-            self.suppressesDismissalAutoSave = true
             await self.viewModel.forceDelete()
         }
         switch viewModel.deleteConfirmationStyle {

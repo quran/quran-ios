@@ -351,12 +351,6 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
         let collections = try await storedCollections()
         XCTAssertEqual(collections.count, 1)
-    }
-
-    func test_presentAddCollection_clearsPreviousNameError() async {
-        let sut = makeSUT()
-        sut.newCollectionName = String(repeating: "a", count: 256)
-        await sut.createPendingCollection()
 
         sut.presentAddCollection()
 

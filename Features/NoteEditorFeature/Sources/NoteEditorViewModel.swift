@@ -103,6 +103,11 @@ final class NoteEditorViewModel {
         canSubmitNote && hasChanges
     }
 
+    /// Unsaved text blocks swipe-to-dismiss so the save runs on screen and a rejected save can't lose the text.
+    var allowsInteractiveDismissal: Bool {
+        canDismissNote && !shouldAutoSaveOnDismiss
+    }
+
     func fetchNote() async throws -> EditableNote {
         do {
             let versesText = try await getTextForVerses(verses)

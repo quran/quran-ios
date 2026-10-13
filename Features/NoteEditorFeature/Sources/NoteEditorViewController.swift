@@ -48,38 +48,23 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
     }
 
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-        viewModel.canDismissNote
+        viewModel.allowsInteractiveDismissal
     }
 
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-        showMinimumLengthAlert()
-    }
-
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        guard !suppressesDismissalAutoSave, viewModel.shouldAutoSaveOnDismiss else {
-            return
-        }
-
-        Task {
-            await viewModel.commitEditsAndExit(dismissOnSave: false)
-        }
+        done()
     }
 
     // MARK: Private
 
     private let viewModel: NoteEditorViewModel
-    private var suppressesDismissalAutoSave = false
     private var cancellables: Set<AnyCancellable> = []
 
     private func observeTextLengthLimitErrors() {
         viewModel.$textLengthLimitError
             .compactMap { $0 }
             .sink { [weak self] error in
-                // An auto-save after a swipe dismissal has no editor left to show the alert on.
-                guard let self, viewIfLoaded?.window != nil else {
-                    return
-                }
-                showNoteLengthLimitAlert(error)
+                self?.showNoteLengthLimitAlert(error)
             }
             .store(in: &cancellables)
     }
@@ -131,12 +116,8 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
             return
         }
 
-        suppressesDismissalAutoSave = true
         Task {
-            let didSave = await viewModel.commitEditsAndExit(dismissOnSave: true)
-            if !didSave {
-                suppressesDismissalAutoSave = false
-            }
+            await viewModel.commitEditsAndExit(dismissOnSave: true)
         }
     }
 
@@ -147,14 +128,12 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
             confirmDeleteNote()
         } else {
             // delete highlight
-            suppressesDismissalAutoSave = true
             await viewModel.forceDelete()
         }
     }
 
     private func confirmDeleteNote() {
         let delete = {
-            self.suppressesDismissalAutoSave = true
             await self.viewModel.forceDelete()
         }
         switch viewModel.deleteConfirmationStyle {

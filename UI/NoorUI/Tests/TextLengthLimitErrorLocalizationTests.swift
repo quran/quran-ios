@@ -1,6 +1,8 @@
 //
 //  TextLengthLimitErrorLocalizationTests.swift
 //
+//  Created by Mohamed Afifi on 2026-10-13.
+//
 
 import QuranAnnotations
 import XCTest

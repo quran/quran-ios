@@ -116,8 +116,26 @@ final class NoteEditorViewModelTests: XCTestCase {
         )
         XCTAssertEqual(editableNote.note, longText)
         XCTAssertFalse(sut.listener.didDismiss)
+        XCTAssertFalse(sut.viewModel.allowsInteractiveDismissal)
         let notes = try await storedNotes()
         XCTAssertEqual(notes.map(\.text), ["Stored note"])
+    }
+
+    func test_allowsInteractiveDismissal_onlyWhenNothingNeedsSavingInSync() async throws {
+        let empty = makeSyncSUT(mode: .create(verses: [ayah(1)]))
+        _ = try await empty.viewModel.fetchNote()
+        XCTAssertTrue(empty.viewModel.allowsInteractiveDismissal)
+
+        let note = try await createStoredNote(body: "Stored note")
+        let sut = makeSyncSUT(mode: .edit(note))
+        let editableNote = try await sut.viewModel.fetchNote()
+        XCTAssertTrue(sut.viewModel.allowsInteractiveDismissal)
+
+        editableNote.note = "Updated note"
+        XCTAssertFalse(sut.viewModel.allowsInteractiveDismissal)
+
+        editableNote.note = "short"
+        XCTAssertFalse(sut.viewModel.allowsInteractiveDismissal)
     }
 
     func test_validAutoSave_updatesSyncedNoteWithoutDismissing() async throws {
@@ -302,6 +320,18 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertFalse(sut.viewModel.shouldAutoSaveOnDismiss)
         XCTAssertTrue(sut.noteService.setNoteCalls.isEmpty)
         XCTAssertTrue(sut.listener.didDismiss)
+    }
+
+    func test_allowsInteractiveDismissal_onlyWhenNothingNeedsSavingInLegacy() async throws {
+        let sut = makeLegacySUT(noteBody: "Stored note")
+        let editableNote = try await sut.viewModel.fetchNote()
+        XCTAssertTrue(sut.viewModel.allowsInteractiveDismissal)
+
+        editableNote.note = "Updated note"
+        XCTAssertFalse(sut.viewModel.allowsInteractiveDismissal)
+
+        editableNote.note = "short"
+        XCTAssertFalse(sut.viewModel.allowsInteractiveDismissal)
     }
 
     func test_delete_removesLegacyNoteVersesAndDismisses() async {

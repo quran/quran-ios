@@ -64,6 +64,8 @@
 "search.popular.title" = "Try searching with";
 "search.placeholder.text" = "Surah, verse, translation, tafseer, and numbers";
 "search.result.count" = "%@ (%d)";
+"search.tips.title" = "Search tips";
+"search.tips.text" = "Search by number for a page, surah, juz or hizb. Try 50 for page 50, or 2:255 for surah 2, verse 255.";
 
 // MARK: - Settings
 

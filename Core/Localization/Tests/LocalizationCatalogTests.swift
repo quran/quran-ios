@@ -76,6 +76,8 @@ final class LocalizationCatalogTests: XCTestCase {
     ]
 
     private let englishFallbackKeys: Set<String> = [
+        "search.tips.title",
+        "search.tips.text",
         "quran.sura-name.indopak.17",
         "quran.sura-name.indopak.40",
         "quran.sura-name.indopak.41",
@@ -89,6 +91,8 @@ final class LocalizationCatalogTests: XCTestCase {
     ]
 
     private let englishOnlyFallbackKeys: Set<String> = [
+        "search.tips.title",
+        "search.tips.text",
         "quran.sura-name-translation.indopak.17",
         "quran.sura-name-translation.indopak.40",
         "quran.sura-name-translation.indopak.41",

@@ -91,7 +91,7 @@ make build-sync-local-debug \
 
 For the sync path, provide:
 
-- `QURAN_OAUTH_CLIENT_ID`
+- `QURAN_OAUTH_CLIENT_ID`. Without it, the Example app still uses Mobile Sync for local data, but sign-in is unavailable.
 
 Optional:
 
@@ -105,11 +105,7 @@ Optional:
 
 `QURAN_OAUTH_CLIENT_SECRET` is only needed when the configured OAuth client is registered as a confidential client. If the environment supports a public PKCE client, leave the secret unset.
 
-The sync auth configuration currently defined in `Container` is:
-
-- redirect URI: `com.quran.oauth://callback`
-- post logout redirect URI: `com.quran.oauth://callback`
-- scopes: `openid,offline_access,content,user,bookmark,sync,collection,reading_session,preference,note`
+`Container` passes the environment to Mobile Sync as an `AppEnvironment`. Mobile Sync defines each environment's auth and sync server URLs, the `com.quran.oauth://callback` redirect URI, and the requested scopes.
 
 ## Expected behavior
 

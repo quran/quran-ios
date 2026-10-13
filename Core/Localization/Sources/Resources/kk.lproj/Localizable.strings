@@ -495,6 +495,8 @@
 "bookmarks.collections.new" = "Жаңа жинақ...";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.new.placeholder" = "Жинақ атауы";
+"bookmarks.collections.name.empty" = "Жинақ атауы бос болмауы керек.";
+"bookmarks.collections.name.too-long" = "Жинақ атауы %d таңбадан аспауы керек.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Аяттарды тақырып, дұға немесе жаттау жоспары бойынша реттеу үшін жинақ жасаңыз.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -561,6 +563,8 @@
 "notes.minimum-length.alert.body" = "Жазба кемінде %d таңбадан тұруы керек.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.minimum-length.alert.title" = "Жазба тым қысқа";
+"notes.maximum-length.alert.title" = "Жазба тым ұзын";
+"notes.maximum-length.alert.body" = "Жазба %d таңбадан аспауы керек.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.new" = "Жаңа жазба";
 

@@ -100,6 +100,26 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertTrue(sut.listener.didDismiss)
     }
 
+    func test_tooLongNote_keepsEditorOpenWithTextAndReportsLimit() async throws {
+        let note = try await createStoredNote(body: "Stored note")
+        let sut = makeSyncSUT(mode: .edit(note))
+        let editableNote = try await sut.viewModel.fetchNote()
+        let longText = String(repeating: "a", count: 10001)
+        editableNote.note = longText
+
+        let didSave = await sut.viewModel.commitEditsAndExit(dismissOnSave: true)
+
+        XCTAssertFalse(didSave)
+        XCTAssertEqual(
+            sut.viewModel.textLengthLimitError,
+            TextLengthLimitError(field: .noteBody, bound: .tooLong, limit: 10000)
+        )
+        XCTAssertEqual(editableNote.note, longText)
+        XCTAssertFalse(sut.listener.didDismiss)
+        let notes = try await storedNotes()
+        XCTAssertEqual(notes.map(\.text), ["Stored note"])
+    }
+
     func test_validAutoSave_updatesSyncedNoteWithoutDismissing() async throws {
         let note = try await createStoredNote(body: "Stored note")
         let sut = makeSyncSUT(mode: .edit(note))

@@ -6,6 +6,7 @@
 //  Copyright © 2020 Quran.com. All rights reserved.
 //
 
+import Combine
 import NoorUI
 import SwiftUI
 import UIKit
@@ -34,6 +35,7 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
         super.viewDidLoad()
 
         presentationController?.delegate = self
+        observeTextLengthLimitErrors()
 
         Task {
             do {
@@ -67,6 +69,20 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
 
     private let viewModel: NoteEditorViewModel
     private var suppressesDismissalAutoSave = false
+    private var cancellables: Set<AnyCancellable> = []
+
+    private func observeTextLengthLimitErrors() {
+        viewModel.$textLengthLimitError
+            .compactMap { $0 }
+            .sink { [weak self] error in
+                // An auto-save after a swipe dismissal has no editor left to show the alert on.
+                guard let self, viewIfLoaded?.window != nil else {
+                    return
+                }
+                showNoteLengthLimitAlert(error)
+            }
+            .store(in: &cancellables)
+    }
 
     private func setNote(_ note: EditableNote) {
         let noteEditor = NoteEditorView(

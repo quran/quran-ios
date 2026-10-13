@@ -189,6 +189,8 @@
 "bookmarks.collections.mine" = "مجموعاتي";
 "bookmarks.collections.new" = "مجموعة جديدة...";
 "bookmarks.collections.new.placeholder" = "اسم المجموعة";
+"bookmarks.collections.name.empty" = "لا يمكن أن يكون اسم المجموعة فارغًا.";
+"bookmarks.collections.name.too-long" = "يجب ألا يتجاوز اسم المجموعة %d حرف.";
 "bookmarks.collections.rename" = "إعادة التسمية";
 "bookmarks.collections.delete.confirmation.title" = "هل تريد حذف المجموعة؟";
 "bookmarks.collections.delete.confirmation.message" = "تحتوي هذه المجموعة على إشارات مرجعية. هل أنت متأكد من رغبتك في حذفها؟";
@@ -358,6 +360,8 @@
 
 "notes.minimum-length.alert.title" = "الملاحظة قصيرة جدًا";
 "notes.minimum-length.alert.body" = "يجب أن تكون الملاحظة %d أحرف على الأقل.";
+"notes.maximum-length.alert.title" = "الملاحظة طويلة جدًا";
+"notes.maximum-length.alert.body" = "يجب ألا تتجاوز الملاحظة %d حرف.";
 
 // Audio
 "audio.play-up-to" = "تشغيل الصوت لنهاية";

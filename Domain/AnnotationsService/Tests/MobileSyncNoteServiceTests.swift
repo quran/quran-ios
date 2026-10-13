@@ -60,6 +60,53 @@ final class MobileSyncNoteServiceTests: XCTestCase {
         observation.cancel()
     }
 
+    func test_createNote_throwsTextLengthLimitErrorForShortBody() async throws {
+        await assertThrows(TextLengthLimitError(field: .noteBody, bound: .tooShort, limit: 6)) {
+            try await service.createNote(body: " ab ", startAyah: ayah(1), endAyah: ayah(1))
+        }
+
+        let notes = try await storedNotes()
+        XCTAssertTrue(notes.isEmpty)
+    }
+
+    func test_createNote_measuresBodyAsTheServerEscapesIt() async {
+        // 2,001 ampersands are 10,005 characters once escaped as `&amp;`.
+        await assertThrows(TextLengthLimitError(field: .noteBody, bound: .tooLong, limit: 10000)) {
+            try await service.createNote(body: String(repeating: "&", count: 2001), startAyah: ayah(1), endAyah: ayah(1))
+        }
+    }
+
+    func test_updateNote_throwsTextLengthLimitErrorAndKeepsStoredBody() async throws {
+        try await service.createNote(body: "Original", startAyah: ayah(1), endAyah: ayah(1))
+        let original = try await storedNote()
+
+        await assertThrows(TextLengthLimitError(field: .noteBody, bound: .tooLong, limit: 10000)) {
+            try await service.updateNote(original, body: String(repeating: "a", count: 10001))
+        }
+
+        let stored = try await storedNote()
+        XCTAssertEqual(stored.text, "Original")
+    }
+
+    private func assertThrows(
+        _ expected: TextLengthLimitError,
+        file: StaticString = #filePath,
+        line: UInt = #line,
+        _ operation: () async throws -> Void
+    ) async {
+        do {
+            try await operation()
+            XCTFail("Expected \(expected)", file: file, line: line)
+        } catch {
+            XCTAssertEqual(error as? TextLengthLimitError, expected, file: file, line: line)
+        }
+    }
+
+    private func storedNotes() async throws -> [QuranAnnotations.Note] {
+        var iterator = service.notesSequence(quran: .hafsMadani1405).makeAsyncIterator()
+        return try await iterator.next() ?? []
+    }
+
     private func storedNote() async throws -> QuranAnnotations.Note {
         var iterator = service.notesSequence(quran: .hafsMadani1405).makeAsyncIterator()
         let notes = try await iterator.next()

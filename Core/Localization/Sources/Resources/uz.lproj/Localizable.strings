@@ -513,6 +513,8 @@
 "bookmarks.collections.new" = "Yangi to‘plam...";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.new.placeholder" = "To‘plam nomi";
+"bookmarks.collections.name.empty" = "To‘plam nomi bo‘sh bo‘lishi mumkin emas.";
+"bookmarks.collections.name.too-long" = "To‘plam nomi %d ta belgidan oshmasligi kerak.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Oyatlarni mavzu, duo yoki yodlash rejasi bo‘yicha tartiblash uchun to‘plam yarating.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -579,6 +581,8 @@
 "notes.minimum-length.alert.body" = "Eslatma kamida %d ta belgidan iborat bo‘lishi kerak.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.minimum-length.alert.title" = "Eslatma juda qisqa";
+"notes.maximum-length.alert.title" = "Eslatma juda uzun";
+"notes.maximum-length.alert.body" = "Eslatma %d ta belgidan oshmasligi kerak.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.new" = "Yangi eslatma";
 

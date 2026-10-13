@@ -29,13 +29,15 @@ public struct MobileSyncNoteService {
     }
 
     public func createNote(body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
-        try await quranDataService.createNote(
-            body: body,
-            startSura: Int32(startAyah.sura.suraNumber),
-            startAyah: Int32(startAyah.ayah),
-            endSura: Int32(endAyah.sura.suraNumber),
-            endAyah: Int32(endAyah.ayah)
-        )
+        try await mapTextLengthLimit {
+            try await quranDataService.createNote(
+                body: body,
+                startSura: Int32(startAyah.sura.suraNumber),
+                startAyah: Int32(startAyah.ayah),
+                endSura: Int32(endAyah.sura.suraNumber),
+                endAyah: Int32(endAyah.ayah)
+            )
+        }
     }
 
     public func updateNote(_ note: QuranAnnotations.Note, body: String) async throws {
@@ -43,14 +45,16 @@ public struct MobileSyncNoteService {
     }
 
     public func updateNote(_ note: QuranAnnotations.Note, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
-        try await quranDataService.updateNote(
-            id: note.id,
-            body: body,
-            startSura: Int32(startAyah.sura.suraNumber),
-            startAyah: Int32(startAyah.ayah),
-            endSura: Int32(endAyah.sura.suraNumber),
-            endAyah: Int32(endAyah.ayah)
-        )
+        try await mapTextLengthLimit {
+            try await quranDataService.updateNote(
+                id: note.id,
+                body: body,
+                startSura: Int32(startAyah.sura.suraNumber),
+                startAyah: Int32(startAyah.ayah),
+                endSura: Int32(endAyah.sura.suraNumber),
+                endAyah: Int32(endAyah.ayah)
+            )
+        }
     }
 
     public func removeNote(_ note: QuranAnnotations.Note) async throws {

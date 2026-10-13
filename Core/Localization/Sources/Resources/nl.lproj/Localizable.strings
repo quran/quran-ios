@@ -426,6 +426,8 @@
 "bookmarks.collections.new" = "Nieuwe verzameling...";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.new.placeholder" = "Naam van verzameling";
+"bookmarks.collections.name.empty" = "De naam van een verzameling mag niet leeg zijn.";
+"bookmarks.collections.name.too-long" = "Namen van verzamelingen mogen niet langer zijn dan %d tekens.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Maak een verzameling om ayahs te ordenen op thema, dua of memorisatieplan.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -492,6 +494,8 @@
 "notes.minimum-length.alert.body" = "Notities moeten minstens %d tekens bevatten.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.minimum-length.alert.title" = "Notitie is te kort";
+"notes.maximum-length.alert.title" = "Notitie is te lang";
+"notes.maximum-length.alert.body" = "Notities mogen niet langer zijn dan %d tekens.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.new" = "Nieuwe notitie";
 

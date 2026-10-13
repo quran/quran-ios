@@ -511,6 +511,8 @@
 "bookmarks.collections.new" = "Новая коллекция...";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.new.placeholder" = "Название коллекции";
+"bookmarks.collections.name.empty" = "Название коллекции не может быть пустым.";
+"bookmarks.collections.name.too-long" = "Название коллекции не может быть длиннее %d символов.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Создайте коллекцию, чтобы организовать аяты по теме, дуа или плану заучивания.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -577,6 +579,8 @@
 "notes.minimum-length.alert.body" = "Заметка должна содержать не менее %d символов.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.minimum-length.alert.title" = "Заметка слишком короткая";
+"notes.maximum-length.alert.title" = "Заметка слишком длинная";
+"notes.maximum-length.alert.body" = "Заметка не может быть длиннее %d символов.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.new" = "Новая заметка";
 

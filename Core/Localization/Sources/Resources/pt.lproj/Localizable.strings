@@ -512,6 +512,8 @@
 "bookmarks.collections.new" = "Nova coleção...";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.new.placeholder" = "Nome da coleção";
+"bookmarks.collections.name.empty" = "O nome da coleção não pode ficar vazio.";
+"bookmarks.collections.name.too-long" = "Os nomes das coleções não podem ter mais de %d caracteres.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Crie uma coleção para organizar ayahs por tema, dua ou plano de memorização.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -578,6 +580,8 @@
 "notes.minimum-length.alert.body" = "As notas devem ter pelo menos %d caracteres.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.minimum-length.alert.title" = "A nota é curta demais";
+"notes.maximum-length.alert.title" = "A nota é longa demais";
+"notes.maximum-length.alert.body" = "As notas não podem ter mais de %d caracteres.";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.new" = "Nova nota";
 

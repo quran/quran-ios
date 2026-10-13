@@ -357,6 +357,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "SyncLoggingTests",
+        "name" : "SyncLoggingTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "NoorUITests",
         "name" : "NoorUITests"
       }

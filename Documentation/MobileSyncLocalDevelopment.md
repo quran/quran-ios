@@ -85,7 +85,13 @@ make build-sync-local-debug \
   MOBILE_SYNC_XCFRAMEWORK_PATH=../relative/path/to/Shared.xcframework
 ```
 
-`MOBILE_SYNC_XCFRAMEWORK_PATH` is relative to the `mobile-sync-spm` package root, as required by Swift Package Manager binary targets. Local example launches default to full HTTP request and response logging; set `MOBILE_SYNC_HTTP_LOG_LEVEL=INFO` or `NONE` to reduce it. Authentication and cookie headers are redacted.
+`MOBILE_SYNC_XCFRAMEWORK_PATH` is relative to the `mobile-sync-spm` package root, as required by Swift Package Manager binary targets.
+
+## Logs
+
+Mobile Sync logs go to swift-log under the `mobile-sync` label, with the component, such as `NotesSyncAdapter` or `SyncHttp`, as the log source (the Example app's stderr output omits sources). The app passes the level its swift-log handlers use to `MobileSyncLogBridge.install(level:)`. Each HTTP request and response logs a summary line at info level; a call that fails without a response logs it at warning. At debug level, the full request and response follow, with headers and text bodies. Mobile Sync logs bodies whole; the Quran app's log files cap long entries in release builds, and debug builds keep them whole. Authentication and cookie headers are always masked.
+
+The Example app logs at debug level, so it always includes HTTP details. The Quran app logs at debug level in debug builds and in sync release builds whose environment is explicitly set to prelive, such as the Quran Sync TestFlight beta. Other release builds follow **Settings › Diagnostics › Enable debug logging** after the next launch.
 
 ## Required runtime environment variables
 

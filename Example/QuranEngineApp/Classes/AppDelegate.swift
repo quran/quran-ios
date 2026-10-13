@@ -9,6 +9,9 @@ import AppStructureFeature
 import Logging
 import NoorFont
 import NoorUI
+#if QURAN_SYNC
+import SyncLogging
+#endif
 import UIKit
 
 @main
@@ -19,7 +22,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("Documents directory: ", FileManager.documentsURL)
 
         FontName.registerFonts()
-        LoggingSystem.bootstrap(StreamLogHandler.standardError)
+        LoggingSystem.bootstrap { label in
+            var handler = StreamLogHandler.standardError(label: label)
+            handler.logLevel = .debug
+            return handler
+        }
+        #if QURAN_SYNC
+        MobileSyncLogBridge.install(level: .debug)
+        #endif
 
         Task {
             // Eagerly load download manager to handle any background downloads.

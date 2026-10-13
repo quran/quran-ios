@@ -224,6 +224,12 @@ private func dataTargets() -> [[Target]] {
             dependencies: mobileSyncTargetDependencies
         ),
 
+        target(type, name: "SyncLogging", dependencies: [
+            .product(name: "Logging", package: "swift-log"),
+        ] + mobileSyncTargetDependencies, testDependencies: [
+            .product(name: "Logging", package: "swift-log"),
+        ] + mobileSyncTargetDependencies),
+
         // MARK: - Page Bookmarks
 
         target(type, name: "PageBookmarkPersistence", dependencies: [
@@ -964,6 +970,7 @@ private func featuresTargets() -> [[Target]] {
             "WhatsNewFeature",
             "AudioUpdater",
             "AppMigrationFeature",
+            "SyncLogging",
         ] + mobileSyncTargetDependencies, testDependencies: [
             "CoreDataModel",
         ]),

@@ -164,7 +164,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
 
     func test_independentStreamsPreserveOtherAnnotationsAndTransientHighlights() async throws {
         let verse = ayah(1)
-        try await noteService.createNote(body: "Note", startAyah: verse, endAyah: verse)
+        try await noteService.createNote(body: "Test note", startAyah: verse, endAyah: verse)
         try await highlightService.setHighlight(.green, for: [verse])
         try await readingBookmarkService.addReadingBookmark(at: .ayah(verse), slot: .orange)
         var iterator = collectionService.collectionsSequence().makeAsyncIterator()
@@ -198,7 +198,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
 
     func test_runningStreamsDoNotRetainObserver() async throws {
         let verse = ayah(1)
-        try await noteService.createNote(body: "Note", startAyah: verse, endAyah: verse)
+        try await noteService.createNote(body: "Test note", startAyah: verse, endAyah: verse)
         try await highlightService.setHighlight(.green, for: [verse])
         try await readingBookmarkService.addReadingBookmark(at: .ayah(verse), slot: .orange)
         var iterator = collectionService.collectionsSequence().makeAsyncIterator()
@@ -281,7 +281,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
     }
 
     func test_ayahIndicatorsPreferenceChange_updatesAnnotations() async throws {
-        try await noteService.createNote(body: "Note", startAyah: ayah(5), endAyah: ayah(5))
+        try await noteService.createNote(body: "Test note", startAyah: ayah(5), endAyah: ayah(5))
         let overlayService = VerseOverlayService()
         let observer = makeObserver(overlayService: overlayService)
         defer { observer.stop() }

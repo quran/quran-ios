@@ -86,8 +86,8 @@ private struct TextPartView: View {
                 size: size,
                 emphasizesSura: emphasizesSura
             )
-        case .suras(let suras, let nameStyle):
-            SuraNamesView(suras: suras, nameStyle: nameStyle, size: size)
+        case .suras(let suras):
+            SuraNamesView(suras: suras, size: size)
         case .ayahCoordinate(let ayah):
             Text(ayah.localizedCoordinate(locale: locale))
                 .font(size.plainFont)
@@ -143,9 +143,9 @@ private extension View {
 enum TextPart {
     case plain(text: String)
     case highlighting(text: String, ranges: [HighlightingRange], lineLimit: Int?)
-    case sura(Sura, emphasizesSura: Bool, nameStyle: SuraNameStyle = .standard)
-    case ayah(AyahNumber, emphasizesSura: Bool, nameStyle: SuraNameStyle = .standard)
-    case suras([Sura], nameStyle: SuraNameStyle)
+    case sura(Sura, emphasizesSura: Bool, nameStyle: SuraNameStyle = .text)
+    case ayah(AyahNumber, emphasizesSura: Bool, nameStyle: SuraNameStyle = .text)
+    case suras([Sura])
     case ayahCoordinate(AyahNumber)
     case quran(
         text: QuranText,
@@ -165,13 +165,25 @@ enum TextPart {
             QuranReference.sura(sura, nameStyle: nameStyle).rawValue(locale: locale)
         case .ayah(let ayah, _, let nameStyle):
             QuranReference.ayah(ayah, nameStyle: nameStyle).rawValue(locale: locale)
-        case .suras(let suras, let nameStyle):
-            suras.map { QuranReference.sura($0, nameStyle: nameStyle).rawValue(locale: locale) }
+        case .suras(let suras):
+            suras.map { QuranReference.sura($0).rawValue(locale: locale) }
                 .joined(separator: SuraNamesView.separator)
         case .ayahCoordinate(let ayah):
             ayah.localizedCoordinate(locale: locale)
         case .quran(let text, _, _, _, _):
             text.text
+        }
+    }
+
+    /// Splits `.suras` into one fixed-size reference per sura with separators between them, so a
+    /// wrapping layout breaks lines only between suras, never inside a name.
+    var wrappingParts: [TextPart] {
+        guard case .suras(let suras) = self else {
+            return [self]
+        }
+        return suras.enumerated().flatMap { index, sura -> [TextPart] in
+            let reference = TextPart.sura(sura, emphasizesSura: false)
+            return index == 0 ? [reference] : [.plain(text: SuraNamesView.separator), reference]
         }
     }
 
@@ -183,7 +195,7 @@ enum TextPart {
             QuranReference.sura(sura).accessibilityText
         case .ayah(let ayah, _, _):
             QuranReference.ayah(ayah).accessibilityText
-        case .suras(let suras, _):
+        case .suras(let suras):
             suras.map { QuranReference.sura($0).accessibilityText }.joined(separator: l("list.separator.comma"))
         case .ayahCoordinate(let ayah):
             ayah.localizedCoordinate()
@@ -205,29 +217,20 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             parts.append(.plain(text: literal))
         }
 
-        public mutating func appendInterpolation(sura: Sura, emphasizingSura: Bool = false, nameStyle: SuraNameStyle = .standard) {
+        public mutating func appendInterpolation(sura: Sura, emphasizingSura: Bool = false, nameStyle: SuraNameStyle = .text) {
             parts.append(.sura(sura, emphasizesSura: emphasizingSura, nameStyle: nameStyle))
         }
 
-        /// Appends the sura names separated by " · ". Standard names wrap between suras;
-        /// other styles render as one part, so a one-line title truncates its last name.
-        public mutating func appendInterpolation(suras: [Sura], nameStyle: SuraNameStyle = .standard) {
-            guard nameStyle == .standard else {
-                parts.append(.suras(suras, nameStyle: nameStyle))
-                return
-            }
-            for (index, sura) in suras.enumerated() {
-                if index > 0 {
-                    parts.append(.plain(text: SuraNamesView.separator))
-                }
-                parts.append(.sura(sura, emphasizesSura: false, nameStyle: nameStyle))
-            }
+        /// Appends the localized sura names separated by " · ". Wrapped lines break only between suras; a one-line
+        /// view truncates the last name.
+        public mutating func appendInterpolation(suras: [Sura]) {
+            parts.append(.suras(suras))
         }
 
         public mutating func appendInterpolation(
             ayah: AyahNumber,
             emphasizingSura: Bool = false,
-            nameStyle: SuraNameStyle = .standard
+            nameStyle: SuraNameStyle = .text
         ) {
             parts.append(.ayah(ayah, emphasizesSura: emphasizingSura, nameStyle: nameStyle))
         }
@@ -403,9 +406,10 @@ private struct MultiPartTextView: View {
     let allowsWrapping: Bool
 
     var body: some View {
+        let parts = allowsWrapping ? text.parts.flatMap(\.wrappingParts) : text.parts
         wrap {
-            ForEach(0 ..< text.parts.count, id: \.self) { i in
-                TextPartView(part: text.parts[i], size: size)
+            ForEach(0 ..< parts.count, id: \.self) { i in
+                TextPartView(part: parts[i], size: size)
             }
         }
         .accessibilityElement(children: .ignore)

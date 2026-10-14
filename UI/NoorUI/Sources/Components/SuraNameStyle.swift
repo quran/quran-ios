@@ -1,12 +1,10 @@
 /// Controls how sura names are presented in sura and ayah references.
 public enum SuraNameStyle: Equatable, Sendable {
-    /// Localized text alongside the Arabic name; only the Arabic name in Arabic locales.
-    case standard
-
-    /// The localized name in regular letters and font in every locale.
+    /// The localized name in regular letters and font in every locale. The default everywhere.
     case text
 
-    /// Localized text outside Arabic locales; Arabic in the decorated sura-name font in Arabic locales
-    /// (or the reading's Quran font for IndoPak).
-    case compact
+    /// The localized name alongside the decorated Arabic name outside Arabic locales; only the decorated
+    /// Arabic name in Arabic locales (the reading's Quran font instead of the sura-name font for IndoPak).
+    /// Reserved for the home Surahs and Juz' lists and the translation pages' sura banner.
+    case decorated
 }

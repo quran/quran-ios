@@ -30,7 +30,7 @@ public struct QuranSuraName: View {
             NoorImage.suraHeader.image.resizable()
                 .aspectRatio(contentMode: .fit)
                 .overlay {
-                    let name: MultipartText = "\(sura: sura)"
+                    let name: MultipartText = "\(sura: sura, nameStyle: .decorated)"
                     name.view(ofSize: .title3, alignment: .center, allowsWrapping: false)
                         .lineLimit(1)
                         .minimumScaleFactor(0.3)

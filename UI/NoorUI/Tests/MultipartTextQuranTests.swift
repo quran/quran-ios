@@ -13,201 +13,195 @@ import XCTest
 @testable import NoorUI
 
 final class MultipartTextQuranTests: XCTestCase {
-    func test_suraReference_inNonArabicLocale_usesLocalizedNameAndDecoratedGlyph() {
+    // MARK: Default (plain) references
+
+    @MainActor
+    func test_suraReference_inNonArabicLocale_usesOnlyLocalizedName() {
         let text: MultipartText = "\(sura: sura)"
 
-        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) \u{E905}")
-    }
-
-    @MainActor
-    func test_emphasizedSuraReference_preservesDecorationAndAccessibility() throws {
-        if UIFont(name: "icomoon", size: 20) == nil {
-            FontName.registerFonts()
-        }
-        let regular: MultipartText = "\(sura: sura)"
-        let emphasized: MultipartText = "\(sura: sura, emphasizingSura: true)"
-        let regularText = regular.attributedString(ofSize: .body)
-        let emphasizedText = emphasized.attributedString(ofSize: .body)
-        let regularFont = try XCTUnwrap(regularText.attribute(.font, at: 0, effectiveRange: nil) as? UIFont)
-        let emphasizedFont = try XCTUnwrap(emphasizedText.attribute(.font, at: 0, effectiveRange: nil) as? UIFont)
-
-        XCTAssertFalse(regularFont.fontDescriptor.symbolicTraits.contains(.traitBold))
-        XCTAssertTrue(emphasizedFont.fontDescriptor.symbolicTraits.contains(.traitBold))
-        XCTAssertEqual(emphasizedText.string, regularText.string)
-        XCTAssertEqual(emphasized.rawValue(locale: arabic), regular.rawValue(locale: arabic))
-        XCTAssertEqual(emphasized.accessibilityText, regular.accessibilityText)
-    }
-
-    @MainActor
-    func test_suraReference_withTextStyle_usesOnlyLocalizedName() {
-        let text: MultipartText = "\(sura: sura, nameStyle: .text)"
-
         XCTAssertEqual(text.rawValue(locale: english), sura.localizedName())
-        XCTAssertEqual(text.attributedString(ofSize: .body).string, sura.localizedName())
+        XCTAssertEqual(QuranReference.sura(sura).attributedString(size: .body, locale: english).string, sura.localizedName())
         XCTAssertEqual(text.accessibilityText, sura.localizedName())
     }
 
-    func test_indoPakSuraReference_withTextStyle_omitsAdditionalArabicName() {
-        let sura = Quran.hafsIndoPak.suras[1]
-        let text: MultipartText = "\(sura: sura, nameStyle: .text)"
+    func test_suraReference_inArabicLocale_usesPlainArabicName() {
+        let text: MultipartText = "\(sura: sura)"
 
-        XCTAssertEqual(text.rawValue(locale: english), sura.localizedName())
         XCTAssertEqual(text.rawValue(locale: arabic), sura.localizedName(language: .arabic))
     }
 
-    func test_compactSuraReference_usesLocalizedTextInEnglishAndDecorationInArabic() {
-        let text: MultipartText = "\(sura: sura, nameStyle: .compact)"
-
-        XCTAssertEqual(text.rawValue(locale: english), sura.localizedName())
-        XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905}")
-        XCTAssertEqual(text.accessibilityText, sura.localizedName())
-    }
-
-    func test_compactSuraReferences_separateAccessibilityTextWithComma() {
-        let suras = Array(Quran.hafsMadani1405.suras[0 ... 1])
-        let text: MultipartText = "\(suras: suras, nameStyle: .compact)"
-
-        XCTAssertEqual(text.accessibilityText, "Al-Fātihah, Al-Baqarah")
-    }
-
-    func test_compactAyahReference_keepsLocalizedCoordinates() {
-        let text: MultipartText = "\(ayah: ayah, nameStyle: .compact)"
-
-        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) · 2:255")
-        XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905} · ٢:٢٥٥")
-        XCTAssertEqual(text.accessibilityText, ayah.localizedName)
-    }
-
-    func test_compactSuraReference_inNonArabicRightToLeftLocale_usesLocalizedText() {
-        let text: MultipartText = "\(sura: sura, nameStyle: .compact)"
+    func test_suraReference_inNonArabicRightToLeftLocale_usesOnlyLocalizedName() {
+        let text: MultipartText = "\(sura: sura)"
 
         XCTAssertEqual(text.rawValue(locale: Locale(identifier: "fa-IR")), sura.localizedName())
     }
 
-    func test_compactIndoPakSuraReference_usesReadingSpecificArabicName() {
+    func test_suraReferences_separateAccessibilityTextWithComma() {
+        let suras = Array(Quran.hafsMadani1405.suras[0 ... 1])
+        let text: MultipartText = "\(suras: suras)"
+
+        XCTAssertEqual(text.accessibilityText, "Al-Fātihah, Al-Baqarah")
+    }
+
+    func test_indoPakSuraReference_usesReadingSpecificName() {
         let sura = Quran.hafsIndoPak.suras[16]
-        let text: MultipartText = "\(sura: sura, nameStyle: .compact)"
+        let text: MultipartText = "\(sura: sura)"
 
         XCTAssertEqual(text.rawValue(locale: english), "Banī Isrā’īl")
         XCTAssertEqual(text.rawValue(locale: arabic), "بَنِي إِسْرَائِيل")
+        let ayahText: MultipartText = "\(ayah: sura.verses[0])"
+        XCTAssertEqual(ayahText.rawValue(locale: english), "Banī Isrā’īl · 17:1")
+    }
+
+    func test_ayahReference_inNonArabicLocale_usesLocalizedNameAndCoordinate() {
+        let text: MultipartText = "\(ayah: ayah)"
+
+        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) · 2:255")
+        XCTAssertEqual(text.accessibilityText, ayah.localizedName)
+    }
+
+    func test_ayahReference_inArabicLocale_usesPlainArabicNameAndLocalizedCoordinate() {
+        let text: MultipartText = "\(ayah: ayah)"
+
+        XCTAssertEqual(text.rawValue(locale: arabic), "\(sura.localizedName(language: .arabic)) · ٢:٢٥٥")
     }
 
     @MainActor
-    func test_nameStyles_useRegularFontOnlyForTextInArabic() throws {
+    func test_ayahReference_attributedStringMatchesRawValue() {
+        let text: MultipartText = "\(ayah: ayah)"
+
+        for locale in [english, arabic] {
+            XCTAssertEqual(
+                QuranReference.ayah(ayah).attributedString(size: .body, locale: locale).string,
+                text.rawValue(locale: locale),
+                locale.identifier
+            )
+        }
+    }
+
+    @MainActor
+    func test_emphasizedSuraReference_drawsLocalizedNameHeavyInEveryLocale() throws {
+        for locale in [english, arabic] {
+            let regular = QuranReference.sura(sura).attributedString(size: .body, locale: locale)
+            let emphasized = QuranReference.sura(sura).attributedString(size: .body, locale: locale, emphasizesSura: true)
+            let regularFont = try XCTUnwrap(regular.attribute(.font, at: 0, effectiveRange: nil) as? UIFont)
+            let emphasizedFont = try XCTUnwrap(emphasized.attribute(.font, at: 0, effectiveRange: nil) as? UIFont)
+
+            XCTAssertFalse(regularFont.fontDescriptor.symbolicTraits.contains(.traitBold), locale.identifier)
+            XCTAssertTrue(emphasizedFont.fontDescriptor.symbolicTraits.contains(.traitBold), locale.identifier)
+            XCTAssertEqual(emphasized.string, regular.string, locale.identifier)
+        }
+        let emphasized: MultipartText = "\(sura: sura, emphasizingSura: true)"
+        XCTAssertEqual(emphasized.accessibilityText, sura.localizedName())
+    }
+
+    @MainActor
+    func test_defaultReferences_inArabicLocale_useRegularFont() {
+        let plainFont = UIFont.preferredFont(forTextStyle: .body).fontName
+        for reference in [QuranReference.sura(sura), QuranReference.ayah(ayah)] {
+            let attributed = reference.attributedString(size: .body, locale: arabic)
+            var fonts = Set<String>()
+            attributed.enumerateAttribute(.font, in: NSRange(location: 0, length: attributed.length)) { value, _, _ in
+                if let font = value as? UIFont {
+                    fonts.insert(font.fontName)
+                }
+            }
+
+            XCTAssertEqual(fonts, [plainFont], "\(reference)")
+            XCTAssertFalse(containsDecoratedGlyph(attributed.string), "\(reference)")
+        }
+    }
+
+    // MARK: Decorated references
+
+    @MainActor
+    func test_decoratedSuraReference_inArabicLocale_usesSuraNameFont() throws {
         if UIFont(name: "icomoon", size: 20) == nil {
             FontName.registerFonts()
         }
-        let cases: [(SuraNameStyle, String, String)] = [
-            (.standard, "\u{E905}", "icomoon"),
-            (.text, sura.localizedName(language: .arabic), UIFont.preferredFont(forTextStyle: .body).fontName),
-            (.compact, "\u{E905}", "icomoon"),
-        ]
-        for (style, expectedName, expectedFont) in cases {
-            let reference = QuranReference.sura(sura, nameStyle: style)
-            let attributed = reference.attributedString(size: .body, locale: arabic)
-            let font = try XCTUnwrap(attributed.attribute(.font, at: 0, effectiveRange: nil) as? UIFont)
+        let attributed = QuranReference.sura(sura, nameStyle: .decorated).attributedString(size: .body, locale: arabic)
+        let font = try XCTUnwrap(attributed.attribute(.font, at: 0, effectiveRange: nil) as? UIFont)
 
-            XCTAssertEqual(attributed.string, expectedName, "\(style)")
-            XCTAssertEqual(font.fontName, expectedFont, "\(style)")
-        }
+        XCTAssertEqual(attributed.string, "\u{E905}")
+        XCTAssertEqual(font.fontName, "icomoon")
     }
 
-    @MainActor
-    func test_compactReferences_preserveUIKitRendering() {
-        let suraText: MultipartText = "\(sura: sura, nameStyle: .compact)"
-        let ayahText: MultipartText = "\(ayah: ayah, nameStyle: .compact)"
+    func test_decoratedSuraReference_inNonArabicLocale_usesLocalizedNameAndDecoratedGlyph() {
+        let text: MultipartText = "\(sura: sura, nameStyle: .decorated)"
 
-        XCTAssertEqual(suraText.attributedString(ofSize: .body).string, suraText.rawValue)
-        XCTAssertEqual(ayahText.attributedString(ofSize: .body).string, ayahText.rawValue)
+        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) \u{E905}")
+        XCTAssertEqual(text.accessibilityText, sura.localizedName())
     }
 
-    func test_suraReference_inArabicLocale_usesOnlyDecoratedGlyph() {
-        let text: MultipartText = "\(sura: sura)"
+    func test_decoratedSuraReference_inArabicLocale_usesOnlyDecoratedGlyph() {
+        let text: MultipartText = "\(sura: sura, nameStyle: .decorated)"
 
         XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905}")
     }
 
-    func test_suraReference_inNonArabicRightToLeftLocale_keepsLocalizedName() {
-        let text: MultipartText = "\(sura: sura)"
+    func test_decoratedSuraReference_inNonArabicRightToLeftLocale_keepsLocalizedName() {
+        let text: MultipartText = "\(sura: sura, nameStyle: .decorated)"
 
         XCTAssertEqual(text.rawValue(locale: Locale(identifier: "fa-IR")), "\(sura.localizedName()) \u{E905}")
     }
 
-    func test_indoPakSuraReference_usesArabicTextInsteadOfDecoratedGlyph() {
-        let sura = Quran.hafsIndoPak.suras[1]
-        let text: MultipartText = "\(sura: sura)"
-
-        XCTAssertEqual(
-            text.rawValue(locale: english),
-            "\(sura.localizedName()) \(sura.localizedName(language: .arabic))"
-        )
-        XCTAssertEqual(text.rawValue(locale: arabic), sura.localizedName(language: .arabic))
-    }
-
-    func test_indoPakSuraReference_usesReadingSpecificArabicName() {
+    func test_decoratedIndoPakSuraReference_usesReadingSpecificArabicName() {
         let sura = Quran.hafsIndoPak.suras[16]
-        let text: MultipartText = "\(sura: sura)"
+        let text: MultipartText = "\(sura: sura, nameStyle: .decorated)"
 
         XCTAssertEqual(text.rawValue(locale: english), "Banī Isrā’īl بَنِي إِسْرَائِيل")
         XCTAssertEqual(text.rawValue(locale: arabic), "بَنِي إِسْرَائِيل")
     }
 
-    func test_ayahReference_inNonArabicLocale_usesCanonicalReference() {
-        let text: MultipartText = "\(ayah: ayah)"
+    func test_decoratedAyahReference_inNonArabicLocale_usesCanonicalReference() {
+        let text: MultipartText = "\(ayah: ayah, nameStyle: .decorated)"
 
         XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) \u{E905} · 2:255")
+        XCTAssertEqual(text.accessibilityText, ayah.localizedName)
     }
 
-    func test_ayahReference_inArabicLocale_usesGlyphAndLocalizedCoordinate() {
-        let text: MultipartText = "\(ayah: ayah)"
+    func test_decoratedAyahReference_inArabicLocale_usesGlyphAndLocalizedCoordinate() {
+        let text: MultipartText = "\(ayah: ayah, nameStyle: .decorated)"
 
         XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905} · ٢:٢٥٥")
     }
 
-    func test_ayahReference_withTextStyle_keepsLocalizedNameAndCoordinate() {
-        let text: MultipartText = "\(ayah: ayah, nameStyle: .text)"
-
-        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) · 2:255")
-        XCTAssertEqual(text.accessibilityText, ayah.localizedName)
-    }
-
-    func test_ayahReference_withTextStyle_inArabicLocale_keepsPlainArabicName() {
-        let text: MultipartText = "\(ayah: ayah, nameStyle: .text)"
-
-        XCTAssertEqual(text.rawValue(locale: arabic), "\(sura.localizedName(language: .arabic)) · ٢:٢٥٥")
-    }
-
-    func test_indoPakAyahReference_withTextStyle_omitsAdditionalArabicName() {
-        let ayah = Quran.hafsIndoPak.suras[1].verses[254]
-        let text: MultipartText = "\(ayah: ayah, nameStyle: .text)"
-
-        XCTAssertEqual(text.rawValue(locale: english), "\(ayah.sura.localizedName()) · 2:255")
-    }
-
     @MainActor
-    func test_ayahReference_withTextStyle_preservesUIKitRendering() {
-        let text: MultipartText = "\(ayah: ayah, emphasizingSura: true, nameStyle: .text)"
+    func test_decoratedReferences_preserveUIKitRendering() {
+        if UIFont(name: "icomoon", size: 20) == nil {
+            FontName.registerFonts()
+        }
+        let suraText: MultipartText = "\(sura: sura, nameStyle: .decorated)"
+        let ayahText: MultipartText = "\(ayah: ayah, nameStyle: .decorated)"
 
-        XCTAssertEqual(text.attributedString(ofSize: .body).string, text.rawValue)
-        XCTAssertFalse(text.attributedString(ofSize: .body).string.contains("\u{E905}"))
-        XCTAssertEqual(
-            QuranReference.ayah(ayah, nameStyle: .text).attributedString(size: .body, locale: arabic).string,
-            text.rawValue(locale: arabic)
-        )
+        for locale in [english, arabic] {
+            XCTAssertEqual(
+                QuranReference.sura(sura, nameStyle: .decorated).attributedString(size: .body, locale: locale).string,
+                suraText.rawValue(locale: locale),
+                locale.identifier
+            )
+            XCTAssertEqual(
+                QuranReference.ayah(ayah, nameStyle: .decorated).attributedString(size: .body, locale: locale).string,
+                ayahText.rawValue(locale: locale),
+                locale.identifier
+            )
+        }
     }
+
+    // MARK: Ranges
 
     func test_singleAyahRange_usesStartReference() {
         let text: MultipartText = "\(ayahRange: ayah ... ayah)"
 
-        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) \u{E905} · 2:255")
+        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) · 2:255")
     }
 
     func test_sameSuraAyahRange_usesEndCoordinate() {
         let end = sura.verses[255]
         let text: MultipartText = "\(ayahRange: ayah ... end)"
 
-        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) \u{E905} · 2:255 - 2:256")
-        XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905} · ٢:٢٥٥ - ٢:٢٥٦")
+        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) · 2:255 - 2:256")
+        XCTAssertEqual(text.rawValue(locale: arabic), "\(sura.localizedName(language: .arabic)) · ٢:٢٥٥ - ٢:٢٥٦")
     }
 
     func test_crossSuraAyahRange_usesBothReferences() {
@@ -217,7 +211,7 @@ final class MultipartTextQuranTests: XCTestCase {
 
         XCTAssertEqual(
             text.rawValue(locale: english),
-            "\(start.sura.localizedName()) \u{E904} · 1:7 - \(end.sura.localizedName()) \u{E905} · 2:1"
+            "\(start.sura.localizedName()) · 1:7 - \(end.sura.localizedName()) · 2:1"
         )
     }
 
@@ -226,15 +220,15 @@ final class MultipartTextQuranTests: XCTestCase {
 
         XCTAssertEqual(
             MultipartText.ayahRange(range, language: .english).rawValue(locale: english),
-            "\(sura.localizedName()) \u{E905} · 2:255 - 2:256"
+            "\(sura.localizedName()) · 2:255 - 2:256"
         )
         XCTAssertEqual(
             MultipartText.ayahRange(range, language: .arabic).rawValue(locale: arabic),
-            "\u{E905} · ٢:٢٥٥ - ٢:٢٥٦"
+            "\(sura.localizedName(language: .arabic)) · ٢:٢٥٥ - ٢:٢٥٦"
         )
         XCTAssertEqual(
             MultipartText.ayahRange(range, language: .chinese).rawValue(locale: chinese),
-            "\(sura.localizedName()) \u{E905} · 2:255至2:256"
+            "\(sura.localizedName()) · 2:255至2:256"
         )
     }
 
@@ -242,9 +236,11 @@ final class MultipartTextQuranTests: XCTestCase {
         let other = Quran.hafsMadani1405.suras[2].verses[17]
         let text: MultipartText = "\(ayahRanges: [ayah ... sura.verses[255], other ... other])"
 
-        XCTAssertEqual(text.rawValue(locale: english), "Al-Baqarah \u{E905} · 2:255 - 2:256; Āli-ʿImrān \u{E906} · 3:18")
+        XCTAssertEqual(text.rawValue(locale: english), "Al-Baqarah · 2:255 - 2:256; Āli-ʿImrān · 3:18")
         XCTAssertEqual(text.accessibilityText, "Al-Baqarah, Ayah 255 - 2:256; Āli-ʿImrān, Ayah 18")
     }
+
+    // MARK: Accessibility
 
     func test_references_useSemanticAccessibilityText() {
         let suraText: MultipartText = "\(sura: sura)"
@@ -260,6 +256,8 @@ final class MultipartTextQuranTests: XCTestCase {
 
         XCTAssertEqual(text.accessibilityText, "\(ayah.localizedName) - \(end.localizedCoordinate())")
     }
+
+    // MARK: Quran text
 
     func test_quranText_preservesText() {
         let quranText = QuranText("Quran text")
@@ -319,4 +317,9 @@ final class MultipartTextQuranTests: XCTestCase {
     private let english = Locale(identifier: "en-CA")
     private let arabic = Locale(identifier: "ar-SA")
     private let chinese = Locale(identifier: "zh")
+
+    /// The decorated sura-name glyphs live in the Unicode private-use area.
+    private func containsDecoratedGlyph(_ text: String) -> Bool {
+        text.unicodeScalars.contains { (0xE000 ... 0xF8FF).contains($0.value) }
+    }
 }

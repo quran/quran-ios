@@ -19,7 +19,7 @@ final class NoorListItemLayoutTests: XCTestCase {
             FontName.registerFonts()
         }
         let sura = Quran.hafsMadani1405.suras[28]
-        let title: MultipartText = "\(sura.localizedSuraNumber). \(sura: sura)"
+        let title: MultipartText = "\(sura.localizedSuraNumber). \(sura: sura, nameStyle: .decorated)"
         let subtitle = NoorListItem.Subtitle(text: "The Spider · Makki · 69 verses", location: .bottom)
 
         let heightWithAccessory = fittingHeight(

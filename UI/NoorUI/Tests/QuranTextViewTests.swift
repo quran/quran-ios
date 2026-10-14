@@ -66,8 +66,8 @@ final class QuranTextViewTests: XCTestCase {
             let value = QuranText("بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ ١")
             let uthmanicText: MultipartText = "\(quran: value, font: .uthmanicHafs, lineLimit: 1)"
             let indoPakText: MultipartText = "\(quran: value, font: .indoPak, lineLimit: 1)"
-            let madaniReference: MultipartText = "\(ayah: Quran.hafsMadani1405.firstVerse)"
-            let indoPakReference: MultipartText = "\(ayah: Quran.hafsIndoPak.firstVerse)"
+            let madaniReference: MultipartText = "\(ayah: Quran.hafsMadani1405.firstVerse, nameStyle: .decorated)"
+            let indoPakReference: MultipartText = "\(ayah: Quran.hafsIndoPak.firstVerse, nameStyle: .decorated)"
             let madaniItem = NoorListItem(
                 subheading: "Hizb 1",
                 title: madaniReference,

@@ -25,7 +25,7 @@ final class MultipartTextLocalizationTests: XCTestCase {
 
         XCTAssertEqual(
             result.rawValue(locale: Locale(identifier: "en")),
-            "Playing audio from Al-Baqarah \u{E905} · 2:255 to Al-Baqarah \u{E905} · 2:256"
+            "Playing audio from Al-Baqarah · 2:255 to Al-Baqarah · 2:256"
         )
     }
 
@@ -43,8 +43,15 @@ final class MultipartTextLocalizationTests: XCTestCase {
 
     func test_surasInterpolation_separatesEverySuraName() {
         let suras = Quran.hafsMadani1405.pages[292].suras
-        let text: MultipartText = "\(suras: suras, nameStyle: .compact)"
+        let text: MultipartText = "\(suras: suras)"
 
         XCTAssertEqual(text.rawValue(locale: Locale(identifier: "en")), "Al-Isrāʾ · Al-Kahf")
+    }
+
+    func test_surasInterpolation_inArabicLocale_usesPlainArabicNames() {
+        let suras = Quran.hafsMadani1405.pages[292].suras
+        let text: MultipartText = "\(suras: suras)"
+
+        XCTAssertEqual(text.rawValue(locale: Locale(identifier: "ar")), "الإِسۡرَاءِ · الكَهۡفِ")
     }
 }

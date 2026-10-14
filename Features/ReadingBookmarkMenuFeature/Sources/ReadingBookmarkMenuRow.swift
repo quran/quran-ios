@@ -48,7 +48,7 @@ struct ReadingBookmarkMenuRow: View {
         case .moveHere:
             switch item.placement {
             case .ayah(let ayah):
-                return .localizedFormat("bookmarks.reading.location", "\(ayah: ayah, nameStyle: .text)")
+                return .localizedFormat("bookmarks.reading.location", "\(ayah: ayah)")
             case .page(let page):
                 return .localizedFormat("bookmarks.reading.location", .text(page.localizedName))
             case .unplaced:

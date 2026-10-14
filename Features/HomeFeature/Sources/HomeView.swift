@@ -120,7 +120,7 @@ private struct HomeViewUI: View {
         let subtitle = subtitleComponents.joined(separator: " · ")
 
         return NoorListItem(
-            title: "\(sura.localizedSuraNumber). \(sura: sura)",
+            title: "\(sura.localizedSuraNumber). \(sura: sura, nameStyle: .decorated)",
             subtitle: .init(text: .text(subtitle), location: .bottom),
             accessory: .text(sura.page.localizedNumber, accessibilityLabel: sura.page.localizedName),
             action: .sync { selectSura(sura) }
@@ -134,7 +134,7 @@ private struct HomeViewUI: View {
 
         return NoorListItem(
             subheading: .text(quarter.localizedName),
-            title: "\(ayah: ayah)",
+            title: "\(ayah: ayah, nameStyle: .decorated)",
             rightSubtitle: "\(quran: item.ayahText, font: quranFont, lineLimit: 1)",
             accessory: .text(page.localizedNumber, accessibilityLabel: page.localizedName),
             action: .sync { selectQuarter(item) }

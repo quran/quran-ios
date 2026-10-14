@@ -1,5 +1,4 @@
 #if QURAN_SYNC
-import NoorFont
 import QuranAnnotations
 import QuranKit
 import QuranLocalization
@@ -37,9 +36,9 @@ public struct ContinueReadingBookmarkRow: View {
     private var title: MultipartText {
         switch bookmark.placement {
         case .ayah(let ayah):
-            "\(ayah: ayah, nameStyle: .compact)"
+            "\(ayah: ayah)"
         case .page(let page):
-            "\(suras: page.suras, nameStyle: .compact)"
+            "\(suras: page.suras)"
         }
     }
 
@@ -71,9 +70,6 @@ private struct ContinueReadingBookmarkRowPreview: View {
             id: "preview", slot: slot, placement: placement,
             modifiedOn: Date(timeIntervalSinceNow: -36000)
         )
-        if UIFont(name: "icomoon", size: 20) == nil {
-            FontName.registerFonts()
-        }
     }
 
     private let bookmark: PlacedReadingBookmark

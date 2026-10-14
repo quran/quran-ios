@@ -1,5 +1,4 @@
 import Localization
-import NoorFont
 import QuranKit
 import QuranLocalization
 import SwiftUI
@@ -45,17 +44,11 @@ struct RecentPageCapsule: View {
     }
 
     private var suraNames: MultipartText {
-        "\(suras: page.suras, nameStyle: .compact)"
+        "\(suras: page.suras)"
     }
 }
 
 #Preview("English") {
-    let _ = {
-        if UIFont(name: "icomoon", size: 20) == nil {
-            FontName.registerFonts()
-        }
-    }()
-
     List {
         Section {
             RecentPageCapsule(page: Quran.hafsMadani1405.pages[0], timestamp: "1 min ago", action: {})

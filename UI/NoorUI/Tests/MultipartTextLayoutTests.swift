@@ -56,9 +56,59 @@ final class MultipartTextLayoutTests: XCTestCase {
         XCTAssertLessThan(heights.1, heights.0)
     }
 
+    func test_wrappingParts_splitSurasIntoSeparateReferences() {
+        let suras = Array(Quran.hafsMadani1405.suras[16 ... 18])
+        let part = TextPart.suras(suras)
+
+        let parts = part.wrappingParts
+
+        XCTAssertEqual(parts.count, 5)
+        XCTAssertEqual(parts.map { $0.rawValue(locale: english) }.joined(), part.rawValue(locale: english))
+        for (index, part) in parts.enumerated() {
+            if index.isMultiple(of: 2) {
+                guard case .sura(let sura, false, .text) = part else {
+                    return XCTFail("Expected a plain sura reference at \(index)")
+                }
+                XCTAssertEqual(sura, suras[index / 2])
+            } else {
+                XCTAssertEqual(part.rawValue(locale: english), " · ")
+            }
+        }
+    }
+
+    func test_view_wrapsSuraNamesOnlyBetweenSuras() async {
+        guard #available(iOS 16.0, *) else { return }
+
+        let widths: [CGFloat] = [60, 90, 100, 110, 130, 160]
+        let heights = await MainActor.run {
+            let suras = Array(Quran.hafsMadani1405.suras[16 ... 18])
+            let wrapping: MultipartText = "\(suras: suras)"
+            let separateReferences: MultipartText =
+                "\(sura: suras[0]) · \(sura: suras[1]) · \(sura: suras[2])"
+            return widths.map { width in
+                (
+                    fittingHeight(pinned(wrapping.view(ofSize: .body)), width: width),
+                    fittingHeight(pinned(separateReferences.view(ofSize: .body)), width: width)
+                )
+            }
+        }
+
+        for (width, height) in zip(widths, heights) {
+            XCTAssertEqual(height.0, height.1, accuracy: 1, "width \(width)")
+        }
+    }
+
+    private let english = Locale(identifier: "en-CA")
+
+    /// Fixes the locale and text size, so the widths that need an extra row don't move with simulator settings.
+    private func pinned(_ content: some View) -> some View {
+        content
+            .environment(\.locale, english)
+            .dynamicTypeSize(.large)
+    }
+
     @MainActor
-    private func fittingHeight(_ content: some View) -> CGFloat {
-        let width: CGFloat = 120
+    private func fittingHeight(_ content: some View, width: CGFloat = 120) -> CGFloat {
         let controller = UIHostingController(rootView: content.frame(width: width, alignment: .leading))
         return controller.sizeThatFits(
             in: CGSize(width: width, height: .greatestFiniteMagnitude)

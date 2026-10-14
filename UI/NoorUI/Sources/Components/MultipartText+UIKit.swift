@@ -33,12 +33,12 @@ private extension TextPart {
                 locale: locale,
                 emphasizesSura: emphasizesSura
             )
-        case .suras(let suras, let nameStyle):
+        case .suras(let suras):
             suras.enumerated().reduce(into: NSMutableAttributedString()) { result, element in
                 if element.offset > 0 {
                     result.append(NSAttributedString(string: SuraNamesView.separator, attributes: [.font: size.plainUIFont]))
                 }
-                result.append(QuranReference.sura(element.element, nameStyle: nameStyle).attributedString(size: size, locale: locale))
+                result.append(QuranReference.sura(element.element).attributedString(size: size, locale: locale))
             }
         case .ayahCoordinate(let ayah):
             NSAttributedString(

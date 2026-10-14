@@ -59,6 +59,8 @@
 // Metadata: Translated by ChatGPT; human review required.
 "translation.selectedTranslations" = "Terpilih";
 "translation.translator" = "Penterjemah: ";
+// In shared verse text, the line above a translation's text: %@ is the translation name, such as "• Sahih International:".
+"translation.share.heading" = "• %@:";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.see-referenced-verse" = "Lihat ayat %d.";
 // Metadata: Translated by ChatGPT; human review required.

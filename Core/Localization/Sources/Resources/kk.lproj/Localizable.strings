@@ -56,6 +56,8 @@
 "translation.text-type.transliteration" = "Транслитерация";
 "translation.selectedTranslations" = "Таңдалған";
 "translation.translator" = "Аудармашы: ";
+// In shared verse text, the line above a translation's text: %@ is the translation name, such as "• Sahih International:".
+"translation.share.heading" = "• %@:";
 "translation.text.see-referenced-verse" = "%d аятты көріңіз.";
 "translation.text.read-more" = "Көбірек оқу";
 // VoiceOver label for the button that shows the next ayah's translation.

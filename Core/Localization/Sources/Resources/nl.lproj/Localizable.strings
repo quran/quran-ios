@@ -56,6 +56,8 @@
 // Metadata: Translated by ChatGPT; human review required.
 "translation.selectedTranslations" = "Geselecteerd";
 "translation.translator" = "Vertaler: ";
+// In shared verse text, the line above a translation's text: %@ is the translation name, such as "• Sahih International:".
+"translation.share.heading" = "• %@:";
 "translation.text.see-referenced-verse" = "Zie ayah %d.";
 "translation.text.read-more" = "Lees Meer";
 // VoiceOver label for the button that shows the next ayah's translation.

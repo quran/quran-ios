@@ -62,6 +62,8 @@
 "translation.text-type.transliteration" = "Transliteration";
 "translation.selectedTranslations" = "Selected";
 "translation.translator" = "Translator: ";
+// In shared verse text, the line above a translation's text: %@ is the translation name, such as "• Sahih International:".
+"translation.share.heading" = "• %@:";
 "translation.text.see-referenced-verse" = "See ayah %d.";
 "translation.text.read-more" = "Read more";
 // VoiceOver label for the button that shows the next ayah's translation.

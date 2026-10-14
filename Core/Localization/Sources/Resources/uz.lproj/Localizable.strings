@@ -64,6 +64,8 @@
 "translation.selectedTranslations" = "Tanlangan";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.translator" = "Tarjimon: ";
+// In shared verse text, the line above a translation's text: %@ is the translation name, such as "• Sahih International:".
+"translation.share.heading" = "• %@:";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.see-referenced-verse" = "%d-oyatni ko'ring.";
 // Metadata: Translated by ChatGPT; human review required.

@@ -32,7 +32,7 @@ struct AyahAnnotationsButton: View {
     @State private var globalFrame: CGRect = .zero
 
     var accessibilityLabel: String {
-        ([ayah.localizedName] + annotations.ordered.map(\.accessibilityLabel)).joined(separator: ", ")
+        ([ayah.localizedName] + annotations.ordered.map(\.accessibilityLabel)).joined(separator: l("list.separator"))
     }
 }
 

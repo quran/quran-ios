@@ -1,8 +1,6 @@
 #if QURAN_SYNC
-import Localization
 import QuranAnnotations
 import QuranKit
-import QuranLocalization
 import SwiftUI
 import XCTest
 @testable import NoorUI
@@ -10,10 +8,15 @@ import XCTest
 @MainActor
 final class AyahAnnotationsButtonTests: XCTestCase {
     func test_accessibilityLabel_identifiesAyahAndAllAnnotationTypes() {
-        let ayah = Quran.hafsMadani1405.suras[1].verses[4]
-        let button = AyahAnnotationsButton(ayah: ayah, annotations: [.note, .collection], height: 12, action: { _ in })
+        let ayah = Quran.hafsMadani1405.suras[1].verses[254]
+        let button = AyahAnnotationsButton(
+            ayah: ayah,
+            annotations: [.note, .readingBookmark(.teal), .collection],
+            height: 12,
+            action: { _ in }
+        )
 
-        XCTAssertEqual(button.accessibilityLabel, "\(ayah.localizedName), \(l("bookmarks.collections")), \(l("tab.notes"))")
+        XCTAssertEqual(button.accessibilityLabel, "Al-Baqarah, Ayah 255; Reading Bookmark: Teal; Collections; Notes")
     }
 
     func test_smallBadge_hasAtLeast44PointLayout() {
@@ -37,7 +40,7 @@ final class AyahAnnotationsButtonTests: XCTestCase {
         let annotations: Set<AyahAnnotation> = [orange, .note, teal]
 
         XCTAssertEqual(annotations.ordered, [teal, orange, .note])
-        XCTAssertEqual(teal.accessibilityLabel, "\(l("ayah.menu.reading-bookmark.title")), \(ReadingBookmarkSlot.teal.displayName)")
+        XCTAssertEqual(teal.accessibilityLabel, "Reading Bookmark: Teal")
     }
 
     func test_readingPins_haveStableOrderAndDistinctAccessibleNames() {

@@ -418,6 +418,8 @@
 "ayah.menu.reading-bookmark.single-ayah-only" = "Chọn một ayah";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.title" = "Dấu trang đọc";
+/* VoiceOver label for a reading bookmark on an ayah. %1$@ is "ayah.menu.reading-bookmark.title" and %2$@ is the bookmark's color, such as "Teal" */
+"ayah.annotation.reading-bookmark" = "%1$@: %2$@";
 
 // Bookmarks
 // Metadata: Translated by ChatGPT; human review required.

@@ -1,3 +1,4 @@
+import Localization
 import NoorFont
 import QuranKit
 import QuranLocalization
@@ -34,7 +35,12 @@ struct RecentPageCapsule: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(page.suras.map { $0.localizedName() }.joined(separator: ", ")), \(page.localizedName), \(timestamp)")
+        .accessibilityLabel(accessibilityLabel)
+    }
+
+    /// Sura names, page and timestamp as a spoken list. The timestamp can be a date with commas.
+    var accessibilityLabel: String {
+        (page.suras.map { $0.localizedName() } + [page.localizedName, timestamp]).joined(separator: l("list.separator"))
     }
 }
 

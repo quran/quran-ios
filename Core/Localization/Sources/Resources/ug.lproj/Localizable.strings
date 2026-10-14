@@ -717,3 +717,6 @@
 // VoiceOver label for the Home button that reverses the surah and juz list order.
 // Metadata: Translated by AI; human review required.
 "home.sort-order.reverse" = "تەرتىپنى ئەكسىچە قىلىش";
+
+/* Separates the items of a list, such as a note's verse ranges */
+"list.separator" = "، ";

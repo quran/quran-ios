@@ -2,6 +2,7 @@
 //  MultipartTextQuranTests.swift
 //
 
+import Localization
 import NoorFont
 import QuranKit
 import QuranLocalization
@@ -237,13 +238,13 @@ final class MultipartTextQuranTests: XCTestCase {
         )
     }
 
-    func test_ayahRanges_separatesRangesLikeSuraNames() {
+    func test_ayahRanges_separatesRangesWithTheListSeparator() {
         let first: MultipartText = "\(ayahRange: ayah ... sura.verses[255])"
         let other = Quran.hafsMadani1405.suras[2].verses[17]
         let second: MultipartText = "\(ayahRange: other ... other)"
         let text: MultipartText = "\(ayahRanges: [ayah ... sura.verses[255], other ... other])"
 
-        let separator = SuraNamesView.separator
+        let separator = l("list.separator")
         XCTAssertEqual(
             text.rawValue(locale: english),
             first.rawValue(locale: english) + separator + second.rawValue(locale: english)

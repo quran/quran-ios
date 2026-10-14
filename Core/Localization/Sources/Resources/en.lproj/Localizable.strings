@@ -467,3 +467,6 @@
 "home.recent-pages.title" = "Recent pages (%@)";
 // VoiceOver label for the Home button that reverses the surah and juz list order.
 "home.sort-order.reverse" = "Reverse order";
+
+/* Separates the items of a list, such as a note's verse ranges */
+"list.separator" = ", ";

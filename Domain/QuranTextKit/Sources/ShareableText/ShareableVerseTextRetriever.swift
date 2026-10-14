@@ -64,7 +64,7 @@ public struct ShareableVerseTextRetriever {
     private let localTranslationsRetriever: LocalTranslationsRetriever
 
     /// A note from Quran.com can cover verses that aren't consecutive, so each run gets its own range, separated by
-    /// " · " as the note editor's title separates them.
+    /// the localized list separator as the note editor's title separates them.
     private func versesSummary(_ verses: [AyahNumber]) -> String {
         verses.consecutiveRanges()
             .map { range in
@@ -73,7 +73,7 @@ public struct ShareableVerseTextRetriever {
                 }
                 return lFormat("quran.range", range.lowerBound.localizedName, range.upperBound.localizedName)
             }
-            .joined(separator: " · ")
+            .joined(separator: l("list.separator"))
     }
 
     private func arabicText(for verse: AyahNumber) async throws -> String {

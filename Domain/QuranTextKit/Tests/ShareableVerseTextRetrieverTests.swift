@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2021-12-19.
 //
 
+import Localization
 import QuranKit
 import TranslationService
 import TranslationServiceFake
@@ -74,7 +75,10 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
         let verses = quran.suras[0].verses
         let versesText = try await shareableTextRetriever.textForVerses([verses[0], verses[1], verses[3]])
 
-        XCTAssertEqual(versesText.last, "Al-Fātihah, Ayah 1 - Al-Fātihah, Ayah 2 · Al-Fātihah, Ayah 4")
+        XCTAssertEqual(
+            versesText.last,
+            "Al-Fātihah, Ayah 1 - Al-Fātihah, Ayah 2" + l("list.separator") + "Al-Fātihah, Ayah 4"
+        )
     }
 
     func testShareTranslationText() async throws {

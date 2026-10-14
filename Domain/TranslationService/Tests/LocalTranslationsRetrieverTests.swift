@@ -88,6 +88,7 @@ class LocalTranslationsRetrieverTests: XCTestCase {
     }
 
     func test_retrievingLocalTranslations_errorAfterDownload() async throws {
+        localTranslationsFake.tearDown()
         localTranslationsFake = LocalTranslationsFake(useFactory: false)
         try await localTranslationsFake.insertTranslation(
             translations[0], installedVersion: 2, downloaded: true
@@ -99,6 +100,21 @@ class LocalTranslationsRetrieverTests: XCTestCase {
         let localTranslations = try await service.getLocalTranslations()
         XCTAssertEqual(Set(localTranslations), [expectedTranslation])
         XCTAssertFalse(preferences.isSelected(expectedTranslation.id))
+    }
+
+    func test_localTranslationsFakes_doNotShareDatabase() async throws {
+        try await localTranslationsFake.insertTranslation(
+            translations[0], installedVersion: translations[0].version, downloaded: true
+        )
+
+        let otherFake = LocalTranslationsFake(useFactory: true)
+        defer { otherFake.tearDown() }
+        try await otherFake.insertTranslation(
+            translations[0], installedVersion: translations[0].version, downloaded: true
+        )
+
+        let otherTranslations = try await otherFake.persistence.retrieveAll()
+        XCTAssertEqual(otherTranslations, [translations[0]])
     }
 
     // MARK: Private

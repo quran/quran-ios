@@ -275,7 +275,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
 
     func setVisiblePages(_ pages: [Page]) {
-        title = pages.map { $0.startSura.localizedName(withPrefix: true) }.joined(separator: " | ")
+        title = pages.map { $0.startSura.localizedName(withPrefix: true) }.joined(separator: l("list.separator.comma"))
         updateTitle(pages)
     }
 
@@ -424,17 +424,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             return
         }
         let suras = pages.map(\.startSura)
-        let juzs = pages.map(\.startJuz)
-        let firstPage = NumberFormatter.shared.format(pages[0].pageNumber)
-        let pageNumbers = pages.count == 1
-            ? firstPage
-            : lFormat("quran.range", firstPage, NumberFormatter.shared.format(pages[pages.count - 1].pageNumber))
-        let pageDescription = lFormat(
-            "page_description",
-            table: .android,
-            pageNumbers,
-            NumberFormatter.shared.format(juzs.min()!.juzNumber)
-        )
+        let pageDescription = pages.localizedDescription()
         let sura = suras.min()!
         let suraReference: MultipartText = "\(sura: sura)"
         if #available(iOS 26.0, *) {

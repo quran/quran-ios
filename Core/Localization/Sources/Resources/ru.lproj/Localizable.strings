@@ -43,7 +43,7 @@
 "quran.ayah.name" = "%1$@, %2$@";
 // A page reference: %@ is the localized page number, such as "Page 42".
 "quran.page.name" = "Страница %@";
-// A range of Quran references or page numbers: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257" or "2 - 3". Translators may reorder the placeholders.
+// A range of Quran references: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257". Translators may reorder the placeholders.
 "quran.range" = "%1$@ - %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
 "quran.hizb.name" = "Хизб %@";
@@ -51,6 +51,8 @@
 "quran.quarter.name" = "%1$@ %2$@";
 // A verse number: %1$d is the ayah number, such as "Ayah 255". Translators may move the number.
 "quran.ayah.number" = "Аят %1$d";
+// The page subtitle when two pages show side by side: %1$@ and %2$@ are the first and last localized page numbers and %3$@ is the localized juz number, such as "Pages 2–3, Juz' 1". Translators may reorder the placeholders.
+"quran.pages.description" = "стр. %1$@–%2$@, джуз %3$@";
 
 // MARK: - Translation
 
@@ -62,6 +64,8 @@
 "translation.selectedTranslations" = "Выбрано";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.translator" = "Переводчик: ";
+// In shared verse text, the line above a translation's text: %@ is the translation name, such as "• Sahih International:".
+"translation.share.heading" = "• %@:";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.see-referenced-verse" = "Смотрите ая %d.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -217,6 +221,8 @@
 "reciters.downloaded" = "Загруженные";
 // Metadata: Translated by ChatGPT; human review required.
 "reciters.all" = "Все";
+// Title of the section listing every reciter in one language: %@ is the language name, such as "All (English)".
+"reciters.all-language" = "Все (%@)";
 
 // MARK: - Audio
 
@@ -480,6 +486,8 @@
 "audio.playback.footer.quran" = "Воспроизведение продолжается до конца Корана. Без потокового воспроизведения эти аяты сначала скачиваются; потоковое воспроизведение экономит место, но требует подключения к интернету.";
 // Metadata: Translated by AI; human review required.
 "audio-manager.stream-hint" = "Чтобы слушать без скачивания, включите «Потоковое аудио» в разделе «Воспроизведение аудио».";
+// Subtitle of a reciter in Audio Downloads: %1$@ is the downloaded size, such as "1.2GB", and %2$@ is the downloaded surahs count, such as "5 surahs downloaded". Translators may reorder the placeholders.
+"audio.downloads.size-and-files" = "%1$@ · %2$@";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Пауза после каждого аята";
 // Metadata: Translated by ChatGPT; human review required.

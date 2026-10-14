@@ -29,7 +29,7 @@
 "quran.ayah.name" = "%1$@، %2$@";
 // A page reference: %@ is the localized page number, such as "Page 42".
 "quran.page.name" = "الصفحة %@";
-// A range of Quran references or page numbers: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257" or "2 - 3". Translators may reorder the placeholders.
+// A range of Quran references: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257". Translators may reorder the placeholders.
 "quran.range" = "%1$@ - %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
 "quran.hizb.name" = "الحزب %@";
@@ -37,6 +37,8 @@
 "quran.quarter.name" = "%1$@ %2$@";
 // A verse number: %1$d is the ayah number, such as "Ayah 255". Translators may move the number.
 "quran.ayah.number" = "آية %1$d";
+// The page subtitle when two pages show side by side: %1$@ and %2$@ are the first and last localized page numbers and %3$@ is the localized juz number, such as "Pages 2–3, Juz' 1". Translators may reorder the placeholders.
+"quran.pages.description" = "صفحات %1$@–%2$@، جزء %3$@";
 
 // IndoPak sura names
 "quran.sura-name.indopak.17" = "بَنِي إِسْرَائِيل";
@@ -51,6 +53,8 @@
 "translation.text-type.transliteration" = "نسخ الحروف للإنجليزية";
 "translation.selectedTranslations" = "المختار";
 "translation.translator" = "المفسر: ";
+// In shared verse text, the line above a translation's text: %@ is the translation name, such as "• Sahih International:".
+"translation.share.heading" = "• %@:";
 "translation.text.see-referenced-verse" = "انظر آية رقم %d.";
 "translation.text.read-more" = "اقرأ المزيد";
 // VoiceOver label for the button that shows the next ayah's translation.
@@ -157,6 +161,8 @@
 "reciters.recent" = "الأخيرة";
 "reciters.downloaded" = "التنزيلات";
 "reciters.all" = "الكل";
+// Title of the section listing every reciter in one language: %@ is the language name, such as "All (English)".
+"reciters.all-language" = "الكل (%@)";
 
 // MARK: - Audio
 
@@ -179,6 +185,8 @@
 "audio.playback.footer.juz" = "يستمر التشغيل حتى نهاية الجزء الحالي. إذا كان «تشغيل الصوت عبر الإنترنت» مُعطّلًا، تُنزَّل تلك الآيات أولًا؛ التشغيل عبر الإنترنت يوفر المساحة لكنه يتطلب اتصالًا بالإنترنت.";
 "audio.playback.footer.quran" = "يستمر التشغيل حتى نهاية القرآن. إذا كان «تشغيل الصوت عبر الإنترنت» مُعطّلًا، تُنزَّل تلك الآيات أولًا؛ التشغيل عبر الإنترنت يوفر المساحة لكنه يتطلب اتصالًا بالإنترنت.";
 "audio-manager.stream-hint" = "للتشغيل دون تنزيل، فعّل «تشغيل الصوت عبر الإنترنت» في «تشغيل الصوتيات».";
+// Subtitle of a reciter in Audio Downloads: %1$@ is the downloaded size, such as "1.2GB", and %2$@ is the downloaded surahs count, such as "5 surahs downloaded". Translators may reorder the placeholders.
+"audio.downloads.size-and-files" = "%1$@ · %2$@";
 "audio.delay.off" = "إيقاف";
 "audio.repeat-count" = "عدد مرات التكرار";
 "audio.repetition-delay" = "مدة الإيقاف بين التكرارات";

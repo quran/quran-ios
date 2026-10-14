@@ -385,6 +385,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "AudioDownloadsFeatureTests",
+        "name" : "AudioDownloadsFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "WhatsNewFeatureTests",
         "name" : "WhatsNewFeatureTests"
       }

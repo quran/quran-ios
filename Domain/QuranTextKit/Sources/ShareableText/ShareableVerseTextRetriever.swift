@@ -106,7 +106,7 @@ public struct ShareableVerseTextRetriever {
 
         for (index, translation) in translations.enumerated() {
             // translator
-            components.append("• \(translation.translationName):")
+            components.append(lFormat("translation.share.heading", translation.translationName))
 
             // translation text for all verses
             components.append(contentsOf: verseTexts.map { stringFromTranslationText($0.translations[index]) })

@@ -38,7 +38,7 @@
 "quran.ayah.name" = "%1$@, %2$@";
 // A page reference: %@ is the localized page number, such as "Page 42".
 "quran.page.name" = "Pagina %@";
-// A range of Quran references or page numbers: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257" or "2 - 3". Translators may reorder the placeholders.
+// A range of Quran references: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257". Translators may reorder the placeholders.
 "quran.range" = "%1$@ - %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
 "quran.hizb.name" = "Hizb %@";
@@ -46,6 +46,8 @@
 "quran.quarter.name" = "%1$@ %2$@";
 // A verse number: %1$d is the ayah number, such as "Ayah 255". Translators may move the number.
 "quran.ayah.number" = "Ayah %1$d";
+// The page subtitle when two pages show side by side: %1$@ and %2$@ are the first and last localized page numbers and %3$@ is the localized juz number, such as "Pages 2–3, Juz' 1". Translators may reorder the placeholders.
+"quran.pages.description" = "Pagina's %1$@–%2$@, Juz' %3$@";
 
 // MARK: - Translation
 
@@ -54,6 +56,8 @@
 // Metadata: Translated by ChatGPT; human review required.
 "translation.selectedTranslations" = "Geselecteerd";
 "translation.translator" = "Vertaler: ";
+// In shared verse text, the line above a translation's text: %@ is the translation name, such as "• Sahih International:".
+"translation.share.heading" = "• %@:";
 "translation.text.see-referenced-verse" = "Zie ayah %d.";
 "translation.text.read-more" = "Lees Meer";
 // VoiceOver label for the button that shows the next ayah's translation.
@@ -178,6 +182,8 @@
 "reciters.recent" = "Recent";
 "reciters.downloaded" = "Gedownload";
 "reciters.all" = "Alle";
+// Title of the section listing every reciter in one language: %@ is the language name, such as "All (English)".
+"reciters.all-language" = "Alle (%@)";
 
 // MARK: - Audio
 
@@ -395,6 +401,8 @@
 "audio.playback.footer.quran" = "Het afspelen gaat door tot het einde van de Koran. Zonder streamen worden die verzen eerst gedownload; streamen bespaart ruimte, maar vereist een internetverbinding.";
 // Metadata: Translated by AI; human review required.
 "audio-manager.stream-hint" = "Zet ‘Audio streamen’ aan in ‘Audioweergave’ om af te spelen zonder te downloaden.";
+// Subtitle of a reciter in Audio Downloads: %1$@ is the downloaded size, such as "1.2GB", and %2$@ is the downloaded surahs count, such as "5 surahs downloaded". Translators may reorder the placeholders.
+"audio.downloads.size-and-files" = "%1$@ · %2$@";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Pauze na elke ayah";
 // Metadata: Translated by ChatGPT; human review required.

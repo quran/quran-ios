@@ -87,6 +87,41 @@ final class LocalizationCatalogTests: XCTestCase {
         }
     }
 
+    func testReciterLanguageTitlesWrapTheLanguageInEachLocalizationsParentheses() throws {
+        for localization in supportedLocalizations {
+            let localized = try strings(for: localization)
+            let parenthesized = localization == "zh" ? "（%@）" : "(%@)"
+            XCTAssertTrue(
+                localized["reciters.all-language", default: ""].contains(parenthesized),
+                "\(localization) reciters.all-language is missing \(parenthesized)"
+            )
+        }
+    }
+
+    func testAudioDownloadSubtitleUsesTheMetadataSeparator() throws {
+        for localization in supportedLocalizations {
+            let localized = try strings(for: localization)
+            // Translators may reorder the placeholders, so only check the separator is there.
+            XCTAssertTrue(
+                localized["audio.downloads.size-and-files", default: ""].contains(" · "),
+                "\(localization) audio.downloads.size-and-files is missing \" · \""
+            )
+        }
+    }
+
+    func testChineseUsesFullWidthColonsAndParentheses() throws {
+        // A colon between two numbers, such as an ayah coordinate "%d:%d", stays half-width.
+        let numericColon = try NSRegularExpression(pattern: #"(\d|%(\d+\$)?[@d]):(?=\d|%)"#)
+        for (key, value) in try strings(for: "zh") {
+            let range = NSRange(value.startIndex..., in: value)
+            let text = numericColon.stringByReplacingMatches(in: value, range: range, withTemplate: "$1")
+            XCTAssertNil(
+                text.rangeOfCharacter(from: CharacterSet(charactersIn: ":()")),
+                "zh \(key) uses half-width punctuation: \(value)"
+            )
+        }
+    }
+
     // MARK: - Private
 
     private let supportedLocalizations = [

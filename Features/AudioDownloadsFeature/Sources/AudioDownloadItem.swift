@@ -70,7 +70,7 @@ extension AudioDownloadedSize? {
         if suraCount == 0 {
             return filesDownloaded
         } else {
-            return "\(Self.formatter.string(from: measurement)) - \(filesDownloaded)"
+            return lFormat("audio.downloads.size-and-files", Self.formatter.string(from: measurement), filesDownloaded)
         }
     }
 }

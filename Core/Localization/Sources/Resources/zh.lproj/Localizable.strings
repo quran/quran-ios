@@ -43,7 +43,7 @@
 "quran.ayah.name" = "%1$@，%2$@";
 // A page reference: %@ is the localized page number, such as "Page 42".
 "quran.page.name" = "第%@页";
-// A range of Quran references or page numbers: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257" or "2 - 3". Translators may reorder the placeholders.
+// A range of Quran references: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257". Translators may reorder the placeholders.
 // Metadata: Translated by AI; human review required.
 "quran.range" = "%1$@至%2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
@@ -55,6 +55,9 @@
 // A verse number: %1$d is the ayah number, such as "Ayah 255". Translators may move the number.
 // Metadata: Translated by AI; human review required.
 "quran.ayah.number" = "第%1$d节";
+// The page subtitle when two pages show side by side: %1$@ and %2$@ are the first and last localized page numbers and %3$@ is the localized juz number, such as "Pages 2–3, Juz' 1". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.pages.description" = "第%3$@卷，第%1$@至%2$@页";
 
 // MARK: - Translation
 
@@ -65,7 +68,9 @@
 // Metadata: Translated by ChatGPT; human review required.
 "translation.selectedTranslations" = "已选";
 // Metadata: Translated by ChatGPT; human review required.
-"translation.translator" = "译者: ";
+"translation.translator" = "译者：";
+// In shared verse text, the line above a translation's text: %@ is the translation name, such as "• Sahih International:".
+"translation.share.heading" = "• %@：";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.see-referenced-verse" = "查看经文 %d。";
 // Metadata: Translated by ChatGPT; human review required.
@@ -90,7 +95,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "search.placeholder.text" = "章节、经文、翻译、注释和数字";
 // Metadata: Translated by ChatGPT; human review required.
-"search.result.count" = "%@ (%d)";
+"search.result.count" = "%@（%d）";
 
 // MARK: - Settings
 
@@ -221,6 +226,8 @@
 "reciters.downloaded" = "已下载";
 // Metadata: Translated by ChatGPT; human review required.
 "reciters.all" = "全部";
+// Title of the section listing every reciter in one language: %@ is the language name, such as "All (English)".
+"reciters.all-language" = "全部（%@）";
 
 // MARK: - Audio
 
@@ -260,7 +267,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.no-data.text" = "长按一节经文。您可以扩展选择以包含多个经文，然后点击书签按钮。";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.verses-count" = "(+%d 节经文)";
+"notes.verses-count" = "（+%d 节经文）";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete.alert.title" = "删除高亮";
 // Metadata: Translated by ChatGPT; human review required.
@@ -485,6 +492,8 @@
 "audio.playback.footer.quran" = "播放将持续到古兰经末尾。关闭流式播放时，这些经文会先下载；流式播放可节省空间，但需要互联网连接。";
 // Metadata: Translated by AI; human review required.
 "audio-manager.stream-hint" = "如需不下载直接播放，请在“音频播放”中开启“流式播放音频”。";
+// Subtitle of a reciter in Audio Downloads: %1$@ is the downloaded size, such as "1.2GB", and %2$@ is the downloaded surahs count, such as "5 surahs downloaded". Translators may reorder the placeholders.
+"audio.downloads.size-and-files" = "%1$@ · %2$@";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "每节经文后暂停";
 // Metadata: Translated by ChatGPT; human review required.
@@ -704,7 +713,7 @@
 "accessibility.section.expand" = "展开分区";
 // Recent pages heading with a localized page count.
 // Metadata: Translated by AI; human review required.
-"home.recent-pages.title" = "最近的页面 (%@)";
+"home.recent-pages.title" = "最近的页面（%@）";
 // VoiceOver label for the Home button that reverses the surah and juz list order.
 // Metadata: Translated by AI; human review required.
 "home.sort-order.reverse" = "倒序排列";

@@ -97,16 +97,9 @@ public struct MobileSyncReadingBookmarkService {
         return renamed
     }
 
-    // MARK: Private
+    // MARK: Internal
 
-    private enum MappingError: Error {
-        case invalidBookmark
-    }
-
-    private let quranDataService: QuranDataService
-    private let storedPageQuran: Quran
-
-    private static func readingBookmark(
+    static func readingBookmark(
         from bookmark: any MobileSync.ReadingBookmark,
         quran: Quran,
         storedPageQuran: Quran
@@ -123,6 +116,12 @@ public struct MobileSyncReadingBookmarkService {
             }
             placement = .ayah(ayah)
         case let bookmark as PageReadingBookmark:
+            // The web numbers IndoPak pages in its own mushafs, which have no page mapping here, so such a
+            // bookmark shows as empty, like a sura or juz bookmark set on the web.
+            guard bookmark.mushafId == PageReadingBookmark.companion.MADANI_MUSHAF_ID else {
+                placement = .unplaced
+                break
+            }
             guard let storedPage = Page(quran: storedPageQuran, pageNumber: Int(bookmark.page)),
                   let page = QuranPageMapper(destination: quran).mapPage(storedPage)
             else {
@@ -145,6 +144,15 @@ public struct MobileSyncReadingBookmarkService {
             name: bookmark.name
         )
     }
+
+    // MARK: Private
+
+    private enum MappingError: Error {
+        case invalidBookmark
+    }
+
+    private let quranDataService: QuranDataService
+    private let storedPageQuran: Quran
 
     private func storedPage(for page: Page) throws -> Page {
         guard let storedPage = QuranPageMapper(destination: storedPageQuran).mapPage(page) else {

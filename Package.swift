@@ -152,7 +152,6 @@ private func modelTargets() -> [[Target]] {
             "Localization",
             "QuranKit",
         ], testDependencies: [
-            "Localization",
             "QuranKit",
         ]),
         target(type, name: "QuranGeometry", dependencies: [

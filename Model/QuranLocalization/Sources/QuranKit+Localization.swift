@@ -19,8 +19,7 @@ extension AyahNumber {
     }
 
     public var localizedName: String {
-        let suraName = sura.localizedName()
-        return "\(suraName), \(localizedAyahNumber)"
+        lFormat("quran.ayah.name", sura.localizedName(), localizedAyahNumber)
     }
 }
 
@@ -32,7 +31,7 @@ extension Juz {
 
 extension Page {
     public var localizedName: String {
-        "\(lAndroid("quran_page")) \(NumberFormatter.shared.format(pageNumber))"
+        lFormat("quran.page.name", NumberFormatter.shared.format(pageNumber))
     }
 
     public var localizedNumber: String {
@@ -42,7 +41,7 @@ extension Page {
     public var localizedQuarterName: String {
         let juzDescription = startJuz.localizedName
         if let quarter {
-            return [juzDescription, quarter.localizedName].joined(separator: ", ")
+            return [juzDescription, quarter.localizedName].joined(separator: l("list.separator.comma"))
         } else {
             return juzDescription
         }

@@ -9,6 +9,8 @@
 // VoiceOver label for an overflow (…) button that opens more options.
 // Metadata: Translated by AI; human review required.
 "button.more" = "Ko‘proq";
+// Separates the items of a short list whose items never contain commas, such as "Juz' 1, ¼ Hizb 1". Lists whose items can contain commas use "list.separator".
+"list.separator.comma" = ", ";
 
 // MARK: - Errors
 
@@ -37,6 +39,10 @@
 "surah" = "Sura";
 // Metadata: Translated by AI; human review required.
 "quran_alquran" = "Qurʼon";
+// A verse reference: %1$@ is the surah name and %2$@ is the localized ayah, such as "Al-Baqarah, Ayah 255". Translators may reorder the placeholders.
+"quran.ayah.name" = "%1$@, %2$@";
+// A page reference: %@ is the localized page number, such as "Page 42".
+"quran.page.name" = "%@-bet";
 
 // MARK: - Translation
 

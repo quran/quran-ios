@@ -54,6 +54,22 @@ final class LocalizationCatalogTests: XCTestCase {
         }
     }
 
+    func testReferenceFormatsUseEachLocalizationsComma() throws {
+        let commas = [
+            "ar": "، ",
+            "fa": "، ",
+            "ug": "، ",
+            "zh": "，",
+        ]
+
+        for localization in supportedLocalizations {
+            let localized = try strings(for: localization)
+            let comma = commas[localization, default: ", "]
+            XCTAssertEqual(localized["list.separator.comma"], comma, "\(localization) list.separator.comma")
+            XCTAssertEqual(localized["quran.ayah.name"], "%1$@\(comma)%2$@", "\(localization) quran.ayah.name")
+        }
+    }
+
     // MARK: - Private
 
     private let supportedLocalizations = [

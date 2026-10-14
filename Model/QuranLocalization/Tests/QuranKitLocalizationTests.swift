@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2021-12-06.
 //
 
+import Localization
 import QuranKit
 import XCTest
 @testable import QuranLocalization
@@ -42,6 +43,42 @@ final class QuranKitLocalizationTests: XCTestCase {
         XCTAssertEqual("Juz' 1", quran.pages[11].localizedQuarterName)
         XCTAssertEqual("Juz' 30, ¾ Hizb 60", quran.pages[598].localizedQuarterName)
         XCTAssertEqual("Juz' 30", quran.pages[599].localizedQuarterName)
+    }
+
+    func testPageQuarterInfoSeparatesWithLocalizedComma() throws {
+        let page = quran.pages[4]
+        let quarter = try XCTUnwrap(page.quarter)
+
+        XCTAssertEqual(
+            [page.startJuz.localizedName, quarter.localizedName].joined(separator: l("list.separator.comma")),
+            page.localizedQuarterName
+        )
+    }
+
+    func testAyahName() {
+        let ayah = quran.suras[1].verses[254]
+
+        XCTAssertEqual("Al-Baqarah, Ayah 255", ayah.localizedName)
+        XCTAssertEqual(
+            lFormat("quran.ayah.name", ayah.sura.localizedName(), ayah.localizedAyahNumber),
+            ayah.localizedName
+        )
+    }
+
+    func testPageName() {
+        let page = quran.pages[41]
+
+        XCTAssertEqual("Page 42", page.localizedName)
+        XCTAssertEqual(lFormat("quran.page.name", NumberFormatter.shared.format(42)), page.localizedName)
+    }
+
+    func testArabicReferenceFormatsUseArabicComma() {
+        XCTAssertEqual("، ", l("list.separator.comma", language: .arabic))
+        XCTAssertEqual(
+            "البَقَرَةِ، آية ٢٥٥",
+            withoutBidiIsolates(lFormat("quran.ayah.name", language: .arabic, "البَقَرَةِ", "آية ٢٥٥"))
+        )
+        XCTAssertEqual("الصفحة ٤٢", withoutBidiIsolates(lFormat("quran.page.name", language: .arabic, "٤٢")))
     }
 
     func testIndoPakSuraNamesUseReadingSpecificEnglishNames() {
@@ -146,4 +183,9 @@ final class QuranKitLocalizationTests: XCTestCase {
     // MARK: Private
 
     private let quran = Quran.hafsMadani1405
+
+    /// Foundation wraps arguments of a right-to-left format in invisible bidi isolates.
+    private func withoutBidiIsolates(_ text: String) -> String {
+        text.replacingOccurrences(of: "\u{2068}", with: "").replacingOccurrences(of: "\u{2069}", with: "")
+    }
 }

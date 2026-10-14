@@ -67,7 +67,7 @@ public struct ShareableVerseTextRetriever {
         if verses.count == 1 {
             return verses[0].localizedName
         }
-        return "\(verses[0].localizedName) - \(verses.last!.localizedName)"
+        return lFormat("quran.range", verses[0].localizedName, verses.last!.localizedName)
     }
 
     private func arabicText(for verse: AyahNumber) async throws -> String {

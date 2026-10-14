@@ -33,6 +33,8 @@
 "quran.ayah.name" = "%1$@, %2$@";
 // A page reference: %@ is the localized page number, such as "Page 42".
 "quran.page.name" = "Page %@";
+// A range of Quran references or page numbers: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257" or "2 - 3". Translators may reorder the placeholders.
+"quran.range" = "%1$@ - %2$@";
 
 // IndoPak sura names
 "quran.sura-name.indopak.17" = "Banī Isrā’īl";

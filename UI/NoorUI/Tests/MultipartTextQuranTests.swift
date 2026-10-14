@@ -220,6 +220,23 @@ final class MultipartTextQuranTests: XCTestCase {
         )
     }
 
+    func test_ayahRange_usesEachLanguagesRangeFormat() {
+        let range = ayah ... sura.verses[255]
+
+        XCTAssertEqual(
+            MultipartText.ayahRange(range, language: .english).rawValue(locale: english),
+            "\(sura.localizedName()) \u{E905} · 2:255 - 2:256"
+        )
+        XCTAssertEqual(
+            MultipartText.ayahRange(range, language: .arabic).rawValue(locale: arabic),
+            "\u{E905} · ٢:٢٥٥ - ٢:٢٥٦"
+        )
+        XCTAssertEqual(
+            MultipartText.ayahRange(range, language: .chinese).rawValue(locale: chinese),
+            "\(sura.localizedName()) \u{E905} · 2:255至2:256"
+        )
+    }
+
     func test_references_useSemanticAccessibilityText() {
         let suraText: MultipartText = "\(sura: sura)"
         let ayahText: MultipartText = "\(ayah: ayah)"
@@ -292,4 +309,5 @@ final class MultipartTextQuranTests: XCTestCase {
     private let ayah = Quran.hafsMadani1405.suras[1].verses[254]
     private let english = Locale(identifier: "en-CA")
     private let arabic = Locale(identifier: "ar-SA")
+    private let chinese = Locale(identifier: "zh")
 }

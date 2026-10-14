@@ -9,8 +9,8 @@
 import Crashing
 import Foundation
 import QuranAudio
+import SystemDependencies
 import VLogging
-import Zip
 
 public struct AudioUnzipper {
     // MARK: Lifecycle
@@ -31,7 +31,7 @@ public struct AudioUnzipper {
 
         logger.info("Unzipping audio file. Reciter=\(reciter.nameKey) file=\(zipFile).")
         do {
-            try Zip.unzipFile(zipFile, destination: reciter.localFolder().url, overwrite: true, password: nil, progress: nil)
+            try zipper.unzipFile(zipFile, destination: reciter.localFolder().url, overwrite: true)
         } catch {
             crasher.recordError(error, reason: "Cannot unzip file '\(zipFile)' to '\(reciter.localFolder())'")
             // delete the zip and try to re-download it again, next time.
@@ -39,4 +39,8 @@ public struct AudioUnzipper {
             throw error
         }
     }
+
+    // MARK: Private
+
+    private let zipper: Zipper = DefaultZipper()
 }

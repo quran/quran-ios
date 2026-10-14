@@ -10,7 +10,6 @@ import QuranAudio
 import SystemDependencies
 import TestResources
 import Utilities
-import Zip
 
 extension Reciter {
     public var gaplessDatabaseZip: String {
@@ -38,7 +37,7 @@ extension Reciter {
         let zipDestination = gaplessDatabaseZipPath
         try FileManager.default.copyItem(at: dbSource, to: gaplessDatabaseZipPath)
         if unZip {
-            try Zip.unzipFile(zipDestination.url, destination: directory.url, overwrite: true, password: nil, progress: nil)
+            try DefaultZipper().unzipFile(zipDestination.url, destination: directory.url, overwrite: true)
         }
     }
 

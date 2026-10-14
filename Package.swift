@@ -61,7 +61,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-collections", from: "1.0.3"),
 
         // Zip
-        .package(url: "https://github.com/marmelroy/Zip", from: "2.1.1"),
+        .package(url: "https://github.com/weichsel/ZIPFoundation", from: "0.9.20"),
 
         // Database
         .package(url: "https://github.com/groue/GRDB.swift", from: "6.29.1"),
@@ -83,10 +83,12 @@ let package = Package(
 private func coreTargets() -> [[Target]] {
     let type = TargetType.core
     return [
-        target(type, name: "SystemDependencies", hasTests: false, dependencies: [
+        target(type, name: "SystemDependencies", dependencies: [
             "Utilities",
-            "Zip",
+            "ZIPFoundation",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+        ], testDependencies: [
+            "ZIPFoundation",
         ]),
         target(type, name: "SystemDependenciesFake", hasTests: false, dependencies: [
             "SystemDependencies",
@@ -423,7 +425,6 @@ private func domainTargets() -> [[Target]] {
             "QuranAudio",
             "VLogging",
             "Crashing",
-            "Zip",
             .product(name: "OrderedCollections", package: "swift-collections"),
         ], testDependencies: [
             "ReciterServiceFake",
@@ -463,7 +464,6 @@ private func domainTargets() -> [[Target]] {
             "QuranTextKit",
             "QueuePlayer",
             "SystemDependencies",
-            "Zip",
         ], testDependencies: [
             "SystemDependenciesFake",
             "TranslationServiceFake",
@@ -501,7 +501,6 @@ private func domainTargets() -> [[Target]] {
             "Localization",
             "Preferences",
             "SystemDependencies",
-            "Zip",
         ], testDependencies: [
             "TranslationServiceFake",
             "BatchDownloaderFake",
@@ -921,7 +920,7 @@ private func featuresTargets() -> [[Target]] {
             "TranslationsFeature",
             "ReadingSelectorFeature",
             "Preferences",
-            "Zip",
+            "ZIPFoundation",
         ] + mobileSyncTargetDependencies, testDependencies: [
             "Analytics",
             "AppDependencies",
@@ -950,6 +949,7 @@ private func featuresTargets() -> [[Target]] {
             "SettingsService",
             "SystemDependenciesFake",
             "TranslationsFeature",
+            "ZIPFoundation",
         ] + mobileSyncTargetDependencies),
 
         target(type, name: "AppStructureFeature", dependencies: [

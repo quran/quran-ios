@@ -31,7 +31,7 @@ public final class ZipperFake: Zipper {
     public var partialFailure: PartialFailure?
     public var unzippedFiles: [URL] = []
 
-    public func unzipFile(_ zipFile: URL, destination: URL, overwrite: Bool, password: String?) throws {
+    public func unzipFile(_ zipFile: URL, destination: URL, overwrite: Bool) throws {
         let files = zipContents(zipFile).sorted { $0.path < $1.path }
 
         if let partialFailure {

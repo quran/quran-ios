@@ -175,6 +175,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "SystemDependenciesTests",
+        "name" : "SystemDependenciesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "TranslationServiceTests",
         "name" : "TranslationServiceTests"
       }

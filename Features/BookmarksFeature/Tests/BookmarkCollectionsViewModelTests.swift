@@ -64,7 +64,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             collection(name: "Z Collection"),
             collection(name: oldPageBookmarksCollectionName),
             collection(name: "A Collection"),
-            collection(name: "Default", id: "__default__", isDefault: true, isSystem: true),
+            collection(name: "Default", id: "__default__", isDefault: true, isReadOnly: true),
         ])
 
         XCTAssertEqual(collections.map(\.name), [
@@ -93,32 +93,10 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             .oldPageBookmarks
         )
         XCTAssertEqual(
-            collection(name: "Default", id: "__default__", isDefault: true, isSystem: true).kind,
+            collection(name: "Default", id: "__default__", isDefault: true, isReadOnly: true).kind,
             .defaultBookmarks
         )
         XCTAssertEqual(collection(name: "Personal").kind, .user)
-    }
-
-    func test_collectionCapabilities_protectSystemCollections() {
-        let defaultBookmarks = collection(
-            name: "Default",
-            id: "__default__",
-            isDefault: true,
-            isSystem: true
-        )
-        let oldPageBookmarks = collection(name: oldPageBookmarksCollectionName)
-        let user = collection(name: "Personal")
-
-        let system = collection(name: "Managed", isSystem: true)
-
-        XCTAssertFalse(defaultBookmarks.canRename)
-        XCTAssertFalse(defaultBookmarks.canDelete)
-        XCTAssertFalse(system.canRename)
-        XCTAssertFalse(system.canDelete)
-        XCTAssertTrue(oldPageBookmarks.canRename)
-        XCTAssertTrue(oldPageBookmarks.canDelete)
-        XCTAssertTrue(user.canRename)
-        XCTAssertTrue(user.canDelete)
     }
 
     func test_defaultCollectionPresentation_usesLocalizedFavoritesNameAndFilledStarIcon() {
@@ -126,7 +104,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             name: "Default",
             id: "__default__",
             isDefault: true,
-            isSystem: true
+            isReadOnly: true
         )
 
         XCTAssertEqual(collection.displayName, l("bookmarks.collections.favorites"))
@@ -634,9 +612,9 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         name: String,
         id: String? = nil,
         isDefault: Bool = false,
-        isSystem: Bool = false
+        isReadOnly: Bool = false
     ) -> AyahBookmarkCollection {
-        AyahBookmarkCollection(id: id ?? name, name: name, isDefault: isDefault, isSystem: isSystem, bookmarks: [])
+        AyahBookmarkCollection(id: id ?? name, name: name, isDefault: isDefault, isReadOnly: isReadOnly, bookmarks: [])
     }
 
     private func waitUntil(

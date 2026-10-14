@@ -110,6 +110,31 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         XCTAssertTrue(collections[0].isDefault)
     }
 
+    func test_collectionsSequence_marksFavoritesReadOnly() async throws {
+        var iterator = service.collectionsSequence().makeAsyncIterator()
+
+        let collections = try await iterator.next() ?? []
+
+        let favorites = try XCTUnwrap(collections.first { $0.isDefault })
+        XCTAssertTrue(favorites.isReadOnly)
+        XCTAssertFalse(favorites.canRename)
+        XCTAssertFalse(favorites.canDelete)
+    }
+
+    func test_collections_keepsReadOnlyCollectionsFromOlderApps() {
+        let collections = AyahBookmarkCollectionService.collections(
+            from: [
+                collectionWithBookmarks(id: "1", name: "Green", isReadOnly: true),
+                collectionWithBookmarks(id: "2", name: "Personal", isReadOnly: false),
+            ],
+            quran: .hafsMadani1405
+        )
+
+        XCTAssertEqual(collections.map(\.name), ["Green", "Personal"])
+        XCTAssertEqual(collections.map(\.canRename), [false, true])
+        XCTAssertEqual(collections.map(\.canDelete), [false, true])
+    }
+
     func test_createCollection_throwsTextLengthLimitErrorForBlankName() async {
         await assertThrows(TextLengthLimitError(field: .collectionName, bound: .tooShort, limit: 1)) {
             try await service.createCollection(named: "   ")
@@ -126,6 +151,20 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
 
         let stored = try await storedCollection(named: "Personal")
         XCTAssertEqual(stored.collection.id, collection.collection.id)
+    }
+
+    private func collectionWithBookmarks(id: String, name: String, isReadOnly: Bool) -> CollectionWithAyahBookmarks {
+        CollectionWithAyahBookmarks(
+            collection: BookmarkCollection(
+                name: name,
+                lastUpdated: Date(timeIntervalSince1970: 0),
+                id: id,
+                isDefault: false,
+                isSystem: false,
+                isReadOnly: isReadOnly
+            ),
+            bookmarks: []
+        )
     }
 
     private func assertThrows(

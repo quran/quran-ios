@@ -94,7 +94,7 @@ public struct AyahBookmarkCollectionService {
                 id: collection.collection.id,
                 name: collection.collection.name,
                 isDefault: collection.collection.isDefault,
-                isSystem: collection.collection.isSystem,
+                isReadOnly: collection.collection.isReadOnly,
                 bookmarks: collection.bookmarks.compactMap { bookmark(for: $0, quran: quran) }
             )
         }

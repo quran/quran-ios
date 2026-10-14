@@ -537,6 +537,7 @@
 "bookmarks.collections.name.empty" = "El nombre de la colección no puede estar vacío.";
 "bookmarks.collections.name.too-long" = "Los nombres de las colecciones no pueden tener más de %d caracteres.";
 "bookmarks.collections.name.duplicate" = "Ya existe una colección llamada «%@».";
+"bookmarks.collections.name.reserved" = "«%@» es un nombre reservado.";
 "bookmarks.collections.read-only" = "Esta colección no se puede renombrar ni eliminar.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Crea una colección para organizar las aleyas por tema, dua o plan de memorización.";

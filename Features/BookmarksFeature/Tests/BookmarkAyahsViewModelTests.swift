@@ -160,7 +160,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
 
         XCTAssertEqual(
             sut.newCollectionNameError,
-            TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)
+            .textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255))
         )
         XCTAssertTrue(sut.isPresentingAddCollection)
         XCTAssertEqual(sut.newCollectionName, longName)

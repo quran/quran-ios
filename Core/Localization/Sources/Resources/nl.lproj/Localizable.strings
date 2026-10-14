@@ -452,6 +452,7 @@
 "bookmarks.collections.name.empty" = "De naam van een verzameling mag niet leeg zijn.";
 "bookmarks.collections.name.too-long" = "Namen van verzamelingen mogen niet langer zijn dan %d tekens.";
 "bookmarks.collections.name.duplicate" = "Er bestaat al een verzameling met de naam ‘%@’.";
+"bookmarks.collections.name.reserved" = "‘%@’ is een gereserveerde naam.";
 "bookmarks.collections.read-only" = "Deze verzameling kan niet worden hernoemd of verwijderd.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Maak een verzameling om ayahs te ordenen op thema, dua of memorisatieplan.";

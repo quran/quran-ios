@@ -214,6 +214,7 @@
 "bookmarks.collections.name.empty" = "لا يمكن أن يكون اسم المجموعة فارغًا.";
 "bookmarks.collections.name.too-long" = "يجب ألا يتجاوز اسم المجموعة %d حرف.";
 "bookmarks.collections.name.duplicate" = "توجد مجموعة باسم “%@” بالفعل.";
+"bookmarks.collections.name.reserved" = "“%@” اسم محجوز.";
 "bookmarks.collections.read-only" = "لا يمكن إعادة تسمية هذه المجموعة أو حذفها.";
 "bookmarks.collections.rename" = "إعادة التسمية";
 "bookmarks.collections.delete.confirmation.title" = "هل تريد حذف المجموعة؟";

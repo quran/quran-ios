@@ -16,6 +16,8 @@ func mapCollectionErrors<T>(_ operation: () async throws -> T) async throws -> T
         throw ReadOnlyCollectionError(collectionID: error.id)
     } catch let error as MobileSyncDuplicateCollectionNameError {
         throw DuplicateCollectionNameError(name: error.name)
+    } catch let error as MobileSyncReservedCollectionNameError {
+        throw ReservedCollectionNameError(name: error.name)
     }
 }
 #endif

@@ -322,7 +322,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
         XCTAssertEqual(
             sut.newCollectionNameError,
-            TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)
+            .textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255))
         )
         XCTAssertTrue(sut.isPresentingAddCollection)
         XCTAssertEqual(sut.newCollectionName, longName)
@@ -334,6 +334,26 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
         XCTAssertNil(sut.newCollectionNameError)
         XCTAssertEqual(sut.newCollectionName, "")
+    }
+
+    func test_createPendingCollection_keepsReservedNameAndExplainsIt() async throws {
+        let sut = makeSUT()
+        sut.presentAddCollection()
+        sut.isPresentingAddCollection = false
+        sut.newCollectionName = "system:notes"
+
+        await sut.createPendingCollection()
+
+        XCTAssertEqual(sut.newCollectionNameError, .reserved(ReservedCollectionNameError(name: "system:notes")))
+        XCTAssertEqual(
+            sut.newCollectionNameError?.localizedMessage,
+            lFormat("bookmarks.collections.name.reserved", "system:notes")
+        )
+        XCTAssertTrue(sut.isPresentingAddCollection)
+        XCTAssertEqual(sut.newCollectionName, "system:notes")
+        XCTAssertNil(sut.error)
+        let collections = try await storedCollections()
+        XCTAssertEqual(collections.count, 1)
     }
 
     func test_requestDeleteCollection_deletesEmptyCollectionWithoutConfirmation() async throws {

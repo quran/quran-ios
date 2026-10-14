@@ -32,4 +32,18 @@ public struct DuplicateCollectionNameError: Error, Equatable, Sendable {
     /// The existing collection's name, which can differ from the typed name in case or surrounding spaces.
     public let name: String
 }
+
+/// Creating or renaming a collection with a name users can't give one: Favorites, and the server's reserved
+/// `system:` names.
+public struct ReservedCollectionNameError: Error, Equatable, Sendable {
+    // MARK: Lifecycle
+
+    public init(name: String) {
+        self.name = name
+    }
+
+    // MARK: Public
+
+    public let name: String
+}
 #endif

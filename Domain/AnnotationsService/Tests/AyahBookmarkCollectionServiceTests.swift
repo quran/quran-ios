@@ -166,6 +166,21 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         XCTAssertEqual(stored.collection.id, collection.collection.id)
     }
 
+    func test_createAndRenameCollection_throwReservedCollectionNameError() async throws {
+        await assertThrows(ReservedCollectionNameError(name: "system:notes")) {
+            try await service.createCollection(named: "system:notes")
+        }
+        try await service.createCollection(named: "Personal")
+        let collection = try await storedCollection(named: "Personal")
+
+        await assertThrows(ReservedCollectionNameError(name: "Favorites")) {
+            try await service.renameCollection(id: collection.collection.id, to: "Favorites")
+        }
+
+        let stored = try await storedCollection(named: "Personal")
+        XCTAssertEqual(stored.collection.id, collection.collection.id)
+    }
+
     func test_renameAndRemoveFavorites_throwReadOnlyCollectionError() async throws {
         var iterator = service.collectionsSequence().makeAsyncIterator()
         let collections = try await iterator.next() ?? []

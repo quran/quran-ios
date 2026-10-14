@@ -539,6 +539,7 @@
 "bookmarks.collections.name.empty" = "نام مجموعه نمی‌تواند خالی باشد.";
 "bookmarks.collections.name.too-long" = "نام مجموعه نمی‌تواند بیش از %d نویسه داشته باشد.";
 "bookmarks.collections.name.duplicate" = "مجموعه‌ای با نام «%@» از قبل وجود دارد.";
+"bookmarks.collections.name.reserved" = "«%@» نامی رزروشده است.";
 "bookmarks.collections.read-only" = "نام این مجموعه را نمی‌توان تغییر داد و نمی‌توان آن را حذف کرد.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "برای سازمان‌دهی آیات بر اساس موضوع، دعا یا برنامهٔ حفظ، یک مجموعه بسازید.";

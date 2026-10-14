@@ -538,6 +538,7 @@
 "bookmarks.collections.name.empty" = "O nome da coleção não pode ficar vazio.";
 "bookmarks.collections.name.too-long" = "Os nomes das coleções não podem ter mais de %d caracteres.";
 "bookmarks.collections.name.duplicate" = "Já existe uma coleção chamada “%@”.";
+"bookmarks.collections.name.reserved" = "“%@” é um nome reservado.";
 "bookmarks.collections.read-only" = "Esta coleção não pode ser renomeada nem excluída.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Crie uma coleção para organizar ayahs por tema, dua ou plano de memorização.";

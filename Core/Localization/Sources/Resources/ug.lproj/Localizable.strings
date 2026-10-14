@@ -540,6 +540,7 @@
 "bookmarks.collections.name.empty" = "توپلام نامى بوش بولسا بولمايدۇ.";
 "bookmarks.collections.name.too-long" = "توپلام نامى %d ھەرپتىن ئېشىپ كەتمەسلىكى كېرەك.";
 "bookmarks.collections.name.duplicate" = "«%@» ناملىق توپلام ئاللىبۇرۇن بار.";
+"bookmarks.collections.name.reserved" = "«%@» ساقلاپ قويۇلغان نام.";
 "bookmarks.collections.read-only" = "بۇ توپلامنىڭ نامىنى ئۆزگەرتكىلى ياكى ئۇنى ئۆچۈرگىلى بولمايدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "ئايەتلەرنى تېما، دۇئا ياكى يادلاش پىلانى بويىچە رەتلەش ئۈچۈن توپلام قۇرۇڭ.";

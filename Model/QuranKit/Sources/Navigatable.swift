@@ -22,3 +22,18 @@ extension Navigatable {
         return values
     }
 }
+
+extension Sequence where Element: Navigatable {
+    /// The values, sorted and without duplicates, grouped into runs of consecutive values.
+    public func consecutiveRanges() -> [ClosedRange<Element>] {
+        var ranges: [ClosedRange<Element>] = []
+        for value in Set(self).sorted() {
+            if let last = ranges.last, last.upperBound.next == value {
+                ranges[ranges.count - 1] = last.lowerBound ... value
+            } else {
+                ranges.append(value ... value)
+            }
+        }
+        return ranges
+    }
+}

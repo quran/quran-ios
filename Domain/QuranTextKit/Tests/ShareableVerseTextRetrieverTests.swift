@@ -69,6 +69,14 @@ final class ShareableVerseTextRetrieverTests: XCTestCase {
         }
     }
 
+    func testShareArabicText_summarizesEachRunOfConsecutiveVerses() async throws {
+        statePreferences.quranMode = .arabic
+        let verses = quran.suras[0].verses
+        let versesText = try await shareableTextRetriever.textForVerses([verses[0], verses[1], verses[3]])
+
+        XCTAssertEqual(versesText.last, "Al-Fātihah, Ayah 1 - Al-Fātihah, Ayah 2 · Al-Fātihah, Ayah 4")
+    }
+
     func testShareTranslationText() async throws {
         statePreferences.quranMode = .translation
 

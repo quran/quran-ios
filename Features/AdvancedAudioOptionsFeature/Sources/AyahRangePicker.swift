@@ -111,7 +111,7 @@ private struct AyahWheelPicker: View {
         HStack(spacing: 0) {
             Picker(l("surah"), selection: suraBinding) {
                 ForEach(model.suras) { sura in
-                    let reference: MultipartText = "\(sura.localizedSuraNumber) · \(sura: sura)"
+                    let reference: MultipartText = "\(sura.localizedSuraNumber). \(sura: sura)"
                     reference
                         .view(ofSize: .body, allowsWrapping: false)
                         .tag(sura)

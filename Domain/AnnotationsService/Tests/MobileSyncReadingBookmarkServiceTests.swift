@@ -1,5 +1,6 @@
 #if QURAN_SYNC
 import class MobileSync.AyahReadingBookmark
+import class MobileSync.PageReadingBookmark
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
@@ -67,6 +68,20 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
         let bookmark = try await storedBookmark(quran: quran)
 
         XCTAssertEqual(bookmark?.placement, .page(expectedPage))
+    }
+
+    func test_readingBookmark_showsIndoPakPageFromTheWebAsUnplaced() {
+        for mushafId: Int32 in [6, 7] {
+            let bookmark = MobileSyncReadingBookmarkService.readingBookmark(
+                from: pageBookmark(page: 255, mushafId: mushafId, name: "Study"),
+                quran: .hafsMadani1405,
+                storedPageQuran: .hafsMadani1405
+            )
+
+            XCTAssertEqual(bookmark?.placement, .unplaced, "mushaf \(mushafId)")
+            XCTAssertEqual(bookmark?.slot, .teal, "mushaf \(mushafId)")
+            XCTAssertEqual(bookmark?.name, "Study", "mushaf \(mushafId)")
+        }
     }
 
     func test_addReadingBookmark_persistsPageLocation() async throws {
@@ -225,6 +240,17 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
             return []
         }
         return bookmarks
+    }
+
+    private func pageBookmark(page: Int, mushafId: Int32, name: String? = nil) -> PageReadingBookmark {
+        PageReadingBookmark(
+            page: Int32(page),
+            lastUpdated: Date(timeIntervalSince1970: 0),
+            id: "1",
+            slot: .teal,
+            name: name,
+            mushafId: mushafId
+        )
     }
 
     private func ayah(_ number: Int) -> AyahNumber {

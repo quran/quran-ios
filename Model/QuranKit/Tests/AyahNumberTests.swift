@@ -11,6 +11,14 @@ import XCTest
 final class AyahNumberTests: XCTestCase {
     // MARK: Internal
 
+    func testConsecutiveRangesGroupsRunsAcrossSuras() {
+        let verses = quran.verses
+        let ranges = [verses[8], verses[6], verses[7], verses[20], verses[7]].consecutiveRanges()
+
+        XCTAssertEqual(ranges, [verses[6] ... verses[8], verses[20] ... verses[20]])
+        XCTAssertEqual([AyahNumber]().consecutiveRanges(), [])
+    }
+
     func testVerses() {
         let verses = quran.verses
         XCTAssertEqual(verses.count, 6236)

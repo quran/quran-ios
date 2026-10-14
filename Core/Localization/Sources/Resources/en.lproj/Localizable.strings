@@ -244,6 +244,9 @@
 "bookmarks.collections.new.placeholder" = "Collection name";
 "bookmarks.collections.name.empty" = "Collection names can't be empty.";
 "bookmarks.collections.name.too-long" = "Collection names can't be longer than %d characters.";
+"bookmarks.collections.name.duplicate" = "A collection named “%@” already exists.";
+"bookmarks.collections.name.reserved" = "“%@” is a reserved name.";
+"bookmarks.collections.read-only" = "This collection can't be renamed or deleted.";
 "bookmarks.collections.rename" = "Rename";
 "bookmarks.collections.delete.confirmation.title" = "Delete Collection?";
 "bookmarks.collections.delete.confirmation.message" = "This collection contains bookmarks. Are you sure you want to delete it?";
@@ -464,3 +467,6 @@
 "home.recent-pages.title" = "Recent pages (%@)";
 // VoiceOver label for the Home button that reverses the surah and juz list order.
 "home.sort-order.reverse" = "Reverse order";
+
+/* Separates the items of a list, such as a note's verse ranges. A semicolon, because items can contain commas ("Al-Fātihah, Ayah 1") */
+"list.separator" = "; ";

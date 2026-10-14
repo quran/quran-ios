@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import MobileSync
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
@@ -26,21 +27,44 @@ final class MobileSyncNoteServiceTests: XCTestCase {
 
         let note = try await storedNote()
         XCTAssertEqual(note.text, "Remember this")
-        XCTAssertEqual(note.startAyah, ayah(1))
-        XCTAssertEqual(note.endAyah, ayah(2))
+        XCTAssertEqual(note.verses, [ayah(1), ayah(2)])
     }
 
-    func test_updateNote_persistsBodyAndRange() async throws {
-        try await service.createNote(body: "Original", startAyah: ayah(1), endAyah: ayah(1))
+    func test_updateNote_changesBodyAndKeepsRange() async throws {
+        try await service.createNote(body: "Original", startAyah: ayah(1), endAyah: ayah(2))
         let original = try await storedNote()
 
-        try await service.updateNote(original, body: "Updated", startAyah: ayah(2), endAyah: ayah(3))
+        try await service.updateNote(original, body: "Updated")
 
         let updated = try await storedNote()
         XCTAssertEqual(updated.id, original.id)
         XCTAssertEqual(updated.text, "Updated")
-        XCTAssertEqual(updated.startAyah, ayah(2))
-        XCTAssertEqual(updated.endAyah, ayah(3))
+        XCTAssertEqual(updated.verses, [ayah(1), ayah(2)])
+    }
+
+    func test_note_mapsEveryRangeOfAQuranComNote() throws {
+        // The app creates notes with one range, so only a note synced from Quran.com has several.
+        let synced = MobileSync.Note(
+            body: "On two passages",
+            ranges: [range(2, 255, 2, 256), range(3, 18, 3, 18)],
+            lastUpdated: Date(timeIntervalSince1970: 1),
+            id: "1"
+        )
+
+        let note = try XCTUnwrap(MobileSyncNoteService.note(from: synced, quran: .hafsMadani1405))
+
+        XCTAssertEqual(note.verses, [verse(2, 255), verse(2, 256), verse(3, 18)])
+    }
+
+    func test_note_skipsNoteWithARangeTheQuranDoesNotHave() {
+        let synced = MobileSync.Note(
+            body: "Broken range",
+            ranges: [range(2, 255, 2, 255), range(1, 8, 1, 8)],
+            lastUpdated: Date(timeIntervalSince1970: 1),
+            id: "1"
+        )
+
+        XCTAssertNil(MobileSyncNoteService.note(from: synced, quran: .hafsMadani1405))
     }
 
     func test_removeNote_deletesPersistedNote() async throws {
@@ -111,6 +135,14 @@ final class MobileSyncNoteServiceTests: XCTestCase {
         var iterator = service.notesSequence(quran: .hafsMadani1405).makeAsyncIterator()
         let notes = try await iterator.next()
         return try XCTUnwrap(notes?.first)
+    }
+
+    private func range(_ startSura: Int32, _ startAyah: Int32, _ endSura: Int32, _ endAyah: Int32) -> NoteRange {
+        NoteRange(startSura: startSura, startAyah: startAyah, endSura: endSura, endAyah: endAyah)
+    }
+
+    private func verse(_ sura: Int, _ ayah: Int) -> AyahNumber {
+        AyahNumber(quran: .hafsMadani1405, sura: sura, ayah: ayah)!
     }
 
     private func ayah(_ number: Int) -> AyahNumber {

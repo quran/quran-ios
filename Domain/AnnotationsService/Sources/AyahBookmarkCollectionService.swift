@@ -25,8 +25,10 @@ public struct AyahBookmarkCollectionService {
 
     // MARK: Public
 
+    /// - Throws: `ReservedCollectionNameError` when the name is reserved, and `TextLengthLimitError` when the name
+    ///   is too short or too long.
     public func createCollection(named name: String) async throws {
-        _ = try await mapTextLengthLimit {
+        _ = try await mapCollectionErrors {
             try await quranDataService.createCollection(named: name)
         }
     }
@@ -39,12 +41,18 @@ public struct AyahBookmarkCollectionService {
         )
     }
 
+    /// - Throws: `ReadOnlyCollectionError` when the collection can't be deleted.
     public func removeCollection(id: String) async throws {
-        _ = try await quranDataService.removeCollection(id: id)
+        _ = try await mapCollectionErrors {
+            try await quranDataService.removeCollection(id: id)
+        }
     }
 
+    /// - Throws: `ReadOnlyCollectionError` when the collection can't be renamed, `ReservedCollectionNameError` when
+    ///   the name is reserved, `DuplicateCollectionNameError` when another collection has the name, and
+    ///   `TextLengthLimitError` when the name is too short or too long.
     public func renameCollection(id: String, to name: String) async throws {
-        _ = try await mapTextLengthLimit {
+        _ = try await mapCollectionErrors {
             try await quranDataService.updateCollection(id: id, name: name)
         }
     }
@@ -94,7 +102,7 @@ public struct AyahBookmarkCollectionService {
                 id: collection.collection.id,
                 name: collection.collection.name,
                 isDefault: collection.collection.isDefault,
-                isSystem: collection.collection.isSystem,
+                isReadOnly: collection.collection.isReadOnly,
                 bookmarks: collection.bookmarks.compactMap { bookmark(for: $0, quran: quran) }
             )
         }

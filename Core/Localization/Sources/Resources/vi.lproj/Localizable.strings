@@ -448,6 +448,9 @@
 "bookmarks.collections.new.placeholder" = "Tên bộ sưu tập";
 "bookmarks.collections.name.empty" = "Tên bộ sưu tập không được để trống.";
 "bookmarks.collections.name.too-long" = "Tên bộ sưu tập không được dài quá %d ký tự.";
+"bookmarks.collections.name.duplicate" = "Đã có bộ sưu tập tên “%@”.";
+"bookmarks.collections.name.reserved" = "“%@” là tên dành riêng.";
+"bookmarks.collections.read-only" = "Không thể đổi tên hoặc xóa bộ sưu tập này.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Tạo bộ sưu tập để sắp xếp các ayah theo chủ đề, dua hoặc kế hoạch ghi nhớ.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -623,3 +626,6 @@
 // VoiceOver label for the Home button that reverses the surah and juz list order.
 // Metadata: Translated by AI; human review required.
 "home.sort-order.reverse" = "Đảo ngược thứ tự";
+
+/* Separates the items of a list, such as a note's verse ranges. A semicolon, because items can contain commas ("Al-Fātihah, Ayah 1") */
+"list.separator" = "; ";

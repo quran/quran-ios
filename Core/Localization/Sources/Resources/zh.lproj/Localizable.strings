@@ -542,6 +542,9 @@
 "bookmarks.collections.new.placeholder" = "收藏集名称";
 "bookmarks.collections.name.empty" = "收藏集名称不能为空。";
 "bookmarks.collections.name.too-long" = "收藏集名称不能超过 %d 个字符。";
+"bookmarks.collections.name.duplicate" = "已存在名为“%@”的收藏集。";
+"bookmarks.collections.name.reserved" = "“%@”是保留名称。";
+"bookmarks.collections.read-only" = "此收藏集无法重命名或删除。";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "创建收藏集，按主题、杜阿或背诵计划整理经文。";
 // Metadata: Translated by ChatGPT; human review required.
@@ -717,3 +720,6 @@
 // VoiceOver label for the Home button that reverses the surah and juz list order.
 // Metadata: Translated by AI; human review required.
 "home.sort-order.reverse" = "倒序排列";
+
+/* Separates the items of a list, such as a note's verse ranges. A semicolon, because items can contain commas ("Al-Fātihah, Ayah 1") */
+"list.separator" = "；";

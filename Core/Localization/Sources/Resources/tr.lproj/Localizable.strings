@@ -479,6 +479,9 @@
 "bookmarks.collections.new.placeholder" = "Koleksiyon adı";
 "bookmarks.collections.name.empty" = "Koleksiyon adı boş olamaz.";
 "bookmarks.collections.name.too-long" = "Koleksiyon adları en fazla %d karakter olabilir.";
+"bookmarks.collections.name.duplicate" = "“%@” adlı bir koleksiyon zaten var.";
+"bookmarks.collections.name.reserved" = "“%@” ayrılmış bir addır.";
+"bookmarks.collections.read-only" = "Bu koleksiyon yeniden adlandırılamaz veya silinemez.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Ayetleri konuya, duaya veya ezber planına göre düzenlemek için bir koleksiyon oluşturun.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -654,3 +657,6 @@
 // VoiceOver label for the Home button that reverses the surah and juz list order.
 // Metadata: Translated by AI; human review required.
 "home.sort-order.reverse" = "Sıralamayı ters çevir";
+
+/* Separates the items of a list, such as a note's verse ranges. A semicolon, because items can contain commas ("Al-Fātihah, Ayah 1") */
+"list.separator" = "; ";

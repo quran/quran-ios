@@ -15,14 +15,14 @@ public class EditableNote: ObservableObject {
     // MARK: Lifecycle
 
     public init(
-        ayahRange: ClosedRange<AyahNumber>,
+        ayahRanges: [ClosedRange<AyahNumber>],
         ayahText: QuranText,
         reading: Reading,
         modifiedSince: String,
         selectedColor: HighlightColor,
         note: String
     ) {
-        self.ayahRange = ayahRange
+        self.ayahRanges = ayahRanges
         self.ayahText = ayahText
         self.reading = reading
         self.modifiedSince = modifiedSince
@@ -33,7 +33,9 @@ public class EditableNote: ObservableObject {
 
     // MARK: Public
 
-    public let ayahRange: ClosedRange<AyahNumber>
+    /// The note's verses as runs of consecutive verses: one for a note made in the app, maybe more for one
+    /// made on Quran.com.
+    public let ayahRanges: [ClosedRange<AyahNumber>]
     public let ayahText: QuranText
     public let modifiedSince: String
     @Published public private(set) var reading: Reading

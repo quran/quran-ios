@@ -236,6 +236,17 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             parts.append(contentsOf: MultipartText.ayahRange(range).parts)
         }
 
+        /// Each range as `ayahRange` writes it, separated by the localized list separator, a semicolon: list items
+        /// can contain commas, and " · " already separates the parts of an ayah reference.
+        public mutating func appendInterpolation(ayahRanges ranges: [ClosedRange<AyahNumber>]) {
+            for (index, range) in ranges.enumerated() {
+                if index > 0 {
+                    parts.append(.plain(text: l("list.separator")))
+                }
+                appendInterpolation(ayahRange: range)
+            }
+        }
+
         public mutating func appendInterpolation(
             quran text: QuranText,
             font: QuranFont,

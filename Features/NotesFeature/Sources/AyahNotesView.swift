@@ -105,15 +105,13 @@ private struct AyahNotesPreview: View {
             Note(
                 id: "first",
                 text: "The “if Allah willed” excuse — the same argument every nation made.",
-                startAyah: verses[0],
-                endAyah: verses[1],
+                verses: Set(verses),
                 modifiedDate: Date().addingTimeInterval(-2 * 60 * 60)
             ),
             Note(
                 id: "second",
                 text: "Khutbah idea: the psychology of blaming destiny.",
-                startAyah: verses[0],
-                endAyah: verses[1],
+                verses: Set(verses),
                 modifiedDate: Date().addingTimeInterval(-24 * 60 * 60)
             ),
         ]

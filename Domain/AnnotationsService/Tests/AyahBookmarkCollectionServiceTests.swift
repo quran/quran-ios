@@ -110,6 +110,31 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         XCTAssertTrue(collections[0].isDefault)
     }
 
+    func test_collectionsSequence_marksFavoritesReadOnly() async throws {
+        var iterator = service.collectionsSequence().makeAsyncIterator()
+
+        let collections = try await iterator.next() ?? []
+
+        let favorites = try XCTUnwrap(collections.first { $0.isDefault })
+        XCTAssertTrue(favorites.isReadOnly)
+        XCTAssertFalse(favorites.canRename)
+        XCTAssertFalse(favorites.canDelete)
+    }
+
+    func test_collections_keepsReadOnlyCollectionsFromOlderApps() {
+        let collections = AyahBookmarkCollectionService.collections(
+            from: [
+                collectionWithBookmarks(id: "1", name: "Green", isReadOnly: true),
+                collectionWithBookmarks(id: "2", name: "Personal", isReadOnly: false),
+            ],
+            quran: .hafsMadani1405
+        )
+
+        XCTAssertEqual(collections.map(\.name), ["Green", "Personal"])
+        XCTAssertEqual(collections.map(\.canRename), [false, true])
+        XCTAssertEqual(collections.map(\.canDelete), [false, true])
+    }
+
     func test_createCollection_throwsTextLengthLimitErrorForBlankName() async {
         await assertThrows(TextLengthLimitError(field: .collectionName, bound: .tooShort, limit: 1)) {
             try await service.createCollection(named: "   ")
@@ -128,8 +153,67 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         XCTAssertEqual(stored.collection.id, collection.collection.id)
     }
 
-    private func assertThrows(
-        _ expected: TextLengthLimitError,
+    func test_renameCollection_throwsDuplicateCollectionNameErrorAndKeepsName() async throws {
+        try await service.createCollection(named: "Study")
+        try await service.createCollection(named: "Personal")
+        let collection = try await storedCollection(named: "Personal")
+
+        await assertThrows(DuplicateCollectionNameError(name: "Study")) {
+            try await service.renameCollection(id: collection.collection.id, to: " study ")
+        }
+
+        let stored = try await storedCollection(named: "Personal")
+        XCTAssertEqual(stored.collection.id, collection.collection.id)
+    }
+
+    func test_createAndRenameCollection_throwReservedCollectionNameError() async throws {
+        await assertThrows(ReservedCollectionNameError(name: "system:notes")) {
+            try await service.createCollection(named: "system:notes")
+        }
+        try await service.createCollection(named: "Personal")
+        let collection = try await storedCollection(named: "Personal")
+
+        await assertThrows(ReservedCollectionNameError(name: "Favorites")) {
+            try await service.renameCollection(id: collection.collection.id, to: "Favorites")
+        }
+
+        let stored = try await storedCollection(named: "Personal")
+        XCTAssertEqual(stored.collection.id, collection.collection.id)
+    }
+
+    func test_renameAndRemoveFavorites_throwReadOnlyCollectionError() async throws {
+        var iterator = service.collectionsSequence().makeAsyncIterator()
+        let collections = try await iterator.next() ?? []
+        let favorites = try XCTUnwrap(collections.first { $0.isDefault })
+        let expected = ReadOnlyCollectionError(collectionID: favorites.id)
+
+        await assertThrows(expected) {
+            try await service.renameCollection(id: favorites.id, to: "Renamed")
+        }
+        await assertThrows(expected) {
+            try await service.removeCollection(id: favorites.id)
+        }
+
+        let stored = try await storedCollections { $0.contains { $0.collection.isDefault } }
+        XCTAssertEqual(stored.first { $0.collection.isDefault }?.collection.id, favorites.id)
+    }
+
+    private func collectionWithBookmarks(id: String, name: String, isReadOnly: Bool) -> CollectionWithAyahBookmarks {
+        CollectionWithAyahBookmarks(
+            collection: BookmarkCollection(
+                name: name,
+                lastUpdated: Date(timeIntervalSince1970: 0),
+                id: id,
+                isDefault: false,
+                isSystem: false,
+                isReadOnly: isReadOnly
+            ),
+            bookmarks: []
+        )
+    }
+
+    private func assertThrows<E: Error & Equatable>(
+        _ expected: E,
         file: StaticString = #filePath,
         line: UInt = #line,
         _ operation: () async throws -> Void
@@ -138,7 +222,7 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
             try await operation()
             XCTFail("Expected \(expected)", file: file, line: line)
         } catch {
-            XCTAssertEqual(error as? TextLengthLimitError, expected, file: file, line: line)
+            XCTAssertEqual(error as? E, expected, file: file, line: line)
         }
     }
 

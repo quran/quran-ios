@@ -2,6 +2,7 @@
 //  MultipartTextQuranTests.swift
 //
 
+import Localization
 import NoorFont
 import QuranKit
 import QuranLocalization
@@ -235,6 +236,14 @@ final class MultipartTextQuranTests: XCTestCase {
             MultipartText.ayahRange(range, language: .chinese).rawValue(locale: chinese),
             "\(sura.localizedName()) \u{E905} · 2:255至2:256"
         )
+    }
+
+    func test_ayahRanges_separatesRangesWithTheListSeparator() {
+        let other = Quran.hafsMadani1405.suras[2].verses[17]
+        let text: MultipartText = "\(ayahRanges: [ayah ... sura.verses[255], other ... other])"
+
+        XCTAssertEqual(text.rawValue(locale: english), "Al-Baqarah \u{E905} · 2:255 - 2:256; Āli-ʿImrān \u{E906} · 3:18")
+        XCTAssertEqual(text.accessibilityText, "Al-Baqarah, Ayah 255 - 2:256; Āli-ʿImrān, Ayah 18")
     }
 
     func test_references_useSemanticAccessibilityText() {

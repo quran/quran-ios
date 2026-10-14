@@ -183,8 +183,7 @@ final class AyahMenuViewModelTests: XCTestCase {
         Note(
             id: id,
             text: "Note",
-            startAyah: verses[0],
-            endAyah: verses[0],
+            verses: [verses[0]],
             modifiedDate: .distantPast
         )
     }

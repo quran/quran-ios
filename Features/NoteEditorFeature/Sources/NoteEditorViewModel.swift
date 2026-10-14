@@ -111,12 +111,13 @@ final class NoteEditorViewModel {
     func fetchNote() async throws -> EditableNote {
         do {
             let versesText = try await getTextForVerses(verses)
-            guard let versesRange else {
+            let ayahRanges = verses.consecutiveRanges()
+            guard !ayahRanges.isEmpty else {
                 throw NoteEditorError.noVerses
             }
             logger.info("NoteEditor: note loaded")
             let editableNote = EditableNote(
-                ayahRange: versesRange.start ... versesRange.end,
+                ayahRanges: ayahRanges,
                 ayahText: versesText,
                 reading: reading,
                 modifiedSince: modifiedSince,
@@ -160,15 +161,15 @@ final class NoteEditorViewModel {
 
         do {
             #if QURAN_SYNC
-            guard let range = versesRange else {
-                return false
-            }
             analytics.logEvent("UpdateNoteVersesNum", value: Set(verses).count.description)
             switch mode {
-            case .create:
-                try await noteService.createNote(body: noteText, startAyah: range.start, endAyah: range.end)
+            case .create(let verses):
+                guard let start = verses.min(), let end = verses.max() else {
+                    return false
+                }
+                try await noteService.createNote(body: noteText, startAyah: start, endAyah: end)
             case .edit(let note):
-                try await noteService.updateNote(note, body: noteText, startAyah: range.start, endAyah: range.end)
+                try await noteService.updateNote(note, body: noteText)
             }
             #else
             try await noteService.setNote(
@@ -269,19 +270,11 @@ final class NoteEditorViewModel {
         case .create(let verses):
             return verses
         case .edit(let note):
-            return note.startAyah.array(to: note.endAyah)
+            return note.verses
         }
         #else
         return Array(note.verses)
         #endif
-    }
-
-    private var versesRange: (start: AyahNumber, end: AyahNumber)? {
-        let verses = verses.sorted()
-        guard let start = verses.first, let end = verses.last else {
-            return nil
-        }
-        return (start, end)
     }
 
     private var body: String {

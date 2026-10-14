@@ -40,20 +40,10 @@ public struct MobileSyncNoteService {
         }
     }
 
+    /// Changes only the note's text. A note's verse range never changes.
     public func updateNote(_ note: QuranAnnotations.Note, body: String) async throws {
-        try await updateNote(note, body: body, startAyah: note.startAyah, endAyah: note.endAyah)
-    }
-
-    public func updateNote(_ note: QuranAnnotations.Note, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
         try await mapTextLengthLimit {
-            try await quranDataService.updateNote(
-                id: note.id,
-                body: body,
-                startSura: Int32(startAyah.sura.suraNumber),
-                startAyah: Int32(startAyah.ayah),
-                endSura: Int32(endAyah.sura.suraNumber),
-                endAyah: Int32(endAyah.ayah)
-            )
+            try await quranDataService.updateNote(id: note.id, body: body)
         }
     }
 
@@ -63,24 +53,31 @@ public struct MobileSyncNoteService {
 
     // MARK: Internal
 
-    static func notes(from notes: [Note_], quran: Quran) -> [QuranAnnotations.Note] {
+    static func notes(from notes: [MobileSync.Note], quran: Quran) -> [QuranAnnotations.Note] {
         notes.compactMap { note(from: $0, quran: quran) }
             .sorted { $0.modifiedDate > $1.modifiedDate }
     }
 
-    static func note(from note: Note_, quran: Quran) -> QuranAnnotations.Note? {
-        guard let start = AyahNumber(quran: quran, sura: Int(note.startSura), ayah: Int(note.startAyah)),
-              let end = AyahNumber(quran: quran, sura: Int(note.endSura), ayah: Int(note.endAyah)),
-              start <= end
-        else {
+    /// Maps every range of the note; a note with a range this Quran doesn't have is skipped.
+    static func note(from note: MobileSync.Note, quran: Quran) -> QuranAnnotations.Note? {
+        var verses = Set<AyahNumber>()
+        for range in note.ranges {
+            guard let start = AyahNumber(quran: quran, sura: Int(range.startSura), ayah: Int(range.startAyah)),
+                  let end = AyahNumber(quran: quran, sura: Int(range.endSura), ayah: Int(range.endAyah)),
+                  start <= end
+            else {
+                return nil
+            }
+            verses.formUnion(start.array(to: end))
+        }
+        guard !verses.isEmpty else {
             return nil
         }
 
         return QuranAnnotations.Note(
             id: note.id,
             text: note.body,
-            startAyah: start,
-            endAyah: end,
+            verses: verses,
             modifiedDate: note.lastUpdated
         )
     }

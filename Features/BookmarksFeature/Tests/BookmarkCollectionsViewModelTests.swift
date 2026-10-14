@@ -64,7 +64,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             collection(name: "Z Collection"),
             collection(name: oldPageBookmarksCollectionName),
             collection(name: "A Collection"),
-            collection(name: "Default", id: "__default__", isDefault: true, isSystem: true),
+            collection(name: "Default", id: "__default__", isDefault: true, isReadOnly: true),
         ])
 
         XCTAssertEqual(collections.map(\.name), [
@@ -93,32 +93,10 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             .oldPageBookmarks
         )
         XCTAssertEqual(
-            collection(name: "Default", id: "__default__", isDefault: true, isSystem: true).kind,
+            collection(name: "Default", id: "__default__", isDefault: true, isReadOnly: true).kind,
             .defaultBookmarks
         )
         XCTAssertEqual(collection(name: "Personal").kind, .user)
-    }
-
-    func test_collectionCapabilities_protectSystemCollections() {
-        let defaultBookmarks = collection(
-            name: "Default",
-            id: "__default__",
-            isDefault: true,
-            isSystem: true
-        )
-        let oldPageBookmarks = collection(name: oldPageBookmarksCollectionName)
-        let user = collection(name: "Personal")
-
-        let system = collection(name: "Managed", isSystem: true)
-
-        XCTAssertFalse(defaultBookmarks.canRename)
-        XCTAssertFalse(defaultBookmarks.canDelete)
-        XCTAssertFalse(system.canRename)
-        XCTAssertFalse(system.canDelete)
-        XCTAssertTrue(oldPageBookmarks.canRename)
-        XCTAssertTrue(oldPageBookmarks.canDelete)
-        XCTAssertTrue(user.canRename)
-        XCTAssertTrue(user.canDelete)
     }
 
     func test_defaultCollectionPresentation_usesLocalizedFavoritesNameAndFilledStarIcon() {
@@ -126,7 +104,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             name: "Default",
             id: "__default__",
             isDefault: true,
-            isSystem: true
+            isReadOnly: true
         )
 
         XCTAssertEqual(collection.displayName, l("bookmarks.collections.favorites"))
@@ -344,7 +322,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
         XCTAssertEqual(
             sut.newCollectionNameError,
-            TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)
+            .textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255))
         )
         XCTAssertTrue(sut.isPresentingAddCollection)
         XCTAssertEqual(sut.newCollectionName, longName)
@@ -356,6 +334,26 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
         XCTAssertNil(sut.newCollectionNameError)
         XCTAssertEqual(sut.newCollectionName, "")
+    }
+
+    func test_createPendingCollection_keepsReservedNameAndExplainsIt() async throws {
+        let sut = makeSUT()
+        sut.presentAddCollection()
+        sut.isPresentingAddCollection = false
+        sut.newCollectionName = "system:notes"
+
+        await sut.createPendingCollection()
+
+        XCTAssertEqual(sut.newCollectionNameError, .reserved(ReservedCollectionNameError(name: "system:notes")))
+        XCTAssertEqual(
+            sut.newCollectionNameError?.localizedMessage,
+            lFormat("bookmarks.collections.name.reserved", "system:notes")
+        )
+        XCTAssertTrue(sut.isPresentingAddCollection)
+        XCTAssertEqual(sut.newCollectionName, "system:notes")
+        XCTAssertNil(sut.error)
+        let collections = try await storedCollections()
+        XCTAssertEqual(collections.count, 1)
     }
 
     func test_requestDeleteCollection_deletesEmptyCollectionWithoutConfirmation() async throws {
@@ -376,6 +374,22 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertTrue(collections[0].collection.isDefault)
         XCTAssertNil(sut.collectionPendingDeletion)
         XCTAssertNil(sut.error)
+    }
+
+    func test_deleteCollection_explainsWhenCollectionTurnedReadOnly() async throws {
+        let stored = try await storedCollections { $0.contains { $0.collection.isDefault } }
+        let favorites = try XCTUnwrap(stored.first { $0.collection.isDefault }?.collection)
+        // A list the sync hadn't refreshed yet still offers to delete it.
+        let staleCollection = collection(name: favorites.name, id: favorites.id)
+        let sut = makeSUT(collectionService: makeService())
+
+        await sut.deleteCollection(staleCollection)
+
+        let error = try XCTUnwrap(sut.error as? ReadOnlyCollectionError)
+        XCTAssertEqual(error, ReadOnlyCollectionError(collectionID: favorites.id))
+        XCTAssertEqual(error.errorDescription, l("bookmarks.collections.read-only"))
+        let collections = try await storedCollections()
+        XCTAssertTrue(collections.contains { $0.collection.id == favorites.id })
     }
 
     func test_requestDeleteCollection_requiresConfirmationBeforeDeletingNonEmptyCollection() async throws {
@@ -634,9 +648,9 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         name: String,
         id: String? = nil,
         isDefault: Bool = false,
-        isSystem: Bool = false
+        isReadOnly: Bool = false
     ) -> AyahBookmarkCollection {
-        AyahBookmarkCollection(id: id ?? name, name: name, isDefault: isDefault, isSystem: isSystem, bookmarks: [])
+        AyahBookmarkCollection(id: id ?? name, name: name, isDefault: isDefault, isReadOnly: isReadOnly, bookmarks: [])
     }
 
     private func waitUntil(

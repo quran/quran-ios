@@ -12,11 +12,11 @@ import QuranKit
 public struct AyahBookmarkCollection: Identifiable {
     // MARK: Lifecycle
 
-    public init(id: String, name: String, isDefault: Bool, isSystem: Bool, bookmarks: [AyahCollectionBookmark]) {
+    public init(id: String, name: String, isDefault: Bool, isReadOnly: Bool, bookmarks: [AyahCollectionBookmark]) {
         self.id = id
         self.name = name
         self.isDefault = isDefault
-        self.isSystem = isSystem
+        self.isReadOnly = isReadOnly
         self.bookmarks = bookmarks
     }
 
@@ -29,11 +29,12 @@ public struct AyahBookmarkCollection: Identifiable {
     public let id: String
     public let name: String
     public let isDefault: Bool
-    public let isSystem: Bool
+    /// Users can't rename or delete it: Favorites, and the color collections older Quran.com apps created.
+    public let isReadOnly: Bool
     public let bookmarks: [AyahCollectionBookmark]
 
-    public var canDelete: Bool { !isSystem }
-    public var canRename: Bool { !isSystem }
+    public var canDelete: Bool { !isReadOnly }
+    public var canRename: Bool { !isReadOnly }
 
     public var kind: AyahBookmarkCollectionKind {
         if isDefault {

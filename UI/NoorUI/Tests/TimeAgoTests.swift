@@ -20,6 +20,15 @@ final class TimeAgoTests: XCTestCase {
     func test_futureDate_readsNow() {
         XCTAssertEqual(english.string(for: now.addingTimeInterval(0.3), relativeTo: now), "now")
         XCTAssertEqual(english.string(for: now.addingTimeInterval(5 * minute), relativeTo: now), "now")
+        XCTAssertEqual(english.string(for: now.addingTimeInterval(60 * minute), relativeTo: now), "now")
+    }
+
+    func test_farFutureDate_readsFullDate() {
+        // Noon UTC on May 18th, so it stays in May 2026 in every time zone.
+        let result = english.string(for: now.addingTimeInterval(2 * day), relativeTo: now)
+
+        XCTAssertTrue(result.contains("May"), result)
+        XCTAssertTrue(result.hasSuffix("2026"), result)
     }
 
     func test_pastDates_readRelative() {
@@ -27,11 +36,16 @@ final class TimeAgoTests: XCTestCase {
         XCTAssertEqual(english.string(for: now.addingTimeInterval(-5 * minute), relativeTo: now), "5 minutes ago")
         XCTAssertEqual(english.string(for: now.addingTimeInterval(-day), relativeTo: now), "yesterday")
         XCTAssertEqual(english.string(for: now.addingTimeInterval(-3 * day), relativeTo: now), "3 days ago")
+        XCTAssertEqual(english.string(for: now.addingTimeInterval(-7 * day), relativeTo: now), "last week")
     }
 
-    func test_olderThanThirtyDays_readsFullDate() {
-        // Noon UTC on April 15th, so it stays in April 2026 in every time zone.
-        let result = english.string(for: now.addingTimeInterval(-31 * day), relativeTo: now)
+    func test_thirtyDaysAgo_staysRelative() {
+        XCTAssertEqual(english.string(for: now.addingTimeInterval(-30 * day), relativeTo: now), "last month")
+    }
+
+    func test_justOverThirtyDaysAgo_readsFullDate() {
+        // One second before noon UTC on April 16th, so it stays in April 2026 in every time zone.
+        let result = english.string(for: now.addingTimeInterval(-30 * day - 1), relativeTo: now)
 
         XCTAssertTrue(result.contains("April"), result)
         XCTAssertTrue(result.hasSuffix("2026"), result)

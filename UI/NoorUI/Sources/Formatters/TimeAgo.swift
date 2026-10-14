@@ -40,11 +40,12 @@ struct TimeAgoFormatter {
 
     func string(for date: Date, relativeTo now: Date) -> String {
         let diff = now.timeIntervalSince(date)
-        if diff > Self.fullDateThreshold {
+        // Far in the past, or further in the future than clock skew explains.
+        if diff > Self.fullDateThreshold || diff < -Self.futureSkewTolerance {
             return dateFormatter.string(from: date)
         }
-        // Under a minute reads as "now". Dates in the future (clock skew, or a date
-        // synced from a device whose clock is ahead) also read as "now".
+        // `.named` only says "now" for a zero offset; format under-a-minute (and small
+        // future skew) dates as zero so they never read "in N seconds" / "N seconds ago".
         let reference = diff < Self.nowThreshold ? now : date
         return relativeDateFormatter.localizedString(for: reference, relativeTo: now)
     }
@@ -52,6 +53,7 @@ struct TimeAgoFormatter {
     // MARK: Private
 
     private static let nowThreshold: TimeInterval = 60
+    private static let futureSkewTolerance: TimeInterval = 60 * 60
     private static let fullDateThreshold: TimeInterval = 60 * 60 * 24 * 30
 
     private let dateFormatter: DateFormatter

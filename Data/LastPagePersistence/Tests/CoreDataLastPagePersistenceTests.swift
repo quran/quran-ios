@@ -15,23 +15,24 @@ import XCTest
 
 final class CoreDataLastPagePersistenceTests: XCTestCase {
     var persistence: CoreDataLastPagePersistence!
+    var store: TemporaryCoreDataStore!
     var stack: CoreDataStack!
     var subscriptions = Set<AnyCancellable>()
 
     override func setUp() {
         super.setUp()
 
-        stack = CoreDataStack.testingStack()
+        store = TemporaryCoreDataStore()
+        stack = store.stack()
         persistence = CoreDataLastPagePersistence(stack: stack)
     }
 
     override func tearDown() {
-        super.tearDown()
-        // Clean up any resources here
-        CoreDataStack.removePersistentFiles()
+        subscriptions.removeAll()
         persistence = nil
         stack = nil
-        subscriptions.removeAll()
+        store = nil
+        super.tearDown()
     }
 
     func testAddAndRetrieveLastPages() async throws {

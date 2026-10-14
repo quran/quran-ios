@@ -294,6 +294,7 @@ private func dataTargets() -> [[Target]] {
             "CoreDataPersistence",
             "CoreDataModel",
             "SystemDependenciesFake",
+            "Utilities",
         ]),
 
         target(type, name: "CoreDataModel", hasTests: false, dependencies: [

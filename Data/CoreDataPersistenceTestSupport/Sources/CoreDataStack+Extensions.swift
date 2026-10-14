@@ -6,15 +6,10 @@
 //
 
 import CoreData
-import CoreDataModel
 import CoreDataPersistence
 import SystemDependenciesFake
 
 extension CoreDataStack {
-    public static func testingStack() -> CoreDataStack {
-        CoreDataStack(name: "TestApp", modelUrl: CoreDataModelResources.quranModel, lazyUniquifiers: { [] })
-    }
-
     /// Runs `body` on a new background context and saves it.
     public func write(_ body: (NSManagedObjectContext) throws -> Void) throws {
         let context = newBackgroundContext()

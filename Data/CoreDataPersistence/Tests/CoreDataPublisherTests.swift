@@ -9,10 +9,12 @@ import AsyncUtilitiesForTesting
 import Combine
 import CoreData
 import CoreDataModel
+import CoreDataPersistenceTestSupport
 import XCTest
 @testable import CoreDataPersistence
 
 class CoreDataPublisherTests: XCTestCase {
+    var store: TemporaryCoreDataStore!
     var coreDataStack: CoreDataStack!
     var context: NSManagedObjectContext!
     var cancellables = Set<AnyCancellable>()
@@ -20,8 +22,8 @@ class CoreDataPublisherTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Instantiating your CoreDataStack
-        coreDataStack = CoreDataStack.testingStack()
+        store = TemporaryCoreDataStore()
+        coreDataStack = store.stack()
         context = coreDataStack.newBackgroundContext()
 
         request = MO_Note.fetchRequest()
@@ -29,11 +31,12 @@ class CoreDataPublisherTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         cancellables.removeAll()
-        // Clean up after each test
-        CoreDataStack.removePersistentFiles()
+        request = nil
+        context = nil
         coreDataStack = nil
+        store = nil
+        super.tearDown()
     }
 
     func test_initialValues() throws {

@@ -7,6 +7,7 @@
 
 import CoreData
 import CoreDataModel
+import CoreDataPersistenceTestSupport
 import SystemDependencies
 import SystemDependenciesFake
 import XCTest
@@ -16,6 +17,7 @@ class CoreDataInsertedEntitiesRetrieverTests: XCTestCase {
     var sut: CoreDataInsertedEntitiesRetriever<MO_LastPage>!
     var transactions: [PersistentHistoryTransaction]!
     var context: NSManagedObjectContext!
+    var store: TemporaryCoreDataStore!
     var stack: CoreDataStack!
     var object1: MO_LastPage!
     var object2: MO_LastPage!
@@ -23,7 +25,8 @@ class CoreDataInsertedEntitiesRetrieverTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        stack = CoreDataStack.testingStack()
+        store = TemporaryCoreDataStore()
+        stack = store.stack()
         context = stack.newBackgroundContext()
 
         object1 = MO_LastPage(context: context)
@@ -45,11 +48,14 @@ class CoreDataInsertedEntitiesRetrieverTests: XCTestCase {
     }
 
     override func tearDown() {
-        CoreDataStack.removePersistentFiles()
         sut = nil
         transactions = nil
+        object1 = nil
+        object2 = nil
+        object3 = nil
         context = nil
         stack = nil
+        store = nil
         super.tearDown()
     }
 

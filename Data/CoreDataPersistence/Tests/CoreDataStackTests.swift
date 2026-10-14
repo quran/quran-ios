@@ -7,20 +7,24 @@
 
 import CoreData
 import CoreDataModel
+import CoreDataPersistenceTestSupport
 import XCTest
 @testable import CoreDataPersistence
 
 class CoreDataStackTests: XCTestCase {
+    var store: TemporaryCoreDataStore!
     var stack: CoreDataStack!
     var temporaryDirectory: URL?
 
     override func setUp() {
         super.setUp()
-        stack = CoreDataStack.testingStack()
+        store = TemporaryCoreDataStore()
+        stack = store.stack()
     }
 
     override func tearDown() {
         stack = nil
+        store = nil
         if let temporaryDirectory {
             try? FileManager.default.removeItem(at: temporaryDirectory)
         }

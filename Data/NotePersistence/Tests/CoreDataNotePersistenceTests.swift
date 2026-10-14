@@ -14,6 +14,7 @@ import XCTest
 
 class CoreDataNotePersistenceTests: XCTestCase {
     var sut: CoreDataNotePersistence!
+    var store: TemporaryCoreDataStore!
     var stack: CoreDataStack!
     var time: SystemTimeFake!
 
@@ -29,7 +30,8 @@ class CoreDataNotePersistenceTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        stack = CoreDataStack.testingStack()
+        store = TemporaryCoreDataStore()
+        stack = store.stack()
         time = SystemTimeFake()
 
         verse1 = VersePersistenceModel(ayah: 1, sura: 1)
@@ -45,9 +47,9 @@ class CoreDataNotePersistenceTests: XCTestCase {
     }
 
     override func tearDown() {
-        CoreDataStack.removePersistentFiles()
         sut = nil
         stack = nil
+        store = nil
         super.tearDown()
     }
 

@@ -18,6 +18,7 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
 
     var sut: CoreDataLastPageUniquifier!
     var context: NSManagedObjectContext!
+    var store: TemporaryCoreDataStore!
     var stack: CoreDataStack!
 
     var entity1: MO_LastPage!
@@ -29,7 +30,8 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        stack = CoreDataStack.testingStack()
+        store = TemporaryCoreDataStore()
+        stack = store.stack()
         context = stack.newBackgroundContext()
 
         entity1 = context.newLastPage(page: 45, modifiedOn: 1)
@@ -44,10 +46,15 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
     }
 
     override func tearDown() {
-        CoreDataStack.removePersistentFiles()
         sut = nil
+        entity1 = nil
+        entity2 = nil
+        entity3 = nil
+        entity4 = nil
+        entity5 = nil
         context = nil
         stack = nil
+        store = nil
         super.tearDown()
     }
 

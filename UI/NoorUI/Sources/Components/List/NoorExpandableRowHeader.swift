@@ -34,14 +34,24 @@ public struct NoorExpandableRowHeader<Value: View>: View {
     // MARK: Public
 
     public var body: some View {
-        if let accessibilityValue {
+        if accessibilityValue != nil {
             button
                 .accessibilityLabel(title)
-                .accessibilityValue("\(accessibilityValue), \(expansionState)")
+                .accessibilityValue(spokenValue)
         } else {
             button
-                .accessibilityValue(expansionState)
+                .accessibilityValue(spokenValue)
         }
+    }
+
+    // MARK: Internal
+
+    /// The value, when given, and the expansion state as a spoken list. The value can contain commas.
+    var spokenValue: String {
+        guard let accessibilityValue else {
+            return expansionState
+        }
+        return [accessibilityValue, expansionState].joined(separator: l("list.separator"))
     }
 
     // MARK: Private

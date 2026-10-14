@@ -310,6 +310,8 @@
 "ayah.menu.reading-bookmark.saved" = "Reading bookmark saved at %@";
 "ayah.menu.reading-bookmark.moved" = "Reading bookmark moved from %@ to %@";
 "ayah.menu.reading-bookmark.removed" = "Reading bookmark removed from %@";
+/* VoiceOver label for a reading bookmark on an ayah. %1$@ is "ayah.menu.reading-bookmark.title" and %2$@ is the bookmark's color, such as "Teal" */
+"ayah.annotation.reading-bookmark" = "%1$@: %2$@";
 
 // MARK: - Highlights
 

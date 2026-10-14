@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import Localization
 import QuranAnnotations
 import QuranKit
 import QuranText
@@ -64,4 +65,16 @@ public class EditableNote: ObservableObject {
     // MARK: Internal
 
     @Published var editing: Bool
+
+    /// The editor's metadata line as a spoken list. The created date can contain commas.
+    var metadataAccessibilityLabel: String {
+        if modifiedSince.isEmpty {
+            return lFormat("notes.editor.words-count", wordCount)
+        }
+
+        return [
+            lFormat("notes.editor.created", modifiedSince),
+            lFormat("notes.editor.words-count", wordCount),
+        ].joined(separator: l("list.separator"))
+    }
 }

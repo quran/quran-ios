@@ -22,7 +22,7 @@ extension AyahAnnotation {
     var accessibilityLabel: String {
         switch self {
         case .readingBookmark(let bookmark):
-            "\(l("ayah.menu.reading-bookmark.title")), \(bookmark.displayName)"
+            lFormat("ayah.annotation.reading-bookmark", l("ayah.menu.reading-bookmark.title"), bookmark.displayName)
         case .collection:
             l("bookmarks.collections")
         case .note:

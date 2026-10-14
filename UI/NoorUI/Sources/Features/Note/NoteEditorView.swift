@@ -168,7 +168,7 @@ private struct NoteEditorContent: View {
     private var metadata: some View {
         metadataText
             .foregroundColor(themeColors.secondaryText)
-            .accessibilityLabel(Text(metadataAccessibilityLabel))
+            .accessibilityLabel(Text(note.metadataAccessibilityLabel))
     }
 
     private var metadataText: Text {
@@ -178,17 +178,6 @@ private struct NoteEditorContent: View {
         }
 
         return Text(lFormat("notes.editor.created", note.modifiedSince)) + Text(" · ") + wordsCount
-    }
-
-    private var metadataAccessibilityLabel: String {
-        if note.modifiedSince.isEmpty {
-            return lFormat("notes.editor.words-count", note.wordCount)
-        }
-
-        return [
-            lFormat("notes.editor.created", note.modifiedSince),
-            lFormat("notes.editor.words-count", note.wordCount),
-        ].joined(separator: ", ")
     }
 
     private var thinDivider: some View {

@@ -436,7 +436,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             titleView?.firstLineAttributedText = suraReference.attributedString(ofSize: .subheadline)
             titleView?.secondLine = pageDescription
             titleView?.isAccessibilityElement = true
-            titleView?.accessibilityLabel = "\(suraReference.accessibilityText), \(pageDescription)"
+            titleView?.accessibilityLabel = [suraReference.accessibilityText, pageDescription].joined(separator: l("list.separator"))
         }
     }
 

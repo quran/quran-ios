@@ -50,25 +50,35 @@ extension Page {
 
 extension Hizb {
     public var localizedName: String {
-        "\(lAndroid("quran_hizb")) \(NumberFormatter.shared.format(hizbNumber))"
+        localizedName(language: nil)
+    }
+
+    func localizedName(language: Language?) -> String {
+        lFormat("quran.hizb.name", language: language, NumberFormatter.shared.format(hizbNumber))
     }
 }
 
 extension Quarter {
     public var localizedName: String {
+        localizedName(language: nil)
+    }
+
+    func localizedName(language: Language?) -> String {
         let rub = quarterNumber - 1
         let reminder = rub % 4
 
         let fraction: String? = switch reminder {
-        case 1: lAndroid("quran_rob3")
-        case 2: lAndroid("quran_nos")
-        case 3: lAndroid("quran_talt_arb3")
+        case 1: lAndroid("quran_rob3", language: language)
+        case 2: lAndroid("quran_nos", language: language)
+        case 3: lAndroid("quran_talt_arb3", language: language)
         default: nil
         }
 
-        let hizbString = hizb.localizedName
-        let components = [fraction, hizbString].compactMap { $0 }
-        return components.joined(separator: " ")
+        let hizbString = hizb.localizedName(language: language)
+        guard let fraction else {
+            return hizbString
+        }
+        return lFormat("quran.quarter.name", language: language, fraction, hizbString)
     }
 }
 

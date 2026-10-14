@@ -31,6 +31,10 @@
 "quran.page.name" = "الصفحة %@";
 // A range of Quran references or page numbers: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257" or "2 - 3". Translators may reorder the placeholders.
 "quran.range" = "%1$@ - %2$@";
+// A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
+"quran.hizb.name" = "الحزب %@";
+// A quarter reference: %1$@ is the fraction (¼, ½ or ¾) and %2$@ is the hizb reference, such as "¼ Hizb 3". Translators may reorder the placeholders.
+"quran.quarter.name" = "%1$@ %2$@";
 
 // IndoPak sura names
 "quran.sura-name.indopak.17" = "بَنِي إِسْرَائِيل";

@@ -27,6 +27,14 @@ final class QuranKitLocalizationTests: XCTestCase {
         XCTAssertEqual("Hizb 2", quran.quarters[4].localizedName)
     }
 
+    func testChineseHizbAndQuarterUseOrdinalWordOrder() {
+        XCTAssertEqual("第3段", quran.hizbs[2].localizedName(language: .chinese))
+        XCTAssertEqual("第1段", quran.quarters[0].localizedName(language: .chinese))
+        XCTAssertEqual("第1段¼", quran.quarters[1].localizedName(language: .chinese))
+        XCTAssertEqual("第1段½", quran.quarters[2].localizedName(language: .chinese))
+        XCTAssertEqual("第1段¾", quran.quarters[3].localizedName(language: .chinese))
+    }
+
     func testPageQuarterInfo() {
         XCTAssertEqual("Juz' 1, Hizb 1", quran.pages[0].localizedQuarterName)
         XCTAssertEqual("Juz' 1", quran.pages[1].localizedQuarterName)

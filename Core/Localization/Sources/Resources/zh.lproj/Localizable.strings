@@ -46,6 +46,12 @@
 // A range of Quran references or page numbers: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257" or "2 - 3". Translators may reorder the placeholders.
 // Metadata: Translated by AI; human review required.
 "quran.range" = "%1$@至%2$@";
+// A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
+// Metadata: Translated by AI; human review required.
+"quran.hizb.name" = "第%@段";
+// A quarter reference: %1$@ is the fraction (¼, ½ or ¾) and %2$@ is the hizb reference, such as "¼ Hizb 3". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.quarter.name" = "%2$@%1$@";
 
 // MARK: - Translation
 

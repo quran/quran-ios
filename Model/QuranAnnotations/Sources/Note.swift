@@ -12,23 +12,23 @@ public struct Note: Equatable {
     // MARK: Lifecycle
 
     #if QURAN_SYNC
-    public init(id: String, text: String, startAyah: AyahNumber, endAyah: AyahNumber, modifiedDate: Date) {
+    /// A note on Quran.com can cover several ranges, so `verses` need not be consecutive.
+    ///
+    /// - Precondition: `verses` isn't empty. Every note covers at least one verse, and `startAyah` and `endAyah`
+    ///   rely on it; `MobileSyncNoteService` skips a synced note it can't map to verses.
+    public init(id: String, text: String, verses: Set<AyahNumber>, modifiedDate: Date) {
+        precondition(!verses.isEmpty, "A note needs at least one verse.")
         self.id = id
         self.text = text
-        if startAyah <= endAyah {
-            self.startAyah = startAyah
-            self.endAyah = endAyah
-        } else {
-            self.startAyah = endAyah
-            self.endAyah = startAyah
-        }
+        self.verses = verses.sorted()
+        verseSet = verses
         self.modifiedDate = modifiedDate
     }
     #else
     public init(verses: Set<AyahNumber>, modifiedDate: Date, text: String?, color: HighlightColor) {
         let sortedVerses = verses.sorted()
-        startAyah = sortedVerses[0]
-        endAyah = sortedVerses[sortedVerses.count - 1]
+        self.verses = sortedVerses[0].array(to: sortedVerses[sortedVerses.count - 1])
+        verseSet = Set(self.verses)
         self.modifiedDate = modifiedDate
         self.color = color
         self.text = text
@@ -38,11 +38,19 @@ public struct Note: Equatable {
     // MARK: Public
 
     public let modifiedDate: Date
-    public let startAyah: AyahNumber
-    public let endAyah: AyahNumber
+    /// The note's verses in order.
+    public let verses: [AyahNumber]
+
+    public var startAyah: AyahNumber {
+        verses[0]
+    }
+
+    public var endAyah: AyahNumber {
+        verses[verses.count - 1]
+    }
 
     public func intersects(verses: [AyahNumber]) -> Bool {
-        return verses.contains { ayah in startAyah <= ayah && ayah <= endAyah }
+        verses.contains { verseSet.contains($0) }
     }
 
     #if QURAN_SYNC
@@ -53,9 +61,9 @@ public struct Note: Equatable {
     public let text: String?
     #endif
 
-    public var verses: [AyahNumber] {
-        startAyah.array(to: endAyah)
-    }
+    // MARK: Private
+
+    private let verseSet: Set<AyahNumber>
 }
 
 #if QURAN_SYNC

@@ -7,6 +7,7 @@ import Combine
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
+import QuranLocalization
 import QuranResources
 import QuranTextKit
 import UIKit
@@ -177,8 +178,7 @@ final class NotesViewModelTests: XCTestCase {
         let note = QuranAnnotations.Note(
             id: "note",
             text: "My note",
-            startAyah: ayah,
-            endAyah: ayah,
+            verses: [ayah],
             modifiedDate: Date()
         )
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-translations-database")
@@ -214,8 +214,7 @@ final class NotesViewModelTests: XCTestCase {
         let note = QuranAnnotations.Note(
             id: "note",
             text: "Ayat al-Kursi",
-            startAyah: startAyah,
-            endAyah: endAyah,
+            verses: Set(startAyah.array(to: endAyah)),
             modifiedDate: .distantPast
         )
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
@@ -240,6 +239,22 @@ final class NotesViewModelTests: XCTestCase {
         sut.navigateTo(NoteItem(note: note, quranText: nil))
 
         XCTAssertEqual(navigatedAyah, startAyah)
+    }
+
+    func test_filteredNotes_matchesSuraOfAnyRange() {
+        let quran = Quran.hafsMadani1405
+        let note = QuranAnnotations.Note(
+            id: "note",
+            text: "On two passages",
+            verses: [quran.suras[1].verses[254], quran.suras[2].verses[17]],
+            modifiedDate: .distantPast
+        )
+        let sut = makeSUT()
+        sut.notes = [NoteItem(note: note, quranText: nil)]
+
+        sut.searchTerm = quran.suras[2].localizedName()
+
+        XCTAssertEqual(sut.filteredNotes.map(\.id), ["note"])
     }
 
     private func storedNotes() async throws -> [QuranAnnotations.Note] {

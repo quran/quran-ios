@@ -105,8 +105,8 @@ final class NotesViewModel: ObservableObject {
             if item.noteText.range(of: term, options: .caseInsensitive) != nil {
                 return true
             }
-            let suraName = item.note.startAyah.sura.localizedName()
-            return suraName.range(of: term, options: .caseInsensitive) != nil
+            let suras = Set(item.note.verses.map(\.sura))
+            return suras.contains { $0.localizedName().range(of: term, options: .caseInsensitive) != nil }
         }
     }
 

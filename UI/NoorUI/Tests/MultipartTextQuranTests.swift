@@ -237,6 +237,20 @@ final class MultipartTextQuranTests: XCTestCase {
         )
     }
 
+    func test_ayahRanges_separatesRangesLikeSuraNames() {
+        let first: MultipartText = "\(ayahRange: ayah ... sura.verses[255])"
+        let other = Quran.hafsMadani1405.suras[2].verses[17]
+        let second: MultipartText = "\(ayahRange: other ... other)"
+        let text: MultipartText = "\(ayahRanges: [ayah ... sura.verses[255], other ... other])"
+
+        let separator = SuraNamesView.separator
+        XCTAssertEqual(
+            text.rawValue(locale: english),
+            first.rawValue(locale: english) + separator + second.rawValue(locale: english)
+        )
+        XCTAssertEqual(text.accessibilityText, first.accessibilityText + separator + second.accessibilityText)
+    }
+
     func test_references_useSemanticAccessibilityText() {
         let suraText: MultipartText = "\(sura: sura)"
         let ayahText: MultipartText = "\(ayah: ayah)"

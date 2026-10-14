@@ -236,6 +236,16 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             parts.append(contentsOf: MultipartText.ayahRange(range).parts)
         }
 
+        /// Each range as `ayahRange` writes it, separated by " · " like `suras`.
+        public mutating func appendInterpolation(ayahRanges ranges: [ClosedRange<AyahNumber>]) {
+            for (index, range) in ranges.enumerated() {
+                if index > 0 {
+                    parts.append(.plain(text: SuraNamesView.separator))
+                }
+                appendInterpolation(ayahRange: range)
+            }
+        }
+
         public mutating func appendInterpolation(
             quran text: QuranText,
             font: QuranFont,

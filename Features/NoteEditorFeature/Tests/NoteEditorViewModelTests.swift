@@ -36,10 +36,22 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertTrue(editableNote.ayahText.text.contains("١"))
         XCTAssertEqual(editableNote.note, "Stored note")
         XCTAssertEqual(editableNote.selectedColor, .pink)
-        XCTAssertEqual(editableNote.ayahRange, ayah(1) ... ayah(2))
+        XCTAssertEqual(editableNote.ayahRanges, [ayah(1) ... ayah(2)])
         XCTAssertFalse(editableNote.modifiedSince.isEmpty)
         XCTAssertFalse(sut.viewModel.showsColors)
         XCTAssertEqual(sut.viewModel.deleteConfirmationStyle, .syncedNote)
+    }
+
+    func test_fetchNote_showsEveryRangeOfMultiRangeNote() async throws {
+        let note = syncedNote(body: "Stored note", verses: [ayah(1), ayah(2), ayah(5)])
+        let sut = makeSyncSUT(mode: .edit(note))
+
+        let editableNote = try await sut.viewModel.fetchNote()
+
+        XCTAssertEqual(editableNote.ayahRanges, [ayah(1) ... ayah(2), ayah(5) ... ayah(5)])
+        let text = editableNote.ayahText.text
+        XCTAssertTrue(text.contains("١") && text.contains("٢") && text.contains("٥"))
+        XCTAssertFalse(text.contains("٣"))
     }
 
     func test_invalidShortNote_doesNotSaveOrDismissInSync() async throws {
@@ -234,7 +246,7 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertTrue(editableNote.ayahText.text.contains("١"))
         XCTAssertEqual(editableNote.note, "Stored note")
         XCTAssertEqual(editableNote.selectedColor, .blue)
-        XCTAssertEqual(editableNote.ayahRange, ayah(1) ... ayah(2))
+        XCTAssertEqual(editableNote.ayahRanges, [ayah(1) ... ayah(2)])
         XCTAssertFalse(editableNote.modifiedSince.isEmpty)
         XCTAssertTrue(sut.viewModel.showsColors)
         XCTAssertEqual(sut.viewModel.deleteConfirmationStyle, .note)
@@ -386,14 +398,12 @@ final class NoteEditorViewModelTests: XCTestCase {
     private func syncedNote(
         localId: String = "note-1",
         body: String,
-        startAyah: AyahNumber? = nil,
-        endAyah: AyahNumber? = nil
+        verses: Set<AyahNumber>? = nil
     ) -> Note {
         Note(
             id: localId,
             text: body,
-            startAyah: startAyah ?? ayah(1),
-            endAyah: endAyah ?? ayah(2),
+            verses: verses ?? [ayah(1), ayah(2)],
             modifiedDate: Date(timeIntervalSince1970: 1)
         )
     }

@@ -169,7 +169,7 @@ private struct NotesViewUI: View {
         #endif
         let noteText = item.noteText.trimmingCharacters(in: .whitespacesAndNewlines)
         return NoteCard(
-            reference: subheadingText(ayah: ayah, ayahCount: note.verses.count),
+            reference: subheadingText(for: note),
             location: "\(page.startJuz.localizedName) · \(page.localizedName)",
             quranText: quranText(item),
             noteText: noteText.isEmpty ? nil : titleText(for: noteText),
@@ -199,11 +199,13 @@ private struct NotesViewUI: View {
         return "\(noteText, highlighting: ranges)"
     }
 
-    private func subheadingText(ayah: AyahNumber, ayahCount: Int) -> MultipartText {
-        let emphasizesSura = !highlightRanges(in: ayah.sura.localizedName()).isEmpty
-        let ayahText: MultipartText = "\(ayah: ayah, emphasizingSura: emphasizesSura)"
-        if ayahCount > 1 {
-            return "\(ayahText) \(lFormat("notes.verses-count", ayahCount - 1))"
+    private func subheadingText(for note: Note) -> MultipartText {
+        // A note from Quran.com can span suras; search matches any of them, so emphasize when any matches.
+        let suras = Set(note.verses.map(\.sura))
+        let emphasizesSura = suras.contains { !highlightRanges(in: $0.localizedName()).isEmpty }
+        let ayahText: MultipartText = "\(ayah: note.startAyah, emphasizingSura: emphasizesSura)"
+        if note.verses.count > 1 {
+            return "\(ayahText) \(lFormat("notes.verses-count", note.verses.count - 1))"
         } else {
             return ayahText
         }

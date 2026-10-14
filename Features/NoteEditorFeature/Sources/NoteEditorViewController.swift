@@ -86,7 +86,7 @@ final class NoteEditorViewController: BaseViewController, UIAdaptivePresentation
             self?.done()
         }
 
-        let title: MultipartText = "\(ayahRange: note.ayahRange)"
+        let title: MultipartText = "\(ayahRanges: note.ayahRanges)"
         let titleLabel = UILabel()
         titleLabel.attributedText = title.attributedString(ofSize: .body)
         titleLabel.accessibilityLabel = title.accessibilityText

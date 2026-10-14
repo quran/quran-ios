@@ -50,8 +50,7 @@ final class NoteItemTests: XCTestCase {
         Note(
             id: id,
             text: body,
-            startAyah: ayah,
-            endAyah: ayah,
+            verses: [ayah],
             modifiedDate: Date()
         )
     }

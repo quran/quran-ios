@@ -222,7 +222,7 @@ private struct NoteEditorPreview: View {
         let verses = Quran.hafsMadani1405.suras[15].verses
         NoteEditorView(
             note: EditableNote(
-                ayahRange: verses[34] ... verses[35],
+                ayahRanges: [verses[34] ... verses[35]],
                 ayahText: "وَقَالَ ٱلَّذِينَ أَشْرَكُوا۟ لَوْ شَآءَ ٱللَّهُ مَا عَبَدْنَا مِن دُونِهِۦ مِن شَىْءٍ نَّحْنُ وَلَآ ءَابَآؤُنَا",
                 reading: .hafs_1405,
                 modifiedSince: Date(timeIntervalSince1970: 1).timeAgo(),

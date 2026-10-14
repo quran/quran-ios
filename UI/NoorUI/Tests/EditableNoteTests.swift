@@ -25,7 +25,7 @@ final class EditableNoteTests: XCTestCase {
     private func makeEditableNote(note: String) -> EditableNote {
         let ayah = Quran.hafsMadani1405.suras[0].verses[0]
         return EditableNote(
-            ayahRange: ayah ... ayah,
+            ayahRanges: [ayah ... ayah],
             ayahText: "بِسْمِ اللَّهِ",
             reading: .hafs_1405,
             modifiedSince: "2 hours ago",

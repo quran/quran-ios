@@ -64,7 +64,10 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
 
         let notes = try await storedNotes()
         XCTAssertEqual(notes.map(\.body), ["Legacy note"])
-        XCTAssertEqual(notes.map { "\($0.startSura):\($0.startAyah)-\($0.endSura):\($0.endAyah)" }, ["2:1-2:3"])
+        XCTAssertEqual(
+            notes.map { $0.ranges.map { "\($0.startSura):\($0.startAyah)-\($0.endSura):\($0.endAyah)" } },
+            [["2:1-2:3"]]
+        )
 
         let highlights = try await first(database.quranDataService.highlightsSequence())
         XCTAssertEqual(highlights.map { "\($0.sura):\($0.ayah) \($0.color.name)" }.sorted(), ["2:1 BLUE", "2:3 BLUE", "3:1 YELLOW"])

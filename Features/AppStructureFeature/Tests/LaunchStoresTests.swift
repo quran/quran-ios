@@ -19,16 +19,17 @@ final class LaunchStoresTests: XCTestCase {
 
     // MARK: Opening
 
-    func testUnreadableCoreDataStoreFailsLaunch() throws {
+    @MainActor
+    func testUnreadableCoreDataStoreFailsLaunch() async throws {
         let name = "LaunchStoresTests-\(UUID().uuidString)"
         try writeUnreadableStore(named: name)
-        let sut = LaunchStores(coreDataStack: CoreDataStack(
+        let sut = LaunchStores(coreDataStore: CoreDataStore(
             name: name,
             modelUrl: CoreDataModelResources.quranModel,
             lazyUniquifiers: { [] }
         ))
 
-        guard case let .failure(.failed(message)) = sut.open() else {
+        guard case let .failure(.failed(message)) = await sut.open() else {
             return XCTFail("Expected launch to fail")
         }
         XCTAssertTrue(message.hasPrefix("###openStore(): Failed to load persistent store: "), message)

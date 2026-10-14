@@ -16,19 +16,19 @@ import VLogging
 
 /// Opens the stores the app reads at launch, before anything resolves them.
 ///
-/// Building the app reads them right away, and a read that can't open its store crashes. Opening
-/// them first lets launch tell a device that's out of storage, which the user can fix, from any
-/// other failure.
+/// Opening them first lets launch tell a device that's out of storage, which the user can fix,
+/// from any other failure.
+@MainActor
 struct LaunchStores {
     // MARK: Internal
 
-    let coreDataStack: CoreDataStack
+    let coreDataStore: CoreDataStore
 
     /// Opens every store, stopping at the first one that fails. A failed open isn't cached, so
     /// calling again retries it.
-    func open() -> Result<Void, LaunchStoreError> {
+    func open() async -> Result<Void, LaunchStoreError> {
         do {
-            try coreDataStack.openStore()
+            _ = try await coreDataStore.stack()
         } catch {
             return .failure(LaunchStoreError(coreDataError: error, availableCapacity: Self.availableCapacity()))
         }
@@ -51,7 +51,7 @@ struct LaunchStores {
     ///
     /// Reads real free space rather than the "important usage" capacity, which counts space
     /// the system could purge but SQLite can't write to yet.
-    static func availableCapacity(at directory: URL) -> Int? {
+    nonisolated static func availableCapacity(at directory: URL) -> Int? {
         var existingDirectory = directory.standardizedFileURL
         while !FileManager.default.fileExists(atPath: existingDirectory.path), existingDirectory.pathComponents.count > 1 {
             existingDirectory = existingDirectory.deletingLastPathComponent()
@@ -70,7 +70,7 @@ struct LaunchStores {
     // MARK: Private
 
     /// The free space on the volume holding the stores, which all live under Application Support.
-    private static func availableCapacity() -> Int? {
+    private nonisolated static func availableCapacity() -> Int? {
         availableCapacity(at: NSPersistentContainer.defaultDirectoryURL())
     }
 }

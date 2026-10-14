@@ -27,7 +27,7 @@ class SimpleCoreDataEntityUniquifierTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        stack = CoreDataStack.testingStack()
+        stack = try await CoreDataStore.testingStore().stack()
         context = stack.newBackgroundContext()
 
         existingEntity = context.newPageBookmark(page: 45, modifiedOn: 100)

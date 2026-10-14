@@ -288,6 +288,7 @@ private func dataTargets() -> [[Target]] {
             "AsyncUtilitiesForTesting",
             "CoreDataModel",
             "CoreDataPersistenceTestSupport",
+            "Utilities",
         ]),
 
         target(type, name: "CoreDataPersistenceTestSupport", hasTests: false, dependencies: [

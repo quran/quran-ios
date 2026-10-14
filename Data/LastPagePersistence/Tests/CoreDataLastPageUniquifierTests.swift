@@ -29,7 +29,7 @@ class CoreDataLastPageUniquifierTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        stack = CoreDataStack.testingStack()
+        stack = try await CoreDataStore.testingStore().stack()
         context = stack.newBackgroundContext()
 
         entity1 = context.newLastPage(page: 45, modifiedOn: 1)

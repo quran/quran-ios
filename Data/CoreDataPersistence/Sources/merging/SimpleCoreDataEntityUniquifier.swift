@@ -38,7 +38,7 @@ public struct SimpleCoreDataEntityUniquifier<T: NSManagedObject>: CoreDataEntity
                 delete(duplicates, using: taskContext)
             }
         }
-        // Save the background context to trigger a notification and merge the result into the viewContext.
+        // Save the background context to trigger a notification that other contexts merge.
         try taskContext.save(with: "Deduplicating \(T.entity().name ?? "")")
     }
 

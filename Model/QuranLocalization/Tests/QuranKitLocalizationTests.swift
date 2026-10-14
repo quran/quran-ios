@@ -27,6 +27,19 @@ final class QuranKitLocalizationTests: XCTestCase {
         XCTAssertEqual("Hizb 2", quran.quarters[4].localizedName)
     }
 
+    func testAyahNumberLocalization() {
+        let ayah = quran.suras[1].verses[254]
+        XCTAssertEqual("第255节", ayah.localizedAyahNumber(language: .chinese))
+    }
+
+    func testChineseHizbAndQuarterUseOrdinalWordOrder() {
+        XCTAssertEqual("第3段", quran.hizbs[2].localizedName(language: .chinese))
+        XCTAssertEqual("第1段", quran.quarters[0].localizedName(language: .chinese))
+        XCTAssertEqual("第1段¼", quran.quarters[1].localizedName(language: .chinese))
+        XCTAssertEqual("第1段½", quran.quarters[2].localizedName(language: .chinese))
+        XCTAssertEqual("第1段¾", quran.quarters[3].localizedName(language: .chinese))
+    }
+
     func testPageQuarterInfo() {
         XCTAssertEqual("Juz' 1, Hizb 1", quran.pages[0].localizedQuarterName)
         XCTAssertEqual("Juz' 1", quran.pages[1].localizedQuarterName)
@@ -42,6 +55,18 @@ final class QuranKitLocalizationTests: XCTestCase {
         XCTAssertEqual("Juz' 1", quran.pages[11].localizedQuarterName)
         XCTAssertEqual("Juz' 30, ¾ Hizb 60", quran.pages[598].localizedQuarterName)
         XCTAssertEqual("Juz' 30", quran.pages[599].localizedQuarterName)
+    }
+
+    func testAyahName() {
+        let ayah = quran.suras[1].verses[254]
+
+        XCTAssertEqual("Al-Baqarah, Ayah 255", ayah.localizedName)
+    }
+
+    func testPageName() {
+        let page = quran.pages[41]
+
+        XCTAssertEqual("Page 42", page.localizedName)
     }
 
     func testIndoPakSuraNamesUseReadingSpecificEnglishNames() {

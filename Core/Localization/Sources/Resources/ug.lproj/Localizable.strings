@@ -9,6 +9,8 @@
 // VoiceOver label for an overflow (…) button that opens more options.
 // Metadata: Translated by AI; human review required.
 "button.more" = "تېخىمۇ كۆپ";
+// Separates the items of a short list whose items never contain commas, such as "Juz' 1, ¼ Hizb 1". Lists whose items can contain commas use "list.separator".
+"list.separator.comma" = "، ";
 
 // MARK: - Errors
 
@@ -37,6 +39,18 @@
 "surah" = "سۈرە";
 // Metadata: Translated by AI; human review required.
 "quran_alquran" = "قۇرئان";
+// A verse reference: %1$@ is the surah name and %2$@ is the localized ayah, such as "Al-Baqarah, Ayah 255". Translators may reorder the placeholders.
+"quran.ayah.name" = "%1$@، %2$@";
+// A page reference: %@ is the localized page number, such as "Page 42".
+"quran.page.name" = "%@-بەت";
+// A range of Quran references or page numbers: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257" or "2 - 3". Translators may reorder the placeholders.
+"quran.range" = "%1$@ - %2$@";
+// A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
+"quran.hizb.name" = "ھىزب %@";
+// A quarter reference: %1$@ is the fraction (¼, ½ or ¾) and %2$@ is the hizb reference, such as "¼ Hizb 3". Translators may reorder the placeholders.
+"quran.quarter.name" = "%1$@ %2$@";
+// A verse number: %1$d is the ayah number, such as "Ayah 255". Translators may move the number.
+"quran.ayah.number" = "%1$d-ئايەت";
 
 // MARK: - Translation
 

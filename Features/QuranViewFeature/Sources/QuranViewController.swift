@@ -425,7 +425,10 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         }
         let suras = pages.map(\.startSura)
         let juzs = pages.map(\.startJuz)
-        let pageNumbers = pages.map(\.pageNumber).map(NumberFormatter.shared.format).joined(separator: " - ")
+        let firstPage = NumberFormatter.shared.format(pages[0].pageNumber)
+        let pageNumbers = pages.count == 1
+            ? firstPage
+            : lFormat("quran.range", firstPage, NumberFormatter.shared.format(pages[pages.count - 1].pageNumber))
         let pageDescription = lFormat(
             "page_description",
             table: .android,

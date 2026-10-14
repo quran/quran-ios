@@ -23,6 +23,7 @@ import Foundation
 public enum Language: String {
     case arabic = "ar"
     case english = "en"
+    case chinese = "zh"
 }
 
 public enum Table: String {

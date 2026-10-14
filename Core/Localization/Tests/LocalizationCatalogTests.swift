@@ -54,6 +54,39 @@ final class LocalizationCatalogTests: XCTestCase {
         }
     }
 
+    func testReferenceFormatsUseEachLocalizationsComma() throws {
+        let commas = [
+            "ar": "، ",
+            "fa": "، ",
+            "ug": "، ",
+            "zh": "，",
+        ]
+
+        for localization in supportedLocalizations {
+            let localized = try strings(for: localization)
+            let comma = commas[localization, default: ", "]
+            XCTAssertEqual(localized["list.separator.comma"], comma, "\(localization) list.separator.comma")
+            // Translators may reorder the placeholders, so only check the comma is there.
+            let ayahComma = comma.trimmingCharacters(in: .whitespaces)
+            XCTAssertTrue(
+                localized["quran.ayah.name", default: ""].contains(ayahComma),
+                "\(localization) quran.ayah.name is missing \(ayahComma)"
+            )
+        }
+    }
+
+    func testAyahNumberFollowsAndroidExceptChineseWordOrder() throws {
+        for localization in supportedLocalizations {
+            let ayahNumber = try strings(for: localization)["quran.ayah.number", default: ""]
+            let android = try strings(named: "Android", for: localization)["quran_ayah", default: ""]
+            if localization == "zh" {
+                XCTAssertEqual(ayahNumber, "第%1$d节")
+            } else {
+                XCTAssertEqual(ayahNumber, android, "\(localization) quran.ayah.number differs from Android's quran_ayah")
+            }
+        }
+    }
+
     // MARK: - Private
 
     private let supportedLocalizations = [
@@ -143,12 +176,25 @@ final class LocalizationCatalogTests: XCTestCase {
     }
 
     private func formatTokens(in value: String) -> [String] {
-        let formatExpression = try! NSRegularExpression(pattern: #"%(?:\d+\$)?([@d])"#)
+        let formatExpression = try! NSRegularExpression(pattern: #"%(?:(\d+)\$)?([@d])"#)
         let readerExpression = try! NSRegularExpression(pattern: #"%%Readers:[^%]+%%"#)
         let range = NSRange(value.startIndex..., in: value)
 
-        let formatTokens = formatExpression.matches(in: value, range: range).compactMap { match in
-            Range(match.range(at: 1), in: value).map { "%\(value[$0])" }
+        // Number bare placeholders in order, so "%@ - %@" matches "%2$@ - %1$@",
+        // but a dropped or repeated positional placeholder doesn't.
+        var bareIndex = 0
+        let formatTokens = formatExpression.matches(in: value, range: range).compactMap { match -> String? in
+            guard let typeRange = Range(match.range(at: 2), in: value) else {
+                return nil
+            }
+            let index: String
+            if let indexRange = Range(match.range(at: 1), in: value) {
+                index = String(value[indexRange])
+            } else {
+                bareIndex += 1
+                index = String(bareIndex)
+            }
+            return "%\(index)$\(value[typeRange])"
         }
         let readerTokens = readerExpression.matches(in: value, range: range).compactMap { match in
             Range(match.range, in: value).map { String(value[$0]) }

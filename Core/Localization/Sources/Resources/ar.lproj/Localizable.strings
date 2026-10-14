@@ -6,6 +6,8 @@
 "button.delete" = "حذف";
 // VoiceOver label for an overflow (…) button that opens more options.
 "button.more" = "المزيد";
+// Separates the items of a short list whose items never contain commas, such as "Juz' 1, ¼ Hizb 1". Lists whose items can contain commas use "list.separator".
+"list.separator.comma" = "، ";
 
 // MARK: - Errors
 
@@ -23,6 +25,18 @@
 "ayah" = "آية";
 "surah" = "السورة";
 "quran_alquran" = "القرآن";
+// A verse reference: %1$@ is the surah name and %2$@ is the localized ayah, such as "Al-Baqarah, Ayah 255". Translators may reorder the placeholders.
+"quran.ayah.name" = "%1$@، %2$@";
+// A page reference: %@ is the localized page number, such as "Page 42".
+"quran.page.name" = "الصفحة %@";
+// A range of Quran references or page numbers: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257" or "2 - 3". Translators may reorder the placeholders.
+"quran.range" = "%1$@ - %2$@";
+// A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
+"quran.hizb.name" = "الحزب %@";
+// A quarter reference: %1$@ is the fraction (¼, ½ or ¾) and %2$@ is the hizb reference, such as "¼ Hizb 3". Translators may reorder the placeholders.
+"quran.quarter.name" = "%1$@ %2$@";
+// A verse number: %1$d is the ayah number, such as "Ayah 255". Translators may move the number.
+"quran.ayah.number" = "آية %1$d";
 
 // IndoPak sura names
 "quran.sura-name.indopak.17" = "بَنِي إِسْرَائِيل";

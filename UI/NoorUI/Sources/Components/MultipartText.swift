@@ -184,7 +184,7 @@ enum TextPart {
         case .ayah(let ayah, _, _):
             QuranReference.ayah(ayah).accessibilityText
         case .suras(let suras, _):
-            suras.map { QuranReference.sura($0).accessibilityText }.joined(separator: ", ")
+            suras.map { QuranReference.sura($0).accessibilityText }.joined(separator: l("list.separator.comma"))
         case .ayahCoordinate(let ayah):
             ayah.localizedCoordinate()
         case .quran(let text, _, _, _, _):
@@ -233,20 +233,7 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         }
 
         public mutating func appendInterpolation(ayahRange range: ClosedRange<AyahNumber>) {
-            let start = range.lowerBound
-            let end = range.upperBound
-            parts.append(.ayah(start, emphasizesSura: false))
-
-            guard start != end else {
-                return
-            }
-
-            parts.append(.plain(text: " - "))
-            if start.sura == end.sura {
-                parts.append(.ayahCoordinate(end))
-            } else {
-                parts.append(.ayah(end, emphasizesSura: false))
-            }
+            parts.append(contentsOf: MultipartText.ayahRange(range).parts)
         }
 
         public mutating func appendInterpolation(
@@ -374,6 +361,25 @@ public struct MultipartText: ExpressibleByStringInterpolation {
 extension MultipartText {
     public static func text(_ plain: String) -> MultipartText {
         MultipartText(stringLiteral: plain)
+    }
+
+    /// Joins the start and the end with the localized `quran.range` format.
+    /// The end is a bare coordinate when it is in the same sura as the start.
+    static func ayahRange(_ range: ClosedRange<AyahNumber>, language: Language? = nil) -> MultipartText {
+        let start = range.lowerBound
+        let end = range.upperBound
+        let startText = MultipartText(parts: [.ayah(start, emphasizesSura: false)])
+        guard start != end else {
+            return startText
+        }
+        let endText = MultipartText(parts: [
+            start.sura == end.sura ? .ayahCoordinate(end) : .ayah(end, emphasizesSura: false),
+        ])
+        return localizedFormat("quran.range", language: language, startText, endText)
+    }
+
+    private init(parts: [TextPart]) {
+        self.parts = parts
     }
 }
 

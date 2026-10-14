@@ -184,7 +184,7 @@ enum TextPart {
         case .ayah(let ayah, _, _):
             QuranReference.ayah(ayah).accessibilityText
         case .suras(let suras, _):
-            suras.map { QuranReference.sura($0).accessibilityText }.joined(separator: ", ")
+            suras.map { QuranReference.sura($0).accessibilityText }.joined(separator: l("list.separator.comma"))
         case .ayahCoordinate(let ayah):
             ayah.localizedCoordinate()
         case .quran(let text, _, _, _, _):

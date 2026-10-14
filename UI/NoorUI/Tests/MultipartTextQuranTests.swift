@@ -2,6 +2,7 @@
 //  MultipartTextQuranTests.swift
 //
 
+import Localization
 import NoorFont
 import QuranKit
 import QuranLocalization
@@ -60,6 +61,17 @@ final class MultipartTextQuranTests: XCTestCase {
         XCTAssertEqual(text.rawValue(locale: english), sura.localizedName())
         XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905}")
         XCTAssertEqual(text.accessibilityText, sura.localizedName())
+    }
+
+    func test_compactSuraReferences_separateAccessibilityTextWithLocalizedComma() {
+        let suras = Array(Quran.hafsMadani1405.suras[0 ... 1])
+        let text: MultipartText = "\(suras: suras, nameStyle: .compact)"
+
+        XCTAssertEqual(text.accessibilityText, "Al-Fātihah, Al-Baqarah")
+        XCTAssertEqual(
+            text.accessibilityText,
+            suras.map { $0.localizedName() }.joined(separator: l("list.separator.comma"))
+        )
     }
 
     func test_compactAyahReference_keepsLocalizedCoordinates() {

@@ -21,7 +21,7 @@ struct RecentPageCapsule: View {
                     .frame(minWidth: badgeSize, minHeight: badgeSize)
                     .background(Color(uiColor: .secondarySystemGroupedBackground), in: Circle())
                 VStack(alignment: .leading, spacing: 0) {
-                    MultipartText("\(suras: page.suras, nameStyle: .compact)")
+                    suraNames
                         .view(ofSize: .subheadline, allowsWrapping: false)
                     Text(timestamp)
                         .font(.caption)
@@ -38,9 +38,14 @@ struct RecentPageCapsule: View {
         .accessibilityLabel(accessibilityLabel)
     }
 
-    /// Sura names, page and timestamp as a spoken list. The timestamp can be a date with commas.
+    /// Sura names, page and timestamp as a spoken list. The sura names read as one item, and the timestamp can be
+    /// a date with commas.
     var accessibilityLabel: String {
-        (page.suras.map { $0.localizedName() } + [page.localizedName, timestamp]).joined(separator: l("list.separator"))
+        [suraNames.accessibilityText, page.localizedName, timestamp].joined(separator: l("list.separator"))
+    }
+
+    private var suraNames: MultipartText {
+        "\(suras: page.suras, nameStyle: .compact)"
     }
 }
 

@@ -177,7 +177,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
         LegacyDataImportCoordinator(reader: CoreDataLegacyDataReader(stack: stack), quranDataService: database.quranDataService)
     }
 
-    private func storedNotes() async throws -> [Note_] {
+    private func storedNotes() async throws -> [MobileSync.Note] {
         try await first(database.quranDataService.notesSequence())
     }
 

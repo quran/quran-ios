@@ -30,17 +30,17 @@ final class MobileSyncNoteServiceTests: XCTestCase {
         XCTAssertEqual(note.endAyah, ayah(2))
     }
 
-    func test_updateNote_persistsBodyAndRange() async throws {
-        try await service.createNote(body: "Original", startAyah: ayah(1), endAyah: ayah(1))
+    func test_updateNote_changesBodyAndKeepsRange() async throws {
+        try await service.createNote(body: "Original", startAyah: ayah(1), endAyah: ayah(2))
         let original = try await storedNote()
 
-        try await service.updateNote(original, body: "Updated", startAyah: ayah(2), endAyah: ayah(3))
+        try await service.updateNote(original, body: "Updated")
 
         let updated = try await storedNote()
         XCTAssertEqual(updated.id, original.id)
         XCTAssertEqual(updated.text, "Updated")
-        XCTAssertEqual(updated.startAyah, ayah(2))
-        XCTAssertEqual(updated.endAyah, ayah(3))
+        XCTAssertEqual(updated.startAyah, ayah(1))
+        XCTAssertEqual(updated.endAyah, ayah(2))
     }
 
     func test_removeNote_deletesPersistedNote() async throws {

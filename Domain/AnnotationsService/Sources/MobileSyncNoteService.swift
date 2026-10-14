@@ -40,20 +40,10 @@ public struct MobileSyncNoteService {
         }
     }
 
+    /// Changes only the note's text. A note's verse range never changes.
     public func updateNote(_ note: QuranAnnotations.Note, body: String) async throws {
-        try await updateNote(note, body: body, startAyah: note.startAyah, endAyah: note.endAyah)
-    }
-
-    public func updateNote(_ note: QuranAnnotations.Note, body: String, startAyah: AyahNumber, endAyah: AyahNumber) async throws {
         try await mapTextLengthLimit {
-            try await quranDataService.updateNote(
-                id: note.id,
-                body: body,
-                startSura: Int32(startAyah.sura.suraNumber),
-                startAyah: Int32(startAyah.ayah),
-                endSura: Int32(endAyah.sura.suraNumber),
-                endAyah: Int32(endAyah.ayah)
-            )
+            try await quranDataService.updateNote(id: note.id, body: body)
         }
     }
 
@@ -63,12 +53,12 @@ public struct MobileSyncNoteService {
 
     // MARK: Internal
 
-    static func notes(from notes: [Note_], quran: Quran) -> [QuranAnnotations.Note] {
+    static func notes(from notes: [MobileSync.Note], quran: Quran) -> [QuranAnnotations.Note] {
         notes.compactMap { note(from: $0, quran: quran) }
             .sorted { $0.modifiedDate > $1.modifiedDate }
     }
 
-    static func note(from note: Note_, quran: Quran) -> QuranAnnotations.Note? {
+    static func note(from note: MobileSync.Note, quran: Quran) -> QuranAnnotations.Note? {
         guard let start = AyahNumber(quran: quran, sura: Int(note.startSura), ayah: Int(note.startAyah)),
               let end = AyahNumber(quran: quran, sura: Int(note.endSura), ayah: Int(note.endAyah)),
               start <= end

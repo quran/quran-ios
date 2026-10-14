@@ -160,15 +160,15 @@ final class NoteEditorViewModel {
 
         do {
             #if QURAN_SYNC
-            guard let range = versesRange else {
-                return false
-            }
             analytics.logEvent("UpdateNoteVersesNum", value: Set(verses).count.description)
             switch mode {
             case .create:
+                guard let range = versesRange else {
+                    return false
+                }
                 try await noteService.createNote(body: noteText, startAyah: range.start, endAyah: range.end)
             case .edit(let note):
-                try await noteService.updateNote(note, body: noteText, startAyah: range.start, endAyah: range.end)
+                try await noteService.updateNote(note, body: noteText)
             }
             #else
             try await noteService.setNote(

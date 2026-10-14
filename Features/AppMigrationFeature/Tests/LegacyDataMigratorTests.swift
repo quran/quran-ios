@@ -70,7 +70,7 @@ final class LegacyDataMigratorTests: XCTestCase {
         return LegacyDataMigrator(coordinator: coordinator, retryDelay: 0)
     }
 
-    private func storedNotes() async throws -> [Note_] {
+    private func storedNotes() async throws -> [MobileSync.Note] {
         let iterator = database.quranDataService.notesSequence().makeAsyncIterator()
         return try await iterator.next() ?? []
     }

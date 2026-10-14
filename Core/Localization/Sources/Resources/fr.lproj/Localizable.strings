@@ -715,5 +715,5 @@
 // Metadata: Translated by AI; human review required.
 "home.sort-order.reverse" = "Inverser l’ordre";
 
-/* Separates the items of a list, such as a note's verse ranges */
-"list.separator" = ", ";
+/* Separates the items of a list, such as a note's verse ranges. A semicolon, because items can contain commas ("Al-Fātihah, Ayah 1") */
+"list.separator" = "; ";

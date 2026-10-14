@@ -239,17 +239,11 @@ final class MultipartTextQuranTests: XCTestCase {
     }
 
     func test_ayahRanges_separatesRangesWithTheListSeparator() {
-        let first: MultipartText = "\(ayahRange: ayah ... sura.verses[255])"
         let other = Quran.hafsMadani1405.suras[2].verses[17]
-        let second: MultipartText = "\(ayahRange: other ... other)"
         let text: MultipartText = "\(ayahRanges: [ayah ... sura.verses[255], other ... other])"
 
-        let separator = l("list.separator")
-        XCTAssertEqual(
-            text.rawValue(locale: english),
-            first.rawValue(locale: english) + separator + second.rawValue(locale: english)
-        )
-        XCTAssertEqual(text.accessibilityText, first.accessibilityText + separator + second.accessibilityText)
+        XCTAssertEqual(text.rawValue(locale: english), "Al-Baqarah \u{E905} · 2:255 - 2:256; Āli-ʿImrān \u{E906} · 3:18")
+        XCTAssertEqual(text.accessibilityText, "Al-Baqarah, Ayah 255 - 2:256; Āli-ʿImrān, Ayah 18")
     }
 
     func test_references_useSemanticAccessibilityText() {

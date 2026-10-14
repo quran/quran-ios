@@ -465,5 +465,5 @@
 // VoiceOver label for the Home button that reverses the surah and juz list order.
 "home.sort-order.reverse" = "عكس الترتيب";
 
-/* Separates the items of a list, such as a note's verse ranges */
-"list.separator" = "، ";
+/* Separates the items of a list, such as a note's verse ranges. A semicolon, because items can contain commas ("Al-Fātihah, Ayah 1") */
+"list.separator" = "؛ ";

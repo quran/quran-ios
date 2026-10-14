@@ -27,6 +27,11 @@ final class QuranKitLocalizationTests: XCTestCase {
         XCTAssertEqual("Hizb 2", quran.quarters[4].localizedName)
     }
 
+    func testAyahNumberLocalization() {
+        let ayah = quran.suras[1].verses[254]
+        XCTAssertEqual("第255节", ayah.localizedAyahNumber(language: .chinese))
+    }
+
     func testChineseHizbAndQuarterUseOrdinalWordOrder() {
         XCTAssertEqual("第3段", quran.hizbs[2].localizedName(language: .chinese))
         XCTAssertEqual("第1段", quran.quarters[0].localizedName(language: .chinese))

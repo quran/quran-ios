@@ -10,7 +10,11 @@ import Localization
 import QuranKit
 
 extension AyahNumber {
-    public var localizedAyahNumber: String { lFormat("quran_ayah", table: .android, ayah) }
+    public var localizedAyahNumber: String { localizedAyahNumber(language: nil) }
+
+    func localizedAyahNumber(language: Language?) -> String {
+        lFormat("quran.ayah.number", language: language, ayah)
+    }
 
     public func localizedCoordinate(locale: Locale = .preferredLanguageLocale) -> String {
         let formatter = NumberFormatter()

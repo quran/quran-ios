@@ -75,6 +75,18 @@ final class LocalizationCatalogTests: XCTestCase {
         }
     }
 
+    func testAyahNumberFollowsAndroidExceptChineseWordOrder() throws {
+        for localization in supportedLocalizations {
+            let ayahNumber = try strings(for: localization)["quran.ayah.number", default: ""]
+            let android = try strings(named: "Android", for: localization)["quran_ayah", default: ""]
+            if localization == "zh" {
+                XCTAssertEqual(ayahNumber, "第%1$d节")
+            } else {
+                XCTAssertEqual(ayahNumber, android, "\(localization) quran.ayah.number differs from Android's quran_ayah")
+            }
+        }
+    }
+
     // MARK: - Private
 
     private let supportedLocalizations = [

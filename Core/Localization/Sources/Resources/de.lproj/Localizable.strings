@@ -536,6 +536,8 @@
 "bookmarks.collections.new.placeholder" = "Name der Sammlung";
 "bookmarks.collections.name.empty" = "Der Name der Sammlung darf nicht leer sein.";
 "bookmarks.collections.name.too-long" = "Namen von Sammlungen dürfen höchstens %d Zeichen lang sein.";
+"bookmarks.collections.name.duplicate" = "Eine Sammlung namens „%@“ existiert bereits.";
+"bookmarks.collections.read-only" = "Diese Sammlung kann nicht umbenannt oder gelöscht werden.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Erstelle eine Sammlung, um Ayahs nach Thema, Dua oder Lernplan zu ordnen.";
 // Metadata: Translated by ChatGPT; human review required.

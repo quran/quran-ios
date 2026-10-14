@@ -536,6 +536,8 @@
 "bookmarks.collections.new.placeholder" = "Название коллекции";
 "bookmarks.collections.name.empty" = "Название коллекции не может быть пустым.";
 "bookmarks.collections.name.too-long" = "Название коллекции не может быть длиннее %d символов.";
+"bookmarks.collections.name.duplicate" = "Коллекция «%@» уже существует.";
+"bookmarks.collections.read-only" = "Эту коллекцию нельзя переименовать или удалить.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Создайте коллекцию, чтобы организовать аяты по теме, дуа или плану заучивания.";
 // Metadata: Translated by ChatGPT; human review required.

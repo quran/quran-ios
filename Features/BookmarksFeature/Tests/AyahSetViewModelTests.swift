@@ -1,5 +1,6 @@
 #if QURAN_SYNC
 import Combine
+import Localization
 import MobileSync
 import MobileSyncTestSupport
 import QuranAnnotations
@@ -138,13 +139,34 @@ final class AyahSetViewModelTests: XCTestCase {
 
         XCTAssertEqual(
             sut.pendingNameError,
-            TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)
+            .textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255))
         )
         XCTAssertTrue(sut.isPresentingRename)
         XCTAssertEqual(sut.pendingName, longName)
         XCTAssertNil(sut.error)
         let storedCollection = try await firstCollection()
         XCTAssertEqual(storedCollection.name, "Personal")
+    }
+
+    func test_renamePending_keepsDuplicateNameAndShowsWhichCollectionHasIt() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Study")
+        try await service.createCollection(named: "Personal")
+        let personal = try await collection(named: "Personal")
+        let sut = makeSUT(collection: personal, service: service)
+        sut.presentRename()
+        sut.isPresentingRename = false
+        sut.pendingName = "study"
+
+        await sut.renamePending()
+
+        XCTAssertEqual(sut.pendingNameError, .duplicate(DuplicateCollectionNameError(name: "Study")))
+        XCTAssertEqual(sut.pendingNameError?.localizedMessage, lFormat("bookmarks.collections.name.duplicate", "Study"))
+        XCTAssertTrue(sut.isPresentingRename)
+        XCTAssertEqual(sut.pendingName, "study")
+        XCTAssertNil(sut.error)
+        let storedCollection = try await collection(named: "Personal")
+        XCTAssertEqual(storedCollection.id, personal.id)
     }
 
     func test_requestDeleteCollection_deletesEmptyCollectionAndNotifiesListener() async throws {
@@ -330,6 +352,16 @@ final class AyahSetViewModelTests: XCTestCase {
             }
         }
         throw TestError.expectedDatabaseStateNotObserved
+    }
+
+    private func collection(named name: String) async throws -> AyahBookmarkCollection {
+        let stored = try await storedCollections {
+            $0.contains { $0.collection.name == name }
+        }
+        return try XCTUnwrap(
+            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
+                .first { $0.name == name }
+        )
     }
 
     private func firstCollection() async throws -> AyahBookmarkCollection {

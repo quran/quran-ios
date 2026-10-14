@@ -39,12 +39,17 @@ public struct AyahBookmarkCollectionService {
         )
     }
 
+    /// - Throws: `ReadOnlyCollectionError` when the collection can't be deleted.
     public func removeCollection(id: String) async throws {
-        _ = try await quranDataService.removeCollection(id: id)
+        _ = try await mapCollectionErrors {
+            try await quranDataService.removeCollection(id: id)
+        }
     }
 
+    /// - Throws: `ReadOnlyCollectionError` when the collection can't be renamed, `DuplicateCollectionNameError`
+    ///   when another collection has the name, and `TextLengthLimitError` when the name is too short or too long.
     public func renameCollection(id: String, to name: String) async throws {
-        _ = try await mapTextLengthLimit {
+        _ = try await mapCollectionErrors {
             try await quranDataService.updateCollection(id: id, name: name)
         }
     }

@@ -542,6 +542,8 @@
 "bookmarks.collections.new.placeholder" = "收藏集名称";
 "bookmarks.collections.name.empty" = "收藏集名称不能为空。";
 "bookmarks.collections.name.too-long" = "收藏集名称不能超过 %d 个字符。";
+"bookmarks.collections.name.duplicate" = "已存在名为“%@”的收藏集。";
+"bookmarks.collections.read-only" = "此收藏集无法重命名或删除。";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "创建收藏集，按主题、杜阿或背诵计划整理经文。";
 // Metadata: Translated by ChatGPT; human review required.

@@ -38,7 +38,7 @@ final class AyahSetViewModel: ObservableObject {
     @Published var isPresentingDeleteConfirmation = false
     @Published var isPresentingRename = false
     @Published var pendingName = ""
-    @Published private(set) var pendingNameError: TextLengthLimitError?
+    @Published private(set) var pendingNameError: CollectionNameError?
 
     func start() async {
         do {
@@ -90,12 +90,14 @@ final class AyahSetViewModel: ObservableObject {
         do {
             try await dataSource.rename(to: name)
             pendingNameError = nil
-        } catch let error as TextLengthLimitError {
-            logger.info("Bookmarks: collection name rejected. Bound: \(error.bound), limit: \(error.limit)")
-            pendingNameError = error
-            isPresentingRename = true
         } catch {
-            self.error = error
+            if let nameError = CollectionNameError(error) {
+                logger.info("Bookmarks: collection name rejected. \(nameError.logDescription)")
+                pendingNameError = nameError
+                isPresentingRename = true
+            } else {
+                self.error = error
+            }
         }
     }
 

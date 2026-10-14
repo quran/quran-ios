@@ -538,6 +538,8 @@
 "bookmarks.collections.new.placeholder" = "To‘plam nomi";
 "bookmarks.collections.name.empty" = "To‘plam nomi bo‘sh bo‘lishi mumkin emas.";
 "bookmarks.collections.name.too-long" = "To‘plam nomi %d ta belgidan oshmasligi kerak.";
+"bookmarks.collections.name.duplicate" = "“%@” nomli to‘plam allaqachon mavjud.";
+"bookmarks.collections.read-only" = "Bu to‘plam nomini o‘zgartirib ham, uni o‘chirib ham bo‘lmaydi.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Oyatlarni mavzu, duo yoki yodlash rejasi bo‘yicha tartiblash uchun to‘plam yarating.";
 // Metadata: Translated by ChatGPT; human review required.

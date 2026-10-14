@@ -536,6 +536,8 @@
 "bookmarks.collections.new.placeholder" = "Nom de la collection";
 "bookmarks.collections.name.empty" = "Le nom de la collection ne peut pas être vide.";
 "bookmarks.collections.name.too-long" = "Les noms de collection ne peuvent pas dépasser %d caractères.";
+"bookmarks.collections.name.duplicate" = "Une collection nommée « %@ » existe déjà.";
+"bookmarks.collections.read-only" = "Cette collection ne peut pas être renommée ni supprimée.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Créez une collection pour organiser les ayahs par thème, doua ou programme de mémorisation.";
 // Metadata: Translated by ChatGPT; human review required.

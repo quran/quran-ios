@@ -520,6 +520,8 @@
 "bookmarks.collections.new.placeholder" = "Жинақ атауы";
 "bookmarks.collections.name.empty" = "Жинақ атауы бос болмауы керек.";
 "bookmarks.collections.name.too-long" = "Жинақ атауы %d таңбадан аспауы керек.";
+"bookmarks.collections.name.duplicate" = "«%@» атты жинақ бұрыннан бар.";
+"bookmarks.collections.read-only" = "Бұл жинақтың атын өзгертуге немесе оны жоюға болмайды.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Аяттарды тақырып, дұға немесе жаттау жоспары бойынша реттеу үшін жинақ жасаңыз.";
 // Metadata: Translated by ChatGPT; human review required.

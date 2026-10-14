@@ -153,6 +153,36 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         XCTAssertEqual(stored.collection.id, collection.collection.id)
     }
 
+    func test_renameCollection_throwsDuplicateCollectionNameErrorAndKeepsName() async throws {
+        try await service.createCollection(named: "Study")
+        try await service.createCollection(named: "Personal")
+        let collection = try await storedCollection(named: "Personal")
+
+        await assertThrows(DuplicateCollectionNameError(name: "Study")) {
+            try await service.renameCollection(id: collection.collection.id, to: " study ")
+        }
+
+        let stored = try await storedCollection(named: "Personal")
+        XCTAssertEqual(stored.collection.id, collection.collection.id)
+    }
+
+    func test_renameAndRemoveFavorites_throwReadOnlyCollectionError() async throws {
+        var iterator = service.collectionsSequence().makeAsyncIterator()
+        let collections = try await iterator.next() ?? []
+        let favorites = try XCTUnwrap(collections.first { $0.isDefault })
+        let expected = ReadOnlyCollectionError(collectionID: favorites.id)
+
+        await assertThrows(expected) {
+            try await service.renameCollection(id: favorites.id, to: "Renamed")
+        }
+        await assertThrows(expected) {
+            try await service.removeCollection(id: favorites.id)
+        }
+
+        let stored = try await storedCollections { $0.contains { $0.collection.isDefault } }
+        XCTAssertEqual(stored.first { $0.collection.isDefault }?.collection.id, favorites.id)
+    }
+
     private func collectionWithBookmarks(id: String, name: String, isReadOnly: Bool) -> CollectionWithAyahBookmarks {
         CollectionWithAyahBookmarks(
             collection: BookmarkCollection(
@@ -167,8 +197,8 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         )
     }
 
-    private func assertThrows(
-        _ expected: TextLengthLimitError,
+    private func assertThrows<E: Error & Equatable>(
+        _ expected: E,
         file: StaticString = #filePath,
         line: UInt = #line,
         _ operation: () async throws -> Void
@@ -177,7 +207,7 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
             try await operation()
             XCTFail("Expected \(expected)", file: file, line: line)
         } catch {
-            XCTAssertEqual(error as? TextLengthLimitError, expected, file: file, line: line)
+            XCTAssertEqual(error as? E, expected, file: file, line: line)
         }
     }
 

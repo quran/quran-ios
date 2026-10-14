@@ -519,6 +519,8 @@
 "bookmarks.collections.new.placeholder" = "Nama koleksi";
 "bookmarks.collections.name.empty" = "Nama koleksi tidak boleh kosong.";
 "bookmarks.collections.name.too-long" = "Nama koleksi tidak boleh melebihi %d aksara.";
+"bookmarks.collections.name.duplicate" = "Koleksi bernama “%@” sudah wujud.";
+"bookmarks.collections.read-only" = "Koleksi ini tidak boleh dinamakan semula atau dipadam.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.no-data.text" = "Cipta koleksi untuk menyusun ayat mengikut tema, doa atau rancangan hafazan.";
 // Metadata: Translated by ChatGPT; human review required.

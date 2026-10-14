@@ -356,6 +356,22 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_deleteCollection_explainsWhenCollectionTurnedReadOnly() async throws {
+        let stored = try await storedCollections { $0.contains { $0.collection.isDefault } }
+        let favorites = try XCTUnwrap(stored.first { $0.collection.isDefault }?.collection)
+        // A list the sync hadn't refreshed yet still offers to delete it.
+        let staleCollection = collection(name: favorites.name, id: favorites.id)
+        let sut = makeSUT(collectionService: makeService())
+
+        await sut.deleteCollection(staleCollection)
+
+        let error = try XCTUnwrap(sut.error as? ReadOnlyCollectionError)
+        XCTAssertEqual(error, ReadOnlyCollectionError(collectionID: favorites.id))
+        XCTAssertEqual(error.errorDescription, l("bookmarks.collections.read-only"))
+        let collections = try await storedCollections()
+        XCTAssertTrue(collections.contains { $0.collection.id == favorites.id })
+    }
+
     func test_requestDeleteCollection_requiresConfirmationBeforeDeletingNonEmptyCollection() async throws {
         let service = makeService()
         try await service.createCollection(named: "Personal")

@@ -67,8 +67,7 @@ public struct AudioRepeatSection<Delay: Hashable>: View {
         case .eachVerse: lAndroid("play_each_verse")
         case .setOfVerses: lAndroid("play_verses_range")
         }
-        // The Android section titles end with a colon.
-        return title.replacingOccurrences(of: ":", with: "")
+        return title.droppingTrailingLabelPunctuation()
     }
 
     private var footer: String {
@@ -90,6 +89,18 @@ public struct AudioRepeatSection<Delay: Hashable>: View {
         case .eachVerse: l("audio.verse-delay")
         case .setOfVerses: l("audio.repetition-delay")
         }
+    }
+}
+
+extension String {
+    /// Drops the colon or full stop, and any whitespace, that ends a label such as the Android
+    /// section titles "Play each verse:", "Écouter chaque Aya :" or "听听每一段经文。".
+    func droppingTrailingLabelPunctuation() -> String {
+        let terminators: Set<Character> = [":", "：", ".", "。"]
+        guard let last = lastIndex(where: { !$0.isWhitespace && !terminators.contains($0) }) else {
+            return ""
+        }
+        return String(self[...last])
     }
 }
 

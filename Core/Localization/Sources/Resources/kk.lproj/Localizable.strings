@@ -205,6 +205,8 @@
 "reciters.downloaded" = "Жүктелген";
 // Metadata: Translated by ChatGPT; human review required.
 "reciters.all" = "Барлығы";
+// Title of the section listing every reciter in one language: %@ is the language name, such as "All (English)".
+"reciters.all-language" = "Барлығы (%@)";
 
 // MARK: - Audio
 
@@ -466,6 +468,8 @@
 "audio.playback.footer.quran" = "Ойнату Құранның соңына дейін жалғасады. Ағынмен ойнату өшірулі болса, ол аяттар алдымен жүктеледі; ағынмен ойнату орын үнемдейді, бірақ интернет байланысын қажет етеді.";
 // Metadata: Translated by AI; human review required.
 "audio-manager.stream-hint" = "Жүктемей тыңдау үшін «Аудио ойнату» бөлімінде «Дыбысты ағынмен ойнату» параметрін қосыңыз.";
+// Subtitle of a reciter in Audio Downloads: %1$@ is the downloaded size, such as "1.2GB", and %2$@ is the downloaded surahs count, such as "5 surahs downloaded". Translators may reorder the placeholders.
+"audio.downloads.size-and-files" = "%1$@ · %2$@";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Әр аяттан кейінгі үзіліс";
 // Metadata: Translated by ChatGPT; human review required.

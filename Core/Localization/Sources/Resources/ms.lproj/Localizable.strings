@@ -202,6 +202,8 @@
 "reciters.downloaded" = "Dimuat turun";
 // Metadata: Translated by ChatGPT; human review required.
 "reciters.all" = "Semua";
+// Title of the section listing every reciter in one language: %@ is the language name, such as "All (English)".
+"reciters.all-language" = "Semua (%@)";
 
 // MARK: - Audio
 
@@ -465,6 +467,8 @@
 "audio.playback.footer.quran" = "Main balik diteruskan hingga akhir Al-Quran. Jika penstriman dimatikan, ayat-ayat itu dimuat turun dahulu; penstriman menjimatkan ruang tetapi memerlukan sambungan internet.";
 // Metadata: Translated by AI; human review required.
 "audio-manager.stream-hint" = "Untuk main tanpa memuat turun, hidupkan “Strim audio” dalam “Main balik audio”.";
+// Subtitle of a reciter in Audio Downloads: %1$@ is the downloaded size, such as "1.2GB", and %2$@ is the downloaded surahs count, such as "5 surahs downloaded". Translators may reorder the placeholders.
+"audio.downloads.size-and-files" = "%1$@ · %2$@";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Jeda selepas setiap ayat";
 // Metadata: Translated by ChatGPT; human review required.

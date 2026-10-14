@@ -219,6 +219,8 @@
 "reciters.downloaded" = "چۈشۈرۈلگەن";
 // Metadata: Translated by ChatGPT; human review required.
 "reciters.all" = "ھەممىسى";
+// Title of the section listing every reciter in one language: %@ is the language name, such as "All (English)".
+"reciters.all-language" = "ھەممىسى (%@)";
 
 // MARK: - Audio
 
@@ -485,6 +487,8 @@
 "audio.playback.footer.quran" = "قويۇش قۇرئاننىڭ ئاخىرىغىچە داۋاملىشىدۇ. تور ئارقىلىق قويۇش تاقالغاندا، ئۇ ئايەتلەر ئالدى بىلەن چۈشۈرۈلىدۇ؛ تور ئارقىلىق قويۇش بوشلۇق تېجەيدۇ، ئەمما تور ئۇلىنىشىنى تەلەپ قىلىدۇ.";
 // Metadata: Translated by AI; human review required.
 "audio-manager.stream-hint" = "چۈشۈرمەي قويۇش ئۈچۈن، «ئاۋاز قويۇش» دا «ئاۋازنى تور ئارقىلىق قويۇش» نى ئېچىڭ.";
+// Subtitle of a reciter in Audio Downloads: %1$@ is the downloaded size, such as "1.2GB", and %2$@ is the downloaded surahs count, such as "5 surahs downloaded". Translators may reorder the placeholders.
+"audio.downloads.size-and-files" = "%1$@ · %2$@";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "ھەر ئايەتتىن كېيىن توختاش";
 // Metadata: Translated by ChatGPT; human review required.

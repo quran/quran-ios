@@ -118,7 +118,7 @@ private struct ReciterListViewUI: View {
 
     private func allTitle(languageCode: String) -> String {
         if let language = Locale.fixedCurrentLocaleNumbers.localizedString(forLanguageCode: languageCode) {
-            return l("reciters.all") + " (" + language.capitalized + ")"
+            return lFormat("reciters.all-language", language.capitalized(with: .fixedCurrentLocaleNumbers))
         }
         return l("reciters.all")
     }

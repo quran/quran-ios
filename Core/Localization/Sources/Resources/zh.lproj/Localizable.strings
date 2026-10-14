@@ -224,6 +224,8 @@
 "reciters.downloaded" = "已下载";
 // Metadata: Translated by ChatGPT; human review required.
 "reciters.all" = "全部";
+// Title of the section listing every reciter in one language: %@ is the language name, such as "All (English)".
+"reciters.all-language" = "全部（%@）";
 
 // MARK: - Audio
 
@@ -488,6 +490,8 @@
 "audio.playback.footer.quran" = "播放将持续到古兰经末尾。关闭流式播放时，这些经文会先下载；流式播放可节省空间，但需要互联网连接。";
 // Metadata: Translated by AI; human review required.
 "audio-manager.stream-hint" = "如需不下载直接播放，请在“音频播放”中开启“流式播放音频”。";
+// Subtitle of a reciter in Audio Downloads: %1$@ is the downloaded size, such as "1.2GB", and %2$@ is the downloaded surahs count, such as "5 surahs downloaded". Translators may reorder the placeholders.
+"audio.downloads.size-and-files" = "%1$@ · %2$@";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "每节经文后暂停";
 // Metadata: Translated by ChatGPT; human review required.

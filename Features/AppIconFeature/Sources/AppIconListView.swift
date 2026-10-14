@@ -71,7 +71,8 @@ private struct AppIconListViewUI: View {
             action: .async { await select(option) }
         )
         // The selected trait replaces the checkmark for VoiceOver.
-        .accessibilityLabel([option.name, defaultCaption].compactMap { $0 }.joined(separator: ", "))
+        .accessibilityLabel(option.name)
+        .accessibilityValue(defaultCaption ?? "")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }

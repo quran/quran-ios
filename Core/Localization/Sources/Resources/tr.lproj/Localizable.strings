@@ -185,6 +185,8 @@
 "reciters.recent" = "Son";
 "reciters.downloaded" = "İndirilenler";
 "reciters.all" = "Herkes";
+// Title of the section listing every reciter in one language: %@ is the language name, such as "All (English)".
+"reciters.all-language" = "Herkes (%@)";
 
 // MARK: - Audio
 
@@ -425,6 +427,8 @@
 "audio.playback.footer.quran" = "Oynatma, Kur'an'ın sonuna kadar devam eder. Çevrimiçi oynatma kapalıyken bu ayetler önce indirilir; çevrimiçi oynatma yer tasarrufu sağlar ancak internet bağlantısı gerektirir.";
 // Metadata: Translated by AI; human review required.
 "audio-manager.stream-hint" = "İndirmeden oynatmak için “Ses oynatma” bölümünde “Sesi çevrimiçi oynat” seçeneğini açın.";
+// Subtitle of a reciter in Audio Downloads: %1$@ is the downloaded size, such as "1.2GB", and %2$@ is the downloaded surahs count, such as "5 surahs downloaded". Translators may reorder the placeholders.
+"audio.downloads.size-and-files" = "%1$@ · %2$@";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Her ayetten sonra duraklat";
 // Metadata: Translated by ChatGPT; human review required.

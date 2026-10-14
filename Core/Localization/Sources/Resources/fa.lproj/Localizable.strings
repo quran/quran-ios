@@ -219,6 +219,8 @@
 "reciters.downloaded" = "دانلود شده";
 // Metadata: Translated by ChatGPT; human review required.
 "reciters.all" = "همه";
+// Title of the section listing every reciter in one language: %@ is the language name, such as "All (English)".
+"reciters.all-language" = "همه (%@)";
 
 // MARK: - Audio
 
@@ -484,6 +486,8 @@
 "audio.playback.footer.quran" = "پخش تا انتهای قرآن ادامه می‌یابد. وقتی پخش جریانی خاموش است، آن آیه‌ها ابتدا دانلود می‌شوند؛ پخش جریانی در فضا صرفه‌جویی می‌کند اما به اتصال اینترنت نیاز دارد.";
 // Metadata: Translated by AI; human review required.
 "audio-manager.stream-hint" = "برای پخش بدون دانلود، «پخش جریانی صوت» را در «پخش صوت» روشن کنید.";
+// Subtitle of a reciter in Audio Downloads: %1$@ is the downloaded size, such as "1.2GB", and %2$@ is the downloaded surahs count, such as "5 surahs downloaded". Translators may reorder the placeholders.
+"audio.downloads.size-and-files" = "%1$@ · %2$@";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "مکث پس از هر آیه";
 // Metadata: Translated by ChatGPT; human review required.

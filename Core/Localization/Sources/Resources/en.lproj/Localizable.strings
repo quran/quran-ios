@@ -171,6 +171,8 @@
 "reciters.recent" = "Recent";
 "reciters.downloaded" = "Downloaded";
 "reciters.all" = "All";
+// Title of the section listing every reciter in one language: %@ is the language name, such as "All (English)".
+"reciters.all-language" = "All (%@)";
 
 // MARK: - Audio
 
@@ -201,6 +203,8 @@
 "audio.playback.footer.juz" = "Playback continues to the end of the current Juz'. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
 "audio.playback.footer.quran" = "Playback continues to the end of the Quran. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
 "audio-manager.stream-hint" = "To play without downloading, turn on Stream Audio in Audio Playback.";
+// Subtitle of a reciter in Audio Downloads: %1$@ is the downloaded size, such as "1.2GB", and %2$@ is the downloaded surahs count, such as "5 surahs downloaded". Translators may reorder the placeholders.
+"audio.downloads.size-and-files" = "%1$@ · %2$@";
 
 "audio.delay.off" = "Off";
 "audio.repeat-count" = "Repeat Count";

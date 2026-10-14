@@ -180,6 +180,8 @@
 "reciters.recent" = "Gần đây";
 "reciters.downloaded" = "Đã tải";
 "reciters.all" = "Tất cả";
+// Title of the section listing every reciter in one language: %@ is the language name, such as "All (English)".
+"reciters.all-language" = "Tất cả (%@)";
 
 // MARK: - Audio
 
@@ -394,6 +396,8 @@
 "audio.playback.footer.quran" = "Phát tiếp đến cuối Kinh Quran. Khi tắt phát trực tuyến, các câu đó sẽ được tải xuống trước; phát trực tuyến tiết kiệm dung lượng nhưng cần kết nối internet.";
 // Metadata: Translated by AI; human review required.
 "audio-manager.stream-hint" = "Để phát mà không cần tải xuống, hãy bật “Phát trực tuyến âm thanh” trong “Phát âm thanh”.";
+// Subtitle of a reciter in Audio Downloads: %1$@ is the downloaded size, such as "1.2GB", and %2$@ is the downloaded surahs count, such as "5 surahs downloaded". Translators may reorder the placeholders.
+"audio.downloads.size-and-files" = "%1$@ · %2$@";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.verse-delay" = "Tạm dừng sau mỗi ayah";
 // Metadata: Translated by ChatGPT; human review required.

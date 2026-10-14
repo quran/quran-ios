@@ -87,6 +87,28 @@ final class LocalizationCatalogTests: XCTestCase {
         }
     }
 
+    func testReciterLanguageTitlesWrapTheLanguageInEachLocalizationsParentheses() throws {
+        for localization in supportedLocalizations {
+            let localized = try strings(for: localization)
+            let parenthesized = localization == "zh" ? "（%@）" : "(%@)"
+            XCTAssertTrue(
+                localized["reciters.all-language", default: ""].contains(parenthesized),
+                "\(localization) reciters.all-language is missing \(parenthesized)"
+            )
+        }
+    }
+
+    func testAudioDownloadSubtitleUsesTheMetadataSeparator() throws {
+        for localization in supportedLocalizations {
+            let localized = try strings(for: localization)
+            // Translators may reorder the placeholders, so only check the separator is there.
+            XCTAssertTrue(
+                localized["audio.downloads.size-and-files", default: ""].contains(" · "),
+                "\(localization) audio.downloads.size-and-files is missing \" · \""
+            )
+        }
+    }
+
     // MARK: - Private
 
     private let supportedLocalizations = [

@@ -109,6 +109,19 @@ final class LocalizationCatalogTests: XCTestCase {
         }
     }
 
+    func testChineseUsesFullWidthColonsAndParentheses() throws {
+        // A colon between two numbers, such as an ayah coordinate "%d:%d", stays half-width.
+        let numericColon = try NSRegularExpression(pattern: #"(\d|%(\d+\$)?[@d]):(?=\d|%)"#)
+        for (key, value) in try strings(for: "zh") {
+            let range = NSRange(value.startIndex..., in: value)
+            let text = numericColon.stringByReplacingMatches(in: value, range: range, withTemplate: "$1")
+            XCTAssertNil(
+                text.rangeOfCharacter(from: CharacterSet(charactersIn: ":()")),
+                "zh \(key) uses half-width punctuation: \(value)"
+            )
+        }
+    }
+
     // MARK: - Private
 
     private let supportedLocalizations = [

@@ -17,21 +17,25 @@ public struct LocalTranslationsFake {
     // MARK: Lifecycle
 
     public init(useFactory: Bool = false) {
-        persistence = GRDBActiveTranslationsPersistence(directory: Self.databasesURL)
+        // Each fake gets its own directory: `DatabaseConnection` pools connections by URL for the
+        // whole process, so a shared path can hand a test a stale connection with rows from an earlier test.
+        databasesURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("LocalTranslationsFake-\(UUID().uuidString)", isDirectory: true)
+        persistence = GRDBActiveTranslationsPersistence(directory: databasesURL)
         if useFactory {
             let persistenceFactory = { (translation: Translation) in
                 let url = TestResources.resourceURL(translation.fileName)
                 return GRDBDatabaseVersionPersistence(fileURL: url)
             }
-            retriever = LocalTranslationsRetriever(databasesURL: Self.databasesURL, fileSystem: fileSystem, versionPersistenceFactory: persistenceFactory)
+            retriever = LocalTranslationsRetriever(databasesURL: databasesURL, fileSystem: fileSystem, versionPersistenceFactory: persistenceFactory)
         } else {
-            retriever = LocalTranslationsRetriever(databasesURL: Self.databasesURL, fileSystem: fileSystem)
+            retriever = LocalTranslationsRetriever(databasesURL: databasesURL, fileSystem: fileSystem)
         }
     }
 
     // MARK: Public
 
-    public static let databasesURL = FileManager.documentsURL.appendingPathComponent("databases", isDirectory: true)
+    public let databasesURL: URL
 
     public let fileSystem = FileSystemFake()
     public let persistence: ActiveTranslationsPersistence
@@ -39,7 +43,7 @@ public struct LocalTranslationsFake {
     public let retriever: LocalTranslationsRetriever
 
     public func tearDown() {
-        try? FileManager.default.removeItem(at: Self.databasesURL)
+        try? FileManager.default.removeItem(at: databasesURL)
     }
 
     public func setTranslations(_ translations: [Translation]) async throws {

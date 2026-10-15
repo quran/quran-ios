@@ -17,7 +17,7 @@ class TranslationDeleterTests: XCTestCase {
         super.setUp()
         localTranslationsFake = LocalTranslationsFake(useFactory: true)
         service = TranslationDeleter(
-            databasesURL: LocalTranslationsFake.databasesURL,
+            databasesURL: localTranslationsFake.databasesURL,
             fileSystem: fileSystem
         )
     }

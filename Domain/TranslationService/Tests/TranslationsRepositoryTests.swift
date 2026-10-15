@@ -20,7 +20,7 @@ class TranslationsRepositoryTests: XCTestCase {
         session = NetworkSessionFake(queue: .main, delegate: nil)
         localTranslationsFake = LocalTranslationsFake(useFactory: true)
         service = TranslationsRepository(
-            databasesURL: LocalTranslationsFake.databasesURL,
+            databasesURL: localTranslationsFake.databasesURL,
             networkManager: NetworkManager(session: session, baseURL: baseURL)
         )
     }

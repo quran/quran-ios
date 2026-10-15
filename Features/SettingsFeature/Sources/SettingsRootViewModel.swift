@@ -116,6 +116,7 @@ final class SettingsRootViewModel: ObservableObject {
     #if QURAN_SYNC
     @Published var isAuthenticated: Bool = false
     @Published var loggedInUser: MobileSyncUser? = nil
+    @Published var isSignOutConfirmationPresented = false
     #endif
 
     @Published var appearanceMode: AppearanceMode {
@@ -236,6 +237,12 @@ final class SettingsRootViewModel: ObservableObject {
             logger.error("Failed to login to Quran.com: \(error)")
             self.error = error
         }
+    }
+
+    /// Asks the user to confirm before signing out, because sign-out clears the synced data on this device.
+    func requestSignOut() {
+        logger.info("Quran Sync: requested sign out confirmation from Settings")
+        isSignOutConfirmationPresented = true
     }
 
     func logoutFromQuranCom() async {

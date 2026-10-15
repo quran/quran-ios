@@ -599,7 +599,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "Excluir nota";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "Criada em %@";
+"notes.editor.edited" = "Editada %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "Excluir nota";
 // Metadata: Translated by ChatGPT; human review required.
@@ -648,6 +648,8 @@
 "setting.quran_account.signed_in" = "Conectado";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Sair";
+"setting.quran_account.sign_out.confirmation.title" = "Sair do Quran.com?";
+"setting.quran_account.sign_out.confirmation.message" = "Seus marcadores e notas serão removidos deste dispositivo e restaurados quando você entrar novamente.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Sincronize seus marcadores em todos os dispositivos";
 

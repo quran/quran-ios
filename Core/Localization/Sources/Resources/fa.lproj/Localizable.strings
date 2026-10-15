@@ -600,7 +600,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "حذف یادداشت";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "ایجادشده در %@";
+"notes.editor.edited" = "ویرایش‌شده %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "حذف یادداشت";
 // Metadata: Translated by ChatGPT; human review required.
@@ -649,6 +649,8 @@
 "setting.quran_account.signed_in" = "وارد شده‌اید";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "خروج";
+"setting.quran_account.sign_out.confirmation.title" = "از Quran.com خارج می‌شوید؟";
+"setting.quran_account.sign_out.confirmation.message" = "نشانک‌ها و یادداشت‌های شما از این دستگاه حذف می‌شوند و با ورود دوباره بازگردانده می‌شوند.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "همگام‌سازی نشانک‌ها در همهٔ دستگاه‌ها";
 

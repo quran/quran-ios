@@ -581,7 +581,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "Padam nota";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "Dicipta %@";
+"notes.editor.edited" = "Disunting %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "Padam nota";
 // Metadata: Translated by ChatGPT; human review required.
@@ -630,6 +630,8 @@
 "setting.quran_account.signed_in" = "Telah log masuk";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Log keluar";
+"setting.quran_account.sign_out.confirmation.title" = "Log keluar daripada Quran.com?";
+"setting.quran_account.sign_out.confirmation.message" = "Penanda halaman dan nota anda akan dialih keluar daripada peranti ini dan dipulihkan apabila anda log masuk semula.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Segerakkan penanda halaman pada semua peranti";
 

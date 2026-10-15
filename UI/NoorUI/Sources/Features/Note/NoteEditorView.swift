@@ -173,11 +173,11 @@ private struct NoteEditorContent: View {
 
     private var metadataText: Text {
         let wordsCount = Text(lFormat("notes.editor.words-count", note.wordCount))
-        if note.modifiedSince.isEmpty {
+        if note.editedSince.isEmpty {
             return wordsCount
         }
 
-        return Text(lFormat("notes.editor.created", note.modifiedSince)) + Text(" · ") + wordsCount
+        return Text(lFormat("notes.editor.edited", note.editedSince)) + Text(" · ") + wordsCount
     }
 
     private var thinDivider: some View {
@@ -214,7 +214,7 @@ private struct NoteEditorPreview: View {
                 ayahRanges: [verses[34] ... verses[35]],
                 ayahText: "وَقَالَ ٱلَّذِينَ أَشْرَكُوا۟ لَوْ شَآءَ ٱللَّهُ مَا عَبَدْنَا مِن دُونِهِۦ مِن شَىْءٍ نَّحْنُ وَلَآ ءَابَآؤُنَا",
                 reading: .hafs_1405,
-                modifiedSince: Date(timeIntervalSince1970: 1).timeAgo(),
+                editedSince: Date(timeIntervalSince1970: 1).timeAgo(),
                 selectedColor: .blue,
                 note: "The “if Allah willed” excuse — the same argument every nation made. Cross-ref 6:148."
             ),

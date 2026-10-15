@@ -19,14 +19,14 @@ public class EditableNote: ObservableObject {
         ayahRanges: [ClosedRange<AyahNumber>],
         ayahText: QuranText,
         reading: Reading,
-        modifiedSince: String,
+        editedSince: String,
         selectedColor: HighlightColor,
         note: String
     ) {
         self.ayahRanges = ayahRanges
         self.ayahText = ayahText
         self.reading = reading
-        self.modifiedSince = modifiedSince
+        self.editedSince = editedSince
         self.selectedColor = selectedColor
         self.note = note
         editing = false
@@ -38,7 +38,7 @@ public class EditableNote: ObservableObject {
     /// made on Quran.com.
     public let ayahRanges: [ClosedRange<AyahNumber>]
     public let ayahText: QuranText
-    public let modifiedSince: String
+    public let editedSince: String
     @Published public private(set) var reading: Reading
     @Published public internal(set) var selectedColor: HighlightColor
     @Published public internal(set) var note: String
@@ -66,14 +66,14 @@ public class EditableNote: ObservableObject {
 
     @Published var editing: Bool
 
-    /// The editor's metadata line as a spoken list. The created date can contain commas.
+    /// The editor's metadata line as a spoken list. The edited date can contain commas.
     var metadataAccessibilityLabel: String {
-        if modifiedSince.isEmpty {
+        if editedSince.isEmpty {
             return lFormat("notes.editor.words-count", wordCount)
         }
 
         return [
-            lFormat("notes.editor.created", modifiedSince),
+            lFormat("notes.editor.edited", editedSince),
             lFormat("notes.editor.words-count", wordCount),
         ].joined(separator: l("list.separator"))
     }

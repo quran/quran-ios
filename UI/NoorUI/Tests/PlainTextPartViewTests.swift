@@ -1,0 +1,38 @@
+//
+//  PlainTextPartViewTests.swift
+//
+//
+//  Created by Mohamed Afifi on 2026-10-14.
+//
+
+import XCTest
+@testable import NoorUI
+
+final class PlainTextPartViewTests: XCTestCase {
+    func test_splittingTrailingSpace_splitsSpaceAndIsolates() {
+        let split = PlainTextPartView.splittingTrailingSpace("عند \u{2068}")
+
+        XCTAssertEqual(split.content, "عند")
+        XCTAssertEqual(split.trailingSpace, " \u{2068}")
+    }
+
+    func test_splittingTrailingSpace_keepsTrailingClustersWhole() {
+        let england = "\u{1F3F4}\u{E0067}\u{E0062}\u{E0065}\u{E006E}\u{E0067}\u{E007F}"
+
+        for text in ["عند \(england)", "عند\u{200D}"] {
+            let split = PlainTextPartView.splittingTrailingSpace(text)
+
+            XCTAssertEqual(split.content, text)
+            XCTAssertEqual(split.trailingSpace, "")
+        }
+    }
+
+    func test_splittingTrailingSpace_doesNotSplitLeftToRightOrEmptyText() {
+        for text in ["", " \u{2069}", "at ", " · "] {
+            let split = PlainTextPartView.splittingTrailingSpace(text)
+
+            XCTAssertEqual(split.content, text)
+            XCTAssertEqual(split.trailingSpace, "")
+        }
+    }
+}

@@ -601,7 +601,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "خاتىرىنى ئۆچۈرۈش";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "%@ قۇرۇلدى";
+"notes.editor.edited" = "%@ تەھرىرلەندى";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "خاتىرىنى ئۆچۈرۈش";
 // Metadata: Translated by ChatGPT; human review required.
@@ -650,6 +650,8 @@
 "setting.quran_account.signed_in" = "كىردىڭىز";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "چىقىش";
+"setting.quran_account.sign_out.confirmation.title" = "Quran.com دىن چىقامسىز؟";
+"setting.quran_account.sign_out.confirmation.message" = "خەتكۈچ ۋە خاتىرىلىرىڭىز بۇ ئۈسكۈنىدىن ئۆچۈرۈلىدۇ، قايتا كىرگەندە ئەسلىگە كېلىدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "خەتكۈچلىرىڭىزنى بارلىق ئۈسكۈنىلەردە ماسقەدەملەڭ";
 

@@ -22,25 +22,25 @@ final class EditableNoteTests: XCTestCase {
         XCTAssertEqual(sut.reading, .indoPak)
     }
 
-    func test_metadataAccessibilityLabel_separatesCreatedDateAndWordCountWithTheListSeparator() {
-        let sut = makeEditableNote(note: "Reflect deeply", modifiedSince: "Monday, October 14, 2026")
+    func test_metadataAccessibilityLabel_separatesEditedDateAndWordCountWithTheListSeparator() {
+        let sut = makeEditableNote(note: "Reflect deeply", editedSince: "Monday, October 14, 2026")
 
-        XCTAssertEqual(sut.metadataAccessibilityLabel, "Created Monday, October 14, 2026; 2 words")
+        XCTAssertEqual(sut.metadataAccessibilityLabel, "Edited Monday, October 14, 2026; 2 words")
     }
 
-    func test_metadataAccessibilityLabel_withoutCreatedDate_isWordCount() {
-        let sut = makeEditableNote(note: "Reflect deeply", modifiedSince: "")
+    func test_metadataAccessibilityLabel_withoutEditedDate_isWordCount() {
+        let sut = makeEditableNote(note: "Reflect deeply", editedSince: "")
 
         XCTAssertEqual(sut.metadataAccessibilityLabel, "2 words")
     }
 
-    private func makeEditableNote(note: String, modifiedSince: String = "2 hours ago") -> EditableNote {
+    private func makeEditableNote(note: String, editedSince: String = "2 hours ago") -> EditableNote {
         let ayah = Quran.hafsMadani1405.suras[0].verses[0]
         return EditableNote(
             ayahRanges: [ayah ... ayah],
             ayahText: "بِسْمِ اللَّهِ",
             reading: .hafs_1405,
-            modifiedSince: modifiedSince,
+            editedSince: editedSince,
             selectedColor: .blue,
             note: note
         )

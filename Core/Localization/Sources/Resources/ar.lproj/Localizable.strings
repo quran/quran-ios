@@ -83,6 +83,8 @@
 "setting.quran_account.signed_in" = "تم تسجيل الدخول";
 "setting.quran_account.profile" = "إدارة الحساب";
 "setting.quran_account.sign_out" = "تسجيل الخروج";
+"setting.quran_account.sign_out.confirmation.title" = "تسجيل الخروج من Quran.com؟";
+"setting.quran_account.sign_out.confirmation.message" = "ستُزال علاماتك المرجعية وملاحظاتك من هذا الجهاز، وتعود عند تسجيل الدخول مرة أخرى.";
 "setting.quran_account.sync_devices" = "مزامنة العلامات عبر جميع الأجهزة";
 "setting.quran_account.custom_collections" = "إبقاء مجموعاتك المخصصة متزامنة";
 "setting.quran_account.attach_notes" = "إبقاء ملاحظات الآيات متزامنة";
@@ -251,7 +253,7 @@
 "notes.delete.alert.body" = "سيتم حذف الملاحظة أيضًا.";
 "notes.delete-note.alert.title" = "حذف الملاحظة";
 "notes.delete-note.alert.body" = "سيتم حذف هذه الملاحظة.";
-"notes.editor.created" = "تم الإنشاء %@";
+"notes.editor.edited" = "تم التعديل %@";
 "notes.editor.delete" = "حذف الملاحظة";
 "notes.editor.note-divider" = "ملاحظتك";
 "notes.icloud.alert.title" = "مزامنة iCloud";

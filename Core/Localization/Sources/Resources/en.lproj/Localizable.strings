@@ -95,6 +95,8 @@
 "setting.quran_account.signed_in" = "Signed in";
 "setting.quran_account.profile" = "Manage account";
 "setting.quran_account.sign_out" = "Sign out";
+"setting.quran_account.sign_out.confirmation.title" = "Sign out of Quran.com?";
+"setting.quran_account.sign_out.confirmation.message" = "Your bookmarks and notes will be removed from this device and restored when you sign in again.";
 "setting.quran_account.sync_devices" = "Sync your bookmarks across all devices";
 "setting.quran_account.custom_collections" = "Keep your custom collections in sync";
 "setting.quran_account.attach_notes" = "Keep your verse notes in sync";
@@ -276,7 +278,7 @@
 "notes.delete.alert.body" = "The associated note will also be deleted.";
 "notes.delete-note.alert.title" = "Delete Note";
 "notes.delete-note.alert.body" = "This note will be deleted.";
-"notes.editor.created" = "Created %@";
+"notes.editor.edited" = "Edited %@";
 "notes.editor.delete" = "Delete note";
 "notes.editor.note-divider" = "YOUR NOTE";
 "notes.icloud.alert.title" = "iCloud Sync";

@@ -598,7 +598,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "Notiz löschen";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "Erstellt am %@";
+"notes.editor.edited" = "Bearbeitet %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "Notiz löschen";
 // Metadata: Translated by ChatGPT; human review required.
@@ -647,6 +647,8 @@
 "setting.quran_account.signed_in" = "Angemeldet";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Abmelden";
+"setting.quran_account.sign_out.confirmation.title" = "Von Quran.com abmelden?";
+"setting.quran_account.sign_out.confirmation.message" = "Deine Lesezeichen und Notizen werden von diesem Gerät entfernt und bei der nächsten Anmeldung wiederhergestellt.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Lesezeichen auf allen Geräten synchronisieren";
 

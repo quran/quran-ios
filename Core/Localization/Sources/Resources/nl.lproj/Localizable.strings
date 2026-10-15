@@ -513,7 +513,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "Notitie verwijderen";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "Aangemaakt op %@";
+"notes.editor.edited" = "Bewerkt %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "Notitie verwijderen";
 // Metadata: Translated by ChatGPT; human review required.
@@ -562,6 +562,8 @@
 "setting.quran_account.signed_in" = "Ingelogd";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Uitloggen";
+"setting.quran_account.sign_out.confirmation.title" = "Uitloggen bij Quran.com?";
+"setting.quran_account.sign_out.confirmation.message" = "Je bladwijzers en notities worden van dit apparaat verwijderd en teruggezet wanneer je opnieuw inlogt.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Je bladwijzers op alle apparaten synchroniseren";
 

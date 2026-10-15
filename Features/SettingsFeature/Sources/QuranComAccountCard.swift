@@ -19,7 +19,7 @@ struct QuranComAccountCard: View {
     let email: String?
     let manageAccountAction: AsyncAction
     let signInAction: AsyncAction
-    let signOutAction: AsyncAction
+    let signOutAction: Action
 
     var body: some View {
         Group {
@@ -121,7 +121,7 @@ struct QuranComAccountCard: View {
 
             Divider()
 
-            AsyncButton(action: signOutAction) {
+            Button(action: signOutAction) {
                 Text(l("setting.quran_account.sign_out"))
                     .foregroundStyle(Color.red)
                     .frame(maxWidth: .infinity, alignment: .leading)

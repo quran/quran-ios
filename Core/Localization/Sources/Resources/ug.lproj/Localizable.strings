@@ -127,6 +127,7 @@
 "menu.twoPages" = "ئىككى بەت يانما-يان (شەكىل تەرتىپىدە)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "تىك مېكىش";
+"menu.focusMode" = "ئوقۇغان ۋاقىتتا باشقا ئايەتلەرنى سۇسلاشتۇرۇش";
 "menu.linePageDividers" = "قۇر ئايرىغۇچلار";
 "menu.linePageSidelines" = "يان سىزىقلار";
 "menu.ayahIndicators" = "ئايەت بەلگىلىرى";

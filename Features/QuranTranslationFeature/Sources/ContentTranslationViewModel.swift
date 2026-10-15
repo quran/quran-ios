@@ -47,6 +47,13 @@ public final class ContentTranslationViewModel: ObservableObject {
 
         overlayService.$overlays
             .combineLatest($verses)
+            .map { overlays, verses in overlays.focusedVerses?.intersection(verses) }
+            .removeDuplicates()
+            .sink { [weak self] in self?.focusedVerses = $0 }
+            .store(in: &cancellables)
+
+        overlayService.$overlays
+            .combineLatest($verses)
             .map { overlays, verses in
                 let colors = overlays.versesByHighlights()
                 return Dictionary(uniqueKeysWithValues: Set(verses).compactMap { verse in
@@ -135,6 +142,8 @@ public final class ContentTranslationViewModel: ObservableObject {
     }
 
     @Published var highlights: [AyahNumber: Color]
+
+    @Published private(set) var focusedVerses: Set<AyahNumber>?
 
     #if QURAN_SYNC
     @Published private(set) var annotationsByVerse: [AyahNumber: Set<AyahAnnotation>] = [:]

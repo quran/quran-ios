@@ -99,6 +99,7 @@
 "menu.arabicFontSize" = "حجم خط القرآن";
 "menu.twoPages" = "عرض صفحتين في الوضع الأفقي";
 "menu.verticalScrolling" = "تمرير رأسي";
+"menu.focusMode" = "تعتيم بقية الآيات أثناء التلاوة";
 "menu.linePageDividers" = "فواصل الأسطر";
 "menu.linePageSidelines" = "الخطوط الجانبية";
 "menu.ayahIndicators" = "مؤشرات الآيات";

@@ -127,6 +127,7 @@
 "menu.twoPages" = "2 páginas lado a lado (em paisagem)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Rolagem vertical";
+"menu.focusMode" = "Escurecer as outras ayahs durante a recitação";
 "menu.linePageDividers" = "Separadores de linha";
 "menu.linePageSidelines" = "Linhas laterais";
 "menu.ayahIndicators" = "Indicadores de ayas";

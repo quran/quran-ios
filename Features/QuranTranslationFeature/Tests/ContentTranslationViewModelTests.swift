@@ -209,6 +209,74 @@ final class ContentTranslationViewModelTests: XCTestCase {
         XCTAssertEqual(Set(sut.highlights.keys), [verse])
     }
 
+    func testFocusedVersesAreNilWhileFocusModeIsOff() {
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        let service = VerseOverlayService()
+        let sut = makeSUT(overlayService: service)
+        sut.verses = verses
+
+        service.overlays.playingVerses = [verses[1]]
+
+        XCTAssertNil(sut.focusedVerses)
+    }
+
+    func testFocusedVersesAreNilWhenNothingIsPlaying() {
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        let service = VerseOverlayService()
+        let sut = makeSUT(overlayService: service)
+        sut.verses = verses
+
+        service.overlays.focusModeEnabled = true
+        service.overlays.selectedVerses = [verses[1]]
+
+        XCTAssertNil(sut.focusedVerses)
+    }
+
+    func testFocusedVersesFollowThePlayingVerseOnThisPage() {
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        let service = VerseOverlayService()
+        let sut = makeSUT(overlayService: service)
+        sut.verses = verses
+
+        service.overlays.focusModeEnabled = true
+        service.overlays.playingVerses = [verses[1]]
+        XCTAssertEqual(sut.focusedVerses, [verses[1]])
+
+        service.overlays.playingVerses = [verses[2]]
+        XCTAssertEqual(sut.focusedVerses, [verses[2]])
+
+        service.overlays.focusModeEnabled = false
+        XCTAssertNil(sut.focusedVerses)
+    }
+
+    func testFocusedVersesAreEmptyWhenTheRecitedVerseIsOnAnotherPage() {
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        let recited = Quran.hafsMadani1405.pages[1].firstVerse
+        let service = VerseOverlayService()
+        let sut = makeSUT(overlayService: service)
+        sut.verses = verses
+
+        service.overlays.focusModeEnabled = true
+        service.overlays.playingVerses = [recited]
+
+        XCTAssertEqual(sut.focusedVerses, [])
+    }
+
+    func testFocusedVersesFollowChangesToDisplayedVerses() {
+        let first = Quran.hafsMadani1405.pages[0].verses
+        let second = Quran.hafsMadani1405.pages[1].verses
+        let service = VerseOverlayService()
+        service.overlays.focusModeEnabled = true
+        service.overlays.playingVerses = [second[0]]
+        let sut = makeSUT(overlayService: service)
+
+        sut.verses = first
+        XCTAssertEqual(sut.focusedVerses, [])
+
+        sut.verses = second
+        XCTAssertEqual(sut.focusedVerses, [second[0]])
+    }
+
     func testReadingUpdatesFromPreferences() {
         let preferences = ReadingPreferences.shared
         let originalReading = preferences.reading

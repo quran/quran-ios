@@ -8,8 +8,8 @@
 import CoreData
 import CoreDataModel
 import CoreDataPersistence
-import CoreDataPersistenceTestSupport
 import XCTest
+@testable import CoreDataPersistenceTestSupport
 
 final class TemporaryCoreDataStoreTests: XCTestCase {
     override func setUpWithError() throws {
@@ -60,6 +60,20 @@ final class TemporaryCoreDataStoreTests: XCTestCase {
 
         XCTAssertTrue(FileManager.default.fileExists(atPath: kept.storeURL.path))
         XCTAssertEqual(try notes(in: keptStack), ["Kept"])
+    }
+
+    func test_drainPendingRemovals_waitsForReleasedStores() throws {
+        let releasedURL = try autoreleasepool {
+            let released = TemporaryCoreDataStore()
+            try released.stack().write { context in
+                _ = context.newNote("Released", modifiedOn: 1)
+            }
+            return released.storeURL
+        }
+
+        TemporaryCoreDataStore.drainPendingRemovals(timeout: 10)
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: releasedURL.path))
     }
 
     func test_removeStores_removesStoresLeftUntouched() throws {

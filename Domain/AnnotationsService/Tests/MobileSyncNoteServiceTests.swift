@@ -44,11 +44,11 @@ final class MobileSyncNoteServiceTests: XCTestCase {
 
     func test_note_mapsEveryRangeOfAQuranComNote() throws {
         // The app creates notes with one range, so only a note synced from Quran.com has several.
-        let synced = MobileSync.Note(
+        let synced = MobileSyncNote(
+            id: "1",
             body: "On two passages",
             ranges: [range(2, 255, 2, 256), range(3, 18, 3, 18)],
-            lastUpdated: Date(timeIntervalSince1970: 1),
-            id: "1"
+            lastUpdated: Date(timeIntervalSince1970: 1)
         )
 
         let note = try XCTUnwrap(MobileSyncNoteService.note(from: synced, quran: .hafsMadani1405))
@@ -57,11 +57,11 @@ final class MobileSyncNoteServiceTests: XCTestCase {
     }
 
     func test_note_skipsNoteWithARangeTheQuranDoesNotHave() {
-        let synced = MobileSync.Note(
+        let synced = MobileSyncNote(
+            id: "1",
             body: "Broken range",
             ranges: [range(2, 255, 2, 255), range(1, 8, 1, 8)],
-            lastUpdated: Date(timeIntervalSince1970: 1),
-            id: "1"
+            lastUpdated: Date(timeIntervalSince1970: 1)
         )
 
         XCTAssertNil(MobileSyncNoteService.note(from: synced, quran: .hafsMadani1405))
@@ -137,8 +137,8 @@ final class MobileSyncNoteServiceTests: XCTestCase {
         return try XCTUnwrap(notes?.first)
     }
 
-    private func range(_ startSura: Int32, _ startAyah: Int32, _ endSura: Int32, _ endAyah: Int32) -> NoteRange {
-        NoteRange(startSura: startSura, startAyah: startAyah, endSura: endSura, endAyah: endAyah)
+    private func range(_ startSura: Int, _ startAyah: Int, _ endSura: Int, _ endAyah: Int) -> MobileSyncNoteRange {
+        MobileSyncNoteRange(startSura: startSura, startAyah: startAyah, endSura: endSura, endAyah: endAyah)
     }
 
     private func verse(_ sura: Int, _ ayah: Int) -> AyahNumber {

@@ -8,17 +8,17 @@ import VLogging
 public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
     // MARK: Lifecycle
 
-    public init(authService: SyncAuthService) {
+    public init(authService: MobileSyncAuthService) {
         self.authService = authService
     }
 
     // MARK: Public
 
     public var authenticationState: AuthenticationState {
-        authService.isLoggedIn() ? .authenticated : .notAuthenticated
+        authService.isLoggedIn ? .authenticated : .notAuthenticated
     }
 
-    public var loggedInUser: UserInfo? {
+    public var loggedInUser: MobileSyncUser? {
         authService.loggedInUser
     }
 
@@ -60,24 +60,21 @@ public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
     }
 
     public func getAuthenticationHeaders() async throws(AuthenticationClientError) -> [String: String] {
+        let headers: [String: String]
         do {
-            let headers = try await authService.authenticationHeaders()
-            guard !headers.isEmpty else {
-                throw AuthenticationClientError.notAuthenticated(underlying: nil)
-            }
-            return headers
-        } catch let error as AuthenticationClientError {
-            throw error
-        } catch let error as MobileSyncAuthenticationError {
-            throw AuthenticationClientError(error)
+            headers = try await authService.authenticationHeaders()
         } catch {
-            throw .authenticationFailed(underlying: error)
+            throw AuthenticationClientError(error)
         }
+        guard !headers.isEmpty else {
+            throw .notAuthenticated(underlying: nil)
+        }
+        return headers
     }
 
     // MARK: Private
 
-    private let authService: SyncAuthService
+    private let authService: MobileSyncAuthService
 }
 
 private extension AuthenticationClientError {

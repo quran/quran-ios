@@ -7,7 +7,7 @@
 //
 
 #if QURAN_SYNC
-@preconcurrency import MobileSync
+import MobileSync
 import QuranAnnotations
 import QuranKit
 import Utilities
@@ -15,7 +15,7 @@ import Utilities
 public struct MobileSyncLastPageService: LastPageService {
     // MARK: Lifecycle
 
-    public init(quranDataService: QuranDataService) {
+    public init(quranDataService: MobileSyncDataService) {
         self.quranDataService = quranDataService
     }
 
@@ -41,8 +41,8 @@ public struct MobileSyncLastPageService: LastPageService {
     public func add(page: Page) async throws -> LastPage {
         let firstVerse = page.firstVerse
         let session = try await quranDataService.addReadingSession(
-            sura: Int32(firstVerse.sura.suraNumber),
-            ayah: Int32(firstVerse.ayah)
+            sura: firstVerse.sura.suraNumber,
+            ayah: firstVerse.ayah
         )
         return lastPage(page: page, for: session)
     }
@@ -51,8 +51,8 @@ public struct MobileSyncLastPageService: LastPageService {
         let firstVerse = toPage.firstVerse
         let updatedSession = try await quranDataService.updateReadingSession(
             id: lastPage.id,
-            sura: Int32(firstVerse.sura.suraNumber),
-            ayah: Int32(firstVerse.ayah)
+            sura: firstVerse.sura.suraNumber,
+            ayah: firstVerse.ayah
         )
         return self.lastPage(page: toPage, for: updatedSession)
     }
@@ -61,16 +61,16 @@ public struct MobileSyncLastPageService: LastPageService {
 
     private static let maxNumberOfLastPages = 10
 
-    private let quranDataService: QuranDataService
+    private let quranDataService: MobileSyncDataService
 
-    private nonisolated func lastPage(for session: ReadingSession, quran: Quran) -> LastPage? {
-        guard let ayah = AyahNumber(quran: quran, sura: Int(session.sura), ayah: Int(session.ayah)) else {
+    private nonisolated func lastPage(for session: MobileSyncReadingSession, quran: Quran) -> LastPage? {
+        guard let ayah = AyahNumber(quran: quran, sura: session.sura, ayah: session.ayah) else {
             return nil
         }
         return lastPage(page: ayah.page, for: session)
     }
 
-    private nonisolated func lastPage(page: Page, for session: ReadingSession) -> LastPage {
+    private nonisolated func lastPage(page: Page, for session: MobileSyncReadingSession) -> LastPage {
         LastPage(
             id: session.id,
             page: page,

@@ -59,8 +59,8 @@ final class MobileSyncAyahHighlightServiceTests: XCTestCase {
         let highlights = try await iterator.next() ?? []
 
         // Other platforms read these colors, so a swapped mapping must fail even though it round-trips.
-        let colors = highlights.map { "\($0.color.name) 1:\($0.ayah)" }
-        XCTAssertEqual(colors.sorted(), ["BLUE 1:3", "GREEN 1:2", "PINK 1:1", "PURPLE 1:5", "YELLOW 1:4"])
+        let colors = highlights.map { "\($0.color) 1:\($0.ayah)" }
+        XCTAssertEqual(colors.sorted(), ["blue 1:3", "green 1:2", "pink 1:1", "purple 1:5", "yellow 1:4"])
     }
 
     private func storedHighlights(

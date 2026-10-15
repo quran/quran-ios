@@ -34,8 +34,7 @@ struct LaunchStores {
         }
         #if QURAN_SYNC
         do {
-            // The containers create the graph with `DriverFactory()` too, and the database is shared.
-            try SharedDependencyGraph.shared.openDatabase(using: DriverFactory())
+            try MobileSyncGraph.openDatabase()
         } catch {
             crashContext.setPersistence(store: "mobile_sync", operation: "open", phase: "failed")
             return .failure(LaunchStoreError(mobileSyncError: error, availableCapacity: Self.availableCapacity()))
@@ -106,7 +105,7 @@ enum LaunchStoreError: Error {
             if PersistentStoreFailure.isStorageFull(underlying, availableCapacity: availableCapacity) {
                 self = .storageFull(store: "mobile_sync", underlying: underlying)
             } else {
-                self = .failed(message: "###openDatabase(using:): Failed to open the MobileSync database: \(underlying)")
+                self = .failed(message: "###MobileSyncGraph.openDatabase(): Failed to open the MobileSync database: \(underlying)")
             }
         }
     }

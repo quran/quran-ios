@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@preconcurrency import MobileSync
+import MobileSync
 import QuranAnnotations
 import QuranKit
 import ReadingService
@@ -16,7 +16,7 @@ public struct AyahBookmarkCollectionService {
     // MARK: Lifecycle
 
     public init(
-        quranDataService: QuranDataService,
+        quranDataService: MobileSyncDataService,
         readingPreferences: ReadingPreferences = .shared
     ) {
         self.quranDataService = quranDataService
@@ -35,9 +35,9 @@ public struct AyahBookmarkCollectionService {
 
     public func addAyahBookmarkToCollection(collectionId: String, ayah: AyahNumber) async throws {
         _ = try await quranDataService.addAyahBookmarkToCollection(
-            collectionId: collectionId,
-            sura: Int32(ayah.sura.suraNumber),
-            ayah: Int32(ayah.ayah)
+            collectionID: collectionId,
+            sura: ayah.sura.suraNumber,
+            ayah: ayah.ayah
         )
     }
 
@@ -59,8 +59,8 @@ public struct AyahBookmarkCollectionService {
 
     public func removeBookmarkFromCollection(_ bookmark: AyahCollectionBookmark) async throws {
         try await quranDataService.removeAyahBookmarkFromCollection(
-            collectionId: bookmark.collectionID,
-            bookmarkId: bookmark.id
+            collectionID: bookmark.collectionID,
+            bookmarkID: bookmark.id
         )
     }
 
@@ -93,7 +93,7 @@ public struct AyahBookmarkCollectionService {
 
     // MARK: Internal
 
-    static func collections(from collections: [CollectionWithAyahBookmarks], quran: Quran) -> [AyahBookmarkCollection] {
+    static func collections(from collections: [MobileSyncCollectionWithBookmarks], quran: Quran) -> [AyahBookmarkCollection] {
         collections.compactMap { collection in
             guard collection.collection.isDefault || !collection.collection.isSystem else {
                 return nil
@@ -123,7 +123,7 @@ public struct AyahBookmarkCollectionService {
 
     // MARK: Private
 
-    private let quranDataService: QuranDataService
+    private let quranDataService: MobileSyncDataService
     private let readingPreferences: ReadingPreferences
 
     private func loadStoredCollections() async throws -> [AyahBookmarkCollection] {
@@ -156,16 +156,16 @@ public struct AyahBookmarkCollectionService {
         }
     }
 
-    private static func bookmark(for bookmark: CollectionAyahBookmark, quran: Quran) -> AyahCollectionBookmark? {
+    private static func bookmark(for bookmark: MobileSyncCollectionBookmark, quran: Quran) -> AyahCollectionBookmark? {
         guard let ayah = AyahNumber(
             quran: quran,
-            sura: Int(bookmark.sura),
-            ayah: Int(bookmark.ayah)
+            sura: bookmark.sura,
+            ayah: bookmark.ayah
         ) else {
             return nil
         }
 
-        return AyahCollectionBookmark(id: bookmark.bookmarkId, collectionID: bookmark.collectionId, ayah: ayah)
+        return AyahCollectionBookmark(id: bookmark.bookmarkID, collectionID: bookmark.collectionID, ayah: ayah)
     }
 }
 #endif

@@ -115,7 +115,7 @@ final class SettingsRootViewModel: ObservableObject {
     @Published var error: Error? = nil
     #if QURAN_SYNC
     @Published var isAuthenticated: Bool = false
-    @Published var loggedInUser: UserInfo? = nil
+    @Published var loggedInUser: MobileSyncUser? = nil
     #endif
 
     @Published var appearanceMode: AppearanceMode {

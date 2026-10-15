@@ -3,16 +3,15 @@
 //  MobileSyncReadingBookmarkService.swift
 //
 
-@preconcurrency import MobileSync
+import MobileSync
 import QuranAnnotations
 import QuranKit
 import Utilities
-import VLogging
 
 public struct MobileSyncReadingBookmarkService {
     // MARK: Lifecycle
 
-    public init(quranDataService: QuranDataService, storedPageQuran: Quran = .hafsMadani1405) {
+    public init(quranDataService: MobileSyncDataService, storedPageQuran: Quran = .hafsMadani1405) {
         self.quranDataService = quranDataService
         self.storedPageQuran = storedPageQuran
     }
@@ -46,8 +45,8 @@ public struct MobileSyncReadingBookmarkService {
         case .ayah(let ayah):
             let bookmark = try await quranDataService.setAyahReadingBookmark(
                 slot: slot.mobileSyncSlot,
-                sura: Int32(ayah.sura.suraNumber),
-                ayah: Int32(ayah.ayah)
+                sura: ayah.sura.suraNumber,
+                ayah: ayah.ayah
             )
             return PlacedReadingBookmark(
                 id: bookmark.id,
@@ -60,7 +59,7 @@ public struct MobileSyncReadingBookmarkService {
             let storedPage = try storedPage(for: page)
             let bookmark = try await quranDataService.setPageReadingBookmark(
                 slot: slot.mobileSyncSlot,
-                page: Int32(storedPage.pageNumber)
+                page: storedPage.pageNumber
             )
             return PlacedReadingBookmark(
                 id: bookmark.id,
@@ -100,45 +99,36 @@ public struct MobileSyncReadingBookmarkService {
     // MARK: Internal
 
     static func readingBookmark(
-        from bookmark: any MobileSync.ReadingBookmark,
+        from bookmark: MobileSyncReadingBookmark,
         quran: Quran,
         storedPageQuran: Quran
     ) -> QuranAnnotations.ReadingBookmark? {
         let placement: QuranAnnotations.ReadingBookmark.Placement
-        switch bookmark {
-        case let bookmark as AyahReadingBookmark:
-            guard let ayah = AyahNumber(
-                quran: quran,
-                sura: Int(bookmark.sura),
-                ayah: Int(bookmark.ayah)
-            ) else {
+        switch bookmark.placement {
+        case let .ayah(sura, ayah):
+            guard let ayah = AyahNumber(quran: quran, sura: sura, ayah: ayah) else {
                 return nil
             }
             placement = .ayah(ayah)
-        case let bookmark as PageReadingBookmark:
+        case let .page(pageNumber, mushafID):
             // The web numbers IndoPak pages in its own mushafs, which have no page mapping here, so such a
             // bookmark shows as empty, like a sura or juz bookmark set on the web.
-            guard bookmark.mushafId == PageReadingBookmark.companion.MADANI_MUSHAF_ID else {
+            guard mushafID == MobileSyncReadingBookmark.madaniMushafID else {
                 placement = .unplaced
                 break
             }
-            guard let storedPage = Page(quran: storedPageQuran, pageNumber: Int(bookmark.page)),
+            guard let storedPage = Page(quran: storedPageQuran, pageNumber: pageNumber),
                   let page = QuranPageMapper(destination: quran).mapPage(storedPage)
             else {
                 return nil
             }
             placement = .page(page)
-        case is EmptyReadingBookmark:
+        case .unplaced:
             placement = .unplaced
-        default:
-            return nil
-        }
-        guard let slot = ReadingBookmarkSlot(mobileSyncSlot: bookmark.slot) else {
-            return nil
         }
         return QuranAnnotations.ReadingBookmark(
             id: bookmark.id,
-            slot: slot,
+            slot: ReadingBookmarkSlot(mobileSyncSlot: bookmark.slot),
             placement: placement,
             modifiedOn: bookmark.lastUpdated,
             name: bookmark.name
@@ -151,7 +141,7 @@ public struct MobileSyncReadingBookmarkService {
         case invalidBookmark
     }
 
-    private let quranDataService: QuranDataService
+    private let quranDataService: MobileSyncDataService
     private let storedPageQuran: Quran
 
     private func storedPage(for page: Page) throws -> Page {
@@ -175,20 +165,15 @@ private extension QuranAnnotations.ReadingBookmarkSlot {
         }
     }
 
-    init?(mobileSyncSlot: MobileSync.ReadingBookmarkSlot) {
-        if mobileSyncSlot == .teal {
-            self = .teal
-        } else if mobileSyncSlot == .orange {
-            self = .orange
-        } else if mobileSyncSlot == .red {
-            self = .red
-        } else {
-            logger.error("Unsupported mobile sync slot \(mobileSyncSlot.name)")
-            return nil
+    init(mobileSyncSlot: MobileSyncReadingBookmarkSlot) {
+        switch mobileSyncSlot {
+        case .teal: self = .teal
+        case .orange: self = .orange
+        case .red: self = .red
         }
     }
 
-    var mobileSyncSlot: MobileSync.ReadingBookmarkSlot {
+    var mobileSyncSlot: MobileSyncReadingBookmarkSlot {
         switch self {
         case .teal:
             .teal

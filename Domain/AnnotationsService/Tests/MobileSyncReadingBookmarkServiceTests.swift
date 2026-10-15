@@ -1,6 +1,5 @@
 #if QURAN_SYNC
-import class MobileSync.AyahReadingBookmark
-import class MobileSync.PageReadingBookmark
+import MobileSync
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
@@ -71,16 +70,16 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     }
 
     func test_readingBookmark_showsIndoPakPageFromTheWebAsUnplaced() {
-        for mushafId: Int32 in [6, 7] {
+        for mushafID in [6, 7] {
             let bookmark = MobileSyncReadingBookmarkService.readingBookmark(
-                from: pageBookmark(page: 255, mushafId: mushafId, name: "Study"),
+                from: pageBookmark(page: 255, mushafID: mushafID, name: "Study"),
                 quran: .hafsMadani1405,
                 storedPageQuran: .hafsMadani1405
             )
 
-            XCTAssertEqual(bookmark?.placement, .unplaced, "mushaf \(mushafId)")
-            XCTAssertEqual(bookmark?.slot, .teal, "mushaf \(mushafId)")
-            XCTAssertEqual(bookmark?.name, "Study", "mushaf \(mushafId)")
+            XCTAssertEqual(bookmark?.placement, .unplaced, "mushaf \(mushafID)")
+            XCTAssertEqual(bookmark?.slot, .teal, "mushaf \(mushafID)")
+            XCTAssertEqual(bookmark?.name, "Study", "mushaf \(mushafID)")
         }
     }
 
@@ -123,10 +122,10 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
 
         // Other platforms read these slots, so a swapped mapping must fail even though it round-trips.
         let slots = bookmarks.compactMap { bookmark -> String? in
-            guard let bookmark = bookmark as? AyahReadingBookmark else { return nil }
-            return "\(bookmark.slot.name) 2:\(bookmark.ayah)"
+            guard case let .ayah(_, ayah) = bookmark.placement else { return nil }
+            return "\(bookmark.slot) 2:\(ayah)"
         }
-        XCTAssertEqual(slots.sorted(), ["ORANGE 2:2", "RED 2:3", "TEAL 2:1"])
+        XCTAssertEqual(slots.sorted(), ["orange 2:2", "red 2:3", "teal 2:1"])
     }
 
     func test_placedReadingBookmarksSequence_filtersUnplacedPinsAndPreservesMetadata() async throws {
@@ -242,14 +241,13 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
         return bookmarks
     }
 
-    private func pageBookmark(page: Int, mushafId: Int32, name: String? = nil) -> PageReadingBookmark {
-        PageReadingBookmark(
-            page: Int32(page),
-            lastUpdated: Date(timeIntervalSince1970: 0),
+    private func pageBookmark(page: Int, mushafID: Int, name: String? = nil) -> MobileSyncReadingBookmark {
+        MobileSyncReadingBookmark(
             id: "1",
             slot: .teal,
+            placement: .page(page, mushafID: mushafID),
             name: name,
-            mushafId: mushafId
+            lastUpdated: Date(timeIntervalSince1970: 0)
         )
     }
 

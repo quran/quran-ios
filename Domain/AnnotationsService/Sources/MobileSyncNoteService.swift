@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@preconcurrency import MobileSync
+import MobileSync
 import QuranAnnotations
 import QuranKit
 import Utilities
@@ -14,7 +14,7 @@ import Utilities
 public struct MobileSyncNoteService {
     // MARK: Lifecycle
 
-    public init(quranDataService: QuranDataService) {
+    public init(quranDataService: MobileSyncDataService) {
         self.quranDataService = quranDataService
     }
 
@@ -32,10 +32,10 @@ public struct MobileSyncNoteService {
         try await mapTextLengthLimit {
             try await quranDataService.createNote(
                 body: body,
-                startSura: Int32(startAyah.sura.suraNumber),
-                startAyah: Int32(startAyah.ayah),
-                endSura: Int32(endAyah.sura.suraNumber),
-                endAyah: Int32(endAyah.ayah)
+                startSura: startAyah.sura.suraNumber,
+                startAyah: startAyah.ayah,
+                endSura: endAyah.sura.suraNumber,
+                endAyah: endAyah.ayah
             )
         }
     }
@@ -53,17 +53,17 @@ public struct MobileSyncNoteService {
 
     // MARK: Internal
 
-    static func notes(from notes: [MobileSync.Note], quran: Quran) -> [QuranAnnotations.Note] {
+    static func notes(from notes: [MobileSyncNote], quran: Quran) -> [QuranAnnotations.Note] {
         notes.compactMap { note(from: $0, quran: quran) }
             .sorted { $0.modifiedDate > $1.modifiedDate }
     }
 
     /// Maps every range of the note; a note with a range this Quran doesn't have is skipped.
-    static func note(from note: MobileSync.Note, quran: Quran) -> QuranAnnotations.Note? {
+    static func note(from note: MobileSyncNote, quran: Quran) -> QuranAnnotations.Note? {
         var verses = Set<AyahNumber>()
         for range in note.ranges {
-            guard let start = AyahNumber(quran: quran, sura: Int(range.startSura), ayah: Int(range.startAyah)),
-                  let end = AyahNumber(quran: quran, sura: Int(range.endSura), ayah: Int(range.endAyah)),
+            guard let start = AyahNumber(quran: quran, sura: range.startSura, ayah: range.startAyah),
+                  let end = AyahNumber(quran: quran, sura: range.endSura, ayah: range.endAyah),
                   start <= end
             else {
                 return nil
@@ -84,6 +84,6 @@ public struct MobileSyncNoteService {
 
     // MARK: Private
 
-    private let quranDataService: QuranDataService
+    private let quranDataService: MobileSyncDataService
 }
 #endif

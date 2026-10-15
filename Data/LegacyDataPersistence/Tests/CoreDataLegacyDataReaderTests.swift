@@ -43,12 +43,12 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
 
         let data = try await importData()
 
-        XCTAssertEqual(data, PersistenceImportData(
-            collections: [ImportCollection(name: collectionName, lastUpdated: date(20), createdAt: date(10))],
-            collectionBookmarks: [ImportCollectionAyahBookmark(collectionName: collectionName, sura: 2, ayah: 6, lastUpdated: date(20), createdAt: date(10))],
-            readingSessions: [ImportReadingSession(sura: 2, ayah: 6, lastUpdated: date(40), createdAt: date(30))],
-            notes: [ImportNote(body: "First version", startSura: 2, startAyah: 255, endSura: 2, endAyah: 255, lastUpdated: date(60), createdAt: date(50))],
-            highlights: [ImportAyahHighlight(sura: 2, ayah: 255, color: .yellow, lastUpdated: date(60), createdAt: date(50))],
+        XCTAssertEqual(data, MobileSyncImportData(
+            collections: [MobileSyncImportCollection(name: collectionName, lastUpdated: date(20), createdAt: date(10))],
+            collectionBookmarks: [MobileSyncImportCollectionBookmark(collectionName: collectionName, sura: 2, ayah: 6, lastUpdated: date(20), createdAt: date(10))],
+            readingSessions: [MobileSyncImportReadingSession(sura: 2, ayah: 6, lastUpdated: date(40), createdAt: date(30))],
+            notes: [MobileSyncImportNote(body: "First version", startSura: 2, startAyah: 255, endSura: 2, endAyah: 255, lastUpdated: date(60), createdAt: date(50))],
+            highlights: [MobileSyncImportHighlight(sura: 2, ayah: 255, color: .yellow, lastUpdated: date(60), createdAt: date(50))],
             readingBookmarks: []
         ))
     }
@@ -153,7 +153,7 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
             }
         }
 
-        XCTAssertEqual(data.collections, [ImportCollection(
+        XCTAssertEqual(data.collections, [MobileSyncImportCollection(
             name: collectionName, lastUpdated: date(1004), createdAt: date(100)
         )])
         XCTAssertEqual(Set(data.collectionBookmarks.map(\.collectionName)), [collectionName])
@@ -186,9 +186,9 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
         }
 
         XCTAssertEqual(Set(data.readingSessions), [
-            ImportReadingSession(sura: 2, ayah: 6, lastUpdated: date(20), createdAt: date(10)),
-            ImportReadingSession(sura: 5, ayah: 69, lastUpdated: date(30), createdAt: date(30)),
-            ImportReadingSession(sura: 5, ayah: 77, lastUpdated: date(40), createdAt: date(40)),
+            MobileSyncImportReadingSession(sura: 2, ayah: 6, lastUpdated: date(20), createdAt: date(10)),
+            MobileSyncImportReadingSession(sura: 5, ayah: 69, lastUpdated: date(30), createdAt: date(30)),
+            MobileSyncImportReadingSession(sura: 5, ayah: 77, lastUpdated: date(40), createdAt: date(40)),
         ])
         XCTAssertEqual(data.collections, [])
     }
@@ -209,12 +209,12 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
             context.note("Remember", color: 1, verses: [(2, 3), (2, 1)], created: date(5), modified: date(6))
         }
 
-        XCTAssertEqual(data.notes, [ImportNote(
+        XCTAssertEqual(data.notes, [MobileSyncImportNote(
             body: "Remember", startSura: 2, startAyah: 1, endSura: 2, endAyah: 3, lastUpdated: date(6), createdAt: date(5)
         )])
         XCTAssertEqual(data.highlights, [
-            ImportAyahHighlight(sura: 2, ayah: 1, color: .green, lastUpdated: date(6), createdAt: date(5)),
-            ImportAyahHighlight(sura: 2, ayah: 3, color: .green, lastUpdated: date(6), createdAt: date(5)),
+            MobileSyncImportHighlight(sura: 2, ayah: 1, color: .green, lastUpdated: date(6), createdAt: date(5)),
+            MobileSyncImportHighlight(sura: 2, ayah: 3, color: .green, lastUpdated: date(6), createdAt: date(5)),
         ])
     }
 
@@ -292,12 +292,10 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
 
     private let collectionName = AyahBookmarkCollection.oldPageBookmarksName
 
-    private let emptyImport = PersistenceImportData(
-        collections: [], collectionBookmarks: [], readingSessions: [], notes: [], highlights: [], readingBookmarks: []
-    )
+    private let emptyImport = MobileSyncImportData()
 
     /// Writes the records to a real store and reads them back.
-    private func importData(_ records: (NSManagedObjectContext) -> Void = { _ in }) async throws -> PersistenceImportData {
+    private func importData(_ records: (NSManagedObjectContext) -> Void = { _ in }) async throws -> MobileSyncImportData {
         let stack = store.stack()
         try stack.write { records($0) }
         return try await CoreDataLegacyDataReader(stack: stack).importData()
@@ -325,11 +323,11 @@ final class CoreDataLegacyDataReaderTests: XCTestCase {
         }
     }
 
-    private func verse(_ bookmark: ImportCollectionAyahBookmark) -> String {
+    private func verse(_ bookmark: MobileSyncImportCollectionBookmark) -> String {
         "\(bookmark.sura):\(bookmark.ayah)"
     }
 
-    private func verse(_ highlight: ImportAyahHighlight) -> String {
+    private func verse(_ highlight: MobileSyncImportHighlight) -> String {
         "\(highlight.sura):\(highlight.ayah)"
     }
 }

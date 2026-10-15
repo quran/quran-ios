@@ -50,7 +50,7 @@ struct AppDependenciesStub: AppDependencies {
         )
     }
 
-    var quranDataService: QuranDataService { MobileSyncTestDatabase.shared.quranDataService }
+    var quranDataService: MobileSyncDataService { MobileSyncTestDatabase.shared.quranDataService }
     #endif
 
     var databasesURL: URL { URL(fileURLWithPath: "/tmp") }

@@ -6,9 +6,8 @@
 //  Created by Mohamed Afifi on 2026-10-11.
 //
 
-import Foundation
 import Logging
-@preconcurrency import MobileSync
+import MobileSync
 
 /// Sends Mobile Sync's logs, including its HTTP calls, to swift-log.
 public enum MobileSyncLogBridge {
@@ -18,7 +17,7 @@ public enum MobileSyncLogBridge {
 
     /// Call once after `LoggingSystem.bootstrap` and before the Mobile Sync graph is created.
     public static func install(level: Logger.Level) {
-        MobileSyncLogging.shared.configure(
+        MobileSyncLogging.configure(
             sink: MobileSyncSwiftLogSink(logger: Logger(label: label)),
             minSeverity: minSeverity(for: level)
         )
@@ -38,7 +37,7 @@ public enum MobileSyncLogBridge {
     }
 }
 
-final class MobileSyncSwiftLogSink: NSObject, MobileSyncLogSink {
+struct MobileSyncSwiftLogSink: MobileSyncLogSink {
     // MARK: Lifecycle
 
     init(logger: Logger) {
@@ -55,7 +54,6 @@ final class MobileSyncSwiftLogSink: NSObject, MobileSyncLogSink {
         case .warn: .warning
         case .error: .error
         case .assert: .critical
-        default: .info
         }
     }
 

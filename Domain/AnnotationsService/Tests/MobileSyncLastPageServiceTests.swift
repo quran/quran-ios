@@ -60,8 +60,8 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
         let storedSessions = try await sessions.next()
         XCTAssertEqual(storedSessions?.count, 1)
         XCTAssertEqual(storedSessions?.first?.id, original.id)
-        XCTAssertEqual(storedSessions?.first?.sura, Int32(quran.pages[20].firstVerse.sura.suraNumber))
-        XCTAssertEqual(storedSessions?.first?.ayah, Int32(quran.pages[20].firstVerse.ayah))
+        XCTAssertEqual(storedSessions?.first?.sura, quran.pages[20].firstVerse.sura.suraNumber)
+        XCTAssertEqual(storedSessions?.first?.ayah, quran.pages[20].firstVerse.ayah)
     }
 
     func test_updateAdvancesModificationTime() async throws {
@@ -69,8 +69,8 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
         let originalPage = quran.pages[10]
         let originalVerse = originalPage.firstVerse
         let originalSession = try await database.quranDataService.addReadingSession(
-            sura: Int32(originalVerse.sura.suraNumber),
-            ayah: Int32(originalVerse.ayah),
+            sura: originalVerse.sura.suraNumber,
+            ayah: originalVerse.ayah,
             timestamp: Date(timeIntervalSince1970: 1)
         )
         var iterator = service.lastPages(quran: quran).makeAsyncIterator()
@@ -168,13 +168,13 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
         let verses = page.verses
         XCTAssertGreaterThan(verses.count, 1)
         let first = try await database.quranDataService.addReadingSession(
-            sura: Int32(verses[0].sura.suraNumber),
-            ayah: Int32(verses[0].ayah),
+            sura: verses[0].sura.suraNumber,
+            ayah: verses[0].ayah,
             timestamp: Date(timeIntervalSince1970: 1)
         )
         let second = try await database.quranDataService.addReadingSession(
-            sura: Int32(verses[1].sura.suraNumber),
-            ayah: Int32(verses[1].ayah),
+            sura: verses[1].sura.suraNumber,
+            ayah: verses[1].ayah,
             timestamp: Date(timeIntervalSince1970: 2)
         )
         var iterator = service.lastPages(quran: quran).makeAsyncIterator()
@@ -186,8 +186,8 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
     }
 
     func test_lastPagesMapsCoordinatesInRequestedQuran() async throws {
-        let sura: Int32 = 2
-        let ayah: Int32 = 255
+        let sura = 2
+        let ayah = 255
         let session = try await database.quranDataService.addReadingSession(
             sura: sura,
             ayah: ayah,
@@ -199,7 +199,7 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
 
             let lastPages = try await iterator.next()
             let expectedAyah = try XCTUnwrap(
-                AyahNumber(quran: quran, sura: Int(sura), ayah: Int(ayah))
+                AyahNumber(quran: quran, sura: sura, ayah: ayah)
             )
 
             XCTAssertEqual(lastPages?.map(\.id), [session.id])
@@ -228,8 +228,8 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
         for (page, timestamp) in zip(pages, timestamps) {
             let verse = page.firstVerse
             let session = try await database.quranDataService.addReadingSession(
-                sura: Int32(verse.sura.suraNumber),
-                ayah: Int32(verse.ayah),
+                sura: verse.sura.suraNumber,
+                ayah: verse.ayah,
                 timestamp: timestamp
             )
             sessionIds.append(session.id)

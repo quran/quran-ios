@@ -590,6 +590,8 @@
 "setting.quran_account.signed_in" = "Oturum açıldı";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Çıkış yap";
+"setting.quran_account.sign_out.confirmation.title" = "Quran.com oturumu kapatılsın mı?";
+"setting.quran_account.sign_out.confirmation.message" = "Yer imleriniz ve notlarınız bu cihazdan kaldırılır ve tekrar oturum açtığınızda geri yüklenir.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Yer imlerinizi tüm cihazlarda eşitleyin";
 

@@ -134,6 +134,22 @@ final class SettingsRootViewModelTests: XCTestCase {
         assertClientIsNotAuthenticated(sut.error)
     }
 
+    func test_requestSignOut_presentsConfirmationWithoutSigningOut() {
+        let client = AuthenticationClientFake()
+        let analytics = AnalyticsRecorder()
+        let sut = makeSUT(analytics: analytics, authenticationClient: client)
+        sut.isAuthenticated = true
+        sut.loggedInUser = makeUser(email: "user@example.com")
+
+        sut.requestSignOut()
+
+        XCTAssertTrue(sut.isSignOutConfirmationPresented)
+        XCTAssertTrue(sut.isAuthenticated)
+        XCTAssertEqual(sut.currentUserEmail, "user@example.com")
+        XCTAssertEqual(client.events, [])
+        XCTAssertEqual(analytics.events, [])
+    }
+
     func test_logout_clearsAuthenticationStateAndEmail() async {
         let client = AuthenticationClientFake()
         let analytics = AnalyticsRecorder()

@@ -647,6 +647,8 @@
 "setting.quran_account.signed_in" = "Connecté";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Se déconnecter";
+"setting.quran_account.sign_out.confirmation.title" = "Se déconnecter de Quran.com ?";
+"setting.quran_account.sign_out.confirmation.message" = "Vos signets et notes seront supprimés de cet appareil et restaurés lors de votre prochaine connexion.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Synchroniser vos signets sur tous vos appareils";
 

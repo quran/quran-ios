@@ -199,8 +199,30 @@ struct QuranReferenceView: View {
     @ScaledMetric private var glyphTopPadding = 5
 
     var body: some View {
+        Group {
+            if reference.arabicName.isIndoPakText, reference.showsArabicName(locale: locale) {
+                // A hidden Madani glyph sizes and spaces the row, so IndoPak rows match Madani ones
+                // whatever the system font's language-dependent line metrics are.
+                ZStack {
+                    decoratedGlyph(reference.decoratedGlyph)
+                        .hidden()
+                        .frame(width: 0)
+                    names
+                }
+            } else {
+                names
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(reference.accessibilityText)
+        .fixedSize()
+    }
+
+    // MARK: Private
+
+    private var names: some View {
         let arabicName = reference.arabicName
-        HStack(alignment: arabicName.isIndoPakText ? .firstTextBaseline : .center, spacing: spacing) {
+        return HStack(alignment: arabicName.isIndoPakText ? .firstTextBaseline : .center, spacing: spacing) {
             if let localizedName = reference.localizedName(locale: locale) {
                 Text(localizedName)
                     .font(size.plainFont)
@@ -210,13 +232,14 @@ struct QuranReferenceView: View {
             if reference.showsArabicName(locale: locale) {
                 switch arabicName {
                 case .decoratedGlyph(let text):
-                    Text(text)
-                        .font(size.suraFont)
-                        .padding(.top, glyphTopPadding)
+                    decoratedGlyph(text)
                 case .indoPakText(let text):
+                    // Noorehira's tall line box overflows the row instead of sizing or spacing it.
                     Text(text)
                         .font(size.quranFont(.indoPak))
-                        .padding(.vertical, size.indoPakReferenceVerticalPadding(glyphTopPadding: glyphTopPadding))
+                        .fixedSize()
+                        .frame(height: 0)
+                        .ignoringSpacing()
                 }
             }
 
@@ -228,9 +251,51 @@ struct QuranReferenceView: View {
                     .environment(\.layoutDirection, .leftToRight)
             }
         }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(reference.accessibilityText)
-        .fixedSize()
+    }
+
+    private func decoratedGlyph(_ text: String) -> some View {
+        Text(text)
+            .font(size.suraFont)
+            .padding(.top, glyphTopPadding)
+    }
+}
+
+private extension View {
+    /// Leaves the spacing between this view's container and its neighbors as if this view weren't there.
+    @ViewBuilder
+    func ignoringSpacing() -> some View {
+        if #available(iOS 16.0, *) {
+            IgnoringSpacingLayout {
+                self
+            }
+        } else {
+            self
+        }
+    }
+}
+
+@available(iOS 16.0, *)
+private struct IgnoringSpacingLayout: Layout {
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        subviews.first?.sizeThatFits(proposal) ?? .zero
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        subviews.first?.place(at: bounds.origin, proposal: proposal)
+    }
+
+    func spacing(subviews: Subviews, cache: inout ()) -> ViewSpacing {
+        ViewSpacing()
+    }
+
+    func explicitAlignment(
+        of guide: VerticalAlignment,
+        in bounds: CGRect,
+        proposal: ProposedViewSize,
+        subviews: Subviews,
+        cache: inout ()
+    ) -> CGFloat? {
+        subviews.first?.dimensions(in: proposal)[explicit: guide].map { bounds.minY + $0 }
     }
 }
 
@@ -303,12 +368,6 @@ extension MultipartText.FontSize {
             return 0
         }
         let excessLineHeight = quranUIFont(.indoPak).lineHeight - quranUIFont(.uthmanicHafs).lineHeight
-        return -max(0, excessLineHeight / 2)
-    }
-
-    func indoPakReferenceVerticalPadding(glyphTopPadding: CGFloat) -> CGFloat {
-        let madaniReferenceHeight = max(plainUIFont.lineHeight, suraUIFont.lineHeight + glyphTopPadding)
-        let excessLineHeight = quranUIFont(.indoPak).lineHeight - madaniReferenceHeight
         return -max(0, excessLineHeight / 2)
     }
 

@@ -98,15 +98,11 @@ final class MultipartTextLayoutTests: XCTestCase {
     func test_view_rightToLeftText_keepsTrailingSpaceBeforeNextPart() async {
         guard #available(iOS 16.0, *) else { return }
 
-        let widths = await MainActor.run { spacedAndUnspacedReferenceWidths(allowsWrapping: true) }
+        for allowsWrapping in [true, false] {
+            let widths = await MainActor.run { spacedAndUnspacedReferenceWidths(allowsWrapping: allowsWrapping) }
 
-        XCTAssertEqual(widths.spaced - widths.unspaced, widths.space, accuracy: 1)
-    }
-
-    func test_view_rightToLeftText_whenWrappingIsDisabled_keepsTrailingSpaceBeforeNextPart() async {
-        let widths = await MainActor.run { spacedAndUnspacedReferenceWidths(allowsWrapping: false) }
-
-        XCTAssertEqual(widths.spaced - widths.unspaced, widths.space, accuracy: 1)
+            XCTAssertEqual(widths.spaced - widths.unspaced, widths.space, accuracy: 1, "allowsWrapping: \(allowsWrapping)")
+        }
     }
 
     func test_view_rightToLeftSentenceEndingInSpace_wrapsWithinWidth() async {

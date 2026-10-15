@@ -16,33 +16,23 @@ final class PlainTextPartViewTests: XCTestCase {
         XCTAssertEqual(split.trailingSpace, " \u{2068}")
     }
 
-    func test_splittingTrailingSpace_keepsTrailingTagSequenceFlagWhole() {
+    func test_splittingTrailingSpace_keepsTrailingClustersWhole() {
         let england = "\u{1F3F4}\u{E0067}\u{E0062}\u{E0065}\u{E006E}\u{E0067}\u{E007F}"
 
-        let split = PlainTextPartView.splittingTrailingSpace("x \(england)")
+        for text in ["x \(england)", "عند\u{200D}"] {
+            let split = PlainTextPartView.splittingTrailingSpace(text)
 
-        XCTAssertEqual(split.content, "x \(england)")
-        XCTAssertEqual(split.trailingSpace, "")
+            XCTAssertEqual(split.content, text)
+            XCTAssertEqual(split.trailingSpace, "")
+        }
     }
 
-    func test_splittingTrailingSpace_keepsTrailingZeroWidthJoinerWhole() {
-        let split = PlainTextPartView.splittingTrailingSpace("عند\u{200D}")
+    func test_splittingTrailingSpace_doesNotSplitTextWithoutContent() {
+        for text in ["", " \u{2069}"] {
+            let split = PlainTextPartView.splittingTrailingSpace(text)
 
-        XCTAssertEqual(split.content, "عند\u{200D}")
-        XCTAssertEqual(split.trailingSpace, "")
-    }
-
-    func test_splittingTrailingSpace_doesNotSplitWhitespaceOnlyText() {
-        let split = PlainTextPartView.splittingTrailingSpace(" \u{2069}")
-
-        XCTAssertEqual(split.content, " \u{2069}")
-        XCTAssertEqual(split.trailingSpace, "")
-    }
-
-    func test_splittingTrailingSpace_doesNotSplitEmptyText() {
-        let split = PlainTextPartView.splittingTrailingSpace("")
-
-        XCTAssertEqual(split.content, "")
-        XCTAssertEqual(split.trailingSpace, "")
+            XCTAssertEqual(split.content, text)
+            XCTAssertEqual(split.trailingSpace, "")
+        }
     }
 }

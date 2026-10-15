@@ -91,7 +91,12 @@ private struct BookmarkCollectionsContent: View {
             }
         }
         .task { await viewModel.start() }
-        .addCollectionAlert(viewModel: viewModel)
+        .collectionNameAlert(
+            l("bookmarks.collections.add"),
+            state: $viewModel.nameAlert,
+            name: $viewModel.newCollectionName,
+            submit: { await viewModel.createPendingCollection() }
+        )
         .collectionDeleteConfirmation(
             item: $viewModel.collectionPendingDeletion,
             delete: { await viewModel.deleteCollection($0) }
@@ -127,34 +132,4 @@ private struct BookmarkCollectionsContent: View {
         )
     }
 }
-
-private extension View {
-    @MainActor
-    func addCollectionAlert(viewModel: BookmarkCollectionsViewModel) -> some View {
-        alert(
-            l("bookmarks.collections.add"),
-            isPresented: Binding(
-                get: { viewModel.isPresentingAddCollection },
-                set: { viewModel.isPresentingAddCollection = $0 }
-            )
-        ) {
-            TextField(
-                l("bookmarks.collections.new.placeholder"),
-                text: Binding(
-                    get: { viewModel.newCollectionName },
-                    set: { viewModel.newCollectionName = $0 }
-                )
-            )
-            Button(lAndroid("cancel"), role: .cancel) {}
-            Button(l("bookmarks.collections.add")) {
-                Task { await viewModel.createPendingCollection() }
-            }
-        } message: {
-            if let error = viewModel.newCollectionNameError {
-                Text(error.localizedMessage)
-            }
-        }
-    }
-}
-
 #endif

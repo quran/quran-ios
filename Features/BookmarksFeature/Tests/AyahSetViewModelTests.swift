@@ -125,6 +125,47 @@ final class AyahSetViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_renamePending_hidesAlertAfterRejectedNameIsFixed() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Personal")
+        let collection = try await firstCollection()
+        let sut = makeSUT(collection: collection, service: service)
+        sut.presentRename()
+        sut.nameAlert = .hidden
+        sut.pendingName = String(repeating: "a", count: 256)
+        await sut.renamePending()
+        XCTAssertEqual(
+            sut.nameAlert,
+            .rejected(.textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)))
+        )
+        sut.pendingName = "Duas"
+
+        await sut.renamePending()
+
+        XCTAssertEqual(sut.nameAlert, .hidden)
+        XCTAssertNil(sut.error)
+        let renamedCollection = try await firstCollection()
+        XCTAssertEqual(renamedCollection.name, "Duas")
+    }
+
+    func test_presentRename_afterRejectionRestoresTitle() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Study")
+        try await service.createCollection(named: "Personal")
+        let personal = try await collection(named: "Personal")
+        let sut = makeSUT(collection: personal, service: service)
+        sut.presentRename()
+        sut.nameAlert = .hidden
+        sut.pendingName = "study"
+        await sut.renamePending()
+        sut.nameAlert = .hidden
+
+        sut.presentRename()
+
+        XCTAssertEqual(sut.nameAlert, .editing)
+        XCTAssertEqual(sut.pendingName, "Personal")
+    }
+
     func test_renamePending_keepsTooLongNameAndShowsLimit() async throws {
         let service = makeService()
         try await service.createCollection(named: "Personal")
@@ -132,16 +173,15 @@ final class AyahSetViewModelTests: XCTestCase {
         let sut = makeSUT(collection: collection, service: service)
         let longName = String(repeating: "a", count: 256)
         sut.presentRename()
-        sut.isPresentingRename = false
+        sut.nameAlert = .hidden
         sut.pendingName = longName
 
         await sut.renamePending()
 
         XCTAssertEqual(
-            sut.pendingNameError,
-            .textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255))
+            sut.nameAlert,
+            .rejected(.textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)))
         )
-        XCTAssertTrue(sut.isPresentingRename)
         XCTAssertEqual(sut.pendingName, longName)
         XCTAssertNil(sut.error)
         let storedCollection = try await firstCollection()
@@ -155,14 +195,13 @@ final class AyahSetViewModelTests: XCTestCase {
         let personal = try await collection(named: "Personal")
         let sut = makeSUT(collection: personal, service: service)
         sut.presentRename()
-        sut.isPresentingRename = false
+        sut.nameAlert = .hidden
         sut.pendingName = "study"
 
         await sut.renamePending()
 
-        XCTAssertEqual(sut.pendingNameError, .duplicate(DuplicateCollectionNameError(name: "Study")))
-        XCTAssertEqual(sut.pendingNameError?.localizedMessage, lFormat("bookmarks.collections.name.duplicate", "Study"))
-        XCTAssertTrue(sut.isPresentingRename)
+        XCTAssertEqual(sut.nameAlert, .rejected(.duplicate(DuplicateCollectionNameError(name: "Study"))))
+        XCTAssertEqual(sut.nameAlert.error?.localizedMessage, lFormat("bookmarks.collections.name.duplicate", "Study"))
         XCTAssertEqual(sut.pendingName, "study")
         XCTAssertNil(sut.error)
         let storedCollection = try await collection(named: "Personal")

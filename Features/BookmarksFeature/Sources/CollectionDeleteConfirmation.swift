@@ -17,12 +17,8 @@ extension View {
                     }
                 }
             ),
-            delete: {
-                guard let item = item.wrappedValue else {
-                    return
-                }
-                await delete(item)
-            }
+            presenting: item.wrappedValue,
+            delete: delete
         )
     }
 
@@ -31,15 +27,31 @@ extension View {
         isPresented: Binding<Bool>,
         delete: @escaping @MainActor () async -> Void
     ) -> some View {
+        collectionDeleteConfirmation(
+            isPresented: isPresented,
+            presenting: (),
+            delete: { _ in await delete() }
+        )
+    }
+
+    /// Hands the presented item to the Delete action, because SwiftUI dismisses the alert,
+    /// clearing a binding-derived item, before the action's task runs.
+    @MainActor
+    private func collectionDeleteConfirmation<Item>(
+        isPresented: Binding<Bool>,
+        presenting item: Item?,
+        delete: @escaping @MainActor (Item) async -> Void
+    ) -> some View {
         alert(
             l("bookmarks.collections.delete.confirmation.title"),
-            isPresented: isPresented
-        ) {
+            isPresented: isPresented,
+            presenting: item
+        ) { item in
             Button(lAndroid("cancel"), role: .cancel) {}
             Button(l("button.delete"), role: .destructive) {
-                Task { await delete() }
+                Task { await delete(item) }
             }
-        } message: {
+        } message: { _ in
             Text(l("bookmarks.collections.delete.confirmation.message"))
         }
     }

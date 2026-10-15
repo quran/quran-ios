@@ -36,9 +36,8 @@ final class AyahSetViewModel: ObservableObject {
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
     @Published var isPresentingDeleteConfirmation = false
-    @Published var isPresentingRename = false
+    @Published var nameAlert: CollectionNameAlert = .hidden
     @Published var pendingName = ""
-    @Published private(set) var pendingNameError: CollectionNameError?
 
     func start() async {
         do {
@@ -72,8 +71,7 @@ final class AyahSetViewModel: ObservableObject {
             return
         }
         pendingName = content.title
-        pendingNameError = nil
-        isPresentingRename = true
+        nameAlert = .editing
     }
 
     func renamePending() async {
@@ -89,12 +87,11 @@ final class AyahSetViewModel: ObservableObject {
 
         do {
             try await dataSource.rename(to: name)
-            pendingNameError = nil
+            nameAlert = .hidden
         } catch {
             if let nameError = CollectionNameError(error) {
                 logger.info("Bookmarks: collection name rejected. \(nameError.logDescription)")
-                pendingNameError = nameError
-                isPresentingRename = true
+                nameAlert = .rejected(nameError)
             } else {
                 self.error = error
             }

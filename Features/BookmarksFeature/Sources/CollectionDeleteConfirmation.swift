@@ -22,6 +22,7 @@ extension View {
         )
     }
 
+    /// Use the `item:` overload when `delete` needs state the dismissal clears.
     @MainActor
     func collectionDeleteConfirmation(
         isPresented: Binding<Bool>,

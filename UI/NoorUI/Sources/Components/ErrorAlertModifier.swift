@@ -11,6 +11,7 @@ import SwiftUI
 import UIx
 
 extension View {
+    /// `retry` runs after the dismissal sets `error` to nil, so it must not read `error`.
     public func errorAlert(error: Binding<Error?>, retry: AsyncAction? = nil) -> some View {
         modifier(ErrorAlertModifier(error: error, retry: retry))
     }

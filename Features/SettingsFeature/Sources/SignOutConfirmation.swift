@@ -4,6 +4,8 @@ import SwiftUI
 
 extension View {
     /// Confirms sign-out, which removes the synced bookmarks and notes from this device.
+    ///
+    /// `signOut` runs after SwiftUI dismisses the alert, so it must not read state the dismissal clears.
     @MainActor
     func signOutConfirmation(
         isPresented: Binding<Bool>,

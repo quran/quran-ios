@@ -107,29 +107,21 @@ private struct AyahSetContentView: View {
 private extension View {
     @MainActor
     func renameAlert(viewModel: AyahSetViewModel) -> some View {
-        alert(
+        textFieldAlert(
             l("bookmarks.collections.rename"),
             isPresented: Binding(
                 get: { viewModel.isPresentingRename },
                 set: { viewModel.isPresentingRename = $0 }
-            )
-        ) {
-            TextField(
-                l("bookmarks.collections.new.placeholder"),
-                text: Binding(
-                    get: { viewModel.pendingName },
-                    set: { viewModel.pendingName = $0 }
-                )
-            )
-            Button(lAndroid("cancel"), role: .cancel) {}
-            Button(l("bookmarks.collections.rename")) {
-                Task { await viewModel.renamePending() }
-            }
-        } message: {
-            if let error = viewModel.pendingNameError {
-                Text(error.localizedMessage)
-            }
-        }
+            ),
+            text: Binding(
+                get: { viewModel.pendingName },
+                set: { viewModel.pendingName = $0 }
+            ),
+            placeholder: l("bookmarks.collections.new.placeholder"),
+            message: viewModel.pendingNameError?.localizedMessage,
+            confirmTitle: l("bookmarks.collections.rename"),
+            confirm: { await viewModel.renamePending() }
+        )
     }
 }
 #endif

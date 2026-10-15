@@ -1,5 +1,6 @@
 #if QURAN_SYNC
 import Analytics
+import Localization
 import MobileSync
 import MobileSyncTestSupport
 import NoorUI
@@ -164,6 +165,32 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         )
         XCTAssertTrue(sut.isPresentingAddCollection)
         XCTAssertEqual(sut.newCollectionName, longName)
+        XCTAssertNil(sut.error)
+        let collections = try await storedCollections()
+        XCTAssertEqual(collections.count, 1)
+    }
+
+    func test_createPendingCollection_keepsReservedNameAndExplainsIt() async throws {
+        let sut = BookmarkAyahsViewModel(
+            verses: verses,
+            collections: [],
+            analytics: AnalyticsRecorder(),
+            ayahBookmarkCollectionService: makeCollectionService(),
+            ayahHighlightService: makeHighlightService()
+        )
+        sut.presentAddCollection()
+        sut.isPresentingAddCollection = false
+        sut.newCollectionName = "Favorites"
+
+        await sut.createPendingCollection()
+
+        XCTAssertEqual(sut.newCollectionNameError, .reserved(ReservedCollectionNameError(name: "Favorites")))
+        XCTAssertEqual(
+            sut.newCollectionNameError?.localizedMessage,
+            lFormat("bookmarks.collections.name.reserved", "Favorites")
+        )
+        XCTAssertTrue(sut.isPresentingAddCollection)
+        XCTAssertEqual(sut.newCollectionName, "Favorites")
         XCTAssertNil(sut.error)
         let collections = try await storedCollections()
         XCTAssertEqual(collections.count, 1)

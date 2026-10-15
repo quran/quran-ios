@@ -169,6 +169,49 @@ final class AyahSetViewModelTests: XCTestCase {
         XCTAssertEqual(storedCollection.id, personal.id)
     }
 
+    func test_renamePending_keepsReservedNameAndExplainsIt() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Personal")
+        let personal = try await collection(named: "Personal")
+        let sut = makeSUT(collection: personal, service: service)
+        sut.presentRename()
+        sut.isPresentingRename = false
+        sut.pendingName = "Favorites"
+
+        await sut.renamePending()
+
+        XCTAssertEqual(sut.pendingNameError, .reserved(ReservedCollectionNameError(name: "Favorites")))
+        XCTAssertEqual(sut.pendingNameError?.localizedMessage, lFormat("bookmarks.collections.name.reserved", "Favorites"))
+        XCTAssertTrue(sut.isPresentingRename)
+        XCTAssertEqual(sut.pendingName, "Favorites")
+        XCTAssertNil(sut.error)
+        let storedCollection = try await collection(named: "Personal")
+        XCTAssertEqual(storedCollection.id, personal.id)
+    }
+
+    func test_renamePending_acceptsCorrectedNameAfterRejection() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Study")
+        try await service.createCollection(named: "Personal")
+        let personal = try await collection(named: "Personal")
+        let sut = makeSUT(collection: personal, service: service)
+        sut.presentRename()
+        sut.isPresentingRename = false
+        sut.pendingName = "study"
+        await sut.renamePending()
+        XCTAssertEqual(sut.pendingNameError, .duplicate(DuplicateCollectionNameError(name: "Study")))
+        sut.isPresentingRename = false
+        sut.pendingName = "Duas"
+
+        await sut.renamePending()
+
+        XCTAssertNil(sut.pendingNameError)
+        XCTAssertFalse(sut.isPresentingRename)
+        XCTAssertNil(sut.error)
+        let storedCollection = try await collection(named: "Duas")
+        XCTAssertEqual(storedCollection.id, personal.id)
+    }
+
     func test_requestDeleteCollection_deletesEmptyCollectionAndNotifiesListener() async throws {
         let service = makeService()
         try await service.createCollection(named: "Personal")

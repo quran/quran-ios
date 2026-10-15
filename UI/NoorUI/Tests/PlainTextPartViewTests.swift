@@ -19,7 +19,7 @@ final class PlainTextPartViewTests: XCTestCase {
     func test_splittingTrailingSpace_keepsTrailingClustersWhole() {
         let england = "\u{1F3F4}\u{E0067}\u{E0062}\u{E0065}\u{E006E}\u{E0067}\u{E007F}"
 
-        for text in ["x \(england)", "عند\u{200D}"] {
+        for text in ["عند \(england)", "عند\u{200D}"] {
             let split = PlainTextPartView.splittingTrailingSpace(text)
 
             XCTAssertEqual(split.content, text)
@@ -27,8 +27,8 @@ final class PlainTextPartViewTests: XCTestCase {
         }
     }
 
-    func test_splittingTrailingSpace_doesNotSplitTextWithoutContent() {
-        for text in ["", " \u{2069}"] {
+    func test_splittingTrailingSpace_doesNotSplitLeftToRightOrEmptyText() {
+        for text in ["", " \u{2069}", "at ", " · "] {
             let split = PlainTextPartView.splittingTrailingSpace(text)
 
             XCTAssertEqual(split.content, text)

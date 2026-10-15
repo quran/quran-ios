@@ -27,11 +27,13 @@ struct PlainTextPartView: View {
     }
 
     /// Splits trailing whitespace and bidi controls, such as the isolates `String(format:)` puts around
-    /// arguments, off the end of the text. Splits between characters, so clusters such as tag-sequence flags
-    /// and ZWJ joins stay whole. Text that is empty or only whitespace isn't split.
+    /// arguments, off the end of right-to-left text. Splits between characters, so clusters such as tag-sequence
+    /// flags and ZWJ joins stay whole. Left-to-right text, and text that is empty or only whitespace, isn't split.
     static func splittingTrailingSpace(_ text: String) -> (content: String, trailingSpace: String) {
         let isTrailingSpace = { (character: Character) in character.unicodeScalars.allSatisfy(Self.isTrailingSpace) }
-        guard let lastContent = text.lastIndex(where: { !isTrailingSpace($0) }) else {
+        guard text.unicodeScalars.contains(where: Self.isRightToLeft),
+              let lastContent = text.lastIndex(where: { !isTrailingSpace($0) })
+        else {
             return (text, "")
         }
         let trailingStart = text.index(after: lastContent)
@@ -46,7 +48,14 @@ struct PlainTextPartView: View {
         "\u{2066}", "\u{2067}", "\u{2068}", "\u{2069}", // isolates
     ]
 
+    /// Hebrew, Arabic, Syriac, Thaana, N'Ko and the other right-to-left script blocks, plus their presentation forms.
+    private static let rightToLeftRanges: [ClosedRange<UInt32>] = [0x0590 ... 0x08FF, 0xFB1D ... 0xFDFF, 0xFE70 ... 0xFEFF]
+
     private static func isTrailingSpace(_ scalar: Unicode.Scalar) -> Bool {
         scalar.properties.isWhitespace || bidiControls.contains(scalar)
+    }
+
+    private static func isRightToLeft(_ scalar: Unicode.Scalar) -> Bool {
+        rightToLeftRanges.contains { $0.contains(scalar.value) }
     }
 }

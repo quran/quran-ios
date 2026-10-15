@@ -51,9 +51,8 @@ final class BookmarkAyahsViewModel: ObservableObject {
     @Published private(set) var isUpdatingHighlight = false
     @Published private(set) var updatingCollectionIDs: Set<String> = []
     @Published var error: Error?
-    @Published var isPresentingAddCollection = false
+    @Published var nameAlert: CollectionNameAlert = .hidden
     @Published var newCollectionName = ""
-    @Published private(set) var newCollectionNameError: CollectionNameError?
 
     let verses: [AyahNumber]
 
@@ -156,8 +155,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
 
     func presentAddCollection() {
         newCollectionName = ""
-        newCollectionNameError = nil
-        isPresentingAddCollection = true
+        nameAlert = .editing
     }
 
     func createPendingCollection() async {
@@ -169,13 +167,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
         do {
             try await ayahBookmarkCollectionService.createCollection(named: name)
             newCollectionName = ""
-            newCollectionNameError = nil
-            isPresentingAddCollection = false
+            nameAlert = .hidden
         } catch {
             if let nameError = CollectionNameError(error) {
                 logger.info("Quran Sync: bookmark collection name rejected. \(nameError.logDescription)")
-                newCollectionNameError = nameError
-                isPresentingAddCollection = true
+                nameAlert = .rejected(nameError)
             } else {
                 logger.error("Quran Sync: failed to create bookmark collection: \(error)")
                 self.error = error

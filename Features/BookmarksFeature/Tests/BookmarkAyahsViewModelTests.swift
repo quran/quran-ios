@@ -153,20 +153,46 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         )
         let longName = String(repeating: "a", count: 256)
         sut.presentAddCollection()
-        sut.isPresentingAddCollection = false
+        sut.nameAlert = .hidden
         sut.newCollectionName = longName
 
         await sut.createPendingCollection()
 
         XCTAssertEqual(
-            sut.newCollectionNameError,
-            .textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255))
+            sut.nameAlert,
+            .rejected(.textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)))
         )
-        XCTAssertTrue(sut.isPresentingAddCollection)
         XCTAssertEqual(sut.newCollectionName, longName)
         XCTAssertNil(sut.error)
         let collections = try await storedCollections()
         XCTAssertEqual(collections.count, 1)
+    }
+
+    func test_createPendingCollection_hidesAlertAfterRejectedNameIsFixed() async throws {
+        let sut = BookmarkAyahsViewModel(
+            verses: verses,
+            collections: [],
+            analytics: AnalyticsRecorder(),
+            ayahBookmarkCollectionService: makeCollectionService(),
+            ayahHighlightService: makeHighlightService()
+        )
+        sut.presentAddCollection()
+        sut.nameAlert = .hidden
+        sut.newCollectionName = String(repeating: "a", count: 256)
+        await sut.createPendingCollection()
+        XCTAssertEqual(
+            sut.nameAlert,
+            .rejected(.textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)))
+        )
+        sut.newCollectionName = "Personal"
+
+        await sut.createPendingCollection()
+
+        XCTAssertEqual(sut.nameAlert, .hidden)
+        XCTAssertEqual(sut.newCollectionName, "")
+        XCTAssertNil(sut.error)
+        let collections = try await mappedCollections()
+        XCTAssertTrue(collections.contains { $0.name == "Personal" })
     }
 
     private func makeFixture() async throws -> (

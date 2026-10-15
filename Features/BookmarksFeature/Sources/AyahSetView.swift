@@ -17,7 +17,12 @@ struct AyahSetView: View {
     var body: some View {
         AyahSetContentView(viewModel: viewModel)
             .task { await viewModel.start() }
-            .renameAlert(viewModel: viewModel)
+            .collectionNameAlert(
+                l("bookmarks.collections.rename"),
+                state: $viewModel.nameAlert,
+                name: $viewModel.pendingName,
+                submit: { await viewModel.renamePending() }
+            )
             .collectionDeleteConfirmation(
                 isPresented: $viewModel.isPresentingDeleteConfirmation,
                 delete: { await viewModel.deleteDataSource() }
@@ -101,35 +106,6 @@ private struct AyahSetContentView: View {
             return nil
         }
         return "\(quran: text, font: viewModel.reading.quranFont, lineLimit: 2)"
-    }
-}
-
-private extension View {
-    @MainActor
-    func renameAlert(viewModel: AyahSetViewModel) -> some View {
-        alert(
-            l("bookmarks.collections.rename"),
-            isPresented: Binding(
-                get: { viewModel.isPresentingRename },
-                set: { viewModel.isPresentingRename = $0 }
-            )
-        ) {
-            TextField(
-                l("bookmarks.collections.new.placeholder"),
-                text: Binding(
-                    get: { viewModel.pendingName },
-                    set: { viewModel.pendingName = $0 }
-                )
-            )
-            Button(lAndroid("cancel"), role: .cancel) {}
-            Button(l("bookmarks.collections.rename")) {
-                Task { await viewModel.renamePending() }
-            }
-        } message: {
-            if let error = viewModel.pendingNameError {
-                Text(error.localizedMessage)
-            }
-        }
     }
 }
 #endif

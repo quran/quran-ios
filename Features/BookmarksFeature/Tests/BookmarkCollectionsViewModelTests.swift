@@ -311,45 +311,63 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_createPendingCollection_hidesAlertAfterRejectedNameIsFixed() async throws {
+        let sut = makeSUT()
+        sut.presentAddCollection()
+        sut.nameAlert = .hidden
+        sut.newCollectionName = "system:notes"
+        await sut.createPendingCollection()
+        XCTAssertEqual(sut.nameAlert, .rejected(.reserved(ReservedCollectionNameError(name: "system:notes"))))
+        sut.newCollectionName = "Personal"
+
+        await sut.createPendingCollection()
+
+        XCTAssertEqual(sut.nameAlert, .hidden)
+        XCTAssertNil(sut.error)
+        let collections = try await storedCollections {
+            $0.contains { $0.collection.name == "Personal" }
+        }
+        XCTAssertEqual(collections.count, 2)
+    }
+
     func test_createPendingCollection_keepsTooLongNameAndShowsLimit() async throws {
         let sut = makeSUT()
         let longName = String(repeating: "a", count: 256)
         sut.presentAddCollection()
-        sut.isPresentingAddCollection = false
+        sut.nameAlert = .hidden
         sut.newCollectionName = longName
 
         await sut.createPendingCollection()
 
         XCTAssertEqual(
-            sut.newCollectionNameError,
-            .textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255))
+            sut.nameAlert,
+            .rejected(.textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)))
         )
-        XCTAssertTrue(sut.isPresentingAddCollection)
         XCTAssertEqual(sut.newCollectionName, longName)
         XCTAssertNil(sut.error)
         let collections = try await storedCollections()
         XCTAssertEqual(collections.count, 1)
 
+        sut.nameAlert = .hidden
         sut.presentAddCollection()
 
-        XCTAssertNil(sut.newCollectionNameError)
+        XCTAssertEqual(sut.nameAlert, .editing)
         XCTAssertEqual(sut.newCollectionName, "")
     }
 
     func test_createPendingCollection_keepsReservedNameAndExplainsIt() async throws {
         let sut = makeSUT()
         sut.presentAddCollection()
-        sut.isPresentingAddCollection = false
+        sut.nameAlert = .hidden
         sut.newCollectionName = "system:notes"
 
         await sut.createPendingCollection()
 
-        XCTAssertEqual(sut.newCollectionNameError, .reserved(ReservedCollectionNameError(name: "system:notes")))
+        XCTAssertEqual(sut.nameAlert, .rejected(.reserved(ReservedCollectionNameError(name: "system:notes"))))
         XCTAssertEqual(
-            sut.newCollectionNameError?.localizedMessage,
+            sut.nameAlert.error?.localizedMessage,
             lFormat("bookmarks.collections.name.reserved", "system:notes")
         )
-        XCTAssertTrue(sut.isPresentingAddCollection)
         XCTAssertEqual(sut.newCollectionName, "system:notes")
         XCTAssertNil(sut.error)
         let collections = try await storedCollections()

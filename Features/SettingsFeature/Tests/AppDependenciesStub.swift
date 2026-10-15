@@ -41,10 +41,15 @@ struct AppDependenciesStub: AppDependencies {
 
     #if QURAN_SYNC
     var authenticationClient: any AuthenticationClient = AuthenticationClientFake()
-    let legacyDataImportCoordinator = LegacyDataImportCoordinator(
-        reader: CoreDataLegacyDataReader(stack: CoreDataStack.testingStack()),
-        quranDataService: MobileSyncTestDatabase.shared.quranDataService
-    )
+    let legacyDataStore = TemporaryCoreDataStore()
+
+    var legacyDataImportCoordinator: LegacyDataImportCoordinator {
+        LegacyDataImportCoordinator(
+            reader: CoreDataLegacyDataReader(stack: legacyDataStore.stack()),
+            quranDataService: quranDataService
+        )
+    }
+
     var quranDataService: QuranDataService { MobileSyncTestDatabase.shared.quranDataService }
     #endif
 

@@ -43,11 +43,6 @@ public class CoreDataStack {
         persistentContainer.viewContext
     }
 
-    public class func removePersistentFiles() {
-        let dataDirectory = NSPersistentContainer.defaultDirectoryURL()
-        FileManager.default.removeDirectoryContents(at: dataDirectory)
-    }
-
     public func newBackgroundContext() -> NSManagedObjectContext {
         makeBackgroundContext(in: persistentContainer)
     }

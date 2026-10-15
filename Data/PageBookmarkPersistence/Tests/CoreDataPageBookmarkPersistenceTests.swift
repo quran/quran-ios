@@ -15,23 +15,24 @@ import XCTest
 
 final class CoreDataPageBookmarkPersistenceTests: XCTestCase {
     var persistence: CoreDataPageBookmarkPersistence!
+    var store: TemporaryCoreDataStore!
     var stack: CoreDataStack!
     var subscriptions = Set<AnyCancellable>()
 
     override func setUp() {
         super.setUp()
 
-        stack = CoreDataStack.testingStack()
+        store = TemporaryCoreDataStore()
+        stack = store.stack()
         persistence = CoreDataPageBookmarkPersistence(stack: stack)
     }
 
     override func tearDown() {
-        super.tearDown()
-        // Clean up any resources here
-        CoreDataStack.removePersistentFiles()
+        subscriptions.removeAll()
         persistence = nil
         stack = nil
-        subscriptions.removeAll()
+        store = nil
+        super.tearDown()
     }
 
     func testInsertAndRetrievePageBookmarks() async throws {

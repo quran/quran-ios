@@ -17,6 +17,7 @@ class SimpleCoreDataEntityUniquifierTests: XCTestCase {
     var sut: SimpleCoreDataEntityUniquifier<MO_PageBookmark>!
     var transactions: [PersistentHistoryTransaction]!
     var context: NSManagedObjectContext!
+    var store: TemporaryCoreDataStore!
     var stack: CoreDataStack!
 
     var existingEntity: MO_PageBookmark!
@@ -27,7 +28,8 @@ class SimpleCoreDataEntityUniquifierTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
 
-        stack = CoreDataStack.testingStack()
+        store = TemporaryCoreDataStore()
+        stack = store.stack()
         context = stack.newBackgroundContext()
 
         existingEntity = context.newPageBookmark(page: 45, modifiedOn: 100)
@@ -56,11 +58,15 @@ class SimpleCoreDataEntityUniquifierTests: XCTestCase {
     }
 
     override func tearDown() {
-        CoreDataStack.removePersistentFiles()
         sut = nil
         transactions = nil
+        existingEntity = nil
+        entity1 = nil
+        entity2 = nil
+        entity3 = nil
         context = nil
         stack = nil
+        store = nil
         super.tearDown()
     }
 

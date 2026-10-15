@@ -30,7 +30,7 @@ struct ContentImageView: View {
                 image: viewModel.imagePage?.image,
                 renderingMode: viewModel.imageRenderingMode,
                 quarterName: viewModel.page.localizedQuarterName,
-                suraNames: viewModel.page.suraNames(),
+                suras: viewModel.page.suras,
                 page: viewModel.page.localizedNumber,
                 scrollToVerse: viewModel.scrollToVerse,
                 wordFrames: viewModel.imagePage?.wordFrames,
@@ -43,7 +43,7 @@ struct ContentImageView: View {
                 image: viewModel.imagePage?.image,
                 renderingMode: viewModel.imageRenderingMode,
                 quarterName: viewModel.page.localizedQuarterName,
-                suraNames: viewModel.page.suraNames(),
+                suras: viewModel.page.suras,
                 page: viewModel.page.localizedNumber,
                 scrollToVerse: viewModel.scrollToVerse,
                 wordFrames: viewModel.imagePage?.wordFrames,
@@ -75,7 +75,7 @@ private struct ContentImageViewBody: View {
     let image: UIImage?
     let renderingMode: QuranThemedImage.RenderingMode
     let quarterName: String
-    let suraNames: MultipartText
+    let suras: [Sura]
     let page: String
     let scrollToVerse: AyahNumber?
     let wordFrames: WordFrameCollection?
@@ -98,7 +98,7 @@ private struct ContentImageViewBody: View {
         } onGlobalFrameChange: {
             onGlobalFrameChange($0)
         } header: {
-            QuranPageHeader(quarterName: quarterName, suraNames: suraNames)
+            QuranPageHeader(quarterName: quarterName, suras: suras)
         } footer: {
             QuranPageFooter(page: page)
         }
@@ -110,7 +110,7 @@ private struct ContentImageViewBody: View {
         } onGlobalFrameChange: {
             onGlobalFrameChange($0)
         } header: {
-            QuranPageHeader(quarterName: quarterName, suraNames: suraNames)
+            QuranPageHeader(quarterName: quarterName, suras: suras)
         } footer: {
             QuranPageFooter(page: page)
         }
@@ -135,7 +135,7 @@ private struct ContentImageViewBody: View {
         image: UIImage(contentsOfFile: testResourceURL("images/page604.png").path)!,
         renderingMode: .tinted,
         quarterName: "ABC",
-        suraNames: "ABC",
+        suras: Quran.hafsMadani1405.pages[603].suras,
         page: "604",
         scrollToVerse: nil,
         wordFrames: nil,

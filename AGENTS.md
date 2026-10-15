@@ -41,7 +41,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Let pushed screens use the standard Back button; do not add Close or Done solely to pop them.
 - Match established layouts in analogous features before introducing a new visual pattern.
 - Render Quran Arabic with NoorUI's Quran text APIs and Quran font; never use a system font.
-- Render sura names with NoorUI's `MultipartText` sura interpolations (`sura:`, `ayah:`, `suras:`, `ayahRange:`/`ayahRanges:`), which show only the localized name (plain Arabic text in Arabic locales). Reserve `nameStyle: .decorated` for the home Surahs and Juz' lists and the translation pages' sura banner.
+- Render sura names with NoorUI's `MultipartText` sura interpolations (`sura:`, `ayah:`, `suras:`, `ayahRange:`/`ayahRanges:`), which show the plain localized name outside Arabic locales and the decorated name in Arabic locales. Reserve `nameStyle: .decorated` (localized plus decorated outside Arabic) for the home Surahs and Juz' lists, the Quran page header (which falls back when it doesn't fit), and the translation sura banner; `.text` keeps plain Arabic and is only for the reading-bookmark menu row.
 - Prefer native `UINavigationItem` title, subtitle, and attributed-title APIs; use a custom `titleView` only when native APIs cannot meet the requirement. For pre-iOS 26 fallback, combine title and subtitle as `Title (Subtitle)`.
 - Inject concrete data services through builders and view models; do not wrap them in closure-based adapters.
 - Use `@ScaledMetric` for explicit UI dimensions that should scale with Dynamic Type; avoid fixed numeric layout metrics.

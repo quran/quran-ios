@@ -29,8 +29,8 @@ enum QuranReference {
         }
     }
 
-    case sura(Sura, nameStyle: SuraNameStyle = .text)
-    case ayah(AyahNumber, nameStyle: SuraNameStyle = .text)
+    case sura(Sura, nameStyle: SuraNameStyle = .standard)
+    case ayah(AyahNumber, nameStyle: SuraNameStyle = .standard)
 
     // MARK: Internal
 
@@ -56,12 +56,10 @@ enum QuranReference {
     }
 
     fileprivate func localizedName(locale: Locale) -> String? {
-        switch nameStyle {
-        case .text:
-            locale.isArabicLanguage ? sura.localizedName(language: .arabic) : sura.localizedName()
-        case .decorated:
-            locale.isArabicLanguage ? nil : sura.localizedName()
+        if nameStyle == .text, locale.isArabicLanguage {
+            return sura.localizedName(language: .arabic)
         }
+        return locale.isArabicLanguage ? nil : sura.localizedName()
     }
 
     fileprivate func coordinate(locale: Locale) -> String? {
@@ -78,7 +76,7 @@ enum QuranReference {
         if let localizedName = localizedName(locale: locale) {
             components.append(localizedName)
         }
-        if showsArabicName {
+        if showsArabicName(locale: locale) {
             components.append(arabicName.text)
         }
 
@@ -102,7 +100,7 @@ enum QuranReference {
             ))
         }
 
-        if showsArabicName {
+        if showsArabicName(locale: locale) {
             if result.length > 0 {
                 result.append(NSAttributedString(string: " "))
             }
@@ -135,8 +133,12 @@ enum QuranReference {
         }
     }
 
-    fileprivate var showsArabicName: Bool {
-        nameStyle == .decorated
+    fileprivate func showsArabicName(locale: Locale) -> Bool {
+        switch nameStyle {
+        case .standard: locale.isArabicLanguage
+        case .decorated: true
+        case .text: false
+        }
     }
 
     // MARK: Private
@@ -205,7 +207,7 @@ struct QuranReferenceView: View {
                     .fontWeight(emphasizesSura ? .heavy : nil)
             }
 
-            if reference.showsArabicName {
+            if reference.showsArabicName(locale: locale) {
                 switch arabicName {
                 case .decoratedGlyph(let text):
                     Text(text)
@@ -232,20 +234,32 @@ struct QuranReferenceView: View {
     }
 }
 
-/// Localized sura names separated by " · ", rendered as a single `Text`, so a one-line
-/// title truncates the last name instead of overflowing its row. Wrapping views split `.suras`
-/// into per-sura references instead (`TextPart.wrappingParts`).
+/// Sura names separated by " · " on one line.
 struct SuraNamesView: View {
     // MARK: Internal
 
     static let separator = " · "
 
     let suras: [Sura]
+    let nameStyle: SuraNameStyle
     let size: MultipartText.FontSize
 
     var body: some View {
-        Text(suras.compactMap { QuranReference.sura($0).localizedName(locale: locale) }.joined(separator: Self.separator))
-            .font(size.plainFont)
+        let references = suras.map { QuranReference.sura($0, nameStyle: nameStyle) }
+        if references.contains(where: { $0.showsArabicName(locale: locale) }) {
+            HStack(spacing: 0) {
+                ForEach(Array(references.enumerated()), id: \.offset) { index, reference in
+                    if index > 0 {
+                        Text(Self.separator)
+                            .font(size.plainFont)
+                    }
+                    QuranReferenceView(reference: reference, size: size)
+                }
+            }
+        } else {
+            Text(references.compactMap { $0.localizedName(locale: locale) }.joined(separator: Self.separator))
+                .font(size.plainFont)
+        }
     }
 
     // MARK: Private
@@ -344,8 +358,9 @@ private struct QuranReferencePreview: View {
 
     var body: some View {
         NoorList {
-            references("text", style: .text)
+            references("standard", style: .standard)
             references("decorated", style: .decorated)
+            references("text", style: .text)
         }
     }
 

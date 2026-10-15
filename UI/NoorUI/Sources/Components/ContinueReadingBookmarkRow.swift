@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import NoorFont
 import QuranAnnotations
 import QuranKit
 import QuranLocalization
@@ -70,6 +71,9 @@ private struct ContinueReadingBookmarkRowPreview: View {
             id: "preview", slot: slot, placement: placement,
             modifiedOn: Date(timeIntervalSinceNow: -36000)
         )
+        if UIFont(name: "icomoon", size: 20) == nil {
+            FontName.registerFonts()
+        }
     }
 
     private let bookmark: PlacedReadingBookmark

@@ -95,7 +95,7 @@ private struct ContentLineViewBody: View {
         AdaptiveQuranScrollView {
             QuranPageHeader(
                 quarterName: page.localizedQuarterName,
-                suraNames: page.suraNames()
+                suras: page.suras
             )
         } footer: {
             QuranPageFooter(page: page.localizedNumber)

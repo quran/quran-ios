@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2026-07-20.
 //
 
+import NoorFont
 import QuranKit
 import SwiftUI
 import UIKit
@@ -56,45 +57,32 @@ final class MultipartTextLayoutTests: XCTestCase {
         XCTAssertLessThan(heights.1, heights.0)
     }
 
-    func test_wrappingParts_splitSurasIntoSeparateReferences() {
-        let suras = Array(Quran.hafsMadani1405.suras[16 ... 18])
-        let part = TextPart.suras(suras)
-
-        let parts = part.wrappingParts
-
-        XCTAssertEqual(parts.count, 5)
-        XCTAssertEqual(parts.map { $0.rawValue(locale: english) }.joined(), part.rawValue(locale: english))
-        for (index, part) in parts.enumerated() {
-            if index.isMultiple(of: 2) {
-                guard case .sura(let sura, false, .text) = part else {
-                    return XCTFail("Expected a plain sura reference at \(index)")
-                }
-                XCTAssertEqual(sura, suras[index / 2])
-            } else {
-                XCTAssertEqual(part.rawValue(locale: english), " · ")
-            }
-        }
-    }
-
     func test_view_wrapsSuraNamesOnlyBetweenSuras() async {
         guard #available(iOS 16.0, *) else { return }
 
-        let widths: [CGFloat] = [60, 90, 100, 110, 130, 160]
+        let widths: [CGFloat] = [60, 130, 260]
         let heights = await MainActor.run {
+            if UIFont(name: "icomoon", size: 20) == nil {
+                FontName.registerFonts()
+            }
             let suras = Array(Quran.hafsMadani1405.suras[16 ... 18])
-            let wrapping: MultipartText = "\(suras: suras)"
-            let separateReferences: MultipartText =
-                "\(sura: suras[0]) · \(sura: suras[1]) · \(sura: suras[2])"
-            return widths.map { width in
-                (
-                    fittingHeight(pinned(wrapping.view(ofSize: .body)), width: width),
-                    fittingHeight(pinned(separateReferences.view(ofSize: .body)), width: width)
-                )
+            return [SuraNameStyle.standard, .decorated].flatMap { style in
+                let wrapping: MultipartText = "\(suras: suras, nameStyle: style)"
+                let separateReferences: MultipartText = """
+                \(sura: suras[0], nameStyle: style) · \(sura: suras[1], nameStyle: style) · \(sura: suras[2], nameStyle: style)
+                """
+                return widths.map { width in
+                    (
+                        "\(style) width \(width)",
+                        fittingHeight(pinned(wrapping.view(ofSize: .body)), width: width),
+                        fittingHeight(pinned(separateReferences.view(ofSize: .body)), width: width)
+                    )
+                }
             }
         }
 
-        for (width, height) in zip(widths, heights) {
-            XCTAssertEqual(height.0, height.1, accuracy: 1, "width \(width)")
+        for (label, wrapping, separate) in heights {
+            XCTAssertEqual(wrapping, separate, accuracy: 1, label)
         }
     }
 

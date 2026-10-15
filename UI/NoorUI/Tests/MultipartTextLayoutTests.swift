@@ -86,15 +86,6 @@ final class MultipartTextLayoutTests: XCTestCase {
         }
     }
 
-    private let english = Locale(identifier: "en-CA")
-
-    /// Fixes the locale and text size, so the widths that need an extra row don't move with simulator settings.
-    private func pinned(_ content: some View) -> some View {
-        content
-            .environment(\.locale, english)
-            .dynamicTypeSize(.large)
-    }
-
     func test_view_rightToLeftText_keepsTrailingSpaceBeforeNextPart() async {
         guard #available(iOS 16.0, *) else { return }
 
@@ -122,6 +113,15 @@ final class MultipartTextLayoutTests: XCTestCase {
 
         XCTAssertLessThanOrEqual(sizes.wrapped.width, width)
         XCTAssertGreaterThan(sizes.wrapped.height, sizes.line.height * 3)
+    }
+
+    private let english = Locale(identifier: "en-CA")
+
+    /// Fixes the locale and text size, so the widths that need an extra row don't move with simulator settings.
+    private func pinned(_ content: some View) -> some View {
+        content
+            .environment(\.locale, english)
+            .dynamicTypeSize(.large)
     }
 
     /// Mirrors `"bookmarks.reading.location" = "عند %@"`, so the plain part ends with a space.

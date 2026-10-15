@@ -1,5 +1,5 @@
 //
-//  Page+Localization.swift
+//  Page+Pageable.swift
 //
 //
 //  Created by Mohamed Afifi on 2023-06-19.
@@ -7,6 +7,5 @@
 
 import Caching
 import QuranKit
-import QuranTextKit
 
 extension Page: @retroactive Pageable { }

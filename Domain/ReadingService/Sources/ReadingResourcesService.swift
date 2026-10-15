@@ -184,7 +184,7 @@ public actor ReadingResourcesService {
         defer { try? fileManager.removeItem(at: zipFile) }
 
         do {
-            try zipper.unzipFile(zipFile, destination: destination, overwrite: true, password: nil)
+            try zipper.unzipFile(zipFile, destination: destination, overwrite: true)
 
             // Write a success file to make it easy to verify if file is downloaded and unzipped successfully.
             try fileManager.writeToFile(at: remoteResource.successFilePath.url, content: "Downloaded")

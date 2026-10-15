@@ -7,14 +7,16 @@
 
 import Foundation
 import QuranText
+import SystemDependencies
 import Utilities
-import Zip
 
 protocol TranslationUnzipper {
     func unzipIfNeeded(_ translation: Translation) throws
 }
 
 struct DefaultTranslationUnzipper: TranslationUnzipper {
+    // MARK: Internal
+
     func unzipIfNeeded(_ translation: Translation) throws {
         // installed latest version
         guard translation.version != translation.installedVersion else {
@@ -42,9 +44,13 @@ struct DefaultTranslationUnzipper: TranslationUnzipper {
                     try? FileManager.default.removeItem(at: zipFile)
                 }
                 try attempt(times: 3) {
-                    try Zip.unzipFile(zipFile, destination: zipFile.deletingLastPathComponent(), overwrite: true, password: nil, progress: nil)
+                    try zipper.unzipFile(zipFile, destination: zipFile.deletingLastPathComponent(), overwrite: true)
                 }
             }
         }
     }
+
+    // MARK: Private
+
+    private let zipper: Zipper = DefaultZipper()
 }

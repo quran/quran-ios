@@ -8,7 +8,7 @@
 import Foundation
 import Preferences
 import VLogging
-import Zip
+import ZIPFoundation
 
 public struct DiagnosticsPreferences {
     // MARK: Lifecycle
@@ -56,7 +56,7 @@ struct DiagnosticsService {
 
         // Zip 'Logs' directory.
         logger.info("Zip diagnostics to \(zipFileURL)")
-        try Zip.zipFiles(paths: [logsDirectory], zipFilePath: zipFileURL, password: nil, progress: nil)
+        try fileManager.zipItem(at: logsDirectory, to: zipFileURL, compressionMethod: .deflate)
         logger.info("Diagnostics Zipped")
 
         return DiagnosticsZip(url: zipFileURL) {

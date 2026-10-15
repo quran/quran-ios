@@ -251,7 +251,7 @@
 "notes.delete.alert.body" = "سيتم حذف الملاحظة أيضًا.";
 "notes.delete-note.alert.title" = "حذف الملاحظة";
 "notes.delete-note.alert.body" = "سيتم حذف هذه الملاحظة.";
-"notes.editor.created" = "تم الإنشاء %@";
+"notes.editor.edited" = "تم التعديل %@";
 "notes.editor.delete" = "حذف الملاحظة";
 "notes.editor.note-divider" = "ملاحظتك";
 "notes.icloud.alert.title" = "مزامنة iCloud";

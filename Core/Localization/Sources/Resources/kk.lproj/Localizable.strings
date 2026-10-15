@@ -582,7 +582,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "Жазбаны жою";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "%@ жасалды";
+"notes.editor.edited" = "%@ өңделді";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "Жазбаны жою";
 // Metadata: Translated by ChatGPT; human review required.

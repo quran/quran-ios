@@ -604,7 +604,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "删除笔记";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "创建于 %@";
+"notes.editor.edited" = "编辑于 %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "删除笔记";
 // Metadata: Translated by ChatGPT; human review required.

@@ -276,7 +276,7 @@
 "notes.delete.alert.body" = "The associated note will also be deleted.";
 "notes.delete-note.alert.title" = "Delete Note";
 "notes.delete-note.alert.body" = "This note will be deleted.";
-"notes.editor.created" = "Created %@";
+"notes.editor.edited" = "Edited %@";
 "notes.editor.delete" = "Delete note";
 "notes.editor.note-divider" = "YOUR NOTE";
 "notes.icloud.alert.title" = "iCloud Sync";

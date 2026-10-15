@@ -510,7 +510,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "Xóa ghi chú";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "Đã tạo %@";
+"notes.editor.edited" = "Đã chỉnh sửa %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "Xóa ghi chú";
 // Metadata: Translated by ChatGPT; human review required.

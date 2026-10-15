@@ -600,7 +600,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "Eslatmani o‘chirish";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "%@ yaratildi";
+"notes.editor.edited" = "%@ tahrirlandi";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "Eslatmani o‘chirish";
 // Metadata: Translated by ChatGPT; human review required.

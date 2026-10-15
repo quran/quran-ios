@@ -37,9 +37,19 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertEqual(editableNote.note, "Stored note")
         XCTAssertEqual(editableNote.selectedColor, .pink)
         XCTAssertEqual(editableNote.ayahRanges, [ayah(1) ... ayah(2)])
-        XCTAssertFalse(editableNote.modifiedSince.isEmpty)
+        XCTAssertFalse(editableNote.editedSince.isEmpty)
         XCTAssertFalse(sut.viewModel.showsColors)
         XCTAssertEqual(sut.viewModel.deleteConfirmationStyle, .syncedNote)
+    }
+
+    func test_fetchNote_footerShowsWhenSyncedNoteWasLastEdited() async throws {
+        let lastEdited = Date().addingTimeInterval(-2 * 24 * 60 * 60)
+        let sut = makeSyncSUT(mode: .edit(syncedNote(body: "Stored note", modifiedDate: lastEdited)))
+
+        let editableNote = try await sut.viewModel.fetchNote()
+
+        XCTAssertEqual(editableNote.editedSince, lastEdited.timeAgo())
+        XCTAssertEqual(editableNote.metadataAccessibilityLabel, "Edited \(lastEdited.timeAgo()); 2 words")
     }
 
     func test_fetchNote_showsEveryRangeOfMultiRangeNote() async throws {
@@ -247,9 +257,19 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertEqual(editableNote.note, "Stored note")
         XCTAssertEqual(editableNote.selectedColor, .blue)
         XCTAssertEqual(editableNote.ayahRanges, [ayah(1) ... ayah(2)])
-        XCTAssertFalse(editableNote.modifiedSince.isEmpty)
+        XCTAssertFalse(editableNote.editedSince.isEmpty)
         XCTAssertTrue(sut.viewModel.showsColors)
         XCTAssertEqual(sut.viewModel.deleteConfirmationStyle, .note)
+    }
+
+    func test_fetchNote_footerShowsWhenLegacyNoteWasLastEdited() async throws {
+        let lastEdited = Date().addingTimeInterval(-2 * 24 * 60 * 60)
+        let sut = makeLegacySUT(noteBody: "Stored note", modifiedDate: lastEdited)
+
+        let editableNote = try await sut.viewModel.fetchNote()
+
+        XCTAssertEqual(editableNote.editedSince, lastEdited.timeAgo())
+        XCTAssertEqual(editableNote.metadataAccessibilityLabel, "Edited \(lastEdited.timeAgo()); 2 words")
     }
 
     func test_invalidShortNote_doesNotSaveOrDismissInLegacy() async throws {
@@ -398,13 +418,14 @@ final class NoteEditorViewModelTests: XCTestCase {
     private func syncedNote(
         localId: String = "note-1",
         body: String,
-        verses: Set<AyahNumber>? = nil
+        verses: Set<AyahNumber>? = nil,
+        modifiedDate: Date = Date(timeIntervalSince1970: 1)
     ) -> Note {
         Note(
             id: localId,
             text: body,
             verses: verses ?? [ayah(1), ayah(2)],
-            modifiedDate: Date(timeIntervalSince1970: 1)
+            modifiedDate: modifiedDate
         )
     }
 
@@ -431,13 +452,14 @@ final class NoteEditorViewModelTests: XCTestCase {
     #else
     private func makeLegacySUT(
         noteBody: String,
-        color: HighlightColor = .pink
+        color: HighlightColor = .pink,
+        modifiedDate: Date = Date(timeIntervalSince1970: 1)
     ) -> (viewModel: NoteEditorViewModel, noteService: LegacyNoteServiceFake, listener: ListenerSpy) {
         let noteService = LegacyNoteServiceFake()
         let listener = ListenerSpy()
         let note = Note(
             verses: [ayah(2), ayah(1)],
-            modifiedDate: Date(timeIntervalSince1970: 1),
+            modifiedDate: modifiedDate,
             text: noteBody,
             color: color
         )

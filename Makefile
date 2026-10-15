@@ -173,12 +173,26 @@ force-build-swiftformat: clone-swiftformat
 clean-swiftformat:
 	@rm -rf $(SWIFT_FORMAT_DIR)/.build
 
+# MobileSync's Kotlin binary is the `Shared` module. Importing it reaches every Kotlin type, so the
+# import is forbidden; the names catch Kotlin types that leak in any other way. Kotlin names that
+# quran-ios also uses for its own types, such as Note and ReadingBookmark, can't be listed.
+SHARED_IMPORT_PATTERN = (^|[[:space:]])import([[:space:]]+(class|struct|enum|protocol|typealias|func|var|let))?[[:space:]]+Shared([^[:alnum:]_]|$$)
+KOTLIN_TYPE_NAMES = Kotlin[A-Z][[:alnum:]]*|[A-Z][[:alnum:]]*_|QuranDataService|SyncAuthService|SharedDependencyGraph|AppGraph|DriverFactory|AppleMobileSyncStorageFactory|MobileSyncStorage(Names)?|SynchronizationEnvironment|Auth(Config|Environment|RuntimeConfig)|AuthFlowFactoryProvider|AuthState|UserInfo|LogoutResult|LogoutWarning(Type)?|SyncErrorKind|PersistenceImport(Data|Result)|Import(Collection|CollectionAyahBookmark|ReadingSession|ReadingBookmark|Note|AyahHighlight)|NoteRange|BookmarkCollection|AyahBookmark|AyahHighlight|ReadingSession|AppEnvironment|SyncStatus|CollectionWithAyahBookmarks|CollectionAyahBookmark|BookmarkCollectionsReplacementResult|AyahHighlightColor|(Ayah|Page|Empty)ReadingBookmark|TextLength(Field|Bound)|(TextLengthLimit|ReadOnlyCollection|DuplicateCollectionName|ReservedCollectionName|DatabaseStorageFull|SessionResetInProgress|Authentication(Cancelled|Network|Failed)?|AuthNotConfigured|SyncHttp|HeadChanged|SyncSuperseded|LogoutTokenCapture)Exception
+KOTLIN_TYPE_PATTERN = (^|[^[:alnum:]_])($(KOTLIN_TYPE_NAMES))([^[:alnum:]_]|$$)
+
 lint-no-kotlin-interop:
-	@matches="$$(git grep --line-number --extended-regexp '(^|[[:space:]])import[[:space:]]+KMPNativeCoroutines|(^|[^[:alnum:]_])(asyncFunction|asyncSequence)[[:space:]]*\(' -- '*.swift' || true)"; \
+	@matches="$$(git grep --untracked --line-number --extended-regexp '(^|[[:space:]])import[[:space:]]+KMPNativeCoroutines|(^|[^[:alnum:]_])(asyncFunction|asyncSequence)[[:space:]]*\(' -- '*.swift' || true)"; \
 	if [ -n "$$matches" ]; then \
 		echo "$$matches"; \
 		echo "error: Direct Kotlin coroutine interop is forbidden in QuranEngine Swift sources." >&2; \
 		echo "Use the Swift-native async APIs exposed by MobileSync; add missing wrappers upstream." >&2; \
+		exit 1; \
+	fi
+	@matches="$$(git grep --untracked --line-number --extended-regexp -e '$(SHARED_IMPORT_PATTERN)' -e '$(KOTLIN_TYPE_PATTERN)' -- '*.swift' || true)"; \
+	if [ -n "$$matches" ]; then \
+		echo "$$matches"; \
+		echo "error: Kotlin types are forbidden in QuranEngine Swift sources." >&2; \
+		echo "Use MobileSync's Swift API instead of importing Shared; add missing wrappers to mobile-sync-spm." >&2; \
 		exit 1; \
 	fi
 

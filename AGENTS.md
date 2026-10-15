@@ -74,6 +74,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Code behind `QURAN_SYNC` must compile both with and without the flag.
 - Any sync change should be checked with explicit sync and no-sync Make targets.
 - Do not rely on ambient shell/launchctl `QURAN_SYNC`.
+- Use only MobileSync's Swift API. Never `import Shared` or name its Kotlin types; add missing wrappers to `mobile-sync-spm`. `make format-lint` enforces this.
 
 ## Style
 
@@ -99,7 +100,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Keep tests in their owning module's `Tests` target. `AllTargetsTests` exists only to link otherwise-untested targets for coverage; do not add behavioral tests there without explicit confirmation.
 - Prefer real objects whenever practical. Use real model types, services, persistence stacks, parsers, mappers, builders, and value objects instead of test doubles.
 - Use fakes only at process or platform boundaries: filesystem, network/session, clock/time, bundle/resources, keychain, OAuth/auth SDK, external SDKs, UIKit navigation/presentation seams.
-- For `QURAN_SYNC` persistence behavior, always use the real MobileSync database through `MobileSyncTestDatabase` from `MobileSyncTestSupport`; never fake `QuranDataService`, `MobileSyncNoteService`, or another sync persistence service.
+- For `QURAN_SYNC` persistence behavior, always use the real MobileSync database through `MobileSyncTestDatabase` from mobile-sync-spm's `MobileSyncTestSupport` product; never fake `MobileSyncDataService`, `MobileSyncNoteService`, or another sync persistence service.
 - Use `Domain/AnnotationsService/Tests/MobileSyncNoteServiceTests.swift` as the reference pattern: `override func setUp() async throws { try await database.reset() }` (and the same reset in `tearDown`), then exercise the production service and assert database-observable state.
 - Do not add mocks or a mocking framework. Avoid generated mocks.
 - Do not introduce protocols only to make something mockable. Protocols should represent real architectural boundaries already useful in production.

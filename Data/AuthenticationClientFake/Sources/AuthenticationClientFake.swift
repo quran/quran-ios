@@ -17,7 +17,7 @@ public final class AuthenticationClientFake: AuthenticationClient {
     }
 
     public var authenticationStateValue: AuthenticationState = .notAuthenticated
-    public var loggedInUserValue: UserInfo?
+    public var loggedInUserValue: MobileSyncUser?
     public var loginResult: Result<Void, AuthenticationClientError> = .success(())
     public var restoreStateResult: Result<AuthenticationState, AuthenticationClientError> = .success(.notAuthenticated)
     public var logoutResult: Result<Void, AuthenticationClientError> = .success(())
@@ -33,7 +33,7 @@ public final class AuthenticationClientFake: AuthenticationClient {
         }
     }
 
-    public var loggedInUser: UserInfo? {
+    public var loggedInUser: MobileSyncUser? {
         get async {
             events.append(.readLoggedInUser)
             return loggedInUserValue
@@ -73,7 +73,7 @@ public final class UnavailableAuthenticationClient: AuthenticationClient {
         get async { .notAuthenticated }
     }
 
-    public var loggedInUser: UserInfo? {
+    public var loggedInUser: MobileSyncUser? {
         get async { nil }
     }
 

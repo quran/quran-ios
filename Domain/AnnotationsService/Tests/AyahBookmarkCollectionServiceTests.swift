@@ -198,12 +198,12 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         XCTAssertEqual(stored.first { $0.collection.isDefault }?.collection.id, favorites.id)
     }
 
-    private func collectionWithBookmarks(id: String, name: String, isReadOnly: Bool) -> CollectionWithAyahBookmarks {
-        CollectionWithAyahBookmarks(
-            collection: BookmarkCollection(
+    private func collectionWithBookmarks(id: String, name: String, isReadOnly: Bool) -> MobileSyncCollectionWithBookmarks {
+        MobileSyncCollectionWithBookmarks(
+            collection: MobileSyncCollection(
+                id: id,
                 name: name,
                 lastUpdated: Date(timeIntervalSince1970: 0),
-                id: id,
                 isDefault: false,
                 isSystem: false,
                 isReadOnly: isReadOnly
@@ -228,8 +228,8 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
 
     private func storedCollection(
         named name: String,
-        where predicate: (CollectionWithAyahBookmarks) -> Bool = { _ in true }
-    ) async throws -> CollectionWithAyahBookmarks {
+        where predicate: (MobileSyncCollectionWithBookmarks) -> Bool = { _ in true }
+    ) async throws -> MobileSyncCollectionWithBookmarks {
         let collections = try await storedCollections { collections in
             collections.contains { $0.collection.name == name && predicate($0) }
         }
@@ -237,8 +237,8 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
     }
 
     private func storedCollections(
-        where predicate: ([CollectionWithAyahBookmarks]) -> Bool
-    ) async throws -> [CollectionWithAyahBookmarks] {
+        where predicate: ([MobileSyncCollectionWithBookmarks]) -> Bool
+    ) async throws -> [MobileSyncCollectionWithBookmarks] {
         let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
         while let collections = try await iterator.next() {
             if predicate(collections) {

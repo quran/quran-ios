@@ -99,7 +99,7 @@ final class LaunchStoresTests: XCTestCase {
 
     func testMobileSyncFailedRollbackOnALowVolumeIsStorageFull() {
         // SQLiter can hide SQLITE_FULL behind a failed rollback.
-        let error = MobileSyncDatabaseError.openFailed(underlying: NSError(domain: "KotlinException", code: 0, userInfo: [
+        let error = MobileSyncDatabaseError.openFailed(underlying: NSError(domain: "MobileSync", code: 0, userInfo: [
             NSLocalizedDescriptionKey: "cannot rollback - no transaction is active",
         ]))
 
@@ -114,7 +114,7 @@ final class LaunchStoresTests: XCTestCase {
 
         let sut = LaunchStoreError(mobileSyncError: error, availableCapacity: Self.plentyOfCapacity)
 
-        XCTAssertEqual(sut.failureMessage, "###openDatabase(using:): Failed to open the MobileSync database: \(underlying)")
+        XCTAssertEqual(sut.failureMessage, "###MobileSyncGraph.openDatabase(): Failed to open the MobileSync database: \(underlying)")
     }
     #endif
 

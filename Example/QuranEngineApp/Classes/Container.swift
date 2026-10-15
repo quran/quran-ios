@@ -57,12 +57,11 @@ class Container: AppDependencies {
     let appIconCatalog = AppIconCatalog.example
 
     #if QURAN_SYNC
-    private(set) lazy var quranDataService: QuranDataService = syncAppGraph.quranDataService
+    private(set) lazy var quranDataService: MobileSyncDataService = syncGraph.dataService
 
-    private(set) lazy var authenticationClient: any AuthenticationClient = {
-        let authService = syncAppGraph.authService
-        return AuthenticationClientMobileSyncImpl(authService: authService)
-    }()
+    private(set) lazy var authenticationClient: any AuthenticationClient = AuthenticationClientMobileSyncImpl(
+        authService: syncGraph.authService
+    )
 
     private(set) lazy var legacyDataImportCoordinator = LegacyDataImportCoordinator(
         reader: CoreDataLegacyDataReader(stack: coreDataStack),
@@ -95,17 +94,11 @@ class Container: AppDependencies {
 
     #if QURAN_SYNC
     /// Without `QURAN_OAUTH_CLIENT_ID`, sign-in is unavailable and data stays local.
-    private lazy var syncAppGraph: AppGraph = {
-        AuthFlowFactoryProvider.shared.doInitialize()
-
-        return SharedDependencyGraph.shared.doInit(
-            driverFactory: DriverFactory(),
-            storage: AppleMobileSyncStorageFactory.shared.create(),
-            appEnvironment: Self.usePreProductionSyncEnvironment() ? .prelive : .production,
-            clientId: Self.nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID") ?? "",
-            clientSecret: Self.nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_SECRET")
-        )
-    }()
+    private lazy var syncGraph = MobileSyncGraph.shared(
+        environment: Self.usePreProductionSyncEnvironment() ? .prelive : .production,
+        clientID: Self.nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_ID") ?? "",
+        clientSecret: Self.nonEmptyEnvironmentValue("QURAN_OAUTH_CLIENT_SECRET")
+    )
     #endif
 
     private static func nonEmptyEnvironmentValue(_ key: String) -> String? {

@@ -343,8 +343,8 @@ final class AyahSetViewModelTests: XCTestCase {
     }
 
     private func storedCollections(
-        where predicate: ([CollectionWithAyahBookmarks]) -> Bool = { _ in true }
-    ) async throws -> [CollectionWithAyahBookmarks] {
+        where predicate: ([MobileSyncCollectionWithBookmarks]) -> Bool = { _ in true }
+    ) async throws -> [MobileSyncCollectionWithBookmarks] {
         let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
         while let collections = try await iterator.next() {
             if predicate(collections) {

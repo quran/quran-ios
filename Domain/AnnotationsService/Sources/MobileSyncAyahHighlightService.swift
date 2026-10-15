@@ -3,7 +3,7 @@
 //  MobileSyncAyahHighlightService.swift
 //
 
-@preconcurrency import MobileSync
+import MobileSync
 import QuranAnnotations
 import QuranKit
 import ReadingService
@@ -13,7 +13,7 @@ public struct MobileSyncAyahHighlightService {
     // MARK: Lifecycle
 
     public init(
-        quranDataService: QuranDataService,
+        quranDataService: MobileSyncDataService,
         readingPreferences: ReadingPreferences = .shared
     ) {
         self.quranDataService = quranDataService
@@ -29,12 +29,12 @@ public struct MobileSyncAyahHighlightService {
                 highlights.reduce(into: [AyahNumber: HighlightColor]()) { result, highlight in
                     guard let ayah = AyahNumber(
                         quran: readingPreferences.reading.quran,
-                        sura: Int(highlight.sura),
-                        ayah: Int(highlight.ayah)
-                    ), let color = HighlightColor(highlight.color) else {
+                        sura: highlight.sura,
+                        ayah: highlight.ayah
+                    ) else {
                         return
                     }
-                    result[ayah] = color
+                    result[ayah] = HighlightColor(highlight.color)
                 }
             }
         return .init(sequence)
@@ -43,8 +43,8 @@ public struct MobileSyncAyahHighlightService {
     public func setHighlight(_ color: HighlightColor, for ayahs: [AyahNumber]) async throws {
         for ayah in ayahs {
             _ = try await quranDataService.setAyahHighlight(
-                sura: Int32(ayah.sura.suraNumber),
-                ayah: Int32(ayah.ayah),
+                sura: ayah.sura.suraNumber,
+                ayah: ayah.ayah,
                 color: color.mobileSyncColor
             )
         }
@@ -53,31 +53,30 @@ public struct MobileSyncAyahHighlightService {
     public func removeHighlight(for ayahs: [AyahNumber]) async throws {
         for ayah in ayahs {
             _ = try await quranDataService.deleteAyahHighlight(
-                sura: Int32(ayah.sura.suraNumber),
-                ayah: Int32(ayah.ayah)
+                sura: ayah.sura.suraNumber,
+                ayah: ayah.ayah
             )
         }
     }
 
     // MARK: Private
 
-    private let quranDataService: QuranDataService
+    private let quranDataService: MobileSyncDataService
     private let readingPreferences: ReadingPreferences
 }
 
 private extension HighlightColor {
-    init?(_ color: AyahHighlightColor) {
+    init(_ color: MobileSyncHighlightColor) {
         switch color {
         case .blue: self = .blue
         case .pink: self = .pink
         case .green: self = .green
         case .yellow: self = .yellow
         case .purple: self = .purple
-        default: return nil
         }
     }
 
-    var mobileSyncColor: AyahHighlightColor {
+    var mobileSyncColor: MobileSyncHighlightColor {
         switch self {
         case .blue: .blue
         case .pink: .pink

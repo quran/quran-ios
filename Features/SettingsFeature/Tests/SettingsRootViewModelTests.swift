@@ -245,14 +245,13 @@ private final class AnalyticsRecorder: AnalyticsLibrary, @unchecked Sendable {
     }
 }
 
-private func makeUser(email: String?) -> UserInfo {
-    UserInfo(
+private func makeUser(email: String?) -> MobileSyncUser {
+    MobileSyncUser(
         id: "1",
         firstName: "Test",
         lastName: "User",
         name: "Test User",
-        email: email,
-        photoUrl: nil
+        email: email
     )
 }
 

@@ -8,7 +8,7 @@
 
 import Foundation
 import LegacyDataPersistence
-@preconcurrency import MobileSync
+import MobileSync
 import Preferences
 import VLogging
 
@@ -23,7 +23,7 @@ import VLogging
 public actor LegacyDataImportCoordinator {
     // MARK: Lifecycle
 
-    public init(reader: CoreDataLegacyDataReader, quranDataService: QuranDataService) {
+    public init(reader: CoreDataLegacyDataReader, quranDataService: MobileSyncDataService) {
         self.reader = reader
         self.quranDataService = quranDataService
     }
@@ -69,7 +69,7 @@ public actor LegacyDataImportCoordinator {
     // MARK: Private
 
     private let reader: CoreDataLegacyDataReader
-    private let quranDataService: QuranDataService
+    private let quranDataService: MobileSyncDataService
     private let preferences = LegacyImportPreferences.shared
 
     private var changesTask: Task<Void, Never>?
@@ -90,7 +90,7 @@ public actor LegacyDataImportCoordinator {
                 logger.info("Legacy import: disabled during the scan")
                 return .success(())
             }
-            let result = try await quranDataService.importData(data: data, deleteExisting: false, trackHistory: true)
+            let result = try await quranDataService.importData(data, deleteExisting: false, trackHistory: true)
             logger.notice("""
             Legacy import: completed in \(milliseconds(since: start))ms changed=\(result.changed) \
             matched=\(result.matched) keptExisting=\(result.keptExisting) alreadyProcessed=\(result.alreadyProcessed)
@@ -108,10 +108,10 @@ public actor LegacyDataImportCoordinator {
 
     /// The error's type, without its message, which may contain user content.
     private static func category(of error: Error) -> String {
-        let error = error as NSError
-        if let exception = error.userInfo["KotlinException"] {
-            return String(describing: type(of: exception))
+        if let error = error as? MobileSyncDataError {
+            return error.category
         }
+        let error = error as NSError
         return "\(error.domain)#\(error.code)"
     }
 

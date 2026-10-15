@@ -24,13 +24,16 @@ let mobileSyncPackageDependency: Package.Dependency = {
     if let localMobileSyncPackagePath, !localMobileSyncPackagePath.isEmpty {
         return .package(path: localMobileSyncPackagePath)
     }
-    return .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.1.34")
+    return .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.2.0")
 }()
 
 let mobileSyncPackageDependencies: [Package.Dependency] =
     quranSyncEnabled ? [mobileSyncPackageDependency] : []
 let mobileSyncTargetDependencies: [Target.Dependency] = quranSyncEnabled ? [
     .product(name: "MobileSync", package: "mobile-sync-spm"),
+] : []
+let mobileSyncTestSupportDependencies: [Target.Dependency] = quranSyncEnabled ? [
+    .product(name: "MobileSyncTestSupport", package: "mobile-sync-spm"),
 ] : []
 
 let settings = (enforceSwiftConcurrencyChecks ? swiftConcurrencySettings : []) + quranSyncSettings
@@ -219,13 +222,6 @@ private func uiTargets() -> [[Target]] {
 private func dataTargets() -> [[Target]] {
     let type = TargetType.data
     return [
-        target(
-            type,
-            name: "MobileSyncTestSupport",
-            hasTests: false,
-            dependencies: mobileSyncTargetDependencies
-        ),
-
         target(type, name: "SyncLogging", dependencies: [
             .product(name: "Logging", package: "swift-log"),
         ] + mobileSyncTargetDependencies, testDependencies: [
@@ -390,8 +386,7 @@ private func dataTargets() -> [[Target]] {
             "VLogging",
         ] + mobileSyncTargetDependencies, testDependencies: [
             "AuthenticationClientFake",
-            "MobileSyncTestSupport",
-        ] + mobileSyncTargetDependencies),
+        ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "AuthenticationClientFake", hasTests: false, dependencies: [
             "AuthenticationClient",
@@ -567,10 +562,9 @@ private func domainTargets() -> [[Target]] {
             "Utilities",
         ] + mobileSyncTargetDependencies, testDependencies: [
             "LastPagePersistence",
-            "MobileSyncTestSupport",
             "PageBookmarkPersistence",
             "QuranKit",
-        ]),
+        ] + mobileSyncTestSupportDependencies),
 
         target(type, name: "LegacyDataMigration", dependencies: [
             "LegacyDataPersistence",
@@ -582,9 +576,8 @@ private func domainTargets() -> [[Target]] {
             "CoreDataPersistence",
             "CoreDataPersistenceTestSupport",
             "LegacyDataPersistence",
-            "MobileSyncTestSupport",
             .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
-        ] + mobileSyncTargetDependencies),
+        ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "SettingsService", hasTests: false, dependencies: [
             "Analytics",
@@ -648,9 +641,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranKit",
             "QuranLocalization",
             "UIx",
-        ], testDependencies: [
-            "MobileSyncTestSupport",
-        ]),
+        ], testDependencies: mobileSyncTestSupportDependencies),
 
         target(type, name: "WhatsNewFeature", dependencies: [
             "NoorUI",
@@ -690,8 +681,7 @@ private func featuresTargets() -> [[Target]] {
             "CoreDataPersistenceTestSupport",
             "LegacyDataMigration",
             "LegacyDataPersistence",
-            "MobileSyncTestSupport",
-        ] + mobileSyncTargetDependencies),
+        ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "AdvancedAudioOptionsFeature", dependencies: [
             "QuranAudio",
@@ -735,12 +725,11 @@ private func featuresTargets() -> [[Target]] {
         ], testDependencies: [
             "Analytics",
             "AnnotationsService",
-            "MobileSyncTestSupport",
             "NoorUI",
             "QuranAnnotations",
             "QuranKit",
             "QuranResources",
-        ]),
+        ] + mobileSyncTestSupportDependencies),
 
         target(type, name: "BookmarksFeature", dependencies: [
             "Analytics",
@@ -758,10 +747,9 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
             "AuthenticationClient",
             "AuthenticationClientFake",
-            "MobileSyncTestSupport",
             "PageBookmarkPersistence",
             "QuranResources",
-        ] + mobileSyncTargetDependencies),
+        ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "QuranPagesFeature", hasTests: false, dependencies: [
             "NoorUI",
@@ -827,9 +815,8 @@ private func featuresTargets() -> [[Target]] {
             "NoteEditorFeature",
         ], testDependencies: [
             "AuthenticationClientFake",
-            "MobileSyncTestSupport",
             "QuranResources",
-        ]),
+        ] + mobileSyncTestSupportDependencies),
 
         target(type, name: "TranslationVerseFeature", hasTests: false, dependencies: [
             "AppDependencies",
@@ -887,9 +874,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "QuranLocalization",
             "ReadingBookmarkMenuFeature",
-        ], testDependencies: [
-            "MobileSyncTestSupport",
-        ] + mobileSyncTargetDependencies),
+        ], testDependencies: mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "AppIconFeature", dependencies: [
             "Analytics",
@@ -930,7 +915,6 @@ private func featuresTargets() -> [[Target]] {
             "AudioDownloadsFeature",
             "AuthenticationClient",
             "AuthenticationClientFake",
-            "MobileSyncTestSupport",
             "BatchDownloader",
             "CoreDataPersistence",
             "CoreDataPersistenceTestSupport",
@@ -952,7 +936,7 @@ private func featuresTargets() -> [[Target]] {
             "SystemDependenciesFake",
             "TranslationsFeature",
             "ZIPFoundation",
-        ] + mobileSyncTargetDependencies),
+        ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "AppStructureFeature", dependencies: [
             "AppIconFeature",

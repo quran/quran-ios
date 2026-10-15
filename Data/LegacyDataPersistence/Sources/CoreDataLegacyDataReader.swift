@@ -10,7 +10,7 @@ import CoreData
 import CoreDataModel
 import CoreDataPersistence
 import Foundation
-@preconcurrency import MobileSync
+import MobileSync
 import QuranAnnotations
 import QuranKit
 
@@ -34,7 +34,7 @@ public struct CoreDataLegacyDataReader: @unchecked Sendable {
     /// Reads every page bookmark, last page, and note.
     ///
     /// Throws when the store cannot be opened or fetched; a failure is never reported as an empty import.
-    public func importData() async throws -> PersistenceImportData {
+    public func importData() async throws -> MobileSyncImportData {
         let context = try stack.openBackgroundContext()
         return try await context.perform { context in
             // Pin the generation so all fetches observe the same store state.
@@ -43,7 +43,7 @@ public struct CoreDataLegacyDataReader: @unchecked Sendable {
 
             let bookmarks = try fetchPageBookmarks(context).compactMap(collectionBookmark)
             let notes = try fetchNotes(context).map(noteComponents)
-            return PersistenceImportData(
+            return MobileSyncImportData(
                 collections: oldPageBookmarksCollection(for: bookmarks),
                 collectionBookmarks: bookmarks,
                 readingSessions: try fetchLastPages(context).compactMap(readingSession),
@@ -95,35 +95,35 @@ private func sortDescriptors<Key: CoreDataKey>(_ keys: Key...) -> [NSSortDescrip
 
 // MARK: - Mapping
 
-private func collectionBookmark(_ bookmark: MO_PageBookmark) -> ImportCollectionAyahBookmark? {
+private func collectionBookmark(_ bookmark: MO_PageBookmark) -> MobileSyncImportCollectionBookmark? {
     guard let verse = firstVerse(page: bookmark.int(Schema.PageBookmark.page), mushafID: bookmark.int(Schema.PageBookmark.mushafID)) else {
         return nil
     }
     let dates = SourceDates(created: bookmark.date(Schema.PageBookmark.createdOn), modified: bookmark.date(Schema.PageBookmark.modifiedOn))
-    return ImportCollectionAyahBookmark(
+    return MobileSyncImportCollectionBookmark(
         collectionName: AyahBookmarkCollection.oldPageBookmarksName,
-        sura: Int32(verse.sura.suraNumber),
-        ayah: Int32(verse.ayah),
+        sura: verse.sura.suraNumber,
+        ayah: verse.ayah,
         lastUpdated: dates.lastUpdated,
         createdAt: dates.createdAt
     )
 }
 
 /// Emits the destination collection only when it receives a membership.
-private func oldPageBookmarksCollection(for bookmarks: [ImportCollectionAyahBookmark]) -> [ImportCollection] {
+private func oldPageBookmarksCollection(for bookmarks: [MobileSyncImportCollectionBookmark]) -> [MobileSyncImportCollection] {
     guard let createdAt = bookmarks.compactMap(\.createdAt).min(),
           let lastUpdated = bookmarks.map(\.lastUpdated).max()
     else {
         return []
     }
-    return [ImportCollection(
+    return [MobileSyncImportCollection(
         name: AyahBookmarkCollection.oldPageBookmarksName,
         lastUpdated: lastUpdated,
         createdAt: createdAt
     )]
 }
 
-private func readingSession(_ lastPage: MO_LastPage) -> ImportReadingSession? {
+private func readingSession(_ lastPage: MO_LastPage) -> MobileSyncImportReadingSession? {
     let createdOn = lastPage.date(Schema.LastPage.createdOn)
     // A last page without dates is left out so it cannot import as a 1970 visit.
     guard let lastUpdated = lastPage.date(Schema.LastPage.modifiedOn) ?? createdOn,
@@ -131,15 +131,15 @@ private func readingSession(_ lastPage: MO_LastPage) -> ImportReadingSession? {
     else {
         return nil
     }
-    return ImportReadingSession(
-        sura: Int32(verse.sura.suraNumber),
-        ayah: Int32(verse.ayah),
+    return MobileSyncImportReadingSession(
+        sura: verse.sura.suraNumber,
+        ayah: verse.ayah,
         lastUpdated: lastUpdated,
         createdAt: createdOn ?? lastUpdated
     )
 }
 
-private func noteComponents(_ note: MO_Note) -> (note: ImportNote?, highlights: [ImportAyahHighlight]) {
+private func noteComponents(_ note: MO_Note) -> (note: MobileSyncImportNote?, highlights: [MobileSyncImportHighlight]) {
     let verseObjects = note.verses as? Set<MO_Verse> ?? []
     // A note without verses may still receive them, so nothing is imported yet.
     guard !verseObjects.isEmpty else {
@@ -149,18 +149,18 @@ private func noteComponents(_ note: MO_Note) -> (note: ImportNote?, highlights: 
     let verses = Set(resolved.compactMap { $0 }).sorted()
     let dates = SourceDates(created: note.date(Schema.Note.createdOn), modified: note.date(Schema.Note.modifiedOn))
 
-    var importNote: ImportNote?
+    var importNote: MobileSyncImportNote?
     // An invalid verse would narrow the range, so the text waits until every verse is valid.
     if let body = note.value(forKey: Schema.Note.note.rawValue) as? String,
        !body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
        !resolved.contains(nil), let start = verses.first, let end = verses.last
     {
-        importNote = ImportNote(
+        importNote = MobileSyncImportNote(
             body: body,
-            startSura: Int32(start.sura.suraNumber),
-            startAyah: Int32(start.ayah),
-            endSura: Int32(end.sura.suraNumber),
-            endAyah: Int32(end.ayah),
+            startSura: start.sura.suraNumber,
+            startAyah: start.ayah,
+            endSura: end.sura.suraNumber,
+            endAyah: end.ayah,
             lastUpdated: dates.lastUpdated,
             createdAt: dates.createdAt
         )
@@ -168,9 +168,9 @@ private func noteComponents(_ note: MO_Note) -> (note: ImportNote?, highlights: 
 
     let color = highlightColor(note.int(Schema.Note.color))
     let highlights = verses.map { verse in
-        ImportAyahHighlight(
-            sura: Int32(verse.sura.suraNumber),
-            ayah: Int32(verse.ayah),
+        MobileSyncImportHighlight(
+            sura: verse.sura.suraNumber,
+            ayah: verse.ayah,
             color: color,
             lastUpdated: dates.lastUpdated,
             createdAt: dates.createdAt
@@ -197,7 +197,7 @@ private func verse(of verse: MO_Verse) -> AyahNumber? {
 }
 
 /// Unknown colors are pink, like the notes list.
-private func highlightColor(_ rawValue: Int?) -> AyahHighlightColor {
+private func highlightColor(_ rawValue: Int?) -> MobileSyncHighlightColor {
     switch HighlightColor(rawValue: rawValue ?? HighlightColor.pink.rawValue) ?? .pink {
     case .pink: .pink
     case .green: .green

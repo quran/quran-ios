@@ -70,7 +70,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
         )
 
         let highlights = try await first(database.quranDataService.highlightsSequence())
-        XCTAssertEqual(highlights.map { "\($0.sura):\($0.ayah) \($0.color.name)" }.sorted(), ["2:1 BLUE", "2:3 BLUE", "3:1 YELLOW"])
+        XCTAssertEqual(highlights.map { "\($0.sura):\($0.ayah) \($0.color)" }.sorted(), ["2:1 blue", "2:3 blue", "3:1 yellow"])
     }
 
     func test_repeatedImport_doesNotRecreateDeletedNote() async throws {
@@ -180,7 +180,7 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
         LegacyDataImportCoordinator(reader: CoreDataLegacyDataReader(stack: stack), quranDataService: database.quranDataService)
     }
 
-    private func storedNotes() async throws -> [MobileSync.Note] {
+    private func storedNotes() async throws -> [MobileSyncNote] {
         try await first(database.quranDataService.notesSequence())
     }
 

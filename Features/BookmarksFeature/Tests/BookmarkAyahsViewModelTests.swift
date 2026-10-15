@@ -196,7 +196,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         )
     }
 
-    private func storedCollections() async throws -> [CollectionWithAyahBookmarks] {
+    private func storedCollections() async throws -> [MobileSyncCollectionWithBookmarks] {
         let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
         return try await iterator.next() ?? []
     }
@@ -218,7 +218,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
     }
 
     private func bookmarkedAyahs(
-        in collections: [CollectionWithAyahBookmarks],
+        in collections: [MobileSyncCollectionWithBookmarks],
         named name: String
     ) -> Set<String> {
         let collection = collections.first {

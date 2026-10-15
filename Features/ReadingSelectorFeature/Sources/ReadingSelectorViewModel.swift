@@ -62,6 +62,10 @@ class ReadingSelectorViewModel: ObservableObject {
         preferences.reading = reading
     }
 
+    func retry() async {
+        await resources.retry()
+    }
+
     // MARK: Private
 
     private let preferences = ReadingPreferences.shared

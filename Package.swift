@@ -765,8 +765,7 @@ private func featuresTargets() -> [[Target]] {
 
         target(type, name: "QuranPagesFeature", hasTests: false, dependencies: [
             "NoorUI",
-            "WeakSet",
-            "QuranTextKit",
+            "QuranKit",
             "Caching",
         ]),
 

@@ -5,7 +5,7 @@ import MobileSync
 import UIKit
 import VLogging
 
-public final actor AuthenticationClientMobileSyncImpl: AuthenticationClient {
+public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sendable {
     // MARK: Lifecycle
 
     public init(authService: MobileSyncAuthService) {

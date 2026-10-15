@@ -649,6 +649,8 @@
 "setting.quran_account.signed_in" = "Kirilgan";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Chiqish";
+"setting.quran_account.sign_out.confirmation.title" = "Quran.comʼdan chiqasizmi?";
+"setting.quran_account.sign_out.confirmation.message" = "Xatcho‘plaringiz va eslatmalaringiz bu qurilmadan o‘chiriladi va qayta kirganingizda tiklanadi.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Xatcho‘plaringizni barcha qurilmalarda sinxronlang";
 

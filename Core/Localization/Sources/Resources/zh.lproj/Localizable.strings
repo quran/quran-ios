@@ -653,6 +653,8 @@
 "setting.quran_account.signed_in" = "已登录";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "退出登录";
+"setting.quran_account.sign_out.confirmation.title" = "要退出 Quran.com 账户吗？";
+"setting.quran_account.sign_out.confirmation.message" = "你的书签和笔记将从此设备上移除，重新登录后即可恢复。";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "在所有设备间同步书签";
 

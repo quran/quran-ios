@@ -559,6 +559,8 @@
 "setting.quran_account.signed_in" = "Đã đăng nhập";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Đăng xuất";
+"setting.quran_account.sign_out.confirmation.title" = "Đăng xuất khỏi Quran.com?";
+"setting.quran_account.sign_out.confirmation.message" = "Dấu trang và ghi chú của bạn sẽ bị xóa khỏi thiết bị này và được khôi phục khi bạn đăng nhập lại.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Đồng bộ dấu trang trên mọi thiết bị";
 

@@ -631,6 +631,8 @@
 "setting.quran_account.signed_in" = "Кірдіңіз";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Шығу";
+"setting.quran_account.sign_out.confirmation.title" = "Quran.com сайтынан шығасыз ба?";
+"setting.quran_account.sign_out.confirmation.message" = "Бетбелгілеріңіз бен жазбаларыңыз осы құрылғыдан жойылады және қайта кіргенде қалпына келтіріледі.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Бетбелгілерді барлық құрылғыларда синхрондау";
 

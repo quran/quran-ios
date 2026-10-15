@@ -35,7 +35,11 @@ struct SettingsRootView: View {
             openQuranComProfile: { viewModel.openQuranComProfile() },
             refreshAuthenticationState: { await viewModel.refreshAuthenticationState() },
             loginAction: { await viewModel.loginToQuranCom() },
-            logoutAction: { await viewModel.logoutFromQuranCom() }
+            signOutAction: { viewModel.requestSignOut() }
+        )
+        .signOutConfirmation(
+            isPresented: $viewModel.isSignOutConfirmationPresented,
+            signOut: { await viewModel.logoutFromQuranCom() }
         )
         #else
         SettingsRootViewUI(
@@ -89,7 +93,7 @@ private struct SettingsRootViewUI: View {
     let openQuranComProfile: AsyncAction
     let refreshAuthenticationState: AsyncAction
     let loginAction: AsyncAction
-    let logoutAction: AsyncAction
+    let signOutAction: Action
     #endif
 
     var body: some View {
@@ -101,7 +105,7 @@ private struct SettingsRootViewUI: View {
                     email: loggedInUserEmail,
                     manageAccountAction: { await openQuranComProfile() },
                     signInAction: { await loginAction() },
-                    signOutAction: { await logoutAction() }
+                    signOutAction: { signOutAction() }
                 )
                 .listRowInsets(.zero)
                 .listRowBackground(Color.clear)
@@ -232,7 +236,7 @@ private struct SettingsRootViewUI: View {
                 openQuranComProfile: {},
                 refreshAuthenticationState: {},
                 loginAction: {},
-                logoutAction: {}
+                signOutAction: {}
             )
             #else
             SettingsRootViewUI(

@@ -647,6 +647,8 @@
 "setting.quran_account.signed_in" = "Выполнен вход";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Выйти";
+"setting.quran_account.sign_out.confirmation.title" = "Выйти из Quran.com?";
+"setting.quran_account.sign_out.confirmation.message" = "Ваши закладки и заметки будут удалены с этого устройства и восстановятся при следующем входе.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Синхронизировать закладки на всех устройствах";
 

@@ -72,7 +72,7 @@ private struct TextPartView: View {
     var body: some View {
         switch part {
         case .plain(let text):
-            Text(text)
+            PlainTextPartView(text: text)
                 .font(size.plainFont)
         case .highlighting(let text, let ranges, let lineLimit):
             highlighting(text: text, ranges: ranges)

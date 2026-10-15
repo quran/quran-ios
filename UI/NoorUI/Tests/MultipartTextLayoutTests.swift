@@ -95,6 +95,78 @@ final class MultipartTextLayoutTests: XCTestCase {
             .dynamicTypeSize(.large)
     }
 
+    func test_view_rightToLeftText_keepsTrailingSpaceBeforeNextPart() async {
+        guard #available(iOS 16.0, *) else { return }
+
+        let widths = await MainActor.run { spacedAndUnspacedReferenceWidths(allowsWrapping: true) }
+
+        XCTAssertEqual(widths.spaced - widths.unspaced, widths.space, accuracy: 1)
+    }
+
+    func test_view_rightToLeftText_whenWrappingIsDisabled_keepsTrailingSpaceBeforeNextPart() async {
+        let widths = await MainActor.run { spacedAndUnspacedReferenceWidths(allowsWrapping: false) }
+
+        XCTAssertEqual(widths.spaced - widths.unspaced, widths.space, accuracy: 1)
+    }
+
+    func test_view_rightToLeftSentenceEndingInSpace_wrapsWithinWidth() async {
+        guard #available(iOS 16.0, *) else { return }
+
+        let width: CGFloat = 120
+        let sizes = await MainActor.run {
+            let ayah = Quran.hafsMadani1405.suras[1].verses[254]
+            let reference: MultipartText = "\(ayah: ayah, nameStyle: .text)"
+            let sentence = String(repeating: "هذه جملة طويلة ", count: 6)
+            let text = MultipartText.format("\(sentence)%@", arguments: [reference])
+            return (
+                wrapped: fittingArabicSize(text.view(ofSize: .footnote), width: width),
+                line: fittingArabicSize(Text("عند").font(.footnote), width: width)
+            )
+        }
+
+        XCTAssertLessThanOrEqual(sizes.wrapped.width, width)
+        XCTAssertGreaterThan(sizes.wrapped.height, sizes.line.height * 3)
+    }
+
+    /// Mirrors `"bookmarks.reading.location" = "عند %@"`, so the plain part ends with a space.
+    @MainActor
+    private func spacedAndUnspacedReferenceWidths(allowsWrapping: Bool) -> (spaced: CGFloat, unspaced: CGFloat, space: CGFloat) {
+        let ayah = Quran.hafsMadani1405.suras[1].verses[254]
+        let reference: MultipartText = "\(ayah: ayah, nameStyle: .text)"
+        let spaced = MultipartText.format("عند %@", arguments: [reference])
+        let unspaced = MultipartText.format("عند%@", arguments: [reference])
+        return (
+            fittingArabicWidth(spaced.view(ofSize: .footnote, allowsWrapping: allowsWrapping)),
+            fittingArabicWidth(unspaced.view(ofSize: .footnote, allowsWrapping: allowsWrapping)),
+            fittingArabicWidth(Text(" ").font(.footnote))
+        )
+    }
+
+    @MainActor
+    private func fittingArabicWidth(_ content: some View) -> CGFloat {
+        let controller = UIHostingController(
+            rootView: content
+                .fixedSize()
+                .environment(\.locale, Locale(identifier: "ar"))
+                .environment(\.layoutDirection, .rightToLeft)
+                .dynamicTypeSize(.large)
+        )
+        return controller.sizeThatFits(
+            in: CGSize(width: CGFloat.greatestFiniteMagnitude, height: .greatestFiniteMagnitude)
+        ).width
+    }
+
+    @MainActor
+    private func fittingArabicSize(_ content: some View, width: CGFloat) -> CGSize {
+        let controller = UIHostingController(
+            rootView: content
+                .environment(\.locale, Locale(identifier: "ar"))
+                .environment(\.layoutDirection, .rightToLeft)
+                .dynamicTypeSize(.large)
+        )
+        return controller.sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude))
+    }
+
     @MainActor
     private func fittingHeight(_ content: some View, width: CGFloat = 120) -> CGFloat {
         let controller = UIHostingController(rootView: content.frame(width: width, alignment: .leading))

@@ -74,6 +74,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Code behind `QURAN_SYNC` must compile both with and without the flag.
 - Any sync change should be checked with explicit sync and no-sync Make targets.
 - Do not rely on ambient shell/launchctl `QURAN_SYNC`.
+- Use only MobileSync's Swift API. Never `import Shared` or name its Kotlin types; add missing wrappers to `mobile-sync-spm`. `make format-lint` enforces this.
 
 ## Style
 

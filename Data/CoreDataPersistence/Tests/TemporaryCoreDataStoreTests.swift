@@ -12,6 +12,15 @@ import CoreDataPersistenceTestSupport
 import XCTest
 
 final class TemporaryCoreDataStoreTests: XCTestCase {
+    override func setUpWithError() throws {
+        directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    }
+
+    override func tearDownWithError() throws {
+        try FileManager.default.removeItem(at: directory)
+    }
+
     func test_storesDoNotShareData() throws {
         let store1 = TemporaryCoreDataStore()
         let store2 = TemporaryCoreDataStore()
@@ -53,7 +62,63 @@ final class TemporaryCoreDataStoreTests: XCTestCase {
         XCTAssertEqual(try notes(in: keptStack), ["Kept"])
     }
 
+    func test_removeStores_removesStoresLeftUntouched() throws {
+        let leftover = "TemporaryCoreDataStore-\(UUID().uuidString)"
+        try createFiles(["\(leftover).sqlite", "\(leftover).sqlite-wal", "\(leftover)/token.data"], modifiedOn: twoHoursAgo)
+
+        TemporaryCoreDataStore.removeStores(in: directory, modifiedBefore: oneHourAgo)
+
+        XCTAssertEqual(try contents(), [])
+    }
+
+    func test_removeStores_keepsStoresWithARecentFile() throws {
+        let inUse = "TemporaryCoreDataStore-\(UUID().uuidString)"
+        let inUseHistory = "TemporaryCoreDataStore-\(UUID().uuidString)"
+        try createFiles(["\(inUse).sqlite", "\(inUseHistory).sqlite", "\(inUseHistory)/token.data"], modifiedOn: twoHoursAgo)
+        try createFiles(["\(inUse).sqlite-wal"], modifiedOn: Date())
+        try setModificationDate(Date(), of: "\(inUseHistory)/token.data")
+
+        TemporaryCoreDataStore.removeStores(in: directory, modifiedBefore: oneHourAgo)
+
+        XCTAssertEqual(try contents(), [inUse + ".sqlite", inUse + ".sqlite-wal", inUseHistory, inUseHistory + ".sqlite"].sorted())
+    }
+
+    func test_removeStores_keepsOtherFiles() throws {
+        try createFiles(["Quran.sqlite", "TemporaryCoreDataStore.txt"], modifiedOn: twoHoursAgo)
+
+        TemporaryCoreDataStore.removeStores(in: directory, modifiedBefore: oneHourAgo)
+
+        XCTAssertEqual(try contents(), ["Quran.sqlite", "TemporaryCoreDataStore.txt"])
+    }
+
     // MARK: Private
+
+    private var directory: URL!
+    private let oneHourAgo = Date().addingTimeInterval(-60 * 60)
+    private let twoHoursAgo = Date().addingTimeInterval(-2 * 60 * 60)
+
+    private func createFiles(_ paths: [String], modifiedOn date: Date) throws {
+        for path in paths {
+            let url = directory.appendingPathComponent(path)
+            try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try Data().write(to: url)
+        }
+        // Sets files first, since adding a file changes its directory's date.
+        for path in paths {
+            try setModificationDate(date, of: path)
+        }
+        for path in paths where path.contains("/") {
+            try setModificationDate(date, of: (path as NSString).deletingLastPathComponent)
+        }
+    }
+
+    private func setModificationDate(_ date: Date, of path: String) throws {
+        try FileManager.default.setAttributes([.modificationDate: date], ofItemAtPath: directory.appendingPathComponent(path).path)
+    }
+
+    private func contents() throws -> [String] {
+        try FileManager.default.contentsOfDirectory(atPath: directory.path).sorted()
+    }
 
     private func notes(in stack: CoreDataStack) throws -> [String?] {
         let context = stack.newBackgroundContext()

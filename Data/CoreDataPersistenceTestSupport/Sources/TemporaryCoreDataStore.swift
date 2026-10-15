@@ -15,10 +15,14 @@ import Utilities
 ///
 /// Never share a store name between tests: Core Data keeps every store in one directory, which test
 /// bundles and concurrent runs on the same simulator share.
+///
+/// Removal never runs if the test process exits first, so the first store in each process also
+/// removes stores that earlier processes left behind.
 public final class TemporaryCoreDataStore {
     // MARK: Lifecycle
 
     public init() {
+        _ = Self.removedLeftoverStores
         storesObserver = NotificationCenter.default.addObserver(
             forName: .NSPersistentStoreCoordinatorStoresDidChange,
             object: nil,
@@ -48,7 +52,7 @@ public final class TemporaryCoreDataStore {
     /// The first Quran model version, before page mushaf IDs existed.
     public static let firstModelURL = CoreDataModelResources.quranModel.appendingPathComponent("Quran.mom")
 
-    public let name = "TemporaryCoreDataStore-\(UUID().uuidString)"
+    public let name = "\(TemporaryCoreDataStore.namePrefix)\(UUID().uuidString)"
 
     public var storeURL: URL {
         directory.appendingPathComponent("\(name).sqlite")
@@ -72,18 +76,55 @@ public final class TemporaryCoreDataStore {
         }
     }
 
+    /// Removes every temporary store in `directory` whose files were all last modified before `date`.
+    ///
+    /// A store that a running process still uses keeps changing, so a store untouched since `date`
+    /// was left behind by a process that exited before its cleanup ran.
+    public static func removeStores(in directory: URL, modifiedBefore date: Date) {
+        let fileManager = FileManager.default
+        let urls = (try? fileManager.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)) ?? []
+        // Groups each store's SQLite files with the history directory named after it.
+        let stores = Dictionary(grouping: urls.filter { $0.lastPathComponent.hasPrefix(namePrefix) }) { url in
+            url.lastPathComponent.prefix { $0 != "." }
+        }
+        for storeURLs in stores.values where storeURLs.allSatisfy({ lastModified($0) < date }) {
+            for url in storeURLs {
+                try? fileManager.removeItem(at: url)
+            }
+        }
+    }
+
     // MARK: Private
 
     private struct WeakCoordinator {
         weak var coordinator: NSPersistentStoreCoordinator?
     }
 
-    private let directory = NSPersistentContainer.defaultDirectoryURL()
+    private static let namePrefix = "TemporaryCoreDataStore-"
+    private static let defaultDirectory = NSPersistentContainer.defaultDirectoryURL()
+    private static let leftoverStoreAge: TimeInterval = 60 * 60
+
+    /// Removes leftovers once per process. An hour leaves alone every store a concurrent run still uses.
+    private static let removedLeftoverStores: Void = removeStores(
+        in: defaultDirectory,
+        modifiedBefore: Date().addingTimeInterval(-leftoverStoreAge)
+    )
+
+    private let directory = TemporaryCoreDataStore.defaultDirectory
     private let coordinators = ManagedCriticalState<[WeakCoordinator]>([])
     private var storesObserver: NSObjectProtocol?
 
     private var storeFileURLs: [URL] {
         ["", "-shm", "-wal"].map { URL(fileURLWithPath: storeURL.path + $0) }
+    }
+
+    /// The latest modification date of `url` and, for a directory, of everything inside it.
+    private static func lastModified(_ url: URL) -> Date {
+        let key = URLResourceKey.contentModificationDateKey
+        let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: [key])
+        let urls = [url] + (enumerator?.compactMap { $0 as? URL } ?? [])
+        // A file removed meanwhile, or one whose date can't be read, counts as just modified.
+        return urls.map { (try? $0.resourceValues(forKeys: [key]).contentModificationDate) ?? .distantFuture }.max() ?? .distantFuture
     }
 
     /// Removes `urls` once every coordinator that opened the store is released, which closes its connections.

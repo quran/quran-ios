@@ -120,7 +120,7 @@ final class NoteEditorViewModel {
                 ayahRanges: ayahRanges,
                 ayahText: versesText,
                 reading: reading,
-                modifiedSince: modifiedSince,
+                editedSince: editedSince,
                 selectedColor: selectedColor,
                 note: body
             )
@@ -290,7 +290,7 @@ final class NoteEditorViewModel {
         #endif
     }
 
-    private var modifiedSince: String {
+    private var editedSince: String {
         #if QURAN_SYNC
         switch mode {
         case .create:

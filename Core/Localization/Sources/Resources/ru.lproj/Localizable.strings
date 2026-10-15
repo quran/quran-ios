@@ -598,7 +598,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "Удалить заметку";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "Создано %@";
+"notes.editor.edited" = "Изменено %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "Удалить заметку";
 // Metadata: Translated by ChatGPT; human review required.

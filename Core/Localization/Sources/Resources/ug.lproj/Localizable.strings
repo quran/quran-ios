@@ -601,7 +601,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "خاتىرىنى ئۆچۈرۈش";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "%@ قۇرۇلدى";
+"notes.editor.edited" = "%@ تەھرىرلەندى";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "خاتىرىنى ئۆچۈرۈش";
 // Metadata: Translated by ChatGPT; human review required.

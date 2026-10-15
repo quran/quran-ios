@@ -599,7 +599,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "Excluir nota";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "Criada em %@";
+"notes.editor.edited" = "Editada %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "Excluir nota";
 // Metadata: Translated by ChatGPT; human review required.

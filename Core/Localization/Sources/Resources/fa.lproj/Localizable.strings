@@ -600,7 +600,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "حذف یادداشت";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "ایجادشده در %@";
+"notes.editor.edited" = "ویرایش‌شده %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "حذف یادداشت";
 // Metadata: Translated by ChatGPT; human review required.

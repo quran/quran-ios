@@ -598,7 +598,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "Notiz löschen";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "Erstellt am %@";
+"notes.editor.edited" = "Bearbeitet %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "Notiz löschen";
 // Metadata: Translated by ChatGPT; human review required.

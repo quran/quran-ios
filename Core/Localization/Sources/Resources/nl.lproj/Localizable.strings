@@ -513,7 +513,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "Notitie verwijderen";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "Aangemaakt op %@";
+"notes.editor.edited" = "Bewerkt %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "Notitie verwijderen";
 // Metadata: Translated by ChatGPT; human review required.

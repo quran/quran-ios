@@ -581,7 +581,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "notes.delete-note.alert.title" = "Padam nota";
 // Metadata: Translated by ChatGPT; human review required.
-"notes.editor.created" = "Dicipta %@";
+"notes.editor.edited" = "Disunting %@";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.editor.delete" = "Padam nota";
 // Metadata: Translated by ChatGPT; human review required.

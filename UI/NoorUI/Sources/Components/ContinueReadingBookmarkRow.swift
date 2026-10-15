@@ -37,9 +37,9 @@ public struct ContinueReadingBookmarkRow: View {
     private var title: MultipartText {
         switch bookmark.placement {
         case .ayah(let ayah):
-            "\(ayah: ayah, nameStyle: .compact)"
+            "\(ayah: ayah)"
         case .page(let page):
-            "\(suras: page.suras, nameStyle: .compact)"
+            "\(suras: page.suras)"
         }
     }
 

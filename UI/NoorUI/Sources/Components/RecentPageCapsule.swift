@@ -45,7 +45,7 @@ struct RecentPageCapsule: View {
     }
 
     private var suraNames: MultipartText {
-        "\(suras: page.suras, nameStyle: .compact)"
+        "\(suras: page.suras)"
     }
 }
 

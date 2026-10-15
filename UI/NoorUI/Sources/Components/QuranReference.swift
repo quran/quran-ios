@@ -135,9 +135,9 @@ enum QuranReference {
 
     fileprivate func showsArabicName(locale: Locale) -> Bool {
         switch nameStyle {
-        case .standard: true
+        case .standard: locale.isArabicLanguage
+        case .decorated: true
         case .text: false
-        case .compact: locale.isArabicLanguage
         }
     }
 
@@ -234,8 +234,7 @@ struct QuranReferenceView: View {
     }
 }
 
-/// Sura names separated by " · ". Text-only names render as a single `Text`, so a one-line
-/// title truncates the last name instead of overflowing its row.
+/// Sura names separated by " · " on one line.
 struct SuraNamesView: View {
     // MARK: Internal
 
@@ -360,8 +359,8 @@ private struct QuranReferencePreview: View {
     var body: some View {
         NoorList {
             references("standard", style: .standard)
+            references("decorated", style: .decorated)
             references("text", style: .text)
-            references("compact", style: .compact)
         }
     }
 

@@ -160,7 +160,7 @@ private struct AnnotatedAyahImagePreview: View {
         } onScaleChange: { _ in
         } onGlobalFrameChange: { _ in
         } header: {
-            QuranPageHeader(quarterName: "Juz 30", suraNames: "Al-Ikhlas")
+            QuranPageHeader(quarterName: "Juz 30", suras: Quran.hafsMadani1405.pages[603].suras)
         } footer: {
             QuranPageFooter(page: "604")
         }

@@ -13,7 +13,7 @@ import SwiftUI
 
 extension TranslationPageHeader: View {
     var body: some View {
-        QuranPageHeader(quarterName: page.localizedQuarterName, suraNames: page.suraNames())
+        QuranPageHeader(quarterName: page.localizedQuarterName, suras: page.suras)
     }
 }
 

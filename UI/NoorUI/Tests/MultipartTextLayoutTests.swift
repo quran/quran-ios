@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2026-07-20.
 //
 
+import NoorFont
 import QuranKit
 import SwiftUI
 import UIKit
@@ -56,9 +57,46 @@ final class MultipartTextLayoutTests: XCTestCase {
         XCTAssertLessThan(heights.1, heights.0)
     }
 
+    func test_view_wrapsSuraNamesOnlyBetweenSuras() async {
+        guard #available(iOS 16.0, *) else { return }
+
+        let widths: [CGFloat] = [60, 130, 260]
+        let heights = await MainActor.run {
+            if UIFont(name: "icomoon", size: 20) == nil {
+                FontName.registerFonts()
+            }
+            let suras = Array(Quran.hafsMadani1405.suras[16 ... 18])
+            return [SuraNameStyle.standard, .decorated].flatMap { style in
+                let wrapping: MultipartText = "\(suras: suras, nameStyle: style)"
+                let separateReferences: MultipartText = """
+                \(sura: suras[0], nameStyle: style) · \(sura: suras[1], nameStyle: style) · \(sura: suras[2], nameStyle: style)
+                """
+                return widths.map { width in
+                    (
+                        "\(style) width \(width)",
+                        fittingHeight(pinned(wrapping.view(ofSize: .body)), width: width),
+                        fittingHeight(pinned(separateReferences.view(ofSize: .body)), width: width)
+                    )
+                }
+            }
+        }
+
+        for (label, wrapping, separate) in heights {
+            XCTAssertEqual(wrapping, separate, accuracy: 1, label)
+        }
+    }
+
+    private let english = Locale(identifier: "en-CA")
+
+    /// Fixes the locale and text size, so the widths that need an extra row don't move with simulator settings.
+    private func pinned(_ content: some View) -> some View {
+        content
+            .environment(\.locale, english)
+            .dynamicTypeSize(.large)
+    }
+
     @MainActor
-    private func fittingHeight(_ content: some View) -> CGFloat {
-        let width: CGFloat = 120
+    private func fittingHeight(_ content: some View, width: CGFloat = 120) -> CGFloat {
         let controller = UIHostingController(rootView: content.frame(width: width, alignment: .leading))
         return controller.sizeThatFits(
             in: CGSize(width: width, height: .greatestFiniteMagnitude)

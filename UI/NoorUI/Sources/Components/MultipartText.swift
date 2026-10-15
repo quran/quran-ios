@@ -175,6 +175,18 @@ enum TextPart {
         }
     }
 
+    /// Splits `.suras` into one fixed-size reference per sura with separators between them, so a
+    /// wrapping layout breaks lines only between suras, never inside a name.
+    var wrappingParts: [TextPart] {
+        guard case .suras(let suras, let nameStyle) = self else {
+            return [self]
+        }
+        return suras.enumerated().flatMap { index, sura -> [TextPart] in
+            let reference = TextPart.sura(sura, emphasizesSura: false, nameStyle: nameStyle)
+            return index == 0 ? [reference] : [.plain(text: SuraNamesView.separator), reference]
+        }
+    }
+
     var accessibilityText: String {
         switch self {
         case .plain(let text), .highlighting(let text, _, _):
@@ -209,19 +221,10 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             parts.append(.sura(sura, emphasizesSura: emphasizingSura, nameStyle: nameStyle))
         }
 
-        /// Appends the sura names separated by " · ". Standard names wrap between suras;
-        /// other styles render as one part, so a one-line title truncates its last name.
+        /// Appends the sura names separated by " · ". Wrapped lines break only between suras; a one-line
+        /// view truncates the last name when no Arabic name shows.
         public mutating func appendInterpolation(suras: [Sura], nameStyle: SuraNameStyle = .standard) {
-            guard nameStyle == .standard else {
-                parts.append(.suras(suras, nameStyle: nameStyle))
-                return
-            }
-            for (index, sura) in suras.enumerated() {
-                if index > 0 {
-                    parts.append(.plain(text: SuraNamesView.separator))
-                }
-                parts.append(.sura(sura, emphasizesSura: false, nameStyle: nameStyle))
-            }
+            parts.append(.suras(suras, nameStyle: nameStyle))
         }
 
         public mutating func appendInterpolation(
@@ -403,9 +406,10 @@ private struct MultiPartTextView: View {
     let allowsWrapping: Bool
 
     var body: some View {
+        let parts = allowsWrapping ? text.parts.flatMap(\.wrappingParts) : text.parts
         wrap {
-            ForEach(0 ..< text.parts.count, id: \.self) { i in
-                TextPartView(part: text.parts[i], size: size)
+            ForEach(0 ..< parts.count, id: \.self) { i in
+                TextPartView(part: parts[i], size: size)
             }
         }
         .accessibilityElement(children: .ignore)

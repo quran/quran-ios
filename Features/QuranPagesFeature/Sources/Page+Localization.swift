@@ -6,14 +6,7 @@
 //
 
 import Caching
-import NoorUI
 import QuranKit
 import QuranTextKit
-
-extension Page {
-    public func suraNames() -> MultipartText {
-        "\(suras: suras)"
-    }
-}
 
 extension Page: @retroactive Pageable { }

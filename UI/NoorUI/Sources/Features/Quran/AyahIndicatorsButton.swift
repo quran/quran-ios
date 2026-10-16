@@ -11,11 +11,9 @@ import SwiftUI
 import UIKit
 import UIx
 
-/// The indicators for one ayah, drawn over its marker. Tapping opens the ayah menu.
 struct AyahIndicatorsButton: View {
     let ayah: AyahNumber
     let indicators: Set<AyahIndicator>
-    /// The ayah marker's height; the indicator covers the marker.
     let size: CGFloat
     let action: (CGPoint) -> Void
 
@@ -34,14 +32,11 @@ struct AyahIndicatorsButton: View {
 
     @State private var globalFrame: CGRect = .zero
 
-    /// Lists every indicator, including ones the marker doesn't draw.
     var accessibilityLabel: String {
         ([ayah.localizedName] + indicators.ordered.map(\.accessibilityLabel)).joined(separator: l("list.separator"))
     }
 }
 
-/// Reading bookmarks are ribbons that cover the marker and stack downward, each peeking below the one in front.
-/// A collection is a folder and a note is a disc with the note icon, both in the system gray.
 private struct AyahIndicatorsLabel: View {
     // MARK: Internal
 

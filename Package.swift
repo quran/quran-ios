@@ -377,6 +377,7 @@ private func dataTargets() -> [[Target]] {
         target(type, name: "BatchDownloaderFake", hasTests: false, dependencies: [
             "BatchDownloader",
             "NetworkSupportFake",
+            "SQLitePersistence",
         ]),
 
         // MARK: - Quran.com OAuth

@@ -19,7 +19,6 @@ final class ReadingResourcesRetentionTests: XCTestCase {
         })
         fileManager.files = downloadedFiles
         let context = BatchDownloaderFake.makeContext()
-        defer { context.tearDown() }
         let (downloader, session) = await context.makeDownloader(fileManager: fileManager)
         let loadingCompleted = AsyncChannelEventObserver()
         let service = ReadingResourcesService(

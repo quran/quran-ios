@@ -25,7 +25,6 @@ final class DownloadManagerCancellationTests: XCTestCase {
         downloader = nil
         request1 = nil
         request2 = nil
-        testContext.tearDown()
         testContext = nil
     }
 

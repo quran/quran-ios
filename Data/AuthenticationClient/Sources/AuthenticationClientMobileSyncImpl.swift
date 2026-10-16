@@ -1,6 +1,7 @@
 #if QURAN_SYNC
 
 import Foundation
+import Logging
 import MobileSync
 import UIKit
 import VLogging
@@ -26,7 +27,7 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
         do {
             try await authService.signInWithReauthentication()
         } catch {
-            logger.error("Failed to login via mobile sync: \(error)")
+            Self.logLoginFailure(error, to: logger)
             throw AuthenticationClientError(error)
         }
     }
@@ -70,6 +71,18 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
             throw .notAuthenticated(underlying: nil)
         }
         return headers
+    }
+
+    // MARK: Internal
+
+    /// A sign-in the user cancelled at the system prompt is not a fault. Hosts forward warnings and errors to crash
+    /// reporting, so it logs at info.
+    static func logLoginFailure(_ error: MobileSyncAuthenticationError, to logger: Logger) {
+        if case .cancelled = error {
+            logger.info("Login via mobile sync cancelled")
+        } else {
+            logger.error("Failed to login via mobile sync: \(error)")
+        }
     }
 
     // MARK: Private

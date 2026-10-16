@@ -385,8 +385,10 @@ private func dataTargets() -> [[Target]] {
         target(type, name: "AuthenticationClient", dependencies: [
             "Preferences",
             "VLogging",
+            .product(name: "Logging", package: "swift-log"),
         ] + mobileSyncTargetDependencies, testDependencies: [
             "AuthenticationClientFake",
+            .product(name: "Logging", package: "swift-log"),
         ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "AuthenticationClientFake", hasTests: false, dependencies: [

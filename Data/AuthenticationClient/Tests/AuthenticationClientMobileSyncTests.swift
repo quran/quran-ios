@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import Logging
 import MobileSync
 import MobileSyncTestSupport
 import XCTest
@@ -34,6 +35,51 @@ final class AuthenticationClientMobileSyncTests: XCTestCase {
         let notes = database.quranDataService.notesSequence().makeAsyncIterator()
         let storedNotes = try await notes.next()
         XCTAssertTrue(storedNotes?.isEmpty == true)
+    }
+
+    func test_logLoginFailure_logsCancellationAtInfo() {
+        let handler = LogHandlerSpy()
+
+        AuthenticationClientMobileSyncImpl.logLoginFailure(.cancelled, to: Logger(label: "test") { _ in handler })
+
+        XCTAssertEqual(handler.entries, [.init(level: .info, message: "Login via mobile sync cancelled")])
+    }
+
+    func test_logLoginFailure_logsOtherFailuresAtError() {
+        let handler = LogHandlerSpy()
+        let error = MobileSyncAuthenticationError.authenticationFailed(underlying: URLError(.badServerResponse))
+
+        AuthenticationClientMobileSyncImpl.logLoginFailure(error, to: Logger(label: "test") { _ in handler })
+
+        XCTAssertEqual(handler.entries, [.init(level: .error, message: "Failed to login via mobile sync: \(error)")])
+    }
+}
+
+private final class LogHandlerSpy: LogHandler {
+    struct Entry: Equatable {
+        let level: Logger.Level
+        let message: String
+    }
+
+    var entries: [Entry] = []
+    var metadata: Logger.Metadata = [:]
+    var logLevel: Logger.Level = .trace
+
+    subscript(metadataKey key: String) -> Logger.Metadata.Value? {
+        get { metadata[key] }
+        set { metadata[key] = newValue }
+    }
+
+    func log(
+        level: Logger.Level,
+        message: Logger.Message,
+        metadata: Logger.Metadata?,
+        source: String,
+        file: String,
+        function: String,
+        line: UInt
+    ) {
+        entries.append(Entry(level: level, message: message.description))
     }
 }
 #endif

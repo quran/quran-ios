@@ -25,7 +25,7 @@ struct ReadingSelector: View {
             imageView: imageView,
             selectItem: { viewModel.showReading($0) },
             start: { await viewModel.start() },
-            retry: { }
+            retry: { await viewModel.retry() }
         )
         .populateThemeStyle()
     }

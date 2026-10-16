@@ -10,12 +10,12 @@ import XCTest
 
 @MainActor
 final class ContentOverlayTests: XCTestCase {
-    func test_imagePage_ignoresUnrelatedAnnotationsAndReceivesVisibilityChanges() {
+    func test_imagePage_ignoresUnrelatedIndicatorsAndReceivesVisibilityChanges() {
         let reading = Reading.hafs_1405
         let page = reading.quran.pages[0]
         let other = reading.quran.pages[1].firstVerse
         let service = VerseOverlayService()
-        service.overlays.annotationsHidden = true
+        service.overlays.indicatorsHidden = true
         let model = ContentImageViewModel(
             reading: reading,
             page: page,
@@ -26,32 +26,32 @@ final class ContentOverlayTests: XCTestCase {
             ),
             overlayService: service
         )
-        XCTAssertTrue(model.annotationsHidden)
+        XCTAssertTrue(model.indicatorsHidden)
         var updates = 0
         let subscription = model.objectWillChange.sink { updates += 1 }
         defer { subscription.cancel() }
 
         service.overlays.notedVerses = [other]
         XCTAssertEqual(updates, 0)
-        XCTAssertTrue(model.ayahAnnotations.isEmpty)
+        XCTAssertTrue(model.ayahIndicators.isEmpty)
 
         service.overlays.notedVerses.insert(page.firstVerse)
         XCTAssertEqual(updates, 1)
-        XCTAssertEqual(model.ayahAnnotations, [page.firstVerse: [.note]])
+        XCTAssertEqual(model.ayahIndicators, [page.firstVerse: [.note]])
 
-        service.overlays.annotationsHidden = false
-        XCTAssertFalse(model.annotationsHidden)
-        service.overlays.annotationsHidden = true
-        XCTAssertTrue(model.annotationsHidden)
-        XCTAssertEqual(model.ayahAnnotations, [page.firstVerse: [.note]])
+        service.overlays.indicatorsHidden = false
+        XCTAssertFalse(model.indicatorsHidden)
+        service.overlays.indicatorsHidden = true
+        XCTAssertTrue(model.indicatorsHidden)
+        XCTAssertEqual(model.ayahIndicators, [page.firstVerse: [.note]])
     }
 
-    func test_linePage_ignoresUnrelatedAnnotationsAndReceivesVisibilityChanges() throws {
+    func test_linePage_ignoresUnrelatedIndicatorsAndReceivesVisibilityChanges() throws {
         let reading = Reading.hafs_1441
         let page = reading.quran.pages[0]
         let other = reading.quran.pages[1].firstVerse
         let service = VerseOverlayService()
-        service.overlays.annotationsHidden = true
+        service.overlays.indicatorsHidden = true
         let model = ContentLineViewModel(
             reading: reading,
             page: page,
@@ -63,24 +63,24 @@ final class ContentOverlayTests: XCTestCase {
             ),
             overlayService: service
         )
-        XCTAssertTrue(model.annotationsHidden)
+        XCTAssertTrue(model.indicatorsHidden)
         var updates = 0
         let subscription = model.objectWillChange.sink { updates += 1 }
         defer { subscription.cancel() }
 
         service.overlays.notedVerses = [other]
         XCTAssertEqual(updates, 0)
-        XCTAssertTrue(model.ayahAnnotations.isEmpty)
+        XCTAssertTrue(model.ayahIndicators.isEmpty)
 
         service.overlays.notedVerses.insert(page.firstVerse)
         XCTAssertEqual(updates, 1)
-        XCTAssertEqual(model.ayahAnnotations, [page.firstVerse: [.note]])
+        XCTAssertEqual(model.ayahIndicators, [page.firstVerse: [.note]])
 
-        service.overlays.annotationsHidden = false
-        XCTAssertFalse(model.annotationsHidden)
-        service.overlays.annotationsHidden = true
-        XCTAssertTrue(model.annotationsHidden)
-        XCTAssertEqual(model.ayahAnnotations, [page.firstVerse: [.note]])
+        service.overlays.indicatorsHidden = false
+        XCTAssertFalse(model.indicatorsHidden)
+        service.overlays.indicatorsHidden = true
+        XCTAssertTrue(model.indicatorsHidden)
+        XCTAssertEqual(model.ayahIndicators, [page.firstVerse: [.note]])
     }
 }
 #endif

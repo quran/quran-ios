@@ -79,7 +79,7 @@ struct TranslationVerseNumber: Identifiable & Hashable {
     let verse: AyahNumber
 
     #if QURAN_SYNC
-    let annotations: Set<AyahAnnotation>
+    let indicators: Set<AyahIndicator>
     #endif
 
     var id: TranslationItemId { .verseNumber(verse) }

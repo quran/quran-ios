@@ -62,12 +62,12 @@ public final class ContentTranslationViewModel: ObservableObject {
             .combineLatest($verses)
             .map { overlays, verses in
                 Dictionary(uniqueKeysWithValues: Set(verses).compactMap { verse in
-                    let annotations = overlays.annotationTypes(for: verse)
-                    return annotations.isEmpty ? nil : (verse, annotations)
+                    let indicators = overlays.indicators(for: verse)
+                    return indicators.isEmpty ? nil : (verse, indicators)
                 })
             }
             .removeDuplicates()
-            .sink { [weak self] in self?.annotationsByVerse = $0 }
+            .sink { [weak self] in self?.indicatorsByVerse = $0 }
             .store(in: &cancellables)
         #endif
 
@@ -137,7 +137,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     @Published var highlights: [AyahNumber: Color]
 
     #if QURAN_SYNC
-    @Published private(set) var annotationsByVerse: [AyahNumber: Set<AyahAnnotation>] = [:]
+    @Published private(set) var indicatorsByVerse: [AyahNumber: Set<AyahIndicator>] = [:]
     #endif
 
     @Published var footnote: TranslationFootnote?
@@ -353,7 +353,7 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     private func verseNumber(verse: AyahNumber) -> TranslationVerseNumber {
         #if QURAN_SYNC
-        TranslationVerseNumber(verse: verse, annotations: annotationsByVerse[verse, default: []])
+        TranslationVerseNumber(verse: verse, indicators: indicatorsByVerse[verse, default: []])
         #else
         TranslationVerseNumber(verse: verse)
         #endif

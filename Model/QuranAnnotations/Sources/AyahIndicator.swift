@@ -1,14 +1,14 @@
 #if QURAN_SYNC
 //
-//  AyahAnnotation.swift
+//  AyahIndicator.swift
 //
 
-public enum AyahAnnotation: Hashable, Sendable, Identifiable {
+public enum AyahIndicator: Hashable, Sendable, Identifiable {
     case readingBookmark(ReadingBookmarkSlot)
     case collection
     case note
 
-    public var id: AyahAnnotation {
+    public var id: AyahIndicator {
         return self
     }
 }

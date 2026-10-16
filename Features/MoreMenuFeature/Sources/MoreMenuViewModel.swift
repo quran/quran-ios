@@ -38,7 +38,7 @@ final class MoreMenuViewModel: ObservableObject {
         showLinePageSidelines = preferences.showLinePageSidelines
         showArabicText = preferences.showArabicInTranslation
         #if QURAN_SYNC
-        ayahIndicators = preferences.ayahIndicators
+        indicatorVisibility = preferences.ayahIndicatorVisibility
         #endif
         appearanceMode = themeService.appearanceMode
 
@@ -125,11 +125,11 @@ final class MoreMenuViewModel: ObservableObject {
             .store(in: &cancellables)
 
         #if QURAN_SYNC
-        $ayahIndicators
+        $indicatorVisibility
             .dropFirst()
             .sink { [weak self] newValue in
-                logger.info("More Menu: set ayah indicators \(newValue)")
-                self?.preferences.ayahIndicators = newValue
+                logger.info("More Menu: set ayah indicator visibility \(newValue)")
+                self?.preferences.ayahIndicatorVisibility = newValue
             }
             .store(in: &cancellables)
         #endif
@@ -170,7 +170,7 @@ final class MoreMenuViewModel: ObservableObject {
     @Published var showLinePageSidelines: Bool
     @Published var showArabicText: Bool
     #if QURAN_SYNC
-    @Published var ayahIndicators: AyahIndicators
+    @Published var indicatorVisibility: AyahIndicatorVisibility
     #endif
 
     @Published var appearanceMode: AppearanceMode

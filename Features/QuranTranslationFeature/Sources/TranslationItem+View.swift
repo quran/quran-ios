@@ -45,7 +45,7 @@ extension TranslationVerseNumber {
     func view(onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?) -> some View {
         QuranVerseNumber(
             verse: verse,
-            annotations: annotations,
+            indicators: indicators,
             onTapped: onAyahNumberTapped.map { onAyahNumberTapped in { point in onAyahNumberTapped(verse, point) } }
         )
     }
@@ -199,7 +199,7 @@ private struct ContentTranslationPreview: View {
                     nil
                 ))
                 #if QURAN_SYNC
-                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse, annotations: []), nil))
+                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse, indicators: []), nil))
                 #else
                 itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse), nil))
                 #endif

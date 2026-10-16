@@ -16,12 +16,12 @@ import XCTest
 
 final class QuranTextViewTests: XCTestCase {
     #if QURAN_SYNC
-    func test_ayahNumber_withoutAnnotations_keepsTheSameTouchTargetHeight() async {
+    func test_ayahNumber_withoutIndicators_keepsTheSameTouchTargetHeight() async {
         let sizes = await MainActor.run {
             let verse = Quran.hafsMadani1405.firstVerse
-            let plain = QuranVerseNumber(verse: verse, annotations: [], onTapped: { _ in })
-            let annotated = QuranVerseNumber(verse: verse, annotations: [.note], onTapped: { _ in })
-            return (fittingSize(plain), fittingSize(annotated))
+            let plain = QuranVerseNumber(verse: verse, indicators: [], onTapped: { _ in })
+            let indicated = QuranVerseNumber(verse: verse, indicators: [.note], onTapped: { _ in })
+            return (fittingSize(plain), fittingSize(indicated))
         }
         XCTAssertEqual(sizes.0.height, sizes.1.height, accuracy: 1)
     }

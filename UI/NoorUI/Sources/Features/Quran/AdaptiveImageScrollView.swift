@@ -39,18 +39,18 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     public init(
         decorations: ImageDecorations,
         renderingMode: QuranThemedImage.RenderingMode = .tinted,
-        ayahAnnotations: [AyahNumber: Set<AyahAnnotation>],
-        annotationsHidden: Bool,
+        ayahIndicators: [AyahNumber: Set<AyahIndicator>],
+        indicatorsHidden: Bool,
         image: () -> UIImage?,
-        onAnnotatedAyahTap: @escaping (AyahNumber, CGPoint) -> Void,
+        onAyahIndicatorTap: @escaping (AyahNumber, CGPoint) -> Void,
         onScaleChange: @escaping (WordFrameScale) -> Void,
         onGlobalFrameChange: @escaping (CGRect) -> Void,
         @ViewBuilder header: () -> Header,
         @ViewBuilder footer: () -> Footer
     ) {
-        self.ayahAnnotations = ayahAnnotations
-        self.annotationsHidden = annotationsHidden
-        self.onAnnotatedAyahTap = onAnnotatedAyahTap
+        self.ayahIndicators = ayahIndicators
+        self.indicatorsHidden = indicatorsHidden
+        self.onAyahIndicatorTap = onAyahIndicatorTap
         self.decorations = decorations
         self.image = image()
         self.renderingMode = renderingMode
@@ -89,9 +89,9 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     private let decorations: ImageDecorations
     @State private var imageViewSize: CGSize = .zero
     #if QURAN_SYNC
-    private let ayahAnnotations: [AyahNumber: Set<AyahAnnotation>]
-    private let annotationsHidden: Bool
-    private let onAnnotatedAyahTap: (AyahNumber, CGPoint) -> Void
+    private let ayahIndicators: [AyahNumber: Set<AyahIndicator>]
+    private let indicatorsHidden: Bool
+    private let onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void
     #endif
     private let onScaleChange: (WordFrameScale) -> Void
     private let onGlobalFrameChange: (CGRect) -> Void
@@ -128,11 +128,11 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
             .allowsHitTesting(false)
         #if QURAN_SYNC
             .overlay {
-                AyahAnnotationsView(
+                AyahIndicatorsView(
                     markers: layout.ayahMarkers,
-                    annotations: ayahAnnotations,
-                    annotationsHidden: annotationsHidden,
-                    onAnnotatedAyahTap: onAnnotatedAyahTap
+                    indicators: ayahIndicators,
+                    indicatorsHidden: indicatorsHidden,
+                    onAyahIndicatorTap: onAyahIndicatorTap
                 )
             }
         #endif
@@ -148,15 +148,15 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
 }
 
 #if QURAN_SYNC
-private struct AnnotatedAyahImagePreview: View {
+private struct IndicatedAyahImagePreview: View {
     var body: some View {
         AdaptiveImageScrollView(
             decorations: decorations,
-            ayahAnnotations: ayah.map { [$0: [.collection, .note]] } ?? [:],
-            annotationsHidden: false
+            ayahIndicators: ayah.map { [$0: [.collection, .note]] } ?? [:],
+            indicatorsHidden: false
         ) {
             UIImage(contentsOfFile: testResourceURL("images/page604.png").path)
-        } onAnnotatedAyahTap: { _, _ in tapCount += 1
+        } onAyahIndicatorTap: { _, _ in tapCount += 1
         } onScaleChange: { _ in
         } onGlobalFrameChange: { _ in
         } header: {
@@ -167,7 +167,7 @@ private struct AnnotatedAyahImagePreview: View {
         .font(.footnote)
         .populateReadableInsets()
         .overlay(alignment: .bottom) {
-            Text(tapCount == 0 ? "Tap the annotation icons" : "Ayah menu tapped \(tapCount) time\(tapCount == 1 ? "" : "s")")
+            Text(tapCount == 0 ? "Tap the indicator icons" : "Ayah menu tapped \(tapCount) time\(tapCount == 1 ? "" : "s")")
                 .font(.footnote.weight(.semibold))
                 .monospacedDigit()
                 .padding(.horizontal)
@@ -203,8 +203,8 @@ private struct AnnotatedAyahImagePreview: View {
     private let ayah = AyahNumber(quran: .hafsMadani1405, sura: 112, ayah: 1)
 }
 
-#Preview("Ayah annotation on Madani 1405") {
-    AnnotatedAyahImagePreview()
+#Preview("Ayah indicator on Madani 1405") {
+    IndicatedAyahImagePreview()
 }
 
 #endif

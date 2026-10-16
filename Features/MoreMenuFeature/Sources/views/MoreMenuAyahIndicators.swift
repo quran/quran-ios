@@ -9,14 +9,14 @@ import QuranText
 import SwiftUI
 
 struct MoreMenuAyahIndicators: View {
-    @Binding var indicators: AyahIndicators
+    @Binding var visibility: AyahIndicatorVisibility
 
     var body: some View {
         NoorMenuRow(
             title: l("menu.ayahIndicators"),
-            items: AyahIndicators.allCases,
-            selection: $indicators,
-            value: indicators.localizedName
+            items: AyahIndicatorVisibility.allCases,
+            selection: $visibility,
+            value: visibility.localizedName
         ) { item in
             Text(item.localizedName)
             if let detail = item.localizedDetail {
@@ -27,7 +27,7 @@ struct MoreMenuAyahIndicators: View {
     }
 }
 
-extension AyahIndicators {
+extension AyahIndicatorVisibility {
     var localizedName: String {
         switch self {
         case .all:
@@ -51,13 +51,13 @@ extension AyahIndicators {
 
 #Preview {
     struct Container: View {
-        @State var indicators = AyahIndicators.readingBookmark
+        @State var visibility = AyahIndicatorVisibility.readingBookmark
 
         var body: some View {
             VStack(spacing: 0) {
-                MoreMenuAyahIndicators(indicators: $indicators)
+                MoreMenuAyahIndicators(visibility: $visibility)
                 Divider()
-                MoreMenuAyahIndicators(indicators: .constant(.all))
+                MoreMenuAyahIndicators(visibility: .constant(.all))
             }
         }
     }

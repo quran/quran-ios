@@ -6,12 +6,12 @@ import XCTest
 @testable import NoorUI
 
 @MainActor
-final class AyahAnnotationsButtonTests: XCTestCase {
-    func test_accessibilityLabel_identifiesAyahAndAllAnnotationTypes() {
+final class AyahIndicatorsButtonTests: XCTestCase {
+    func test_accessibilityLabel_identifiesAyahAndAllIndicatorTypes() {
         let ayah = Quran.hafsMadani1405.suras[1].verses[254]
-        let button = AyahAnnotationsButton(
+        let button = AyahIndicatorsButton(
             ayah: ayah,
-            annotations: [.note, .readingBookmark(.teal), .collection],
+            indicators: [.note, .readingBookmark(.teal), .collection],
             height: 12,
             action: { _ in }
         )
@@ -20,9 +20,9 @@ final class AyahAnnotationsButtonTests: XCTestCase {
     }
 
     func test_smallBadge_hasAtLeast44PointLayout() {
-        let button = AyahAnnotationsButton(
+        let button = AyahIndicatorsButton(
             ayah: Quran.hafsMadani1405.suras[1].verses[4],
-            annotations: [.note],
+            indicators: [.note],
             height: 8,
             action: { _ in }
         )
@@ -35,22 +35,22 @@ final class AyahAnnotationsButtonTests: XCTestCase {
     }
 
     func test_readingPins_useSlotAccessibleNames() {
-        let teal = AyahAnnotation.readingBookmark(.teal)
-        let orange = AyahAnnotation.readingBookmark(.orange)
-        let annotations: Set<AyahAnnotation> = [orange, .note, teal]
+        let teal = AyahIndicator.readingBookmark(.teal)
+        let orange = AyahIndicator.readingBookmark(.orange)
+        let indicators: Set<AyahIndicator> = [orange, .note, teal]
 
-        XCTAssertEqual(annotations.ordered, [teal, orange, .note])
+        XCTAssertEqual(indicators.ordered, [teal, orange, .note])
         XCTAssertEqual(teal.accessibilityLabel, "Reading Bookmark: Teal")
     }
 
     func test_readingPins_haveStableOrderAndDistinctAccessibleNames() {
-        let teal = AyahAnnotation.readingBookmark(.teal)
-        let orange = AyahAnnotation.readingBookmark(.orange)
-        let red = AyahAnnotation.readingBookmark(.red)
-        let annotations: Set<AyahAnnotation> = [.note, red, teal, orange]
+        let teal = AyahIndicator.readingBookmark(.teal)
+        let orange = AyahIndicator.readingBookmark(.orange)
+        let red = AyahIndicator.readingBookmark(.red)
+        let indicators: Set<AyahIndicator> = [.note, red, teal, orange]
 
-        XCTAssertEqual(annotations.ordered, [teal, orange, red, .note])
-        XCTAssertEqual(Set(annotations.ordered.map(\.accessibilityLabel)).count, 4)
+        XCTAssertEqual(indicators.ordered, [teal, orange, red, .note])
+        XCTAssertEqual(Set(indicators.ordered.map(\.accessibilityLabel)).count, 4)
         XCTAssertTrue(orange.accessibilityLabel.contains(ReadingBookmarkSlot.orange.displayName))
     }
 }

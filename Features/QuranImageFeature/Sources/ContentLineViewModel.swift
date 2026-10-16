@@ -88,10 +88,10 @@ final class ContentLineViewModel: ObservableObject {
     }
 
     #if QURAN_SYNC
-    var annotationsHidden: Bool { overlays.annotationsHidden }
+    var indicatorsHidden: Bool { overlays.indicatorsHidden }
 
-    var ayahAnnotations: [AyahNumber: Set<AyahAnnotation>] {
-        overlays.annotationsByVerse
+    var ayahIndicators: [AyahNumber: Set<AyahIndicator>] {
+        overlays.indicatorsByVerse
     }
     #endif
 

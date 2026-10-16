@@ -1,6 +1,6 @@
 #if QURAN_SYNC
 //
-//  AyahAnnotationsButton.swift
+//  AyahIndicatorsButton.swift
 //
 
 import Localization
@@ -10,9 +10,9 @@ import QuranLocalization
 import SwiftUI
 import UIx
 
-struct AyahAnnotationsButton: View {
+struct AyahIndicatorsButton: View {
     let ayah: AyahNumber
-    let annotations: Set<AyahAnnotation>
+    let indicators: Set<AyahIndicator>
     let height: CGFloat
     let action: (CGPoint) -> Void
 
@@ -20,30 +20,30 @@ struct AyahAnnotationsButton: View {
         Button {
             action(CGPoint(x: globalFrame.midX, y: globalFrame.midY))
         } label: {
-            AyahAnnotationsLabel(annotations: annotations, height: height)
+            AyahIndicatorsLabel(indicators: indicators, height: height)
                 .minimumTouchTarget()
         }
-        .buttonStyle(AyahAnnotationsButtonStyle())
+        .buttonStyle(AyahIndicatorsButtonStyle())
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityIdentifier("ayah-annotations-\(ayah.sura.suraNumber)-\(ayah.ayah)")
+        .accessibilityIdentifier("ayah-indicators-\(ayah.sura.suraNumber)-\(ayah.ayah)")
         .onGlobalFrameChanged { globalFrame = $0 }
     }
 
     @State private var globalFrame: CGRect = .zero
 
     var accessibilityLabel: String {
-        ([ayah.localizedName] + annotations.ordered.map(\.accessibilityLabel)).joined(separator: l("list.separator"))
+        ([ayah.localizedName] + indicators.ordered.map(\.accessibilityLabel)).joined(separator: l("list.separator"))
     }
 }
 
-private struct AyahAnnotationsLabel: View {
-    let annotations: Set<AyahAnnotation>
+private struct AyahIndicatorsLabel: View {
+    let indicators: Set<AyahIndicator>
     let height: CGFloat
 
     var body: some View {
         HStack(spacing: height * 0.14) {
-            ForEach(annotations.ordered) { annotation in
-                AyahAnnotationIcon(annotation: annotation)
+            ForEach(indicators.ordered) { indicator in
+                AyahIndicatorIcon(indicator: indicator)
             }
         }
         .font(.system(size: height * 0.48, weight: .semibold))
@@ -59,7 +59,7 @@ private struct AyahAnnotationsLabel: View {
     @Environment(\.themeColors) private var themeColors
 }
 
-private struct AyahAnnotationsButtonStyle: ButtonStyle {
+private struct AyahIndicatorsButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.94 : 1)
@@ -67,14 +67,14 @@ private struct AyahAnnotationsButtonStyle: ButtonStyle {
     }
 }
 
-private struct AyahAnnotationsButtonPreview: View {
+private struct AyahIndicatorsButtonPreview: View {
     var body: some View {
         VStack(alignment: .leading) {
-            previewRow("Note", annotations: [.note])
-            previewRow("Collection", annotations: [.collection])
-            previewRow("Reading bookmarks", annotations: readingBookmarks)
-            previewRow("Combined", annotations: readingBookmarks.union([.collection, .note]))
-            previewRow("Small badge", annotations: [.note], height: 8)
+            previewRow("Note", indicators: [.note])
+            previewRow("Collection", indicators: [.collection])
+            previewRow("Reading bookmarks", indicators: readingBookmarks)
+            previewRow("Combined", indicators: readingBookmarks.union([.collection, .note]))
+            previewRow("Small badge", indicators: [.note], height: 8)
 
             Text("Dashed outlines show touch targets.")
                 .font(.caption)
@@ -90,17 +90,17 @@ private struct AyahAnnotationsButtonPreview: View {
     private let ayah = Quran.hafsMadani1405.suras[1].verses[4]
     @ScaledMetric private var badgeHeight = 20.0
 
-    private var readingBookmarks: Set<AyahAnnotation> {
+    private var readingBookmarks: Set<AyahIndicator> {
         Set(ReadingBookmarkSlot.allCases.map { .readingBookmark($0) })
     }
 
-    private func previewRow(_ title: String, annotations: Set<AyahAnnotation>, height: CGFloat? = nil) -> some View {
+    private func previewRow(_ title: String, indicators: Set<AyahIndicator>, height: CGFloat? = nil) -> some View {
         HStack {
             Text(title)
             Spacer()
-            AyahAnnotationsButton(
+            AyahIndicatorsButton(
                 ayah: ayah,
-                annotations: annotations,
+                indicators: indicators,
                 height: height ?? badgeHeight,
                 action: { _ in tapCount += 1 }
             )
@@ -113,7 +113,7 @@ private struct AyahAnnotationsButtonPreview: View {
     }
 }
 
-#Preview("Annotation buttons") {
-    AyahAnnotationsButtonPreview()
+#Preview("Indicator buttons") {
+    AyahIndicatorsButtonPreview()
 }
 #endif

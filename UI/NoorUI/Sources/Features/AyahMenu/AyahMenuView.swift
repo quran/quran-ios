@@ -231,9 +231,9 @@ private struct AyahMenuViewList: View {
     @ViewBuilder private var bookmarkIcon: some View {
         switch dataObject.bookmarkState {
         case .unhighlighted:
-            NoorSystemImage.folderBadgePlus.image
+            NoorSystemImage.star.image
         case .bookmarked:
-            NoorSystemImage.folder.image
+            NoorSystemImage.starFilled.image
         case .partiallyHighlighted:
             HighlightPaletteIcon()
         case .highlighted(let color):

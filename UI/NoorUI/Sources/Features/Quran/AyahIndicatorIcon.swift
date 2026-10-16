@@ -13,7 +13,7 @@ struct AyahIndicatorIcon: View {
                 NoorSystemImage.bookmark.image
                     .foregroundStyle(bookmark.swiftUIColor)
             case .collection:
-                NoorSystemImage.folder.image
+                NoorSystemImage.starFilled.image
                     .themedSecondaryForeground()
             case .note:
                 NoorSystemImage.note.image

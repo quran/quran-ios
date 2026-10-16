@@ -17,26 +17,18 @@ extension AyahBookmarkCollection {
         }
     }
 
+    /// Favorites and user collections share the star, the app's icon for a collection.
     var displayImage: NoorSystemImage {
         switch kind {
-        case .defaultBookmarks:
+        case .defaultBookmarks, .user:
             .starFilled
         case .oldPageBookmarks:
             .book
-        case .user:
-            .folderOutline
         }
     }
 
     var displayImageColor: Color {
-        switch kind {
-        case .defaultBookmarks:
-            Color(uiColor: .systemYellow)
-        case .oldPageBookmarks:
-            .secondaryLabel
-        case .user:
-            .label
-        }
+        .secondaryLabel
     }
 }
 

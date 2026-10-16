@@ -61,7 +61,7 @@ private struct BookmarkCollectionsContent: View {
                     NoorListEmptyState(
                         title: l("bookmarks.collections.no-data.title"),
                         text: l("bookmarks.collections.no-data.text"),
-                        image: .folderOutline
+                        image: .star
                     )
                 }
 

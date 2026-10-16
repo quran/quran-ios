@@ -25,9 +25,6 @@ public enum NoorSystemImage: String {
     case bookmarkOutline = "bookmark"
     case bookmark = "bookmark.fill"
     case book
-    case folder = "folder.fill"
-    case folderOutline = "folder"
-    case folderBadgePlus = "folder.badge.plus"
     case colorSwatch = "circle.fill"
     case plus
     case plusCircle = "plus.circle"

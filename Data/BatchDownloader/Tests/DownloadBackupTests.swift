@@ -8,7 +8,6 @@ import XCTest
 final class DownloadBackupTests: XCTestCase {
     func testCompletedDownloadsExcludeTheirDirectories() async throws {
         let context = BatchDownloaderFake.makeContext()
-        defer { context.tearDown() }
         let (downloader, session) = await context.makeDownloader()
 
         for path in ["audio_files/reciter/audio.mp3", "audio_files/reciter/timing.zip", "translations/en.zip", "readings/hafs/pages.zip"] {
@@ -25,7 +24,6 @@ final class DownloadBackupTests: XCTestCase {
 
     func testRecreatedDownloadDirectoryIsExcludedAgain() async throws {
         let context = BatchDownloaderFake.makeContext()
-        defer { context.tearDown() }
         let (downloader, session) = await context.makeDownloader()
         let destination = context.downloadsURL.appendingPathComponent("audio_files/reciter/audio.mp3", isDirectory: false)
         try await completeDownload(destination: destination, context: context, downloader: downloader, session: session)

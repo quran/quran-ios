@@ -50,7 +50,6 @@ final class ReadingResourcesServiceTests: XCTestCase {
     }
 
     override func tearDown() {
-        testContext.tearDown()
         testContext = nil
         downloader = nil
         session = nil

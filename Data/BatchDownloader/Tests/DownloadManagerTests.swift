@@ -50,7 +50,6 @@ final class DownloadManagerTests: XCTestCase {
         request3 = nil
         request4 = nil
         request5 = nil
-        testContext.tearDown()
         testContext = nil
     }
 

@@ -31,7 +31,6 @@ class QuranAudioDownloaderTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        testContext.tearDown()
         testContext = nil
         Reciter.cleanUpAudio()
         batchDownloader = nil

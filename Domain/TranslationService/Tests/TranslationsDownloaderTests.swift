@@ -25,7 +25,6 @@ class TranslationsDownloaderTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        testContext.tearDown()
         testContext = nil
         downloader = nil
         batchDownloader = nil

@@ -12,18 +12,18 @@ final class AyahIndicatorsButtonTests: XCTestCase {
         let button = AyahIndicatorsButton(
             ayah: ayah,
             indicators: [.note, .readingBookmark(.teal), .collection],
-            height: 12,
+            size: 12,
             action: { _ in }
         )
 
         XCTAssertEqual(button.accessibilityLabel, "Al-Baqarah, Ayah 255; Reading Bookmark: Teal; Collections; Notes")
     }
 
-    func test_smallBadge_hasAtLeast44PointLayout() {
+    func test_smallMarker_hasAtLeast44PointLayout() {
         let button = AyahIndicatorsButton(
             ayah: Quran.hafsMadani1405.suras[1].verses[4],
             indicators: [.note],
-            height: 8,
+            size: 8,
             action: { _ in }
         )
         let controller = UIHostingController(rootView: button.fixedSize())
@@ -32,6 +32,29 @@ final class AyahIndicatorsButtonTests: XCTestCase {
 
         XCTAssertGreaterThanOrEqual(size.width, 44)
         XCTAssertGreaterThanOrEqual(size.height, 44)
+    }
+
+    func test_markerIndicators_stackEveryReadingBookmarkAndHideNotesAndCollections() {
+        let indicators: Set<AyahIndicator> = [.note, .collection, .readingBookmark(.orange), .readingBookmark(.teal)]
+
+        XCTAssertEqual(indicators.markerIndicators, [.readingBookmark(.teal), .readingBookmark(.orange)])
+    }
+
+    func test_markerIndicators_preferNoteOverCollection() {
+        XCTAssertEqual(Set<AyahIndicator>([.collection, .note]).markerIndicators, [.note])
+        XCTAssertEqual(Set<AyahIndicator>([.collection]).markerIndicators, [.collection])
+        XCTAssertEqual(Set<AyahIndicator>().markerIndicators, [])
+    }
+
+    func test_accessibilityLabel_listsIndicatorsTheMarkerHides() {
+        let button = AyahIndicatorsButton(
+            ayah: Quran.hafsMadani1405.suras[1].verses[4],
+            indicators: [.collection, .note],
+            size: 12,
+            action: { _ in }
+        )
+
+        XCTAssertEqual(button.accessibilityLabel, "Al-Baqarah, Ayah 5; Collections; Notes")
     }
 
     func test_readingPins_useSlotAccessibleNames() {

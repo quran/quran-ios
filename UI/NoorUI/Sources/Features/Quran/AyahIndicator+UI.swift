@@ -18,6 +18,27 @@ extension Set<AyahIndicator> {
     }
 }
 
+extension Set<AyahIndicator> {
+    /// What an ayah marker draws: every reading bookmark, stacked. Without one, a single indicator,
+    /// a note before a collection.
+    var markerIndicators: [AyahIndicator] {
+        let bookmarks = ordered.filter {
+            if case .readingBookmark = $0 {
+                true
+            } else {
+                false
+            }
+        }
+        if !bookmarks.isEmpty {
+            return bookmarks
+        }
+        if contains(.note) {
+            return [.note]
+        }
+        return contains(.collection) ? [.collection] : []
+    }
+}
+
 extension AyahIndicator {
     var accessibilityLabel: String {
         switch self {

@@ -8,8 +8,6 @@ import QuranKit
 import SwiftUI
 
 public struct AyahIndicatorsView: View {
-    private static let heightScale: CGFloat = 0.8
-
     public init(
         markers: [AyahMarkerPlacement],
         indicators: [AyahNumber: Set<AyahIndicator>],
@@ -26,15 +24,14 @@ public struct AyahIndicatorsView: View {
         ZStack(alignment: .topLeading) {
             ForEach(indicatedPlacements, id: \.ayah) { placement in
                 let rectangle = placement.frame
-                let buttonHeight = rectangle.height * Self.heightScale
 
                 AyahIndicatorsButton(
                     ayah: placement.ayah,
                     indicators: indicators[placement.ayah, default: []],
-                    height: buttonHeight,
+                    size: rectangle.height,
                     action: { onAyahIndicatorTap(placement.ayah, $0) }
                 )
-                .position(x: rectangle.midX, y: rectangle.maxY)
+                .position(x: rectangle.midX, y: rectangle.midY)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

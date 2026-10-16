@@ -111,6 +111,15 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertEqual(collection.displayImage, .starFilled)
     }
 
+    func test_userCollectionPresentation_usesTheSameNeutralStarAsFavorites() {
+        let favorites = collection(name: "Default", id: "__default__", isDefault: true, isReadOnly: true)
+        let duas = collection(name: "Duas")
+
+        XCTAssertEqual(duas.displayImage, .starFilled)
+        XCTAssertEqual(duas.displayImageColor, favorites.displayImageColor)
+        XCTAssertEqual(duas.displayImageColor, .secondaryLabel)
+    }
+
     func test_collectionDetailsController_usesNativeTitleAndSubtitle() {
         let collection = collection(name: "Red")
         let viewModel = makeCollectionDetailsViewModel(collection: collection)

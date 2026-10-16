@@ -74,7 +74,7 @@ private struct AyahSetContentView: View {
         NoorListEmptyState(
             title: lAndroid("bookmarks_list_empty"),
             text: emptyStateText,
-            image: viewModel.content.highlightColor == nil ? .folder : .colorSwatch,
+            image: viewModel.content.highlightColor == nil ? .star : .colorSwatch,
             style: .prominent(
                 imageColor: viewModel.content.highlightColor?.color ?? Color.accentColor
             )

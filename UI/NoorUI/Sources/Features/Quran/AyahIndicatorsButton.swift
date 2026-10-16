@@ -69,7 +69,7 @@ private struct AyahIndicatorsLabel: View {
         case .readingBookmark(let slot):
             symbol(.bookmark, color: slot.swiftUIColor, scale: 0.98)
         case .collection:
-            symbol(.folder, color: gray, scale: 0.84)
+            symbol(.starFilled, color: gray, scale: 0.84)
         case .note:
             Circle()
                 .fill(gray)

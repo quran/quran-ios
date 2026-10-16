@@ -5,7 +5,7 @@
 import CoreGraphics
 import QuranKit
 
-/// An ayah marker's rectangle in the page drawing and annotation layers' local coordinate space.
+/// An ayah marker's rectangle in the page drawing and indicator layers' local coordinate space.
 public struct AyahMarkerPlacement: Hashable {
     public init(ayah: AyahNumber, frame: CGRect) {
         self.ayah = ayah

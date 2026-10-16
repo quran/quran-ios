@@ -60,8 +60,8 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
     }
 
     #if QURAN_SYNC
-    public func setAyahAnnotationsHidden(_ hidden: Bool) {
-        viewModel.overlays.annotationsHidden = hidden
+    public func setAyahIndicatorsHidden(_ hidden: Bool) {
+        viewModel.overlays.indicatorsHidden = hidden
     }
     #endif
 

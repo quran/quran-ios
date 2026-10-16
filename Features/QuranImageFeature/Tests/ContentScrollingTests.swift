@@ -43,7 +43,7 @@ final class ContentScrollingTests: XCTestCase {
             overlayService: overlayService
         )
         #if QURAN_SYNC
-        let view = ContentImageView(viewModel: model, onAnnotatedAyahTap: { _, _ in })
+        let view = ContentImageView(viewModel: model, onAyahIndicatorTap: { _, _ in })
         #else
         let view = ContentImageView(viewModel: model)
         #endif
@@ -85,7 +85,7 @@ final class ContentScrollingTests: XCTestCase {
             overlayService: overlayService
         )
         #if QURAN_SYNC
-        let view = ContentLineView(viewModel: model, onAnnotatedAyahTap: { _, _ in })
+        let view = ContentLineView(viewModel: model, onAyahIndicatorTap: { _, _ in })
         #else
         let view = ContentLineView(viewModel: model)
         #endif

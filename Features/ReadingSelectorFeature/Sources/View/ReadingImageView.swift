@@ -26,11 +26,11 @@ struct ReadingImageView: View {
         AdaptiveImageScrollView(
             decorations: decorations,
             renderingMode: renderingMode,
-            ayahAnnotations: [:],
-            annotationsHidden: false
+            ayahIndicators: [:],
+            indicatorsHidden: false
         ) {
             image
-        } onAnnotatedAyahTap: { _, _ in
+        } onAyahIndicatorTap: { _, _ in
         } onScaleChange: { _ in
         } onGlobalFrameChange: { _ in
         } header: {

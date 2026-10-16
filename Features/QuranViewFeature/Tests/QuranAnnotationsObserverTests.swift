@@ -18,11 +18,11 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         highlightService = MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
         collectionService = AyahBookmarkCollectionService(quranDataService: database.quranDataService)
         readingBookmarkService = MobileSyncReadingBookmarkService(quranDataService: database.quranDataService)
-        QuranContentStatePreferences.shared.ayahIndicators = .all
+        QuranContentStatePreferences.shared.ayahIndicatorVisibility = .all
     }
 
     override func tearDown() async throws {
-        QuranContentStatePreferences.shared.ayahIndicators = .readingBookmark
+        QuranContentStatePreferences.shared.ayahIndicatorVisibility = .readingBookmark
         try await database.reset()
         noteService = nil
         highlightService = nil
@@ -42,7 +42,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
 
         XCTAssertEqual(observer.notes(interacting: [ayah(2)]).map(\.text), ["Stored note"])
         XCTAssertTrue(observer.notes(interacting: [ayah(3)]).isEmpty)
-        XCTAssertEqual(overlayService.overlays.annotationsByVerse, [ayah(1): [.note], ayah(2): [.note]])
+        XCTAssertEqual(overlayService.overlays.indicatorsByVerse, [ayah(1): [.note], ayah(2): [.note]])
     }
 
     func test_noteDeletionRemovesObservedAnnotation() async throws {
@@ -88,7 +88,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         XCTAssertEqual(observer.collections.count, 2)
         XCTAssertTrue(observer.collections.contains { $0.isDefault })
         XCTAssertTrue(observer.collections.contains { $0.name == "Duas" })
-        XCTAssertEqual(overlayService.overlays.annotationsByVerse, [ayah(1): [.collection]])
+        XCTAssertEqual(overlayService.overlays.indicatorsByVerse, [ayah(1): [.collection]])
         XCTAssertTrue(overlayService.overlays.colorHighlights.isEmpty)
     }
 
@@ -108,7 +108,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
 
         XCTAssertEqual(observer.readingBookmarks.map(\.slot), [.teal])
         XCTAssertEqual(observer.latestReadingBookmark(at: [.page(page)])?.slot, .teal)
-        XCTAssertTrue(overlayService.overlays.annotationsByVerse.isEmpty)
+        XCTAssertTrue(overlayService.overlays.indicatorsByVerse.isEmpty)
     }
 
     func test_start_publishesSubsequentReadingBookmarkChanges() async throws {
@@ -121,7 +121,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         await waitForOverlays(overlayService) { $0.readingBookmarks.map(\.slot) == [.orange] }
 
         XCTAssertEqual(observer.readingBookmarks.map(\.slot), [.orange])
-        XCTAssertEqual(overlayService.overlays.annotationsByVerse, [ayah(255): [.readingBookmark(.orange)]])
+        XCTAssertEqual(overlayService.overlays.indicatorsByVerse, [ayah(255): [.readingBookmark(.orange)]])
     }
 
     func test_clearingReadingBookmarkRemovesPublishedPin() async throws {
@@ -136,7 +136,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         await waitForOverlays(overlayService) { $0.readingBookmarks.isEmpty }
 
         XCTAssertTrue(observer.readingBookmarks.isEmpty)
-        XCTAssertTrue(overlayService.overlays.annotationsByVerse.isEmpty)
+        XCTAssertTrue(overlayService.overlays.indicatorsByVerse.isEmpty)
     }
 
     func test_clearingOnePinPreservesAnotherOnTheSameAyah() async throws {
@@ -148,7 +148,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         defer { observer.stop() }
         observer.start()
         await waitForOverlays(overlayService) { $0.readingBookmarks.count == 3 }
-        XCTAssertEqual(overlayService.overlays.annotationsByVerse, [
+        XCTAssertEqual(overlayService.overlays.indicatorsByVerse, [
             ayah(5): [.readingBookmark(.teal), .readingBookmark(.red)],
             ayah(255): [.readingBookmark(.orange)],
         ])
@@ -156,7 +156,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         try await readingBookmarkService.clearReadingBookmark(in: .teal)
         await waitForOverlays(overlayService) { $0.readingBookmarks.count == 2 }
 
-        XCTAssertEqual(overlayService.overlays.annotationsByVerse, [
+        XCTAssertEqual(overlayService.overlays.indicatorsByVerse, [
             ayah(5): [.readingBookmark(.red)], ayah(255): [.readingBookmark(.orange)],
         ])
         XCTAssertEqual(observer.latestReadingBookmark(at: [.ayah(ayah(5)), .ayah(ayah(6))])?.slot, .red)
@@ -181,14 +181,14 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         observer.start()
         await waitForOverlays(overlayService) {
             $0.colorHighlights[verse] == .green
-                && $0.annotationsByVerse[verse] == [.note, .collection, .readingBookmark(.orange)]
+                && $0.indicatorsByVerse[verse] == [.note, .collection, .readingBookmark(.orange)]
         }
         let note = try XCTUnwrap(observer.notes.first)
 
         try await noteService.removeNote(note)
         await waitForOverlays(overlayService) { $0.notedVerses.isEmpty }
 
-        XCTAssertEqual(overlayService.overlays.annotationsByVerse[verse], [.collection, .readingBookmark(.orange)])
+        XCTAssertEqual(overlayService.overlays.indicatorsByVerse[verse], [.collection, .readingBookmark(.orange)])
         XCTAssertEqual(overlayService.overlays.colorHighlights[verse], .green)
         XCTAssertEqual(overlayService.overlays.navigationTarget, verse)
         XCTAssertEqual(overlayService.overlays.playingVerses, [verse])
@@ -211,7 +211,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         observer?.start()
         await waitForOverlays(overlayService) {
             $0.colorHighlights[verse] == .green
-                && $0.annotationsByVerse[verse] == [.note, .collection, .readingBookmark(.orange)]
+                && $0.indicatorsByVerse[verse] == [.note, .collection, .readingBookmark(.orange)]
         }
 
         observer = nil
@@ -265,7 +265,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
     private var readingBookmarkService: MobileSyncReadingBookmarkService!
 
     func test_start_appliesAyahIndicatorsPreference() async throws {
-        QuranContentStatePreferences.shared.ayahIndicators = .readingBookmark
+        QuranContentStatePreferences.shared.ayahIndicatorVisibility = .readingBookmark
         try await noteService.createNote(body: "Hidden note", startAyah: ayah(5), endAyah: ayah(5))
         try await readingBookmarkService.addReadingBookmark(at: .ayah(ayah(5)), slot: .teal)
         let overlayService = VerseOverlayService()
@@ -277,7 +277,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
             $0.notedVerses == [self.ayah(5)] && $0.readingBookmarks.map(\.slot) == [.teal]
         }
 
-        XCTAssertEqual(overlayService.overlays.annotationsByVerse, [ayah(5): [.readingBookmark(.teal)]])
+        XCTAssertEqual(overlayService.overlays.indicatorsByVerse, [ayah(5): [.readingBookmark(.teal)]])
     }
 
     func test_ayahIndicatorsPreferenceChange_updatesAnnotations() async throws {
@@ -286,12 +286,12 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         let observer = makeObserver(overlayService: overlayService)
         defer { observer.stop() }
         observer.start()
-        await waitForOverlays(overlayService) { $0.annotationsByVerse == [self.ayah(5): [.note]] }
+        await waitForOverlays(overlayService) { $0.indicatorsByVerse == [self.ayah(5): [.note]] }
 
-        QuranContentStatePreferences.shared.ayahIndicators = .none
+        QuranContentStatePreferences.shared.ayahIndicatorVisibility = .none
 
-        XCTAssertEqual(overlayService.overlays.ayahIndicators, .none)
-        XCTAssertTrue(overlayService.overlays.annotationsByVerse.isEmpty)
+        XCTAssertEqual(overlayService.overlays.indicatorVisibility, .none)
+        XCTAssertTrue(overlayService.overlays.indicatorsByVerse.isEmpty)
         XCTAssertEqual(overlayService.overlays.notedVerses, [ayah(5)])
     }
 

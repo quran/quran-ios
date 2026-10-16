@@ -19,7 +19,7 @@ import UIx
 struct ContentLineView: View {
     @StateObject var viewModel: ContentLineViewModel
     #if QURAN_SYNC
-    let onAnnotatedAyahTap: (AyahNumber, CGPoint) -> Void
+    let onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void
     #endif
 
     var body: some View {
@@ -30,14 +30,14 @@ struct ContentLineView: View {
             scrollToVerse: viewModel.scrollToVerse,
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
-            ayahAnnotations: viewModel.ayahAnnotations,
-            annotationsHidden: viewModel.annotationsHidden,
+            ayahIndicators: viewModel.ayahIndicators,
+            indicatorsHidden: viewModel.indicatorsHidden,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
             chromeStyle: viewModel.chromeStyle,
             imageRenderingMode: viewModel.imageRenderingMode,
             imageForLine: viewModel.lineImage(for:),
             imageForSideline: viewModel.sidelineImage(for:),
-            onAnnotatedAyahTap: onAnnotatedAyahTap,
+            onAyahIndicatorTap: onAyahIndicatorTap,
             onGlobalFrameChange: viewModel.updateContentFrame
         )
         #else
@@ -78,8 +78,8 @@ private struct ContentLineViewBody: View {
     let wordFrames: WordFrameCollection
     let highlightColorsByVerse: [AyahNumber: Color]
     #if QURAN_SYNC
-    let ayahAnnotations: [AyahNumber: Set<AyahAnnotation>]
-    let annotationsHidden: Bool
+    let ayahIndicators: [AyahNumber: Set<AyahIndicator>]
+    let indicatorsHidden: Bool
     #endif
     let drawsAyahNumbersAndSuraHeaders: Bool
     let chromeStyle: LinePageChromeStyle
@@ -87,7 +87,7 @@ private struct ContentLineViewBody: View {
     let imageForLine: (Int) -> UIImage?
     let imageForSideline: (String) -> UIImage?
     #if QURAN_SYNC
-    let onAnnotatedAyahTap: (AyahNumber, CGPoint) -> Void
+    let onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void
     #endif
     let onGlobalFrameChange: (CGRect) -> Void
 
@@ -145,13 +145,13 @@ private struct ContentLineViewBody: View {
         #if QURAN_SYNC
             .overlay {
                 if let layout {
-                    AyahAnnotationsView(
+                    AyahIndicatorsView(
                         markers: layout.ayahMarkerPlacements.map {
                             AyahMarkerPlacement(ayah: $0.marker.ayah, frame: $0.frame)
                         },
-                        annotations: ayahAnnotations,
-                        annotationsHidden: annotationsHidden,
-                        onAnnotatedAyahTap: onAnnotatedAyahTap
+                        indicators: ayahIndicators,
+                        indicatorsHidden: indicatorsHidden,
+                        onAyahIndicatorTap: onAyahIndicatorTap
                     )
                 }
             }

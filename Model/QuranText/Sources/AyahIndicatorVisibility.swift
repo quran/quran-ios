@@ -1,10 +1,10 @@
 #if QURAN_SYNC
 //
-//  AyahIndicators.swift
+//  AyahIndicatorVisibility.swift
 //
 
-/// Which annotations the reader shows next to ayah numbers.
-public enum AyahIndicators: String, CaseIterable, Sendable {
+/// Which indicators the reader shows next to ayah numbers.
+public enum AyahIndicatorVisibility: String, CaseIterable, Sendable {
     case all
     case readingBookmark
     case none

@@ -16,7 +16,7 @@ import SwiftUI
 struct ContentImageView: View {
     @StateObject var viewModel: ContentImageViewModel
     #if QURAN_SYNC
-    let onAnnotatedAyahTap: (AyahNumber, CGPoint) -> Void
+    let onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void
     #endif
 
     var body: some View {
@@ -24,9 +24,9 @@ struct ContentImageView: View {
             #if QURAN_SYNC
             ContentImageViewBody(
                 decorations: viewModel.decorations,
-                ayahAnnotations: viewModel.ayahAnnotations,
-                annotationsHidden: viewModel.annotationsHidden,
-                onAnnotatedAyahTap: onAnnotatedAyahTap,
+                ayahIndicators: viewModel.ayahIndicators,
+                indicatorsHidden: viewModel.indicatorsHidden,
+                onAyahIndicatorTap: onAyahIndicatorTap,
                 image: viewModel.imagePage?.image,
                 renderingMode: viewModel.imageRenderingMode,
                 quarterName: viewModel.page.localizedQuarterName,
@@ -68,9 +68,9 @@ struct ContentImageView: View {
 private struct ContentImageViewBody: View {
     let decorations: ImageDecorations
     #if QURAN_SYNC
-    var ayahAnnotations: [AyahNumber: Set<AyahAnnotation>] = [:]
-    var annotationsHidden = false
-    var onAnnotatedAyahTap: (AyahNumber, CGPoint) -> Void = { _, _ in }
+    var ayahIndicators: [AyahNumber: Set<AyahIndicator>] = [:]
+    var indicatorsHidden = false
+    var onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void = { _, _ in }
     #endif
     let image: UIImage?
     let renderingMode: QuranThemedImage.RenderingMode
@@ -87,12 +87,12 @@ private struct ContentImageViewBody: View {
         let content = AdaptiveImageScrollView(
             decorations: decorations,
             renderingMode: renderingMode,
-            ayahAnnotations: ayahAnnotations,
-            annotationsHidden: annotationsHidden
+            ayahIndicators: ayahIndicators,
+            indicatorsHidden: indicatorsHidden
         ) {
             image
-        } onAnnotatedAyahTap: {
-            onAnnotatedAyahTap($0, $1)
+        } onAyahIndicatorTap: {
+            onAyahIndicatorTap($0, $1)
         } onScaleChange: {
             onScaleChange($0)
         } onGlobalFrameChange: {

@@ -21,14 +21,14 @@ public struct QuranVerseNumber: View {
     let verse: AyahNumber
 
     #if QURAN_SYNC
-    private let annotations: Set<AyahAnnotation>
+    private let indicators: Set<AyahIndicator>
     private let onTapped: ((CGPoint) -> Void)?
     @State private var capsuleFrame: CGRect = .zero
 
     /// A `nil` `onTapped` shows the capsule as a plain label.
-    public init(verse: AyahNumber, annotations: Set<AyahAnnotation>, onTapped: ((CGPoint) -> Void)?) {
+    public init(verse: AyahNumber, indicators: Set<AyahIndicator>, onTapped: ((CGPoint) -> Void)?) {
         self.verse = verse
-        self.annotations = annotations
+        self.indicators = indicators
         self.onTapped = onTapped
     }
     #else
@@ -69,11 +69,11 @@ public struct QuranVerseNumber: View {
         HStack(spacing: spacing) {
             Text(lFormat("translation.text.ayah-number", verse.sura.suraNumber, verse.ayah))
             #if QURAN_SYNC
-            if !annotations.isEmpty {
+            if !indicators.isEmpty {
                 Divider()
                     .frame(height: dividerHeight)
-                ForEach(annotations.ordered) { annotation in
-                    AyahAnnotationIcon(annotation: annotation)
+                ForEach(indicators.ordered) { indicator in
+                    AyahIndicatorIcon(indicator: indicator)
                 }
             }
             #endif
@@ -90,12 +90,12 @@ public struct QuranVerseNumber: View {
 }
 
 #if QURAN_SYNC
-#Preview("Verse number and annotations") {
+#Preview("Verse number and indicators") {
     VStack(spacing: 0) {
-        ForEach([Set<AyahAnnotation>(), [.note], [.readingBookmark(.teal), .readingBookmark(.orange), .collection, .note]], id: \.self) { annotations in
+        ForEach([Set<AyahIndicator>(), [.note], [.readingBookmark(.teal), .readingBookmark(.orange), .collection, .note]], id: \.self) { indicators in
             QuranVerseNumber(
                 verse: Quran.hafsMadani1405.suras[1].verses[7],
-                annotations: annotations,
+                indicators: indicators,
                 onTapped: { _ in }
             )
         }

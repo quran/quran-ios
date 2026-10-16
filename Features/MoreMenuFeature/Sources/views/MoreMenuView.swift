@@ -87,7 +87,7 @@ private struct MoreMenuRootView: View {
 
                     #if QURAN_SYNC
                     viewBasedOn(state.ayahIndicators) {
-                        MoreMenuAyahIndicators(indicators: $store.ayahIndicators)
+                        MoreMenuAyahIndicators(visibility: $store.indicatorVisibility)
                             .background(Color.systemBackground)
                         empty
                     }

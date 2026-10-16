@@ -1,5 +1,5 @@
 //
-//  AyahAnnotationsView.swift
+//  AyahIndicatorsView.swift
 //
 
 #if QURAN_SYNC
@@ -7,58 +7,58 @@ import QuranAnnotations
 import QuranKit
 import SwiftUI
 
-public struct AyahAnnotationsView: View {
+public struct AyahIndicatorsView: View {
     private static let heightScale: CGFloat = 0.8
 
     public init(
         markers: [AyahMarkerPlacement],
-        annotations: [AyahNumber: Set<AyahAnnotation>],
-        annotationsHidden: Bool,
-        onAnnotatedAyahTap: @escaping (AyahNumber, CGPoint) -> Void
+        indicators: [AyahNumber: Set<AyahIndicator>],
+        indicatorsHidden: Bool,
+        onAyahIndicatorTap: @escaping (AyahNumber, CGPoint) -> Void
     ) {
         self.markers = markers
-        self.annotations = annotations
-        self.annotationsHidden = annotationsHidden
-        self.onAnnotatedAyahTap = onAnnotatedAyahTap
+        self.indicators = indicators
+        self.indicatorsHidden = indicatorsHidden
+        self.onAyahIndicatorTap = onAyahIndicatorTap
     }
 
     public var body: some View {
         ZStack(alignment: .topLeading) {
-            ForEach(annotatedPlacements, id: \.ayah) { placement in
+            ForEach(indicatedPlacements, id: \.ayah) { placement in
                 let rectangle = placement.frame
                 let buttonHeight = rectangle.height * Self.heightScale
 
-                AyahAnnotationsButton(
+                AyahIndicatorsButton(
                     ayah: placement.ayah,
-                    annotations: annotations[placement.ayah, default: []],
+                    indicators: indicators[placement.ayah, default: []],
                     height: buttonHeight,
-                    action: { onAnnotatedAyahTap(placement.ayah, $0) }
+                    action: { onAyahIndicatorTap(placement.ayah, $0) }
                 )
                 .position(x: rectangle.midX, y: rectangle.maxY)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .environment(\.layoutDirection, .leftToRight)
-        .opacity(annotationsHidden ? 0 : 1)
-        .animation(NoorAnimation.standard, value: annotationsHidden)
-        .allowsHitTesting(!annotationsHidden)
-        .accessibilityHidden(annotationsHidden)
+        .opacity(indicatorsHidden ? 0 : 1)
+        .animation(NoorAnimation.standard, value: indicatorsHidden)
+        .allowsHitTesting(!indicatorsHidden)
+        .accessibilityHidden(indicatorsHidden)
     }
 
-    private let annotationsHidden: Bool
+    private let indicatorsHidden: Bool
     private let markers: [AyahMarkerPlacement]
-    private let annotations: [AyahNumber: Set<AyahAnnotation>]
-    private let onAnnotatedAyahTap: (AyahNumber, CGPoint) -> Void
+    private let indicators: [AyahNumber: Set<AyahIndicator>]
+    private let onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void
 
-    private var annotatedPlacements: [AyahMarkerPlacement] {
-        markers.filter { annotations[$0.ayah]?.isEmpty == false }
+    private var indicatedPlacements: [AyahMarkerPlacement] {
+        markers.filter { indicators[$0.ayah]?.isEmpty == false }
     }
 }
 
-private struct AyahAnnotationsPlacementPreview: View {
+private struct AyahIndicatorsPlacementPreview: View {
     var body: some View {
         VStack {
-            Text("Dashed rectangles show marker frames. The third has no annotations.")
+            Text("Dashed rectangles show marker frames. The third has no indicators.")
                 .font(.caption)
 
             ZStack(alignment: .topLeading) {
@@ -72,15 +72,15 @@ private struct AyahAnnotationsPlacementPreview: View {
             .frame(width: 280, height: 240)
             .allowsHitTesting(false)
             .overlay {
-                AyahAnnotationsView(
+                AyahIndicatorsView(
                     markers: markers,
-                    annotations: [ayahs[0]: [.note], ayahs[1]: [.collection, .note]],
-                    annotationsHidden: false,
-                    onAnnotatedAyahTap: { ayah, _ in tappedAyah = ayah }
+                    indicators: [ayahs[0]: [.note], ayahs[1]: [.collection, .note]],
+                    indicatorsHidden: false,
+                    onAyahIndicatorTap: { ayah, _ in tappedAyah = ayah }
                 )
             }
 
-            Text(tappedAyah.map { "Tapped ayah \($0.ayah)" } ?? "Tap an annotation")
+            Text(tappedAyah.map { "Tapped ayah \($0.ayah)" } ?? "Tap an indicator")
                 .font(.footnote)
         }
         .padding()
@@ -100,8 +100,8 @@ private struct AyahAnnotationsPlacementPreview: View {
     }
 }
 
-#Preview("Annotation placement") {
-    AyahAnnotationsPlacementPreview()
+#Preview("Indicator placement") {
+    AyahIndicatorsPlacementPreview()
 }
 
 #endif

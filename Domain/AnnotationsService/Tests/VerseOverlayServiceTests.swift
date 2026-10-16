@@ -38,13 +38,13 @@ final class VerseOverlayServiceTests: XCTestCase {
             service.$overlays
                 .map { $0.restricted(to: page) }
                 .removeDuplicates()
-                .sink { visibilityByPage[page, default: []].append($0.annotationsHidden) }
+                .sink { visibilityByPage[page, default: []].append($0.indicatorsHidden) }
         }
         defer { subscriptions.forEach { $0.cancel() } }
 
-        service.overlays.annotationsHidden = true
-        service.overlays.annotationsHidden = true
-        service.overlays.annotationsHidden = false
+        service.overlays.indicatorsHidden = true
+        service.overlays.indicatorsHidden = true
+        service.overlays.indicatorsHidden = false
 
         for page in pages {
             XCTAssertEqual(visibilityByPage[page], [false, true, false])
@@ -53,13 +53,13 @@ final class VerseOverlayServiceTests: XCTestCase {
 
     func test_newPageSubscription_receivesCurrentVisibility() {
         let service = VerseOverlayService()
-        service.overlays.annotationsHidden = true
+        service.overlays.indicatorsHidden = true
         var received: [Bool] = []
 
         let subscription = service.$overlays
             .map { $0.restricted(to: Quran.hafsMadani1405.pages[1]) }
             .removeDuplicates()
-            .sink { received.append($0.annotationsHidden) }
+            .sink { received.append($0.indicatorsHidden) }
         defer { subscription.cancel() }
 
         XCTAssertEqual(received, [true])
@@ -111,8 +111,8 @@ final class VerseOverlayServiceTests: XCTestCase {
         let subscription = service.scrollRequests.sink { scrollCount += 1 }
         defer { subscription.cancel() }
 
-        service.overlays.annotationsHidden = true
-        service.overlays.annotationsHidden = false
+        service.overlays.indicatorsHidden = true
+        service.overlays.indicatorsHidden = false
         service.overlays.notedVerses = [verse]
         service.overlays.colorHighlights = [verse: .green]
         service.overlays.selectedVerses = [verse]

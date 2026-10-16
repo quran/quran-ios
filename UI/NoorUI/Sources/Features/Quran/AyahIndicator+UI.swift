@@ -2,9 +2,9 @@
 import Localization
 import QuranAnnotations
 
-extension Set<AyahAnnotation> {
-    var ordered: [AyahAnnotation] {
-        var result: [AyahAnnotation] = []
+extension Set<AyahIndicator> {
+    var ordered: [AyahIndicator] {
+        var result: [AyahIndicator] = []
         for slot in ReadingBookmarkSlot.allCases {
             result += filter {
                 if case .readingBookmark(let bookmark) = $0 {
@@ -18,11 +18,11 @@ extension Set<AyahAnnotation> {
     }
 }
 
-extension AyahAnnotation {
+extension AyahIndicator {
     var accessibilityLabel: String {
         switch self {
         case .readingBookmark(let bookmark):
-            lFormat("ayah.annotation.reading-bookmark", l("ayah.menu.reading-bookmark.title"), bookmark.displayName)
+            lFormat("ayah.indicator.reading-bookmark", l("ayah.menu.reading-bookmark.title"), bookmark.displayName)
         case .collection:
             l("bookmarks.collections")
         case .note:

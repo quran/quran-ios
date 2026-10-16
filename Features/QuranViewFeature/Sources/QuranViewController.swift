@@ -238,7 +238,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     func presentQuranContent(_ viewController: ContentViewController) {
         #if QURAN_SYNC
-        viewController.setAyahAnnotationsHidden(statusBarHidden)
+        viewController.setAyahIndicatorsHidden(statusBarHidden)
         #endif
         addContent(viewController)
     }
@@ -391,7 +391,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         quranView?.setBarsHidden(hidden, animated: true)
         #if QURAN_SYNC
         for contentViewController in children.compactMap({ $0 as? ContentViewController }) {
-            contentViewController.setAyahAnnotationsHidden(hidden)
+            contentViewController.setAyahIndicatorsHidden(hidden)
         }
         #endif
 

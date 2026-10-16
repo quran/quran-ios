@@ -20,19 +20,19 @@ public struct VerseOverlays: Equatable {
     public var navigationTarget: AyahNumber?
     public var colorHighlights: [AyahNumber: HighlightColor] = [:]
     public var notedVerses: Set<AyahNumber> = []
-    public var annotationsHidden = false
+    public var indicatorsHidden = false
     #if QURAN_SYNC
     public var collectionVerses: Set<AyahNumber> = []
     public var readingBookmarks: [PlacedReadingBookmark] = []
-    /// The reader's indicator preference, applied by `annotationTypes(for:)` and `annotationsByVerse`.
-    public var ayahIndicators = AyahIndicators.all
+    /// The reader's indicator preference, applied by `indicators(for:)` and `indicatorsByVerse`.
+    public var indicatorVisibility = AyahIndicatorVisibility.all
     #endif
 
     public var pointedWord: Word?
 }
 
 extension VerseOverlays {
-    /// Filters overlays for rendering one page while preserving annotation visibility.
+    /// Filters overlays for rendering one page while preserving indicator visibility.
     public func restricted(to page: Page) -> Self {
         var overlays = self
         overlays.playingVerses = playingVerses.filter { $0.page == page }
@@ -54,37 +54,37 @@ extension VerseOverlays {
     }
 
     #if QURAN_SYNC
-    public func annotationTypes(for verse: AyahNumber) -> Set<AyahAnnotation> {
-        var annotations: Set<AyahAnnotation> = []
-        if ayahIndicators.showsNotesAndCollections {
+    public func indicators(for verse: AyahNumber) -> Set<AyahIndicator> {
+        var indicators: Set<AyahIndicator> = []
+        if indicatorVisibility.showsNotesAndCollections {
             if notedVerses.contains(verse) {
-                annotations.insert(.note)
+                indicators.insert(.note)
             }
             if collectionVerses.contains(verse) {
-                annotations.insert(.collection)
+                indicators.insert(.collection)
             }
         }
-        if ayahIndicators.showsReadingBookmarks {
+        if indicatorVisibility.showsReadingBookmarks {
             for bookmark in readingBookmarks where bookmark.isAt(verse) {
-                annotations.insert(.readingBookmark(bookmark.slot))
+                indicators.insert(.readingBookmark(bookmark.slot))
             }
         }
-        return annotations
+        return indicators
     }
 
-    public var annotationsByVerse: [AyahNumber: Set<AyahAnnotation>] {
+    public var indicatorsByVerse: [AyahNumber: Set<AyahIndicator>] {
         var verses: Set<AyahNumber> = []
-        if ayahIndicators.showsNotesAndCollections {
+        if indicatorVisibility.showsNotesAndCollections {
             verses.formUnion(notedVerses)
             verses.formUnion(collectionVerses)
         }
-        if ayahIndicators.showsReadingBookmarks {
+        if indicatorVisibility.showsReadingBookmarks {
             verses.formUnion(readingBookmarks.compactMap { bookmark -> AyahNumber? in
                 guard case .ayah(let ayah) = bookmark.placement else { return nil }
                 return ayah
             })
         }
-        return Dictionary(uniqueKeysWithValues: verses.map { ($0, annotationTypes(for: $0)) })
+        return Dictionary(uniqueKeysWithValues: verses.map { ($0, indicators(for: $0)) })
     }
     #endif
 

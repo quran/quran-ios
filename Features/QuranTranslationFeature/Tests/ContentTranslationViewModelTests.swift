@@ -15,7 +15,7 @@ import XCTest
 @MainActor
 final class ContentTranslationViewModelTests: XCTestCase {
     #if QURAN_SYNC
-    func testVerseNumberItemsIncludeLiveAnnotationsAndRemoveClearedBadges() throws {
+    func testVerseNumberItemsIncludeLiveIndicatorsAndRemoveClearedBadges() throws {
         let verse = Quran.hafsMadani1405.firstVerse
         let service = VerseOverlayService()
         let sut = makeSUT(overlayService: service)
@@ -35,10 +35,10 @@ final class ContentTranslationViewModelTests: XCTestCase {
             .init(id: "page", slot: .red, placement: .page(verse.page), modifiedOn: .distantPast),
         ]
 
-        let annotatedItem = try verseNumberItem(in: sut)
-        XCTAssertEqual(annotatedItem.annotations, [.note, .collection, .readingBookmark(.teal), .readingBookmark(.orange)])
-        XCTAssertEqual(annotatedItem.id, originalItem.id)
-        XCTAssertNotEqual(annotatedItem, originalItem)
+        let indicatedItem = try verseNumberItem(in: sut)
+        XCTAssertEqual(indicatedItem.indicators, [.note, .collection, .readingBookmark(.teal), .readingBookmark(.orange)])
+        XCTAssertEqual(indicatedItem.id, originalItem.id)
+        XCTAssertNotEqual(indicatedItem, originalItem)
 
         service.overlays.notedVerses = []
         service.overlays.collectionVerses = []
@@ -47,7 +47,7 @@ final class ContentTranslationViewModelTests: XCTestCase {
         XCTAssertEqual(try verseNumberItem(in: sut), originalItem)
     }
 
-    func testAnnotationsFollowChangesToDisplayedVerses() {
+    func testIndicatorsFollowChangesToDisplayedVerses() {
         let first = Quran.hafsMadani1405.pages[0].firstVerse
         let second = Quran.hafsMadani1405.pages[1].firstVerse
         let service = VerseOverlayService()
@@ -56,20 +56,20 @@ final class ContentTranslationViewModelTests: XCTestCase {
         let sut = makeSUT(overlayService: service)
 
         sut.verses = [first]
-        XCTAssertEqual(sut.annotationsByVerse, [first: [.note]])
+        XCTAssertEqual(sut.indicatorsByVerse, [first: [.note]])
 
         sut.verses = [second]
-        XCTAssertEqual(sut.annotationsByVerse, [second: [.collection]])
+        XCTAssertEqual(sut.indicatorsByVerse, [second: [.collection]])
     }
 
-    func testUnrelatedOverlayChangesDoNotRepublishTranslationAnnotations() {
+    func testUnrelatedOverlayChangesDoNotRepublishTranslationIndicators() {
         let verse = Quran.hafsMadani1405.pages[0].firstVerse
         let other = Quran.hafsMadani1405.pages[1].firstVerse
         let service = VerseOverlayService()
         let sut = makeSUT(overlayService: service)
         sut.verses = [verse]
         var updates = 0
-        let subscription = sut.$annotationsByVerse.dropFirst().sink { _ in updates += 1 }
+        let subscription = sut.$indicatorsByVerse.dropFirst().sink { _ in updates += 1 }
         defer { subscription.cancel() }
 
         service.overlays.notedVerses = [other]
@@ -82,10 +82,10 @@ final class ContentTranslationViewModelTests: XCTestCase {
         service.overlays.notedVerses.insert(verse)
 
         XCTAssertEqual(updates, 1)
-        XCTAssertEqual(sut.annotationsByVerse, [verse: [.note]])
+        XCTAssertEqual(sut.indicatorsByVerse, [verse: [.note]])
     }
 
-    func testHiddenArabicTextKeepsAnnotationsOnVerseNumber() throws {
+    func testHiddenArabicTextKeepsIndicatorsOnVerseNumber() throws {
         hideArabicText()
         let verse = Quran.hafsMadani1405.firstVerse
         let service = VerseOverlayService()
@@ -100,7 +100,7 @@ final class ContentTranslationViewModelTests: XCTestCase {
 
         let verseNumber = try XCTUnwrap(verseNumbers(in: sut).first)
 
-        XCTAssertEqual(verseNumber.annotations, [.note])
+        XCTAssertEqual(verseNumber.indicators, [.note])
     }
 
     private func verseNumberItem(in viewModel: ContentTranslationViewModel) throws -> TranslationVerseNumber {
@@ -199,7 +199,7 @@ final class ContentTranslationViewModelTests: XCTestCase {
 
         service.overlays.colorHighlights = [other: .green]
         service.overlays.notedVerses = [verse]
-        service.overlays.annotationsHidden = true
+        service.overlays.indicatorsHidden = true
 
         XCTAssertEqual(updates, 0)
 

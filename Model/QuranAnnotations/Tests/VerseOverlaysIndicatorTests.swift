@@ -4,7 +4,7 @@ import QuranText
 import XCTest
 @testable import QuranAnnotations
 
-final class VerseOverlaysAnnotationTests: XCTestCase {
+final class VerseOverlaysIndicatorTests: XCTestCase {
     func test_restricted_keepsCollectionsAndBothBookmarkPlacementsOnThePage() {
         let page = Quran.hafsMadani1405.pages[0]
         let otherPage = Quran.hafsMadani1405.pages[1]
@@ -24,8 +24,8 @@ final class VerseOverlaysAnnotationTests: XCTestCase {
 
         XCTAssertEqual(restricted.collectionVerses, [page.firstVerse])
         XCTAssertEqual(restricted.readingBookmarks, [ayahBookmark, pageBookmark])
-        XCTAssertEqual(restricted.annotationTypes(for: page.firstVerse), [.collection, .readingBookmark(.teal)])
-        XCTAssertTrue(restricted.annotationTypes(for: otherPage.firstVerse).isEmpty)
+        XCTAssertEqual(restricted.indicators(for: page.firstVerse), [.collection, .readingBookmark(.teal)])
+        XCTAssertTrue(restricted.indicators(for: otherPage.firstVerse).isEmpty)
     }
 
     func test_annotationTypes_combinesBadgesWithoutTreatingHighlightsOrPageBookmarksAsBadges() {
@@ -40,9 +40,9 @@ final class VerseOverlaysAnnotationTests: XCTestCase {
             PlacedReadingBookmark(id: "page", slot: .red, placement: .page(page), modifiedOn: .distantPast),
         ]
 
-        XCTAssertEqual(overlays.annotationTypes(for: verse), [.note, .collection, .readingBookmark(.teal), .readingBookmark(.orange)])
-        XCTAssertTrue(overlays.annotationTypes(for: page.verses[1]).isEmpty)
-        XCTAssertEqual(overlays.annotationsByVerse, [verse: overlays.annotationTypes(for: verse)])
+        XCTAssertEqual(overlays.indicators(for: verse), [.note, .collection, .readingBookmark(.teal), .readingBookmark(.orange)])
+        XCTAssertTrue(overlays.indicators(for: page.verses[1]).isEmpty)
+        XCTAssertEqual(overlays.indicatorsByVerse, [verse: overlays.indicators(for: verse)])
     }
 
     func test_renamingBookmark_preservesAnnotationWithoutScrolling() {
@@ -52,11 +52,11 @@ final class VerseOverlaysAnnotationTests: XCTestCase {
         var renamed = original
         renamed.readingBookmarks = [bookmark(.teal, at: ayah, name: "Hifz")]
 
-        XCTAssertEqual(renamed.annotationsByVerse, [ayah: [.readingBookmark(.teal)]])
+        XCTAssertEqual(renamed.indicatorsByVerse, [ayah: [.readingBookmark(.teal)]])
         XCTAssertNotEqual(renamed, original)
         XCTAssertFalse(renamed.needsScrolling(comparingTo: original))
         renamed.readingBookmarks = [bookmark(.teal, at: ayah)]
-        XCTAssertEqual(renamed.annotationsByVerse, original.annotationsByVerse)
+        XCTAssertEqual(renamed.indicatorsByVerse, original.indicatorsByVerse)
     }
 
     func test_annotations_preserveAllPinsAndOtherTypesOnTheSameAyah() {
@@ -66,7 +66,7 @@ final class VerseOverlaysAnnotationTests: XCTestCase {
         overlays.collectionVerses = [ayah]
         overlays.readingBookmarks = ReadingBookmarkSlot.allCases.map { bookmark($0, at: ayah) }
 
-        XCTAssertEqual(overlays.annotationsByVerse, [ayah: [
+        XCTAssertEqual(overlays.indicatorsByVerse, [ayah: [
             .readingBookmark(.teal), .readingBookmark(.orange),
             .readingBookmark(.red), .collection, .note,
         ]])
@@ -81,7 +81,7 @@ final class VerseOverlaysAnnotationTests: XCTestCase {
 
         overlays.readingBookmarks = [bookmark(.teal, at: second)]
 
-        XCTAssertEqual(overlays.annotationsByVerse, [first: [.note], second: [.readingBookmark(.teal)]])
+        XCTAssertEqual(overlays.indicatorsByVerse, [first: [.note], second: [.readingBookmark(.teal)]])
     }
 
     func test_annotationChanges_doNotScrollTheReader() {
@@ -100,40 +100,40 @@ final class VerseOverlaysAnnotationTests: XCTestCase {
             modifiedOn: .distantPast, name: "Hifz"
         )]
 
-        XCTAssertTrue(overlays.annotationsByVerse.isEmpty)
+        XCTAssertTrue(overlays.indicatorsByVerse.isEmpty)
     }
 
     func test_readingBookmarkIndicators_hideNotesAndCollections() {
         let noted = Quran.hafsMadani1405.suras[1].verses[4]
         let bookmarked = Quran.hafsMadani1405.suras[1].verses[5]
         var overlays = VerseOverlays()
-        overlays.ayahIndicators = .readingBookmark
+        overlays.indicatorVisibility = .readingBookmark
         overlays.notedVerses = [noted, bookmarked]
         overlays.collectionVerses = [noted]
         overlays.readingBookmarks = [bookmark(.teal, at: bookmarked)]
 
-        XCTAssertTrue(overlays.annotationTypes(for: noted).isEmpty)
-        XCTAssertEqual(overlays.annotationTypes(for: bookmarked), [.readingBookmark(.teal)])
-        XCTAssertEqual(overlays.annotationsByVerse, [bookmarked: [.readingBookmark(.teal)]])
+        XCTAssertTrue(overlays.indicators(for: noted).isEmpty)
+        XCTAssertEqual(overlays.indicators(for: bookmarked), [.readingBookmark(.teal)])
+        XCTAssertEqual(overlays.indicatorsByVerse, [bookmarked: [.readingBookmark(.teal)]])
     }
 
     func test_noIndicators_hideEveryAnnotation() {
         let ayah = Quran.hafsMadani1405.suras[1].verses[4]
         var overlays = VerseOverlays()
-        overlays.ayahIndicators = .none
+        overlays.indicatorVisibility = .none
         overlays.notedVerses = [ayah]
         overlays.collectionVerses = [ayah]
         overlays.readingBookmarks = [bookmark(.teal, at: ayah)]
 
-        XCTAssertTrue(overlays.annotationTypes(for: ayah).isEmpty)
-        XCTAssertTrue(overlays.annotationsByVerse.isEmpty)
+        XCTAssertTrue(overlays.indicators(for: ayah).isEmpty)
+        XCTAssertTrue(overlays.indicatorsByVerse.isEmpty)
     }
 
     func test_restricted_keepsAyahIndicators() {
         var overlays = VerseOverlays()
-        overlays.ayahIndicators = .none
+        overlays.indicatorVisibility = .none
 
-        XCTAssertEqual(overlays.restricted(to: Quran.hafsMadani1405.pages[0]).ayahIndicators, .none)
+        XCTAssertEqual(overlays.restricted(to: Quran.hafsMadani1405.pages[0]).indicatorVisibility, .none)
     }
 
     private func bookmark(_ slot: ReadingBookmarkSlot, at ayah: AyahNumber, name: String? = nil) -> PlacedReadingBookmark {

@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2026-10-15.
 //
 
+import AsyncAlgorithms
 import Foundation
 import NetworkSupportFake
 import XCTest
@@ -36,6 +37,24 @@ final class BatchDownloaderTestContextTests: XCTestCase {
         downloader = nil
         session = nil
         BatchDownloaderTestContext.drainPendingRemovals(timeout: 10)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: sandbox.path))
+    }
+
+    func test_release_removesTheSandboxWhenNoTestReadsTheDownloadsObserver() async throws {
+        var context: BatchDownloaderTestContext? = BatchDownloaderFake.makeContext()
+        let sandbox = try XCTUnwrap(context?.downloadsURL.url)
+        var downloader: DownloadManager?
+        var session: NetworkSessionFake?
+        (downloader, session) = try await XCTUnwrap(context).makeDownloader()
+        session?.downloadsObserver = AsyncChannel()
+        let request = try XCTUnwrap(context).makeDownloadRequest("1")
+        _ = try await downloader?.download(DownloadBatchRequest(requests: [request]))
+
+        context = nil
+        downloader = nil
+        session = nil
+        BatchDownloaderTestContext.drainPendingRemovals(timeout: 10)
+
         XCTAssertFalse(FileManager.default.fileExists(atPath: sandbox.path))
     }
 

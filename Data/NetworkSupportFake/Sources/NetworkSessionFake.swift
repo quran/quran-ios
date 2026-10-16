@@ -43,7 +43,8 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
         let task = SessionTask(taskIdentifier: taskIdentifier)
         task.originalRequest = request
         downloads.append(task)
-        Task { await downloadsObserver?.send(task) }
+        // Sending waits until a test reads the observer, maybe never, so capture only the observer, not the session.
+        Task { [downloadsObserver] in await downloadsObserver?.send(task) }
         return task
     }
 

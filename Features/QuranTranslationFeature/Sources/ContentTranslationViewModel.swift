@@ -153,7 +153,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     }
 
     func items(quranFont: QuranFont) -> [TranslationItem] {
-        guard let page = verseTexts.first?.key.page else {
+        guard let page else {
             return []
         }
         guard verseTexts.first?.value.translations.count == translations.count else {
@@ -264,6 +264,17 @@ public final class ContentTranslationViewModel: ObservableObject {
         return items
     }
 
+    func pageSection(quranFont: QuranFont) -> TranslationPageSection? {
+        guard let page else {
+            return nil
+        }
+        let pageItems = items(quranFont: quranFont)
+        guard !pageItems.isEmpty else {
+            return nil
+        }
+        return TranslationPageSection(page: page, items: pageItems)
+    }
+
     func load() async {
         do {
             let requestedVerses = verses
@@ -340,6 +351,10 @@ public final class ContentTranslationViewModel: ObservableObject {
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
     private let contentStatePreferences = QuranContentStatePreferences.shared
     private let fontSizePreferences = FontSizePreferences.shared
+
+    private var page: Page? {
+        verseTexts.first?.key.page
+    }
 
     private func arabicText(verse: AyahNumber, verseText: VerseText, quranFont: QuranFont) -> TranslationArabicText {
         let arabicVerseNumber = NumberFormatter.arabicNumberFormatter.format(verse.ayah)

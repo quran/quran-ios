@@ -54,10 +54,14 @@ private final class NotesTabInteractor: TabInteractor {
 
 private class NotesTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
-        UITabBarItem(
+        guard #available(iOS 18.4, *) else {
+            // highlighter has no filled variant.
+            return UITabBarItem(title: l("tab.notes"), image: .symbol("highlighter"), selectedImage: nil)
+        }
+        return UITabBarItem(
             title: l("tab.notes"),
-            image: .symbol("text.justify.leading"),
-            selectedImage: .symbol("text.justify.leading", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))
+            image: .symbol("long.text.page.and.pencil"),
+            selectedImage: .symbol("long.text.page.and.pencil.fill")
         )
     }
 }

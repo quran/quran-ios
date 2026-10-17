@@ -47,11 +47,22 @@ private final class HomeTabInteractor: TabInteractor {
 }
 
 private final class HomeTabViewController: TabViewController {
+    // MARK: Internal
+
     override func getTabBarItem() -> UITabBarItem {
         UITabBarItem(
             title: "\(lAndroid("quran_sura")) / \(lAndroid("quran_juz2"))",
-            image: .symbol("doc.text"),
-            selectedImage: .symbol("doc.text.fill")
+            image: .symbol(symbolName),
+            selectedImage: .symbol("\(symbolName).fill")
         )
+    }
+
+    // MARK: Private
+
+    private var symbolName: String {
+        if #available(iOS 17, *) {
+            return "book.pages"
+        }
+        return "doc.text"
     }
 }

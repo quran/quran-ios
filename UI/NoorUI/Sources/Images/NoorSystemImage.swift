@@ -28,7 +28,9 @@ public enum NoorSystemImage: String {
     case colorSwatch = "circle.fill"
     case plus
     case plusCircle = "plus.circle"
-    case note = "text.justify.leading"
+    case pageAndPencil = "long.text.page.and.pencil"
+    case pageAndPencilFilled = "long.text.page.and.pencil.fill"
+    case highlighter
     case lastPage = "clock"
     case profile = "person.crop.circle"
     case settings = "gearshape"
@@ -61,5 +63,23 @@ public enum NoorSystemImage: String {
 
     public var image: Image {
         Image(systemName: rawValue)
+    }
+}
+
+extension NoorSystemImage {
+    /// Notes and highlights. `pageAndPencil` needs iOS 18.4, so earlier versions use `highlighter`.
+    public static var notes: NoorSystemImage {
+        if #available(iOS 18.4, *) {
+            return .pageAndPencil
+        }
+        return .highlighter
+    }
+
+    /// The selected `notes` symbol. `highlighter` has no filled variant.
+    public static var notesFilled: NoorSystemImage {
+        if #available(iOS 18.4, *) {
+            return .pageAndPencilFilled
+        }
+        return .highlighter
     }
 }

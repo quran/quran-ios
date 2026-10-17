@@ -8,7 +8,6 @@
 import AppDependencies
 import AppIconFeature
 import Localization
-import NoorUI
 import QuranViewFeature
 import SettingsFeature
 import UIKit
@@ -80,8 +79,8 @@ final class SettingsTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
         UITabBarItem(
             title: lAndroid("menu_settings"),
-            image: NoorImage.settings.uiImage,
-            selectedImage: NoorImage.settingsFilled.uiImage
+            image: .symbol("gearshape"),
+            selectedImage: .symbol("gearshape.fill")
         )
     }
 

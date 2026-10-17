@@ -28,7 +28,6 @@ public enum NoorSystemImage: String {
     case colorSwatch = "circle.fill"
     case plus
     case plusCircle = "plus.circle"
-    case note = "text.justify.leading"
     case pageAndPencil = "long.text.page.and.pencil"
     case pageAndPencilFilled = "long.text.page.and.pencil.fill"
     case highlighter

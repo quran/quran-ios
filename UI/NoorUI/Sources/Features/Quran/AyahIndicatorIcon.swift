@@ -16,7 +16,7 @@ struct AyahIndicatorIcon: View {
                 NoorSystemImage.starFilled.image
                     .themedSecondaryForeground()
             case .note:
-                NoorSystemImage.note.image
+                NoorSystemImage.notes.image
                     .themedSecondaryForeground()
             }
         }

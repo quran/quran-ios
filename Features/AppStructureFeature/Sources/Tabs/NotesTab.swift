@@ -8,6 +8,7 @@
 
 import AppDependencies
 import Localization
+import NoorUI
 import NotesFeature
 import QuranViewFeature
 import UIKit
@@ -54,14 +55,10 @@ private final class NotesTabInteractor: TabInteractor {
 
 private class NotesTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
-        guard #available(iOS 18.4, *) else {
-            // highlighter has no filled variant.
-            return UITabBarItem(title: l("tab.notes"), image: .symbol("highlighter"), selectedImage: nil)
-        }
-        return UITabBarItem(
+        UITabBarItem(
             title: l("tab.notes"),
-            image: .symbol("long.text.page.and.pencil"),
-            selectedImage: .symbol("long.text.page.and.pencil.fill")
+            image: .symbol(NoorSystemImage.notes.rawValue),
+            selectedImage: .symbol(NoorSystemImage.notesFilled.rawValue)
         )
     }
 }

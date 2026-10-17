@@ -129,7 +129,7 @@ private struct NotesViewUI: View {
         NoorListEmptyState(
             title: noDataTitle,
             text: noDataText,
-            image: .note,
+            image: .notes,
             style: .prominent(imageColor: .accentColor)
         )
     }

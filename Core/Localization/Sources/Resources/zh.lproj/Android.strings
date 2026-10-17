@@ -183,7 +183,7 @@
 "prefs_import_title" = "进口";
 "prefs_landscape_orientation_summary_off" = "锁定竖屏";
 "prefs_landscape_orientation_summary_on" = "锁定横屏";
-"prefs_landscape_orientation_title" = "锁屏方向";
+"prefs_landscape_orientation_title" = "横屏模式";
 "prefs_lock_orientation_summary_off" = "跟随系统";
 "prefs_lock_orientation_summary_on" = "古兰经页面的屏幕旋转方向";
 "prefs_lock_orientation_title" = "屏幕旋转方向";

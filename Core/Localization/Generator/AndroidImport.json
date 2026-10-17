@@ -20,6 +20,7 @@
     "play",
     "play_each_verse",
     "play_verses_range",
+    "prefs_landscape_orientation_title",
     "prefs_translations",
     "quran_hizb",
     "quran_juz2",
@@ -58,6 +59,7 @@
     },
     "pt": {
       "strings": {
+        "prefs_landscape_orientation_title": "Orientação paisagem",
         "repeatValues[3]": "continuamente"
       },
       "plurals": {
@@ -80,6 +82,7 @@
     },
     "zh": {
       "strings": {
+        "prefs_landscape_orientation_title": "横屏模式",
         "quran_sura_title": "苏拉 %1$@",
         "repeatValues[3]": "循环"
       },

@@ -22,18 +22,34 @@ public struct VerseOverlays: Equatable {
     public var navigationHighlight: AyahNumber?
     public var colorHighlights: [AyahNumber: HighlightColor] = [:]
     public var notedVerses: Set<AyahNumber> = []
+    public var focusModeEnabled = false
     #if QURAN_SYNC
     public var collectionVerses: Set<AyahNumber> = []
     public var readingBookmarks: [PlacedReadingBookmark] = []
     #endif
 
     public var pointedWord: Word?
+
+    public var focusedVerses: Set<AyahNumber>? {
+        guard focusModeEnabled else {
+            return nil
+        }
+        if let restrictedFocusedVerses {
+            return restrictedFocusedVerses
+        }
+        return playingVerses.isEmpty ? nil : Set(playingVerses)
+    }
+
+    // MARK: Private
+
+    private var restrictedFocusedVerses: Set<AyahNumber>?
 }
 
 extension VerseOverlays {
     /// Filters overlays for rendering one page.
     public func restricted(to page: Page) -> Self {
         var overlays = self
+        overlays.restrictedFocusedVerses = focusedVerses.map { verses in verses.filter { $0.page == page } }
         overlays.playingVerses = playingVerses.filter { $0.page == page }
         overlays.selectedVerses = selectedVerses.filter { $0.page == page }
         overlays.navigationTarget = navigationTarget.flatMap { $0.page == page ? $0 : nil }

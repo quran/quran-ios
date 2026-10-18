@@ -10,6 +10,7 @@ import Localization
 import QueuePlayer
 import QuranAudio
 import QuranAudioKit
+import QuranTextKit
 import ReciterListFeature
 import ReciterService
 import UIKit
@@ -36,6 +37,7 @@ final class AudioPlaybackViewModel: ObservableObject {
         playbackRate = audioPreferences.playbackRate
         audioEnd = audioPreferences.audioEnd
         streamingEnabled = audioPreferences.streamingEnabled
+        focusModeEnabled = contentStatePreferences.focusModeEnabled
         verseRuns = audioPreferences.verseRuns
         verseDelay = audioPreferences.verseDelay
         listRuns = audioPreferences.listRuns
@@ -45,6 +47,7 @@ final class AudioPlaybackViewModel: ObservableObject {
         audioPreferences.$playbackRate.assign(to: &$playbackRate)
         audioPreferences.$audioEnd.assign(to: &$audioEnd)
         audioPreferences.$streamingEnabled.assign(to: &$streamingEnabled)
+        contentStatePreferences.$focusModeEnabled.assign(to: &$focusModeEnabled)
         audioPreferences.$verseRuns.assign(to: &$verseRuns)
         audioPreferences.$verseDelay.assign(to: &$verseDelay)
         audioPreferences.$listRuns.assign(to: &$listRuns)
@@ -66,6 +69,10 @@ final class AudioPlaybackViewModel: ObservableObject {
 
     @Published var streamingEnabled: Bool {
         didSet { save(streamingEnabled, to: \.streamingEnabled) }
+    }
+
+    @Published var focusModeEnabled: Bool {
+        didSet { saveFocusMode() }
     }
 
     @Published var verseRuns: Runs {
@@ -121,10 +128,16 @@ final class AudioPlaybackViewModel: ObservableObject {
 
     private let audioPreferences = AudioPreferences.shared
     private let reciterPreferences = ReciterPreferences.shared
+    private let contentStatePreferences = QuranContentStatePreferences.shared
 
     private func save<Value: Equatable>(_ value: Value, to keyPath: ReferenceWritableKeyPath<AudioPreferences, Value>) {
         guard audioPreferences[keyPath: keyPath] != value else { return }
         audioPreferences[keyPath: keyPath] = value
+    }
+
+    private func saveFocusMode() {
+        guard contentStatePreferences.focusModeEnabled != focusModeEnabled else { return }
+        contentStatePreferences.focusModeEnabled = focusModeEnabled
     }
 }
 

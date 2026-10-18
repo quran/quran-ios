@@ -47,6 +47,52 @@ final class ImageDecorationsLayoutTests: XCTestCase {
         XCTAssertEqual(layout.wordHighlight?.color, VerseOverlays.wordHighlightColor)
     }
 
+    func testUnfocusedPageHasNoFocusedLineRects() {
+        let layout = makeLayout(
+            scale: WordFrameScale(scale: 0.5, xOffset: 10, yOffset: 20),
+            verseHighlights: [verses[1]: .yellow]
+        )
+
+        XCTAssertNil(layout.focusedLineRects)
+    }
+
+    func testFocusedLineRectsMatchTheFocusedVerseHighlight() {
+        let scale = WordFrameScale(scale: 0.5, xOffset: 10, yOffset: 20)
+        let highlighted = makeLayout(scale: scale, verseHighlights: [verses[1]: .yellow])
+
+        let layout = makeLayout(scale: scale, focusedVerses: [verses[1]])
+
+        XCTAssertEqual(layout.focusedLineRects, [
+            CGRect(x: 20, y: 40, width: 50, height: 20),
+            CGRect(x: 30, y: 90, width: 30, height: 20),
+        ])
+        XCTAssertEqual(layout.focusedLineRects, highlighted.verseHighlights[0].lineRects)
+    }
+
+    func testFocusedLineRectsCoverEveryFocusedVerse() throws {
+        let scale = WordFrameScale(scale: 0.5, xOffset: 10, yOffset: 20)
+        let highlighted = makeLayout(scale: scale, verseHighlights: [verses[0]: .yellow, verses[1]: .yellow])
+
+        let layout = makeLayout(scale: scale, focusedVerses: [verses[0], verses[1]])
+
+        let focusedRects = try XCTUnwrap(layout.focusedLineRects)
+        let verseRects = highlighted.verseHighlights.flatMap(\.lineRects)
+        XCTAssertEqual(verseRects.count, 3)
+        for rect in verseRects {
+            XCTAssertTrue(focusedRects.contains { $0.contains(rect) }, "\(rect)")
+        }
+    }
+
+    func testFocusedLineRectsAreEmptyWhenNoFocusedVerseIsOnThePage() {
+        let scale = WordFrameScale(scale: 0.5, xOffset: 10, yOffset: 20)
+
+        let elsewhere = makeLayout(scale: scale, focusedVerses: [verses[2]])
+        let nothingFocused = makeLayout(scale: scale, focusedVerses: [])
+
+        XCTAssertEqual(elsewhere.focusedLineRects, [])
+        XCTAssertEqual(nothingFocused.focusedLineRects, [])
+    }
+
     private var verses: [AyahNumber] {
         Quran.hafsMadani1405.suras[1].verses
     }
@@ -63,7 +109,8 @@ final class ImageDecorationsLayoutTests: XCTestCase {
     private func makeLayout(
         scale: WordFrameScale,
         verseHighlights: [AyahNumber: Color] = [:],
-        wordHighlight: Word? = nil
+        wordHighlight: Word? = nil,
+        focusedVerses: Set<AyahNumber>? = nil
     ) -> ImageDecorationsLayout {
         ImageDecorationsLayout(
             decorations: ImageDecorations(
@@ -72,7 +119,8 @@ final class ImageDecorationsLayoutTests: XCTestCase {
                 drawsAyahNumbersAndSuraHeaders: false,
                 wordFrames: wordFrames,
                 verseHighlights: verseHighlights,
-                wordHighlight: wordHighlight
+                wordHighlight: wordHighlight,
+                focusedVerses: focusedVerses
             ),
             imageSize: CGSize(width: 200, height: 300),
             scale: scale

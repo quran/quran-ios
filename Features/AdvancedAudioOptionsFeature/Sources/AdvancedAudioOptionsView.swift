@@ -45,6 +45,7 @@ private struct AdvancedAudioOptionsRootView: View {
             verseDelay: $viewModel.verseDelay,
             repetitionDelay: $viewModel.repetitionDelay,
             playbackRate: viewModel.playbackRate,
+            focusModeEnabled: $viewModel.focusModeEnabled,
             dismiss: { viewModel.dismiss() },
             play: { viewModel.play() },
             updateFromVerseTo: { viewModel.updateFromVerseTo($0) },
@@ -70,6 +71,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
     @Binding var verseDelay: VerseDelay
     @Binding var repetitionDelay: RepetitionDelay
     let playbackRate: Float
+    @Binding var focusModeEnabled: Bool
     let dismiss: @MainActor @Sendable () -> Void
     let play: @MainActor @Sendable () -> Void
     let updateFromVerseTo: ItemAction<AyahNumber>
@@ -101,6 +103,12 @@ struct AdvancedAudioOptionsRootViewUI: View {
                     items: PlaybackSpeed.supportedRates,
                     selection: playbackRateBinding,
                     label: PlaybackSpeed.formatted
+                )
+
+                NoorToggleRow(
+                    title: l("audio.focus-mode.title"),
+                    image: .focusMode,
+                    isOn: $focusModeEnabled
                 )
             }
 

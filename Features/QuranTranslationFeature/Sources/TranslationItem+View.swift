@@ -102,18 +102,35 @@ extension TranslatorText: View {
     }
 }
 
+extension TranslationItemId {
+    func isDimmed(by focusedVerses: Set<AyahNumber>?) -> Bool {
+        guard let focusedVerses, let ayah else {
+            return false
+        }
+        return !focusedVerses.contains(ayah)
+    }
+}
+
 extension TranslationItem {
     #if QURAN_SYNC
-    func view(onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?) -> some View {
-        content { $0.view(onAyahNumberTapped: onAyahNumberTapped) }
+    func view(
+        focusedVerses: Set<AyahNumber>? = nil,
+        onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?
+    ) -> some View {
+        content(focusedVerses: focusedVerses) { $0.view(onAyahNumberTapped: onAyahNumberTapped) }
     }
     #else
-    func view() -> some View {
-        content { $0.view() }
+    func view(focusedVerses: Set<AyahNumber>? = nil) -> some View {
+        content(focusedVerses: focusedVerses) { $0.view() }
     }
     #endif
 
-    private func content(@ViewBuilder verseNumberView: (TranslationVerseNumber) -> some View) -> some View {
+    private static let dimmedOpacity = 0.25
+
+    private func content(
+        focusedVerses: Set<AyahNumber>?,
+        @ViewBuilder verseNumberView: (TranslationVerseNumber) -> some View
+    ) -> some View {
         VStack {
             switch self {
             case .pageHeader(let pageHeader):
@@ -141,6 +158,7 @@ extension TranslationItem {
         .listRowInsets(.zero)
         .listRowBackground(Color.clear)
         .background(color)
+        .opacity(id.isDimmed(by: focusedVerses) ? Self.dimmedOpacity : 1)
         .trackingTarget(item: id)
     }
 }

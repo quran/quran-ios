@@ -23,6 +23,7 @@ struct AudioPlaybackView: View {
             playbackRate: $viewModel.playbackRate,
             audioEnd: $viewModel.audioEnd,
             streamingEnabled: $viewModel.streamingEnabled,
+            focusModeEnabled: $viewModel.focusModeEnabled,
             verseRuns: $viewModel.verseRuns,
             verseDelay: $viewModel.verseDelay,
             listRuns: $viewModel.listRuns,
@@ -41,6 +42,7 @@ private struct AudioPlaybackViewUI: View {
     @Binding var playbackRate: Float
     @Binding var audioEnd: AudioEnd
     @Binding var streamingEnabled: Bool
+    @Binding var focusModeEnabled: Bool
     @Binding var verseRuns: Runs
     @Binding var verseDelay: VerseDelay
     @Binding var listRuns: Runs
@@ -81,6 +83,12 @@ private struct AudioPlaybackViewUI: View {
                     image: .stream,
                     isOn: $streamingEnabled
                 )
+
+                NoorToggleRow(
+                    title: l("audio.focus-mode.title"),
+                    image: .focusMode,
+                    isOn: $focusModeEnabled
+                )
             }
 
             AudioRepeatSection(
@@ -109,6 +117,7 @@ private struct AudioPlaybackViewUI: View {
         @State var playbackRate: Float = 1
         @State var audioEnd = AudioEnd.page
         @State var streamingEnabled = false
+        @State var focusModeEnabled = false
         @State var verseRuns = Runs.finite(1)
         @State var verseDelay = VerseDelay.none
         @State var listRuns = Runs.indefinite
@@ -120,6 +129,7 @@ private struct AudioPlaybackViewUI: View {
                 playbackRate: $playbackRate,
                 audioEnd: $audioEnd,
                 streamingEnabled: $streamingEnabled,
+                focusModeEnabled: $focusModeEnabled,
                 verseRuns: $verseRuns,
                 verseDelay: $verseDelay,
                 listRuns: $listRuns,

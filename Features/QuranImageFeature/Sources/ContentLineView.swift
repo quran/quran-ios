@@ -32,6 +32,7 @@ struct ContentLineView: View {
             onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
+            focusedVerses: viewModel.focusedVerses,
             ayahReadingBookmarks: viewModel.ayahReadingBookmarks,
             pageReadingBookmarks: viewModel.pageReadingBookmarks,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
@@ -51,6 +52,7 @@ struct ContentLineView: View {
             onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
+            focusedVerses: viewModel.focusedVerses,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
             chromeStyle: viewModel.chromeStyle,
             imageRenderingMode: viewModel.imageRenderingMode,
@@ -84,6 +86,7 @@ private struct ContentLineViewBody: View {
     let onReaderScroll: () -> Void
     let wordFrames: WordFrameCollection
     let highlightColorsByVerse: [AyahNumber: Color]
+    let focusedVerses: Set<AyahNumber>?
     #if QURAN_SYNC
     let ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]]
     let pageReadingBookmarks: [ReadingBookmarkSlot]
@@ -157,6 +160,7 @@ private struct ContentLineViewBody: View {
                 suraHeaders(layout)
                 highlights(layout)
                 ayahMarkers(layout)
+                focusDim(layout)
             }
         }
         .frame(
@@ -206,6 +210,17 @@ private struct ContentLineViewBody: View {
                 SuraHeaderView(tint: chromePalette.header.foreground)
                     .placed(in: placement.frame)
             }
+        }
+    }
+
+    @ViewBuilder
+    private func focusDim(_ layout: LinePageLayout) -> some View {
+        if let focusedVerses {
+            QuranFocusDim(
+                cutouts: layout.highlightRects
+                    .filter { focusedVerses.contains($0.ayah) }
+                    .map(\.rect)
+            )
         }
     }
 

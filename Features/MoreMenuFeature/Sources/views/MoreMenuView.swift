@@ -93,12 +93,6 @@ private struct MoreMenuRootView: View {
                     }
                     #endif
 
-                    viewBasedOn(state.focusMode) {
-                        MoreMenuFocusMode(enabled: $store.focusModeEnabled)
-                            .background(Color.systemBackground)
-                        empty
-                    }
-
                     viewBasedOn(state.orientation, customCondition: store.mode == .arabic) {
                         MoreMenuDeviceRotation()
                             .background(Color.systemBackground)

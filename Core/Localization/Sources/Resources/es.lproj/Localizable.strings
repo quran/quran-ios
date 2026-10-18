@@ -127,7 +127,6 @@
 "menu.twoPages" = "2 páginas una al lado de la otra (en paisaje)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Desplazamiento vertical";
-"menu.focusMode" = "Atenuar las demás aleyas durante la recitación";
 "menu.linePageDividers" = "Separadores de línea";
 "menu.linePageSidelines" = "Líneas laterales";
 "menu.ayahIndicators" = "Indicadores de versículos";
@@ -471,6 +470,7 @@
 "audio.repetition-delay.description" = "Define cuánto tiempo pausar antes de que comience la siguiente repetición.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Transmitir audio";
+"audio.focus-mode.title" = "Atenuar las demás aleyas durante la recitación";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Reproducción de audio";
 // Metadata: Translated by AI; human review required.

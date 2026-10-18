@@ -127,7 +127,6 @@
 "menu.twoPages" = "Yonma-yon 2 sahifa (gorizontal formatda)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Vertikal aylantirish";
-"menu.focusMode" = "Tilovat paytida boshqa oyatlarni xiralashtirish";
 "menu.linePageDividers" = "Qator ajratgichlari";
 "menu.linePageSidelines" = "Yon chiziqlar";
 "menu.ayahIndicators" = "Oyat belgilari";
@@ -473,6 +472,7 @@
 "audio.repetition-delay.description" = "Keyingi takror boshlanishidan oldingi tanaffus davomiyligini belgilaydi.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Audioni internet orqali ijro etish";
+"audio.focus-mode.title" = "Tilovat paytida boshqa oyatlarni xiralashtirish";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Audio ijrosi";
 // Metadata: Translated by AI; human review required.

@@ -127,7 +127,6 @@
 "menu.twoPages" = "2 صفحه کنار هم (در حالت افقی)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "اسکرول عمودی";
-"menu.focusMode" = "کم‌رنگ کردن سایر آیات هنگام تلاوت";
 "menu.linePageDividers" = "جداکننده‌های سطر";
 "menu.linePageSidelines" = "خطوط کناری";
 "menu.ayahIndicators" = "نشانگرهای آیه";
@@ -473,6 +472,7 @@
 "audio.repetition-delay.description" = "مدت مکث پیش از آغاز تکرار بعدی را تعیین می‌کند.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "پخش جریانی صوت";
+"audio.focus-mode.title" = "کم‌رنگ کردن سایر آیات هنگام تلاوت";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "پخش صوت";
 // Metadata: Translated by AI; human review required.

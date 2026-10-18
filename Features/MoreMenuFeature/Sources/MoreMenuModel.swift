@@ -40,7 +40,6 @@ public struct MoreMenuControlsState {
     #if QURAN_SYNC
     public var ayahIndicators = ConfigState.alwaysOff
     #endif
-    public var focusMode = ConfigState.conditional
     public var orientation = ConfigState.conditional
     public var fontSize = ConfigState.conditional
     public var twoPages = ConfigState.conditional

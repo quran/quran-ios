@@ -127,7 +127,6 @@
 "menu.twoPages" = "2 páginas lado a lado (em paisagem)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Rolagem vertical";
-"menu.focusMode" = "Escurecer as outras ayahs durante a recitação";
 "menu.linePageDividers" = "Separadores de linha";
 "menu.linePageSidelines" = "Linhas laterais";
 "menu.ayahIndicators" = "Indicadores de ayas";
@@ -472,6 +471,7 @@
 "audio.repetition-delay.description" = "Define por quanto tempo pausar antes do início da próxima repetição.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Transmitir áudio";
+"audio.focus-mode.title" = "Escurecer as outras ayahs durante a recitação";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Reprodução de áudio";
 // Metadata: Translated by AI; human review required.

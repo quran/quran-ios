@@ -33,7 +33,6 @@ final class MoreMenuViewModel: ObservableObject {
         translationFontSize = fontSizePreferences.translationFontSize
         arabicFontSize = fontSizePreferences.arabicFontSize
         twoPagesEnabled = preferences.twoPagesEnabled
-        focusModeEnabled = preferences.focusModeEnabled
         verticalScrollingEnabled = preferences.verticalScrollingEnabled
         showLinePageDividers = preferences.showLinePageDividers
         showLinePageSidelines = preferences.showLinePageSidelines
@@ -90,14 +89,6 @@ final class MoreMenuViewModel: ObservableObject {
             .sink { [weak self] newValue in
                 logger.info("More Menu: set two pages enabled \(newValue)")
                 self?.preferences.twoPagesEnabled = newValue
-            }
-            .store(in: &cancellables)
-
-        $focusModeEnabled
-            .dropFirst()
-            .sink { [weak self] newValue in
-                logger.info("More Menu: set focus mode enabled \(newValue)")
-                self?.preferences.focusModeEnabled = newValue
             }
             .store(in: &cancellables)
 
@@ -174,7 +165,6 @@ final class MoreMenuViewModel: ObservableObject {
     @Published var arabicFontSize: FontSize
 
     @Published var twoPagesEnabled: Bool
-    @Published var focusModeEnabled: Bool
     @Published var verticalScrollingEnabled: Bool
     @Published var showLinePageDividers: Bool
     @Published var showLinePageSidelines: Bool

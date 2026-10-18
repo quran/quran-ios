@@ -127,7 +127,6 @@
 "menu.twoPages" = "2 страницы рядом (в альбомном формате)";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.verticalScrolling" = "Вертикальная прокрутка";
-"menu.focusMode" = "Приглушать остальные аяты при прослушивании";
 "menu.linePageDividers" = "Разделители строк";
 "menu.linePageSidelines" = "Боковые линии";
 "menu.ayahIndicators" = "Значки аятов";
@@ -471,6 +470,7 @@
 "audio.repetition-delay.description" = "Определяет длительность паузы перед началом следующего повтора.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Потоковое аудио";
+"audio.focus-mode.title" = "Приглушать остальные аяты при прослушивании";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Воспроизведение аудио";
 // Metadata: Translated by AI; human review required.

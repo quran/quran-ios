@@ -42,6 +42,11 @@ public struct AudioBannerBuilder {
             .enableToastPresenter()
         let viewController = UIHostingController(rootView: view)
         viewController.view.backgroundColor = nil
+        if #available(iOS 16.4, *) {
+            // Stay at the bottom of the reader. A keyboard, even one shown by a presented
+            // editor like the reading bookmark menu, would otherwise lift the banner above it.
+            viewController.safeAreaRegions = .container
+        }
         viewModel.listener = listener
         return (viewController, viewModel)
     }

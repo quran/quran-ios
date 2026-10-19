@@ -109,6 +109,7 @@ private func previewOption(_ id: String, _ alternateIconName: String?, light: In
         alternateIconName: alternateIconName,
         name: id.capitalized,
         previewImageName: "app-icon-\(id)",
+        artworkImageName: "app-artwork-\(id)",
         accent: AppIconAccent(light: UIColor(rgb: light), dark: UIColor(rgb: dark), onDark: .black)
     )
 }

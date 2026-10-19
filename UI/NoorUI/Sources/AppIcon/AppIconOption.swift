@@ -16,18 +16,21 @@ public struct AppIconOption: Identifiable {
     ///   - alternateIconName: The name iOS knows the icon by, or `nil` for the primary icon.
     ///   - name: The localized display name.
     ///   - previewImageName: A preview image in the main bundle.
+    ///   - artworkImageName: An opaque, square image of the icon in the main bundle, without its rounded mask.
     ///   - accent: The colors the icon lends the interface.
     public init(
         id: String,
         alternateIconName: String?,
         name: String,
         previewImageName: String,
+        artworkImageName: String,
         accent: AppIconAccent
     ) {
         self.id = id
         self.alternateIconName = alternateIconName
         self.name = name
         self.previewImageName = previewImageName
+        self.artworkImageName = artworkImageName
         self.accent = accent
     }
 
@@ -46,10 +49,16 @@ public struct AppIconOption: Identifiable {
         Image(previewImageName, bundle: .main)
     }
 
+    /// The icon as square artwork for places that draw their own shape, such as Now Playing.
+    public var artworkImage: UIImage? {
+        UIImage(named: artworkImageName, in: .main, compatibleWith: nil)
+    }
+
     // MARK: Internal
 
     let alternateIconName: String?
     let previewImageName: String
+    let artworkImageName: String
     let accent: AppIconAccent
 }
 

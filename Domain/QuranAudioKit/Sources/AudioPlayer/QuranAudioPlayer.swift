@@ -11,6 +11,7 @@ import QueuePlayer
 import QuranAudio
 import QuranKit
 import ReciterService
+import UIKit
 import VLogging
 
 public struct QuranAudioPlayerActions: Sendable {
@@ -83,6 +84,14 @@ public class QuranAudioPlayer {
         player.setRate(rate)
     }
 
+    /// Sets the image Now Playing shows for the app, such as its current Home Screen icon.
+    public func setArtwork(_ artwork: UIImage?) {
+        self.artwork = artwork
+        if audioRequest != nil {
+            nowPlaying.update(artwork: artwork)
+        }
+    }
+
     // MARK: - Play
 
     public func play(
@@ -129,6 +138,7 @@ public class QuranAudioPlayer {
     private let gappedAudioRequestBuilder: QuranAudioRequestBuilder = GappedAudioRequestBuilder()
     private let gaplessAudioRequestBuilder: QuranAudioRequestBuilder = GaplessAudioRequestBuilder()
     private var audioRequest: QuranAudioRequest?
+    private var artwork: UIImage?
 
     // MARK: - AudioPlayerActions
 
@@ -156,6 +166,7 @@ public class QuranAudioPlayer {
 
         let info = audioRequest.getPlayerInfo(for: fileIndex)
         nowPlaying.update(info: info)
+        nowPlaying.update(artwork: artwork)
         nowPlaying.update(playingIndex: fileIndex)
         // Zero until `durationLoaded(_:)`, so the previous file's duration never shows.
         nowPlaying.update(duration: duration ?? 0)

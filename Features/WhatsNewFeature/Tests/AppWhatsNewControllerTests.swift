@@ -198,6 +198,7 @@ final class AppWhatsNewControllerTests: XCTestCase {
                 alternateIconName: nil,
                 name: "Primary",
                 previewImageName: "app-icon-primary",
+                artworkImageName: "app-artwork-primary",
                 accent: AppIconAccent(light: .systemIndigo, dark: .systemYellow, onDark: .black)
             ),
         ]),

@@ -28,6 +28,7 @@ extension AppIconOption {
         alternateIconName: nil,
         name: "QuranEngine",
         previewImageName: "app-icon-engine-amber",
+        artworkImageName: "app-artwork-engine-amber",
         accent: .amber
     )
 
@@ -36,6 +37,7 @@ extension AppIconOption {
         alternateIconName: "AppIcon-Graphite",
         name: l("app_icon.name.graphite"),
         previewImageName: "app-icon-engine-graphite",
+        artworkImageName: "app-artwork-engine-graphite",
         accent: .amber
     )
 }

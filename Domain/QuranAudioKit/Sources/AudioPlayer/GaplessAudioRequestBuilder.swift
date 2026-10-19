@@ -31,8 +31,7 @@ struct GaplessAudioRequest: QuranAudioRequest {
     func getPlayerInfo(for fileIndex: Int) -> PlayerItemInfo {
         PlayerItemInfo(
             title: ayahs[fileIndex][0].sura.localizedName(),
-            artist: reciter.localizedName,
-            image: nil
+            artist: reciter.localizedName
         )
     }
 

@@ -30,8 +30,7 @@ struct GappedAudioRequest: QuranAudioRequest {
         let ayah = ayahs[fileIndex]
         return PlayerItemInfo(
             title: ayah.localizedName,
-            artist: reciter.localizedName,
-            image: nil
+            artist: reciter.localizedName
         )
     }
 

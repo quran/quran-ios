@@ -219,4 +219,5 @@ swiftlint-analyzer:
 export-example-app-icon-images:
 	Tools/export-app-icon-images.sh preview "$(EXAMPLE_RESOURCES_DIR)/AppIcon.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-icon-engine-amber.imageset" 180
 	Tools/export-app-icon-images.sh preview "$(EXAMPLE_RESOURCES_DIR)/AppIcon-Graphite.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-icon-engine-graphite.imageset" 60
-	Tools/export-app-icon-images.sh artwork "$(EXAMPLE_RESOURCES_DIR)/AppIcon.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-image.imageset" 1024
+	Tools/export-app-icon-images.sh artwork "$(EXAMPLE_RESOURCES_DIR)/AppIcon.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-artwork-engine-amber.imageset" 1024
+	Tools/export-app-icon-images.sh artwork "$(EXAMPLE_RESOURCES_DIR)/AppIcon-Graphite.icon" "$(EXAMPLE_RESOURCES_DIR)/Assets.xcassets/app-artwork-engine-graphite.imageset" 1024

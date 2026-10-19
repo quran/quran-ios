@@ -265,5 +265,6 @@ private let previewAppIcon = AppIconOption(
     alternateIconName: nil,
     name: "Navy & Gold",
     previewImageName: "app-icon-navy-gold",
+    artworkImageName: "app-artwork-navy-gold",
     accent: AppIconAccent(light: .systemIndigo, dark: .systemYellow, onDark: .black)
 )

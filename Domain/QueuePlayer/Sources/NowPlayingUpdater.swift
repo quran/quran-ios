@@ -33,9 +33,14 @@ public class NowPlayingUpdater {
     public func update(info: PlayerItemInfo) {
         update([MPMediaItemPropertyTitle: info.title,
                 MPMediaItemPropertyArtist: info.artist])
-        if let artwork = info.artwork {
-            update([MPMediaItemPropertyArtwork: artwork])
+    }
+
+    public func update(artwork image: UIImage?) {
+        var info = nowPlayingInfo ?? [:]
+        info[MPMediaItemPropertyArtwork] = image.map { image in
+            MPMediaItemArtwork(boundsSize: image.size) { _ in image }
         }
+        nowPlayingInfo = info
     }
 
     public func update(rate: Float) {

@@ -34,6 +34,7 @@ struct AppDependenciesStub: AppDependencies {
                 alternateIconName: nil,
                 name: "Primary",
                 previewImageName: "app-icon-primary",
+                artworkImageName: "app-artwork-primary",
                 accent: AppIconAccent(light: .black, dark: .white, onDark: .black)
             ),
         ]),

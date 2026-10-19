@@ -236,6 +236,29 @@ class QuranAudioPlayerTests: XCTestCase {
         XCTAssertEqual(nowPlayingDuration, 4)
     }
 
+    @MainActor
+    func test_nowPlaying_showsTheArtworkWithTheFrameChange() async throws {
+        let artwork = makeImage()
+        player.setArtwork(artwork)
+        try await runDownloadedTestCase(gapless: false)
+
+        queuePlayer.actions?.audioFrameChanged(0, 0, makePlayerItem(), nil)
+
+        XCTAssertIdentical(nowPlayingArtwork, artwork)
+    }
+
+    @MainActor
+    func test_nowPlaying_switchesTheArtworkWhilePlaying() async throws {
+        player.setArtwork(makeImage())
+        try await runDownloadedTestCase(gapless: false)
+        queuePlayer.actions?.audioFrameChanged(0, 0, makePlayerItem(), nil)
+
+        let artwork = makeImage()
+        player.setArtwork(artwork)
+
+        XCTAssertIdentical(nowPlayingArtwork, artwork)
+    }
+
     // MARK: Private
 
     private var player: QuranAudioPlayer!
@@ -250,6 +273,16 @@ class QuranAudioPlayerTests: XCTestCase {
     @MainActor
     private var nowPlayingDuration: TimeInterval? {
         MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] as? TimeInterval
+    }
+
+    @MainActor
+    private var nowPlayingArtwork: UIImage? {
+        let artwork = MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyArtwork] as? MPMediaItemArtwork
+        return artwork?.image(at: artwork?.bounds.size ?? .zero)
+    }
+
+    private func makeImage() -> UIImage {
+        UIGraphicsImageRenderer(size: CGSize(width: 1, height: 1)).image { _ in }
     }
 
     private func makePlayerItem() -> AVPlayerItem {

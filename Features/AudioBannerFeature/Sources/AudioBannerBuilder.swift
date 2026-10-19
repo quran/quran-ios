@@ -31,6 +31,7 @@ public struct AudioBannerBuilder {
             reciterRetreiver: ReciterDataRetriever(),
             recentRecitersService: RecentRecitersService(),
             audioPlayer: QuranAudioPlayer(),
+            appIconService: container.appIconService(),
             downloader: QuranAudioDownloader(
                 baseURL: container.filesAppHost,
                 downloader: container.downloadManager

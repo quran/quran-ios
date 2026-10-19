@@ -62,6 +62,7 @@ extension AppIconOption {
             alternateIconName: alternateIconName,
             name: id.capitalized,
             previewImageName: "app-icon-\(id)",
+            artworkImageName: "app-artwork-\(id)",
             accent: accent
         )
     }

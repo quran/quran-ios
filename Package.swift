@@ -743,8 +743,15 @@ private func featuresTargets() -> [[Target]] {
             "ReciterListFeature",
             "AdvancedAudioOptionsFeature",
         ], testDependencies: [
+            "AdvancedAudioOptionsFeature",
+            "AnalyticsFake",
+            "BatchDownloaderFake",
             "NoorUI",
+            "QuranAudioKit",
             "QuranKit",
+            "ReciterListFeature",
+            "ReciterService",
+            "SystemDependenciesFake",
         ]),
 
         target(type, name: "AudioDownloadsFeature", dependencies: [

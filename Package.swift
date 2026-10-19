@@ -908,6 +908,7 @@ private func featuresTargets() -> [[Target]] {
             "TranslationsFeature",
             "ReadingSelectorFeature",
             "Preferences",
+            "SystemDependencies",
             "ZIPFoundation",
         ] + mobileSyncTargetDependencies, testDependencies: [
             "Analytics",

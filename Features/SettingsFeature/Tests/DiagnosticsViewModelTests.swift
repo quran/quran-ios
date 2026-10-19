@@ -6,6 +6,7 @@
 //
 
 import Localization
+import SystemDependenciesFake
 import XCTest
 @testable import SettingsFeature
 
@@ -37,17 +38,34 @@ final class DiagnosticsViewModelTests: XCTestCase {
         XCTAssertEqual(sut.enableDebugLoggingFooter, l("diagnostics.enable_debug_logs.details"))
     }
 
+    func test_appVersion_showsTheVersionAndBuildLeftToRight() {
+        bundle.info["CFBundleShortVersionString"] = "2.4.0"
+        bundle.info["CFBundleVersion"] = "310"
+        let sut = makeSUT()
+
+        XCTAssertEqual(sut.appVersion, "\u{2066}2.4.0 (310)\u{2069}")
+    }
+
+    func test_appVersion_showsTheVersionAloneWithoutABuild() {
+        bundle.info["CFBundleShortVersionString"] = "2.4.0"
+        let sut = makeSUT()
+
+        XCTAssertEqual(sut.appVersion, "\u{2066}2.4.0\u{2069}")
+    }
+
     // MARK: Private
 
     private var directory: URL!
+    private let bundle = SystemBundleFake()
 
-    private func makeSUT(isDebugLoggingAlwaysEnabled: Bool) -> DiagnosticsViewModel {
+    private func makeSUT(isDebugLoggingAlwaysEnabled: Bool = true) -> DiagnosticsViewModel {
         DiagnosticsViewModel(
             diagnosticsService: DiagnosticsService(
                 logsDirectory: directory.appendingPathComponent("logs", isDirectory: true),
                 databasesDirectory: directory.appendingPathComponent("databases", isDirectory: true)
             ),
             isDebugLoggingAlwaysEnabled: isDebugLoggingAlwaysEnabled,
+            bundle: bundle,
             navigationController: nil
         )
     }

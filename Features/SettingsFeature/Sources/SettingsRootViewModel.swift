@@ -19,6 +19,7 @@ import NoorUI
 import ReadingSelectorFeature
 import SafariServices
 import SettingsService
+import SystemDependencies
 import TranslationsFeature
 import UIKit
 import VLogging
@@ -109,7 +110,7 @@ final class SettingsRootViewModel: ObservableObject {
     /// Whether the app can change its Home Screen icon. The App Icon row hides otherwise.
     let isAppIconAvailable: Bool
 
-    let contactUsService = ContactUsService()
+    let contactUsService = ContactUsService(bundle: DefaultSystemBundle())
     let themeService = ThemeService.shared
 
     weak var navigationController: UINavigationController?

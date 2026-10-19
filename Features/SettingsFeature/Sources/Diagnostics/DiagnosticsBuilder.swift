@@ -8,6 +8,7 @@
 import AppDependencies
 import Localization
 import SwiftUI
+import SystemDependencies
 
 @MainActor
 public struct DiagnosticsBuilder {
@@ -27,6 +28,7 @@ public struct DiagnosticsBuilder {
         let viewModel = DiagnosticsViewModel(
             diagnosticsService: service,
             isDebugLoggingAlwaysEnabled: container.isDebugLoggingAlwaysEnabled,
+            bundle: DefaultSystemBundle(),
             navigationController: navigationController
         )
         let view = DiagnosticsView(viewModel: viewModel)

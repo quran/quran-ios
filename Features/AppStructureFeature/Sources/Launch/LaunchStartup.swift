@@ -30,7 +30,8 @@ public final class LaunchStartup {
         fileSystemMigrator: FileSystemMigrator,
         recitersPathMigrator: RecitersPathMigrator,
         reviewService: ReviewService,
-        appIconService: AppIconService
+        appIconService: AppIconService,
+        analyticsUserPropertiesReporterBuilder: AnalyticsUserPropertiesReporterBuilder
     ) {
         self.appBuilder = appBuilder
         self.launchStores = launchStores
@@ -40,6 +41,7 @@ public final class LaunchStartup {
         self.recitersPathMigrator = recitersPathMigrator
         self.reviewService = reviewService
         self.appIconService = appIconService
+        self.analyticsUserPropertiesReporterBuilder = analyticsUserPropertiesReporterBuilder
     }
 
     deinit {
@@ -92,6 +94,8 @@ public final class LaunchStartup {
     private let audioUpdater: AudioUpdater
     private let reviewService: ReviewService
     private let appIconService: AppIconService
+    private let analyticsUserPropertiesReporterBuilder: AnalyticsUserPropertiesReporterBuilder
+    private var analyticsUserPropertiesReporter: AnalyticsUserPropertiesReporter?
     private let crashApplicationObserver = CrashApplicationObserver()
     private let notificationCenter = NotificationCenter.default
 
@@ -181,6 +185,7 @@ public final class LaunchStartup {
             #if QURAN_SYNC
             startLegacyDataImport()
             #endif
+            startReportingUserProperties()
             upgradeIfNeeded(window: window)
         case .showStorageFull:
             reportStorageFull()
@@ -301,6 +306,14 @@ public final class LaunchStartup {
             for: "3.1.0"
         )
         #endif
+    }
+
+    /// Preferences read while protected data is unavailable return their defaults.
+    private func startReportingUserProperties() {
+        guard analyticsUserPropertiesReporter == nil else { return }
+        let reporter = analyticsUserPropertiesReporterBuilder.build(appIconService: appIconService)
+        analyticsUserPropertiesReporter = reporter
+        reporter.start()
     }
 
     #if QURAN_SYNC

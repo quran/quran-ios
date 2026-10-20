@@ -950,14 +950,24 @@ private func featuresTargets() -> [[Target]] {
         ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "AppStructureFeature", dependencies: [
+            "Analytics",
             "AppIconFeature",
             "AppMigrator",
+            "AuthenticationClient",
             "CoreDataPersistence",
             "Crashing",
             "FeaturesSupport",
             "NoorUI",
+            "QueuePlayer",
+            "QuranAudio",
+            "QuranAudioKit",
             "QuranKit",
+            "QuranText",
+            "QuranTextKit",
             "ReadingService",
+            "ReciterService",
+            "TranslationService",
+            "WordTextService",
             "HomeFeature",
             "BookmarksFeature",
             "NotesFeature",
@@ -969,7 +979,11 @@ private func featuresTargets() -> [[Target]] {
             "AppMigrationFeature",
             "SyncLogging",
         ] + mobileSyncTargetDependencies, testDependencies: [
+            "AnalyticsFake",
+            "AuthenticationClientFake",
             "CoreDataModel",
+            "ReciterServiceFake",
+            "SystemDependenciesFake",
         ]),
     ]
 }

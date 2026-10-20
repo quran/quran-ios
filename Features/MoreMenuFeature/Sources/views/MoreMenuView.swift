@@ -47,23 +47,16 @@ private struct MoreMenuRootView: View {
                                 .contentShape(Rectangle())
                         }
                         .buttonStyle(BackgroundHighlightingStyle())
-                        .background(Color.systemBackground)
-
-                        empty
                     }
 
                     viewBasedOn(state.arabicText, customCondition: store.mode == .translation) {
                         MoreMenuArabicText(enabled: $store.showArabicText)
-                            .background(Color.systemBackground)
-                        empty
                     }
 
                     viewBasedOn(state.wordPointer, customCondition: store.mode == .arabic) {
                         MoreMenuWordPointer(enabled: $store.wordPointerEnabled)
-                            .background(Color.systemBackground)
                         if store.wordPointerEnabled {
                             divider
-                                .background(Color.systemBackground)
                             Button {
                                 showWordPointerSelection()
                             } label: {
@@ -71,38 +64,31 @@ private struct MoreMenuRootView: View {
                                     .contentShape(Rectangle())
                             }
                             .buttonStyle(BackgroundHighlightingStyle())
-                            .background(Color.systemBackground)
                         }
-                        empty
                     }
+
+                    // Text options above, display options below.
+                    sectionSeparator
 
                     viewBasedOn(state.linePageDisplay, customCondition: store.mode == .arabic) {
                         MoreMenuLinePageDisplay(
                             showDividers: $store.showLinePageDividers,
                             showSidelines: $store.showLinePageSidelines
                         )
-                        .background(Color.systemBackground)
-                        empty
                     }
 
                     #if QURAN_SYNC
                     viewBasedOn(state.ayahIndicators) {
                         MoreMenuAyahIndicators(visibility: $store.indicatorVisibility)
-                            .background(Color.systemBackground)
-                        empty
                     }
                     #endif
 
                     viewBasedOn(state.orientation, customCondition: store.mode == .arabic) {
                         MoreMenuDeviceRotation()
-                            .background(Color.systemBackground)
-                        empty
                     }
 
                     viewBasedOn(state.twoPages) {
                         MoreMenuTwoPages(enabled: $store.twoPagesEnabled)
-                            .background(Color.systemBackground)
-                        empty
                     }
 
                     viewBasedOn(state.verticalScrolling) {
@@ -126,15 +112,20 @@ private struct MoreMenuRootView: View {
         store.state
     }
 
-    private var empty: some View {
-        VStack {
-            MoreMenuEmpty()
-        }
-    }
+    @ScaledMetric private var sectionSpacing = 8.0
 
     private var divider: some View {
         Divider()
             .padding(.leading)
+    }
+
+    /// A 1pt line, since a hairline `Divider` is barely visible on the popover's Liquid Glass.
+    private var sectionSeparator: some View {
+        Rectangle()
+            .fill(Color.separator)
+            .frame(height: 1)
+            .padding(.horizontal)
+            .padding(.vertical, sectionSpacing)
     }
 
     @ViewBuilder

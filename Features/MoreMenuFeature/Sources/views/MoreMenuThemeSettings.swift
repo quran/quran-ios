@@ -68,7 +68,6 @@ struct MoreMenuThemeSettingsMenuItem: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(BackgroundHighlightingStyle())
-        .background(Color.systemBackground)
         UIViewControllerReader(viewController: $viewController)
     }
 

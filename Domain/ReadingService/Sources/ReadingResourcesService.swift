@@ -154,7 +154,12 @@ public actor ReadingResourcesService {
 
             return .ready
         } catch {
-            crasher.recordError(error, reason: "Failed to download \(reading). Error: \(error)")
+            // The downloader and the unzip step record their own failures.
+            if error.isCancelled {
+                logger.info("Resources: Loading reading \(reading) was cancelled")
+            } else {
+                logger.error("Resources: Failed to load reading \(reading). Error: \(error)")
+            }
             return .error(error as NSError)
         }
     }

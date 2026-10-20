@@ -568,6 +568,7 @@ private func domainTargets() -> [[Target]] {
         ] + mobileSyncTestSupportDependencies),
 
         target(type, name: "LegacyDataMigration", dependencies: [
+            "Crashing",
             "LegacyDataPersistence",
             "Preferences",
             "VLogging",

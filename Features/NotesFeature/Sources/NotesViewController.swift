@@ -36,18 +36,13 @@ final class NotesViewController: UIHostingController<NotesView>, UISearchBarDele
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.placeholder = l("notes.search.placeholder.text")
-        searchController.searchBar.delegate = self
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = true
+        search.install(in: navigationItem, hidesSearchBarWhenScrolling: true)
         definesPresentationContext = true
 
         viewModel.$searchTerm
             .receive(on: DispatchQueue.main)
             .sink { [weak self] term in
-                guard let bar = self?.searchController.searchBar else { return }
+                guard let bar = self?.search.searchBar else { return }
                 if bar.text != term {
                     bar.text = term
                 }
@@ -79,7 +74,11 @@ final class NotesViewController: UIHostingController<NotesView>, UISearchBarDele
     private var editController: NavigationEditModeController?
     private let viewModel: NotesViewModel
     private let noteEditorBuilder: NoteEditorBuilder
-    private let searchController = UISearchController(searchResultsController: nil)
+    private lazy var search = NavigationSearch(
+        placeholder: l("notes.search.placeholder.text"),
+        delegate: self,
+        hidesNavigationBarDuringPresentation: false
+    )
     private var cancellables: Set<AnyCancellable> = []
 
     private var currentEditMode: EditMode? {
@@ -109,7 +108,7 @@ final class NotesViewController: UIHostingController<NotesView>, UISearchBarDele
                     target: self,
                     action: #selector(shareAllNotes)
                 ),
-            ]
+            ] + [search.barButtonItem].compactMap { $0 }
         )
     }
 

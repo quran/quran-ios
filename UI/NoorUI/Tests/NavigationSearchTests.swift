@@ -48,6 +48,25 @@ final class NavigationSearchTests: XCTestCase {
         XCTAssertFalse(search.searchBar.searchTextField.isFirstResponder)
     }
 
+    func test_iOSAppOnMac_searchBarWidthFollowsDynamicTypeAndCanShrink() throws {
+        let search = makeSearch(isiOSAppOnMac: true)
+        let width = try XCTUnwrap(search.searchBar.constraints.first { $0.firstAttribute == .width && $0.secondItem == nil })
+        XCTAssertLessThan(width.priority, .required)
+
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 1024, height: 768))
+        window.traitOverrides.preferredContentSizeCategory = .large
+        window.addSubview(search.searchBar)
+        window.isHidden = false
+        defer { window.isHidden = true }
+        window.layoutIfNeeded()
+        let defaultWidth = width.constant
+
+        window.traitOverrides.preferredContentSizeCategory = .accessibilityExtraExtraExtraLarge
+        window.layoutIfNeeded()
+
+        XCTAssertGreaterThan(width.constant, defaultWidth)
+    }
+
     // MARK: Private
 
     private let delegate = SearchBarDelegate()

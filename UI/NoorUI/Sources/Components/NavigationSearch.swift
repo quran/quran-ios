@@ -12,9 +12,10 @@ import UIKit
 /// iPhone and iPad get a `UISearchController` in the navigation item. An iOS app running on a Mac
 /// gets a plain search bar in a bar button item instead. There, activating a navigation bar search
 /// controller lays out its presentation with `+[UINavigationBar defaultSizeForOrientation:]`, which
-/// reads the main scene bounds through `UIScreen`. For a single-scene app built with a recent SDK
-/// (the iOS 27 SDK on macOS 27), UIKit on the Mac throws "Accessing the focus system through UIScreen
-/// is no longer supported." A plain search bar has no presentation, so it never takes that path.
+/// reads the main scene bounds through `UIScreen`, and UIKit throws "Accessing the focus system
+/// through UIScreen is no longer supported." This reproduces on macOS 27 with this single-scene app;
+/// production reports it from macOS 26.2 on for builds since 3.0.1, while builds with an older SDK,
+/// such as 2.6.8, never crashed. A plain search bar has no presentation, so it never takes that path.
 @MainActor
 public final class NavigationSearch {
     // MARK: Lifecycle
@@ -31,9 +32,7 @@ public final class NavigationSearch {
     init(placeholder: String, delegate: UISearchBarDelegate, hidesNavigationBarDuringPresentation: Bool, isiOSAppOnMac: Bool) {
         if isiOSAppOnMac {
             searchController = nil
-            searchBar = UISearchBar()
-            searchBar.searchBarStyle = .minimal
-            searchBar.widthAnchor.constraint(equalToConstant: UIFontMetrics.default.scaledValue(for: Self.macSearchBarWidth)).isActive = true
+            searchBar = ToolbarSearchBar()
             barButtonItem = UIBarButtonItem(customView: searchBar)
         } else {
             let searchController = UISearchController(searchResultsController: nil)
@@ -51,10 +50,15 @@ public final class NavigationSearch {
 
     public let searchBar: UISearchBar
 
-    /// Shows the search bar when there is no search controller. Place it with the navigation item's trailing items.
+    /// The search bar's item on a Mac, where there is no search controller; `nil` on iPhone and iPad.
+    ///
+    /// `install(in:hidesSearchBarWhenScrolling:)` doesn't place it: callers add it to their trailing
+    /// items themselves, so screens whose trailing items are managed elsewhere (such as by an edit
+    /// mode controller) can include it there.
     public let barButtonItem: UIBarButtonItem?
 
-    /// Adds the search controller, if any, to the navigation item.
+    /// Adds the search controller to the navigation item on iPhone and iPad.
+    /// On a Mac it adds nothing; place `barButtonItem` in the trailing items instead.
     public func install(in navigationItem: UINavigationItem, hidesSearchBarWhenScrolling: Bool) {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
@@ -71,8 +75,41 @@ public final class NavigationSearch {
     // MARK: Internal
 
     let searchController: UISearchController?
+}
+
+/// A search bar for a Mac toolbar. Its width follows Dynamic Type and gives way in narrow windows.
+private final class ToolbarSearchBar: UISearchBar {
+    // MARK: Lifecycle
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        searchBarStyle = .minimal
+        widthConstraint.priority = .defaultHigh
+        widthConstraint.isActive = true
+        updateWidth()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: Internal
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
+            updateWidth()
+        }
+    }
+
+    func updateWidth() {
+        widthConstraint.constant = UIFontMetrics.default.scaledValue(for: Self.preferredWidth, compatibleWith: traitCollection)
+    }
 
     // MARK: Private
 
-    private static let macSearchBarWidth: CGFloat = 220
+    private static let preferredWidth: CGFloat = 220
+
+    private lazy var widthConstraint = widthAnchor.constraint(equalToConstant: Self.preferredWidth)
 }

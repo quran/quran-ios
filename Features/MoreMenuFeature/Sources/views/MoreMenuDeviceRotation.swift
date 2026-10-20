@@ -15,16 +15,17 @@ struct MoreMenuDeviceRotation: View {
     @State var updateOrientationTo: UIInterfaceOrientation? = nil
 
     var body: some View {
+        // Portrait comes first as the default; each icon shows the orientation its button rotates to.
         HStack {
-            DeviceRotation(image: NoorImage.rotateToLandscape.image) {
-                updateOrientationTo = .landscapeLeft
-            }
-            .disabled(orientation.isLandscape)
-
-            DeviceRotation(image: NoorImage.rotateToPortrait.image) {
+            DeviceRotation(image: NoorSystemImage.rotateToPortrait.image) {
                 updateOrientationTo = .portrait
             }
             .disabled(orientation.isPortrait)
+
+            DeviceRotation(image: NoorSystemImage.rotateToLandscape.image) {
+                updateOrientationTo = .landscapeLeft
+            }
+            .disabled(orientation.isLandscape)
         }
         .background(
             HStack {
@@ -43,7 +44,7 @@ private struct DeviceRotation: View {
     var body: some View {
         Button(action: action) {
             image
-                .renderingMode(.template)
+                .imageScale(.large)
                 .foregroundColor(isEnabled ? .label : .gray)
                 .padding()
                 .frame(minWidth: 0, maxWidth: .infinity)
@@ -51,24 +52,8 @@ private struct DeviceRotation: View {
     }
 }
 
-struct MoreMenuDeviceRotation_Previews: PreviewProvider {
-    struct Container: View {
-        @State var orientation: UIInterfaceOrientation
-
-        var body: some View {
-            MoreMenuDeviceRotation()
-        }
-    }
-
-    // MARK: Internal
-
-    static var previews: some View {
-        VStack {
-            Container(orientation: .landscapeLeft)
-            Divider()
-            Container(orientation: .portrait)
-        }
-    }
+#Preview {
+    MoreMenuDeviceRotation()
 }
 
 private struct DeviceOrientationResolver: UIViewControllerRepresentable {

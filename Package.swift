@@ -105,7 +105,7 @@ private func coreTargets() -> [[Target]] {
             .product(name: "Logging", package: "swift-log"),
         ]),
 
-        target(type, name: "Analytics", hasTests: false, dependencies: [
+        target(type, name: "Analytics", dependencies: [
             "VLogging",
         ]),
 

@@ -129,6 +129,7 @@ private func coreTargets() -> [[Target]] {
         ]),
 
         target(type, name: "Utilities", dependencies: [
+            "VLogging",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
         ]),
@@ -958,6 +959,7 @@ private func featuresTargets() -> [[Target]] {
             "AudioUpdater",
             "AppMigrationFeature",
             "SyncLogging",
+            "Utilities",
         ] + mobileSyncTargetDependencies, testDependencies: [
             "CoreDataModel",
         ]),

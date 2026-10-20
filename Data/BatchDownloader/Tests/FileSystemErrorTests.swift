@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Utilities
 import XCTest
 @testable import BatchDownloader
 
@@ -35,7 +36,7 @@ final class FileSystemErrorTests: XCTestCase {
     }
 
     func test_noSuchFileAtLowCapacityThreshold_isNotNoDiskSpace() {
-        let capacity = FileSystemError.lowAvailableCapacity
+        let capacity = FileManager.lowAvailableCapacity
         XCTAssertFalse(FileSystemError.isNoDiskSpace(posixError(ENOENT), availableCapacity: capacity))
     }
 
@@ -69,25 +70,6 @@ final class FileSystemErrorTests: XCTestCase {
         XCTAssertFalse(FileSystemError.isNoDiskSpace(error, availableCapacity: ampleCapacity))
     }
 
-    func test_noSpaceLeftOnDeviceAtUnderlyingErrorDepth_isNoDiskSpace() {
-        // The last error the walk inspects.
-        var error = posixError(ENOSPC)
-        for _ in 0 ..< FileSystemError.maximumUnderlyingErrorDepth - 1 {
-            error = NSError(domain: "OtherDomain", code: 1, userInfo: [NSUnderlyingErrorKey: error])
-        }
-        XCTAssertTrue(FileSystemError.isNoDiskSpace(error, availableCapacity: ampleCapacity))
-    }
-
-    func test_noSpaceLeftOnDeviceBeyondUnderlyingErrorDepth_isNotNoDiskSpace() {
-        // NSError copies its user info, so a plain chain can't refer back to itself. The depth
-        // cap bounds the walk, so an error nested deeper than it is never inspected.
-        var error = posixError(ENOSPC)
-        for _ in 0 ..< FileSystemError.maximumUnderlyingErrorDepth {
-            error = NSError(domain: "OtherDomain", code: 1, userInfo: [NSUnderlyingErrorKey: error])
-        }
-        XCTAssertFalse(FileSystemError.isNoDiskSpace(error, availableCapacity: ampleCapacity))
-    }
-
     func test_initWithNoSpaceLeftOnDeviceUnderCocoaError_isNoDiskSpace() {
         let error = CocoaError(.fileWriteUnknown, userInfo: [NSUnderlyingErrorKey: posixError(ENOSPC)])
         guard case .noDiskSpace = FileSystemError(error: error) else {
@@ -97,8 +79,8 @@ final class FileSystemErrorTests: XCTestCase {
 
     // MARK: Private
 
-    private let ampleCapacity = 10 * FileSystemError.lowAvailableCapacity
-    private let lowCapacity = FileSystemError.lowAvailableCapacity - 1
+    private let ampleCapacity = 10 * FileManager.lowAvailableCapacity
+    private let lowCapacity = FileManager.lowAvailableCapacity - 1
 
     private func posixError(_ code: Int32) -> NSError {
         NSError(domain: NSPOSIXErrorDomain, code: Int(code))

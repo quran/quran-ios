@@ -20,6 +20,7 @@
 
 import Foundation
 import Localization
+import Utilities
 
 public enum FileSystemError: Error {
     case noDiskSpace
@@ -41,61 +42,29 @@ public enum FileSystemError: Error {
 
     // MARK: Internal
 
-    /// Free space, in bytes, below which an ambiguous file error counts as no disk space.
-    ///
-    /// A full device doesn't always report itself. Older iOS releases failed background
-    /// downloads with `ENOENT` when the disk was full, while iOS 27 fails them with `ENOSPC`.
-    /// URLSession can also report `cannotCreateFile` or `cannotWriteToFile` without saying why.
-    /// A download writes megabytes, and iOS warns that storage is almost full well before
-    /// 50 MB, so such a failure below this is far more likely the device than a missing file.
-    static let lowAvailableCapacity = 50 * 1024 * 1024
-
-    /// Bounds the walk over `NSUnderlyingErrorKey`, in case an `NSError` subclass returns a
-    /// chain that loops back on itself.
-    static let maximumUnderlyingErrorDepth = 16
-
     /// Whether a download that failed with `error` failed because the device is out of storage.
     ///
     /// An error that reports a full device, directly or through `NSUnderlyingErrorKey`, always
-    /// counts. An ambiguous file error counts only when the volume is nearly full.
+    /// counts. An ambiguous file error counts only when the volume has less than
+    /// `FileManager.lowAvailableCapacity` free. Older iOS releases failed background downloads
+    /// with `ENOENT` when the disk was full, while iOS 27 fails them with `ENOSPC`. URLSession
+    /// can also report `cannotCreateFile` or `cannotWriteToFile` without saying why.
     ///
     /// - Parameter availableCapacity: The free space, in bytes, of the volume holding the
-    ///   downloads, from `URLResourceValues.volumeAvailableCapacity`, or `nil` if it couldn't be
+    ///   downloads, from `FileManager.availableCapacity(at:)`, or `nil` if it couldn't be
     ///   read. Evaluated only for an ambiguous file error, so ordinary failures skip the disk.
     static func isNoDiskSpace(_ error: any Error, availableCapacity: @autoclosure () -> Int?) -> Bool {
-        let chain = errorChain(of: error)
-        if chain.contains(where: reportsNoDiskSpace) {
+        let chain = error.underlyingErrorChain
+        if chain.contains(where: \.reportsOutOfSpace) {
             return true
         }
         guard chain.contains(where: mayReportNoDiskSpace), let availableCapacity = availableCapacity() else {
             return false
         }
-        return availableCapacity < lowAvailableCapacity
+        return availableCapacity < FileManager.lowAvailableCapacity
     }
 
     // MARK: Private
-
-    /// `error` followed by the errors it wraps through `NSUnderlyingErrorKey`.
-    private static func errorChain(of error: any Error) -> [NSError] {
-        var chain: [NSError] = []
-        var current: NSError? = error as NSError
-        while let error = current, chain.count < maximumUnderlyingErrorDepth {
-            chain.append(error)
-            current = error.userInfo[NSUnderlyingErrorKey] as? NSError
-        }
-        return chain
-    }
-
-    private static func reportsNoDiskSpace(_ error: NSError) -> Bool {
-        switch error.domain {
-        case NSCocoaErrorDomain:
-            error.code == NSFileWriteOutOfSpaceError
-        case NSPOSIXErrorDomain:
-            error.code == Int(ENOSPC)
-        default:
-            false
-        }
-    }
 
     /// File errors that a full device can cause, but that other failures cause too.
     private static func mayReportNoDiskSpace(_ error: NSError) -> Bool {

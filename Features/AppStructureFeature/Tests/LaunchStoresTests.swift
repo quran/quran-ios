@@ -1,6 +1,7 @@
 import CoreData
 import CoreDataModel
 import CoreDataPersistence
+import Utilities
 import XCTest
 @testable import AppStructureFeature
 #if QURAN_SYNC
@@ -32,16 +33,6 @@ final class LaunchStoresTests: XCTestCase {
             return XCTFail("Expected launch to fail")
         }
         XCTAssertTrue(message.hasPrefix("###openStore(): Failed to load persistent store: "), message)
-    }
-
-    // MARK: Available capacity
-
-    func testAvailableCapacityOfAMissingDirectoryIsMeasuredAtItsNearestAncestor() {
-        let missing = FileManager.default.temporaryDirectory
-            .appendingPathComponent("LaunchStoresTests-\(UUID().uuidString)", isDirectory: true)
-            .appendingPathComponent("Application Support", isDirectory: true)
-
-        XCTAssertNotNil(LaunchStores.availableCapacity(at: missing))
     }
 
     // MARK: Core Data errors
@@ -136,8 +127,8 @@ final class LaunchStoresTests: XCTestCase {
 
     // MARK: Private
 
-    private static let lowCapacity = PersistentStoreFailure.lowAvailableCapacity - 1
-    private static let plentyOfCapacity = 10 * PersistentStoreFailure.lowAvailableCapacity
+    private static let lowCapacity = FileManager.lowAvailableCapacity - 1
+    private static let plentyOfCapacity = 10 * FileManager.lowAvailableCapacity
 
     private var createdFiles: [URL] = []
 

@@ -6,6 +6,7 @@
 //
 
 import Analytics
+import AnalyticsFake
 import AppIconFeature
 import AudioDownloadsFeature
 import Localization
@@ -43,7 +44,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
     // MARK: Appearance mode
 
     func test_selectAppearanceMode_appliesAndLogsChange() {
-        let analytics = AnalyticsRecorder()
+        let analytics = AnalyticsLibrarySpy()
         let sut = makeSUT(analytics: analytics)
         let mode: AppearanceMode = sut.appearanceMode == .dark ? .light : .dark
 
@@ -51,11 +52,11 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
 
         XCTAssertEqual(sut.appearanceMode, mode)
         XCTAssertEqual(ThemeService.shared.appearanceMode, mode)
-        XCTAssertEqual(analytics.events, [AnalyticsEvent(name: "ChangeAppearanceMode", value: mode.description)])
+        XCTAssertEqual(analytics.events, [.init(name: "ChangeAppearanceMode", value: mode.description)])
     }
 
     func test_selectAppearanceMode_ignoresCurrentMode() {
-        let analytics = AnalyticsRecorder()
+        let analytics = AnalyticsLibrarySpy()
         let sut = makeSUT(analytics: analytics)
 
         sut.selectAppearanceMode(sut.appearanceMode)
@@ -179,18 +180,5 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
             navigationController: navigationController
         )
         #endif
-    }
-}
-
-private struct AnalyticsEvent: Equatable {
-    let name: String
-    let value: String
-}
-
-private final class AnalyticsRecorder: AnalyticsLibrary, @unchecked Sendable {
-    private(set) var events: [AnalyticsEvent] = []
-
-    func logEvent(_ name: String, value: String) {
-        events.append(.init(name: name, value: value))
     }
 }

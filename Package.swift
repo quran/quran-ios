@@ -108,6 +108,10 @@ private func coreTargets() -> [[Target]] {
         target(type, name: "Analytics", dependencies: [
             "VLogging",
         ]),
+        target(type, name: "AnalyticsFake", hasTests: false, dependencies: [
+            "Analytics",
+            "Utilities",
+        ]),
 
         target(type, name: "Caching", dependencies: [
             "Locking",
@@ -655,6 +659,7 @@ private func featuresTargets() -> [[Target]] {
             .copy("whats-new.plist"),
         ], testDependencies: [
             "Analytics",
+            "AnalyticsFake",
             "AppMigrator",
         ]),
 
@@ -725,6 +730,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranTextKit",
         ], testDependencies: [
             "Analytics",
+            "AnalyticsFake",
             "AnnotationsService",
             "NoorUI",
             "QuranAnnotations",
@@ -745,6 +751,7 @@ private func featuresTargets() -> [[Target]] {
             "Utilities",
         ], testDependencies: [
             "Analytics",
+            "AnalyticsFake",
             "AnnotationsService",
             "AuthenticationClient",
             "AuthenticationClientFake",
@@ -815,6 +822,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranLocalization",
             "NoteEditorFeature",
         ], testDependencies: [
+            "AnalyticsFake",
             "AuthenticationClientFake",
             "QuranResources",
         ] + mobileSyncTestSupportDependencies),
@@ -886,6 +894,7 @@ private func featuresTargets() -> [[Target]] {
             "VLogging",
         ], testDependencies: [
             "Analytics",
+            "AnalyticsFake",
             "NoorUI",
             "SystemDependenciesFake",
         ]),
@@ -911,6 +920,7 @@ private func featuresTargets() -> [[Target]] {
             "ZIPFoundation",
         ] + mobileSyncTargetDependencies, testDependencies: [
             "Analytics",
+            "AnalyticsFake",
             "AppDependencies",
             "AppIconFeature",
             "AudioDownloadsFeature",

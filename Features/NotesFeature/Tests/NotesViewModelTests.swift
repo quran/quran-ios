@@ -1,5 +1,6 @@
 #if QURAN_SYNC
 import Analytics
+import AnalyticsFake
 import AnnotationsService
 import AuthenticationClient
 import AuthenticationClientFake
@@ -44,7 +45,7 @@ final class NotesViewModelTests: XCTestCase {
         let item = NoteItem(note: note, quranText: "Verse")
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         let sut = NotesViewModel(
-            analytics: AnalyticsRecorder(),
+            analytics: AnalyticsLibrarySpy(),
             authenticationClient: UnavailableAuthenticationClient(),
             navigationController: UINavigationController(),
             noteService: noteService,
@@ -75,7 +76,7 @@ final class NotesViewModelTests: XCTestCase {
         try await noteService.createNote(body: "Observed note", startAyah: ayah, endAyah: ayah)
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         let sut = NotesViewModel(
-            analytics: AnalyticsRecorder(),
+            analytics: AnalyticsLibrarySpy(),
             authenticationClient: UnavailableAuthenticationClient(),
             navigationController: UINavigationController(),
             noteService: noteService,
@@ -122,7 +123,7 @@ final class NotesViewModelTests: XCTestCase {
     func test_login_setsAuthenticated_whenLoginSucceeds() async {
         let client = AuthenticationClientFake()
         client.authenticationStateValue = .authenticated
-        let analytics = AnalyticsRecorder()
+        let analytics = AnalyticsLibrarySpy()
         let sut = makeSUT(analytics: analytics, authenticationClient: client)
 
         await sut.loginToQuranCom()
@@ -159,7 +160,7 @@ final class NotesViewModelTests: XCTestCase {
     }
 
     func test_dismissSyncBanner_persistsDismissal() {
-        let analytics = AnalyticsRecorder()
+        let analytics = AnalyticsLibrarySpy()
         let sut = makeSUT(analytics: analytics)
 
         sut.dismissSyncBanner()
@@ -183,7 +184,7 @@ final class NotesViewModelTests: XCTestCase {
         )
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-translations-database")
         let sut = NotesViewModel(
-            analytics: AnalyticsRecorder(),
+            analytics: AnalyticsLibrarySpy(),
             authenticationClient: UnavailableAuthenticationClient(),
             navigationController: UINavigationController(),
             noteService: noteService,
@@ -220,7 +221,7 @@ final class NotesViewModelTests: XCTestCase {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         var navigatedAyah: AyahNumber?
         let sut = NotesViewModel(
-            analytics: AnalyticsRecorder(),
+            analytics: AnalyticsLibrarySpy(),
             authenticationClient: UnavailableAuthenticationClient(),
             navigationController: UINavigationController(),
             noteService: noteService,
@@ -263,7 +264,7 @@ final class NotesViewModelTests: XCTestCase {
     }
 
     private func makeSUT(
-        analytics: AnalyticsLibrary = AnalyticsRecorder(),
+        analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
         authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient()
     ) -> NotesViewModel {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
@@ -305,16 +306,4 @@ private enum TestError: Error {
     case loginFailed
 }
 
-private struct AnalyticsEvent: Equatable {
-    let name: String
-    let value: String
-}
-
-private final class AnalyticsRecorder: AnalyticsLibrary, @unchecked Sendable {
-    private(set) var events: [AnalyticsEvent] = []
-
-    func logEvent(_ name: String, value: String) {
-        events.append(.init(name: name, value: value))
-    }
-}
 #endif

@@ -1,6 +1,7 @@
 #if QURAN_SYNC
 
 import Analytics
+import AnalyticsFake
 import AppDependencies
 import AppIconFeature
 import AudioDownloadsFeature
@@ -80,7 +81,7 @@ final class SettingsRootViewModelTests: XCTestCase {
     func test_login_updatesAuthenticationStateAndEmail() async {
         let client = AuthenticationClientFake()
         client.authenticationStateValue = .authenticated
-        let analytics = AnalyticsRecorder()
+        let analytics = AnalyticsLibrarySpy()
         client.loggedInUserValue = makeUser(email: "user@example.com")
         let navigationController = UINavigationController()
         let sut = makeSUT(
@@ -136,7 +137,7 @@ final class SettingsRootViewModelTests: XCTestCase {
 
     func test_requestSignOut_presentsConfirmationWithoutSigningOut() {
         let client = AuthenticationClientFake()
-        let analytics = AnalyticsRecorder()
+        let analytics = AnalyticsLibrarySpy()
         let sut = makeSUT(analytics: analytics, authenticationClient: client)
         sut.isAuthenticated = true
         sut.loggedInUser = makeUser(email: "user@example.com")
@@ -152,7 +153,7 @@ final class SettingsRootViewModelTests: XCTestCase {
 
     func test_logout_clearsAuthenticationStateAndEmail() async {
         let client = AuthenticationClientFake()
-        let analytics = AnalyticsRecorder()
+        let analytics = AnalyticsLibrarySpy()
         client.loggedInUserValue = makeUser(email: "user@example.com")
         let sut = makeSUT(analytics: analytics, authenticationClient: client)
         sut.isAuthenticated = true
@@ -199,7 +200,7 @@ final class SettingsRootViewModelTests: XCTestCase {
     // MARK: Private
 
     private func makeSUT(
-        analytics: AnalyticsLibrary = AnalyticsRecorder(),
+        analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
         authenticationClient: (any AuthenticationClient)?,
         legacyDataImportCoordinator: LegacyDataImportCoordinator? = nil,
         navigationController: UINavigationController? = nil
@@ -229,19 +230,6 @@ final class SettingsRootViewModelTests: XCTestCase {
         guard case .notAuthenticated = error as? AuthenticationClientError else {
             return XCTFail("Expected notAuthenticated, got \(String(describing: error))", file: file, line: line)
         }
-    }
-}
-
-private struct AnalyticsEvent: Equatable {
-    let name: String
-    let value: String
-}
-
-private final class AnalyticsRecorder: AnalyticsLibrary, @unchecked Sendable {
-    private(set) var events: [AnalyticsEvent] = []
-
-    func logEvent(_ name: String, value: String) {
-        events.append(.init(name: name, value: value))
     }
 }
 

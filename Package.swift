@@ -627,9 +627,11 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "QuranLocalization",
             "ReadingBookmarkMenuFeature",
+            "Utilities",
         ], testDependencies: [
             "Analytics",
             "NotePersistence",
+            "QuranResources",
         ]),
 
         target(type, name: "ReadingBookmarkMenuFeature", dependencies: [

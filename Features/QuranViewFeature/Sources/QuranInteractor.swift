@@ -260,6 +260,33 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         presenter?.shareText(lines, in: sourceView, at: point, completion: {})
     }
 
+    func showError(_ error: Error) {
+        logger.info("Quran: show ayah menu error")
+        contentViewModel?.removeAyahMenuHighlight()
+        guard let presenter else {
+            return
+        }
+        // The user may have tapped outside the menu while its action was running.
+        guard let presented = presenter.presentedViewController else {
+            presenter.showErrorAlert(error: error)
+            return
+        }
+        // Dismissing again mid-transition may be ignored, so its completion would never run.
+        if presented.isBeingDismissed {
+            guard let transitionCoordinator = presented.transitionCoordinator ?? presenter.transitionCoordinator else {
+                presenter.showErrorAlert(error: error)
+                return
+            }
+            transitionCoordinator.animate(alongsideTransition: nil) { [weak self] _ in
+                self?.presenter?.showErrorAlert(error: error)
+            }
+            return
+        }
+        presenter.dismissPresentedViewController { [weak self] in
+            self?.presenter?.showErrorAlert(error: error)
+        }
+    }
+
     #if QURAN_SYNC
     func showNotes(for verses: [AyahNumber], addingNewNote: Bool) async {
         logger.info("Quran: show ayah notes. Verses: \(verses.map(\.nonLocalizedDescription).joined(separator: ", "))")

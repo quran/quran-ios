@@ -33,9 +33,7 @@ class TranslationsRepositoryTests: XCTestCase {
     }
 
     func test_firstTimeDownload() async throws {
-        try nextResponse(TranslationsResponse(
-            data: translations.map { TranslationResponse($0) }
-        ))
+        try session.respondWithTranslations(translations, baseURL: baseURL)
 
         try await service.downloadAndSyncTranslations()
 
@@ -59,10 +57,10 @@ class TranslationsRepositoryTests: XCTestCase {
             version: 1000
         )
 
-        try nextResponse(TranslationsResponse(data: [TranslationResponse(translation)]))
+        try session.respondWithTranslations([translation], baseURL: baseURL)
         try await service.downloadAndSyncTranslations()
 
-        try nextResponse(TranslationsResponse(data: [TranslationResponse(updatedTranslation)]))
+        try session.respondWithTranslations([updatedTranslation], baseURL: baseURL)
         try await service.downloadAndSyncTranslations()
 
         let localResults = try await retriever.getLocalTranslations()
@@ -82,10 +80,10 @@ class TranslationsRepositoryTests: XCTestCase {
             version: translation.version
         )
 
-        try nextResponse(TranslationsResponse(data: [TranslationResponse(translation)]))
+        try session.respondWithTranslations([translation], baseURL: baseURL)
         try await service.downloadAndSyncTranslations()
 
-        try nextResponse(TranslationsResponse(data: [TranslationResponse(updatedTranslation)]))
+        try session.respondWithTranslations([updatedTranslation], baseURL: baseURL)
         try await service.downloadAndSyncTranslations()
 
         let localResults = try await retriever.getLocalTranslations()
@@ -118,35 +116,9 @@ class TranslationsRepositoryTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func nextResponse(_ response: TranslationsResponse) throws {
-        let encoder = JSONEncoder()
-        let parameters = [("v", "5")]
-        let request = NetworkManager.request(
-            baseURL: baseURL,
-            path: TranslationNetworkManager.path,
-            parameters: parameters
-        )
-        session.dataResults[request.url!] = .success(try encoder.encode(response))
-    }
-
     private func expectedTranslation(_ translation: Translation, installedVersion: Int?) -> Translation {
         var translation = translation
         translation.installedVersion = installedVersion
         return translation
-    }
-}
-
-private extension TranslationResponse {
-    init(_ translation: Translation) {
-        self.init(
-            id: translation.id,
-            displayName: translation.displayName,
-            translator: translation.translator,
-            translatorForeign: translation.translatorForeign,
-            fileUrl: translation.fileURL,
-            fileName: translation.fileName,
-            languageCode: translation.languageCode,
-            currentVersion: translation.version
-        )
     }
 }

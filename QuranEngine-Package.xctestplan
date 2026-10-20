@@ -399,6 +399,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "TranslationsFeatureTests",
+        "name" : "TranslationsFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "WhatsNewFeatureTests",
         "name" : "WhatsNewFeatureTests"
       }

@@ -51,7 +51,13 @@ public struct Translation: Hashable, Sendable {
     public var installedVersion: Int?
 
     public var isDownloaded: Bool { installedVersion != nil }
-    public var needsUpgrade: Bool { installedVersion != version }
+    /// Whether the server has a newer version than the installed one.
+    public var needsUpgrade: Bool {
+        guard let installedVersion else {
+            return false
+        }
+        return installedVersion < version
+    }
 
     public var translationName: String {
         translatorDisplayName ?? displayName

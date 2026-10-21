@@ -49,6 +49,7 @@ final class NavigationSearchTests: XCTestCase {
     }
 
     func test_iOSAppOnMac_searchBarWidthFollowsDynamicTypeAndCanShrink() throws {
+        guard #available(iOS 17.0, *) else { return }
         let search = makeSearch(isiOSAppOnMac: true)
         let width = try XCTUnwrap(search.searchBar.constraints.first { $0.firstAttribute == .width && $0.secondItem == nil })
         XCTAssertLessThan(width.priority, .required)

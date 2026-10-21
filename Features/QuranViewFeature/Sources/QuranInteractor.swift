@@ -260,6 +260,14 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         presenter?.shareText(lines, in: sourceView, at: point, completion: {})
     }
 
+    func showError(_ error: Error) {
+        logger.info("Quran: show ayah menu error")
+        contentViewModel?.removeAyahMenuHighlight()
+        presenter?.dismissPresentedViewController { [weak self] in
+            self?.presenter?.showErrorAlert(error: error)
+        }
+    }
+
     #if QURAN_SYNC
     func showNotes(for verses: [AyahNumber], addingNewNote: Bool) async {
         logger.info("Quran: show ayah notes. Verses: \(verses.map(\.nonLocalizedDescription).joined(separator: ", "))")

@@ -17,6 +17,7 @@ import QuranLocalization
 import QuranTextKit
 import ReadingService
 import UIKit
+import Utilities
 import VLogging
 
 @MainActor
@@ -26,6 +27,8 @@ public protocol AyahMenuListener: AnyObject {
     func playAudio(_ from: AyahNumber, to: AyahNumber?, repeatVerses: Bool)
 
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint)
+    /// Dismisses the ayah menu and presents `error` to the user.
+    func showError(_ error: Error)
     func showTranslation(_ verses: [AyahNumber])
     #if QURAN_SYNC
     func showNotes(for verses: [AyahNumber], addingNewNote: Bool) async
@@ -233,24 +236,35 @@ final class AyahMenuViewModel {
         listener?.showTranslation(deps.verses)
     }
 
-    func copy() {
+    func copy() async {
         logger.info("AyahMenu: copy. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
-        listener?.dismissAyahMenu()
-        Task {
-            if let lines = try? await retrieveSelectedAyahText() {
-                let pasteBoard = UIPasteboard.general
-                pasteBoard.string = lines.joined(separator: "\n")
+        // Dismiss only after retrieval succeeds. On failure, `showError` dismisses the menu itself and
+        // presents the alert once that dismissal finishes; an earlier dismissal would still be in flight.
+        do {
+            let lines = try await retrieveSelectedAyahText()
+            listener?.dismissAyahMenu()
+            UIPasteboard.general.string = lines.joined(separator: "\n")
+        } catch {
+            if error.isCancelled {
+                return
             }
+            crasher.recordError(error, reason: "Failed to retrieve verse text for copy")
+            listener?.showError(error)
         }
     }
 
-    func share() {
+    func share() async {
         logger.info("AyahMenu: share. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
-        Task {
-            if let lines = try? await retrieveSelectedAyahText() {
-                let withNewLines = lines.joined(separator: "\n")
-                listener?.shareText([withNewLines], in: self.deps.sourceView, at: self.deps.pointInView)
+        do {
+            let lines = try await retrieveSelectedAyahText()
+            let withNewLines = lines.joined(separator: "\n")
+            listener?.shareText([withNewLines], in: deps.sourceView, at: deps.pointInView)
+        } catch {
+            if error.isCancelled {
+                return
             }
+            crasher.recordError(error, reason: "Failed to retrieve verse text for share")
+            listener?.showError(error)
         }
     }
 
@@ -271,8 +285,6 @@ final class AyahMenuViewModel {
     #endif
 
     private func retrieveSelectedAyahText() async throws -> [String] {
-        try await crasher.recordError("Failed to update highlights") {
-            try await deps.textRetriever.textForVerses(deps.verses)
-        }
+        try await deps.textRetriever.textForVerses(deps.verses)
     }
 }

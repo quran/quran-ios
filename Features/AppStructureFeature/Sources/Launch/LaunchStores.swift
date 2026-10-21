@@ -12,6 +12,7 @@ import Foundation
 #if QURAN_SYNC
 import MobileSync
 #endif
+import Utilities
 import VLogging
 
 /// Opens the stores the app reads at launch, before anything resolves them.
@@ -45,32 +46,15 @@ struct LaunchStores {
         return .success(())
     }
 
-    /// The free space on the volume holding `directory`, measured at its nearest existing
-    /// ancestor, since the directory may not exist yet on a fresh install.
-    ///
-    /// Reads real free space rather than the "important usage" capacity, which counts space
-    /// the system could purge but SQLite can't write to yet.
-    static func availableCapacity(at directory: URL) -> Int? {
-        var existingDirectory = directory.standardizedFileURL
-        while !FileManager.default.fileExists(atPath: existingDirectory.path), existingDirectory.pathComponents.count > 1 {
-            existingDirectory = existingDirectory.deletingLastPathComponent()
-        }
-        do {
-            let values = try existingDirectory.resourceValues(forKeys: [.volumeAvailableCapacityKey])
-            let capacity = values.volumeAvailableCapacity
-            logger.notice("Launch stores: \(capacity.map(String.init) ?? "unknown") bytes available at \(existingDirectory.path)")
-            return capacity
-        } catch {
-            logger.error("Launch stores: couldn't read the available capacity at \(existingDirectory.path). Error: \(error)")
-            return nil
-        }
-    }
-
     // MARK: Private
 
     /// The free space on the volume holding the stores, which all live under Application Support.
+    /// The directory may not exist yet on a fresh install.
     private static func availableCapacity() -> Int? {
-        availableCapacity(at: NSPersistentContainer.defaultDirectoryURL())
+        let directory = NSPersistentContainer.defaultDirectoryURL()
+        let capacity = FileManager.default.availableCapacity(at: directory)
+        logger.notice("Launch stores: \(capacity.map(String.init) ?? "unknown") bytes available at \(directory.path)")
+        return capacity
     }
 }
 

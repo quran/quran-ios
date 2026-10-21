@@ -7,20 +7,11 @@
 
 import CoreData
 import Foundation
+import Utilities
 
 /// Classifies errors from loading a persistent store.
 public enum PersistentStoreFailure {
     // MARK: Public
-
-    /// Free space, in bytes, below which a failure to open a store counts as storage full.
-    ///
-    /// A full device doesn't always fail with `SQLITE_FULL`. With nothing left, SQLite can't
-    /// create the store's `-shm` file and reports `SQLITE_CANTOPEN` (14), or `SQLITE_IOERR`
-    /// (10) partway through a write. Opening a store needs a few MB for its write-ahead log,
-    /// and iOS warns that storage is almost full well before 50 MB, so an open that fails
-    /// below this is far more likely the device than a damaged store. If space is freed and
-    /// the failure persists, it's no longer classified as storage full and crashes as before.
-    public static let lowAvailableCapacity = 50 * 1024 * 1024
 
     /// Whether `error`, or an error it wraps through `NSUnderlyingErrorKey`, reports
     /// that the device is out of storage.
@@ -28,20 +19,24 @@ public enum PersistentStoreFailure {
     /// Opening a SQLite store writes its journal and metadata, so a full device fails the
     /// open itself, usually as a Cocoa error carrying `SQLITE_FULL`.
     public static func isStorageFull(_ error: any Error) -> Bool {
-        errorChain(of: error).contains(where: reportsStorageFull)
+        error.underlyingErrorChain.contains(where: reportsStorageFull)
     }
 
     /// Whether a store that failed to open with `error` should be treated as the device
     /// being out of storage.
     ///
-    /// Besides errors that report a full device, any failure counts when the volume is
-    /// nearly full, except a damaged store or an incompatible model, which free space can't fix.
+    /// Besides errors that report a full device, any failure counts when the volume has less
+    /// than `FileManager.lowAvailableCapacity` free, except a damaged store or an incompatible
+    /// model, which free space can't fix. With nothing left, SQLite can't create the store's
+    /// `-shm` file and reports `SQLITE_CANTOPEN` (14), or `SQLITE_IOERR` (10) partway through a
+    /// write. If space is freed and the failure persists, it's no longer classified as storage
+    /// full and crashes as before.
     ///
     /// - Parameter availableCapacity: The free space, in bytes, of the volume holding the store,
-    ///   from `URLResourceValues.volumeAvailableCapacity`, or `nil` if it couldn't be read.
+    ///   from `FileManager.availableCapacity(at:)`, or `nil` if it couldn't be read.
     ///   Without it, only the error is considered.
     public static func isStorageFull(_ error: any Error, availableCapacity: Int?) -> Bool {
-        let chain = errorChain(of: error)
+        let chain = error.underlyingErrorChain
         if chain.contains(where: reportsStorageFull) {
             return true
         }
@@ -51,7 +46,7 @@ public enum PersistentStoreFailure {
         guard let availableCapacity else {
             return false
         }
-        return availableCapacity < lowAvailableCapacity
+        return availableCapacity < FileManager.lowAvailableCapacity
     }
 
     // MARK: Private
@@ -71,32 +66,8 @@ public enum PersistentStoreFailure {
         NSInferredMappingModelError,
     ]
 
-    /// Guards against an underlying error chain that refers back to itself.
-    private static let maximumUnderlyingErrorDepth = 16
-
-    /// `error` followed by the errors it wraps through `NSUnderlyingErrorKey`.
-    private static func errorChain(of error: any Error) -> [NSError] {
-        var chain: [NSError] = []
-        var current: NSError? = error as NSError
-        while let error = current, chain.count < maximumUnderlyingErrorDepth {
-            chain.append(error)
-            current = error.userInfo[NSUnderlyingErrorKey] as? NSError
-        }
-        return chain
-    }
-
     private static func reportsStorageFull(_ error: NSError) -> Bool {
-        if primarySQLiteCodes(of: error).contains(sqliteFull) {
-            return true
-        }
-        switch error.domain {
-        case NSCocoaErrorDomain:
-            return error.code == NSFileWriteOutOfSpaceError
-        case NSPOSIXErrorDomain:
-            return error.code == Int(ENOSPC)
-        default:
-            return false
-        }
+        error.reportsOutOfSpace || primarySQLiteCodes(of: error).contains(sqliteFull)
     }
 
     private static func reportsSpaceIndependentFailure(_ error: NSError) -> Bool {

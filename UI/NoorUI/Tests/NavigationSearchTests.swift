@@ -67,9 +67,41 @@ final class NavigationSearchTests: XCTestCase {
         XCTAssertGreaterThan(width.constant, defaultWidth)
     }
 
+    func test_iOSAppOnMac_escapeCancelsEditingSearch() throws {
+        let search = makeSearch(isiOSAppOnMac: true)
+        let viewController = UIViewController()
+        viewController.navigationItem.rightBarButtonItem = search.barButtonItem
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 1024, height: 768))
+        window.rootViewController = UINavigationController(rootViewController: viewController)
+        window.makeKeyAndVisible()
+        window.layoutIfNeeded()
+        defer { window.isHidden = true }
+
+        let searchBar = search.searchBar
+        XCTAssertNil(searchBar.keyCommands, "Escape is left alone while the field isn't editing")
+        XCTAssertTrue(searchBar.becomeFirstResponder())
+        searchBar.text = "رحمن"
+
+        let escape = try XCTUnwrap(searchBar.keyCommands?.first { $0.input == UIKeyCommand.inputEscape })
+        XCTAssertTrue(escape.wantsPriorityOverSystemBehavior)
+        let action = try XCTUnwrap(escape.action)
+        XCTAssertIdentical(searchBar.searchTextField.target(forAction: action, withSender: escape) as AnyObject?, searchBar)
+        searchBar.perform(action, with: escape)
+
+        XCTAssertEqual(searchBar.text, "")
+        XCTAssertFalse(searchBar.searchTextField.isFirstResponder)
+        XCTAssertEqual(delegate.events, [.textDidChange(""), .cancelButtonClicked])
+    }
+
+    func test_iPhoneAndIPad_searchBarHasNoEscapeCommand() {
+        let search = makeSearch(isiOSAppOnMac: false)
+
+        XCTAssertNil(search.searchBar.keyCommands)
+    }
+
     // MARK: Private
 
-    private let delegate = SearchBarDelegate()
+    private let delegate = SearchBarDelegateSpy()
 
     private func makeSearch(isiOSAppOnMac: Bool) -> NavigationSearch {
         NavigationSearch(
@@ -86,5 +118,19 @@ final class NavigationSearchTests: XCTestCase {
     }
 }
 
-private final class SearchBarDelegate: NSObject, UISearchBarDelegate {
+private final class SearchBarDelegateSpy: NSObject, UISearchBarDelegate {
+    enum Event: Equatable {
+        case textDidChange(String)
+        case cancelButtonClicked
+    }
+
+    private(set) var events: [Event] = []
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        events.append(.textDidChange(searchText))
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        events.append(.cancelButtonClicked)
+    }
 }

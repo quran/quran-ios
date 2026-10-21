@@ -98,8 +98,13 @@ private final class ToolbarSearchBar: UISearchBar {
     // MARK: Internal
 
     /// The search field is first responder while editing, and its key commands reach this bar through the responder chain.
+    /// While text is being composed, Escape is left to the input method to cancel the composition.
     override var keyCommands: [UIKeyCommand]? {
-        searchTextField.isFirstResponder ? [cancelCommand] : nil
+        let commands = super.keyCommands ?? []
+        guard searchTextField.isFirstResponder, searchTextField.markedTextRange == nil else {
+            return commands.isEmpty ? nil : commands
+        }
+        return commands + [cancelCommand]
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -118,7 +123,7 @@ private final class ToolbarSearchBar: UISearchBar {
     private static let preferredWidth: CGFloat = 220
 
     private lazy var cancelCommand: UIKeyCommand = {
-        let command = UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(cancel))
+        let command = UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(cancelSearch))
         command.wantsPriorityOverSystemBehavior = true
         return command
     }()
@@ -127,7 +132,7 @@ private final class ToolbarSearchBar: UISearchBar {
 
     /// Mirrors tapping a Cancel button: clears the text, ends editing, and tells the delegate.
     @objc
-    private func cancel() {
+    private func cancelSearch() {
         guard searchTextField.isFirstResponder else {
             return
         }

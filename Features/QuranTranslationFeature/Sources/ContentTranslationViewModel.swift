@@ -89,7 +89,9 @@ public final class ContentTranslationViewModel: ObservableObject {
             .sink { [weak self] in self?.showArabicText = $0 }
             .store(in: &cancellables)
 
+        // Translation services update the selection from background tasks.
         selectedTranslationsPreferences.$selectedTranslationIds
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.selectedTranslations = $0 }
             .store(in: &cancellables)
 

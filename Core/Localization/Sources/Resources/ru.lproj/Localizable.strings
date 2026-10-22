@@ -470,6 +470,7 @@
 "audio.repetition-delay.description" = "Определяет длительность паузы перед началом следующего повтора.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Потоковое аудио";
+"audio.focus-mode.title" = "Приглушать остальные аяты при прослушивании";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Воспроизведение аудио";
 // Metadata: Translated by AI; human review required.

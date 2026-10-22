@@ -13,6 +13,7 @@ public struct ImageDecorations {
     public var wordFrames: WordFrameCollection
     public var verseHighlights: [AyahNumber: Color]
     public var wordHighlight: Word?
+    public var focusedVerses: Set<AyahNumber>?
 
     public init(
         suraHeaders: [SuraHeaderLocation],
@@ -20,7 +21,8 @@ public struct ImageDecorations {
         drawsAyahNumbersAndSuraHeaders: Bool,
         wordFrames: WordFrameCollection,
         verseHighlights: [AyahNumber: Color] = [:],
-        wordHighlight: Word? = nil
+        wordHighlight: Word? = nil,
+        focusedVerses: Set<AyahNumber>? = nil
     ) {
         self.suraHeaders = suraHeaders
         self.ayahNumbers = ayahNumbers
@@ -28,5 +30,6 @@ public struct ImageDecorations {
         self.wordFrames = wordFrames
         self.verseHighlights = verseHighlights
         self.wordHighlight = wordHighlight
+        self.focusedVerses = focusedVerses
     }
 }

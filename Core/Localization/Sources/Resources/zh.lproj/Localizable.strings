@@ -476,6 +476,7 @@
 "audio.repetition-delay.description" = "设置下一次重复开始前的暂停时长。";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "流式播放音频";
+"audio.focus-mode.title" = "诵读时淡化其他经文";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "音频播放";
 // Metadata: Translated by AI; human review required.

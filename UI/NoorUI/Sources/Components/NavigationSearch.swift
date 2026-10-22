@@ -16,6 +16,10 @@ import UIKit
 /// through UIScreen is no longer supported." This reproduces on macOS 27 with this single-scene app;
 /// production reports it from macOS 26.2 on for builds since 3.0.1, while builds with an older SDK,
 /// such as 2.6.8, never crashed. A plain search bar has no presentation, so it never takes that path.
+///
+/// This is a workaround for a UIKit bug (FB24201508) that only hits single-scene apps:
+/// https://developer.apple.com/forums/thread/841090
+/// Remove it and go back to `UISearchController` on a Mac once the app supports multiple windows.
 @MainActor
 public final class NavigationSearch {
     // MARK: Lifecycle

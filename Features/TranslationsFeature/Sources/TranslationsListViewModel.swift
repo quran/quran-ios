@@ -182,10 +182,14 @@ final class TranslationsListViewModel: ObservableObject {
     }
 
     private func translationItem(_ translation: Translation) -> TranslationItem {
-        TranslationItem(
-            info: translation,
-            progress: progress[translation].map { .downloading($0) } ?? .notDownloading
-        )
+        let itemProgress: TranslationItem.DownloadingProgress = if let progress = progress[translation] {
+            .downloading(progress)
+        } else if translation.needsUpgrade {
+            .needsUpgrade
+        } else {
+            .notDownloading
+        }
+        return TranslationItem(info: translation, progress: itemProgress)
     }
 
     private func loadTranslations() async {
@@ -224,16 +228,12 @@ final class TranslationsListViewModel: ObservableObject {
 
             let newKeys = Set(newValue.keys)
             let oldKeys = Set(oldValue.keys)
-            // if a download completed
-            let addedKeys = oldKeys.subtracting(newKeys)
-            if !addedKeys.isEmpty {
+            // Downloads that ended, whether they completed, failed, or were cancelled.
+            let endedDownloads = oldKeys.subtracting(newKeys)
+            if !endedDownloads.isEmpty {
                 do {
                     try await loadLocalTranslations()
-
-                    // select newly downloaded translation
-                    if let addedTranslation = addedKeys.first {
-                        selectedTranslationsPreferences.select(addedTranslation.id)
-                    }
+                    selectNewlyInstalledTranslations(endedDownloads)
                 } catch {
                     crasher.recordError(error, reason: "Failed to reload local translations")
                     self.error = error
@@ -241,6 +241,18 @@ final class TranslationsListViewModel: ObservableObject {
             }
 
             progress = newValue
+        }
+    }
+
+    /// Selects the translations that the ended downloads installed for the first time.
+    ///
+    /// A failed or cancelled download leaves its translation not downloaded, and an upgrade
+    /// was already downloaded, so neither changes the selection.
+    private func selectNewlyInstalledTranslations(_ endedDownloads: Set<Translation>) {
+        let notDownloadedIds = Set(endedDownloads.filter { !$0.isDownloaded }.map(\.id))
+        let installed = translations.filter { notDownloadedIds.contains($0.id) && $0.isDownloaded }
+        for translation in installed {
+            selectedTranslationsPreferences.select(translation.id)
         }
     }
 }

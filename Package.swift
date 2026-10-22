@@ -510,6 +510,7 @@ private func domainTargets() -> [[Target]] {
 
         target(type, name: "TranslationServiceFake", hasTests: false, dependencies: [
             "TranslationService",
+            "NetworkSupportFake",
             "SystemDependenciesFake",
             "Utilities",
             "TestResources",
@@ -809,10 +810,16 @@ private func featuresTargets() -> [[Target]] {
             "Utilities",
         ]),
 
-        target(type, name: "TranslationsFeature", hasTests: false, dependencies: [
+        target(type, name: "TranslationsFeature", dependencies: [
             "AppDependencies",
             "TranslationService",
             "NoorUI",
+        ], testDependencies: [
+            "BatchDownloaderFake",
+            "NetworkSupportFake",
+            "TestResources",
+            "TranslationPersistence",
+            "TranslationServiceFake",
         ]),
 
         target(type, name: "NotesFeature", dependencies: [

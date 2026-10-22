@@ -143,7 +143,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
     }
 
     private func makeSUT(
-        analytics: AnalyticsLibrary = NoopAnalytics(),
+        analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
         appIconService: AppIconService? = nil,
         navigationController: UINavigationController? = nil
     ) -> SettingsRootViewModel {
@@ -153,7 +153,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
         #if QURAN_SYNC
         return SettingsRootViewModel(
             analytics: analytics,
-            reviewService: ReviewService(analytics: NoopAnalytics()),
+            reviewService: ReviewService(analytics: AnalyticsLibrarySpy()),
             authenticationClient: container.authenticationClient,
             legacyDataImportCoordinator: container.legacyDataImportCoordinator,
             audioPlaybackBuilder: AudioPlaybackBuilder(),
@@ -169,7 +169,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
         #else
         return SettingsRootViewModel(
             analytics: analytics,
-            reviewService: ReviewService(analytics: NoopAnalytics()),
+            reviewService: ReviewService(analytics: AnalyticsLibrarySpy()),
             audioPlaybackBuilder: AudioPlaybackBuilder(),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
             translationsListBuilder: TranslationsListBuilder(container: container),

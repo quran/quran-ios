@@ -52,6 +52,8 @@ public final class AnalyticsLibrarySpy: AnalyticsLibrary, Sendable {
         state.withCriticalRegion { $0.events.append(Event(name: name, value: value)) }
     }
 
+    public func logEvent(_: String, parameters _: [String: AnalyticsValue]) {}
+
     public func setUserProperty(_ value: String?, forName name: String) {
         state.withCriticalRegion {
             $0.userProperties[name] = value

@@ -209,7 +209,7 @@ final class SettingsRootViewModelTests: XCTestCase {
         let container = AppDependenciesStub(authenticationClient: authenticationClient ?? UnavailableAuthenticationClient())
         return SettingsRootViewModel(
             analytics: analytics,
-            reviewService: ReviewService(analytics: NoopAnalytics()),
+            reviewService: ReviewService(analytics: AnalyticsLibrarySpy()),
             authenticationClient: authenticationClient ?? UnavailableAuthenticationClient(),
             legacyDataImportCoordinator: legacyDataImportCoordinator ?? container.legacyDataImportCoordinator,
             audioPlaybackBuilder: AudioPlaybackBuilder(),

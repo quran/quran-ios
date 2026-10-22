@@ -186,7 +186,7 @@ final class AppWhatsNewControllerTests: XCTestCase {
     ])
 
     private func makeSUT(
-        analytics: AnalyticsLibrary = NoopAnalytics(),
+        analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
         launchVersion: LaunchVersionUpdate
     ) -> AppWhatsNewController {
         AppWhatsNewController(analytics: analytics, launchVersion: launchVersion, appIconCatalog: appIconCatalog)
@@ -225,8 +225,4 @@ private final class PresenterFake: UIViewController {
         presentedController = nil
         completion?()
     }
-}
-
-private struct NoopAnalytics: AnalyticsLibrary {
-    func logEvent(_: String, value _: String) {}
 }

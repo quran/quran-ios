@@ -566,6 +566,7 @@ private func domainTargets() -> [[Target]] {
             "Analytics",
             "Utilities",
         ] + mobileSyncTargetDependencies, testDependencies: [
+            "AnalyticsFake",
             "LastPagePersistence",
             "PageBookmarkPersistence",
             "QuranKit",
@@ -632,7 +633,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranLocalization",
             "ReadingBookmarkMenuFeature",
         ], testDependencies: [
-            "Analytics",
+            "AnalyticsFake",
             "NotePersistence",
         ]),
 
@@ -848,7 +849,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "NoorUI",
         ], testDependencies: [
-            "Analytics",
+            "AnalyticsFake",
             "QuranResources",
             "QuranText",
         ]),

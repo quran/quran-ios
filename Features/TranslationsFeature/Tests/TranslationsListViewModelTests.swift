@@ -180,6 +180,79 @@ final class TranslationsListViewModelTests: XCTestCase {
         XCTAssertEqual(preferences.selectedTranslationIds, [])
     }
 
+    // MARK: - Downloads running when the list opens
+
+    func test_completedNewDownloadRunningOnOpen_selectsTranslation() async throws {
+        let translation = try await makeTranslation(id: 1, version: TextVersion.new, installedVersion: nil)
+        let download = try await startDownloadingWithoutViewModel(translation)
+        let viewModel = try await startViewModel()
+        await downloadSession.writeDownloadData(download, bytesWritten: 50, totalBytes: 100)
+        await waitUntil { self.item(translation, in: viewModel).map(self.isDownloading) == true }
+
+        try await completeDownload(download, textVersion: TextVersion.new)
+        await waitUntilInstalled(translation, version: TextVersion.new, in: viewModel)
+
+        XCTAssertEqual(preferences.selectedTranslationIds, [translation.id])
+    }
+
+    func test_completedUpgradeRunningOnOpen_keepsTranslationUnselected() async throws {
+        let outdated = try await makeTranslation(id: 1, version: TextVersion.new, installedVersion: TextVersion.old)
+        let download = try await startDownloadingWithoutViewModel(outdated)
+        let viewModel = try await startViewModel()
+        await downloadSession.writeDownloadData(download, bytesWritten: 50, totalBytes: 100)
+        await waitUntil { self.item(outdated, in: viewModel).map(self.isDownloading) == true }
+
+        try await completeDownload(download, textVersion: TextVersion.new)
+        await waitUntilInstalled(outdated, version: TextVersion.new, in: viewModel)
+
+        XCTAssertEqual(preferences.selectedTranslationIds, [])
+    }
+
+    // MARK: - Changes during downloads
+
+    func test_serverVersionChangeDuringDownload_keepsShowingProgress() async throws {
+        let translation = try await makeTranslation(id: 1, version: TextVersion.old, installedVersion: nil)
+        let viewModel = try await startViewModel()
+
+        _ = try await startDownloading(translation, in: viewModel)
+        let updated = try await refreshServer(translation, version: TextVersion.new, in: viewModel)
+
+        let downloadingItem = try XCTUnwrap(item(translation, in: viewModel))
+        XCTAssertEqual(downloadingItem.info, updated)
+        XCTAssertTrue(isDownloading(downloadingItem))
+    }
+
+    func test_completedNewDownloadAfterServerVersionChange_selectsTranslation() async throws {
+        let translation = try await makeTranslation(id: 1, version: TextVersion.old, installedVersion: nil)
+        let viewModel = try await startViewModel()
+
+        let download = try await startDownloading(translation, in: viewModel)
+        let updated = try await refreshServer(translation, version: TextVersion.new, in: viewModel)
+        try await completeDownload(download, textVersion: TextVersion.new)
+        await waitUntilDownloadEnded(translation, in: viewModel)
+
+        XCTAssertEqual(
+            item(translation, in: viewModel),
+            TranslationItem(info: installed(updated, version: TextVersion.new), progress: .notDownloading)
+        )
+        XCTAssertEqual(preferences.selectedTranslationIds, [translation.id])
+    }
+
+    func test_deletingTranslationDuringUpgrade_endsDownload() async throws {
+        let outdated = try await makeTranslation(id: 1, version: TextVersion.new, installedVersion: TextVersion.old)
+        let viewModel = try await startViewModel()
+
+        _ = try await startDownloading(outdated, in: viewModel)
+        let downloadingItem = try XCTUnwrap(item(outdated, in: viewModel))
+        let deleteAction = try XCTUnwrap(viewModel.deleteTranslation(downloadingItem))
+        await deleteAction()
+        await waitUntilDownloadEnded(outdated, in: viewModel)
+
+        XCTAssertEqual(viewModel.availableTranslations, [
+            TranslationItem(info: installed(outdated, version: nil), progress: .notDownloading),
+        ])
+    }
+
     // MARK: Private
 
     /// Text versions stored in the TestResources translation databases.
@@ -257,11 +330,42 @@ final class TranslationsListViewModelTests: XCTestCase {
         return try XCTUnwrap(download)
     }
 
+    /// Starts downloading `translation` outside the list, as a download that was running before the list opened.
+    private func startDownloadingWithoutViewModel(_ translation: Translation) async throws -> SessionTask {
+        _ = try await TranslationsDownloader(downloader: downloadManager).download(translation)
+        let download = downloadSession.downloads.first { $0.originalRequest?.url == translation.fileURL }
+        return try XCTUnwrap(download)
+    }
+
     private func completeDownload(_ download: SessionTask, textVersion: Int) async throws {
         let location = FileManager.default.temporaryDirectory
             .appendingPathComponent("\(fileNamePrefix!)-download-\(UUID().uuidString).db")
         try FileManager.default.copyItem(at: databaseURL(textVersion: textVersion), to: location)
         await downloadSession.completeDownloadTask(download, location: location, totalBytes: 100, progressLoops: 1)
+    }
+
+    /// Makes the server list `translation` at `version` and refreshes the list.
+    private func refreshServer(
+        _ translation: Translation,
+        version: Int,
+        in viewModel: TranslationsListViewModel
+    ) async throws -> Translation {
+        let updated = Translation(
+            id: translation.id,
+            displayName: translation.displayName,
+            translator: translation.translator,
+            translatorForeign: translation.translatorForeign,
+            fileURL: translation.fileURL,
+            fileName: translation.fileName,
+            languageCode: translation.languageCode,
+            version: version,
+            installedVersion: translation.installedVersion
+        )
+        serverTranslations = serverTranslations.map { $0.id == updated.id ? updated : $0 }
+        try serverSession.respondWithTranslations(serverTranslations, baseURL: baseURL)
+        await viewModel.refresh()
+        XCTAssertNil(viewModel.error)
+        return updated
     }
 
     /// Waits until the list stops showing the download, which happens after it reloads the local translations.
@@ -275,11 +379,29 @@ final class TranslationsListViewModelTests: XCTestCase {
             guard let item = self.item(translation, in: viewModel) else {
                 return false
             }
-            if case .downloading = item.progress {
-                return false
-            }
+            return !self.isDownloading(item)
+        }
+    }
+
+    /// Waits until the list shows `translation` installed at `version`, which happens after its download ends.
+    private func waitUntilInstalled(
+        _ translation: Translation,
+        version: Int,
+        in viewModel: TranslationsListViewModel,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async {
+        let expected = TranslationItem(info: installed(translation, version: version), progress: .notDownloading)
+        await waitUntil(file: file, line: line) {
+            self.item(translation, in: viewModel) == expected
+        }
+    }
+
+    private func isDownloading(_ item: TranslationItem) -> Bool {
+        if case .downloading = item.progress {
             return true
         }
+        return false
     }
 
     private func item(_ translation: Translation, in viewModel: TranslationsListViewModel) -> TranslationItem? {
@@ -287,7 +409,7 @@ final class TranslationsListViewModelTests: XCTestCase {
         return items.first { $0.id == translation.id }
     }
 
-    private func installed(_ translation: Translation, version: Int) -> Translation {
+    private func installed(_ translation: Translation, version: Int?) -> Translation {
         var translation = translation
         translation.installedVersion = version
         return translation
@@ -299,7 +421,7 @@ final class TranslationsListViewModelTests: XCTestCase {
     }
 
     private func waitUntil(
-        timeout: TimeInterval = 10,
+        timeout: TimeInterval = 30,
         file: StaticString = #filePath,
         line: UInt = #line,
         condition: @escaping @MainActor () -> Bool

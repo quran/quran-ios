@@ -5,7 +5,7 @@
 //  Created by Mohamed Afifi on 2026-10-20.
 //
 
-import Analytics
+import AnalyticsFake
 import BatchDownloader
 import BatchDownloaderFake
 import NetworkSupport
@@ -308,7 +308,7 @@ final class TranslationsListViewModelTests: XCTestCase {
     private func startViewModel() async throws -> TranslationsListViewModel {
         try serverSession.respondWithTranslations(serverTranslations, baseURL: baseURL)
         let viewModel = TranslationsListViewModel(
-            analytics: NoopAnalytics(),
+            analytics: AnalyticsLibrarySpy(),
             translationsRepository: TranslationsRepository(
                 databasesURL: databasesURL,
                 networkManager: NetworkManager(session: serverSession, baseURL: baseURL)
@@ -435,8 +435,4 @@ final class TranslationsListViewModelTests: XCTestCase {
         }
         XCTFail("Condition was not met in time", file: file, line: line)
     }
-}
-
-private struct NoopAnalytics: AnalyticsLibrary {
-    func logEvent(_ name: String, value: String) { }
 }

@@ -815,6 +815,7 @@ private func featuresTargets() -> [[Target]] {
             "TranslationService",
             "NoorUI",
         ], testDependencies: [
+            "AnalyticsFake",
             "BatchDownloaderFake",
             "NetworkSupportFake",
             "TestResources",

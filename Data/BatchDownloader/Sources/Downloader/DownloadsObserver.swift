@@ -33,6 +33,7 @@ public final class DownloadsObserver<Key: Hashable> {
         runningDownloads.formUnion(downloads)
 
         for download in downloads {
+            keys[download] = keys[download] ?? extractKey(download)
             cancellableTasks.task { [weak self] in
                 do {
                     for try await progress in download.progress {
@@ -55,10 +56,13 @@ public final class DownloadsObserver<Key: Hashable> {
 
     private let progress = CurrentValueSubject<[Key: Double], Never>([:])
     private var cancellableTasks = Set<CancellableTask>()
+    /// The key of each running download, resolved once, so the download keeps its key until it
+    /// finishes even if `extractKey` would no longer find it, such as after the item is deleted.
+    private var keys: [DownloadBatchResponse: Key] = [:]
 
     private func finish(_ download: DownloadBatchResponse) {
         runningDownloads.remove(download)
-        if let key = extractKey(download) {
+        if let key = keys.removeValue(forKey: download) ?? extractKey(download) {
             progress.value.removeValue(forKey: key)
         }
     }
@@ -69,10 +73,11 @@ public final class DownloadsObserver<Key: Hashable> {
             return
         }
 
-        guard let key = extractKey(batch) else {
+        guard let key = keys[batch] ?? extractKey(batch) else {
             logger.debug("Cannot find key \(Key.self) for download \(batch)")
             return
         }
+        keys[batch] = key
         progress.value[key] = newProgress
     }
 }

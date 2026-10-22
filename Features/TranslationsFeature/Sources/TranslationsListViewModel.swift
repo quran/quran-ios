@@ -36,7 +36,7 @@ final class TranslationsListViewModel: ObservableObject {
         self.downloader = downloader
 
         let downloadsObserver = DownloadsObserver(
-            extractKey: { [weak self] in self?.translations.firstMatches($0) },
+            extractKey: { [weak self] in self?.translations.firstMatches($0)?.id },
             showError: { [weak self] error in self?.error = error }
         )
         self.downloadsObserver = downloadsObserver
@@ -112,13 +112,15 @@ final class TranslationsListViewModel: ObservableObject {
         let translation = item.info
         logger.info("Translations: start downloading translation \(translation.id)")
         analytics.downloading(translation: translation)
-        progress[translation] = 0
+        downloadStarted(translation)
+        progress[translation.id] = 0
 
         do {
             let response = try await downloader.download(translation)
             await downloadsObserver?.observe([response])
         } catch {
-            progress.removeValue(forKey: translation)
+            progress.removeValue(forKey: translation.id)
+            newDownloadIDs.remove(translation.id)
             crasher.recordError(error, reason: "Failed to start the translation download")
             self.error = error
         }
@@ -168,13 +170,15 @@ final class TranslationsListViewModel: ObservableObject {
     private let deleter: TranslationDeleter
     private let downloader: TranslationsDownloader
     private let selectedTranslationsPreferences = SelectedTranslationsPreferences.shared
-    private var downloadsObserver: DownloadsObserver<Translation>?
+    private var downloadsObserver: DownloadsObserver<Translation.ID>?
     private var cancellables = Set<AnyCancellable>()
     private var pendingDeletionIDs: Set<Translation.ID> = []
+    /// Downloads of translations that weren't downloaded when the download started.
+    private var newDownloadIDs: Set<Translation.ID> = []
 
     @Published private var translations: [Translation] = []
     @Published private var selectedTranslationIds: [Translation.ID] = []
-    @Published private var progress: [Translation: Double] = [:]
+    @Published private var progress: [Translation.ID: Double] = [:]
 
     private func restoreTranslation(_ translation: Translation, at index: Int) {
         translations.removeAll { $0.id == translation.id }
@@ -182,7 +186,7 @@ final class TranslationsListViewModel: ObservableObject {
     }
 
     private func translationItem(_ translation: Translation) -> TranslationItem {
-        let itemProgress: TranslationItem.DownloadingProgress = if let progress = progress[translation] {
+        let itemProgress: TranslationItem.DownloadingProgress = if let progress = progress[translation.id] {
             .downloading(progress)
         } else if translation.needsUpgrade {
             .needsUpgrade
@@ -228,12 +232,20 @@ final class TranslationsListViewModel: ObservableObject {
 
             let newKeys = Set(newValue.keys)
             let oldKeys = Set(oldValue.keys)
+            // Downloads not started by `startDownloading`, such as ones already running when the list opened.
+            for id in newKeys.subtracting(oldKeys) {
+                if let translation = translations.first(where: { $0.id == id }) {
+                    downloadStarted(translation)
+                }
+            }
             // Downloads that ended, whether they completed, failed, or were cancelled.
             let endedDownloads = oldKeys.subtracting(newKeys)
             if !endedDownloads.isEmpty {
+                let endedNewDownloads = newDownloadIDs.intersection(endedDownloads)
+                newDownloadIDs.subtract(endedDownloads)
                 do {
                     try await loadLocalTranslations()
-                    selectNewlyInstalledTranslations(endedDownloads)
+                    selectNewlyInstalledTranslations(endedNewDownloads)
                 } catch {
                     crasher.recordError(error, reason: "Failed to reload local translations")
                     self.error = error
@@ -244,13 +256,20 @@ final class TranslationsListViewModel: ObservableObject {
         }
     }
 
-    /// Selects the translations that the ended downloads installed for the first time.
+    private func downloadStarted(_ translation: Translation) {
+        if translation.isDownloaded {
+            newDownloadIDs.remove(translation.id)
+        } else {
+            newDownloadIDs.insert(translation.id)
+        }
+    }
+
+    /// Selects the translations that ended new downloads installed.
     ///
     /// A failed or cancelled download leaves its translation not downloaded, and an upgrade
-    /// was already downloaded, so neither changes the selection.
-    private func selectNewlyInstalledTranslations(_ endedDownloads: Set<Translation>) {
-        let notDownloadedIds = Set(endedDownloads.filter { !$0.isDownloaded }.map(\.id))
-        let installed = translations.filter { notDownloadedIds.contains($0.id) && $0.isDownloaded }
+    /// isn't a new download, so neither changes the selection.
+    private func selectNewlyInstalledTranslations(_ endedNewDownloads: Set<Translation.ID>) {
+        let installed = translations.filter { endedNewDownloads.contains($0.id) && $0.isDownloaded }
         for translation in installed {
             selectedTranslationsPreferences.select(translation.id)
         }

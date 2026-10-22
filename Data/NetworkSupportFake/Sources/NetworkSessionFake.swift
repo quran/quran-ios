@@ -54,6 +54,17 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
         return (data, URLResponse())
     }
 
+    /// Reports that `task` has written `bytesWritten` of `totalBytes` without finishing it.
+    public func writeDownloadData(_ task: SessionTask, bytesWritten: Int, totalBytes: Int) async {
+        await delegate?.networkSession(
+            self,
+            downloadTask: task,
+            didWriteData: Int64(bytesWritten),
+            totalBytesWritten: Int64(bytesWritten),
+            totalBytesExpectedToWrite: Int64(totalBytes)
+        )
+    }
+
     public func completeDownloadTask(_ task: SessionTask, location: URL, totalBytes: Int, progressLoops: Int) async {
         let step = Int64(1 / Double(progressLoops) * Double(totalBytes))
         for i in 0 ... progressLoops {

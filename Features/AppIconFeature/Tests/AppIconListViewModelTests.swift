@@ -6,6 +6,7 @@
 //
 
 import Analytics
+import AnalyticsFake
 import SystemDependenciesFake
 import UIKit
 import XCTest
@@ -23,7 +24,7 @@ final class AppIconListViewModelTests: XCTestCase {
         bundle.info["CFBundleIcons"] = [
             "CFBundleAlternateIcons": ["AppIcon-Blue": ["CFBundleIconName": "AppIcon-Blue"]],
         ]
-        analytics = AnalyticsRecorder()
+        analytics = AnalyticsLibrarySpy()
     }
 
     override func tearDown() async throws {
@@ -97,7 +98,7 @@ final class AppIconListViewModelTests: XCTestCase {
 
     private var iconAccess: AlternateIconAccessFake!
     private var bundle: SystemBundleFake!
-    private var analytics: AnalyticsRecorder!
+    private var analytics: AnalyticsLibrarySpy!
 
     private func makeService() -> AppIconService {
         let catalog = AppIconCatalog(sections: [
@@ -109,18 +110,5 @@ final class AppIconListViewModelTests: XCTestCase {
 
     private func makeSUT(source: AppIconListSource = .settings) -> AppIconListViewModel {
         AppIconListViewModel(appIconService: makeService(), analytics: analytics, source: source)
-    }
-}
-
-private struct AnalyticsEvent: Equatable {
-    let name: String
-    let value: String
-}
-
-private final class AnalyticsRecorder: AnalyticsLibrary, @unchecked Sendable {
-    private(set) var events: [AnalyticsEvent] = []
-
-    func logEvent(_ name: String, value: String) {
-        events.append(.init(name: name, value: value))
     }
 }

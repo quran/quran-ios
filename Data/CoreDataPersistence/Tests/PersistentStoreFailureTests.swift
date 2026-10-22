@@ -8,6 +8,7 @@
 import CoreData
 import CoreDataPersistence
 import Foundation
+import Utilities
 import XCTest
 
 final class PersistentStoreFailureTests: XCTestCase {
@@ -104,13 +105,13 @@ final class PersistentStoreFailureTests: XCTestCase {
     // MARK: Available capacity
 
     func test_cantOpenWithLowCapacity_isStorageFull() {
-        let capacity = PersistentStoreFailure.lowAvailableCapacity - 1
+        let capacity = FileManager.lowAvailableCapacity - 1
 
         XCTAssertTrue(PersistentStoreFailure.isStorageFull(cantOpenError, availableCapacity: capacity))
     }
 
     func test_cantOpenWithPlentyOfCapacity_isNotStorageFull() {
-        let capacity = PersistentStoreFailure.lowAvailableCapacity
+        let capacity = FileManager.lowAvailableCapacity
 
         XCTAssertFalse(PersistentStoreFailure.isStorageFull(cantOpenError, availableCapacity: capacity))
     }
@@ -161,8 +162,8 @@ final class PersistentStoreFailureTests: XCTestCase {
 
     // MARK: Private
 
-    private let lowCapacity = PersistentStoreFailure.lowAvailableCapacity - 1
-    private let plentyOfCapacity = 10 * PersistentStoreFailure.lowAvailableCapacity
+    private let lowCapacity = FileManager.lowAvailableCapacity - 1
+    private let plentyOfCapacity = 10 * FileManager.lowAvailableCapacity
 
     /// The error Core Data reported when a full device couldn't create the store's `-shm` file.
     private var cantOpenError: NSError {

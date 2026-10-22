@@ -267,6 +267,22 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
 
     func dismissPresentedViewController(completion: (() -> Void)?) {
+        // The user may have already dismissed it, e.g. by tapping outside a popover.
+        guard let presentedViewController else {
+            completion?()
+            return
+        }
+        // Dismissing again mid-transition may be ignored, so its completion would never run.
+        if presentedViewController.isBeingDismissed {
+            guard let transitionCoordinator = presentedViewController.transitionCoordinator ?? transitionCoordinator else {
+                completion?()
+                return
+            }
+            transitionCoordinator.animate(alongsideTransition: nil) { _ in
+                completion?()
+            }
+            return
+        }
         dismiss(animated: true, completion: completion)
     }
 

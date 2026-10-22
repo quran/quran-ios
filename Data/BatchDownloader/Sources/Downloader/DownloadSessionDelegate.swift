@@ -95,7 +95,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
                 reason: "Problem with creating directory or copying item to the new location '\(destinationURL)'"
             )
             // fail the batch since we save the file
-            await dataController.downloadFailed(response, with: FileSystemError(error: error))
+            await dataController.downloadFailed(response, with: fileSystemError(error, request: response.request))
         }
     }
 
@@ -109,7 +109,16 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         }
 
         let validationError = validate(task: task)
-        let theError = sessionError ?? validationError
+        if validationError == nil, let fileMoveError = sessionError as? DownloadedFileMoveError {
+            // The transfer used up any resume data, so a retry must start over.
+            try? fileManager.removeItem(at: response.request.resumePath)
+            // NetworkSessionToURLSessionDelegate recorded the failure when it couldn't keep the downloaded file.
+            await dataController.downloadFailed(response, with: fileSystemError(fileMoveError.underlyingError, request: response.request))
+            return
+        }
+
+        // A rejected response explains the failure better than not keeping the file it delivered.
+        let theError = sessionError is DownloadedFileMoveError ? validationError : sessionError ?? validationError
 
         // if success, early return
         guard let error = theError else {
@@ -117,7 +126,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
             return
         }
 
-        let finalError = wrap(error: error, resumePath: response.request.resumePath)
+        let finalError = wrap(error: error, request: response.request)
         await dataController.downloadFailed(response, with: finalError)
     }
 
@@ -134,7 +143,8 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
     private let dataController: DownloadBatchDataController
     private let fileManager: FileSystem
 
-    private func wrap(error theError: Error, resumePath: RelativeFilePath) -> Error {
+    private func wrap(error theError: Error, request: DownloadRequest) -> Error {
+        let resumePath = request.resumePath
         var error = theError
 
         // save resume data, if found
@@ -155,12 +165,19 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         crasher.recordError(error, reason: "Download network error occurred")
 
         // check if no disk space
-        let finalError: Error = if let error = error as? POSIXError, error.code == .ENOENT {
+        let directory = request.destination.url.deletingLastPathComponent()
+        let finalError: Error = if FileSystemError.isNoDiskSpace(error, availableCapacity: FileManager.default.availableCapacity(at: directory)) {
             FileSystemError.noDiskSpace
         } else {
             NetworkError(error: error)
         }
         return finalError
+    }
+
+    /// Classifies a failure to keep `request`'s downloaded file, as `noDiskSpace` when the device is full.
+    private func fileSystemError(_ error: Error, request: DownloadRequest) -> FileSystemError {
+        let directory = request.destination.url.deletingLastPathComponent()
+        return FileSystemError(error: error, availableCapacity: FileManager.default.availableCapacity(at: directory))
     }
 
     private func validate(task: NetworkSessionTask) -> Error? {

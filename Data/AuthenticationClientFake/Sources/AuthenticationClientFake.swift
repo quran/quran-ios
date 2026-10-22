@@ -1,6 +1,7 @@
 #if QURAN_SYNC
 
 import AuthenticationClient
+import Combine
 import Foundation
 import MobileSync
 import UIKit
@@ -17,6 +18,7 @@ public final class AuthenticationClientFake: AuthenticationClient {
     }
 
     public var authenticationStateValue: AuthenticationState = .notAuthenticated
+    public var authenticationStateAfterLogin: AuthenticationState?
     public var loggedInUserValue: MobileSyncUser?
     public var loginResult: Result<Void, AuthenticationClientError> = .success(())
     public var restoreStateResult: Result<AuthenticationState, AuthenticationClientError> = .success(.notAuthenticated)
@@ -40,9 +42,16 @@ public final class AuthenticationClientFake: AuthenticationClient {
         }
     }
 
+    public var authenticationStateChanges: AnyPublisher<AuthenticationState, Never> {
+        stateChanges.eraseToAnyPublisher()
+    }
+
     public func login(on _: UIViewController) async throws(AuthenticationClientError) {
         events.append(.login)
         try loginResult.get()
+        if let authenticationStateAfterLogin {
+            changeState(to: authenticationStateAfterLogin)
+        }
     }
 
     public func restoreState() async throws(AuthenticationClientError) -> AuthenticationState {
@@ -53,6 +62,7 @@ public final class AuthenticationClientFake: AuthenticationClient {
     public func logout() async throws(AuthenticationClientError) {
         events.append(.logout)
         try logoutResult.get()
+        changeState(to: .notAuthenticated)
     }
 
     public func authenticate(request: URLRequest) async throws(AuthenticationClientError) -> URLRequest {
@@ -63,6 +73,16 @@ public final class AuthenticationClientFake: AuthenticationClient {
     public func getAuthenticationHeaders() async throws(AuthenticationClientError) -> [String: String] {
         events.append(.getAuthenticationHeaders)
         return try authenticationHeadersResult.get()
+    }
+
+    // MARK: Private
+
+    private let stateChanges = PassthroughSubject<AuthenticationState, Never>()
+
+    private func changeState(to state: AuthenticationState) {
+        guard state != authenticationStateValue else { return }
+        authenticationStateValue = state
+        stateChanges.send(state)
     }
 }
 
@@ -75,6 +95,10 @@ public final class UnavailableAuthenticationClient: AuthenticationClient {
 
     public var loggedInUser: MobileSyncUser? {
         get async { nil }
+    }
+
+    public var authenticationStateChanges: AnyPublisher<AuthenticationState, Never> {
+        Empty().eraseToAnyPublisher()
     }
 
     public func login(on _: UIViewController) async throws(AuthenticationClientError) {

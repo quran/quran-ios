@@ -7,6 +7,7 @@
 
 import Crashing
 import Foundation
+import Utilities
 
 public protocol NetworkSession: AnyObject, Sendable {
     var delegateQueue: OperationQueue { get }
@@ -75,6 +76,25 @@ extension URLSessionUploadTask: NetworkSessionUploadTask {
 extension URLSessionDataTask: NetworkSessionDataTask {
 }
 
+/// A download task's transfer succeeded, but its downloaded file couldn't be kept for the delegate.
+///
+/// `NetworkSessionToURLSessionDelegate` records `underlyingError`, then completes such a task with this
+/// error instead of `nil`, so the download fails rather than completing without its file.
+public struct DownloadedFileMoveError: Error {
+    // MARK: Lifecycle
+
+    public init(underlyingError: Error) {
+        self.underlyingError = underlyingError
+    }
+
+    // MARK: Public
+
+    public let underlyingError: Error
+}
+
+/// Forwards URLSession's callbacks to a `NetworkSessionDelegate`, each in its own task.
+///
+/// A download task's completion reaches the delegate only after the delegate handled its downloaded file.
 public final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownloadDelegate, Sendable {
     // MARK: Lifecycle
 
@@ -106,24 +126,33 @@ public final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownl
         let temporaryDirectory = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
         let filePath = UUID().uuidString
         let temporaryFile = temporaryDirectory.appendingPathComponent(filePath)
+        let delivery: Task<Error?, Never>
         do {
             // Move the file to a temporary location as URLSession would delete it before the async task starts.
             try FileManager.default.moveItem(at: location, to: temporaryFile)
-            Task {
+            delivery = Task {
                 await networkSessionDelegate.networkSession(session, downloadTask: downloadTask, didFinishDownloadingTo: temporaryFile)
                 try? FileManager.default.removeItem(at: temporaryFile)
+                return nil
             }
         } catch {
             crasher.recordError(
                 error,
                 reason: "Problem moving the downloaded file to a temporary location '\(temporaryFile)'"
             )
+            delivery = Task { error }
         }
+        // URLSession calls didCompleteWithError next, which waits for this delivery.
+        deliveries.withCriticalRegion { $0[downloadTask.taskIdentifier] = delivery }
     }
 
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError sessionError: Error?) {
+        let delivery = deliveries.withCriticalRegion { $0.removeValue(forKey: task.taskIdentifier) }
         Task {
-            await networkSessionDelegate.networkSession(session, task: task, didCompleteWithError: sessionError)
+            // The delegate must have the file before it learns the task completed.
+            let fileMoveError = await delivery?.value
+            let error = sessionError ?? fileMoveError.map(DownloadedFileMoveError.init)
+            await networkSessionDelegate.networkSession(session, task: task, didCompleteWithError: error)
         }
     }
 
@@ -136,4 +165,11 @@ public final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownl
     // MARK: Internal
 
     let networkSessionDelegate: NetworkSessionDelegate
+
+    // MARK: Private
+
+    /// The pending deliveries of downloaded files, by task identifier, until their tasks complete.
+    ///
+    /// Each delivery finishes once the delegate handled the file, or with the error that kept the file from it.
+    private let deliveries = ManagedCriticalState<[Int: Task<Error?, Never>]>([:])
 }

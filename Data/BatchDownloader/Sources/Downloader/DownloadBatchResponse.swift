@@ -9,7 +9,6 @@
 //
 
 import Combine
-import Crashing
 import NetworkSupport
 import Utilities
 import VLogging
@@ -185,9 +184,8 @@ public actor DownloadBatchResponse {
             return
         }
 
+        // Failures are recorded where they occur (DownloadSessionDelegate); cancellations aren't recorded.
         if let error = firstError {
-            crasher.recordError(error, reason: "Download failed \(batchId)")
-
             // Cancel other tasks if any has failed
             for request in requests {
                 cancel(request)

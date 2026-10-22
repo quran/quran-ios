@@ -1,5 +1,5 @@
 #if !QURAN_SYNC
-import Analytics
+import AnalyticsFake
 import Combine
 import QuranKit
 import XCTest
@@ -29,7 +29,7 @@ final class NoteServiceTests: XCTestCase {
                 color: 0
             ),
         ])
-        let sut = NoteService(persistence: persistence, analytics: NoopAnalytics())
+        let sut = NoteService(persistence: persistence, analytics: AnalyticsLibrarySpy())
 
         var receivedNotes: [Note] = []
         let cancellable = sut.notes(quran: Quran.hafsMadani1405).sink { receivedNotes = $0 }
@@ -62,9 +62,5 @@ private final class NotePersistenceFake: NotePersistence {
     }
 
     private let models: [NotePersistenceModel]
-}
-
-private struct NoopAnalytics: AnalyticsLibrary {
-    func logEvent(_ name: String, value: String) {}
 }
 #endif

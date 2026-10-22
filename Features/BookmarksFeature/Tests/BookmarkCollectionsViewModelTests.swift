@@ -1,5 +1,6 @@
 #if QURAN_SYNC
 import Analytics
+import AnalyticsFake
 import AuthenticationClient
 import AuthenticationClientFake
 import Combine
@@ -247,7 +248,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     func test_login_setsAuthenticated_whenLoginSucceeds() async {
         let client = AuthenticationClientFake()
         client.authenticationStateValue = .authenticated
-        let analytics = AnalyticsRecorder()
+        let analytics = AnalyticsLibrarySpy()
         let navigationController = UINavigationController()
         let sut = makeSUT(
             analytics: analytics,
@@ -291,7 +292,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     }
 
     func test_dismissSyncBanner_persistsDismissal() {
-        let analytics = AnalyticsRecorder()
+        let analytics = AnalyticsLibrarySpy()
         let sut = makeSUT(analytics: analytics)
 
         sut.dismissSyncBanner()
@@ -583,7 +584,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     }
 
     private func makeSUT(
-        analytics: AnalyticsLibrary = AnalyticsRecorder(),
+        analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
         authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient(),
         collectionService: AyahBookmarkCollectionService? = nil,
         readingBookmarkService: MobileSyncReadingBookmarkService? = nil,
@@ -701,16 +702,4 @@ private enum TestError: Error, Equatable {
     case loginFailed
 }
 
-private struct AnalyticsEvent: Equatable {
-    let name: String
-    let value: String
-}
-
-private final class AnalyticsRecorder: AnalyticsLibrary, @unchecked Sendable {
-    private(set) var events: [AnalyticsEvent] = []
-
-    func logEvent(_ name: String, value: String) {
-        events.append(.init(name: name, value: value))
-    }
-}
 #endif

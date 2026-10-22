@@ -6,6 +6,7 @@
 //  Created by Mohamed Afifi on 2026-09-27.
 //
 
+import Crashing
 import Foundation
 import LegacyDataPersistence
 import MobileSync
@@ -17,7 +18,8 @@ import VLogging
 ///
 /// Every scan reads the whole store and submits it as one tracked import, so MobileSync skips
 /// content it already handled, even after the user edits or deletes it. Scans never overlap, and
-/// requests made during a scan share one follow-up scan.
+/// requests made during a scan share one follow-up scan. A failed scan is retried by later scans,
+/// and the first failure of each instance is reported to crash reporting by category only.
 ///
 /// Use one instance for the whole app, so ``disable()`` waits for every scan.
 public actor LegacyDataImportCoordinator {
@@ -73,6 +75,7 @@ public actor LegacyDataImportCoordinator {
     private let preferences = LegacyImportPreferences.shared
 
     private var changesTask: Task<Void, Never>?
+    private var reportedFailure = false
     private lazy var runner = LegacyImportScanRunner { [weak self] in
         await self?.scan() ?? .success(())
     }
@@ -101,9 +104,22 @@ public actor LegacyDataImportCoordinator {
             guard preferences.isEnabled else {
                 return .success(())
             }
-            logger.error("Legacy import: failed in \(milliseconds(since: start))ms error=\(Self.category(of: error))")
+            let category = Self.category(of: error)
+            logger.error("Legacy import: failed in \(milliseconds(since: start))ms error=\(category)")
+            if !(error is CancellationError) {
+                reportFirstFailure(category: category)
+            }
             return .failure(error)
         }
+    }
+
+    /// Reports only the first failure, so retries in the same launch add no duplicate reports.
+    private func reportFirstFailure(category: String) {
+        guard !reportedFailure else {
+            return
+        }
+        reportedFailure = true
+        crasher.recordError(LegacyImportFailure(category: category), reason: "Legacy import failed")
     }
 
     /// The error's type, without its message, which may contain user content.
@@ -117,6 +133,22 @@ public actor LegacyDataImportCoordinator {
 
     private func milliseconds(since start: Date) -> Int {
         Int(Date().timeIntervalSince(start) * 1000)
+    }
+}
+
+/// A failed scan reported without its underlying error, whose message may contain user content.
+struct LegacyImportFailure: CustomNSError {
+    static let errorDomain = "LegacyDataMigration.LegacyImportFailure"
+
+    let category: String
+
+    /// One code for every failure, so they group as one issue.
+    var errorCode: Int {
+        1
+    }
+
+    var errorUserInfo: [String: Any] {
+        ["legacy_import_error": category]
     }
 }
 

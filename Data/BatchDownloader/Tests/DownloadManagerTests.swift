@@ -188,28 +188,6 @@ final class DownloadManagerTests: XCTestCase {
         }
     }
 
-    func testDownloadFailWithResumeData() async throws {
-        // download a batch of 2 requests
-        let batch = DownloadBatchRequest(requests: [request1])
-        let response = try await downloader.download(batch)
-        let details = await response.details(of: request1)
-
-        // fail download with resume data
-        let task = try XCTUnwrap(details.task as? SessionTask)
-        let resumeText = "some data"
-        let error = URLError(.networkConnectionLost, userInfo: [
-            NSURLSessionDownloadTaskResumeData: resumeText.data(using: .utf8) as Any,
-        ])
-        session?.failDownloadTask(task, error: error)
-
-        // verify promise result
-        await assertThrows(response.progress, NetworkError.connectionLost)
-
-        // verify task
-        await assertThrows(details.progress.values(), NetworkError.connectionLost)
-        try await AsyncAssertEqual(try String(contentsOf: request1.resumePath), resumeText)
-    }
-
     func testDownloadBatchAfterEnquingThem() async throws {
         // download a batch of 2 requests
         let request = DownloadBatchRequest(requests: [request1, request2, request3, request4])

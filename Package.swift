@@ -105,8 +105,12 @@ private func coreTargets() -> [[Target]] {
             .product(name: "Logging", package: "swift-log"),
         ]),
 
-        target(type, name: "Analytics", hasTests: false, dependencies: [
+        target(type, name: "Analytics", dependencies: [
             "VLogging",
+        ]),
+        target(type, name: "AnalyticsFake", hasTests: false, dependencies: [
+            "Analytics",
+            "Utilities",
         ]),
 
         target(type, name: "Caching", dependencies: [
@@ -129,6 +133,7 @@ private func coreTargets() -> [[Target]] {
         ]),
 
         target(type, name: "Utilities", dependencies: [
+            "VLogging",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
         ]),
@@ -351,8 +356,8 @@ private func dataTargets() -> [[Target]] {
         target(type, name: "NetworkSupport", dependencies: [
             "Crashing",
             "Localization",
-        ], testDependencies: [
             "Utilities",
+        ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "NetworkSupportFake",
         ]),
@@ -563,12 +568,14 @@ private func domainTargets() -> [[Target]] {
             "Analytics",
             "Utilities",
         ] + mobileSyncTargetDependencies, testDependencies: [
+            "AnalyticsFake",
             "LastPagePersistence",
             "PageBookmarkPersistence",
             "QuranKit",
         ] + mobileSyncTestSupportDependencies),
 
         target(type, name: "LegacyDataMigration", dependencies: [
+            "Crashing",
             "LegacyDataPersistence",
             "Preferences",
             "VLogging",
@@ -628,9 +635,11 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "QuranLocalization",
             "ReadingBookmarkMenuFeature",
+            "Utilities",
         ], testDependencies: [
-            "Analytics",
+            "AnalyticsFake",
             "NotePersistence",
+            "QuranResources",
         ]),
 
         target(type, name: "ReadingBookmarkMenuFeature", dependencies: [
@@ -656,6 +665,7 @@ private func featuresTargets() -> [[Target]] {
             .copy("whats-new.plist"),
         ], testDependencies: [
             "Analytics",
+            "AnalyticsFake",
             "AppMigrator",
         ]),
 
@@ -726,6 +736,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranTextKit",
         ], testDependencies: [
             "Analytics",
+            "AnalyticsFake",
             "AnnotationsService",
             "NoorUI",
             "QuranAnnotations",
@@ -746,6 +757,7 @@ private func featuresTargets() -> [[Target]] {
             "Utilities",
         ], testDependencies: [
             "Analytics",
+            "AnalyticsFake",
             "AnnotationsService",
             "AuthenticationClient",
             "AuthenticationClientFake",
@@ -822,6 +834,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranLocalization",
             "NoteEditorFeature",
         ], testDependencies: [
+            "AnalyticsFake",
             "AuthenticationClientFake",
             "QuranResources",
         ] + mobileSyncTestSupportDependencies),
@@ -847,7 +860,7 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "NoorUI",
         ], testDependencies: [
-            "Analytics",
+            "AnalyticsFake",
             "QuranResources",
             "QuranText",
         ]),
@@ -893,6 +906,7 @@ private func featuresTargets() -> [[Target]] {
             "VLogging",
         ], testDependencies: [
             "Analytics",
+            "AnalyticsFake",
             "NoorUI",
             "SystemDependenciesFake",
         ]),
@@ -918,6 +932,7 @@ private func featuresTargets() -> [[Target]] {
             "ZIPFoundation",
         ] + mobileSyncTargetDependencies, testDependencies: [
             "Analytics",
+            "AnalyticsFake",
             "AppDependencies",
             "AppIconFeature",
             "AudioDownloadsFeature",
@@ -947,14 +962,24 @@ private func featuresTargets() -> [[Target]] {
         ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "AppStructureFeature", dependencies: [
+            "Analytics",
             "AppIconFeature",
             "AppMigrator",
+            "AuthenticationClient",
             "CoreDataPersistence",
             "Crashing",
             "FeaturesSupport",
             "NoorUI",
+            "QueuePlayer",
+            "QuranAudio",
+            "QuranAudioKit",
             "QuranKit",
+            "QuranText",
+            "QuranTextKit",
             "ReadingService",
+            "ReciterService",
+            "TranslationService",
+            "WordTextService",
             "HomeFeature",
             "BookmarksFeature",
             "NotesFeature",
@@ -965,8 +990,13 @@ private func featuresTargets() -> [[Target]] {
             "AudioUpdater",
             "AppMigrationFeature",
             "SyncLogging",
+            "Utilities",
         ] + mobileSyncTargetDependencies, testDependencies: [
+            "AnalyticsFake",
+            "AuthenticationClientFake",
             "CoreDataModel",
+            "ReciterServiceFake",
+            "SystemDependenciesFake",
         ]),
     ]
 }

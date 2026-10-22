@@ -9,6 +9,7 @@ import QuranKit
 import QuranText
 import QuranTextKit
 import ReadingService
+import TranslationService
 import XCTest
 @testable import QuranTranslationFeature
 
@@ -219,6 +220,28 @@ final class ContentTranslationViewModelTests: XCTestCase {
         preferences.reading = .indoPak
 
         XCTAssertEqual(sut.reading, .indoPak)
+    }
+
+    func testSelectedTranslationsPublishOnMainThreadWhenPreferenceChangesInBackground() async {
+        let preferences = SelectedTranslationsPreferences.shared
+        let originalIds = preferences.selectedTranslationIds
+        defer { preferences.selectedTranslationIds = originalIds }
+        preferences.selectedTranslationIds = [1, 2]
+        let sut = makeSUT()
+        let updated = expectation(description: "selected translations updated")
+        var updatesOnMainThread: [Bool] = []
+        let subscription = sut.$selectedTranslations.dropFirst().sink { _ in
+            updatesOnMainThread.append(Thread.isMainThread)
+            updated.fulfill()
+        }
+        defer { subscription.cancel() }
+
+        // Mirrors TranslationsVersionUpdater/TranslationDeleter writing from a pool thread.
+        await Task.detached { preferences.remove(1) }.value
+        await fulfillment(of: [updated], timeout: 1)
+
+        XCTAssertEqual(updatesOnMainThread, [true])
+        XCTAssertEqual(sut.selectedTranslations, [2])
     }
 
     func testCommitLoadedContentPublishesOneCoherentSnapshot() {

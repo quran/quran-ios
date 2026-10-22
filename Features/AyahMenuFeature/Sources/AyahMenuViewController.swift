@@ -57,8 +57,8 @@ final class AyahMenuViewController: UIViewController {
             addNote: { [weak self] in await self?.viewModel.editNote() },
             deleteNote: { [weak self] in await self?.viewModel.deleteNotes() },
             showTranslation: { [weak self] in self?.viewModel.showTranslation() },
-            copy: { [weak self] in self?.viewModel.copy() },
-            share: { [weak self] in self?.viewModel.share() },
+            copy: { [weak self] in await self?.viewModel.copy() },
+            share: { [weak self] in await self?.viewModel.share() },
             showReadingBookmarkMenu: { [weak self] in self?.showReadingBookmarkMenu() }
         )
         #else
@@ -69,8 +69,8 @@ final class AyahMenuViewController: UIViewController {
             addNote: { [weak self] in await self?.viewModel.editNote() },
             deleteNote: { [weak self] in await self?.viewModel.deleteNotes() },
             showTranslation: { [weak self] in self?.viewModel.showTranslation() },
-            copy: { [weak self] in self?.viewModel.copy() },
-            share: { [weak self] in self?.viewModel.share() }
+            copy: { [weak self] in await self?.viewModel.copy() },
+            share: { [weak self] in await self?.viewModel.share() }
         )
         #endif
         let highlightingColor = viewModel.highlightingColor

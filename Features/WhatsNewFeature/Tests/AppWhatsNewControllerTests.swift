@@ -6,6 +6,7 @@
 //
 
 import Analytics
+import AnalyticsFake
 import AppMigrator
 import NoorUI
 import UIKit
@@ -127,7 +128,7 @@ final class AppWhatsNewControllerTests: XCTestCase {
     }
 
     func test_revealActions_completeOnlyOnce() throws {
-        let analytics = AnalyticsRecorder()
+        let analytics = AnalyticsLibrarySpy()
         let presenter = PresenterFake()
         let sut = makeSUT(analytics: analytics, launchVersion: .update(from: "2.6.8", to: "2.7.0"))
         var chooseAnotherIconCount = 0
@@ -140,16 +141,16 @@ final class AppWhatsNewControllerTests: XCTestCase {
         try XCTUnwrap(reveal.rootView.onChooseAnotherIcon)()
 
         XCTAssertEqual(analytics.events, [
-            AnalyticsEvent(name: "PresentingWhatsNew", value: "2.7.0"),
-            AnalyticsEvent(name: "PresentingAppIconReveal", value: "2.7.0"),
-            AnalyticsEvent(name: "AppIconRevealContinue", value: "2.7.0"),
+            .init(name: "PresentingWhatsNew", value: "2.7.0"),
+            .init(name: "PresentingAppIconReveal", value: "2.7.0"),
+            .init(name: "AppIconRevealContinue", value: "2.7.0"),
         ])
         XCTAssertEqual(presenter.dismissCount, 1)
         XCTAssertEqual(chooseAnotherIconCount, 0)
     }
 
     func test_revealReplay_logsEachReplayWithoutDismissing() throws {
-        let analytics = AnalyticsRecorder()
+        let analytics = AnalyticsLibrarySpy()
         let presenter = PresenterFake()
         let sut = makeSUT(analytics: analytics, launchVersion: .update(from: "2.6.8", to: "2.7.0"))
         store.lastSeenVersion = "2.6.2"
@@ -160,10 +161,10 @@ final class AppWhatsNewControllerTests: XCTestCase {
         reveal.rootView.onReplay()
 
         XCTAssertEqual(analytics.events, [
-            AnalyticsEvent(name: "PresentingWhatsNew", value: "2.7.0"),
-            AnalyticsEvent(name: "PresentingAppIconReveal", value: "2.7.0"),
-            AnalyticsEvent(name: "AppIconRevealReplay", value: "2.7.0"),
-            AnalyticsEvent(name: "AppIconRevealReplay", value: "2.7.0"),
+            .init(name: "PresentingWhatsNew", value: "2.7.0"),
+            .init(name: "PresentingAppIconReveal", value: "2.7.0"),
+            .init(name: "AppIconRevealReplay", value: "2.7.0"),
+            .init(name: "AppIconRevealReplay", value: "2.7.0"),
         ])
         XCTAssertIdentical(presenter.presentedController, reveal)
         XCTAssertEqual(store.lastSeenVersion, "2.6.2")
@@ -185,7 +186,7 @@ final class AppWhatsNewControllerTests: XCTestCase {
     ])
 
     private func makeSUT(
-        analytics: AnalyticsLibrary = NoopAnalytics(),
+        analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
         launchVersion: LaunchVersionUpdate
     ) -> AppWhatsNewController {
         AppWhatsNewController(analytics: analytics, launchVersion: launchVersion, appIconCatalog: appIconCatalog)
@@ -224,21 +225,4 @@ private final class PresenterFake: UIViewController {
         presentedController = nil
         completion?()
     }
-}
-
-private struct AnalyticsEvent: Equatable {
-    let name: String
-    let value: String
-}
-
-private final class AnalyticsRecorder: AnalyticsLibrary, @unchecked Sendable {
-    private(set) var events: [AnalyticsEvent] = []
-
-    func logEvent(_ name: String, value: String) {
-        events.append(.init(name: name, value: value))
-    }
-}
-
-private struct NoopAnalytics: AnalyticsLibrary {
-    func logEvent(_: String, value _: String) {}
 }

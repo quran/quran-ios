@@ -6,7 +6,9 @@
 //
 
 import BatchDownloader
+import Crashing
 import QuranKit
+import Utilities
 
 struct ReadingResourceDownloader {
     // MARK: Internal
@@ -31,7 +33,15 @@ struct ReadingResourceDownloader {
             download = runningReading
         } else {
             let request = DownloadRequest(url: remoteResource.url, destination: remoteResource.zipFile)
-            download = try await downloader.download(DownloadBatchRequest(requests: [request]))
+            do {
+                download = try await downloader.download(DownloadBatchRequest(requests: [request]))
+            } catch {
+                // Download failures are recorded by the batch downloader, but starting one isn't.
+                if !error.isCancelled {
+                    crasher.recordError(error, reason: "Failed to start downloading \(reading)")
+                }
+                throw error
+            }
         }
 
         for try await progress in download.progress {

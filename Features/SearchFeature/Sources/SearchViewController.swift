@@ -8,6 +8,7 @@
 import Combine
 import Foundation
 import Localization
+import NoorUI
 import SwiftUI
 import VLogging
 
@@ -42,18 +43,14 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
 
         addFullScreenChild(searchResultsViewController)
 
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = true
-        searchController.searchBar.placeholder = l("search.placeholder.text")
-        searchController.searchBar.delegate = self
-        navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
+        search.install(in: navigationItem, hidesSearchBarWhenScrolling: false)
+        navigationItem.rightBarButtonItem = search.barButtonItem
         definesPresentationContext = true
 
         viewModel.$searchTerm
             .receive(on: DispatchQueue.main)
             .sink { [weak self] searchTerm in
-                self?.searchController.searchBar.text = searchTerm
+                self?.search.searchBar.text = searchTerm
             }
             .store(in: &cancellables)
 
@@ -63,9 +60,9 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
             .sink { [weak self] state in
                 switch state {
                 case .closed:
-                    self?.searchController.searchBar.endEditing(true)
+                    self?.search.searchBar.endEditing(true)
                 case .open:
-                    self?.searchController.searchBar.becomeFirstResponder()
+                    self?.search.searchBar.becomeFirstResponder()
                 }
             }
             .store(in: &cancellables)
@@ -74,12 +71,12 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Deactivating the search controller when leaving clears the search bar text.
-        searchController.searchBar.text = viewModel.searchTerm
+        search.searchBar.text = viewModel.searchTerm
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        searchController.isActive = false
+        search.deactivate()
     }
 
     // MARK: - Search delegate methods
@@ -113,6 +110,10 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
 
     private var cancellables: Set<AnyCancellable> = []
     private let viewModel: SearchViewModel
-    private let searchController = UISearchController(searchResultsController: nil)
+    private lazy var search = NavigationSearch(
+        placeholder: l("search.placeholder.text"),
+        delegate: self,
+        hidesNavigationBarDuringPresentation: true
+    )
     private let searchResultsViewController: UIHostingController<SearchView>
 }

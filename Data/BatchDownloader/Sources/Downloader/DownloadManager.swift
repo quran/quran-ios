@@ -65,6 +65,10 @@ public final class DownloadManager: Sendable {
 
     public func start() async {
         logger.info("Starting download manager")
+        // Load the saved batches before creating the session: a relaunched background session delivers
+        // the downloads that finished while the app was terminated as soon as it's created, and they'd
+        // be dropped if their batches weren't loaded yet.
+        await dataController.loadBatches()
         let session = createSession()
         await dataController.start(with: session)
         logger.info("Download manager started")

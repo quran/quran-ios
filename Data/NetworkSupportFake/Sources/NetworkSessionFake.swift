@@ -9,6 +9,7 @@ import AsyncAlgorithms
 import AsyncUtilitiesForTesting
 import Foundation
 import NetworkSupport
+import Utilities
 
 public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
     // MARK: Lifecycle
@@ -16,13 +17,19 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
     public init(queue: OperationQueue, delegate: NetworkSessionDelegate? = nil, downloads: [SessionTask] = []) {
         delegateQueue = queue
         self.delegate = delegate
-        self.downloads = downloads
+        downloadsState = ManagedCriticalState(downloads)
     }
 
     // MARK: Public
 
     public let delegateQueue: OperationQueue
-    public var downloads: [SessionTask] = []
+
+    /// Locked because the downloader lists the tasks while tests and the fake change them.
+    public var downloads: [SessionTask] {
+        get { downloadsState.withCriticalRegion { $0 } }
+        set { downloadsState.withCriticalRegion { $0 = newValue } }
+    }
+
     public var dataTasks: [SessionTask] = []
     public var downloadsObserver: AsyncChannel<SessionTask>?
 
@@ -34,7 +41,7 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
 
     public func downloadTask(withResumeData resumeData: Data) -> NetworkSessionDownloadTask {
         let task = SessionTask(taskIdentifier: taskIdentifier)
-        downloads.append(task)
+        downloadsState.withCriticalRegion { $0.append(task) }
         task.resumeData = resumeData
         return task
     }
@@ -42,7 +49,7 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
     public func downloadTask(with request: URLRequest) -> NetworkSessionDownloadTask {
         let task = SessionTask(taskIdentifier: taskIdentifier)
         task.originalRequest = request
-        downloads.append(task)
+        downloadsState.withCriticalRegion { $0.append(task) }
         // Sending waits until a test reads the observer, maybe never, so capture only the observer, not the session.
         Task { [downloadsObserver] in await downloadsObserver?.send(task) }
         return task
@@ -121,6 +128,7 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
 
     // MARK: Private
 
+    private let downloadsState: ManagedCriticalState<[SessionTask]>
     private var taskIdentifierCounter = 0
 
     private var taskIdentifier: Int {

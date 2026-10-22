@@ -8,6 +8,7 @@
 
 import AppDependencies
 import Localization
+import NoorUI
 import NotesFeature
 import QuranViewFeature
 import UIKit
@@ -56,8 +57,8 @@ private class NotesTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
         UITabBarItem(
             title: l("tab.notes"),
-            image: .symbol("text.justify.leading"),
-            selectedImage: .symbol("text.justify.leading", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))
+            image: .symbol(NoorSystemImage.notes.rawValue),
+            selectedImage: .symbol(NoorSystemImage.notesFilled.rawValue)
         )
     }
 }

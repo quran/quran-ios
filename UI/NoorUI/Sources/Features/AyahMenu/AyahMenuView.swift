@@ -277,9 +277,9 @@ private struct AyahMenuViewList: View {
     private var noteIcon: some View {
         Group {
             if dataObject.usesSyncedNotesIcon {
-                NoorSystemImage.note.image
+                NoorSystemImage.notes.image
             } else {
-                NoorSystemImage.note.image
+                NoorSystemImage.notes.image
                     .foregroundColor(dataObject.highlightingColor.color)
             }
         }

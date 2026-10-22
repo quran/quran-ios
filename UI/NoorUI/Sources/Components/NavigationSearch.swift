@@ -82,6 +82,7 @@ public final class NavigationSearch {
 }
 
 /// A search bar for a Mac toolbar. Its width follows Dynamic Type and gives way in narrow windows.
+/// It has no Cancel button, so Escape cancels while its field is editing.
 private final class ToolbarSearchBar: UISearchBar {
     // MARK: Lifecycle
 
@@ -100,6 +101,16 @@ private final class ToolbarSearchBar: UISearchBar {
 
     // MARK: Internal
 
+    /// The search field is first responder while editing, and its key commands reach this bar through the responder chain.
+    /// While text is being composed, Escape is left to the input method to cancel the composition.
+    override var keyCommands: [UIKeyCommand]? {
+        let commands = super.keyCommands ?? []
+        guard searchTextField.isFirstResponder, searchTextField.markedTextRange == nil else {
+            return commands.isEmpty ? nil : commands
+        }
+        return commands + [cancelCommand]
+    }
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory {
@@ -115,5 +126,25 @@ private final class ToolbarSearchBar: UISearchBar {
 
     private static let preferredWidth: CGFloat = 220
 
+    private lazy var cancelCommand: UIKeyCommand = {
+        let command = UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(cancelSearch))
+        command.wantsPriorityOverSystemBehavior = true
+        return command
+    }()
+
     private lazy var widthConstraint = widthAnchor.constraint(equalToConstant: Self.preferredWidth)
+
+    /// Mirrors tapping a Cancel button: clears the text, ends editing, and tells the delegate.
+    @objc
+    private func cancelSearch() {
+        guard searchTextField.isFirstResponder else {
+            return
+        }
+        if let text, !text.isEmpty {
+            self.text = ""
+            delegate?.searchBar?(self, textDidChange: "")
+        }
+        endEditing(true)
+        delegate?.searchBarCancelButtonClicked?(self)
+    }
 }

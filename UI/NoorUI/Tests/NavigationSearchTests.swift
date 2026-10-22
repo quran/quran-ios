@@ -68,9 +68,86 @@ final class NavigationSearchTests: XCTestCase {
         XCTAssertGreaterThan(width.constant, defaultWidth)
     }
 
+    func test_iOSAppOnMac_escapeCancelsEditingSearch() throws {
+        let search = makeSearch(isiOSAppOnMac: true)
+        let window = show(search)
+        defer { window.isHidden = true }
+
+        let searchBar = search.searchBar
+        XCTAssertNil(escapeCommand(of: searchBar), "Escape is left alone while the field isn't editing")
+        XCTAssertTrue(searchBar.becomeFirstResponder())
+        searchBar.text = "رحمن"
+
+        let escape = try XCTUnwrap(escapeCommand(of: searchBar))
+        XCTAssertTrue(escape.wantsPriorityOverSystemBehavior)
+        let action = try XCTUnwrap(escape.action)
+        XCTAssertIdentical(searchBar.searchTextField.target(forAction: action, withSender: escape) as AnyObject?, searchBar)
+        delegate.removeAllEvents()
+        searchBar.perform(action, with: escape)
+
+        XCTAssertEqual(searchBar.text, "")
+        XCTAssertFalse(searchBar.searchTextField.isFirstResponder)
+        XCTAssertEqual(delegate.events, [.textDidChange(""), .cancelButtonClicked])
+    }
+
+    func test_iOSAppOnMac_escapeWithAnEmptyFieldOnlyCancels() throws {
+        let search = makeSearch(isiOSAppOnMac: true)
+        let window = show(search)
+        defer { window.isHidden = true }
+
+        let searchBar = search.searchBar
+        XCTAssertTrue(searchBar.becomeFirstResponder())
+        let escape = try XCTUnwrap(escapeCommand(of: searchBar))
+        delegate.removeAllEvents()
+        searchBar.perform(try XCTUnwrap(escape.action), with: escape)
+
+        XCTAssertFalse(searchBar.searchTextField.isFirstResponder)
+        XCTAssertEqual(delegate.events, [.cancelButtonClicked])
+    }
+
+    func test_iOSAppOnMac_escapeIsLeftToTheInputMethodWhileComposing() {
+        let search = makeSearch(isiOSAppOnMac: true)
+        let window = show(search)
+        defer { window.isHidden = true }
+
+        let textField = search.searchBar.searchTextField
+        XCTAssertTrue(search.searchBar.becomeFirstResponder())
+        textField.setMarkedText("か", selectedRange: NSRange(location: 1, length: 0))
+        XCTAssertNotNil(textField.markedTextRange)
+        XCTAssertNil(escapeCommand(of: search.searchBar))
+
+        textField.unmarkText()
+        XCTAssertNotNil(escapeCommand(of: search.searchBar))
+    }
+
+    func test_iPhoneAndIPad_searchBarHasNoEscapeCommand() {
+        let search = makeSearch(isiOSAppOnMac: false)
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 1024, height: 768))
+        window.addSubview(search.searchBar)
+        window.makeKeyAndVisible()
+        defer { window.isHidden = true }
+
+        XCTAssertTrue(search.searchBar.becomeFirstResponder())
+        XCTAssertNil(escapeCommand(of: search.searchBar))
+    }
+
     // MARK: Private
 
-    private let delegate = SearchBarDelegate()
+    private let delegate = SearchBarDelegateSpy()
+
+    private func show(_ search: NavigationSearch) -> UIWindow {
+        let viewController = UIViewController()
+        viewController.navigationItem.rightBarButtonItem = search.barButtonItem
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 1024, height: 768))
+        window.rootViewController = UINavigationController(rootViewController: viewController)
+        window.makeKeyAndVisible()
+        window.layoutIfNeeded()
+        return window
+    }
+
+    private func escapeCommand(of searchBar: UISearchBar) -> UIKeyCommand? {
+        searchBar.keyCommands?.first { $0.input == UIKeyCommand.inputEscape }
+    }
 
     private func makeSearch(isiOSAppOnMac: Bool) -> NavigationSearch {
         NavigationSearch(
@@ -87,5 +164,23 @@ final class NavigationSearchTests: XCTestCase {
     }
 }
 
-private final class SearchBarDelegate: NSObject, UISearchBarDelegate {
+private final class SearchBarDelegateSpy: NSObject, UISearchBarDelegate {
+    enum Event: Equatable {
+        case textDidChange(String)
+        case cancelButtonClicked
+    }
+
+    private(set) var events: [Event] = []
+
+    func removeAllEvents() {
+        events.removeAll()
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        events.append(.textDidChange(searchText))
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        events.append(.cancelButtonClicked)
+    }
 }

@@ -74,8 +74,6 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
 
         // remove the resume data
         try? fileManager.removeItem(at: resumePath)
-        // remove the existing file if exist.
-        try? fileManager.removeItem(at: destinationURL)
 
         // create directory if needed
         let directory = destinationURL.deletingLastPathComponent()
@@ -88,10 +86,9 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
             crasher.recordError(error, reason: "Couldn't exclude download directory from backup '\(directory)'")
         }
 
-        // move the file to destination
+        // Move the file to destination, replacing an existing file atomically so readers never find it missing.
         do {
-            try fileManager.moveItem(at: location, to: destinationURL)
-
+            try fileManager.replaceItem(at: destinationURL.url, withItemAt: location)
         } catch {
             crasher.recordError(
                 error,

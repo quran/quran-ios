@@ -14,6 +14,8 @@ public protocol FileSystem: Sendable {
     func copyItem(at srcURL: URL, to dstURL: URL) throws
     func removeItem(at url: URL) throws
     func moveItem(at src: URL, to dst: URL) throws
+    /// Moves `newItem` to `originalItem`, atomically replacing any item already there so it is never missing.
+    func replaceItem(at originalItem: URL, withItemAt newItem: URL) throws
     func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL]
     func resourceValues(at url: URL, forKeys keys: Set<URLResourceKey>) throws -> ResourceValues
     func setExcludedFromBackup(_ excluded: Bool, at url: URL) throws
@@ -38,6 +40,14 @@ public struct DefaultFileSystem: FileSystem {
 
     public func moveItem(at src: URL, to dst: URL) throws {
         try FileManager.default.moveItem(at: src, to: dst)
+    }
+
+    public func replaceItem(at originalItem: URL, withItemAt newItem: URL) throws {
+        if fileExists(at: originalItem) {
+            _ = try FileManager.default.replaceItemAt(originalItem, withItemAt: newItem)
+        } else {
+            try moveItem(at: newItem, to: originalItem)
+        }
     }
 
     public func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL] {

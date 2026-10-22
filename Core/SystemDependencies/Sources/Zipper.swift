@@ -20,25 +20,45 @@ public struct DefaultZipper: Zipper {
     // MARK: Public
 
     /// Extracts `zipFile` into `destination`, throwing for entries that would land outside it.
-    /// With `overwrite`, files already at an entry's path are replaced; otherwise extraction fails on them.
+    /// With `overwrite`, each file already at an entry's path is swapped in atomically, and existing files are
+    /// untouched if extraction fails; otherwise extraction fails on them.
     public func unzipFile(_ zipFile: URL, destination: URL, overwrite: Bool) throws {
         let fileManager = FileManager.default
         if overwrite {
-            try removeItemsReplaced(by: zipFile, in: destination, fileManager: fileManager)
+            try replaceItems(with: zipFile, in: destination, fileManager: fileManager)
+        } else {
+            try fileManager.unzipItem(at: zipFile, to: destination)
         }
-        try fileManager.unzipItem(at: zipFile, to: destination)
     }
 
     // MARK: Private
 
-    private func removeItemsReplaced(by zipFile: URL, in destination: URL, fileManager: FileManager) throws {
+    /// Extracts into a staging directory on the same volume, then swaps each entry into `destination`,
+    /// so readers never find a replaced file missing.
+    private func replaceItems(with zipFile: URL, in destination: URL, fileManager: FileManager) throws {
         let archive = try Archive(url: zipFile, accessMode: .read)
-        // Validate every entry before deleting anything, so a crafted archive cannot delete files outside `destination`.
-        let replacedItems = try archive
-            .filter { $0.type != .directory }
-            .map { try containedURL(for: $0.path, in: destination) }
-        for item in replacedItems where (try? item.checkResourceIsReachable()) == true {
-            try fileManager.removeItem(at: item)
+        // Validate every entry before changing anything, so a crafted archive cannot replace files outside `destination`.
+        let entries = try archive.map { entry in
+            (target: try containedURL(for: entry.path, in: destination), path: entry.path, isDirectory: entry.type == .directory)
+        }
+
+        try fileManager.createDirectory(at: destination, withIntermediateDirectories: true)
+        let staging = try fileManager.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: destination, create: true)
+        defer { try? fileManager.removeItem(at: staging) }
+        try fileManager.unzipItem(at: zipFile, to: staging)
+
+        for entry in entries {
+            if entry.isDirectory {
+                try fileManager.createDirectory(at: entry.target, withIntermediateDirectories: true)
+                continue
+            }
+            let extracted = staging.appendingPathComponent(entry.path)
+            if (try? entry.target.checkResourceIsReachable()) == true {
+                _ = try fileManager.replaceItemAt(entry.target, withItemAt: extracted)
+            } else {
+                try fileManager.createDirectory(at: entry.target.deletingLastPathComponent(), withIntermediateDirectories: true)
+                try fileManager.moveItem(at: extracted, to: entry.target)
+            }
         }
     }
 

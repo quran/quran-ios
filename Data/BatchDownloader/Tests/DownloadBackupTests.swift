@@ -41,12 +41,7 @@ final class DownloadBackupTests: XCTestCase {
         downloader: DownloadManager,
         session: NetworkSessionFake
     ) async throws {
-        let request = DownloadRequest(url: URL(string: "https://example.com/\(UUID().uuidString)")!, destination: destination)
-        let batch = try await downloader.download(DownloadBatchRequest(requests: [request]))
-        let details = await batch.details(of: request)
-        let task = try XCTUnwrap(details.task as? SessionTask)
         let source = try context.createTextFile(at: UUID().uuidString, content: "downloaded content")
-        await session.completeDownloadTask(task, location: source, totalBytes: 100, progressLoops: 1)
-        for try await _ in batch.progress { }
+        try await context.completeDownload(to: destination, from: source, downloader: downloader, session: session)
     }
 }

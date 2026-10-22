@@ -86,6 +86,21 @@ public final class BatchDownloaderTestContext: Sendable {
         )
     }
 
+    /// Downloads `destination` as a single-request batch that `session` finishes from `location`, and waits for the batch to end.
+    public func completeDownload(
+        to destination: RelativeFilePath,
+        from location: URL,
+        downloader: DownloadManager,
+        session: NetworkSessionFake
+    ) async throws {
+        let request = DownloadRequest(url: URL(validURL: "https://example.com/\(UUID().uuidString)"), destination: destination)
+        let batch = try await downloader.download(DownloadBatchRequest(requests: [request]))
+        let details = await batch.details(of: request)
+        let task = try XCTUnwrap(details.task as? SessionTask)
+        await session.completeDownloadTask(task, location: location, totalBytes: 100, progressLoops: 1)
+        for try await _ in batch.progress { }
+    }
+
     public func createTextFile(at path: String, content: String) throws -> URL {
         let directory = downloadsURL.appendingPathComponent("temp", isDirectory: true).url
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)

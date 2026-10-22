@@ -45,6 +45,41 @@ final class DefaultZipperTests: XCTestCase {
         XCTAssertEqual(try contents(of: "other.db"), "unrelated")
     }
 
+    func test_unzipFile_overwrite_createsMissingDestination() throws {
+        destination = destination.appendingPathComponent("missing/nested", isDirectory: true)
+        let zipFile = try makeZip(["folder/database.db": "database", "empty/": nil])
+
+        try sut.unzipFile(zipFile, destination: destination, overwrite: true)
+
+        XCTAssertEqual(try contents(of: "folder/database.db"), "database")
+        XCTAssertEqual(try items(in: destination), ["empty", "folder"])
+    }
+
+    func test_unzipFile_overwrite_replacesNestedFilesAndKeepsOthers() throws {
+        try FileManager.default.createDirectory(at: destination.appendingPathComponent("folder"), withIntermediateDirectories: true)
+        try write("old", to: destination.appendingPathComponent("folder/database.db"))
+        try write("unrelated", to: destination.appendingPathComponent("folder/other.db"))
+        let zipFile = try makeZip(["folder/database.db": "new"])
+
+        try sut.unzipFile(zipFile, destination: destination, overwrite: true)
+
+        XCTAssertEqual(try contents(of: "folder/database.db"), "new")
+        XCTAssertEqual(try contents(of: "folder/other.db"), "unrelated")
+        XCTAssertEqual(try items(in: destination), ["folder"])
+    }
+
+    // An upgrade must keep the installed file when the new archive cannot be extracted.
+    func test_unzipFile_overwrite_keepsExistingFileWhenExtractionFails() throws {
+        try write("old", to: destination.appendingPathComponent("database.db"))
+        let zipFile = try makeZip(["database.db": "new-content"], compressionMethod: .none)
+        try corrupt("new-content", in: zipFile)
+
+        XCTAssertThrowsError(try sut.unzipFile(zipFile, destination: destination, overwrite: true))
+
+        XCTAssertEqual(try contents(of: "database.db"), "old")
+        XCTAssertEqual(try items(in: destination), ["database.db"])
+    }
+
     func test_unzipFile_withoutOverwrite_failsOnExistingFile() throws {
         try write("old", to: destination.appendingPathComponent("database.db"))
         let zipFile = try makeZip(["database.db": "new"])
@@ -83,7 +118,7 @@ final class DefaultZipperTests: XCTestCase {
     private var destination: URL!
 
     /// Builds a zip whose entries are written verbatim; a `nil` value adds a directory entry.
-    private func makeZip(_ entries: KeyValuePairs<String, String?>) throws -> URL {
+    private func makeZip(_ entries: KeyValuePairs<String, String?>, compressionMethod: CompressionMethod = .deflate) throws -> URL {
         let zipFile = root.appendingPathComponent(UUID().uuidString + ".zip")
         let archive = try Archive(url: zipFile, accessMode: .create)
         for (path, content) in entries {
@@ -92,12 +127,24 @@ final class DefaultZipperTests: XCTestCase {
                 with: path,
                 type: content == nil ? .directory : .file,
                 uncompressedSize: Int64(data.count),
-                compressionMethod: .deflate
+                compressionMethod: compressionMethod
             ) { position, size in
                 data.subdata(in: Int(position) ..< Int(position) + size)
             }
         }
         return zipFile
+    }
+
+    /// Flips the first byte of `content` stored uncompressed in `zipFile`, so its checksum no longer matches.
+    private func corrupt(_ content: String, in zipFile: URL) throws {
+        var data = try Data(contentsOf: zipFile)
+        let range = try XCTUnwrap(data.range(of: Data(content.utf8)))
+        data[range.lowerBound] ^= 0xFF
+        try data.write(to: zipFile)
+    }
+
+    private func items(in directory: URL) throws -> [String] {
+        try FileManager.default.contentsOfDirectory(atPath: directory.path).sorted()
     }
 
     private func write(_ content: String, to url: URL) throws {

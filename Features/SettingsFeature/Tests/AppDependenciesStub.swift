@@ -6,6 +6,7 @@
 //
 
 import Analytics
+import AnalyticsFake
 import AppDependencies
 import BatchDownloader
 import CoreDataPersistence
@@ -63,15 +64,11 @@ struct AppDependenciesStub: AppDependencies {
     var databasesDirectory: URL { URL(fileURLWithPath: "/tmp") }
     var supportsCloudKit: Bool { false }
     var downloadManager: DownloadManager { fatalError("Unused in tests") }
-    var analytics: AnalyticsLibrary { NoopAnalytics() }
+    var analytics: AnalyticsLibrary { AnalyticsLibrarySpy() }
     var readingResources: ReadingResourcesService { fatalError("Unused in tests") }
     var remoteResources: ReadingRemoteResources? { nil }
     var coreDataStack: CoreDataStack { fatalError("Unused in tests") }
     var lastPagePersistence: LastPagePersistence { fatalError("Unused in tests") }
     var notePersistence: NotePersistence { fatalError("Unused in tests") }
     var pageBookmarkPersistence: PageBookmarkPersistence { fatalError("Unused in tests") }
-}
-
-struct NoopAnalytics: AnalyticsLibrary {
-    func logEvent(_: String, value _: String) {}
 }

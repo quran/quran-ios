@@ -37,7 +37,8 @@ public struct LaunchBuilder {
             fileSystemMigrator: fileSystemMigrator,
             recitersPathMigrator: RecitersPathMigrator(),
             reviewService: ReviewService(analytics: container.analytics),
-            appIconService: container.appIconService()
+            appIconService: container.appIconService(),
+            analyticsUserPropertiesReporterBuilder: AnalyticsUserPropertiesReporterBuilder(container: container)
         )
     }
 

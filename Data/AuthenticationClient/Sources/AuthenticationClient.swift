@@ -7,6 +7,7 @@
 
 #if QURAN_SYNC
 
+import Combine
 import Foundation
 import MobileSync
 import UIKit
@@ -65,6 +66,9 @@ public protocol AuthenticationClient {
 
     var authenticationState: AuthenticationState { get async }
     var loggedInUser: MobileSyncUser? { get async }
+
+    /// Emits only changes, not the current state.
+    var authenticationStateChanges: AnyPublisher<AuthenticationState, Never> { get }
 }
 
 public extension AuthenticationClient {

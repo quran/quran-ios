@@ -1,5 +1,5 @@
 #if !QURAN_SYNC
-import Analytics
+import AnalyticsFake
 import AnnotationsService
 import Combine
 import QuranAnnotations
@@ -93,7 +93,7 @@ final class AyahMenuLegacyViewModelTests: XCTestCase {
                 quranFileURL: quranFileURL ?? unavailableDatabase
             ),
             notes: [],
-            noteService: NoteService(persistence: persistence, analytics: NoopAnalytics())
+            noteService: NoteService(persistence: persistence, analytics: AnalyticsLibrarySpy())
         ))
     }
 }
@@ -128,10 +128,6 @@ private final class NotePersistenceSpy: NotePersistence {
     func removeNotes(with verses: [VersePersistenceModel]) async throws -> [NotePersistenceModel] {
         []
     }
-}
-
-private struct NoopAnalytics: AnalyticsLibrary {
-    func logEvent(_ name: String, value: String) {}
 }
 
 @MainActor

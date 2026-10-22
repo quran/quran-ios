@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import Combine
 import MobileSync
 import MobileSyncTestSupport
 import XCTest
@@ -34,6 +35,22 @@ final class AuthenticationClientMobileSyncTests: XCTestCase {
         let notes = database.quranDataService.notesSequence().makeAsyncIterator()
         let storedNotes = try await notes.next()
         XCTAssertTrue(storedNotes?.isEmpty == true)
+    }
+
+    func test_logoutAndRestore_whileSignedOut_emitNoStateChange() async throws {
+        let client = AuthenticationClientMobileSyncImpl(
+            authService: database.authService
+        )
+        XCTAssertEqual(client.authenticationState, .notAuthenticated)
+        var emittedStates: [AuthenticationState] = []
+        let observation = client.authenticationStateChanges.sink { emittedStates.append($0) }
+
+        try await client.logout()
+        _ = try? await client.restoreState()
+
+        XCTAssertEqual(client.authenticationState, .notAuthenticated)
+        XCTAssertEqual(emittedStates, [])
+        observation.cancel()
     }
 }
 #endif

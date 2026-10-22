@@ -1,5 +1,5 @@
 #if !QURAN_SYNC
-import Analytics
+import AnalyticsFake
 import AnnotationsService
 import Combine
 import Foundation
@@ -80,15 +80,11 @@ final class BookmarksViewModelTests: XCTestCase {
     ) -> BookmarksViewModel {
         let service = PageBookmarkService(persistence: persistence)
         return BookmarksViewModel(
-            analytics: AnalyticsSpy(),
+            analytics: AnalyticsLibrarySpy(),
             service: service,
             navigateTo: navigateTo
         )
     }
-}
-
-private struct AnalyticsSpy: AnalyticsLibrary {
-    func logEvent(_: String, value _: String) {}
 }
 
 private final class PageBookmarkPersistenceSpy: PageBookmarkPersistence {

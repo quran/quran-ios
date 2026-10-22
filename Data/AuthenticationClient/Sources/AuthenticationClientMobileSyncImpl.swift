@@ -1,5 +1,6 @@
 #if QURAN_SYNC
 
+import Combine
 import Foundation
 import MobileSync
 import UIKit
@@ -18,11 +19,17 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
         authService.isLoggedIn ? .authenticated : .notAuthenticated
     }
 
+    public var authenticationStateChanges: AnyPublisher<AuthenticationState, Never> {
+        stateChanges.eraseToAnyPublisher()
+    }
+
     public var loggedInUser: MobileSyncUser? {
         authService.loggedInUser
     }
 
     public func login(on _: UIViewController) async throws(AuthenticationClientError) {
+        let previousState = authenticationState
+        defer { reportStateChange(from: previousState) }
         do {
             try await authService.signInWithReauthentication()
         } catch {
@@ -32,6 +39,8 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
     }
 
     public func restoreState() async throws(AuthenticationClientError) -> AuthenticationState {
+        let previousState = authenticationState
+        defer { reportStateChange(from: previousState) }
         do {
             _ = try await authService.refreshAuthentication()
             return authenticationState
@@ -42,6 +51,8 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
     }
 
     public func logout() async throws(AuthenticationClientError) {
+        let previousState = authenticationState
+        defer { reportStateChange(from: previousState) }
         do {
             try await authService.signOut()
         } catch {
@@ -75,6 +86,15 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
     // MARK: Private
 
     private let authService: MobileSyncAuthService
+    private let stateChanges = PassthroughSubject<AuthenticationState, Never>()
+
+    /// Failed operations can change the state too, such as a restore that finds the session revoked.
+    private func reportStateChange(from previousState: AuthenticationState) {
+        let state = authenticationState
+        if state != previousState {
+            stateChanges.send(state)
+        }
+    }
 }
 
 private extension AuthenticationClientError {

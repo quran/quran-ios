@@ -409,6 +409,13 @@
         "identifier" : "QueuePlayerTests",
         "name" : "QueuePlayerTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AnalyticsTests",
+        "name" : "AnalyticsTests"
+      }
     }
   ],
   "version" : 1

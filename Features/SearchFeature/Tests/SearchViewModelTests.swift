@@ -5,7 +5,7 @@
 //  Created by Mohamed Afifi on 2026-09-27.
 //
 
-import Analytics
+import AnalyticsFake
 import QuranResources
 import QuranText
 import QuranTextKit
@@ -59,7 +59,7 @@ final class SearchViewModelTests: XCTestCase {
 
     private func makeSUT() -> SearchViewModel {
         SearchViewModel(
-            analytics: NoopAnalytics(),
+            analytics: AnalyticsLibrarySpy(),
             searchService: CompositeSearcher(
                 databasesURL: databasesURL,
                 quranFileURL: QuranResources.quranUthmaniV2Database
@@ -89,10 +89,6 @@ final class SearchViewModelTests: XCTestCase {
         }
         XCTFail("Condition was not met in time", file: file, line: line)
     }
-}
-
-private struct NoopAnalytics: AnalyticsLibrary {
-    func logEvent(_ name: String, value: String) { }
 }
 
 private extension SearchViewModel {

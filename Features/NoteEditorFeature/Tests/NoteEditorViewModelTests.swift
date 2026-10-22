@@ -1,4 +1,5 @@
 import Analytics
+import AnalyticsFake
 #if QURAN_SYNC
 import MobileSyncTestSupport
 #endif
@@ -401,9 +402,9 @@ final class NoteEditorViewModelTests: XCTestCase {
     #if QURAN_SYNC
     private func makeSyncSUT(
         mode: NoteEditorMode
-    ) -> (viewModel: NoteEditorViewModel, noteService: MobileSyncNoteService, analytics: AnalyticsSpy, listener: ListenerSpy) {
+    ) -> (viewModel: NoteEditorViewModel, noteService: MobileSyncNoteService, analytics: AnalyticsLibrarySpy, listener: ListenerSpy) {
         let noteService = MobileSyncNoteService(quranDataService: database.quranDataService)
-        let analytics = AnalyticsSpy()
+        let analytics = AnalyticsLibrarySpy()
         let listener = ListenerSpy()
         let viewModel = NoteEditorViewModel(
             noteService: noteService,
@@ -489,21 +490,7 @@ private final class ListenerSpy: NoteEditorListener {
     }
 }
 
-#if QURAN_SYNC
-private struct AnalyticsEvent: Equatable {
-    let name: String
-    let value: String
-}
-
-private final class AnalyticsSpy: AnalyticsLibrary, @unchecked Sendable {
-    private(set) var events: [AnalyticsEvent] = []
-
-    func logEvent(_ name: String, value: String) {
-        events.append(.init(name: name, value: value))
-    }
-}
-
-#else
+#if !QURAN_SYNC
 private final class LegacyNoteServiceFake: NoteEditorLegacyServicing {
     struct SetNoteCall: Equatable {
         let note: String

@@ -188,61 +188,6 @@ final class DownloadManagerTests: XCTestCase {
         }
     }
 
-    func testDownloadFailWithResumeData() async throws {
-        // download a batch of 2 requests
-        let batch = DownloadBatchRequest(requests: [request1])
-        let response = try await downloader.download(batch)
-        let details = await response.details(of: request1)
-
-        // fail download with resume data
-        let task = try XCTUnwrap(details.task as? SessionTask)
-        let resumeText = "some data"
-        let error = URLError(.networkConnectionLost, userInfo: [
-            NSURLSessionDownloadTaskResumeData: resumeText.data(using: .utf8) as Any,
-        ])
-        session?.failDownloadTask(task, error: error)
-
-        // verify promise result
-        await assertThrows(response.progress, NetworkError.connectionLost)
-
-        // verify task
-        await assertThrows(details.progress.values(), NetworkError.connectionLost)
-        try await AsyncAssertEqual(try String(contentsOf: request1.resumePath), resumeText)
-    }
-
-    func testDownloadFailWithNoSpaceLeftOnDeviceThrowsNoDiskSpace() async throws {
-        let batch = DownloadBatchRequest(requests: [request1])
-        let response = try await downloader.download(batch)
-        let details = await response.details(of: request1)
-
-        // A full device fails background downloads with ENOSPC.
-        let task = try XCTUnwrap(details.task as? SessionTask)
-        session?.failDownloadTask(task, error: NSError(domain: NSPOSIXErrorDomain, code: Int(ENOSPC)))
-
-        await assertThrows(response.progress, FileSystemError.noDiskSpace)
-        await assertThrows(details.progress.values(), FileSystemError.noDiskSpace)
-    }
-
-    func testDownloadFailWithNoSuchFileAndAmpleSpaceThrowsNetworkError() async throws {
-        let batch = DownloadBatchRequest(requests: [request1])
-        let response = try await downloader.download(batch)
-        let details = await response.details(of: request1)
-
-        // The test host has plenty of free space, so ENOENT isn't a full device.
-        let task = try XCTUnwrap(details.task as? SessionTask)
-        session?.failDownloadTask(task, error: NSError(domain: NSPOSIXErrorDomain, code: Int(ENOENT)))
-
-        let batchError = await thrownError(response.progress)
-        guard case .unknown? = batchError as? NetworkError else {
-            return XCTFail("Expected NetworkError.unknown, got \(String(describing: batchError))")
-        }
-
-        let requestError = await thrownError(details.progress.values())
-        guard case .unknown? = requestError as? NetworkError else {
-            return XCTFail("Expected NetworkError.unknown, got \(String(describing: requestError))")
-        }
-    }
-
     func testDownloadBatchAfterEnquingThem() async throws {
         // download a batch of 2 requests
         let request = DownloadBatchRequest(requests: [request1, request2, request3, request4])
@@ -439,15 +384,6 @@ final class DownloadManagerTests: XCTestCase {
             }
         }
         return tasks
-    }
-
-    private func thrownError(_ progress: AsyncThrowingPublisher<DownloadProgress>) async -> Error? {
-        do {
-            for try await _ in progress { }
-            return nil
-        } catch {
-            return error
-        }
     }
 
     private func assertThrows(

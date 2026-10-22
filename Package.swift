@@ -352,8 +352,8 @@ private func dataTargets() -> [[Target]] {
         target(type, name: "NetworkSupport", dependencies: [
             "Crashing",
             "Localization",
-        ], testDependencies: [
             "Utilities",
+        ], testDependencies: [
             "AsyncUtilitiesForTesting",
             "NetworkSupportFake",
         ]),

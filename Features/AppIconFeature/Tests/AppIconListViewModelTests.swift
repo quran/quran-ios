@@ -86,6 +86,7 @@ final class AppIconListViewModelTests: XCTestCase {
         alternateIconName: nil,
         name: "Primary",
         previewImageName: "app-icon-primary",
+        artworkImageName: "app-artwork-primary",
         accent: AppIconAccent(light: .black, dark: .white, onDark: .black)
     )
     private let blue = AppIconOption(
@@ -93,6 +94,7 @@ final class AppIconListViewModelTests: XCTestCase {
         alternateIconName: "AppIcon-Blue",
         name: "Blue",
         previewImageName: "app-icon-blue",
+        artworkImageName: "app-artwork-blue",
         accent: AppIconAccent(light: .systemBlue, dark: .systemBlue, onDark: .black)
     )
 

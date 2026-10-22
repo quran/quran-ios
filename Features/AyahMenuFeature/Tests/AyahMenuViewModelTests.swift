@@ -4,6 +4,7 @@ import Localization
 import QuranAnnotations
 import QuranAudioKit
 import QuranKit
+import QuranResources
 import QuranTextKit
 import UIKit
 import XCTest
@@ -137,6 +138,46 @@ final class AyahMenuViewModelTests: XCTestCase {
         XCTAssertEqual(sut.playSubtitle, l("ayah.menu.play-end-hizb"))
     }
 
+    func test_share_sharesSelectedVerseText() async throws {
+        let originalQuranMode = QuranContentStatePreferences.shared.quranMode
+        defer { QuranContentStatePreferences.shared.quranMode = originalQuranMode }
+        QuranContentStatePreferences.shared.quranMode = .arabic
+        let sut = makeSUT(verses: [AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!], textRetriever: availableTextRetriever)
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        await sut.share()
+
+        let sharedText = try XCTUnwrap(listener.sharedLines?.first)
+        XCTAssertEqual(listener.sharedLines?.count, 1)
+        XCTAssertTrue(sharedText.contains("﴿ ١ ﴾"))
+        XCTAssertTrue(sharedText.hasSuffix("\n\nAl-Fātihah, Ayah 1"))
+        XCTAssertTrue(listener.shownErrors.isEmpty)
+    }
+
+    func test_share_showsErrorWhenVerseTextIsUnavailable() async {
+        let sut = makeSUT()
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        await sut.share()
+
+        XCTAssertEqual(listener.shownErrors.count, 1)
+        XCTAssertNil(listener.sharedLines)
+    }
+
+    func test_copy_showsErrorWhenVerseTextIsUnavailable() async {
+        let sut = makeSUT()
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        await sut.copy()
+
+        XCTAssertEqual(listener.shownErrors.count, 1)
+        // `showError` dismisses the menu itself; dismissing it first would leave that dismissal in flight.
+        XCTAssertFalse(listener.didDismiss)
+    }
+
     private var verses: [AyahNumber] {
         [
             AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 7)!,
@@ -149,22 +190,34 @@ final class AyahMenuViewModelTests: XCTestCase {
         notes: [Note] = [],
         highlightVerses: [AyahNumber: HighlightColor] = [:],
         bookmarkedVerses: Set<AyahNumber> = [],
-        readingBookmark: PlacedReadingBookmark? = nil
+        readingBookmark: PlacedReadingBookmark? = nil,
+        textRetriever: ShareableVerseTextRetriever? = nil
     ) -> AyahMenuViewModel {
-        let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
-        return AyahMenuViewModel(deps: .init(
+        AyahMenuViewModel(deps: .init(
             sourceView: UIView(),
             pointInView: .zero,
             verses: verses ?? self.verses,
-            textRetriever: ShareableVerseTextRetriever(
-                databasesURL: unavailableDatabase,
-                quranFileURL: unavailableDatabase
-            ),
+            textRetriever: textRetriever ?? unavailableTextRetriever,
             notes: notes,
             highlightVerses: highlightVerses,
             bookmarkedVerses: bookmarkedVerses,
             readingBookmark: readingBookmark
         ))
+    }
+
+    private var unavailableTextRetriever: ShareableVerseTextRetriever {
+        ShareableVerseTextRetriever(databasesURL: unavailableDatabase, quranFileURL: unavailableDatabase)
+    }
+
+    private var availableTextRetriever: ShareableVerseTextRetriever {
+        ShareableVerseTextRetriever(
+            databasesURL: unavailableDatabase,
+            quranFileURL: QuranResources.quranUthmaniV2Database
+        )
+    }
+
+    private var unavailableDatabase: URL {
+        URL(fileURLWithPath: "/tmp/unavailable-quran-database")
     }
 
     private func readingBookmark(
@@ -194,10 +247,24 @@ private final class BookmarkListenerSpy: AyahMenuListener {
     private(set) var bookmarkedVerses: [AyahNumber]?
     private(set) var shownNoteVerses: [AyahNumber]?
     private(set) var isAddingNewNote = false
+    private(set) var didDismiss = false
+    private(set) var sharedLines: [String]?
+    private(set) var shownErrors: [Error] = []
 
-    func dismissAyahMenu() {}
+    func dismissAyahMenu() {
+        didDismiss = true
+    }
+
     func playAudio(_ from: AyahNumber, to: AyahNumber?, repeatVerses: Bool) {}
-    func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint) {}
+
+    func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint) {
+        sharedLines = lines
+    }
+
+    func showError(_ error: Error) {
+        shownErrors.append(error)
+    }
+
     func showTranslation(_ verses: [AyahNumber]) {}
     func deleteNotes(in verses: [AyahNumber]) async {}
 

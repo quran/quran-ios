@@ -98,7 +98,8 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
                 reason: "Problem with creating directory or copying item to the new location '\(destinationURL)'"
             )
             // fail the batch since we save the file
-            await dataController.downloadFailed(response, with: FileSystemError(error: error))
+            let fileError = FileSystemError(error: error, availableCapacity: FileManager.default.availableCapacity(at: directory.url))
+            await dataController.downloadFailed(response, with: fileError)
         }
     }
 
@@ -120,7 +121,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
             return
         }
 
-        let finalError = wrap(error: error, resumePath: response.request.resumePath)
+        let finalError = wrap(error: error, request: response.request)
         await dataController.downloadFailed(response, with: finalError)
     }
 
@@ -137,7 +138,8 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
     private let dataController: DownloadBatchDataController
     private let fileManager: FileSystem
 
-    private func wrap(error theError: Error, resumePath: RelativeFilePath) -> Error {
+    private func wrap(error theError: Error, request: DownloadRequest) -> Error {
+        let resumePath = request.resumePath
         var error = theError
 
         // save resume data, if found
@@ -158,7 +160,8 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         crasher.recordError(error, reason: "Download network error occurred")
 
         // check if no disk space
-        let finalError: Error = if let error = error as? POSIXError, error.code == .ENOENT {
+        let directory = request.destination.url.deletingLastPathComponent()
+        let finalError: Error = if FileSystemError.isNoDiskSpace(error, availableCapacity: FileManager.default.availableCapacity(at: directory)) {
             FileSystemError.noDiskSpace
         } else {
             NetworkError(error: error)

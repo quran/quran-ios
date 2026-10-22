@@ -129,6 +129,7 @@ private func coreTargets() -> [[Target]] {
         ]),
 
         target(type, name: "Utilities", dependencies: [
+            "VLogging",
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
         ]),
@@ -568,6 +569,7 @@ private func domainTargets() -> [[Target]] {
         ] + mobileSyncTestSupportDependencies),
 
         target(type, name: "LegacyDataMigration", dependencies: [
+            "Crashing",
             "LegacyDataPersistence",
             "Preferences",
             "VLogging",
@@ -627,9 +629,11 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "QuranLocalization",
             "ReadingBookmarkMenuFeature",
+            "Utilities",
         ], testDependencies: [
             "Analytics",
             "NotePersistence",
+            "QuranResources",
         ]),
 
         target(type, name: "ReadingBookmarkMenuFeature", dependencies: [
@@ -958,6 +962,7 @@ private func featuresTargets() -> [[Target]] {
             "AudioUpdater",
             "AppMigrationFeature",
             "SyncLogging",
+            "Utilities",
         ] + mobileSyncTargetDependencies, testDependencies: [
             "CoreDataModel",
         ]),

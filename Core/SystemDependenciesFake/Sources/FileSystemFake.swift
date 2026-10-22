@@ -84,6 +84,14 @@ public final class FileSystemFake: FileSystem, Sendable {
         files.insert(dst)
     }
 
+    public func replaceItem(at originalItem: URL, withItemAt newItem: URL) throws {
+        if !files.contains(newItem) {
+            throw FileSystemError.general("Source file doesn't exist: \(newItem)")
+        }
+        files.remove(newItem)
+        files.insert(originalItem)
+    }
+
     public func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?) throws -> [URL] {
         filesInDirectory[url] ?? []
     }

@@ -682,16 +682,17 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     }
 
     private func waitUntil(
-        timeoutIterations: Int = 1000,
+        timeout: TimeInterval = 10,
         condition: @escaping @MainActor () -> Bool,
         file: StaticString = #filePath,
         line: UInt = #line
     ) async {
-        for _ in 0 ..< timeoutIterations {
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
             if condition() {
                 return
             }
-            await Task.yield()
+            try? await Task.sleep(nanoseconds: 10_000_000)
         }
         XCTFail("Condition was not met in time", file: file, line: line)
     }

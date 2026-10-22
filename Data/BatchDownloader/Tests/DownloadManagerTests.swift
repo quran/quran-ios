@@ -140,6 +140,29 @@ final class DownloadManagerTests: XCTestCase {
         for try await _ in response.progress { }
     }
 
+    func testLateProgressOfCompletedDownloadDoesNotReopenIt() async throws {
+        let batch = DownloadBatchRequest(requests: [request1, request2])
+        let response = try await downloader.download(batch)
+
+        let task1 = try await completeTask(response, i: 0)
+        // URLSession can report a download's progress after the download completed.
+        await session?.writeData(of: task1.task, bytesWritten: 50, totalBytesWritten: 50, totalBytesExpectedToWrite: 100)
+        let task2 = try await completeTask(response, i: 1)
+
+        // Bounded wait: a batch left waiting on the reopened download must fail the test, not hang the run.
+        let finished = expectation(description: "batch finished")
+        let iteration = Task {
+            for try await _ in response.progress { }
+            finished.fulfill()
+        }
+        await fulfillment(of: [finished], timeout: 5)
+        iteration.cancel()
+
+        await AsyncAssertEqual(await response.download(of: request1).status, .completed)
+        try await verifyCompletedTask(task: task1)
+        try await verifyCompletedTask(task: task2)
+    }
+
     func testCancelDownloadsRemovesBatches() async throws {
         let batch = DownloadBatchRequest(requests: [request1, request2])
         _ = try await downloader.download(batch)

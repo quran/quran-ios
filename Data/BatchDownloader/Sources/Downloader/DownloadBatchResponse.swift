@@ -142,14 +142,12 @@ public actor DownloadBatchResponse {
     }
 
     func updateProgress(of request: DownloadRequest, _ progress: DownloadProgress) {
-        if completed {
+        // Progress can arrive after its download finished, failed or was cancelled; it mustn't reopen the download.
+        let response = response(of: request)
+        guard response.isInProgress else {
             return
         }
-
-        mutableResponse(of: request) { response in
-            response.state = .inProgress
-            response.progress.send(progress)
-        }
+        response.progress.send(progress)
 
         let accumulated = responses.values.map(\.progress.value.progress).reduce(0, +)
         let overallProgress = DownloadProgress(total: 1, completed: accumulated / Double(responses.count))

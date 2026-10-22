@@ -43,11 +43,22 @@ actor DownloadBatchDataController {
 
     // MARK: Internal
 
-    func start(with session: NetworkSession) async {
-        await bootstrapPersistence()
+    /// Loads the saved batches. Call it before creating the session, which can deliver their downloads at once.
+    func loadBatches() async {
+        do {
+            try await attempt(times: 3) {
+                try await loadBatchesFromPersistence()
+            }
+        } catch {
+            crasher.recordError(error, reason: "Failed to retrieve initial download batches from persistence.")
+        }
+    }
 
+    func start(with session: NetworkSession) async {
         self.session = session
         let (_, _, downloadTasks) = await session.tasks()
+        // If the session no longer lists a finished task whose callbacks weren't handled yet,
+        // its download loses the task id here and is downloaded again.
         for batch in batches {
             await batch.associateTasks(downloadTasks)
         }
@@ -139,16 +150,6 @@ actor DownloadBatchDataController {
             for try await _ in response.progress { }
         } catch {
             logger.error("Batch \(response.batchId) failed to download with error: \(error)")
-        }
-    }
-
-    private func bootstrapPersistence() async {
-        do {
-            try await attempt(times: 3) {
-                try await loadBatchesFromPersistence()
-            }
-        } catch {
-            crasher.recordError(error, reason: "Failed to retrieve initial download batches from persistence.")
         }
     }
 

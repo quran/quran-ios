@@ -69,13 +69,7 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
         let step = Int64(1 / Double(progressLoops) * Double(totalBytes))
         for i in 0 ... progressLoops {
             let written = Int64(Double(i) / Double(progressLoops) * Double(totalBytes))
-            await delegate?.networkSession(
-                self,
-                downloadTask: task,
-                didWriteData: step,
-                totalBytesWritten: written,
-                totalBytesExpectedToWrite: Int64(totalBytes)
-            )
+            await writeData(of: task, bytesWritten: step, totalBytesWritten: written, totalBytesExpectedToWrite: Int64(totalBytes))
             await Task.megaYield()
         }
 
@@ -83,6 +77,17 @@ public final class NetworkSessionFake: NetworkSession, @unchecked Sendable {
         await delegate?.networkSession(self, downloadTask: task, didFinishDownloadingTo: location)
         await delegate?.networkSession(self, task: task, didCompleteWithError: nil)
         downloads = downloads.filter { $0 == task }
+    }
+
+    /// Reports `task`'s progress, as URLSession does while downloading, sometimes even after the task completed.
+    public func writeData(of task: SessionTask, bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) async {
+        await delegate?.networkSession(
+            self,
+            downloadTask: task,
+            didWriteData: bytesWritten,
+            totalBytesWritten: totalBytesWritten,
+            totalBytesExpectedToWrite: totalBytesExpectedToWrite
+        )
     }
 
     public func failDownloadTask(_ task: SessionTask, error: Error) {

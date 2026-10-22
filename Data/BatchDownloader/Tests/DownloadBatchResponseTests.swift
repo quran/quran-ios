@@ -18,6 +18,19 @@ final class DownloadBatchResponseTests: XCTestCase {
         await assertFinishes(response)
     }
 
+    func testLateProgressOfFinishedDownloadDoesNotReopenIt() async {
+        let response = await DownloadBatchResponse(batch: makeBatch(statuses: [.downloading, .downloading]))
+        let (request1, request2) = (response.requests[0], response.requests[1])
+
+        await response.complete(request1, result: .success(()))
+        await response.updateProgress(of: request1, DownloadProgress(total: 1, completed: 0.5))
+        await response.complete(request2, result: .success(()))
+
+        await assertFinishes(response)
+        let status = await response.download(of: request1).status
+        XCTAssertEqual(status, .completed)
+    }
+
     // MARK: Private
 
     private func makeBatch(statuses: [Download.Status]) -> DownloadBatch {

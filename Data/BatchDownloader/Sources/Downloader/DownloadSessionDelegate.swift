@@ -98,8 +98,7 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
                 reason: "Problem with creating directory or copying item to the new location '\(destinationURL)'"
             )
             // fail the batch since we save the file
-            let fileError = FileSystemError(error: error, availableCapacity: FileManager.default.availableCapacity(at: directory.url))
-            await dataController.downloadFailed(response, with: fileError)
+            await dataController.downloadFailed(response, with: fileSystemError(error, request: response.request))
         }
     }
 
@@ -113,7 +112,16 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
         }
 
         let validationError = validate(task: task)
-        let theError = sessionError ?? validationError
+        if validationError == nil, let fileMoveError = sessionError as? DownloadedFileMoveError {
+            // The transfer used up any resume data, so a retry must start over.
+            try? fileManager.removeItem(at: response.request.resumePath)
+            // NetworkSessionToURLSessionDelegate recorded the failure when it couldn't keep the downloaded file.
+            await dataController.downloadFailed(response, with: fileSystemError(fileMoveError.underlyingError, request: response.request))
+            return
+        }
+
+        // A rejected response explains the failure better than not keeping the file it delivered.
+        let theError = sessionError is DownloadedFileMoveError ? validationError : sessionError ?? validationError
 
         // if success, early return
         guard let error = theError else {
@@ -167,6 +175,12 @@ actor DownloadSessionDelegate: NetworkSessionDelegate {
             NetworkError(error: error)
         }
         return finalError
+    }
+
+    /// Classifies a failure to keep `request`'s downloaded file, as `noDiskSpace` when the device is full.
+    private func fileSystemError(_ error: Error, request: DownloadRequest) -> FileSystemError {
+        let directory = request.destination.url.deletingLastPathComponent()
+        return FileSystemError(error: error, availableCapacity: FileManager.default.availableCapacity(at: directory))
     }
 
     private func validate(task: NetworkSessionTask) -> Error? {

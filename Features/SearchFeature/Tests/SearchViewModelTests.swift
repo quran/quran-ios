@@ -53,6 +53,34 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(sut.searchResults, results)
     }
 
+    func test_search_findsVerse_fromTipExample() async {
+        let sut = makeSUT()
+        let task = Task { await sut.start() }
+        await settle()
+
+        sut.search(for: "2:255")
+        await waitUntil { sut.searchResults != nil }
+
+        let expectedVerse = sut.reading.quran.suras[1].verses[254]
+        XCTAssertEqual(sut.searchResults?.flatMap(\.items).map(\.ayah), [expectedVerse])
+        task.cancel()
+        await task.value
+    }
+
+    func test_search_findsPage_fromTipExample() async {
+        let sut = makeSUT()
+        let task = Task { await sut.start() }
+        await settle()
+
+        sut.search(for: "50")
+        await waitUntil { sut.searchResults != nil }
+
+        let expectedVerse = sut.reading.quran.pages[49].firstVerse
+        XCTAssertEqual(sut.searchResults?.flatMap(\.items).contains { $0.ayah == expectedVerse }, true)
+        task.cancel()
+        await task.value
+    }
+
     // MARK: Private
 
     private var databasesURL: URL!

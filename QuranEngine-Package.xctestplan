@@ -423,6 +423,13 @@
         "identifier" : "AnalyticsTests",
         "name" : "AnalyticsTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "AudioBannerFeatureTests",
+        "name" : "AudioBannerFeatureTests"
+      }
     }
   ],
   "version" : 1

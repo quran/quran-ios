@@ -40,13 +40,7 @@ public struct AudioBannerBuilder {
         )
         let view = AudioBannerView(viewModel: viewModel)
             .enableToastPresenter()
-        let viewController = UIHostingController(rootView: view)
-        viewController.view.backgroundColor = nil
-        if #available(iOS 16.4, *) {
-            // Stay at the bottom of the reader. A keyboard, even one shown by a presented
-            // editor like the reading bookmark menu, would otherwise lift the banner above it.
-            viewController.safeAreaRegions = .container
-        }
+        let viewController = Self.makeHostingController(rootView: view)
         viewModel.listener = listener
         return (viewController, viewModel)
     }
@@ -54,4 +48,16 @@ public struct AudioBannerBuilder {
     // MARK: Internal
 
     let container: AppDependencies
+
+    /// Hosts the banner so it stays pinned to the bottom of the reader.
+    static func makeHostingController(rootView: some View) -> UIViewController {
+        let viewController = UIHostingController(rootView: rootView)
+        viewController.view.backgroundColor = nil
+        if #available(iOS 16.4, *) {
+            // A keyboard, even one shown by a presented editor like the reading bookmark menu,
+            // would otherwise count as bottom safe area and lift the banner above it (#1149, #1199).
+            viewController.safeAreaRegions = .container
+        }
+        return viewController
+    }
 }

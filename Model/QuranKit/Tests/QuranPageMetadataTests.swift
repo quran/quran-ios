@@ -106,6 +106,32 @@ final class QuranPageMetadataTests: XCTestCase {
         )
     }
 
+    func testIndoPakPagesStartAtTheFirstVerseOnTheirPage() throws {
+        let quran = Quran.hafsIndoPak
+        let expectedFirstVerses: [(page: Int, sura: Int, ayah: Int)] = [
+            (371, 26, 65), (372, 26, 91), (373, 26, 118),
+            (403, 29, 45), (404, 29, 53), (405, 29, 64),
+            (494, 43, 50), (495, 43, 64), (496, 43, 80),
+        ]
+        for expected in expectedFirstVerses {
+            let page = try XCTUnwrap(Page(quran: quran, pageNumber: expected.page))
+            XCTAssertEqual(page.firstVerse.sura.suraNumber, expected.sura, "page \(expected.page)")
+            XCTAssertEqual(page.firstVerse.ayah, expected.ayah, "page \(expected.page)")
+        }
+
+        let expectedVersePages: [(sura: Int, ayah: Int, page: Int)] = [
+            (26, 91, 372),
+            (29, 52, 403),
+            (29, 53, 404),
+            (43, 63, 494),
+            (43, 64, 495),
+        ]
+        for expected in expectedVersePages {
+            let verse = try XCTUnwrap(AyahNumber(quran: quran, sura: expected.sura, ayah: expected.ayah))
+            XCTAssertEqual(verse.page.pageNumber, expected.page, "\(expected.sura):\(expected.ayah)")
+        }
+    }
+
     func testIndoPakReadingConfiguration() {
         XCTAssertTrue(Reading.allReadings.contains(.indoPak))
         XCTAssertEqual(Reading.indoPak.quran, .hafsIndoPak)

@@ -67,6 +67,21 @@ final class NetworkSessionToURLSessionDelegateTests: XCTestCase {
         XCTAssertNil(error)
     }
 
+    func testBackgroundEventsFinishAfterDeliveringEarlierCallbacks() async throws {
+        let task = session.downloadTask(with: URL(validURL: "https://example.com/file.zip"))
+        let location = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try XCTUnwrap("downloaded".data(using: .utf8)).write(to: location)
+
+        delegate.urlSession(session, downloadTask: task, didFinishDownloadingTo: location)
+        delegate.urlSession(session, task: task, didCompleteWithError: nil)
+        delegate.urlSessionDidFinishEvents(forBackgroundURLSession: session)
+
+        // The spy suspends while handling the file and the completion, so finishing the events
+        // without waiting for them would let the system suspend the app before they're saved.
+        let events = await spy.events.prefix(3).collect()
+        XCTAssertEqual(events.map(\.name), ["finishedDownloading", "completed", "finishedEvents"])
+    }
+
     // MARK: Private
 
     private var session: URLSession!
@@ -78,6 +93,17 @@ private final class NetworkSessionDelegateSpy: NetworkSessionDelegate {
     enum Event: Sendable {
         case finishedDownloading(contents: String?)
         case completed(Error?)
+        case finishedEvents
+
+        // MARK: Internal
+
+        var name: String {
+            switch self {
+            case .finishedDownloading: "finishedDownloading"
+            case .completed: "completed"
+            case .finishedEvents: "finishedEvents"
+            }
+        }
     }
 
     // MARK: Lifecycle
@@ -110,10 +136,13 @@ private final class NetworkSessionDelegateSpy: NetworkSessionDelegate {
     }
 
     func networkSession(_ session: NetworkSession, task: NetworkSessionTask, didCompleteWithError sessionError: Error?) async {
+        // Suspend like a delegate that saves the completion, giving other callbacks a chance to run first.
+        await Task.megaYield()
         continuation.yield(.completed(sessionError))
     }
 
     func networkSessionDidFinishEvents(forBackgroundURLSession session: NetworkSession) async {
+        continuation.yield(.finishedEvents)
     }
 
     // MARK: Private

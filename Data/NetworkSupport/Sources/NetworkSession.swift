@@ -35,6 +35,9 @@ public protocol NetworkSessionUploadTask: NetworkSessionTask {
 public protocol NetworkSessionDataTask: NetworkSessionTask {
 }
 
+/// `NetworkSessionToURLSessionDelegate` delivers these callbacks one at a time in URLSession's order, so each must return
+/// promptly and never await something only a later callback brings (like a cancelled task's completion): that would
+/// block every later callback, including the end of background events.
 public protocol NetworkSessionDelegate: Sendable {
     func networkSession(
         _ session: NetworkSession,
@@ -92,14 +95,29 @@ public struct DownloadedFileMoveError: Error {
     public let underlyingError: Error
 }
 
-/// Forwards URLSession's callbacks to a `NetworkSessionDelegate`, each in its own task.
+/// Forwards URLSession's callbacks to a `NetworkSessionDelegate`, one at a time in the order URLSession delivered them.
 ///
-/// A download task's completion reaches the delegate only after the delegate handled its downloaded file.
+/// A download task's completion reaches the delegate only after the delegate handled its downloaded file, and the end of a
+/// background session's events reaches it only after it handled every callback delivered before, so the app isn't
+/// suspended before it saved them. This covers the work the delegate awaits in each callback, not unstructured work
+/// it starts.
 public final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownloadDelegate, Sendable {
     // MARK: Lifecycle
 
     public init(networkSessionDelegate: NetworkSessionDelegate) {
         self.networkSessionDelegate = networkSessionDelegate
+        let (callbacks, continuation) = AsyncStream.makeStream(of: Callback.self)
+        self.callbacks = continuation
+        Task {
+            for await callback in callbacks {
+                await callback()
+            }
+        }
+    }
+
+    deinit {
+        // The worker still delivers the callbacks it received, then ends.
+        callbacks.finish()
     }
 
     // MARK: Public
@@ -111,7 +129,8 @@ public final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownl
         totalBytesWritten: Int64,
         totalBytesExpectedToWrite: Int64
     ) {
-        Task {
+        let networkSessionDelegate = networkSessionDelegate
+        callbacks.yield {
             await networkSessionDelegate.networkSession(
                 session,
                 downloadTask: downloadTask,
@@ -126,38 +145,37 @@ public final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownl
         let temporaryDirectory = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
         let filePath = UUID().uuidString
         let temporaryFile = temporaryDirectory.appendingPathComponent(filePath)
-        let delivery: Task<Error?, Never>
         do {
-            // Move the file to a temporary location as URLSession would delete it before the async task starts.
+            // Move the file to a temporary location as URLSession deletes it once this method returns.
             try FileManager.default.moveItem(at: location, to: temporaryFile)
-            delivery = Task {
-                await networkSessionDelegate.networkSession(session, downloadTask: downloadTask, didFinishDownloadingTo: temporaryFile)
-                try? FileManager.default.removeItem(at: temporaryFile)
-                return nil
-            }
         } catch {
             crasher.recordError(
                 error,
                 reason: "Problem moving the downloaded file to a temporary location '\(temporaryFile)'"
             )
-            delivery = Task { error }
+            // URLSession calls didCompleteWithError next, which reports this error.
+            fileMoveErrors.withCriticalRegion { $0[downloadTask.taskIdentifier] = error }
+            return
         }
-        // URLSession calls didCompleteWithError next, which waits for this delivery.
-        deliveries.withCriticalRegion { $0[downloadTask.taskIdentifier] = delivery }
+        let networkSessionDelegate = networkSessionDelegate
+        callbacks.yield {
+            await networkSessionDelegate.networkSession(session, downloadTask: downloadTask, didFinishDownloadingTo: temporaryFile)
+            try? FileManager.default.removeItem(at: temporaryFile)
+        }
     }
 
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError sessionError: Error?) {
-        let delivery = deliveries.withCriticalRegion { $0.removeValue(forKey: task.taskIdentifier) }
-        Task {
-            // The delegate must have the file before it learns the task completed.
-            let fileMoveError = await delivery?.value
-            let error = sessionError ?? fileMoveError.map(DownloadedFileMoveError.init)
+        let fileMoveError = fileMoveErrors.withCriticalRegion { $0.removeValue(forKey: task.taskIdentifier) }
+        let error = sessionError ?? fileMoveError.map(DownloadedFileMoveError.init)
+        let networkSessionDelegate = networkSessionDelegate
+        callbacks.yield {
             await networkSessionDelegate.networkSession(session, task: task, didCompleteWithError: error)
         }
     }
 
     public func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
-        Task {
+        let networkSessionDelegate = networkSessionDelegate
+        callbacks.yield {
             await networkSessionDelegate.networkSessionDidFinishEvents(forBackgroundURLSession: session)
         }
     }
@@ -168,8 +186,11 @@ public final class NetworkSessionToURLSessionDelegate: NSObject, URLSessionDownl
 
     // MARK: Private
 
-    /// The pending deliveries of downloaded files, by task identifier, until their tasks complete.
-    ///
-    /// Each delivery finishes once the delegate handled the file, or with the error that kept the file from it.
-    private let deliveries = ManagedCriticalState<[Int: Task<Error?, Never>]>([:])
+    private typealias Callback = @Sendable () async -> Void
+
+    /// Feeds the worker that forwards each callback to the delegate after the previous one finished.
+    private let callbacks: AsyncStream<Callback>.Continuation
+
+    /// The errors that kept downloaded files from the delegate, by task identifier, until their tasks complete.
+    private let fileMoveErrors = ManagedCriticalState<[Int: Error]>([:])
 }

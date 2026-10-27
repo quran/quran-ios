@@ -199,6 +199,7 @@
 "audio.end-at.description" = "Choosing an option other than Custom also updates your Play up to setting.";
 
 "audio.streaming.title" = "Stream Audio";
+"audio.focus-mode.title" = "Dim other ayahs during recitation";
 "audio.playback.title" = "Audio Playback";
 "audio.playback.footer.page" = "Playback continues to the end of the current Page. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
 "audio.playback.footer.quarter" = "Playback continues to the end of the current ¼ Hizb. With streaming off, those verses download first; streaming saves space but needs an internet connection.";

@@ -113,6 +113,11 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                     ImageDecorationsView(layout: layout)
                 }
             }
+            .overlay {
+                if let focusedLineRects = layout.focusedLineRects {
+                    QuranFocusDim(cutouts: focusedLineRects)
+                }
+            }
             .onGlobalFrameChanged { frame in
                 if imageViewSize != frame.size {
                     imageViewSize = frame.size

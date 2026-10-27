@@ -473,6 +473,7 @@
 "audio.repetition-delay.description" = "كېيىنكى تەكرار باشلىنىشتىن بۇرۇن قانچىلىك توختاشنى بەلگىلەيدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "ئاۋازنى تور ئارقىلىق قويۇش";
+"audio.focus-mode.title" = "ئوقۇغان ۋاقىتتا باشقا ئايەتلەرنى سۇسلاشتۇرۇش";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "ئاۋاز قويۇش";
 // Metadata: Translated by AI; human review required.

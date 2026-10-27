@@ -385,6 +385,7 @@
 "audio.repetition-delay.description" = "Stelt in hoe lang wordt gepauzeerd voordat de volgende herhaling begint.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Audio streamen";
+"audio.focus-mode.title" = "Andere ayahs dimmen tijdens de recitatie";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Audioweergave";
 // Metadata: Translated by AI; human review required.

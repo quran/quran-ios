@@ -30,6 +30,7 @@ struct ContentLineView: View {
             scrollToVerse: viewModel.scrollToVerse,
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
+            focusedVerses: viewModel.focusedVerses,
             ayahIndicators: viewModel.ayahIndicators,
             indicatorsHidden: viewModel.indicatorsHidden,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
@@ -47,6 +48,7 @@ struct ContentLineView: View {
             scrollToVerse: viewModel.scrollToVerse,
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
+            focusedVerses: viewModel.focusedVerses,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
             chromeStyle: viewModel.chromeStyle,
             imageRenderingMode: viewModel.imageRenderingMode,
@@ -77,6 +79,7 @@ private struct ContentLineViewBody: View {
     let scrollToVerse: AyahNumber?
     let wordFrames: WordFrameCollection
     let highlightColorsByVerse: [AyahNumber: Color]
+    let focusedVerses: Set<AyahNumber>?
     #if QURAN_SYNC
     let ayahIndicators: [AyahNumber: Set<AyahIndicator>]
     let indicatorsHidden: Bool
@@ -134,6 +137,7 @@ private struct ContentLineViewBody: View {
                 suraHeaders(layout)
                 highlights(layout)
                 ayahMarkers(layout)
+                focusDim(layout)
             }
         }
         .frame(
@@ -177,6 +181,17 @@ private struct ContentLineViewBody: View {
                 SuraHeaderView(tint: chromePalette.header.foreground)
                     .placed(in: placement.frame)
             }
+        }
+    }
+
+    @ViewBuilder
+    private func focusDim(_ layout: LinePageLayout) -> some View {
+        if let focusedVerses {
+            QuranFocusDim(
+                cutouts: layout.highlightRects
+                    .filter { focusedVerses.contains($0.ayah) }
+                    .map(\.rect)
+            )
         }
     }
 

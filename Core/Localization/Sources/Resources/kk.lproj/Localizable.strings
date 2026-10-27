@@ -454,6 +454,7 @@
 "audio.repetition-delay.description" = "Келесі қайталау басталғанға дейінгі үзіліс ұзақтығын белгілейді.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Дыбысты ағынмен ойнату";
+"audio.focus-mode.title" = "Оқу кезінде басқа аяттарды күңгірттеу";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Аудио ойнату";
 // Metadata: Translated by AI; human review required.

@@ -453,6 +453,7 @@
 "audio.repetition-delay.description" = "Menetapkan tempoh jeda sebelum ulangan seterusnya bermula.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Strim audio";
+"audio.focus-mode.title" = "Malapkan ayat lain semasa bacaan";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Main balik audio";
 // Metadata: Translated by AI; human review required.

@@ -413,6 +413,7 @@
 "audio.repetition-delay.description" = "Bir sonraki tekrar başlamadan önce ne kadar duraklanacağını belirler.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Sesi çevrimiçi oynat";
+"audio.focus-mode.title" = "Okuma sırasında diğer ayetleri soluklaştır";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Ses oynatma";
 // Metadata: Translated by AI; human review required.

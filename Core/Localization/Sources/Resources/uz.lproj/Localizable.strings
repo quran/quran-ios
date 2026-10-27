@@ -472,6 +472,7 @@
 "audio.repetition-delay.description" = "Keyingi takror boshlanishidan oldingi tanaffus davomiyligini belgilaydi.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Audioni internet orqali ijro etish";
+"audio.focus-mode.title" = "Tilovat paytida boshqa oyatlarni xiralashtirish";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Audio ijrosi";
 // Metadata: Translated by AI; human review required.

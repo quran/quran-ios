@@ -382,6 +382,7 @@
 "audio.repetition-delay.description" = "Đặt thời gian tạm dừng trước khi lần lặp tiếp theo bắt đầu.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Phát trực tuyến âm thanh";
+"audio.focus-mode.title" = "Làm mờ các ayah khác khi đang đọc";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Phát âm thanh";
 // Metadata: Translated by AI; human review required.

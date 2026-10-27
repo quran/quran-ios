@@ -74,7 +74,7 @@ private struct AyahIndicatorsLabel: View {
             Circle()
                 .fill(gray)
                 .overlay {
-                    NoorSystemImage.note.image
+                    NoorSystemImage.notes.image
                         .font(.system(size: size * 0.46, weight: .bold))
                         .foregroundStyle(themeColors.background)
                 }

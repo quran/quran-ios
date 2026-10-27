@@ -5,11 +5,11 @@ import Combine
 import Foundation
 import MobileSync
 import UIKit
+import Utilities
 
 public final class AuthenticationClientFake: AuthenticationClient {
     public enum Event: Equatable {
         case readAuthenticationState
-        case readLoggedInUser
         case login
         case restoreState
         case logout
@@ -19,7 +19,14 @@ public final class AuthenticationClientFake: AuthenticationClient {
 
     public var authenticationStateValue: AuthenticationState = .notAuthenticated
     public var authenticationStateAfterLogin: AuthenticationState?
-    public var loggedInUserValue: MobileSyncUser?
+    /// The user a successful ``login(on:)`` publishes to ``loggedInUserUpdates``.
+    /// Set ``authenticationStateAfterLogin`` to `.authenticated` too, as a real sign-in does.
+    public var loggedInUserAfterLogin: MobileSyncUser?
+    /// Setting it also publishes the user to ``loggedInUserUpdates``.
+    public var loggedInUserValue: MobileSyncUser? {
+        didSet { loggedInUserSubject.send(loggedInUserValue) }
+    }
+
     public var loginResult: Result<Void, AuthenticationClientError> = .success(())
     public var restoreStateResult: Result<AuthenticationState, AuthenticationClientError> = .success(.notAuthenticated)
     public var logoutResult: Result<Void, AuthenticationClientError> = .success(())
@@ -35,15 +42,18 @@ public final class AuthenticationClientFake: AuthenticationClient {
         }
     }
 
-    public var loggedInUser: MobileSyncUser? {
-        get async {
-            events.append(.readLoggedInUser)
-            return loggedInUserValue
-        }
-    }
-
     public var authenticationStateChanges: AnyPublisher<AuthenticationState, Never> {
         stateChanges.eraseToAnyPublisher()
+    }
+
+    /// ``loggedInUserValue`` now and after every change, without repeats.
+    public var loggedInUserUpdates: AnyAsyncSequence<MobileSyncUser?> {
+        AnyAsyncSequence(loggedInUserSubject.removeDuplicates().values())
+    }
+
+    /// Ends every current and later ``loggedInUserUpdates`` observation with `error`.
+    public func failLoggedInUserUpdates(with error: Error) {
+        loggedInUserSubject.send(completion: .failure(error))
     }
 
     public func login(on _: UIViewController) async throws(AuthenticationClientError) {
@@ -51,6 +61,9 @@ public final class AuthenticationClientFake: AuthenticationClient {
         try loginResult.get()
         if let authenticationStateAfterLogin {
             changeState(to: authenticationStateAfterLogin)
+        }
+        if let loggedInUserAfterLogin {
+            loggedInUserValue = loggedInUserAfterLogin
         }
     }
 
@@ -63,6 +76,7 @@ public final class AuthenticationClientFake: AuthenticationClient {
         events.append(.logout)
         try logoutResult.get()
         changeState(to: .notAuthenticated)
+        loggedInUserValue = nil
     }
 
     public func authenticate(request: URLRequest) async throws(AuthenticationClientError) -> URLRequest {
@@ -78,6 +92,7 @@ public final class AuthenticationClientFake: AuthenticationClient {
     // MARK: Private
 
     private let stateChanges = PassthroughSubject<AuthenticationState, Never>()
+    private let loggedInUserSubject = CurrentValueSubject<MobileSyncUser?, Error>(nil)
 
     private func changeState(to state: AuthenticationState) {
         guard state != authenticationStateValue else { return }
@@ -93,12 +108,15 @@ public final class UnavailableAuthenticationClient: AuthenticationClient {
         get async { .notAuthenticated }
     }
 
-    public var loggedInUser: MobileSyncUser? {
-        get async { nil }
-    }
-
     public var authenticationStateChanges: AnyPublisher<AuthenticationState, Never> {
         Empty().eraseToAnyPublisher()
+    }
+
+    public var loggedInUserUpdates: AnyAsyncSequence<MobileSyncUser?> {
+        AnyAsyncSequence(AsyncStream { continuation in
+            continuation.yield(nil)
+            continuation.finish()
+        })
     }
 
     public func login(on _: UIViewController) async throws(AuthenticationClientError) {

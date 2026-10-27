@@ -37,6 +37,17 @@ final class AuthenticationClientMobileSyncTests: XCTestCase {
         XCTAssertTrue(storedNotes?.isEmpty == true)
     }
 
+    func test_loggedInUserUpdates_startWithNoUser_whileSignedOut() async throws {
+        let client = AuthenticationClientMobileSyncImpl(
+            authService: database.authService
+        )
+        var updates = client.loggedInUserUpdates.makeAsyncIterator()
+
+        let user = try await updates.next()
+
+        XCTAssertEqual(user, .some(nil))
+    }
+
     func test_logoutAndRestore_whileSignedOut_emitNoStateChange() async throws {
         let client = AuthenticationClientMobileSyncImpl(
             authService: database.authService

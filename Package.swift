@@ -24,7 +24,7 @@ let mobileSyncPackageDependency: Package.Dependency = {
     if let localMobileSyncPackagePath, !localMobileSyncPackagePath.isEmpty {
         return .package(path: localMobileSyncPackagePath)
     }
-    return .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.2.4")
+    return .package(url: "https://github.com/quran/mobile-sync-spm.git", from: "0.3.0")
 }()
 
 let mobileSyncPackageDependencies: [Package.Dependency] =
@@ -389,6 +389,7 @@ private func dataTargets() -> [[Target]] {
 
         target(type, name: "AuthenticationClient", dependencies: [
             "Preferences",
+            "Utilities",
             "VLogging",
         ] + mobileSyncTargetDependencies, testDependencies: [
             "AuthenticationClientFake",
@@ -396,6 +397,7 @@ private func dataTargets() -> [[Target]] {
 
         target(type, name: "AuthenticationClientFake", hasTests: false, dependencies: [
             "AuthenticationClient",
+            "Utilities",
         ] + mobileSyncTargetDependencies),
     ]
 }

@@ -4,6 +4,7 @@ import Combine
 import Foundation
 import MobileSync
 import UIKit
+import Utilities
 import VLogging
 
 public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sendable {
@@ -23,8 +24,8 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
         stateChanges.eraseToAnyPublisher()
     }
 
-    public var loggedInUser: MobileSyncUser? {
-        authService.loggedInUser
+    public var loggedInUserUpdates: AnyAsyncSequence<MobileSyncUser?> {
+        AnyAsyncSequence(authService.loggedInUserUpdates)
     }
 
     public func login(on _: UIViewController) async throws(AuthenticationClientError) {

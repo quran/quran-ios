@@ -25,6 +25,8 @@ final class DiagnosticsViewModel: ObservableObject {
 
     // MARK: Internal
 
+    let isDebugLoggingAlwaysEnabled: Bool
+
     @Published var error: Error? = nil
 
     var enableDebugLoggingFooter: String {
@@ -33,9 +35,13 @@ final class DiagnosticsViewModel: ObservableObject {
             : l("diagnostics.enable_debug_logs.details")
     }
 
-    @Published var enableDebugLogging = DiagnosticsPreferences.shared.enableDebugLogging {
-        didSet {
-            DiagnosticsPreferences.shared.enableDebugLogging = enableDebugLogging
+    var enableDebugLogging: Bool {
+        get { isDebugLoggingAlwaysEnabled || savedEnableDebugLogging }
+        set {
+            guard !isDebugLoggingAlwaysEnabled else {
+                return
+            }
+            savedEnableDebugLogging = newValue
         }
     }
 
@@ -53,6 +59,11 @@ final class DiagnosticsViewModel: ObservableObject {
     // MARK: Private
 
     private let diagnosticsService: DiagnosticsService
-    private let isDebugLoggingAlwaysEnabled: Bool
     private weak var navigationController: UINavigationController?
+
+    @Published private var savedEnableDebugLogging = DiagnosticsPreferences.shared.enableDebugLogging {
+        didSet {
+            DiagnosticsPreferences.shared.enableDebugLogging = savedEnableDebugLogging
+        }
+    }
 }

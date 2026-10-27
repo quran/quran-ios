@@ -120,6 +120,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
         alternateIconName: nil,
         name: "Navy",
         previewImageName: "app-icon-navy",
+        artworkImageName: "app-artwork-navy",
         accent: AppIconAccent(light: .black, dark: .white, onDark: .black)
     )
     private let blue = AppIconOption(
@@ -127,6 +128,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
         alternateIconName: "AppIcon-Blue",
         name: "Blue",
         previewImageName: "app-icon-blue",
+        artworkImageName: "app-artwork-blue",
         accent: AppIconAccent(light: .systemBlue, dark: .systemBlue, onDark: .black)
     )
 

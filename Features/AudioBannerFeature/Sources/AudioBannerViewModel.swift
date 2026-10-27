@@ -9,6 +9,7 @@
 import AdvancedAudioOptionsFeature
 import Analytics
 import BatchDownloader
+import Combine
 import Crashing
 import Foundation
 import Localization
@@ -58,6 +59,7 @@ public final class AudioBannerViewModel: ObservableObject {
         reciterRetreiver: ReciterDataRetriever,
         recentRecitersService: RecentRecitersService,
         audioPlayer: QuranAudioPlayer,
+        appIconService: AppIconService,
         downloader: QuranAudioDownloader,
         reciterListBuilder: ReciterListBuilder,
         advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder
@@ -79,6 +81,9 @@ public final class AudioBannerViewModel: ObservableObject {
         setUpRemoteCommandHandler()
 
         AudioPreferences.shared.$playbackRate.assign(to: &$playbackRate)
+        appIconService.currentOptionPublisher
+            .sink { [audioPlayer] option in audioPlayer.setArtwork(option.artworkImage) }
+            .store(in: &cancellables)
     }
 
     // MARK: Public
@@ -178,6 +183,7 @@ public final class AudioBannerViewModel: ObservableObject {
     private var repetitionDelay: RepetitionDelay = AudioPreferences.shared.repetitionDelay
     private var reciters: [Reciter] = []
     private var cancellableTasks: Set<CancellableTask> = []
+    private var cancellables: Set<AnyCancellable> = []
 
     @Published private var playingState: PlaybackState = .stopped {
         didSet {

@@ -11,9 +11,8 @@ import Utilities
 public struct MobileSyncReadingBookmarkService {
     // MARK: Lifecycle
 
-    public init(quranDataService: MobileSyncDataService, storedPageQuran: Quran = .hafsMadani1405) {
+    public init(quranDataService: MobileSyncDataService) {
         self.quranDataService = quranDataService
-        self.storedPageQuran = storedPageQuran
     }
 
     // MARK: Public
@@ -25,11 +24,10 @@ public struct MobileSyncReadingBookmarkService {
     }
 
     public func readingBookmarksSequence(quran: Quran) -> AnyAsyncSequence<[QuranAnnotations.ReadingBookmark]> {
-        let storedPageQuran = storedPageQuran
-        let sequence = quranDataService.readingBookmarksSequence()
+        let sequence = quranDataService.readingBookmarksSequence(mushaf: quran.mobileSyncMushaf)
             .map { bookmarks in
                 bookmarks.compactMap {
-                    Self.readingBookmark(from: $0, quran: quran, storedPageQuran: storedPageQuran)
+                    Self.readingBookmark(from: $0, quran: quran)
                 }
                 .sorted { $0.slot.sortIndex < $1.slot.sortIndex }
             }
@@ -56,10 +54,10 @@ public struct MobileSyncReadingBookmarkService {
                 name: bookmark.name
             )
         case .page(let page):
-            let storedPage = try storedPage(for: page)
             let bookmark = try await quranDataService.setPageReadingBookmark(
                 slot: slot.mobileSyncSlot,
-                page: storedPage.pageNumber
+                page: page.pageNumber,
+                mushaf: page.quran.mobileSyncMushaf
             )
             return PlacedReadingBookmark(
                 id: bookmark.id,
@@ -89,8 +87,12 @@ public struct MobileSyncReadingBookmarkService {
         name: String?,
         quran: Quran
     ) async throws -> QuranAnnotations.ReadingBookmark {
-        let bookmark = try await quranDataService.renameReadingBookmark(slot: slot.mobileSyncSlot, name: name)
-        guard let renamed = Self.readingBookmark(from: bookmark, quran: quran, storedPageQuran: storedPageQuran) else {
+        let bookmark = try await quranDataService.renameReadingBookmark(
+            slot: slot.mobileSyncSlot,
+            name: name,
+            mushaf: quran.mobileSyncMushaf
+        )
+        guard let renamed = Self.readingBookmark(from: bookmark, quran: quran) else {
             throw MappingError.invalidBookmark
         }
         return renamed
@@ -100,8 +102,7 @@ public struct MobileSyncReadingBookmarkService {
 
     static func readingBookmark(
         from bookmark: MobileSyncReadingBookmark,
-        quran: Quran,
-        storedPageQuran: Quran
+        quran: Quran
     ) -> QuranAnnotations.ReadingBookmark? {
         let placement: QuranAnnotations.ReadingBookmark.Placement
         switch bookmark.placement {
@@ -110,17 +111,12 @@ public struct MobileSyncReadingBookmarkService {
                 return nil
             }
             placement = .ayah(ayah)
-        case let .page(pageNumber, mushafID):
-            // The web numbers IndoPak pages in its own mushafs, which have no page mapping here, so such a
-            // bookmark shows as empty, like a sura or juz bookmark set on the web.
-            guard mushafID == MobileSyncReadingBookmark.madaniMushafID else {
+        case let .page(pageNumber, mushaf):
+            // MobileSync maps pages into the mushaf they were read in; a page it couldn't map arrives unplaced.
+            // A page that still isn't one of the reader's pages keeps the slot and its name, like that case.
+            guard mushaf == quran.mobileSyncMushaf, let page = Page(quran: quran, pageNumber: pageNumber) else {
                 placement = .unplaced
                 break
-            }
-            guard let storedPage = Page(quran: storedPageQuran, pageNumber: pageNumber),
-                  let page = QuranPageMapper(destination: quran).mapPage(storedPage)
-            else {
-                return nil
             }
             placement = .page(page)
         case .unplaced:
@@ -142,17 +138,17 @@ public struct MobileSyncReadingBookmarkService {
     }
 
     private let quranDataService: MobileSyncDataService
-    private let storedPageQuran: Quran
+}
 
-    private func storedPage(for page: Page) throws -> Page {
-        guard let storedPage = QuranPageMapper(destination: storedPageQuran).mapPage(page) else {
-            throw PageMappingError.unableToMapPage(
-                pageNumber: page.pageNumber,
-                source: page.quran,
-                destination: storedPageQuran
-            )
+private extension Quran {
+    /// The page layout MobileSync sets and reads this Quran's page bookmarks in. Every reading shares one of
+    /// these layouts, and IndoPak's page numbers, 2...611, are already the ones MobileSync expects.
+    var mobileSyncMushaf: MobileSyncMushaf {
+        switch pageMushaf {
+        case .madani1405: .madani1405
+        case .madani1440: .madani1440
+        case .indoPak: .indopak15Lines
         }
-        return storedPage
     }
 }
 

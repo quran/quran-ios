@@ -58,29 +58,49 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
         XCTAssertEqual(stored?.placement, .unplaced)
     }
 
-    func test_readingBookmarkSequence_mapsPageIntoRequestedQuran() async throws {
-        let storedPage = Quran.hafsMadani1405.pages[254]
-        _ = try await service.addReadingBookmark(at: .page(storedPage), slot: .teal)
-        let quran = Quran.hafsIndoPak
-        let expectedPage = try XCTUnwrap(QuranPageMapper(destination: quran).mapPage(storedPage))
+    func test_readingBookmarksSequence_mapsMadani1405PageIntoEachReadersQuran() async throws {
+        try await service.addReadingBookmark(at: .page(page(585, of: .hafsMadani1405)), slot: .teal)
 
-        let bookmark = try await storedBookmark(quran: quran)
+        let madani1440 = try await storedBookmark(quran: .hafsMadani1440)
+        let indoPak = try await storedBookmark(quran: .hafsIndoPak)
 
-        XCTAssertEqual(bookmark?.placement, .page(expectedPage))
+        XCTAssertEqual(madani1440?.placement, .page(page(585, of: .hafsMadani1440)))
+        XCTAssertEqual(indoPak?.placement, .page(page(591, of: .hafsIndoPak)))
     }
 
-    func test_readingBookmark_showsIndoPakPageFromTheWebAsUnplaced() {
-        for mushafID in [6, 7] {
-            let bookmark = MobileSyncReadingBookmarkService.readingBookmark(
-                from: pageBookmark(page: 255, mushafID: mushafID, name: "Study"),
-                quran: .hafsMadani1405,
-                storedPageQuran: .hafsMadani1405
-            )
+    func test_readingBookmarksSequence_mapsIndoPakPageIntoMadaniAndBack() async throws {
+        let indoPakPage = page(537, of: .hafsIndoPak)
 
-            XCTAssertEqual(bookmark?.placement, .unplaced, "mushaf \(mushafID)")
-            XCTAssertEqual(bookmark?.slot, .teal, "mushaf \(mushafID)")
-            XCTAssertEqual(bookmark?.name, "Study", "mushaf \(mushafID)")
-        }
+        let madaniPage = page(536, of: .hafsMadani1440)
+
+        let created = try await service.addReadingBookmark(at: .page(indoPakPage), slot: .teal)
+        try await service.addReadingBookmark(at: .page(madaniPage), slot: .orange)
+        let madani1440 = try await storedBookmarks(quran: .hafsMadani1440)
+        let indoPak = try await storedBookmarks(quran: .hafsIndoPak)
+
+        XCTAssertEqual(created.placement, .page(indoPakPage))
+        XCTAssertEqual(madani1440.map(\.placement), [.page(madaniPage), .page(madaniPage)])
+        XCTAssertEqual(indoPak.map(\.placement), [.page(indoPakPage), .page(indoPakPage)])
+    }
+
+    func test_readingBookmark_pageTheReadersQuranDoesNotHaveIsUnplaced() {
+        let bookmark = MobileSyncReadingBookmarkService.readingBookmark(
+            from: pageBookmark(page: 1, mushaf: .indopak15Lines, name: "Study"),
+            quran: .hafsIndoPak
+        )
+
+        XCTAssertEqual(bookmark?.placement, .unplaced)
+        XCTAssertEqual(bookmark?.slot, .teal)
+        XCTAssertEqual(bookmark?.name, "Study")
+    }
+
+    func test_readingBookmark_pageReadInAnotherMushafIsUnplaced() {
+        let bookmark = MobileSyncReadingBookmarkService.readingBookmark(
+            from: pageBookmark(page: 255, mushaf: .madani1440),
+            quran: .hafsMadani1405
+        )
+
+        XCTAssertEqual(bookmark?.placement, .unplaced)
     }
 
     func test_addReadingBookmark_persistsPageLocation() async throws {
@@ -117,7 +137,7 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
         try await service.addReadingBookmark(at: .ayah(ayah(2)), slot: .orange)
         try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .red)
 
-        let iterator = database.quranDataService.readingBookmarksSequence().makeAsyncIterator()
+        let iterator = database.quranDataService.readingBookmarksSequence(mushaf: .madani1405).makeAsyncIterator()
         let bookmarks = try await iterator.next() ?? []
 
         // Other platforms read these slots, so a swapped mapping must fail even though it round-trips.
@@ -153,12 +173,10 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     }
 
     func test_placedReadingBookmarksSequence_mapsPageIntoRequestedQuran() async throws {
-        let storedPage = Quran.hafsMadani1405.pages[254]
-        try await service.addReadingBookmark(at: .page(storedPage), slot: .teal)
-        let quran = Quran.hafsIndoPak
-        let expectedPage = try XCTUnwrap(QuranPageMapper(destination: quran).mapPage(storedPage))
+        try await service.addReadingBookmark(at: .page(page(585, of: .hafsMadani1405)), slot: .teal)
+        let expectedPage = page(591, of: .hafsIndoPak)
 
-        var iterator = service.placedReadingBookmarksSequence(quran: quran).makeAsyncIterator()
+        var iterator = service.placedReadingBookmarksSequence(quran: .hafsIndoPak).makeAsyncIterator()
         let placed = try await iterator.next()
 
         XCTAssertEqual(placed?.first?.placement, .page(expectedPage))
@@ -212,16 +230,13 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
     }
 
     func test_renameReadingBookmark_returnsPageInRequestedQuran() async throws {
-        let page = Quran.hafsMadani1405.pages[40]
-        try await service.addReadingBookmark(at: .page(page), slot: .teal)
-        let quran = Quran.hafsIndoPak
-        let mappedPage = try XCTUnwrap(QuranPageMapper(destination: quran).mapPage(page))
+        try await service.addReadingBookmark(at: .page(page(537, of: .hafsIndoPak)), slot: .teal)
 
-        let renamed = try await service.renameReadingBookmark(in: .teal, name: "Review", quran: quran)
-        let stored = try await storedBookmark(quran: quran)
+        let renamed = try await service.renameReadingBookmark(in: .teal, name: "Review", quran: .hafsMadani1440)
+        let stored = try await storedBookmark(quran: .hafsMadani1440)
 
         XCTAssertEqual(renamed, stored)
-        XCTAssertEqual(renamed.placement, .page(mappedPage))
+        XCTAssertEqual(renamed.placement, .page(page(536, of: .hafsMadani1440)))
         XCTAssertEqual(renamed.name, "Review")
     }
 
@@ -241,11 +256,15 @@ final class MobileSyncReadingBookmarkServiceTests: XCTestCase {
         return bookmarks
     }
 
-    private func pageBookmark(page: Int, mushafID: Int, name: String? = nil) -> MobileSyncReadingBookmark {
+    private func page(_ number: Int, of quran: Quran) -> Page {
+        Page(quran: quran, pageNumber: number)!
+    }
+
+    private func pageBookmark(page: Int, mushaf: MobileSyncMushaf, name: String? = nil) -> MobileSyncReadingBookmark {
         MobileSyncReadingBookmark(
             id: "1",
             slot: .teal,
-            placement: .page(page, mushafID: mushafID),
+            placement: .page(page, mushaf: mushaf),
             name: name,
             lastUpdated: Date(timeIntervalSince1970: 0)
         )

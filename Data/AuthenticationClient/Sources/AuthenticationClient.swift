@@ -11,6 +11,7 @@ import Combine
 import Foundation
 import MobileSync
 import UIKit
+import Utilities
 
 public enum AuthenticationClientError: Error {
     /// The user dismissed the interactive authentication flow.
@@ -66,6 +67,13 @@ public protocol AuthenticationClient {
 
     var authenticationState: AuthenticationState { get async }
     var loggedInUser: MobileSyncUser? { get async }
+
+    /// The signed-in user now and after every change, such as a token refresh that updates the profile.
+    ///
+    /// nil means signed out, a sign-in in progress, or a signed-in session whose profile isn't known yet,
+    /// so read ``authenticationState`` to tell them apart. Cancel the observing task to stop; the sequence
+    /// then ends or throws `CancellationError`. It throws ``AuthenticationClientError`` otherwise.
+    var loggedInUserUpdates: AnyAsyncSequence<MobileSyncUser?> { get }
 
     /// Emits only changes, not the current state.
     var authenticationStateChanges: AnyPublisher<AuthenticationState, Never> { get }

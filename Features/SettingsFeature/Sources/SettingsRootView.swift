@@ -33,7 +33,7 @@ struct SettingsRootView: View {
             isAuthenticated: viewModel.isAuthenticated,
             loggedInUserEmail: viewModel.currentUserEmail,
             openQuranComProfile: { viewModel.openQuranComProfile() },
-            refreshAuthenticationState: { await viewModel.refreshAuthenticationState() },
+            observeAuthentication: { await viewModel.observeAuthentication() },
             loginAction: { await viewModel.loginToQuranCom() },
             signOutAction: { viewModel.requestSignOut() }
         )
@@ -91,7 +91,7 @@ private struct SettingsRootViewUI: View {
     let isAuthenticated: Bool
     let loggedInUserEmail: String?
     let openQuranComProfile: AsyncAction
-    let refreshAuthenticationState: AsyncAction
+    let observeAuthentication: AsyncAction
     let loginAction: AsyncAction
     let signOutAction: Action
     #endif
@@ -200,7 +200,7 @@ private struct SettingsRootViewUI: View {
             }
         }
         #if QURAN_SYNC
-        .task { await refreshAuthenticationState() }
+        .task { await observeAuthentication() }
         #endif
         .errorAlert(error: $error)
         .noorListIconColumn()
@@ -234,7 +234,7 @@ private struct SettingsRootViewUI: View {
                 isAuthenticated: false,
                 loggedInUserEmail: nil,
                 openQuranComProfile: {},
-                refreshAuthenticationState: {},
+                observeAuthentication: {},
                 loginAction: {},
                 signOutAction: {}
             )

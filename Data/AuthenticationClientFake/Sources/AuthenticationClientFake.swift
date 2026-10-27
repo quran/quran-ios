@@ -5,6 +5,7 @@ import Combine
 import Foundation
 import MobileSync
 import UIKit
+import Utilities
 
 public final class AuthenticationClientFake: AuthenticationClient {
     public enum Event: Equatable {
@@ -19,7 +20,11 @@ public final class AuthenticationClientFake: AuthenticationClient {
 
     public var authenticationStateValue: AuthenticationState = .notAuthenticated
     public var authenticationStateAfterLogin: AuthenticationState?
-    public var loggedInUserValue: MobileSyncUser?
+    /// Setting it also publishes the user to ``loggedInUserUpdates``.
+    public var loggedInUserValue: MobileSyncUser? {
+        didSet { loggedInUserSubject.send(loggedInUserValue) }
+    }
+
     public var loginResult: Result<Void, AuthenticationClientError> = .success(())
     public var restoreStateResult: Result<AuthenticationState, AuthenticationClientError> = .success(.notAuthenticated)
     public var logoutResult: Result<Void, AuthenticationClientError> = .success(())
@@ -46,6 +51,16 @@ public final class AuthenticationClientFake: AuthenticationClient {
         stateChanges.eraseToAnyPublisher()
     }
 
+    /// ``loggedInUserValue`` now and after every change, without repeats.
+    public var loggedInUserUpdates: AnyAsyncSequence<MobileSyncUser?> {
+        AnyAsyncSequence(loggedInUserSubject.removeDuplicates().values())
+    }
+
+    /// Ends every current and later ``loggedInUserUpdates`` observation with `error`.
+    public func failLoggedInUserUpdates(with error: Error) {
+        loggedInUserSubject.send(completion: .failure(error))
+    }
+
     public func login(on _: UIViewController) async throws(AuthenticationClientError) {
         events.append(.login)
         try loginResult.get()
@@ -63,6 +78,7 @@ public final class AuthenticationClientFake: AuthenticationClient {
         events.append(.logout)
         try logoutResult.get()
         changeState(to: .notAuthenticated)
+        loggedInUserValue = nil
     }
 
     public func authenticate(request: URLRequest) async throws(AuthenticationClientError) -> URLRequest {
@@ -78,6 +94,7 @@ public final class AuthenticationClientFake: AuthenticationClient {
     // MARK: Private
 
     private let stateChanges = PassthroughSubject<AuthenticationState, Never>()
+    private let loggedInUserSubject = CurrentValueSubject<MobileSyncUser?, Error>(nil)
 
     private func changeState(to state: AuthenticationState) {
         guard state != authenticationStateValue else { return }
@@ -99,6 +116,13 @@ public final class UnavailableAuthenticationClient: AuthenticationClient {
 
     public var authenticationStateChanges: AnyPublisher<AuthenticationState, Never> {
         Empty().eraseToAnyPublisher()
+    }
+
+    public var loggedInUserUpdates: AnyAsyncSequence<MobileSyncUser?> {
+        AnyAsyncSequence(AsyncStream { continuation in
+            continuation.yield(nil)
+            continuation.finish()
+        })
     }
 
     public func login(on _: UIViewController) async throws(AuthenticationClientError) {

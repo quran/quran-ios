@@ -212,6 +212,23 @@ final class SettingsRootViewModel: ObservableObject {
     }
 
     #if QURAN_SYNC
+    /// Restores the session, then keeps the account card on the signed-in user until the task is cancelled,
+    /// such as when a background token refresh updates the profile.
+    ///
+    /// After any other error, the card stops updating until Settings appears again.
+    func observeAuthentication() async {
+        await refreshAuthenticationState()
+        do {
+            for try await user in authenticationClient.loggedInUserUpdates {
+                await showLoggedInUser(user)
+            }
+        } catch is CancellationError {
+            return
+        } catch {
+            logger.error("Quran Sync: failed to observe the signed-in user from Settings: \(error)")
+        }
+    }
+
     func refreshAuthenticationState() async {
         isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
         loggedInUser = isAuthenticated ? await authenticationClient.loggedInUser : nil
@@ -268,6 +285,17 @@ final class SettingsRootViewModel: ObservableObject {
     private let quranProfileURL: URL
     private var authenticationClient: any AuthenticationClient
     private let legacyDataImportCoordinator: LegacyDataImportCoordinator
+
+    /// The authentication state decides whether the user is signed in, because a nil user can also be
+    /// a signed-in session whose profile isn't known yet. That keeps the last known profile.
+    private func showLoggedInUser(_ user: MobileSyncUser?) async {
+        isAuthenticated = await authenticationClient.authenticationState == .authenticated
+        if !isAuthenticated {
+            loggedInUser = nil
+        } else if let user {
+            loggedInUser = user
+        }
+    }
     #endif
 }
 

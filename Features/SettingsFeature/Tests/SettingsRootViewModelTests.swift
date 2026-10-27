@@ -8,6 +8,7 @@ import AudioDownloadsFeature
 import AuthenticationClient
 import AuthenticationClientFake
 import BatchDownloader
+import Combine
 import CoreDataPersistence
 import CoreDataPersistenceTestSupport
 import Foundation
@@ -77,6 +78,139 @@ final class SettingsRootViewModelTests: XCTestCase {
         XCTAssertEqual(sut.currentUserEmail, "user@example.com")
         XCTAssertEqual(client.events, [.restoreState, .readAuthenticationState, .readLoggedInUser])
     }
+
+    // MARK: Observing the signed-in user
+
+    func test_observeAuthentication_showsUpdatedUser_whileSignedIn() async {
+        let client = AuthenticationClientFake()
+        client.restoreStateResult = .success(.authenticated)
+        client.authenticationStateValue = .authenticated
+        client.loggedInUserValue = makeUser(email: "old@example.com")
+        let sut = makeSUT(authenticationClient: client)
+        let observation = Task { await sut.observeAuthentication() }
+        await waitUntil(sut.$loggedInUser) { $0?.email == "old@example.com" }
+
+        // Such as a token refresh that updates the profile.
+        client.loggedInUserValue = makeUser(email: "new@example.com")
+
+        await waitUntil(sut.$loggedInUser) { $0?.email == "new@example.com" }
+        XCTAssertTrue(sut.isAuthenticated)
+        observation.cancel()
+    }
+
+    func test_observeAuthentication_keepsShownUser_whenSignedInSessionHasNoUser() async {
+        let client = AuthenticationClientFake()
+        let sut = makeSUT(authenticationClient: client)
+        var emails: [String?] = []
+        let recording = sut.$loggedInUser.map { $0?.email }.removeDuplicates().sink { emails.append($0) }
+        let observation = await startObservingSignIn(sut, client: client, email: "user@example.com")
+
+        // A session stored before MobileSync kept the profile has no user until its next token refresh.
+        client.loggedInUserValue = nil
+        client.loggedInUserValue = makeUser(email: "refreshed@example.com")
+
+        await waitUntil(sut.$loggedInUser) { $0?.email == "refreshed@example.com" }
+        XCTAssertEqual(emails, [nil, "user@example.com", "refreshed@example.com"])
+        XCTAssertTrue(sut.isAuthenticated)
+        observation.cancel()
+        recording.cancel()
+    }
+
+    func test_observeAuthentication_showsSignedOut_whenSessionEnds() async {
+        let client = AuthenticationClientFake()
+        let sut = makeSUT(authenticationClient: client)
+        let observation = await startObservingSignIn(sut, client: client, email: "user@example.com")
+
+        client.authenticationStateValue = .notAuthenticated
+        client.loggedInUserValue = nil
+
+        await waitUntil(sut.$isAuthenticated) { !$0 }
+        XCTAssertNil(sut.currentUserEmail)
+        XCTAssertNil(sut.error)
+        observation.cancel()
+    }
+
+    func test_observeAuthentication_staysSignedOut_whenSignedOutSessionReportsUser() async {
+        let client = AuthenticationClientFake()
+        let sut = makeSUT(authenticationClient: client)
+        let ended = expectation(description: "Observation ended")
+        let observation = await startObservingSignIn(sut, client: client, email: "user@example.com", ended: ended)
+        client.authenticationStateValue = .notAuthenticated
+        client.loggedInUserValue = nil
+        await waitUntil(sut.$isAuthenticated) { !$0 }
+
+        client.loggedInUserValue = makeUser(email: "stale@example.com")
+        // Failing the updates after the user ends the observation once the user is handled.
+        client.failLoggedInUserUpdates(with: NSError(domain: "test", code: 1))
+
+        await fulfillment(of: [ended], timeout: 5)
+        XCTAssertFalse(sut.isAuthenticated)
+        XCTAssertNil(sut.currentUserEmail)
+        observation.cancel()
+    }
+
+    func test_observeAuthentication_endsWhenCancelled() async {
+        let client = AuthenticationClientFake()
+        let sut = makeSUT(authenticationClient: client)
+        let ended = expectation(description: "Observation ended")
+        let observation = await startObservingSignIn(sut, client: client, email: "user@example.com", ended: ended)
+
+        observation.cancel()
+
+        await fulfillment(of: [ended], timeout: 5)
+        client.loggedInUserValue = makeUser(email: "later@example.com")
+        XCTAssertEqual(sut.currentUserEmail, "user@example.com")
+    }
+
+    func test_observeAuthentication_keepsShownUser_whenUpdatesFail() async {
+        let client = AuthenticationClientFake()
+        let sut = makeSUT(authenticationClient: client)
+        let ended = expectation(description: "Observation ended")
+        let observation = await startObservingSignIn(sut, client: client, email: "user@example.com", ended: ended)
+
+        client.failLoggedInUserUpdates(with: NSError(domain: "test", code: 1))
+
+        await fulfillment(of: [ended], timeout: 5)
+        XCTAssertTrue(sut.isAuthenticated)
+        XCTAssertEqual(sut.currentUserEmail, "user@example.com")
+        XCTAssertNil(sut.error)
+        observation.cancel()
+    }
+
+    func test_observeAuthentication_endsQuietly_whenUpdatesAreCancelled() async {
+        let client = AuthenticationClientFake()
+        let sut = makeSUT(authenticationClient: client)
+        let ended = expectation(description: "Observation ended")
+        let observation = await startObservingSignIn(sut, client: client, email: "user@example.com", ended: ended)
+
+        // The MobileSync updates throw CancellationError when their task is cancelled.
+        client.failLoggedInUserUpdates(with: CancellationError())
+
+        await fulfillment(of: [ended], timeout: 5)
+        XCTAssertTrue(sut.isAuthenticated)
+        XCTAssertEqual(sut.currentUserEmail, "user@example.com")
+        XCTAssertNil(sut.error)
+        observation.cancel()
+    }
+
+    func test_observeAuthentication_staysSignedOut_afterSigningOutFromSettings() async {
+        let client = AuthenticationClientFake()
+        let sut = makeSUT(authenticationClient: client)
+        let ended = expectation(description: "Observation ended")
+        let observation = await startObservingSignIn(sut, client: client, email: "user@example.com", ended: ended)
+
+        await sut.logoutFromQuranCom()
+        // Failing the updates ends the observation once the signed-out update is handled.
+        client.failLoggedInUserUpdates(with: NSError(domain: "test", code: 1))
+
+        await fulfillment(of: [ended], timeout: 5)
+        XCTAssertFalse(sut.isAuthenticated)
+        XCTAssertNil(sut.currentUserEmail)
+        XCTAssertNil(sut.error)
+        observation.cancel()
+    }
+
+    // MARK: Signing in and out
 
     func test_login_updatesAuthenticationStateAndEmail() async {
         let client = AuthenticationClientFake()
@@ -225,6 +359,34 @@ final class SettingsRootViewModelTests: XCTestCase {
     }
 
     private let database = MobileSyncTestDatabase.shared
+
+    /// Starts observing with a restore that reports signed out and a client that reports signed in with `email`,
+    /// so the refresh shows signed out and the user can only arrive through the updates. Returns once it shows.
+    private func startObservingSignIn(
+        _ sut: SettingsRootViewModel,
+        client: AuthenticationClientFake,
+        email: String,
+        ended: XCTestExpectation? = nil
+    ) async -> Task<Void, Never> {
+        let observation = Task {
+            await sut.observeAuthentication()
+            ended?.fulfill()
+        }
+        client.authenticationStateValue = .authenticated
+        client.loggedInUserValue = makeUser(email: email)
+        await waitUntil(sut.$loggedInUser) { $0?.email == email }
+        return observation
+    }
+
+    private func waitUntil<Value>(
+        _ publisher: Published<Value>.Publisher,
+        satisfies predicate: @escaping (Value) -> Bool
+    ) async {
+        let satisfied = expectation(description: "Published value satisfies the predicate")
+        let observation = publisher.first(where: predicate).sink { _ in satisfied.fulfill() }
+        await fulfillment(of: [satisfied], timeout: 5)
+        observation.cancel()
+    }
 
     private func assertClientIsNotAuthenticated(_ error: Error?, file: StaticString = #filePath, line: UInt = #line) {
         guard case .notAuthenticated = error as? AuthenticationClientError else {

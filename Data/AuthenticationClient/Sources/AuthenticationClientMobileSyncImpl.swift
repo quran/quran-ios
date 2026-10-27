@@ -25,7 +25,7 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
     }
 
     public var loggedInUserUpdates: AnyAsyncSequence<MobileSyncUser?> {
-        AnyAsyncSequence(AuthenticationErrorSequence(base: authService.loggedInUserUpdates))
+        AnyAsyncSequence(authService.loggedInUserUpdates)
     }
 
     public func login(on _: UIViewController) async throws(AuthenticationClientError) {
@@ -95,33 +95,6 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
         if state != previousState {
             stateChanges.send(state)
         }
-    }
-}
-
-/// Throws ``AuthenticationClientError`` like the client's other operations, passing cancellation through.
-private struct AuthenticationErrorSequence<Base: AsyncSequence>: AsyncSequence {
-    struct AsyncIterator: AsyncIteratorProtocol {
-        var base: Base.AsyncIterator
-
-        mutating func next() async throws -> Base.Element? {
-            do {
-                return try await base.next()
-            } catch let error as CancellationError {
-                throw error
-            } catch let error as MobileSyncAuthenticationError {
-                throw AuthenticationClientError(error)
-            } catch {
-                throw AuthenticationClientError.authenticationFailed(underlying: error)
-            }
-        }
-    }
-
-    typealias Element = Base.Element
-
-    let base: Base
-
-    func makeAsyncIterator() -> AsyncIterator {
-        AsyncIterator(base: base.makeAsyncIterator())
     }
 }
 

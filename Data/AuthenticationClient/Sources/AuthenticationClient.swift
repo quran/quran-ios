@@ -71,7 +71,7 @@ public protocol AuthenticationClient {
     ///
     /// nil means signed out, a sign-in in progress, or a signed-in session whose profile isn't known yet,
     /// so read ``authenticationState`` to tell them apart. Cancel the observing task to stop; the sequence
-    /// then ends or throws `CancellationError`. It throws ``AuthenticationClientError`` otherwise.
+    /// then ends or throws `CancellationError`.
     var loggedInUserUpdates: AnyAsyncSequence<MobileSyncUser?> { get }
 
     /// Emits only changes, not the current state.

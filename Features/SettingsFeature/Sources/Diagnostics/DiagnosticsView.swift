@@ -17,6 +17,7 @@ struct DiagnosticsView: View {
         DiagnosticsViewUI(
             error: $viewModel.error,
             enableDebugLogging: $viewModel.enableDebugLogging,
+            isDebugLoggingAlwaysEnabled: viewModel.isDebugLoggingAlwaysEnabled,
             enableDebugLoggingFooter: viewModel.enableDebugLoggingFooter,
             shareLog: { viewModel.shareLogs() }
         )
@@ -26,6 +27,7 @@ struct DiagnosticsView: View {
 private struct DiagnosticsViewUI: View {
     @Binding var error: Error?
     @Binding var enableDebugLogging: Bool
+    let isDebugLoggingAlwaysEnabled: Bool
     let enableDebugLoggingFooter: String
     let shareLog: Action
 
@@ -41,6 +43,7 @@ private struct DiagnosticsViewUI: View {
                 Toggle(isOn: $enableDebugLogging) {
                     Text(l("diagnostics.enable_debug_logs"))
                 }
+                .disabled(isDebugLoggingAlwaysEnabled)
             }
 
             NoorBasicSection {
@@ -63,6 +66,7 @@ private struct DiagnosticsViewUI: View {
             DiagnosticsViewUI(
                 error: $error,
                 enableDebugLogging: $enableDebugLogging,
+                isDebugLoggingAlwaysEnabled: false,
                 enableDebugLoggingFooter: l("diagnostics.enable_debug_logs.details"),
                 shareLog: {}
             )

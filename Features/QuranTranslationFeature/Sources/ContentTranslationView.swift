@@ -34,7 +34,7 @@ public struct ContentTranslationView: View {
     private var content: some View {
         #if QURAN_SYNC
         ContentTranslationViewBody(
-            items: viewModel.items(quranFont: viewModel.reading.quranFont),
+            section: viewModel.pageSection(quranFont: viewModel.reading.quranFont),
             arabicFontSize: viewModel.arabicFontSize,
             translationFontSize: viewModel.translationFontSize,
             highlights: viewModel.highlights,
@@ -46,7 +46,7 @@ public struct ContentTranslationView: View {
         )
         #else
         ContentTranslationViewBody(
-            items: viewModel.items(quranFont: viewModel.reading.quranFont),
+            section: viewModel.pageSection(quranFont: viewModel.reading.quranFont),
             arabicFontSize: viewModel.arabicFontSize,
             translationFontSize: viewModel.translationFontSize,
             highlights: viewModel.highlights,
@@ -74,7 +74,7 @@ public struct ContentTranslationView: View {
 }
 
 private struct ContentTranslationViewBody: View {
-    let items: [TranslationItem]
+    let section: TranslationPageSection?
 
     let arabicFontSize: FontSize
     let translationFontSize: FontSize
@@ -91,11 +91,11 @@ private struct ContentTranslationViewBody: View {
 
     var body: some View {
         List {
-            ForEach(items) { item in
+            if let section {
                 #if QURAN_SYNC
-                item.view(onAyahNumberTapped: onAyahNumberTapped)
+                TranslationPageRows(section: section, onAyahNumberTapped: onAyahNumberTapped)
                 #else
-                item.view()
+                TranslationPageRows(section: section)
                 #endif
             }
         }
@@ -106,7 +106,24 @@ private struct ContentTranslationViewBody: View {
         .trackCollection(with: tracker)
         .sheet(item: $footnote) { $0 }
         .quranScrolling(scrollToValue: scrollToItem) { item in
-            items.contains { $0.id == item } ? item : nil
+            section?.scrollTarget(for: item)
+        }
+    }
+}
+
+private struct TranslationPageRows: View {
+    let section: TranslationPageSection
+    #if QURAN_SYNC
+    let onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?
+    #endif
+
+    var body: some View {
+        ForEach(section.items) { item in
+            #if QURAN_SYNC
+            item.view(onAyahNumberTapped: onAyahNumberTapped)
+            #else
+            item.view()
+            #endif
         }
     }
 }

@@ -24,10 +24,6 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
         stateChanges.eraseToAnyPublisher()
     }
 
-    public var loggedInUser: MobileSyncUser? {
-        authService.loggedInUser
-    }
-
     public var loggedInUserUpdates: AnyAsyncSequence<MobileSyncUser?> {
         AnyAsyncSequence(AuthenticationErrorSequence(base: authService.loggedInUserUpdates))
     }

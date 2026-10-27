@@ -10,7 +10,6 @@ import Utilities
 public final class AuthenticationClientFake: AuthenticationClient {
     public enum Event: Equatable {
         case readAuthenticationState
-        case readLoggedInUser
         case login
         case restoreState
         case logout
@@ -20,6 +19,9 @@ public final class AuthenticationClientFake: AuthenticationClient {
 
     public var authenticationStateValue: AuthenticationState = .notAuthenticated
     public var authenticationStateAfterLogin: AuthenticationState?
+    /// The user a successful ``login(on:)`` publishes to ``loggedInUserUpdates``.
+    /// Set ``authenticationStateAfterLogin`` to `.authenticated` too, as a real sign-in does.
+    public var loggedInUserAfterLogin: MobileSyncUser?
     /// Setting it also publishes the user to ``loggedInUserUpdates``.
     public var loggedInUserValue: MobileSyncUser? {
         didSet { loggedInUserSubject.send(loggedInUserValue) }
@@ -37,13 +39,6 @@ public final class AuthenticationClientFake: AuthenticationClient {
         get async {
             events.append(.readAuthenticationState)
             return authenticationStateValue
-        }
-    }
-
-    public var loggedInUser: MobileSyncUser? {
-        get async {
-            events.append(.readLoggedInUser)
-            return loggedInUserValue
         }
     }
 
@@ -66,6 +61,9 @@ public final class AuthenticationClientFake: AuthenticationClient {
         try loginResult.get()
         if let authenticationStateAfterLogin {
             changeState(to: authenticationStateAfterLogin)
+        }
+        if let loggedInUserAfterLogin {
+            loggedInUserValue = loggedInUserAfterLogin
         }
     }
 
@@ -108,10 +106,6 @@ public final class UnavailableAuthenticationClient: AuthenticationClient {
 
     public var authenticationState: AuthenticationState {
         get async { .notAuthenticated }
-    }
-
-    public var loggedInUser: MobileSyncUser? {
-        get async { nil }
     }
 
     public var authenticationStateChanges: AnyPublisher<AuthenticationState, Never> {

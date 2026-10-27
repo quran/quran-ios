@@ -66,7 +66,6 @@ public protocol AuthenticationClient {
     func getAuthenticationHeaders() async throws(AuthenticationClientError) -> [String: String]
 
     var authenticationState: AuthenticationState { get async }
-    var loggedInUser: MobileSyncUser? { get async }
 
     /// The signed-in user now and after every change, such as a token refresh that updates the profile.
     ///

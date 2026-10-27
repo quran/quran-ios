@@ -213,11 +213,20 @@ final class SettingsRootViewModel: ObservableObject {
 
     #if QURAN_SYNC
     /// Restores the session, then keeps the account card on the signed-in user until the task is cancelled,
-    /// such as when a background token refresh updates the profile.
+    /// such as after signing in or when a background token refresh updates the profile.
     ///
-    /// After any other error, the card stops updating until Settings appears again.
+    /// The card's user comes only from these updates. After any other error, the card stops updating
+    /// until Settings appears again.
     func observeAuthentication() async {
-        await refreshAuthenticationState()
+        let restoredState = await authenticationClient.safelyRestoreState()
+        logger.info("Quran Sync: restored authentication from Settings. State: \(restoredState)")
+        // A signed-in card waits for the first update, which brings the user with it.
+        if restoredState != .authenticated {
+            isAuthenticated = false
+            loggedInUser = nil
+        }
+        runningAuthenticationObservations += 1
+        defer { runningAuthenticationObservations -= 1 }
         do {
             for try await user in authenticationClient.loggedInUserUpdates {
                 await showLoggedInUser(user)
@@ -229,12 +238,6 @@ final class SettingsRootViewModel: ObservableObject {
         }
     }
 
-    func refreshAuthenticationState() async {
-        isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
-        loggedInUser = isAuthenticated ? await authenticationClient.loggedInUser : nil
-        logger.info("Quran Sync: restored authentication from Settings. Authenticated: \(isAuthenticated)")
-    }
-
     func loginToQuranCom() async {
         guard let viewController = navigationController else {
             return
@@ -244,9 +247,12 @@ final class SettingsRootViewModel: ObservableObject {
         logger.info("Quran Sync: starting sign in from Settings")
         do {
             try await authenticationClient.login(on: viewController)
-            isAuthenticated = await authenticationClient.authenticationState == .authenticated
-            loggedInUser = isAuthenticated ? await authenticationClient.loggedInUser : nil
-            logger.info("Quran Sync: sign in completed from Settings. Authenticated: \(isAuthenticated)")
+            let state = await authenticationClient.authenticationState
+            logger.info("Quran Sync: sign in completed from Settings. State: \(state)")
+            // While observing, the updates show the card signed in together with the user.
+            if runningAuthenticationObservations == 0 {
+                isAuthenticated = state == .authenticated
+            }
         } catch AuthenticationClientError.cancelled {
             logger.info("Quran Sync: sign in cancelled from Settings")
             return
@@ -285,6 +291,10 @@ final class SettingsRootViewModel: ObservableObject {
     private let quranProfileURL: URL
     private var authenticationClient: any AuthenticationClient
     private let legacyDataImportCoordinator: LegacyDataImportCoordinator
+
+    /// How many `observeAuthentication()` calls are following the updates. A count, not a flag, because
+    /// SwiftUI can start the next `.task` before the cancelled one ends.
+    private var runningAuthenticationObservations = 0
 
     /// The authentication state decides whether the user is signed in, because a nil user can also be
     /// a signed-in session whose profile isn't known yet. That keeps the last known profile.

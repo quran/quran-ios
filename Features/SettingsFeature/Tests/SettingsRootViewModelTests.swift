@@ -43,40 +43,58 @@ final class SettingsRootViewModelTests: XCTestCase {
         try await super.tearDown()
     }
 
-    func test_refreshAuthenticationState_returnsNotAuthenticated_whenClientIsMissing() async {
+    // MARK: Restoring the session
+
+    func test_observeAuthentication_showsSignedOut_whenClientIsMissing() async {
         let sut = makeSUT(authenticationClient: nil)
 
-        await sut.refreshAuthenticationState()
+        // The unavailable client's updates report no user once, then end.
+        await sut.observeAuthentication()
 
         XCTAssertFalse(sut.isAuthenticated)
         XCTAssertNil(sut.currentUserEmail)
     }
 
-    func test_refreshAuthenticationState_returnsRestoredState_whenRestoreSucceeds() async {
+    func test_observeAuthentication_showsSignedOut_whenRestoreReportsSignedOut() async {
+        let client = AuthenticationClientFake()
+        // Failing the updates first ends the observation right after the restore.
+        client.failLoggedInUserUpdates(with: NSError(domain: "test", code: 1))
+        let sut = makeSUT(authenticationClient: client)
+        sut.isAuthenticated = true
+        sut.loggedInUser = makeUser(email: "stale@example.com")
+
+        await sut.observeAuthentication()
+
+        XCTAssertFalse(sut.isAuthenticated)
+        XCTAssertNil(sut.currentUserEmail)
+    }
+
+    func test_observeAuthentication_showsUser_afterRestoringSignedInSession() async {
         let client = AuthenticationClientFake()
         client.restoreStateResult = .success(.authenticated)
+        client.authenticationStateValue = .authenticated
         client.loggedInUserValue = makeUser(email: "user@example.com")
         let sut = makeSUT(authenticationClient: client)
 
-        await sut.refreshAuthenticationState()
+        let observation = Task { await sut.observeAuthentication() }
 
+        await waitUntil(sut.$loggedInUser) { $0?.email == "user@example.com" }
         XCTAssertTrue(sut.isAuthenticated)
-        XCTAssertEqual(sut.currentUserEmail, "user@example.com")
-        XCTAssertEqual(client.events, [.restoreState, .readLoggedInUser])
+        observation.cancel()
     }
 
-    func test_refreshAuthenticationState_fallsBackToCurrentState_whenRestoreFails() async {
+    func test_observeAuthentication_fallsBackToCurrentState_whenRestoreFails() async {
         let client = AuthenticationClientFake()
         client.restoreStateResult = .failure(.notAuthenticated(underlying: NSError(domain: "test", code: 1)))
         client.authenticationStateValue = .authenticated
         client.loggedInUserValue = makeUser(email: "user@example.com")
         let sut = makeSUT(authenticationClient: client)
 
-        await sut.refreshAuthenticationState()
+        let observation = Task { await sut.observeAuthentication() }
 
+        await waitUntil(sut.$loggedInUser) { $0?.email == "user@example.com" }
         XCTAssertTrue(sut.isAuthenticated)
-        XCTAssertEqual(sut.currentUserEmail, "user@example.com")
-        XCTAssertEqual(client.events, [.restoreState, .readAuthenticationState, .readLoggedInUser])
+        observation.cancel()
     }
 
     // MARK: Observing the signed-in user
@@ -212,11 +230,11 @@ final class SettingsRootViewModelTests: XCTestCase {
 
     // MARK: Signing in and out
 
-    func test_login_updatesAuthenticationStateAndEmail() async {
+    /// Also covers an observation that already ended after an error, so the card never stays signed out.
+    func test_login_updatesAuthenticationState_whenNotObserving() async {
         let client = AuthenticationClientFake()
         client.authenticationStateValue = .authenticated
         let analytics = AnalyticsLibrarySpy()
-        client.loggedInUserValue = makeUser(email: "user@example.com")
         let navigationController = UINavigationController()
         let sut = makeSUT(
             analytics: analytics,
@@ -227,10 +245,53 @@ final class SettingsRootViewModelTests: XCTestCase {
         await sut.loginToQuranCom()
 
         XCTAssertTrue(sut.isAuthenticated)
-        XCTAssertEqual(sut.currentUserEmail, "user@example.com")
-        XCTAssertEqual(client.events, [.login, .readAuthenticationState, .readLoggedInUser])
         XCTAssertEqual(analytics.events, [.init(name: "QuranSyncSignIn", value: "settings")])
         XCTAssertNil(sut.error)
+    }
+
+    func test_login_showsSignedInUser_whileObserving() async {
+        let client = AuthenticationClientFake()
+        client.authenticationStateAfterLogin = .authenticated
+        client.loggedInUserAfterLogin = makeUser(email: "user@example.com")
+        let navigationController = UINavigationController()
+        let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
+        let observation = await startObservingSignedOut(sut, client: client)
+
+        await sut.loginToQuranCom()
+
+        await waitUntil(sut.$loggedInUser) { $0?.email == "user@example.com" }
+        XCTAssertTrue(sut.isAuthenticated)
+        XCTAssertNil(sut.error)
+        observation.cancel()
+    }
+
+    func test_login_neverShowsSignedInWithoutUser_whenUserArrivesAfterLogin() async {
+        let client = AuthenticationClientFake()
+        client.authenticationStateAfterLogin = .authenticated
+        let navigationController = UINavigationController()
+        let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
+        let observation = await startObservingSignedOut(sut, client: client)
+        var cards: [String] = []
+        let signedIn = expectation(description: "Card shows the signed-in user")
+        signedIn.assertForOverFulfill = false
+        // SwiftUI renders the card once the main actor finishes its current turn, so sample it then.
+        let recording = sut.objectWillChange.receive(on: DispatchQueue.main).sink { _ in
+            MainActor.assumeIsolated {
+                let card = "\(sut.isAuthenticated ? "signed in" : "signed out"), \(sut.currentUserEmail ?? "no email")"
+                cards.append(card)
+                if card == "signed in, user@example.com" {
+                    signedIn.fulfill()
+                }
+            }
+        }
+
+        await sut.loginToQuranCom()
+        client.loggedInUserValue = makeUser(email: "user@example.com")
+
+        await fulfillment(of: [signedIn], timeout: 5)
+        XCTAssertFalse(cards.contains("signed in, no email"), "\(cards)")
+        observation.cancel()
+        recording.cancel()
     }
 
     func test_login_doesNotSetErrorWhenLoginCompletesWithoutAuthentication() async {
@@ -242,7 +303,6 @@ final class SettingsRootViewModelTests: XCTestCase {
 
         XCTAssertFalse(sut.isAuthenticated)
         XCTAssertNil(sut.currentUserEmail)
-        XCTAssertEqual(client.events, [.login, .readAuthenticationState])
         XCTAssertNil(sut.error)
     }
 
@@ -256,7 +316,6 @@ final class SettingsRootViewModelTests: XCTestCase {
 
         XCTAssertFalse(sut.isAuthenticated)
         XCTAssertNil(sut.currentUserEmail)
-        XCTAssertEqual(client.events, [.login])
         XCTAssertNil(sut.error)
     }
 
@@ -375,6 +434,20 @@ final class SettingsRootViewModelTests: XCTestCase {
         client.authenticationStateValue = .authenticated
         client.loggedInUserValue = makeUser(email: email)
         await waitUntil(sut.$loggedInUser) { $0?.email == email }
+        return observation
+    }
+
+    /// Starts observing a signed-out session and returns once the observation follows the updates. The restore
+    /// reports signed in, such as a session that ends right after it, so only the first update can clear the
+    /// stale user.
+    private func startObservingSignedOut(
+        _ sut: SettingsRootViewModel,
+        client: AuthenticationClientFake
+    ) async -> Task<Void, Never> {
+        client.restoreStateResult = .success(.authenticated)
+        sut.loggedInUser = makeUser(email: "stale@example.com")
+        let observation = Task { await sut.observeAuthentication() }
+        await waitUntil(sut.$loggedInUser) { $0 == nil }
         return observation
     }
 

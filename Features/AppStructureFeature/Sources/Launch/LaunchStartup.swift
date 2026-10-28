@@ -360,9 +360,9 @@ public final class LaunchStartup {
                 Task { @MainActor in
                     guard let self, self.foregroundSyncState.willEnterForeground() else { return }
                     logger.info("Quran Sync: syncing after returning to the foreground")
-                    // MobileSync syncs only while a user is signed in. Waiting a few seconds lets a quick
-                    // switch away and back sync once.
-                    quranDataService.triggerSync(immediately: false)
+                    // MobileSync syncs only while a user is signed in, a few seconds later so a quick switch
+                    // away and back syncs once, and records the run as a return to the foreground.
+                    quranDataService.syncOnForeground()
                 }
             },
         ]

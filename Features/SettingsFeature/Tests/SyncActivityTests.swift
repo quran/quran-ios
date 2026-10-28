@@ -204,13 +204,29 @@ final class SyncActivityTests: XCTestCase {
 
         let summary = SyncStatusSummary(activity, style: .card)
 
-        // The time starts the line, so its first letter is capitalized, such as "Now".
+        // The time starts the line, so its first letter is capitalized, such as "Just now".
         let timeAgo = syncedAt.timeAgo()
         XCTAssertEqual(summary.icon, .synced)
         XCTAssertEqual(summary.tone, .normal)
         XCTAssertEqual(summary.title, l("sync.status.synced.short"))
         XCTAssertEqual(summary.detail, timeAgo.prefix(1).capitalized(with: .fixedCurrentLocaleNumbers) + timeAgo.dropFirst())
         XCTAssertFalse(summary.hasHeldItems)
+    }
+
+    func test_cardSummary_saysJustNow_forASyncInTheLastMinute() {
+        let syncedAt = Date().addingTimeInterval(-5)
+        let synced = SyncActivity(runs: [makeRun(.succeeded, endedAt: syncedAt.timeIntervalSince1970)])
+        let held = SyncActivity(
+            runs: [makeRun(.succeeded, endedAt: syncedAt.timeIntervalSince1970)],
+            heldItems: [heldItem(.note, id: "n1", reason: .tooShort)]
+        )
+
+        let justNow = l("sync.status.just-now")
+        XCTAssertEqual(
+            SyncStatusSummary(synced, style: .card).detail,
+            justNow.prefix(1).capitalized(with: .fixedCurrentLocaleNumbers) + justNow.dropFirst()
+        )
+        XCTAssertEqual(SyncStatusSummary(held, style: .card).detail, lFormat("sync.status.everything-else-synced", justNow))
     }
 
     /// The card keeps offering to review held items while it syncs or after a failure.

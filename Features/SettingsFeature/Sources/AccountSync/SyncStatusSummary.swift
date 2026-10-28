@@ -91,11 +91,11 @@ struct SyncStatusSummary: Equatable {
             case (.card, nil):
                 tone = .normal
                 title = l("sync.status.synced.short")
-                detail = date.timeAgo().capitalizingFirstLetter()
+                detail = date.syncedTimeAgo().capitalizingFirstLetter()
             case (.card, let held?):
                 tone = .caution
                 title = held
-                detail = lFormat("sync.status.everything-else-synced", date.timeAgo())
+                detail = lFormat("sync.status.everything-else-synced", date.syncedTimeAgo())
             }
         case .neverSynced:
             icon = held == nil ? nil : .held

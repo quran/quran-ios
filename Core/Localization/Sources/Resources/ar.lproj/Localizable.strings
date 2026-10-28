@@ -475,6 +475,8 @@
 "sync.account.title" = "الحساب والمزامنة";
 // Sync status when the last sync succeeded: %@ is a relative time, such as "2 minutes ago".
 "sync.status.synced" = "تمت المزامنة %@";
+// How long ago a sync was when it was within the last minute, as in "Synced just now".
+"sync.status.just-now" = "قبل لحظات";
 // Sync status before the first sync with Quran.com.
 "sync.status.never-synced" = "لم تتم المزامنة بعد";
 // Sync status while a sync runs.

@@ -3,6 +3,7 @@
 import Foundation
 import Localization
 import MobileSync
+import NoorUI
 import XCTest
 @testable import SettingsFeature
 
@@ -124,6 +125,24 @@ final class SyncActivityTests: XCTestCase {
     }
 
     // MARK: Status summary
+
+    func test_summary_saysSyncedJustNow_withinAMinute() {
+        let summary = SyncStatusSummary(SyncActivity(status: .succeeded(at: Date().addingTimeInterval(-5))))
+
+        XCTAssertEqual(summary.title, lFormat("sync.status.synced", l("sync.status.just-now")))
+    }
+
+    func test_syncedTimeAgo_saysJustNow_forTheLastMinuteAndASlightlyAheadClock() {
+        XCTAssertEqual(Date().addingTimeInterval(-59).syncedTimeAgo(), l("sync.status.just-now"))
+        XCTAssertEqual(Date().addingTimeInterval(30).syncedTimeAgo(), l("sync.status.just-now"))
+    }
+
+    func test_syncedTimeAgo_saysHowLongAgo_afterAMinute() {
+        let twoHoursAgo = Date().addingTimeInterval(-2 * 60 * 60)
+
+        XCTAssertEqual(twoHoursAgo.syncedTimeAgo(), twoHoursAgo.timeAgo())
+        XCTAssertNotEqual(twoHoursAgo.syncedTimeAgo(), l("sync.status.just-now"))
+    }
 
     func test_summary_showsHeldCount_whenSyncedWithHeldItems() {
         let activity = SyncActivity(

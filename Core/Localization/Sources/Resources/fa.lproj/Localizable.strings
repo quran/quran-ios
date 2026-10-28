@@ -727,6 +727,8 @@
 "sync.account.title" = "حساب و همگام‌سازی";
 // Sync status when the last sync succeeded: %@ is a relative time, such as "2 minutes ago".
 "sync.status.synced" = "%@ همگام‌سازی شد";
+// How long ago a sync was when it was within the last minute, as in "Synced just now".
+"sync.status.just-now" = "همین حالا";
 // Sync status before the first sync with Quran.com.
 "sync.status.never-synced" = "هنوز همگام‌سازی نشده";
 // Sync status while a sync runs.

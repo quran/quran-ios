@@ -64,7 +64,7 @@ struct SyncStatusSummary: Equatable {
             button = .tryAgain
         case .synced(let date):
             icon = held == nil ? .synced : .held
-            title = lFormat("sync.status.synced", date.timeAgo())
+            title = lFormat("sync.status.synced", date.syncedTimeAgo())
             detail = held ?? l("sync.status.all-items")
             button = .syncNow
         case .neverSynced:
@@ -82,5 +82,17 @@ struct SyncStatusSummary: Equatable {
     let title: String
     let detail: String
     let button: Button
+}
+
+extension Date {
+    /// How long ago a sync was, saying "just now" for the last minute, where the system says "now".
+    func syncedTimeAgo() -> String {
+        let elapsed = Date().timeIntervalSince(self)
+        // A clock a little ahead of the server's can put a sync just after now.
+        if elapsed < 60, elapsed > -60 * 60 {
+            return l("sync.status.just-now")
+        }
+        return timeAgo()
+    }
 }
 #endif

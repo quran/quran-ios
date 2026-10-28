@@ -30,14 +30,14 @@ final class SyncActivityTests: XCTestCase {
         let error = MobileSyncRunError(kind: .network, httpStatus: nil, serverCode: nil, message: "offline")
         let activity = SyncActivity(runs: [makeRun(.failed, endedAt: 200, error: error), makeRun(.succeeded, endedAt: 100)])
 
-        XCTAssertEqual(activity.state, .failed(error))
+        XCTAssertEqual(activity.state, .failed(error.kind))
     }
 
     func test_state_isFailed_whenTheStatusFailedAfterTheLatestRun() {
         let error = MobileSyncRunError(kind: .server, httpStatus: 503, serverCode: nil, message: "unavailable")
         let activity = SyncActivity(status: .failed(at: date(300), error: error), runs: [makeRun(.succeeded, endedAt: 100)])
 
-        XCTAssertEqual(activity.state, .failed(error))
+        XCTAssertEqual(activity.state, .failed(error.kind))
     }
 
     func test_state_isSynced_whenARunSucceededAfterTheFailedStatus() {
@@ -52,7 +52,7 @@ final class SyncActivityTests: XCTestCase {
         let error = MobileSyncRunError(kind: .rejected, httpStatus: 400, serverCode: nil, message: "bad")
         let activity = SyncActivity(runs: [makeRun(.pulledOnly, endedAt: 300), makeRun(.failed, endedAt: 200, error: error)])
 
-        XCTAssertEqual(activity.state, .failed(error))
+        XCTAssertEqual(activity.state, .failed(error.kind))
     }
 
     func test_state_ignoresCancelledRuns() {
@@ -95,6 +95,12 @@ final class SyncActivityTests: XCTestCase {
         XCTAssertEqual(summary.title, l("sync.status.failed"))
         XCTAssertEqual(summary.detail, l("sync.error.network"))
         XCTAssertEqual(summary.button, .tryAgain)
+    }
+
+    func test_summary_showsAnUnknownFailure_whenAFailedRunHasNoError() {
+        let summary = SyncStatusSummary(SyncActivity(runs: [makeRun(.failed, endedAt: 100)]))
+
+        XCTAssertEqual(summary.detail, l("sync.error.unknown"))
     }
 
     func test_summary_disablesTheButtonWhileSyncing() {

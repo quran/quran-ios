@@ -51,10 +51,10 @@ struct SyncStatusSummary: Equatable {
             title = l("sync.status.syncing")
             detail = l("sync.status.sending")
             button = .syncing
-        case .failed(let error):
+        case .failed(let reason):
             icon = .failed
             title = l("sync.status.failed")
-            detail = error?.kind.localizedDescription ?? l("sync.error.paused")
+            detail = reason?.localizedDescription ?? l("sync.error.paused")
             button = .tryAgain
         case .synced(let date):
             icon = held == nil ? .synced : .held

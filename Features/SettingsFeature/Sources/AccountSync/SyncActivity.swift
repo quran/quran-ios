@@ -14,8 +14,8 @@ import VLogging
 struct SyncActivity: Equatable {
     enum State: Equatable {
         case syncing
-        /// The latest sync failed. `error` is `nil` when it only couldn't send the local changes.
-        case failed(MobileSyncRunError?)
+        /// The latest sync failed for `reason`, which is `nil` when it only couldn't send the local changes.
+        case failed(MobileSyncRunError.Kind?)
         case synced(at: Date)
         case neverSynced
     }
@@ -40,14 +40,14 @@ struct SyncActivity: Equatable {
         }
         let latestRun = runs.first { $0.result != .cancelled }
         if case .failed(let failedAt, let error) = status, latestRun.map({ $0.endedAt <= failedAt }) ?? true {
-            return .failed(error)
+            return .failed(error.kind)
         }
         switch latestRun?.result {
         case .failed:
-            return .failed(latestRun?.error)
+            return .failed(latestRun?.error?.kind ?? .unknown)
         case .pulledOnly:
             // Pushes stay paused after a failure until a sync that sends the changes succeeds.
-            return .failed(runs.first { $0.result == .failed }?.error)
+            return .failed(runs.first { $0.result == .failed }?.error?.kind)
         default:
             break
         }

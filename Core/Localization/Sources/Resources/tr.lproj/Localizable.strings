@@ -800,3 +800,5 @@
 "sync.sign-out.unsynced-lost" = "Çıkış yaparsanız eşitlenmemiş her şey kaybolur.";
 // Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
 "sync.sign-out.review" = "İncele";
+// Button on an item that doesn't sync: opens its note editor or renames its collection.
+"sync.held.edit" = "Düzenle";

@@ -23,7 +23,7 @@ final class SyncActivityViewModelTests: XCTestCase {
 
     /// The test database never syncs, so the screen has no runs and nothing held.
     func test_start_followsTheSyncActivity() async {
-        let sut = SyncActivityViewModel(quranDataService: database.quranDataService)
+        let sut = makeSUT()
         let activityArrived = expectation(description: "The sync activity arrived")
         activityArrived.expectedFulfillmentCount = 3
         activityArrived.assertForOverFulfill = false
@@ -43,7 +43,7 @@ final class SyncActivityViewModelTests: XCTestCase {
         try await database.quranDataService.createNote(
             body: "Reflection", startSura: 18, startAyah: 10, endSura: 18, endAyah: 10, timestamp: Date()
         )
-        let sut = SyncActivityViewModel(quranDataService: database.quranDataService)
+        let sut = makeSUT()
         let notesArrived = expectation(description: "The notes arrived")
         let recording = sut.$lookup.first { !$0.notesByID.isEmpty }.sink { _ in notesArrived.fulfill() }
         let observation = Task { await sut.start() }
@@ -58,6 +58,13 @@ final class SyncActivityViewModelTests: XCTestCase {
     // MARK: Private
 
     private let database = MobileSyncTestDatabase.shared
+
+    private func makeSUT() -> SyncActivityViewModel {
+        SyncActivityViewModel(
+            quranDataService: database.quranDataService,
+            editor: SyncActivityBuilder(container: AppDependenciesStub()).heldItemEditor(navigationController: nil)
+        )
+    }
 }
 
 #endif

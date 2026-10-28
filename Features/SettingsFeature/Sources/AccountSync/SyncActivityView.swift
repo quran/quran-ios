@@ -20,8 +20,10 @@ struct SyncActivityView: View {
             heldRows: viewModel.heldRows,
             runs: viewModel.runs,
             start: { await viewModel.start() },
-            syncNow: { viewModel.syncNow() }
+            syncNow: { viewModel.syncNow() },
+            edit: { await viewModel.editor.edit($0) }
         )
+        .heldItemEditing(viewModel.editor)
     }
 }
 
@@ -31,6 +33,7 @@ private struct SyncActivityViewUI: View {
     let runs: [SyncRunRow]
     let start: AsyncAction
     let syncNow: Action
+    let edit: @MainActor (HeldItemRow.Edit) async -> Void
 
     var body: some View {
         NoorList {
@@ -47,7 +50,11 @@ private struct SyncActivityViewUI: View {
                     footer: l("sync.held.footer")
                 ) {
                     ForEach(heldRows) { row in
-                        HeldItemRowView(row: row)
+                        HeldItemRowView(row: row) {
+                            if let rowEdit = row.edit {
+                                HeldItemEditButton(edit: rowEdit, action: edit)
+                            }
+                        }
                     }
                 }
             }
@@ -90,7 +97,8 @@ private struct SyncActivityViewUI: View {
             )),
         ],
         start: {},
-        syncNow: {}
+        syncNow: {},
+        edit: { _ in }
     )
 }
 #endif

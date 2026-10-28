@@ -282,12 +282,14 @@ final class AccountSyncViewModelTests: XCTestCase {
         signOut: @escaping @MainActor () async throws -> Void = {},
         navigationController: UINavigationController? = nil
     ) -> AccountSyncViewModel {
-        AccountSyncViewModel(
+        let container = AppDependenciesStub()
+        return AccountSyncViewModel(
             user: nil,
             authenticationClient: client,
             quranDataService: database.quranDataService,
             quranProfileURL: URL(string: "https://quran.com/profile")!,
-            syncActivityBuilder: SyncActivityBuilder(container: AppDependenciesStub()),
+            syncActivityBuilder: SyncActivityBuilder(container: container),
+            editor: SyncActivityBuilder(container: container).heldItemEditor(navigationController: navigationController),
             signOut: signOut,
             navigationController: navigationController
         )

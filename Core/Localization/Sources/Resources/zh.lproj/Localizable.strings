@@ -863,3 +863,5 @@
 "sync.sign-out.unsynced-lost" = "如果退出登录，所有尚未同步的内容都将丢失。";
 // Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
 "sync.sign-out.review" = "查看";
+// Button on an item that doesn't sync: opens its note editor or renames its collection.
+"sync.held.edit" = "编辑";

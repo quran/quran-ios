@@ -23,6 +23,7 @@ final class AccountSyncViewModel: ObservableObject {
         quranDataService: MobileSyncDataService,
         quranProfileURL: URL,
         syncActivityBuilder: SyncActivityBuilder,
+        editor: HeldItemEditor,
         signOut: @escaping @MainActor () async throws -> Void,
         navigationController: UINavigationController?
     ) {
@@ -31,6 +32,7 @@ final class AccountSyncViewModel: ObservableObject {
         self.quranDataService = quranDataService
         self.quranProfileURL = quranProfileURL
         self.syncActivityBuilder = syncActivityBuilder
+        self.editor = editor
         self.signOut = signOut
         self.navigationController = navigationController
     }
@@ -39,6 +41,9 @@ final class AccountSyncViewModel: ObservableObject {
 
     /// How many held items and runs the screen shows before linking to the full list.
     static let previewCount = 3
+
+    /// Fixes the held items.
+    let editor: HeldItemEditor
 
     @Published private(set) var user: MobileSyncUser?
     @Published private(set) var activity = SyncActivity()
@@ -83,7 +88,10 @@ final class AccountSyncViewModel: ObservableObject {
     /// Opens every held item and every recent sync.
     func showActivity() {
         logger.info("Account & Sync: show Sync activity")
-        navigationController?.pushViewController(syncActivityBuilder.build(), animated: true)
+        navigationController?.pushViewController(
+            syncActivityBuilder.build(navigationController: navigationController),
+            animated: true
+        )
     }
 
     func openQuranComProfile() {

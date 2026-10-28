@@ -859,3 +859,5 @@
 "sync.sign-out.unsynced-lost" = "Chiqsangiz, sinxronlanmagan hamma narsa yo‘qoladi.";
 // Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
 "sync.sign-out.review" = "Ko‘rib chiqish";
+// Button on an item that doesn't sync: opens its note editor or renames its collection.
+"sync.held.edit" = "Tahrirlash";

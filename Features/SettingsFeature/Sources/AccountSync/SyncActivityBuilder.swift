@@ -6,8 +6,10 @@
 //  Created by Mohamed Afifi on 2026-10-28.
 //
 
+import AnnotationsService
 import AppDependencies
 import Localization
+import NoteEditorFeature
 import SwiftUI
 import UIKit
 
@@ -15,11 +17,23 @@ import UIKit
 struct SyncActivityBuilder {
     let container: AppDependencies
 
-    func build() -> UIViewController {
-        let viewModel = SyncActivityViewModel(quranDataService: container.quranDataService)
+    func build(navigationController: UINavigationController?) -> UIViewController {
+        let viewModel = SyncActivityViewModel(
+            quranDataService: container.quranDataService,
+            editor: heldItemEditor(navigationController: navigationController)
+        )
         let viewController = UIHostingController(rootView: SyncActivityView(viewModel: viewModel))
         viewController.title = l("sync.activity.title")
         return viewController
+    }
+
+    func heldItemEditor(navigationController: UINavigationController?) -> HeldItemEditor {
+        HeldItemEditor(
+            noteService: container.mobileSyncNoteService(),
+            collectionService: container.ayahBookmarkCollectionService(),
+            noteEditorBuilder: NoteEditorBuilder(container: container),
+            navigationController: navigationController
+        )
     }
 }
 #endif

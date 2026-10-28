@@ -21,12 +21,14 @@ struct AccountSyncBuilder {
         signOut: @escaping @MainActor () async throws -> Void,
         navigationController: UINavigationController?
     ) -> UIViewController {
+        let syncActivityBuilder = SyncActivityBuilder(container: container)
         let viewModel = AccountSyncViewModel(
             user: user,
             authenticationClient: container.authenticationClient,
             quranDataService: container.quranDataService,
             quranProfileURL: container.quranProfileURL,
-            syncActivityBuilder: SyncActivityBuilder(container: container),
+            syncActivityBuilder: syncActivityBuilder,
+            editor: syncActivityBuilder.heldItemEditor(navigationController: navigationController),
             signOut: signOut,
             navigationController: navigationController
         )

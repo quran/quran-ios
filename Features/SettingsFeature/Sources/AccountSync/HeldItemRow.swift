@@ -21,6 +21,14 @@ struct HeldItemRow: Identifiable {
         case bookmark
     }
 
+    /// How the user fixes the item.
+    enum Edit: Equatable {
+        /// Opens the note editor; a note's verses never change, so only its text can.
+        case note(id: String)
+        /// Renames the collection, now called `name`.
+        case collection(id: String, name: String)
+    }
+
     // MARK: Internal
 
     let item: MobileSyncHeldItem
@@ -29,6 +37,8 @@ struct HeldItemRow: Identifiable {
     let reason: String
     /// How many held items wait on this one, or `nil` when none do.
     let waiting: String?
+    /// `nil` when editing can't fix the item, such as a deleted note.
+    let edit: Edit?
 
     var id: String {
         [item.type.idPrefix, item.collectionID, item.id].compactMap { $0 }.joined(separator: "/")
@@ -43,7 +53,8 @@ struct HeldItemRow: Identifiable {
                 kind: item.type.rowKind,
                 title: title(of: item, lookup: lookup),
                 reason: reason(for: item),
-                waiting: waiting(waitingItems)
+                waiting: waiting(waitingItems),
+                edit: edit(item, lookup: lookup)
             )
         }
     }
@@ -80,6 +91,25 @@ struct HeldItemRow: Identifiable {
             return .localizedFormat("sync.held.reading-bookmark", .text(name))
         case .readingSession:
             return .text(l("sync.held.reading-progress"))
+        }
+    }
+
+    private static func edit(_ item: MobileSyncHeldItem, lookup: HeldItemLookup) -> Edit? {
+        switch (item.type, item.reason) {
+        case (.note, .tooShort), (.note, .tooLong), (.note, .rejectedByServer):
+            guard lookup.notesByID[item.id] != nil else {
+                return nil
+            }
+            return .note(id: item.id)
+        case (.collection, .tooShort), (.collection, .tooLong), (.collection, .reservedName),
+             (.collection, .rejectedByServer), (.collection, .waitingOnOtherItem):
+            // Favorites and read-only collections can't be renamed.
+            guard let collection = lookup.collectionsByID[item.id], !collection.isDefault, !collection.isReadOnly else {
+                return nil
+            }
+            return .collection(id: item.id, name: collection.name)
+        default:
+            return nil
         }
     }
 

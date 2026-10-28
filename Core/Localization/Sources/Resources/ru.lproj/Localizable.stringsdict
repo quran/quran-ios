@@ -170,8 +170,8 @@
             <string>%d попытки</string>
         </dict>
     </dict>
-    <!-- Sign-out confirmation: how many items haven't synced and would be lost. -->
-    <key>sync.sign-out.unsynced</key>
+    <!-- Sign-out warning: how many changes the next sync would send, which signing out loses. -->
+    <key>sync.sign-out.pending</key>
     <dict>
         <key>NSStringLocalizedFormatKey</key>
         <string>%#@items@</string>
@@ -182,13 +182,34 @@
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>one</key>
-            <string>%d элемент ещё не синхронизирован с Quran.com и будет потерян, если вы выйдете.</string>
+            <string>%d изменение ещё ждёт синхронизации с Quran.com.</string>
             <key>few</key>
-            <string>%d элемента ещё не синхронизированы с Quran.com и будут потеряны, если вы выйдете.</string>
+            <string>%d изменения ещё ждут синхронизации с Quran.com.</string>
             <key>many</key>
-            <string>%d элементов ещё не синхронизированы с Quran.com и будут потеряны, если вы выйдете.</string>
+            <string>%d изменений ещё ждут синхронизации с Quran.com.</string>
             <key>other</key>
-            <string>%d элемента ещё не синхронизированы с Quran.com и будут потеряны, если вы выйдете.</string>
+            <string>%d изменения ещё ждут синхронизации с Quran.com.</string>
+        </dict>
+    </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them, which signing out loses. -->
+    <key>sync.sign-out.held</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d элемент не синхронизируется, пока вы его не исправите.</string>
+            <key>few</key>
+            <string>%d элемента не синхронизируются, пока вы их не исправите.</string>
+            <key>many</key>
+            <string>%d элементов не синхронизируются, пока вы их не исправите.</string>
+            <key>other</key>
+            <string>%d элемента не синхронизируются, пока вы их не исправите.</string>
         </dict>
     </dict>
 </dict>

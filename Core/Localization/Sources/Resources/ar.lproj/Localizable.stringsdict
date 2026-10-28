@@ -199,8 +199,8 @@
             <string>%d محاولة</string>
         </dict>
     </dict>
-    <!-- Sign-out confirmation: how many items haven't synced and would be lost. -->
-    <key>sync.sign-out.unsynced</key>
+    <!-- Sign-out warning: how many changes the next sync would send, which signing out loses. -->
+    <key>sync.sign-out.pending</key>
     <dict>
         <key>NSStringLocalizedFormatKey</key>
         <string>%#@items@</string>
@@ -211,17 +211,42 @@
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>zero</key>
-            <string>%d عنصر لم تتم مزامنته مع Quran.com بعد وسيُفقد إذا سجّلت الخروج.</string>
+            <string>%d تغيير ما زال بانتظار المزامنة مع Quran.com.</string>
             <key>one</key>
-            <string>عنصر واحد لم تتم مزامنته مع Quran.com بعد وسيُفقد إذا سجّلت الخروج.</string>
+            <string>تغيير واحد ما زال بانتظار المزامنة مع Quran.com.</string>
             <key>two</key>
-            <string>عنصران لم تتم مزامنتهما مع Quran.com بعد وسيُفقدان إذا سجّلت الخروج.</string>
+            <string>تغييران ما زالا بانتظار المزامنة مع Quran.com.</string>
             <key>few</key>
-            <string>%d عناصر لم تتم مزامنتها مع Quran.com بعد وستُفقد إذا سجّلت الخروج.</string>
+            <string>%d تغييرات ما زالت بانتظار المزامنة مع Quran.com.</string>
             <key>many</key>
-            <string>%d عنصرًا لم تتم مزامنته مع Quran.com بعد وسيُفقد إذا سجّلت الخروج.</string>
+            <string>%d تغييرًا ما زال بانتظار المزامنة مع Quran.com.</string>
             <key>other</key>
-            <string>%d عنصر لم تتم مزامنته مع Quran.com بعد وسيُفقد إذا سجّلت الخروج.</string>
+            <string>%d تغيير ما زال بانتظار المزامنة مع Quran.com.</string>
+        </dict>
+    </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them, which signing out loses. -->
+    <key>sync.sign-out.held</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>%d عنصر لا يمكن مزامنته حتى تصلحه.</string>
+            <key>one</key>
+            <string>عنصر واحد لا يمكن مزامنته حتى تصلحه.</string>
+            <key>two</key>
+            <string>عنصران لا يمكن مزامنتهما حتى تصلحهما.</string>
+            <key>few</key>
+            <string>%d عناصر لا يمكن مزامنتها حتى تصلحها.</string>
+            <key>many</key>
+            <string>%d عنصرًا لا يمكن مزامنته حتى تصلحه.</string>
+            <key>other</key>
+            <string>%d عنصر لا يمكن مزامنته حتى تصلحه.</string>
         </dict>
     </dict>
 </dict>

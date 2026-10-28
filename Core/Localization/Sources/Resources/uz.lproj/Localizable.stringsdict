@@ -138,8 +138,8 @@
             <string>%d ta urinish</string>
         </dict>
     </dict>
-    <!-- Sign-out confirmation: how many items haven't synced and would be lost. -->
-    <key>sync.sign-out.unsynced</key>
+    <!-- Sign-out warning: how many changes the next sync would send, which signing out loses. -->
+    <key>sync.sign-out.pending</key>
     <dict>
         <key>NSStringLocalizedFormatKey</key>
         <string>%#@items@</string>
@@ -150,9 +150,26 @@
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>one</key>
-            <string>%d ta element Quran.com bilan hali sinxronlanmagan va chiqsangiz yo‘qoladi.</string>
+            <string>%d ta o‘zgarish hali Quran.com bilan sinxronlanishini kutmoqda.</string>
             <key>other</key>
-            <string>%d ta element Quran.com bilan hali sinxronlanmagan va chiqsangiz yo‘qoladi.</string>
+            <string>%d ta o‘zgarish hali Quran.com bilan sinxronlanishini kutmoqda.</string>
+        </dict>
+    </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them, which signing out loses. -->
+    <key>sync.sign-out.held</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d ta element siz tuzatmaguningizcha sinxronlanmaydi.</string>
+            <key>other</key>
+            <string>%d ta element siz tuzatmaguningizcha sinxronlanmaydi.</string>
         </dict>
     </dict>
 </dict>

@@ -44,12 +44,18 @@ final class AccountSyncViewModel: ObservableObject {
     @Published private(set) var activity = SyncActivity()
     @Published private(set) var lookup = HeldItemLookup()
     @Published var isSignOutConfirmationPresented = false
-    /// How many items haven't synced when sign-out was requested, or `nil` when it couldn't be read.
-    @Published private(set) var unsyncedCount: Int?
+    /// The items that hadn't synced when sign-out was requested, or `nil` when they couldn't be read.
+    @Published private(set) var unsyncedItems: MobileSyncUnsyncedItemCounts?
+    /// Set to scroll to the items that don't sync; the view clears it once it has.
+    @Published var scrollsToHeldItems = false
     @Published var error: Error?
 
     var status: SyncStatusSummary {
         SyncStatusSummary(activity)
+    }
+
+    var signOutWarning: SignOutWarning {
+        SignOutWarning(unsynced: unsyncedItems)
     }
 
     var heldRows: [HeldItemRow] {
@@ -90,12 +96,18 @@ final class AccountSyncViewModel: ObservableObject {
     func requestSignOut() async {
         logger.info("Quran Sync: requested sign out confirmation from Account & Sync")
         do {
-            unsyncedCount = try await quranDataService.unsyncedItemCountSequence().first { _ in true }
+            unsyncedItems = try await quranDataService.unsyncedItemsSequence().first { _ in true }
         } catch {
-            logger.error("Quran Sync: failed to read the unsynced item count before signing out: \(error)")
-            unsyncedCount = nil
+            logger.error("Quran Sync: failed to read the unsynced items before signing out: \(error)")
+            unsyncedItems = nil
         }
         isSignOutConfirmationPresented = true
+    }
+
+    /// Stays on this screen instead of signing out, showing the items that don't sync when there are any.
+    func reviewUnsyncedItems() {
+        logger.info("Quran Sync: reviewing unsynced items instead of signing out")
+        scrollsToHeldItems = !heldRows.isEmpty
     }
 
     func signOutOfQuranCom() async {

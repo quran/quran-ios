@@ -1,47 +1,66 @@
 #if QURAN_SYNC
 import Localization
+import MobileSync
 import SwiftUI
+
+/// What the sign-out confirmation says: that everything synced, or what signing out loses.
+struct SignOutWarning: Equatable {
+    // MARK: Lifecycle
+
+    /// - Parameter unsynced: The items that haven't synced, or `nil` when they couldn't be read.
+    init(unsynced: MobileSyncUnsyncedItemCounts?) {
+        guard let unsynced else {
+            message = l("sync.sign-out.unsynced-unknown")
+            offersReview = true
+            return
+        }
+        guard unsynced.pending + unsynced.held > 0 else {
+            message = l("setting.quran_account.sign_out.confirmation.message")
+            offersReview = false
+            return
+        }
+        let counts = [
+            unsynced.pending > 0 ? lFormat("sync.sign-out.pending", unsynced.pending) : nil,
+            unsynced.held > 0 ? lFormat("sync.sign-out.held", unsynced.held) : nil,
+        ]
+        message = (counts.compactMap { $0 } + [l("sync.sign-out.unsynced-lost")]).joined(separator: "\n")
+        offersReview = true
+    }
+
+    // MARK: Internal
+
+    let message: String
+    /// Whether it offers Review, to look at what hasn't synced instead of signing out, in place of Cancel.
+    let offersReview: Bool
+}
 
 extension View {
     /// Confirms sign-out, which removes the synced bookmarks and notes from this device and loses the changes that
     /// haven't synced yet.
-    ///
-    /// - Parameter unsyncedCount: How many items haven't synced, or `nil` when it couldn't be read.
     @MainActor
     func signOutConfirmation(
         isPresented: Binding<Bool>,
-        unsyncedCount: Int?,
-        syncNow: @escaping @MainActor () -> Void,
+        warning: SignOutWarning,
+        review: @escaping @MainActor () -> Void,
         signOut: @escaping @MainActor () async -> Void
     ) -> some View {
         alert(
             l("setting.quran_account.sign_out.confirmation.title"),
             isPresented: isPresented
         ) {
-            Button(lAndroid("cancel"), role: .cancel) {}
-            if unsyncedCount != 0 {
-                Button(l("sync.action.sync-now")) {
-                    syncNow()
+            if warning.offersReview {
+                Button(l("sync.sign-out.review"), role: .cancel) {
+                    review()
                 }
+            } else {
+                Button(lAndroid("cancel"), role: .cancel) {}
             }
             Button(l("setting.quran_account.sign_out"), role: .destructive) {
                 Task { await signOut() }
             }
         } message: {
-            Text(signOutConfirmationMessage(unsyncedCount: unsyncedCount))
+            Text(warning.message)
         }
-    }
-}
-
-/// Warns about the changes signing out loses, or says that everything synced.
-func signOutConfirmationMessage(unsyncedCount: Int?) -> String {
-    switch unsyncedCount {
-    case 0:
-        l("setting.quran_account.sign_out.confirmation.message")
-    case let count?:
-        lFormat("sync.sign-out.unsynced", count)
-    case nil:
-        l("sync.sign-out.unsynced-unknown")
     }
 }
 #endif

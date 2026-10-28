@@ -21,6 +21,7 @@ struct AccountSyncView: View {
             heldRows: viewModel.heldRows,
             recentRuns: viewModel.recentRuns,
             error: $viewModel.error,
+            scrollsToHeldItems: $viewModel.scrollsToHeldItems,
             start: { await viewModel.start() },
             syncNow: { viewModel.syncNow() },
             showActivity: { viewModel.showActivity() },
@@ -29,8 +30,8 @@ struct AccountSyncView: View {
         )
         .signOutConfirmation(
             isPresented: $viewModel.isSignOutConfirmationPresented,
-            unsyncedCount: viewModel.unsyncedCount,
-            syncNow: { viewModel.syncNow() },
+            warning: viewModel.signOutWarning,
+            review: { viewModel.reviewUnsyncedItems() },
             signOut: { await viewModel.signOutOfQuranCom() }
         )
     }
@@ -44,6 +45,7 @@ private struct AccountSyncViewUI: View {
     let heldRows: [HeldItemRow]
     let recentRuns: [SyncRunRow]
     @Binding var error: Error?
+    @Binding var scrollsToHeldItems: Bool
     let start: AsyncAction
     let syncNow: Action
     let showActivity: Action
@@ -51,6 +53,29 @@ private struct AccountSyncViewUI: View {
     let signOut: AsyncAction
 
     var body: some View {
+        ScrollViewReader { proxy in
+            list
+                .onChange(of: scrollsToHeldItems) { scrolls in
+                    guard scrolls else { return }
+                    scrollsToHeldItems = false
+                    if let firstHeldRow = heldRows.first {
+                        withAnimation(NoorAnimation.standard) {
+                            proxy.scrollTo(firstHeldRow.id, anchor: .center)
+                        }
+                    }
+                }
+        }
+        .task { await start() }
+        .errorAlert(error: $error)
+        .noorListIconColumn()
+    }
+
+    // MARK: Private
+
+    @ScaledMetric private var avatarLength = 88.0
+    @ScaledMetric private var headerSpacing = 6.0
+
+    private var list: some View {
         NoorList {
             Section {
                 header
@@ -109,15 +134,7 @@ private struct AccountSyncViewUI: View {
                 )
             }
         }
-        .task { await start() }
-        .errorAlert(error: $error)
-        .noorListIconColumn()
     }
-
-    // MARK: Private
-
-    @ScaledMetric private var avatarLength = 88.0
-    @ScaledMetric private var headerSpacing = 6.0
 
     private var header: some View {
         VStack(spacing: headerSpacing) {
@@ -177,6 +194,7 @@ private struct AccountSyncViewUI: View {
             )),
         ],
         error: .constant(nil),
+        scrollsToHeldItems: .constant(false),
         start: {},
         syncNow: {},
         showActivity: {},

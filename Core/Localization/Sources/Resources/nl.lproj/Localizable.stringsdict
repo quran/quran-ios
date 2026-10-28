@@ -138,8 +138,8 @@
             <string>%d pogingen</string>
         </dict>
     </dict>
-    <!-- Sign-out confirmation: how many items haven't synced and would be lost. -->
-    <key>sync.sign-out.unsynced</key>
+    <!-- Sign-out warning: how many changes the next sync would send, which signing out loses. -->
+    <key>sync.sign-out.pending</key>
     <dict>
         <key>NSStringLocalizedFormatKey</key>
         <string>%#@items@</string>
@@ -150,9 +150,26 @@
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>one</key>
-            <string>%d item is nog niet met Quran.com gesynchroniseerd en gaat verloren als je uitlogt.</string>
+            <string>%d wijziging wacht nog op synchronisatie met Quran.com.</string>
             <key>other</key>
-            <string>%d items zijn nog niet met Quran.com gesynchroniseerd en gaan verloren als je uitlogt.</string>
+            <string>%d wijzigingen wachten nog op synchronisatie met Quran.com.</string>
+        </dict>
+    </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them, which signing out loses. -->
+    <key>sync.sign-out.held</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d item kan pas synchroniseren als je het oplost.</string>
+            <key>other</key>
+            <string>%d items kunnen pas synchroniseren als je ze oplost.</string>
         </dict>
     </dict>
 </dict>

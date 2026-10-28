@@ -122,8 +122,8 @@
             <string>%d 次尝试</string>
         </dict>
     </dict>
-    <!-- Sign-out confirmation: how many items haven't synced and would be lost. -->
-    <key>sync.sign-out.unsynced</key>
+    <!-- Sign-out warning: how many changes the next sync would send, which signing out loses. -->
+    <key>sync.sign-out.pending</key>
     <dict>
         <key>NSStringLocalizedFormatKey</key>
         <string>%#@items@</string>
@@ -134,7 +134,22 @@
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>other</key>
-            <string>%d 项尚未同步到 Quran.com，退出登录后将会丢失。</string>
+            <string>%d 项更改仍在等待同步到 Quran.com。</string>
+        </dict>
+    </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them, which signing out loses. -->
+    <key>sync.sign-out.held</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>other</key>
+            <string>%d 项在你修复之前无法同步。</string>
         </dict>
     </dict>
 </dict>

@@ -138,8 +138,8 @@
             <string>%d تلاش</string>
         </dict>
     </dict>
-    <!-- Sign-out confirmation: how many items haven't synced and would be lost. -->
-    <key>sync.sign-out.unsynced</key>
+    <!-- Sign-out warning: how many changes the next sync would send, which signing out loses. -->
+    <key>sync.sign-out.pending</key>
     <dict>
         <key>NSStringLocalizedFormatKey</key>
         <string>%#@items@</string>
@@ -150,9 +150,26 @@
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>one</key>
-            <string>%d مورد هنوز با Quran.com همگام‌سازی نشده و با خروج از دست می‌رود.</string>
+            <string>%d تغییر هنوز در انتظار همگام‌سازی با Quran.com است.</string>
             <key>other</key>
-            <string>%d مورد هنوز با Quran.com همگام‌سازی نشده‌اند و با خروج از دست می‌روند.</string>
+            <string>%d تغییر هنوز در انتظار همگام‌سازی با Quran.com است.</string>
+        </dict>
+    </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them, which signing out loses. -->
+    <key>sync.sign-out.held</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d مورد تا وقتی اصلاحش نکنید همگام‌سازی نمی‌شود.</string>
+            <key>other</key>
+            <string>%d مورد تا وقتی اصلاحشان نکنید همگام‌سازی نمی‌شوند.</string>
         </dict>
     </dict>
 </dict>

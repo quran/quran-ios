@@ -132,8 +132,8 @@
             <string>%d deneme</string>
         </dict>
     </dict>
-    <!-- Sign-out confirmation: how many items haven't synced and would be lost. -->
-    <key>sync.sign-out.unsynced</key>
+    <!-- Sign-out warning: how many changes the next sync would send, which signing out loses. -->
+    <key>sync.sign-out.pending</key>
     <dict>
         <key>NSStringLocalizedFormatKey</key>
         <string>%#@items@</string>
@@ -144,9 +144,26 @@
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>one</key>
-            <string>%d öğe henüz Quran.com ile eşitlenmedi ve çıkış yaparsanız kaybolur.</string>
+            <string>%d değişiklik hâlâ Quran.com ile eşitlenmeyi bekliyor.</string>
             <key>other</key>
-            <string>%d öğe henüz Quran.com ile eşitlenmedi ve çıkış yaparsanız kaybolur.</string>
+            <string>%d değişiklik hâlâ Quran.com ile eşitlenmeyi bekliyor.</string>
+        </dict>
+    </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them, which signing out loses. -->
+    <key>sync.sign-out.held</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d öğe siz düzeltene kadar eşitlenemez.</string>
+            <key>other</key>
+            <string>%d öğe siz düzeltene kadar eşitlenemez.</string>
         </dict>
     </dict>
 </dict>

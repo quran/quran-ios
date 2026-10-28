@@ -101,21 +101,19 @@ final class AccountSyncViewModelTests: XCTestCase {
         XCTAssertEqual(navigationController.topViewController?.title, l("sync.activity.title"))
     }
 
-    func test_requestSignOut_presentsTheConfirmation_withNothingUnsynced() async {
+    func test_requestSignOut_saysEverythingSynced_withNothingUnsynced() async {
         let sut = makeSUT(client: signedInClient(email: "user@example.com"))
 
         await sut.requestSignOut()
 
         XCTAssertTrue(sut.isSignOutConfirmationPresented)
-        XCTAssertEqual(sut.unsyncedCount, 0)
-        XCTAssertEqual(
-            signOutConfirmationMessage(unsyncedCount: sut.unsyncedCount),
-            l("setting.quran_account.sign_out.confirmation.message")
-        )
+        XCTAssertEqual(sut.unsyncedItems, MobileSyncUnsyncedItemCounts(pending: 0, held: 0))
+        XCTAssertEqual(sut.signOutWarning.message, l("setting.quran_account.sign_out.confirmation.message"))
+        XCTAssertFalse(sut.signOutWarning.offersReview)
     }
 
-    /// The test database never syncs, so a new note stays unsynced and signing out would lose it.
-    func test_requestSignOut_warnsAboutUnsyncedItems() async throws {
+    /// The test database never syncs, so a new note stays pending and signing out would lose it.
+    func test_requestSignOut_warnsAboutPendingChanges() async throws {
         try await database.quranDataService.createNote(
             body: "Reflection", startSura: 2, startAyah: 255, endSura: 2, endAyah: 255, timestamp: Date()
         )
@@ -124,12 +122,68 @@ final class AccountSyncViewModelTests: XCTestCase {
         await sut.requestSignOut()
 
         XCTAssertTrue(sut.isSignOutConfirmationPresented)
-        XCTAssertEqual(sut.unsyncedCount, 1)
-        XCTAssertEqual(signOutConfirmationMessage(unsyncedCount: sut.unsyncedCount), lFormat("sync.sign-out.unsynced", 1))
+        XCTAssertEqual(sut.unsyncedItems, MobileSyncUnsyncedItemCounts(pending: 1, held: 0))
+        XCTAssertEqual(
+            sut.signOutWarning.message,
+            [lFormat("sync.sign-out.pending", 1), l("sync.sign-out.unsynced-lost")].joined(separator: "\n")
+        )
+        XCTAssertTrue(sut.signOutWarning.offersReview)
     }
 
-    func test_signOutMessage_warnsWithoutACount_whenItCouldNotBeRead() {
-        XCTAssertEqual(signOutConfirmationMessage(unsyncedCount: nil), l("sync.sign-out.unsynced-unknown"))
+    func test_reviewUnsyncedItems_staysWithoutScrolling_whenNothingIsHeld() async throws {
+        try await database.quranDataService.createNote(
+            body: "Reflection", startSura: 2, startAyah: 255, endSura: 2, endAyah: 255, timestamp: Date()
+        )
+        let navigationController = UINavigationController(rootViewController: UIViewController())
+        navigationController.pushViewController(UIViewController(), animated: false)
+        var signOuts = 0
+        let sut = makeSUT(
+            client: signedInClient(email: "user@example.com"),
+            signOut: { signOuts += 1 },
+            navigationController: navigationController
+        )
+        await sut.requestSignOut()
+
+        sut.reviewUnsyncedItems()
+
+        XCTAssertFalse(sut.scrollsToHeldItems)
+        XCTAssertEqual(signOuts, 0)
+        XCTAssertEqual(navigationController.viewControllers.count, 2)
+    }
+
+    // MARK: Sign-out warning
+
+    func test_signOutWarning_countsItemsThatCannotSync() {
+        let warning = SignOutWarning(unsynced: MobileSyncUnsyncedItemCounts(pending: 0, held: 2))
+
+        XCTAssertEqual(warning.message, [lFormat("sync.sign-out.held", 2), l("sync.sign-out.unsynced-lost")].joined(separator: "\n"))
+        XCTAssertTrue(warning.offersReview)
+    }
+
+    func test_signOutWarning_countsPendingAndHeldItemsApart() {
+        let warning = SignOutWarning(unsynced: MobileSyncUnsyncedItemCounts(pending: 3, held: 1))
+
+        XCTAssertEqual(
+            warning.message,
+            [lFormat("sync.sign-out.pending", 3), lFormat("sync.sign-out.held", 1), l("sync.sign-out.unsynced-lost")]
+                .joined(separator: "\n")
+        )
+        XCTAssertTrue(warning.offersReview)
+    }
+
+    func test_signOutWarning_warnsWithoutCounts_whenTheyCouldNotBeRead() {
+        let warning = SignOutWarning(unsynced: nil)
+
+        XCTAssertEqual(warning.message, l("sync.sign-out.unsynced-unknown"))
+        XCTAssertTrue(warning.offersReview)
+    }
+
+    /// Plural rules pick the right form for one item and for several.
+    func test_signOutWarning_pluralizesTheCounts() {
+        XCTAssertEqual(lFormat("sync.sign-out.pending", 1), "1 change is still waiting to sync to Quran.com.")
+        XCTAssertEqual(lFormat("sync.sign-out.pending", 2), "2 changes are still waiting to sync to Quran.com.")
+        XCTAssertEqual(lFormat("sync.sign-out.held", 1), "1 item can't sync until you fix it.")
+        XCTAssertEqual(lFormat("sync.sign-out.held", 2), "2 items can't sync until you fix them.")
     }
 
     // MARK: Private

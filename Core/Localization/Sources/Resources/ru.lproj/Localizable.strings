@@ -853,3 +853,7 @@
 "sync.runs.see-all" = "Вся история";
 // Sign-out confirmation when the app couldn't count the changes that haven't synced.
 "sync.sign-out.unsynced-unknown" = "Изменения, которые ещё не синхронизированы с Quran.com, будут потеряны, если вы выйдете.";
+// Sign-out warning, after how many changes haven't synced: what signing out does to them.
+"sync.sign-out.unsynced-lost" = "При выходе всё несинхронизированное будет потеряно.";
+// Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
+"sync.sign-out.review" = "Просмотреть";

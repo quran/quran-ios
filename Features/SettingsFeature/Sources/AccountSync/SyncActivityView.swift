@@ -69,7 +69,7 @@ private struct SyncActivityViewUI: View {
     }
 
     /// How many runs MobileSync keeps.
-    private static let historyLimit = 50
+    private static let historyLimit = 100
 }
 
 #Preview {

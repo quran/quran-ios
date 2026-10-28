@@ -97,6 +97,10 @@ private struct SearchViewUI: View {
     @ViewBuilder
     var entry: some View {
         NoorList {
+            NoorBasicSection(title: l("search.tips.title")) {
+                NoorListItem(title: .text(l("search.tips.text")))
+            }
+
             NoorSection(title: l("search.recents.title"), recents.map(SelfIdentifiable.init)) { item in
                 NoorListItem(
                     image: .init(.search, color: .secondaryLabel),

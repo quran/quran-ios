@@ -18,6 +18,21 @@ extension Color {
         Color(UIColor(light: UIColor(rgb: 0x004D40), dark: UIColor(rgb: 0x039F85)))
     }
 
+    /// Amber for icons and text that need attention without being an error, such as items that don't sync.
+    public static var caution: Color {
+        Color(UIColor(light: UIColor(rgb: 0xA04B00), dark: UIColor(rgb: 0xFFB35C)))
+    }
+
+    /// The background of a card that holds ``caution`` content.
+    public static var cautionBackground: Color {
+        Color(UIColor(light: UIColor(rgb: 0xFFF4E5), dark: UIColor(rgb: 0x2E2210)))
+    }
+
+    /// Separates the rows of a ``cautionBackground`` card.
+    public static var cautionSeparator: Color {
+        Color(UIColor(light: UIColor(rgb: 0xF3DDBF), dark: UIColor(rgb: 0x4A3A20)))
+    }
+
     /// Highlights the recited verse and word. It stays the same whatever the app icon.
     static var recitation: Color {
         Color(UIColor.recitation)

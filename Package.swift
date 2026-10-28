@@ -1000,7 +1000,7 @@ private func featuresTargets() -> [[Target]] {
             "CoreDataModel",
             "ReciterServiceFake",
             "SystemDependenciesFake",
-        ]),
+        ] + mobileSyncTestSupportDependencies),
     ]
 }
 

@@ -10,9 +10,6 @@ import AppMigrationFeature
 import AppMigrator
 import AudioUpdater
 import Crashing
-#if QURAN_SYNC
-import MobileSync
-#endif
 import NoorUI
 import QuranKit
 import ReadingService
@@ -54,11 +51,6 @@ public final class LaunchStartup {
         if let foregroundObserver {
             notificationCenter.removeObserver(foregroundObserver)
         }
-        #if QURAN_SYNC
-        for observer in foregroundSyncObservers {
-            notificationCenter.removeObserver(observer)
-        }
-        #endif
     }
 
     // MARK: Public
@@ -115,8 +107,7 @@ public final class LaunchStartup {
     private var storeOpenStartupState = StoreOpenStartupState()
     private var foregroundObserver: NSObjectProtocol?
     #if QURAN_SYNC
-    private var foregroundSyncState = ForegroundSyncState()
-    private var foregroundSyncObservers: [NSObjectProtocol] = []
+    private var foregroundSync: ForegroundSync?
     #endif
 
     private func perform(_ action: ProtectedDataStartupState.Action, window: UIWindow) {
@@ -337,35 +328,12 @@ public final class LaunchStartup {
         Task { await coordinator.start() }
     }
 
-    /// Syncs each time the user returns to the app, so changes from other devices show without waiting for
-    /// the periodic sync. Launch already syncs, so the launch itself doesn't sync again.
+    /// Launch already syncs, so only later returns to the app sync.
     private func syncOnReturningToForeground() {
-        guard foregroundSyncObservers.isEmpty else { return }
-        let quranDataService = appBuilder.container.quranDataService
-        foregroundSyncObservers = [
-            notificationCenter.addObserver(
-                forName: UIApplication.didEnterBackgroundNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                Task { @MainActor in
-                    self?.foregroundSyncState.didEnterBackground()
-                }
-            },
-            notificationCenter.addObserver(
-                forName: UIApplication.willEnterForegroundNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                Task { @MainActor in
-                    guard let self, self.foregroundSyncState.willEnterForeground() else { return }
-                    logger.info("Quran Sync: syncing after returning to the foreground")
-                    // MobileSync syncs only while a user is signed in, a few seconds later so a quick switch
-                    // away and back syncs once, and records the run as a return to the foreground.
-                    quranDataService.syncOnForeground()
-                }
-            },
-        ]
+        guard foregroundSync == nil else { return }
+        let sync = ForegroundSync(quranDataService: appBuilder.container.quranDataService, notificationCenter: notificationCenter)
+        foregroundSync = sync
+        sync.start()
     }
     #endif
 

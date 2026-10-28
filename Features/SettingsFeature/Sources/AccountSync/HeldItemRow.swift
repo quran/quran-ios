@@ -37,7 +37,7 @@ struct HeldItemRow: Identifiable {
     /// A row for each held item the user can fix, in MobileSync's order.
     static func rows(for items: [MobileSyncHeldItem], lookup: HeldItemLookup) -> [HeldItemRow] {
         items.filter { $0.waitingOn == nil }.map { item in
-            let waitingItems = items.filter { $0.waitingOn == item }
+            let waitingItems = items.filter { $0.waitingOn?.names(item) == true }
             return HeldItemRow(
                 item: item,
                 kind: item.type.rowKind,
@@ -167,6 +167,13 @@ struct HeldItemRow: Identifiable {
 
     /// Sync identifies verses by sura and ayah, which every Hafs mushaf numbers the same.
     private static let quran = Quran.hafsMadani1405
+}
+
+private extension MobileSyncHeldItem.Blocker {
+    /// Whether it is `item`, which it names by identity.
+    func names(_ item: MobileSyncHeldItem) -> Bool {
+        type == item.type && id == item.id && collectionID == item.collectionID
+    }
 }
 
 private extension MobileSyncResourceType {

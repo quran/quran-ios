@@ -154,7 +154,7 @@ func heldItem(
         id: id,
         collectionID: collectionID,
         reason: reason,
-        waitingOn: waitingOn,
+        waitingOn: waitingOn.map { MobileSyncHeldItem.Blocker(type: $0.type, id: $0.id, collectionID: $0.collectionID, reason: $0.reason) },
         httpStatus: nil,
         serverCode: nil
     )

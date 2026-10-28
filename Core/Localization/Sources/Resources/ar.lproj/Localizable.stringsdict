@@ -219,9 +219,9 @@
             <key>few</key>
             <string>%d عناصر لم تتم مزامنتها مع Quran.com بعد وستُفقد إذا سجّلت الخروج.</string>
             <key>many</key>
-            <string>%d عنصرًا لم تتم مزامنتها مع Quran.com بعد وستُفقد إذا سجّلت الخروج.</string>
+            <string>%d عنصرًا لم تتم مزامنته مع Quran.com بعد وسيُفقد إذا سجّلت الخروج.</string>
             <key>other</key>
-            <string>%d عنصر لم تتم مزامنتها مع Quran.com بعد وستُفقد إذا سجّلت الخروج.</string>
+            <string>%d عنصر لم تتم مزامنته مع Quran.com بعد وسيُفقد إذا سجّلت الخروج.</string>
         </dict>
     </dict>
 </dict>

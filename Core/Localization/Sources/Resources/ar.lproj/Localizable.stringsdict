@@ -99,5 +99,105 @@
             <string>%d علامة إضافية</string>
         </dict>
     </dict>
+    <!-- How many items don't sync. -->
+    <key>sync.held.count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>لا توجد عناصر لا تتم مزامنتها</string>
+            <key>one</key>
+            <string>عنصر واحد لا تتم مزامنته</string>
+            <key>two</key>
+            <string>عنصران لا تتم مزامنتهما</string>
+            <key>few</key>
+            <string>%d عناصر لا تتم مزامنتها</string>
+            <key>many</key>
+            <string>%d عنصرًا لا تتم مزامنتها</string>
+            <key>other</key>
+            <string>%d عنصر لا تتم مزامنتها</string>
+        </dict>
+    </dict>
+    <!-- How many bookmarked verses don't sync until the item above them does. -->
+    <key>sync.held.waiting.verses</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@verses@</string>
+        <key>verses</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>لا آيات في الانتظار</string>
+            <key>one</key>
+            <string>آية واحدة في الانتظار</string>
+            <key>two</key>
+            <string>آيتان في الانتظار</string>
+            <key>few</key>
+            <string>%d آيات في الانتظار</string>
+            <key>many</key>
+            <string>%d آية في الانتظار</string>
+            <key>other</key>
+            <string>%d آية في الانتظار</string>
+        </dict>
+    </dict>
+    <!-- How many items don't sync until the item above them does. -->
+    <key>sync.held.waiting.items</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>لا عناصر في الانتظار</string>
+            <key>one</key>
+            <string>عنصر واحد في الانتظار</string>
+            <key>two</key>
+            <string>عنصران في الانتظار</string>
+            <key>few</key>
+            <string>%d عناصر في الانتظار</string>
+            <key>many</key>
+            <string>%d عنصرًا في الانتظار</string>
+            <key>other</key>
+            <string>%d عنصر في الانتظار</string>
+        </dict>
+    </dict>
+    <!-- How many times a failed sync tried, counting retries. -->
+    <key>sync.run.attempts</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@attempts@</string>
+        <key>attempts</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>%d محاولة</string>
+            <key>one</key>
+            <string>محاولة واحدة</string>
+            <key>two</key>
+            <string>محاولتان</string>
+            <key>few</key>
+            <string>%d محاولات</string>
+            <key>many</key>
+            <string>%d محاولة</string>
+            <key>other</key>
+            <string>%d محاولة</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

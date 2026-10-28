@@ -17,6 +17,7 @@ struct QuranComAccountCard: View {
 
     let isAuthenticated: Bool
     let email: String?
+    let openAccountAction: Action
     let manageAccountAction: AsyncAction
     let signInAction: AsyncAction
     let signOutAction: Action
@@ -75,28 +76,38 @@ struct QuranComAccountCard: View {
 
     private var authenticatedContent: some View {
         VStack(spacing: 0) {
-            HStack(spacing: headerSpacing) {
-                Text(accountInitial)
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(Color.accentColor)
-                    .frame(width: avatarSize, height: avatarSize)
-                    .background(Color.accentColor.opacity(0.1), in: Circle())
-                    .accessibilityHidden(true)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(l("setting.quran_account.signed_in"))
-                        .font(.caption.weight(.bold))
+            Button(action: openAccountAction) {
+                HStack(spacing: headerSpacing) {
+                    Text(accountInitial)
+                        .font(.title3.weight(.semibold))
                         .foregroundStyle(Color.accentColor)
-                        .textCase(.uppercase)
+                        .frame(width: avatarSize, height: avatarSize)
+                        .background(Color.accentColor.opacity(0.1), in: Circle())
+                        .accessibilityHidden(true)
 
-                    Text(email ?? l("setting.quran_account.profile"))
-                        .font(.subheadline)
-                        .foregroundStyle(Color.label)
-                        .lineLimit(1)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(l("setting.quran_account.signed_in"))
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(Color.accentColor)
+                            .textCase(.uppercase)
+
+                        Text(email ?? l("setting.quran_account.profile"))
+                            .font(.subheadline)
+                            .foregroundStyle(Color.label)
+                            .lineLimit(1)
+                    }
+
+                    Spacer(minLength: 0)
+
+                    Image(systemName: "chevron.right")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(Color.tertiaryLabel)
+                        .accessibilityHidden(true)
                 }
-
-                Spacer(minLength: 0)
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
+            .accessibilityHint(l("sync.account.title"))
             .padding(.bottom, cardPadding)
 
             Divider()
@@ -148,6 +159,7 @@ struct QuranComAccountCard: View {
         QuranComAccountCard(
             isAuthenticated: false,
             email: nil,
+            openAccountAction: {},
             manageAccountAction: {},
             signInAction: {},
             signOutAction: {}
@@ -163,6 +175,7 @@ struct QuranComAccountCard: View {
         QuranComAccountCard(
             isAuthenticated: true,
             email: "user@example.com",
+            openAccountAction: {},
             manageAccountAction: {},
             signInAction: {},
             signOutAction: {}

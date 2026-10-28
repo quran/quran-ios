@@ -163,6 +163,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
             diagnosticsBuilder: DiagnosticsBuilder(container: container),
             appIconService: appIconService,
             appIconBuilder: AppIconBuilder(container: container),
+            accountSyncBuilder: AccountSyncBuilder(container: container),
             quranProfileURL: container.quranProfileURL,
             navigationController: navigationController
         )

@@ -70,5 +70,73 @@
             <string>%d weitere Lesezeichen</string>
         </dict>
     </dict>
+    <!-- How many items don't sync. -->
+    <key>sync.held.count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d Element wird nicht synchronisiert</string>
+            <key>other</key>
+            <string>%d Elemente werden nicht synchronisiert</string>
+        </dict>
+    </dict>
+    <!-- How many bookmarked verses don't sync until the item above them does. -->
+    <key>sync.held.waiting.verses</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@verses@</string>
+        <key>verses</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d Vers wartet darauf</string>
+            <key>other</key>
+            <string>%d Verse warten darauf</string>
+        </dict>
+    </dict>
+    <!-- How many items don't sync until the item above them does. -->
+    <key>sync.held.waiting.items</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d Element wartet darauf</string>
+            <key>other</key>
+            <string>%d Elemente warten darauf</string>
+        </dict>
+    </dict>
+    <!-- How many times a failed sync tried, counting retries. -->
+    <key>sync.run.attempts</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@attempts@</string>
+        <key>attempts</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d Versuch</string>
+            <key>other</key>
+            <string>%d Versuche</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

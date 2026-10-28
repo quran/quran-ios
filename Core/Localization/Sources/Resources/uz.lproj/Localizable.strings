@@ -723,3 +723,113 @@
 
 /* Separates the items of a list, such as a note's verse ranges. A semicolon, because items can contain commas ("Al-Fātihah, Ayah 1") */
 "list.separator" = "; ";
+// Title of the Quran.com Account & Sync screen, opened from the account card in Settings.
+"sync.account.title" = "Hisob va sinxronlash";
+// Sync status when the last sync succeeded: %@ is a relative time, such as "2 minutes ago".
+"sync.status.synced" = "%@ sinxronlandi";
+// Sync status before the first sync with Quran.com.
+"sync.status.never-synced" = "Hali sinxronlanmagan";
+// Sync status while a sync runs.
+"sync.status.syncing" = "Sinxronlanmoqda…";
+// Detail under the sync status while a sync runs.
+"sync.status.sending" = "O‘zgarishlaringiz yuborilmoqda";
+// Sync status when the latest sync failed.
+"sync.status.failed" = "Sinxronlab bo‘lmadi";
+// Detail under the sync status: what syncs with Quran.com.
+"sync.status.all-items" = "Xatcho‘plar, to‘plamlar, eslatmalar va o‘qish jarayoni";
+// Why a sync failed: the device couldn't reach Quran.com.
+"sync.error.network" = "Aloqa yo‘q";
+// Why a sync failed: Quran.com didn't accept the signed-in session.
+"sync.error.authentication" = "Quran.com kirishingizni qabul qilmadi";
+// Why a sync failed: Quran.com's server failed or was unavailable.
+"sync.error.server" = "Quran.com mavjud emas";
+// Why a sync failed: Quran.com rejected the request.
+"sync.error.rejected" = "Quran.com o‘zgarishlarni qabul qilmadi";
+// Why a sync failed, when the reason is unknown.
+"sync.error.unknown" = "Nimadir xato ketdi";
+// Detail when the latest sync received changes but couldn't send this device's changes.
+"sync.error.paused" = "O‘zgarishlaringiz yuborilmayapti";
+// Button that syncs with Quran.com right away.
+"sync.action.sync-now" = "Hozir sinxronlash";
+// The disabled sync button while a sync runs.
+"sync.action.syncing" = "Sinxronlanmoqda";
+// Button that syncs again after a sync failed.
+"sync.action.try-again" = "Qayta urinish";
+// Header of the list of items that don't sync: %@ is how many.
+"sync.held.header" = "Sinxronlanmayapti · %@";
+// Footer under the list of items that don't sync.
+"sync.held.footer" = "Ular siz tuzatmaguningizcha shu qurilmada qoladi. Qolgan hammasi sinxronlanishda davom etadi.";
+// An item that doesn't sync: a note, where %@ is its verse range, such as "Al-Baqarah 2:255".
+"sync.held.note" = "%@ uchun eslatma";
+// An item that doesn't sync: a collection, where %@ is its name.
+"sync.held.collection" = "“%@” to‘plami";
+// An item that doesn't sync: a verse bookmark, where %@ is the verse, such as "Al-Kahf 18:10".
+"sync.held.bookmark" = "%@ xatcho‘pi";
+// An item that doesn't sync: a reading bookmark, where %@ is its name or color.
+"sync.held.reading-bookmark" = "“%@” o‘qish xatcho‘pi";
+// An item that doesn't sync: the user's reading progress.
+"sync.held.reading-progress" = "O‘qish jarayoni";
+// An item that doesn't sync: a note deleted on this device.
+"sync.held.deleted-note" = "O‘chirilgan eslatma";
+// An item that doesn't sync: a collection deleted on this device.
+"sync.held.deleted-collection" = "O‘chirilgan to‘plam";
+// An item that doesn't sync: a bookmark deleted on this device.
+"sync.held.deleted-bookmark" = "O‘chirilgan xatcho‘p";
+// Why an item doesn't sync: its text is shorter than Quran.com accepts.
+"sync.held.reason.too-short" = "Quran.com uchun juda qisqa.";
+// Why an item doesn't sync: its text is longer than Quran.com accepts.
+"sync.held.reason.too-long" = "Quran.com uchun juda uzun.";
+// Why an item doesn't sync: its verses don't exist.
+"sync.held.reason.invalid-verses" = "Quran.com bu oyatlarni tanimaydi.";
+// Why an item doesn't sync: a reading bookmark's location doesn't exist.
+"sync.held.reason.invalid-location" = "Quran.com bu joyni tanimaydi.";
+// Why an item doesn't sync: Quran.com reserves the collection's name.
+"sync.held.reason.reserved-name" = "Quran.com bu nomni o‘z ro‘yxati uchun saqlaydi.";
+// Why an item doesn't sync: Quran.com doesn't let users rename or delete the collection.
+"sync.held.reason.read-only" = "Quran.com bu to‘plamni o‘zgartirishga ruxsat bermaydi.";
+// Why an item doesn't sync: Quran.com refused the change.
+"sync.held.reason.not-accepted" = "Quran.com bu o‘zgarishni qabul qilmadi.";
+// Why a note doesn't sync: Quran.com refused it.
+"sync.held.reason.not-accepted.note" = "Quran.com bu eslatmani qabul qilmadi.";
+// Why a collection doesn't sync: Quran.com refused it.
+"sync.held.reason.not-accepted.collection" = "Quran.com bu to‘plamni qabul qilmadi.";
+// Why a bookmark doesn't sync: Quran.com refused it.
+"sync.held.reason.not-accepted.bookmark" = "Quran.com bu xatcho‘pni qabul qilmadi.";
+// Why an item doesn't sync: its collection doesn't sync yet.
+"sync.held.reason.waiting-on-collection" = "To‘plami sinxronlanishini kutmoqda.";
+// Why an item doesn't sync: another item that doesn't sync uses its name or slot.
+"sync.held.reason.waiting-on-other" = "Boshqa element sinxronlanishini kutmoqda.";
+// Why an item doesn't sync: it syncs after the first sync brings Quran.com's copy.
+"sync.held.reason.not-linked" = "Quran.com bilan birinchi sinxronlashni kutmoqda.";
+// Header of the list of the latest syncs.
+"sync.runs.header" = "So‘nggi sinxronlashlar";
+// Shown in the list of the latest syncs before the first sync.
+"sync.runs.empty.title" = "Hali sinxronlash yo‘q";
+// Shown in the list of the latest syncs before the first sync.
+"sync.runs.empty.body" = "Quran.com bilan har bir sinxronlash shu yerda ko‘rinadi.";
+// A sync in the list of syncs: %1$@ is when it ran, such as "Today, 10:42", and %2$@ is what started it, such as "Sync now".
+"sync.run.title" = "%1$@ · %2$@";
+// Separates the parts of a sync's details, such as "Sent 3 · Received 1".
+"sync.separator" = " · ";
+// What started a sync: the user tapped Sync now.
+"sync.run.trigger.manual" = "Hozir sinxronlash";
+// What started a sync: a change on this device.
+"sync.run.trigger.local-change" = "Shu qurilmadagi o‘zgarish";
+// What started a sync: the periodic sync, where %@ is the number of minutes.
+"sync.run.trigger.periodic" = "Har %@ daqiqada";
+// What started a sync: the app started.
+"sync.run.trigger.app-start" = "Ilova ishga tushdi";
+// What started a sync: the user signed in.
+"sync.run.trigger.sign-in" = "Kirish";
+// A sync's details: %@ is how many changes it sent to Quran.com.
+"sync.run.sent" = "%@ ta yuborildi";
+// A sync's details: %@ is how many changes it received from Quran.com.
+"sync.run.received" = "%@ ta qabul qilindi";
+// A sync's details: %@ is how many items didn't sync.
+"sync.run.held" = "%@ ta ushlab qolindi";
+// A sync's details: it received changes but didn't send this device's changes.
+"sync.run.sending-paused" = "Yuborish to‘xtatilgan";
+// A sync's details: it was stopped before it finished, such as by another sync.
+"sync.run.stopped" = "To‘xtatildi";
+// A sync's details: there was nothing to send or receive.
+"sync.run.up-to-date" = "Hammasi yangi";

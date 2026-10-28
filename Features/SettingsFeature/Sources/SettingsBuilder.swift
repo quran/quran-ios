@@ -40,6 +40,7 @@ public struct SettingsBuilder {
             diagnosticsBuilder: DiagnosticsBuilder(container: container),
             appIconService: container.appIconService(),
             appIconBuilder: AppIconBuilder(container: container),
+            accountSyncBuilder: AccountSyncBuilder(container: container),
             quranProfileURL: container.quranProfileURL,
             navigationController: navigationController
         )

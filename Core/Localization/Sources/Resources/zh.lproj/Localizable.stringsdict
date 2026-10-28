@@ -62,5 +62,65 @@
             <string>另外 %d 个书签</string>
         </dict>
     </dict>
+    <!-- How many items don't sync. -->
+    <key>sync.held.count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>other</key>
+            <string>%d 项未同步</string>
+        </dict>
+    </dict>
+    <!-- How many bookmarked verses don't sync until the item above them does. -->
+    <key>sync.held.waiting.verses</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@verses@</string>
+        <key>verses</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>other</key>
+            <string>%d 节经文正在等待</string>
+        </dict>
+    </dict>
+    <!-- How many items don't sync until the item above them does. -->
+    <key>sync.held.waiting.items</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>other</key>
+            <string>%d 项正在等待</string>
+        </dict>
+    </dict>
+    <!-- How many times a failed sync tried, counting retries. -->
+    <key>sync.run.attempts</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@attempts@</string>
+        <key>attempts</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>other</key>
+            <string>%d 次尝试</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

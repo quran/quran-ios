@@ -922,6 +922,8 @@ private func featuresTargets() -> [[Target]] {
             "LegacyDataMigration",
             "SettingsService",
             "NoorUI",
+            "QuranAnnotations",
+            "QuranKit",
             "QueuePlayer",
             "QuranAudio",
             "QuranAudioKit",

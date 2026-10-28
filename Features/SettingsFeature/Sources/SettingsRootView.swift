@@ -32,6 +32,7 @@ struct SettingsRootView: View {
             navigateToDiagnotics: { viewModel.navigateToDiagnotics() },
             isAuthenticated: viewModel.isAuthenticated,
             loggedInUserEmail: viewModel.currentUserEmail,
+            navigateToAccountSync: { viewModel.navigateToAccountSync() },
             openQuranComProfile: { viewModel.openQuranComProfile() },
             observeAuthentication: { await viewModel.observeAuthentication() },
             loginAction: { await viewModel.loginToQuranCom() },
@@ -90,6 +91,7 @@ private struct SettingsRootViewUI: View {
     #if QURAN_SYNC
     let isAuthenticated: Bool
     let loggedInUserEmail: String?
+    let navigateToAccountSync: Action
     let openQuranComProfile: AsyncAction
     let observeAuthentication: AsyncAction
     let loginAction: AsyncAction
@@ -103,6 +105,7 @@ private struct SettingsRootViewUI: View {
                 QuranComAccountCard(
                     isAuthenticated: isAuthenticated,
                     email: loggedInUserEmail,
+                    openAccountAction: { navigateToAccountSync() },
                     manageAccountAction: { await openQuranComProfile() },
                     signInAction: { await loginAction() },
                     signOutAction: { signOutAction() }
@@ -233,6 +236,7 @@ private struct SettingsRootViewUI: View {
                 navigateToDiagnotics: {},
                 isAuthenticated: false,
                 loggedInUserEmail: nil,
+                navigateToAccountSync: {},
                 openQuranComProfile: {},
                 observeAuthentication: {},
                 loginAction: {},

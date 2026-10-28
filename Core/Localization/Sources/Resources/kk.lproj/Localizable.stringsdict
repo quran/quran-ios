@@ -70,5 +70,73 @@
             <string>Тағы %d бетбелгі</string>
         </dict>
     </dict>
+    <!-- How many items don't sync. -->
+    <key>sync.held.count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d элемент синхрондалмайды</string>
+            <key>other</key>
+            <string>%d элемент синхрондалмайды</string>
+        </dict>
+    </dict>
+    <!-- How many bookmarked verses don't sync until the item above them does. -->
+    <key>sync.held.waiting.verses</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@verses@</string>
+        <key>verses</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d аят күтуде</string>
+            <key>other</key>
+            <string>%d аят күтуде</string>
+        </dict>
+    </dict>
+    <!-- How many items don't sync until the item above them does. -->
+    <key>sync.held.waiting.items</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d элемент күтуде</string>
+            <key>other</key>
+            <string>%d элемент күтуде</string>
+        </dict>
+    </dict>
+    <!-- How many times a failed sync tried, counting retries. -->
+    <key>sync.run.attempts</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@attempts@</string>
+        <key>attempts</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d әрекет</string>
+            <key>other</key>
+            <string>%d әрекет</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

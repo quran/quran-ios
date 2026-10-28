@@ -86,5 +86,89 @@
             <string>Ещё %d закладки</string>
         </dict>
     </dict>
+    <!-- How many items don't sync. -->
+    <key>sync.held.count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d элемент не синхронизируется</string>
+            <key>few</key>
+            <string>%d элемента не синхронизируются</string>
+            <key>many</key>
+            <string>%d элементов не синхронизируются</string>
+            <key>other</key>
+            <string>%d элемента не синхронизируются</string>
+        </dict>
+    </dict>
+    <!-- How many bookmarked verses don't sync until the item above them does. -->
+    <key>sync.held.waiting.verses</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@verses@</string>
+        <key>verses</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d аят ожидает</string>
+            <key>few</key>
+            <string>%d аята ожидают</string>
+            <key>many</key>
+            <string>%d аятов ожидают</string>
+            <key>other</key>
+            <string>%d аята ожидают</string>
+        </dict>
+    </dict>
+    <!-- How many items don't sync until the item above them does. -->
+    <key>sync.held.waiting.items</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d элемент ожидает</string>
+            <key>few</key>
+            <string>%d элемента ожидают</string>
+            <key>many</key>
+            <string>%d элементов ожидают</string>
+            <key>other</key>
+            <string>%d элемента ожидают</string>
+        </dict>
+    </dict>
+    <!-- How many times a failed sync tried, counting retries. -->
+    <key>sync.run.attempts</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@attempts@</string>
+        <key>attempts</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d попытка</string>
+            <key>few</key>
+            <string>%d попытки</string>
+            <key>many</key>
+            <string>%d попыток</string>
+            <key>other</key>
+            <string>%d попытки</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

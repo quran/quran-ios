@@ -166,5 +166,33 @@
             <string>%d öğe siz düzeltene kadar eşitlenemez.</string>
         </dict>
     </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them (held), and how many more wait on those. -->
+    <key>sync.sign-out.held-waiting</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%1$#@held@, %2$#@waiting@</string>
+        <key>held</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%1$d öğe siz düzeltene kadar eşitlenemez</string>
+            <key>other</key>
+            <string>%1$d öğe siz düzeltene kadar eşitlenemez</string>
+        </dict>
+        <key>waiting</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%2$d öğe daha o zamana kadar bekleyecek.</string>
+            <key>other</key>
+            <string>%2$d öğe daha o zamana kadar bekleyecek.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

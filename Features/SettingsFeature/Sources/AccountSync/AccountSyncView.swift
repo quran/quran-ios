@@ -58,10 +58,8 @@ private struct AccountSyncViewUI: View {
                 .onChange(of: scrollsToHeldItems) { scrolls in
                     guard scrolls else { return }
                     scrollsToHeldItems = false
-                    if let firstHeldRow = heldRows.first {
-                        withAnimation(NoorAnimation.standard) {
-                            proxy.scrollTo(firstHeldRow.id, anchor: .center)
-                        }
+                    withAnimation(NoorAnimation.standard) {
+                        proxy.scrollTo(Self.heldItemsID, anchor: .top)
                     }
                 }
         }
@@ -71,6 +69,8 @@ private struct AccountSyncViewUI: View {
     }
 
     // MARK: Private
+
+    private static let heldItemsID = "held-items"
 
     @ScaledMetric private var avatarLength = 88.0
     @ScaledMetric private var headerSpacing = 6.0
@@ -105,6 +105,7 @@ private struct AccountSyncViewUI: View {
                         )
                     }
                 }
+                .id(Self.heldItemsID)
             }
 
             NoorBasicSection(title: l("sync.runs.header")) {

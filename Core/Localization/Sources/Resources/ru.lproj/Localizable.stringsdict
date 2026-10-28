@@ -212,5 +212,41 @@
             <string>%d элемента не синхронизируются, пока вы их не исправите.</string>
         </dict>
     </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them (held), and how many more wait on those. -->
+    <key>sync.sign-out.held-waiting</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%1$#@held@, и ещё %2$#@waiting@</string>
+        <key>held</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%1$d элемент не синхронизируется, пока вы его не исправите</string>
+            <key>few</key>
+            <string>%1$d элемента не синхронизируются, пока вы их не исправите</string>
+            <key>many</key>
+            <string>%1$d элементов не синхронизируются, пока вы их не исправите</string>
+            <key>other</key>
+            <string>%1$d элемента не синхронизируются, пока вы их не исправите</string>
+        </dict>
+        <key>waiting</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%2$d подождёт до тех пор.</string>
+            <key>few</key>
+            <string>%2$d подождут до тех пор.</string>
+            <key>many</key>
+            <string>%2$d подождут до тех пор.</string>
+            <key>other</key>
+            <string>%2$d подождут до тех пор.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

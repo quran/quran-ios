@@ -55,7 +55,7 @@ final class AccountSyncViewModel: ObservableObject {
     }
 
     var signOutWarning: SignOutWarning {
-        SignOutWarning(unsynced: unsyncedItems)
+        SignOutWarning(unsynced: unsyncedItems, activity: activity)
     }
 
     var heldRows: [HeldItemRow] {
@@ -95,19 +95,25 @@ final class AccountSyncViewModel: ObservableObject {
     /// Asks the user to confirm, warning about the changes that haven't synced, which sign-out deletes.
     func requestSignOut() async {
         logger.info("Quran Sync: requested sign out confirmation from Account & Sync")
+        let unsynced: MobileSyncUnsyncedItemCounts?
         do {
-            unsyncedItems = try await quranDataService.unsyncedItemsSequence().first { _ in true }
+            unsynced = try await quranDataService.unsyncedItemsSequence().first { _ in true }
         } catch {
             logger.error("Quran Sync: failed to read the unsynced items before signing out: \(error)")
-            unsyncedItems = nil
+            unsynced = nil
         }
+        // A cancelled read, such as a double tap's first, ends without counts; it mustn't replace a real read's.
+        guard !Task.isCancelled else {
+            return
+        }
+        unsyncedItems = unsynced
         isSignOutConfirmationPresented = true
     }
 
     /// Stays on this screen instead of signing out, showing the items that don't sync when there are any.
     func reviewUnsyncedItems() {
         logger.info("Quran Sync: reviewing unsynced items instead of signing out")
-        scrollsToHeldItems = !heldRows.isEmpty
+        scrollsToHeldItems = signOutWarning.showsHeldItems
     }
 
     func signOutOfQuranCom() async {

@@ -172,5 +172,33 @@
             <string>%d مورد تا وقتی اصلاحشان نکنید همگام‌سازی نمی‌شوند.</string>
         </dict>
     </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them (held), and how many more wait on those. -->
+    <key>sync.sign-out.held-waiting</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%1$#@held@ و %2$#@waiting@</string>
+        <key>held</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%1$d مورد تا وقتی اصلاحش نکنید همگام‌سازی نمی‌شود</string>
+            <key>other</key>
+            <string>%1$d مورد تا وقتی اصلاحشان نکنید همگام‌سازی نمی‌شوند</string>
+        </dict>
+        <key>waiting</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%2$d مورد دیگر هم تا آن وقت همگام‌سازی نمی‌شود.</string>
+            <key>other</key>
+            <string>%2$d مورد دیگر هم تا آن وقت همگام‌سازی نمی‌شوند.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

@@ -607,6 +607,6 @@
 // Sign-out confirmation when the app couldn't count the changes that haven't synced.
 "sync.sign-out.unsynced-unknown" = "Changes that haven't synced to Quran.com yet will be lost if you sign out.";
 // Sign-out warning, after how many changes haven't synced: what signing out does to them.
-"sync.sign-out.unsynced-lost" = "Signing out will lose anything that hasn't synced.";
+"sync.sign-out.unsynced-lost" = "If you sign out, anything that hasn't synced will be lost.";
 // Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
 "sync.sign-out.review" = "Review";

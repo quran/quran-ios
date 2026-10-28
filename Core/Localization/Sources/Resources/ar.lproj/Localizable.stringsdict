@@ -249,5 +249,49 @@
             <string>%d عنصر لا يمكن مزامنته حتى تصلحه.</string>
         </dict>
     </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them (held), and how many more wait on those. -->
+    <key>sync.sign-out.held-waiting</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%1$#@held@، و%2$#@waiting@</string>
+        <key>held</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>%1$d عنصر لا يمكن مزامنته حتى تصلحه</string>
+            <key>one</key>
+            <string>عنصر واحد لا يمكن مزامنته حتى تصلحه</string>
+            <key>two</key>
+            <string>عنصران لا يمكن مزامنتهما حتى تصلحهما</string>
+            <key>few</key>
+            <string>%1$d عناصر لا يمكن مزامنتها حتى تصلحها</string>
+            <key>many</key>
+            <string>%1$d عنصرًا لا يمكن مزامنته حتى تصلحه</string>
+            <key>other</key>
+            <string>%1$d عنصر لا يمكن مزامنته حتى تصلحه</string>
+        </dict>
+        <key>waiting</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>%2$d عنصر آخر لا يمكن مزامنته حتى ذلك الحين.</string>
+            <key>one</key>
+            <string>عنصر آخر لا يمكن مزامنته حتى ذلك الحين.</string>
+            <key>two</key>
+            <string>عنصران آخران لا يمكن مزامنتهما حتى ذلك الحين.</string>
+            <key>few</key>
+            <string>%2$d عناصر أخرى لا يمكن مزامنتها حتى ذلك الحين.</string>
+            <key>many</key>
+            <string>%2$d عنصرًا آخر لا يمكن مزامنته حتى ذلك الحين.</string>
+            <key>other</key>
+            <string>%2$d عنصر آخر لا يمكن مزامنته حتى ذلك الحين.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

@@ -130,6 +130,25 @@ final class AccountSyncViewModelTests: XCTestCase {
         XCTAssertTrue(sut.signOutWarning.offersReview)
     }
 
+    /// A double tap cancels the first read, which then ends without counts; it keeps the counts already read.
+    func test_requestSignOut_keepsTheCounts_whenItsTaskIsCancelled() async throws {
+        try await database.quranDataService.createNote(
+            body: "Reflection", startSura: 2, startAyah: 255, endSura: 2, endAyah: 255, timestamp: Date()
+        )
+        let sut = makeSUT(client: signedInClient(email: "user@example.com"))
+        await sut.requestSignOut()
+        sut.isSignOutConfirmationPresented = false
+
+        let cancelled = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            await sut.requestSignOut()
+        }
+        await cancelled.value
+
+        XCTAssertEqual(sut.unsyncedItems, MobileSyncUnsyncedItemCounts(pending: 1, held: 0))
+        XCTAssertFalse(sut.isSignOutConfirmationPresented)
+    }
+
     func test_reviewUnsyncedItems_staysWithoutScrolling_whenNothingIsHeld() async throws {
         try await database.quranDataService.createNote(
             body: "Reflection", startSura: 2, startAyah: 255, endSura: 2, endAyah: 255, timestamp: Date()
@@ -142,6 +161,14 @@ final class AccountSyncViewModelTests: XCTestCase {
             signOut: { signOuts += 1 },
             navigationController: navigationController
         )
+        // The status, the runs and the held items each arrive once from MobileSync.
+        let activityArrived = expectation(description: "The sync activity arrived")
+        activityArrived.expectedFulfillmentCount = 3
+        activityArrived.assertForOverFulfill = false
+        let recording = sut.$activity.dropFirst().sink { _ in activityArrived.fulfill() }
+        let observation = Task { await sut.start() }
+        await fulfillment(of: [activityArrived], timeout: 5)
+        recording.cancel()
         await sut.requestSignOut()
 
         sut.reviewUnsyncedItems()
@@ -149,19 +176,43 @@ final class AccountSyncViewModelTests: XCTestCase {
         XCTAssertFalse(sut.scrollsToHeldItems)
         XCTAssertEqual(signOuts, 0)
         XCTAssertEqual(navigationController.viewControllers.count, 2)
+        observation.cancel()
     }
 
     // MARK: Sign-out warning
 
+    /// MobileSync counts a held collection's verses as held too; the user fixes only the collection, as the Not
+    /// syncing list shows.
+    func test_signOutWarning_countsWhatToFix_andTheItemsWaitingOnIt() {
+        let collection = heldItem(.collection, id: "c1", reason: .reservedName)
+        let verses = ["2:255", "18:10", "36:1", "67:1"].map {
+            heldItem(.collectionBookmark, id: $0, collectionID: "c1", reason: .waitingOnParent, waitingOn: collection)
+        }
+        let activity = SyncActivity(heldItems: [collection] + verses)
+
+        let warning = SignOutWarning(unsynced: MobileSyncUnsyncedItemCounts(pending: 0, held: 5), activity: activity)
+
+        XCTAssertEqual(
+            warning.message,
+            [lFormat("sync.sign-out.held-waiting", 1, 4), l("sync.sign-out.unsynced-lost")].joined(separator: "\n")
+        )
+        XCTAssertTrue(warning.offersReview)
+        XCTAssertTrue(warning.showsHeldItems)
+    }
+
     func test_signOutWarning_countsItemsThatCannotSync() {
-        let warning = SignOutWarning(unsynced: MobileSyncUnsyncedItemCounts(pending: 0, held: 2))
+        let activity = SyncActivity(heldItems: [heldItem(.note, id: "n1", reason: .tooShort), heldItem(.note, id: "n2", reason: .tooLong)])
+
+        let warning = SignOutWarning(unsynced: MobileSyncUnsyncedItemCounts(pending: 0, held: 2), activity: activity)
 
         XCTAssertEqual(warning.message, [lFormat("sync.sign-out.held", 2), l("sync.sign-out.unsynced-lost")].joined(separator: "\n"))
-        XCTAssertTrue(warning.offersReview)
+        XCTAssertTrue(warning.showsHeldItems)
     }
 
     func test_signOutWarning_countsPendingAndHeldItemsApart() {
-        let warning = SignOutWarning(unsynced: MobileSyncUnsyncedItemCounts(pending: 3, held: 1))
+        let activity = SyncActivity(heldItems: [heldItem(.note, id: "n1", reason: .tooShort)])
+
+        let warning = SignOutWarning(unsynced: MobileSyncUnsyncedItemCounts(pending: 3, held: 1), activity: activity)
 
         XCTAssertEqual(
             warning.message,
@@ -171,24 +222,53 @@ final class AccountSyncViewModelTests: XCTestCase {
         XCTAssertTrue(warning.offersReview)
     }
 
+    func test_signOutWarning_countsEveryHeldItem_beforeTheHeldListArrives() {
+        let warning = SignOutWarning(unsynced: MobileSyncUnsyncedItemCounts(pending: 0, held: 3), activity: SyncActivity())
+
+        XCTAssertEqual(warning.message, [lFormat("sync.sign-out.held", 3), l("sync.sign-out.unsynced-lost")].joined(separator: "\n"))
+        XCTAssertFalse(warning.showsHeldItems)
+    }
+
     func test_signOutWarning_warnsWithoutCounts_whenTheyCouldNotBeRead() {
-        let warning = SignOutWarning(unsynced: nil)
+        let warning = SignOutWarning(unsynced: nil, activity: SyncActivity())
 
         XCTAssertEqual(warning.message, l("sync.sign-out.unsynced-unknown"))
         XCTAssertTrue(warning.offersReview)
     }
 
-    /// Plural rules pick the right form for one item and for several.
+    /// Plural rules pick the right form for one item and for several, whatever the simulator's language.
     func test_signOutWarning_pluralizesTheCounts() {
-        XCTAssertEqual(lFormat("sync.sign-out.pending", 1), "1 change is still waiting to sync to Quran.com.")
-        XCTAssertEqual(lFormat("sync.sign-out.pending", 2), "2 changes are still waiting to sync to Quran.com.")
-        XCTAssertEqual(lFormat("sync.sign-out.held", 1), "1 item can't sync until you fix it.")
-        XCTAssertEqual(lFormat("sync.sign-out.held", 2), "2 items can't sync until you fix them.")
+        XCTAssertEqual(english("sync.sign-out.pending", 1), "1 change is still waiting to sync to Quran.com.")
+        XCTAssertEqual(english("sync.sign-out.pending", 2), "2 changes are still waiting to sync to Quran.com.")
+        XCTAssertEqual(english("sync.sign-out.held", 1), "1 item can't sync until you fix it.")
+        XCTAssertEqual(english("sync.sign-out.held", 2), "2 items can't sync until you fix them.")
+        XCTAssertEqual(
+            english("sync.sign-out.held-waiting", 1, 4),
+            "1 item can't sync until you fix it, and 4 more can't sync until then."
+        )
+        XCTAssertEqual(
+            english("sync.sign-out.held-waiting", 2, 1),
+            "2 items can't sync until you fix them, and 1 more can't sync until then."
+        )
+    }
+
+    /// Arabic has six plural forms, and its forms for one and two leave out the number.
+    func test_signOutWarning_pluralizesTheCountsInArabic() {
+        XCTAssertEqual(arabic("sync.sign-out.held-waiting", 1, 2), "عنصر واحد لا يمكن مزامنته حتى تصلحه، وعنصران آخران لا يمكن مزامنتهما حتى ذلك الحين.")
+        XCTAssertEqual(arabic("sync.sign-out.held-waiting", 3, 11), "3 عناصر لا يمكن مزامنتها حتى تصلحها، و11 عنصرًا آخر لا يمكن مزامنته حتى ذلك الحين.")
     }
 
     // MARK: Private
 
     private let database = MobileSyncTestDatabase.shared
+
+    private func english(_ key: String, _ arguments: CVarArg...) -> String {
+        String(format: l(key, language: .english), locale: Locale(identifier: "en"), arguments: arguments)
+    }
+
+    private func arabic(_ key: String, _ arguments: CVarArg...) -> String {
+        String(format: l(key, language: .arabic), locale: Locale(identifier: "ar"), arguments: arguments)
+    }
 
     private func signedInClient(email: String) -> AuthenticationClientFake {
         let client = AuthenticationClientFake()

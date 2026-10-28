@@ -172,5 +172,33 @@
             <string>%d elementos no se pueden sincronizar hasta que los corrijas.</string>
         </dict>
     </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them (held), and how many more wait on those. -->
+    <key>sync.sign-out.held-waiting</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%1$#@held@, y %2$#@waiting@</string>
+        <key>held</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%1$d elemento no se puede sincronizar hasta que lo corrijas</string>
+            <key>other</key>
+            <string>%1$d elementos no se pueden sincronizar hasta que los corrijas</string>
+        </dict>
+        <key>waiting</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%2$d más tendrá que esperar hasta entonces.</string>
+            <key>other</key>
+            <string>%2$d más tendrán que esperar hasta entonces.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

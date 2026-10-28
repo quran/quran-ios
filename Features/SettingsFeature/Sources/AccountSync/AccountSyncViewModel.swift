@@ -22,6 +22,7 @@ final class AccountSyncViewModel: ObservableObject {
         authenticationClient: any AuthenticationClient,
         quranDataService: MobileSyncDataService,
         quranProfileURL: URL,
+        syncActivityBuilder: SyncActivityBuilder,
         signOut: @escaping @MainActor () async throws -> Void,
         navigationController: UINavigationController?
     ) {
@@ -29,6 +30,7 @@ final class AccountSyncViewModel: ObservableObject {
         self.authenticationClient = authenticationClient
         self.quranDataService = quranDataService
         self.quranProfileURL = quranProfileURL
+        self.syncActivityBuilder = syncActivityBuilder
         self.signOut = signOut
         self.navigationController = navigationController
     }
@@ -70,6 +72,12 @@ final class AccountSyncViewModel: ObservableObject {
         quranDataService.triggerSync(immediately: true)
     }
 
+    /// Opens every held item and every recent sync.
+    func showActivity() {
+        logger.info("Account & Sync: show Sync activity")
+        navigationController?.pushViewController(syncActivityBuilder.build(), animated: true)
+    }
+
     func openQuranComProfile() {
         logger.info("Account & Sync: Open Quran.com profile.")
         let viewController = SFSafariViewController(url: quranProfileURL)
@@ -95,6 +103,7 @@ final class AccountSyncViewModel: ObservableObject {
     private let authenticationClient: any AuthenticationClient
     private let quranDataService: MobileSyncDataService
     private let quranProfileURL: URL
+    private let syncActivityBuilder: SyncActivityBuilder
     private let signOut: @MainActor () async throws -> Void
     private weak var navigationController: UINavigationController?
 

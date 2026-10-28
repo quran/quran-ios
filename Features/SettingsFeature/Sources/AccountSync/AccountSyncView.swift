@@ -23,6 +23,7 @@ struct AccountSyncView: View {
             error: $viewModel.error,
             start: { await viewModel.start() },
             syncNow: { viewModel.syncNow() },
+            showActivity: { viewModel.showActivity() },
             openProfile: { viewModel.openQuranComProfile() },
             signOut: { viewModel.requestSignOut() }
         )
@@ -43,6 +44,7 @@ private struct AccountSyncViewUI: View {
     @Binding var error: Error?
     let start: AsyncAction
     let syncNow: Action
+    let showActivity: Action
     let openProfile: Action
     let signOut: Action
 
@@ -68,6 +70,13 @@ private struct AccountSyncViewUI: View {
                     ForEach(heldRows.prefix(AccountSyncViewModel.previewCount)) { row in
                         HeldItemRowView(row: row)
                     }
+                    if heldRows.count > AccountSyncViewModel.previewCount {
+                        SyncLinkRow(
+                            title: lFormat("sync.held.show-all", NumberFormatter.shared.format(heldRows.count)),
+                            action: showActivity,
+                            background: Color.cautionBackground
+                        )
+                    }
                 }
             }
 
@@ -78,6 +87,7 @@ private struct AccountSyncViewUI: View {
                     ForEach(recentRuns) { run in
                         SyncRunRowView(row: run)
                     }
+                    SyncLinkRow(title: l("sync.runs.see-all"), action: showActivity)
                 }
             }
 
@@ -167,6 +177,7 @@ private struct AccountSyncViewUI: View {
         error: .constant(nil),
         start: {},
         syncNow: {},
+        showActivity: {},
         openProfile: {},
         signOut: {}
     )

@@ -26,6 +26,7 @@ struct AccountSyncBuilder {
             authenticationClient: container.authenticationClient,
             quranDataService: container.quranDataService,
             quranProfileURL: container.quranProfileURL,
+            syncActivityBuilder: SyncActivityBuilder(container: container),
             signOut: signOut,
             navigationController: navigationController
         )

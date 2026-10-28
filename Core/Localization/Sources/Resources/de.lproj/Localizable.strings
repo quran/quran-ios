@@ -843,3 +843,11 @@
 "sync.status.everything-else-synced" = "Alles andere synchronisiert %@";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Nicht Synchronisiertes ansehen";
+// Title of the screen with every item that doesn't sync and the latest syncs.
+"sync.activity.title" = "Synchronisierungsverlauf";
+// Footer under the list of syncs: %@ is how many syncs the app keeps.
+"sync.activity.footer" = "Die letzten %@ Synchronisierungen auf diesem Gerät.";
+// Link under the first items that don't sync: %@ is how many there are in all.
+"sync.held.show-all" = "Alle %@ anzeigen";
+// Link under the latest syncs that opens every sync.
+"sync.runs.see-all" = "Gesamten Verlauf anzeigen";

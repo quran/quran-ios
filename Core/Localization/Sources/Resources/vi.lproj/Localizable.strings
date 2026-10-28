@@ -755,3 +755,11 @@
 "sync.status.everything-else-synced" = "Mọi thứ khác đã đồng bộ %@";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Xem lại các mục không đồng bộ";
+// Title of the screen with every item that doesn't sync and the latest syncs.
+"sync.activity.title" = "Hoạt động đồng bộ";
+// Footer under the list of syncs: %@ is how many syncs the app keeps.
+"sync.activity.footer" = "%@ lần đồng bộ gần nhất trên thiết bị này.";
+// Link under the first items that don't sync: %@ is how many there are in all.
+"sync.held.show-all" = "Hiện tất cả %@";
+// Link under the latest syncs that opens every sync.
+"sync.runs.see-all" = "Xem tất cả hoạt động";

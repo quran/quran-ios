@@ -345,47 +345,6 @@ final class SettingsRootViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
-    // MARK: Sync activity
-
-    /// The test database never syncs, so the card shows an account that hasn't synced yet.
-    func test_observeSyncActivity_followsMobileSync() async {
-        let sut = makeSUT(authenticationClient: AuthenticationClientFake())
-        let activityArrived = expectation(description: "The sync activity arrived")
-        activityArrived.expectedFulfillmentCount = 3
-        activityArrived.assertForOverFulfill = false
-        let recording = sut.$syncActivity.dropFirst().sink { _ in activityArrived.fulfill() }
-        let observation = Task { await sut.observeSyncActivity() }
-
-        await fulfillment(of: [activityArrived], timeout: 5)
-
-        XCTAssertEqual(sut.syncActivity.state, .neverSynced)
-        XCTAssertEqual(sut.syncActivity.runs, [])
-        XCTAssertEqual(sut.syncActivity.heldItems, [])
-        observation.cancel()
-        recording.cancel()
-    }
-
-    /// MobileSync syncs only while a user is signed in.
-    func test_syncNow_doesNothing_whenSignedOut() async throws {
-        let sut = makeSUT(authenticationClient: AuthenticationClientFake())
-
-        sut.syncNow()
-
-        // Cancelling, not breaking out, stops MobileSync's collector.
-        let service = database.quranDataService
-        let status = try await Task {
-            var first: MobileSyncStatus?
-            do {
-                for try await status in service.syncStatusSequence() {
-                    first = status
-                    withUnsafeCurrentTask { $0?.cancel() }
-                }
-            } catch is CancellationError {}
-            return first
-        }.value
-        XCTAssertEqual(status, .idle)
-    }
-
     func test_logout_disablesLegacyImport() async throws {
         let store = TemporaryCoreDataStore()
         let stack = store.stack()

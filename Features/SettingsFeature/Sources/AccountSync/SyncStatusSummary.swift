@@ -40,14 +40,29 @@ struct SyncStatusSummary: Equatable {
         }
     }
 
+    /// The Account & Sync screen says it all in the title; the Settings card puts the time in the detail and
+    /// leads with what isn't syncing.
+    enum Style {
+        case screen
+        case card
+    }
+
+    /// How the title reads.
+    enum Tone: Equatable {
+        case normal
+        case failure
+        case caution
+    }
+
     // MARK: Lifecycle
 
-    init(_ activity: SyncActivity) {
+    init(_ activity: SyncActivity, style: Style = .screen) {
         let heldCount = activity.blockingItems.count
         let held = heldCount > 0 ? lFormat("sync.held.count", heldCount) : nil
         switch activity.state {
         case .syncing:
             icon = .syncing
+            tone = .normal
             title = l("sync.status.syncing")
             detail = l("sync.status.sending")
             button = .syncing
@@ -59,19 +74,40 @@ struct SyncStatusSummary: Equatable {
             button = .tryAgain
         case .failed(let reason):
             icon = .failed
+            tone = .failure
             title = l("sync.status.failed")
             detail = reason?.localizedDescription ?? l("sync.error.paused")
             button = .tryAgain
         case .synced(let date):
             icon = held == nil ? .synced : .held
-            title = lFormat("sync.status.synced", date.syncedTimeAgo())
-            detail = held ?? l("sync.status.all-items")
             button = .syncNow
+            switch (style, held) {
+            case (.screen, _):
+                tone = .normal
+                title = lFormat("sync.status.synced", date.syncedTimeAgo())
+                detail = held ?? l("sync.status.all-items")
+            case (.card, nil):
+                tone = .normal
+                title = l("sync.status.synced.short")
+                detail = date.timeAgo().capitalizingFirstLetter()
+            case (.card, let held?):
+                tone = .caution
+                title = held
+                detail = lFormat("sync.status.everything-else-synced", date.timeAgo())
+            }
         case .neverSynced:
             icon = held == nil ? nil : .held
-            title = l("sync.status.never-synced")
-            detail = held ?? l("sync.status.all-items")
             button = .syncNow
+            switch (style, held) {
+            case (.card, let held?):
+                tone = .caution
+                title = held
+                detail = l("sync.status.never-synced")
+            default:
+                tone = .normal
+                title = l("sync.status.never-synced")
+                detail = held ?? l("sync.status.all-items")
+            }
         }
     }
 
@@ -79,6 +115,7 @@ struct SyncStatusSummary: Equatable {
 
     /// `nil` before the first sync.
     let icon: Icon?
+    let tone: Tone
     let title: String
     let detail: String
     let button: Button
@@ -93,6 +130,13 @@ extension Date {
             return l("sync.status.just-now")
         }
         return timeAgo()
+    }
+}
+
+private extension String {
+    /// "2 minutes ago" starts a line on the card.
+    func capitalizingFirstLetter() -> String {
+        prefix(1).capitalized(with: .fixedCurrentLocaleNumbers) + dropFirst()
     }
 }
 #endif

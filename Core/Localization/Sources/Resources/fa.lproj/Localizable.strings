@@ -839,3 +839,9 @@
 "sync.run.stopped" = "متوقف شد";
 // A sync's details: there was nothing to send or receive.
 "sync.run.up-to-date" = "به‌روز است";
+// Sync status on the Settings account card when everything synced. The time shows under it.
+"sync.status.synced.short" = "همگام‌سازی شد";
+// Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
+"sync.status.everything-else-synced" = "بقیهٔ موارد %@ همگام‌سازی شدند";
+// Link on the Settings account card that opens the items that don't sync.
+"sync.held.review" = "بررسی مواردی که همگام‌سازی نمی‌شوند";

@@ -217,7 +217,7 @@ final class SettingsRootViewModelTests: XCTestCase {
         let ended = expectation(description: "Observation ended")
         let observation = await startObservingSignIn(sut, client: client, email: "user@example.com", ended: ended)
 
-        await sut.logoutFromQuranCom()
+        try? await sut.signOutOfQuranCom(from: .accountSync)
         // Failing the updates ends the observation once the signed-out update is handled.
         client.failLoggedInUserUpdates(with: NSError(domain: "test", code: 1))
 
@@ -328,23 +328,7 @@ final class SettingsRootViewModelTests: XCTestCase {
         assertClientIsNotAuthenticated(sut.error)
     }
 
-    func test_requestSignOut_presentsConfirmationWithoutSigningOut() {
-        let client = AuthenticationClientFake()
-        let analytics = AnalyticsLibrarySpy()
-        let sut = makeSUT(analytics: analytics, authenticationClient: client)
-        sut.isAuthenticated = true
-        sut.loggedInUser = makeUser(email: "user@example.com")
-
-        sut.requestSignOut()
-
-        XCTAssertTrue(sut.isSignOutConfirmationPresented)
-        XCTAssertTrue(sut.isAuthenticated)
-        XCTAssertEqual(sut.currentUserEmail, "user@example.com")
-        XCTAssertEqual(client.events, [])
-        XCTAssertEqual(analytics.events, [])
-    }
-
-    func test_logout_clearsAuthenticationStateAndEmail() async {
+    func test_logout_clearsAuthenticationStateAndEmail() async throws {
         let client = AuthenticationClientFake()
         let analytics = AnalyticsLibrarySpy()
         client.loggedInUserValue = makeUser(email: "user@example.com")
@@ -352,22 +336,13 @@ final class SettingsRootViewModelTests: XCTestCase {
         sut.isAuthenticated = true
         sut.loggedInUser = makeUser(email: "user@example.com")
 
-        await sut.logoutFromQuranCom()
+        try await sut.signOutOfQuranCom(from: .accountSync)
 
         XCTAssertFalse(sut.isAuthenticated)
         XCTAssertNil(sut.currentUserEmail)
         XCTAssertEqual(client.events, [.logout])
-        XCTAssertEqual(analytics.events, [.init(name: "QuranSyncSignOut", value: "settings")])
-        XCTAssertNil(sut.error)
-    }
-
-    func test_signOutFromAccountSync_reportsTheAccountSyncSource() async throws {
-        let analytics = AnalyticsLibrarySpy()
-        let sut = makeSUT(analytics: analytics, authenticationClient: AuthenticationClientFake())
-
-        try await sut.signOutOfQuranCom(from: .accountSync)
-
         XCTAssertEqual(analytics.events, [.init(name: "QuranSyncSignOut", value: "account_sync")])
+        XCTAssertNil(sut.error)
     }
 
     func test_logout_disablesLegacyImport() async throws {
@@ -383,7 +358,7 @@ final class SettingsRootViewModelTests: XCTestCase {
         )
         let sut = makeSUT(authenticationClient: AuthenticationClientFake(), legacyDataImportCoordinator: coordinator)
 
-        await sut.logoutFromQuranCom()
+        try await sut.signOutOfQuranCom(from: .accountSync)
         try await coordinator.importNow()
 
         let notes = database.quranDataService.notesSequence().makeAsyncIterator()
@@ -391,12 +366,15 @@ final class SettingsRootViewModelTests: XCTestCase {
         XCTAssertEqual(importedNotes, [])
     }
 
-    func test_logout_setsErrorWhenClientIsMissing() async {
+    func test_logout_throwsWhenClientIsMissing() async {
         let sut = makeSUT(authenticationClient: nil)
 
-        await sut.logoutFromQuranCom()
-
-        assertClientIsNotAuthenticated(sut.error)
+        do {
+            try await sut.signOutOfQuranCom(from: .accountSync)
+            XCTFail("Expected signing out to fail")
+        } catch {
+            assertClientIsNotAuthenticated(error)
+        }
     }
 
     // MARK: Private
@@ -413,6 +391,7 @@ final class SettingsRootViewModelTests: XCTestCase {
             analytics: analytics,
             reviewService: ReviewService(analytics: AnalyticsLibrarySpy()),
             authenticationClient: authenticationClient ?? UnavailableAuthenticationClient(),
+            quranDataService: database.quranDataService,
             legacyDataImportCoordinator: legacyDataImportCoordinator ?? container.legacyDataImportCoordinator,
             audioPlaybackBuilder: AudioPlaybackBuilder(),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
@@ -422,7 +401,6 @@ final class SettingsRootViewModelTests: XCTestCase {
             appIconService: container.appIconService(),
             appIconBuilder: AppIconBuilder(container: container),
             accountSyncBuilder: AccountSyncBuilder(container: container),
-            quranProfileURL: container.quranProfileURL,
             navigationController: navigationController
         )
     }

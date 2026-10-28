@@ -749,3 +749,9 @@
 "sync.run.stopped" = "Đã dừng";
 // A sync's details: there was nothing to send or receive.
 "sync.run.up-to-date" = "Đã cập nhật";
+// Sync status on the Settings account card when everything synced. The time shows under it.
+"sync.status.synced.short" = "Đã đồng bộ";
+// Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
+"sync.status.everything-else-synced" = "Mọi thứ khác đã đồng bộ %@";
+// Link on the Settings account card that opens the items that don't sync.
+"sync.held.review" = "Xem lại các mục không đồng bộ";

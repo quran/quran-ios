@@ -32,6 +32,7 @@ final class SettingsRootViewModel: ObservableObject {
         analytics: AnalyticsLibrary,
         reviewService: ReviewService,
         authenticationClient: any AuthenticationClient,
+        quranDataService: MobileSyncDataService,
         legacyDataImportCoordinator: LegacyDataImportCoordinator,
         audioPlaybackBuilder: AudioPlaybackBuilder,
         audioDownloadsBuilder: AudioDownloadsBuilder,
@@ -41,7 +42,6 @@ final class SettingsRootViewModel: ObservableObject {
         appIconService: AppIconService,
         appIconBuilder: AppIconBuilder,
         accountSyncBuilder: AccountSyncBuilder,
-        quranProfileURL: URL,
         navigationController: UINavigationController
     ) {
         appearanceMode = themeService.appearanceMode
@@ -50,6 +50,7 @@ final class SettingsRootViewModel: ObservableObject {
         self.analytics = analytics
         self.reviewService = reviewService
         self.authenticationClient = authenticationClient
+        self.quranDataService = quranDataService
         self.legacyDataImportCoordinator = legacyDataImportCoordinator
         self.audioPlaybackBuilder = audioPlaybackBuilder
         self.audioDownloadsBuilder = audioDownloadsBuilder
@@ -58,7 +59,6 @@ final class SettingsRootViewModel: ObservableObject {
         self.diagnosticsBuilder = diagnosticsBuilder
         self.appIconBuilder = appIconBuilder
         self.accountSyncBuilder = accountSyncBuilder
-        self.quranProfileURL = quranProfileURL
         self.navigationController = navigationController
 
         themeService.appearanceModePublisher.assign(to: &$appearanceMode)
@@ -118,7 +118,7 @@ final class SettingsRootViewModel: ObservableObject {
     #if QURAN_SYNC
     @Published var isAuthenticated: Bool = false
     @Published var loggedInUser: MobileSyncUser? = nil
-    @Published var isSignOutConfirmationPresented = false
+    @Published private(set) var syncActivity = SyncActivity()
     #endif
 
     @Published var appearanceMode: AppearanceMode {
@@ -200,12 +200,6 @@ final class SettingsRootViewModel: ObservableObject {
         loggedInUser?.email
     }
 
-    func openQuranComProfile() {
-        logger.info("Settings: Open Quran.com profile.")
-        let viewController = SFSafariViewController(url: quranProfileURL)
-        navigationController?.present(viewController, animated: true)
-    }
-
     func navigateToAccountSync() {
         logger.info("Settings: navigateToAccountSync")
         let viewController = accountSyncBuilder.build(
@@ -250,6 +244,18 @@ final class SettingsRootViewModel: ObservableObject {
         }
     }
 
+    /// Follows the sync status, runs and held items for the account card until the task is cancelled.
+    func observeSyncActivity() async {
+        for await change in SyncActivity.changes(of: quranDataService) {
+            syncActivity.apply(change)
+        }
+    }
+
+    func syncNow() {
+        logger.info("Quran Sync: Sync now from Settings")
+        quranDataService.triggerSync(immediately: true)
+    }
+
     func loginToQuranCom() async {
         guard let viewController = navigationController else {
             return
@@ -274,21 +280,7 @@ final class SettingsRootViewModel: ObservableObject {
         }
     }
 
-    /// Asks the user to confirm before signing out, because sign-out clears the synced data on this device.
-    func requestSignOut() {
-        logger.info("Quran Sync: requested sign out confirmation from Settings")
-        isSignOutConfirmationPresented = true
-    }
-
-    func logoutFromQuranCom() async {
-        do {
-            try await signOutOfQuranCom(from: .settings)
-        } catch {
-            self.error = error
-        }
-    }
-
-    /// Signs out, here or from the Account & Sync screen, which shows its own error.
+    /// Signs out for the Account & Sync screen, which confirms first and shows the error.
     func signOutOfQuranCom(from source: QuranSyncAuthenticationSource) async throws {
         analytics.quranSyncSignOut(from: source)
         logger.info("Quran Sync: starting sign out from \(source)")
@@ -310,7 +302,7 @@ final class SettingsRootViewModel: ObservableObject {
 
     #if QURAN_SYNC
     private let accountSyncBuilder: AccountSyncBuilder
-    private let quranProfileURL: URL
+    private let quranDataService: MobileSyncDataService
     private var authenticationClient: any AuthenticationClient
     private let legacyDataImportCoordinator: LegacyDataImportCoordinator
 

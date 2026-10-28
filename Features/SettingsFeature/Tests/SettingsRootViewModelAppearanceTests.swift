@@ -155,6 +155,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
             analytics: analytics,
             reviewService: ReviewService(analytics: AnalyticsLibrarySpy()),
             authenticationClient: container.authenticationClient,
+            quranDataService: container.quranDataService,
             legacyDataImportCoordinator: container.legacyDataImportCoordinator,
             audioPlaybackBuilder: AudioPlaybackBuilder(),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
@@ -164,7 +165,6 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
             appIconService: appIconService,
             appIconBuilder: AppIconBuilder(container: container),
             accountSyncBuilder: AccountSyncBuilder(container: container),
-            quranProfileURL: container.quranProfileURL,
             navigationController: navigationController
         )
         #else

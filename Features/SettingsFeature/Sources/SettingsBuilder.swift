@@ -32,6 +32,7 @@ public struct SettingsBuilder {
             analytics: container.analytics,
             reviewService: ReviewService(analytics: container.analytics),
             authenticationClient: container.authenticationClient,
+            quranDataService: container.quranDataService,
             legacyDataImportCoordinator: container.legacyDataImportCoordinator,
             audioPlaybackBuilder: AudioPlaybackBuilder(),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),
@@ -41,7 +42,6 @@ public struct SettingsBuilder {
             appIconService: container.appIconService(),
             appIconBuilder: AppIconBuilder(container: container),
             accountSyncBuilder: AccountSyncBuilder(container: container),
-            quranProfileURL: container.quranProfileURL,
             navigationController: navigationController
         )
         #else

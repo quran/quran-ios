@@ -184,6 +184,38 @@ final class SyncActivityTests: XCTestCase {
         XCTAssertEqual(summary.detail, l("sync.error.unknown"))
     }
 
+    func test_cardSummary_leadsWithTheHeldCount_andPutsTheTimeInTheDetail() {
+        let syncedAt = Date().addingTimeInterval(-120)
+        let activity = SyncActivity(
+            runs: [makeRun(.succeeded, endedAt: syncedAt.timeIntervalSince1970)],
+            heldItems: [heldItem(.note, id: "n1", reason: .tooShort)]
+        )
+
+        let summary = SyncStatusSummary(activity, style: .card)
+
+        XCTAssertEqual(summary.tone, .caution)
+        XCTAssertEqual(summary.title, lFormat("sync.held.count", 1))
+        XCTAssertEqual(summary.detail, lFormat("sync.status.everything-else-synced", syncedAt.timeAgo()))
+    }
+
+    func test_cardSummary_showsSynced_withTheTimeInTheDetail() {
+        let activity = SyncActivity(runs: [makeRun(.succeeded, endedAt: Date().timeIntervalSince1970 - 120)])
+
+        let summary = SyncStatusSummary(activity, style: .card)
+
+        XCTAssertEqual(summary.icon, .synced)
+        XCTAssertEqual(summary.tone, .normal)
+        XCTAssertEqual(summary.title, l("sync.status.synced.short"))
+        XCTAssertFalse(summary.detail.isEmpty)
+    }
+
+    func test_cardSummary_showsTheFailureInRed() {
+        let summary = SyncStatusSummary(SyncActivity(runs: [makeRun(.failed, endedAt: 100)]), style: .card)
+
+        XCTAssertEqual(summary.tone, .failure)
+        XCTAssertEqual(summary.detail, l("sync.error.unknown"))
+    }
+
     func test_summary_disablesTheButtonWhileSyncing() {
         let summary = SyncStatusSummary(SyncActivity(status: .syncing))
 

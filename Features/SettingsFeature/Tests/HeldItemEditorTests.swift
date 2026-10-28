@@ -74,33 +74,8 @@ final class HeldItemEditorTests: XCTestCase {
         await sut.renameReadingBookmark(in: .teal)
 
         XCTAssertNil(sut.error)
-        let bookmarks = try await firstElement(of: database.quranDataService.readingBookmarksSequence(mushaf: .madani1405))
+        let bookmarks = try await database.quranDataService.readingBookmarksSequence(mushaf: .madani1405).first { _ in true }
         XCTAssertEqual(bookmarks?.first { $0.slot == .teal }?.name, "Juz Amma")
-    }
-
-    // MARK: First element
-
-    func test_firstElement_readsTheCurrentNotes() async throws {
-        try await database.quranDataService.createNote(
-            body: "Reflection", startSura: 2, startAyah: 255, endSura: 2, endAyah: 255, timestamp: Date()
-        )
-
-        let notes = try await firstElement(of: database.quranDataService.notesSequence())
-
-        XCTAssertEqual(notes?.map(\.body), ["Reflection"])
-    }
-
-    func test_firstElement_stopsWhenTheCallerIsCancelled() async throws {
-        let service = database.quranDataService
-        let read = Task {
-            withUnsafeCurrentTask { $0?.cancel() }
-            return try await firstElement(of: service.notesSequence())
-        }
-
-        do {
-            _ = try await read.value
-            XCTFail("Expected the read to be cancelled")
-        } catch is CancellationError {}
     }
 
     // MARK: Rows

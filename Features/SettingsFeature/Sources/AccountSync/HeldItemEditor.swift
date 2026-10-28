@@ -117,7 +117,8 @@ final class HeldItemEditor: ObservableObject, NoteEditorListener {
     private func editNote(id: String) async {
         logger.info("Quran Sync: editing a held note")
         do {
-            let notes = try await firstElement(of: noteService.notesSequence(quran: readingPreferences.reading.quran))
+            let notes = try await noteService.notesSequence(quran: readingPreferences.reading.quran).first { _ in true }
+            try Task.checkCancellation()
             guard let note = notes?.first(where: { $0.id == id }) else {
                 logger.error("Quran Sync: the held note to edit is no longer on this device")
                 error = ItemNotFoundError()

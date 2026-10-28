@@ -170,5 +170,26 @@
             <string>%d попытки</string>
         </dict>
     </dict>
+    <!-- Sign-out confirmation: how many items haven't synced and would be lost. -->
+    <key>sync.sign-out.unsynced</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d элемент ещё не синхронизирован с Quran.com и будет потерян, если вы выйдете.</string>
+            <key>few</key>
+            <string>%d элемента ещё не синхронизированы с Quran.com и будут потеряны, если вы выйдете.</string>
+            <key>many</key>
+            <string>%d элементов ещё не синхронизированы с Quran.com и будут потеряны, если вы выйдете.</string>
+            <key>other</key>
+            <string>%d элемента ещё не синхронизированы с Quran.com и будут потеряны, если вы выйдете.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

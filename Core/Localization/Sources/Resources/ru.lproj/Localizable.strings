@@ -648,7 +648,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Выйти";
 "setting.quran_account.sign_out.confirmation.title" = "Выйти из Quran.com?";
-"setting.quran_account.sign_out.confirmation.message" = "Ваши закладки и заметки будут удалены с этого устройства и восстановятся при следующем входе.";
+"setting.quran_account.sign_out.confirmation.message" = "Всё синхронизировано с Quran.com. Ваши закладки, коллекции и заметки будут удалены с этого устройства и восстановятся при следующем входе.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Синхронизировать закладки на всех устройствах";
 
@@ -851,3 +851,5 @@
 "sync.held.show-all" = "Показать все (%@)";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "Вся история";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "Изменения, которые ещё не синхронизированы с Quran.com, будут потеряны, если вы выйдете.";

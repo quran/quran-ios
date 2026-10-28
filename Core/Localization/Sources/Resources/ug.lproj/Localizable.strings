@@ -651,7 +651,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "چىقىش";
 "setting.quran_account.sign_out.confirmation.title" = "Quran.com دىن چىقامسىز؟";
-"setting.quran_account.sign_out.confirmation.message" = "خەتكۈچ ۋە خاتىرىلىرىڭىز بۇ ئۈسكۈنىدىن ئۆچۈرۈلىدۇ، قايتا كىرگەندە ئەسلىگە كېلىدۇ.";
+"setting.quran_account.sign_out.confirmation.message" = "ھەممىسى Quran.com بىلەن ماسقەدەملەندى. خەتكۈچ، توپلام ۋە خاتىرىلىرىڭىز بۇ ئۈسكۈنىدىن ئۆچۈرۈلىدۇ، قايتا كىرگەندە ئەسلىگە كېلىدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "خەتكۈچلىرىڭىزنى بارلىق ئۈسكۈنىلەردە ماسقەدەملەڭ";
 
@@ -854,3 +854,5 @@
 "sync.held.show-all" = "ھەممىسىنى كۆرسىتىش (%@)";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "بارلىق پائالىيەتنى كۆرۈش";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "Quran.com بىلەن تېخى ماسقەدەملەنمىگەن ئۆزگەرتىشلەر چىقسىڭىز يوقىلىدۇ.";

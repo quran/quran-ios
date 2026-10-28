@@ -135,5 +135,22 @@
             <string>%d attempts</string>
         </dict>
     </dict>
+    <!-- Sign-out confirmation: how many items haven't synced and would be lost. -->
+    <key>sync.sign-out.unsynced</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d item hasn't synced to Quran.com yet and will be lost if you sign out.</string>
+            <key>other</key>
+            <string>%d items haven't synced to Quran.com yet and will be lost if you sign out.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

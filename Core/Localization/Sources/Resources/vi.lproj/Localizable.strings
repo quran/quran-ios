@@ -560,7 +560,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Đăng xuất";
 "setting.quran_account.sign_out.confirmation.title" = "Đăng xuất khỏi Quran.com?";
-"setting.quran_account.sign_out.confirmation.message" = "Dấu trang và ghi chú của bạn sẽ bị xóa khỏi thiết bị này và được khôi phục khi bạn đăng nhập lại.";
+"setting.quran_account.sign_out.confirmation.message" = "Mọi thứ đã được đồng bộ với Quran.com. Dấu trang, bộ sưu tập và ghi chú của bạn sẽ bị xóa khỏi thiết bị này và được khôi phục khi bạn đăng nhập lại.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Đồng bộ dấu trang trên mọi thiết bị";
 
@@ -763,3 +763,5 @@
 "sync.held.show-all" = "Hiện tất cả %@";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "Xem tất cả hoạt động";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "Những thay đổi chưa được đồng bộ với Quran.com sẽ bị mất nếu bạn đăng xuất.";

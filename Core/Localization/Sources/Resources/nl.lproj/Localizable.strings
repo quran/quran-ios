@@ -563,7 +563,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Uitloggen";
 "setting.quran_account.sign_out.confirmation.title" = "Uitloggen bij Quran.com?";
-"setting.quran_account.sign_out.confirmation.message" = "Je bladwijzers en notities worden van dit apparaat verwijderd en teruggezet wanneer je opnieuw inlogt.";
+"setting.quran_account.sign_out.confirmation.message" = "Alles is gesynchroniseerd met Quran.com. Je bladwijzers, verzamelingen en notities worden van dit apparaat verwijderd en teruggezet wanneer je opnieuw inlogt.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Je bladwijzers op alle apparaten synchroniseren";
 
@@ -766,3 +766,5 @@
 "sync.held.show-all" = "Alle %@ tonen";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "Alle activiteit bekijken";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "Wijzigingen die nog niet met Quran.com zijn gesynchroniseerd, gaan verloren als je uitlogt.";

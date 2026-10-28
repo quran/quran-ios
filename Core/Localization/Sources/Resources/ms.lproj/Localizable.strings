@@ -631,7 +631,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Log keluar";
 "setting.quran_account.sign_out.confirmation.title" = "Log keluar daripada Quran.com?";
-"setting.quran_account.sign_out.confirmation.message" = "Penanda halaman dan nota anda akan dialih keluar daripada peranti ini dan dipulihkan apabila anda log masuk semula.";
+"setting.quran_account.sign_out.confirmation.message" = "Semuanya telah disegerakkan dengan Quran.com. Penanda halaman, koleksi dan nota anda akan dialih keluar daripada peranti ini dan dipulihkan apabila anda log masuk semula.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Segerakkan penanda halaman pada semua peranti";
 
@@ -834,3 +834,5 @@
 "sync.held.show-all" = "Tunjukkan semua %@";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "Lihat semua aktiviti";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "Perubahan yang belum disegerakkan dengan Quran.com akan hilang jika anda log keluar.";

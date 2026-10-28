@@ -25,10 +25,12 @@ struct AccountSyncView: View {
             syncNow: { viewModel.syncNow() },
             showActivity: { viewModel.showActivity() },
             openProfile: { viewModel.openQuranComProfile() },
-            signOut: { viewModel.requestSignOut() }
+            signOut: { await viewModel.requestSignOut() }
         )
         .signOutConfirmation(
             isPresented: $viewModel.isSignOutConfirmationPresented,
+            unsyncedCount: viewModel.unsyncedCount,
+            syncNow: { viewModel.syncNow() },
             signOut: { await viewModel.signOutOfQuranCom() }
         )
     }
@@ -46,7 +48,7 @@ private struct AccountSyncViewUI: View {
     let syncNow: Action
     let showActivity: Action
     let openProfile: Action
-    let signOut: Action
+    let signOut: AsyncAction
 
     var body: some View {
         NoorList {
@@ -103,7 +105,7 @@ private struct AccountSyncViewUI: View {
                     image: .init(.signOut, color: .red),
                     title: .text(l("setting.quran_account.sign_out")),
                     titleColor: .red,
-                    action: .sync { signOut() }
+                    action: .async { await signOut() }
                 )
             }
         }

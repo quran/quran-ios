@@ -199,5 +199,30 @@
             <string>%d محاولة</string>
         </dict>
     </dict>
+    <!-- Sign-out confirmation: how many items haven't synced and would be lost. -->
+    <key>sync.sign-out.unsynced</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>%d عنصر لم تتم مزامنته مع Quran.com بعد وسيُفقد إذا سجّلت الخروج.</string>
+            <key>one</key>
+            <string>عنصر واحد لم تتم مزامنته مع Quran.com بعد وسيُفقد إذا سجّلت الخروج.</string>
+            <key>two</key>
+            <string>عنصران لم تتم مزامنتهما مع Quran.com بعد وسيُفقدان إذا سجّلت الخروج.</string>
+            <key>few</key>
+            <string>%d عناصر لم تتم مزامنتها مع Quran.com بعد وستُفقد إذا سجّلت الخروج.</string>
+            <key>many</key>
+            <string>%d عنصرًا لم تتم مزامنتها مع Quran.com بعد وستُفقد إذا سجّلت الخروج.</string>
+            <key>other</key>
+            <string>%d عنصر لم تتم مزامنتها مع Quran.com بعد وستُفقد إذا سجّلت الخروج.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

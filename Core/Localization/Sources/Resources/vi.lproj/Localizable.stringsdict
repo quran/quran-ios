@@ -122,5 +122,20 @@
             <string>%d lần thử</string>
         </dict>
     </dict>
+    <!-- Sign-out confirmation: how many items haven't synced and would be lost. -->
+    <key>sync.sign-out.unsynced</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>other</key>
+            <string>%d mục chưa được đồng bộ với Quran.com và sẽ bị mất nếu bạn đăng xuất.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

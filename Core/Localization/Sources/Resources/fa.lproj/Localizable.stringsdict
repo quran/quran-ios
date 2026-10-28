@@ -138,5 +138,22 @@
             <string>%d تلاش</string>
         </dict>
     </dict>
+    <!-- Sign-out confirmation: how many items haven't synced and would be lost. -->
+    <key>sync.sign-out.unsynced</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d مورد هنوز با Quran.com همگام‌سازی نشده و با خروج از دست می‌رود.</string>
+            <key>other</key>
+            <string>%d مورد هنوز با Quran.com همگام‌سازی نشده‌اند و با خروج از دست می‌روند.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

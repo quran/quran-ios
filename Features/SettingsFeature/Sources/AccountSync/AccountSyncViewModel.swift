@@ -44,6 +44,8 @@ final class AccountSyncViewModel: ObservableObject {
     @Published private(set) var activity = SyncActivity()
     @Published private(set) var lookup = HeldItemLookup()
     @Published var isSignOutConfirmationPresented = false
+    /// How many items haven't synced when sign-out was requested, or `nil` when it couldn't be read.
+    @Published private(set) var unsyncedCount: Int?
     @Published var error: Error?
 
     var status: SyncStatusSummary {
@@ -84,8 +86,15 @@ final class AccountSyncViewModel: ObservableObject {
         navigationController?.present(viewController, animated: true)
     }
 
-    func requestSignOut() {
+    /// Asks the user to confirm, warning about the changes that haven't synced, which sign-out deletes.
+    func requestSignOut() async {
         logger.info("Quran Sync: requested sign out confirmation from Account & Sync")
+        do {
+            unsyncedCount = try await quranDataService.unsyncedItemCount()
+        } catch {
+            logger.error("Quran Sync: failed to read the unsynced item count before signing out: \(error)")
+            unsyncedCount = nil
+        }
         isSignOutConfirmationPresented = true
     }
 

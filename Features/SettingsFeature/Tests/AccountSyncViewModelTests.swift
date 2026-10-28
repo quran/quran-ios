@@ -101,12 +101,35 @@ final class AccountSyncViewModelTests: XCTestCase {
         XCTAssertEqual(navigationController.topViewController?.title, l("sync.activity.title"))
     }
 
-    func test_requestSignOut_presentsTheConfirmation() {
+    func test_requestSignOut_presentsTheConfirmation_withNothingUnsynced() async {
         let sut = makeSUT(client: signedInClient(email: "user@example.com"))
 
-        sut.requestSignOut()
+        await sut.requestSignOut()
 
         XCTAssertTrue(sut.isSignOutConfirmationPresented)
+        XCTAssertEqual(sut.unsyncedCount, 0)
+        XCTAssertEqual(
+            signOutConfirmationMessage(unsyncedCount: sut.unsyncedCount),
+            l("setting.quran_account.sign_out.confirmation.message")
+        )
+    }
+
+    /// The test database never syncs, so a new note stays unsynced and signing out would lose it.
+    func test_requestSignOut_warnsAboutUnsyncedItems() async throws {
+        try await database.quranDataService.createNote(
+            body: "Reflection", startSura: 2, startAyah: 255, endSura: 2, endAyah: 255, timestamp: Date()
+        )
+        let sut = makeSUT(client: signedInClient(email: "user@example.com"))
+
+        await sut.requestSignOut()
+
+        XCTAssertTrue(sut.isSignOutConfirmationPresented)
+        XCTAssertEqual(sut.unsyncedCount, 1)
+        XCTAssertEqual(signOutConfirmationMessage(unsyncedCount: sut.unsyncedCount), lFormat("sync.sign-out.unsynced", 1))
+    }
+
+    func test_signOutMessage_warnsWithoutACount_whenItCouldNotBeRead() {
+        XCTAssertEqual(signOutConfirmationMessage(unsyncedCount: nil), l("sync.sign-out.unsynced-unknown"))
     }
 
     // MARK: Private

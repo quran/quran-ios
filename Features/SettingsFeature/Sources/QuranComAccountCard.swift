@@ -117,7 +117,7 @@ struct QuranComAccountCard: View {
             statusRow
                 .padding(.top, rowVerticalPadding)
 
-            if status.icon == .held {
+            if status.hasHeldItems {
                 reviewHeldItems
                     .padding(.top, rowVerticalPadding)
             }

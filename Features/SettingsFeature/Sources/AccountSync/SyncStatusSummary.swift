@@ -58,6 +58,7 @@ struct SyncStatusSummary: Equatable {
 
     init(_ activity: SyncActivity, style: Style = .screen) {
         let heldCount = activity.blockingItems.count
+        hasHeldItems = heldCount > 0
         let held = heldCount > 0 ? lFormat("sync.held.count", heldCount) : nil
         switch activity.state {
         case .syncing:
@@ -119,6 +120,8 @@ struct SyncStatusSummary: Equatable {
     let title: String
     let detail: String
     let button: Button
+    /// Whether items the user can fix aren't syncing, whatever the sync is doing now.
+    let hasHeldItems: Bool
 }
 
 extension Date {

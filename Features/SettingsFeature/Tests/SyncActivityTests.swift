@@ -199,14 +199,47 @@ final class SyncActivityTests: XCTestCase {
     }
 
     func test_cardSummary_showsSynced_withTheTimeInTheDetail() {
-        let activity = SyncActivity(runs: [makeRun(.succeeded, endedAt: Date().timeIntervalSince1970 - 120)])
+        let syncedAt = Date().addingTimeInterval(-120)
+        let activity = SyncActivity(runs: [makeRun(.succeeded, endedAt: syncedAt.timeIntervalSince1970)])
 
         let summary = SyncStatusSummary(activity, style: .card)
 
+        // The time starts the line, so its first letter is capitalized, such as "Now".
+        let timeAgo = syncedAt.timeAgo()
         XCTAssertEqual(summary.icon, .synced)
         XCTAssertEqual(summary.tone, .normal)
         XCTAssertEqual(summary.title, l("sync.status.synced.short"))
-        XCTAssertFalse(summary.detail.isEmpty)
+        XCTAssertEqual(summary.detail, timeAgo.prefix(1).capitalized(with: .fixedCurrentLocaleNumbers) + timeAgo.dropFirst())
+        XCTAssertFalse(summary.hasHeldItems)
+    }
+
+    /// The card keeps offering to review held items while it syncs or after a failure.
+    func test_cardSummary_keepsHeldItems_whileSyncing() {
+        let activity = SyncActivity(status: .syncing, heldItems: [heldItem(.note, id: "n1", reason: .tooShort)])
+
+        let summary = SyncStatusSummary(activity, style: .card)
+
+        XCTAssertEqual(summary.icon, .syncing)
+        XCTAssertTrue(summary.hasHeldItems)
+    }
+
+    func test_cardSummary_keepsHeldItems_afterAFailure() {
+        let activity = SyncActivity(
+            runs: [makeRun(.failed, endedAt: 100)],
+            heldItems: [heldItem(.note, id: "n1", reason: .tooShort)]
+        )
+
+        let summary = SyncStatusSummary(activity, style: .card)
+
+        XCTAssertEqual(summary.icon, .failed)
+        XCTAssertTrue(summary.hasHeldItems)
+    }
+
+    func test_cardSummary_hasNoHeldItems_whenOnlyWaitingItemsAreLeft() {
+        let parent = heldItem(.collection, id: "c1", reason: .reservedName)
+        let activity = SyncActivity(heldItems: [heldItem(.collectionBookmark, id: "2:255", reason: .waitingOnParent, waitingOn: parent)])
+
+        XCTAssertFalse(SyncStatusSummary(activity, style: .card).hasHeldItems)
     }
 
     func test_cardSummary_showsTheFailureInRed() {

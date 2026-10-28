@@ -90,7 +90,7 @@ final class AccountSyncViewModel: ObservableObject {
     func requestSignOut() async {
         logger.info("Quran Sync: requested sign out confirmation from Account & Sync")
         do {
-            unsyncedCount = try await quranDataService.unsyncedItemCount()
+            unsyncedCount = try await quranDataService.unsyncedItemCountSequence().first { _ in true }
         } catch {
             logger.error("Quran Sync: failed to read the unsynced item count before signing out: \(error)")
             unsyncedCount = nil

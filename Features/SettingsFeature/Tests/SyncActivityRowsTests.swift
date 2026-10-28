@@ -64,6 +64,25 @@ final class SyncActivityRowsTests: XCTestCase {
         XCTAssertEqual(row.title.accessibilityText, lFormat("sync.held.reading-bookmark", l("highlight.color.orange")))
     }
 
+    /// A note on this device whose verses don't exist isn't deleted: it shows the verse numbers it has.
+    func test_heldNoteWithInvalidVerses_isTitledByItsNumbers() throws {
+        let lookup = HeldItemLookup(notes: [note(id: "n1", sura: 2, ayah: 300)])
+
+        let row = try XCTUnwrap(HeldItemRow.rows(for: [heldItem(.note, id: "n1", reason: .invalidRange)], lookup: lookup).first)
+
+        XCTAssertEqual(row.title.accessibilityText, lFormat("sync.held.note", "2:300"))
+        XCTAssertEqual(row.reason, l("sync.held.reason.invalid-verses"))
+    }
+
+    func test_heldBookmarkOnAMissingVerse_isTitledByItsNumbers() throws {
+        let item = heldItem(.collectionBookmark, id: "2:300", collectionID: "c1", reason: .invalidVerse)
+
+        let row = try XCTUnwrap(HeldItemRow.rows(for: [item], lookup: HeldItemLookup()).first)
+
+        XCTAssertEqual(row.title.accessibilityText, lFormat("sync.held.bookmark", "2:300"))
+        XCTAssertEqual(row.reason, l("sync.held.reason.invalid-verses"))
+    }
+
     /// An item held while being deleted is no longer in the other models.
     func test_heldDeletedNote_isTitledAsDeleted() throws {
         let row = try XCTUnwrap(HeldItemRow.rows(for: [heldItem(.note, id: "gone", reason: .rejectedByServer)], lookup: HeldItemLookup()).first)

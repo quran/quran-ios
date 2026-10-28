@@ -53,18 +53,23 @@ struct HeldItemRow: Identifiable {
     private static func title(of item: MobileSyncHeldItem, lookup: HeldItemLookup) -> MultipartText {
         switch item.type {
         case .note:
-            guard let range = lookup.notesByID[item.id]?.ranges.first.flatMap(ayahRange) else {
+            // Only a note missing from this device is deleted. One whose verses don't exist shows their numbers.
+            guard let range = lookup.notesByID[item.id]?.ranges.first else {
                 return .text(l("sync.held.deleted-note"))
             }
-            return .localizedFormat("sync.held.note", "\(ayahRange: range)")
+            guard let ayahs = ayahRange(range) else {
+                return .localizedFormat("sync.held.note", .text(rawRange(range)))
+            }
+            return .localizedFormat("sync.held.note", "\(ayahRange: ayahs)")
         case .collection:
             guard let collection = lookup.collectionsByID[item.id] else {
                 return .text(l("sync.held.deleted-collection"))
             }
             return .localizedFormat("sync.held.collection", .text(collection.displayName))
         case .collectionBookmark:
+            // The id names the verse even when the verse doesn't exist, so show its numbers then.
             guard let ayah = bookmarkedAyah(item.id) else {
-                return .text(l("sync.held.deleted-bookmark"))
+                return .localizedFormat("sync.held.bookmark", .text(rawVerse(item.id)))
             }
             return .localizedFormat("sync.held.bookmark", "\(ayah: ayah)")
         case .readingBookmark:
@@ -137,6 +142,27 @@ struct HeldItemRow: Identifiable {
             return nil
         }
         return AyahNumber(quran: quran, sura: numbers[0], ayah: numbers[1])
+    }
+
+    /// `2:300`, or `2:300–3:1`, with the app's digits.
+    private static func rawRange(_ range: MobileSyncNoteRange) -> String {
+        let start = rawVerse(sura: range.startSura, ayah: range.startAyah)
+        guard range.startSura != range.endSura || range.startAyah != range.endAyah else {
+            return start
+        }
+        return start + "–" + rawVerse(sura: range.endSura, ayah: range.endAyah)
+    }
+
+    private static func rawVerse(_ id: String) -> String {
+        let numbers = id.split(separator: ":").compactMap { Int($0) }
+        guard numbers.count == 2 else {
+            return id
+        }
+        return rawVerse(sura: numbers[0], ayah: numbers[1])
+    }
+
+    private static func rawVerse(sura: Int, ayah: Int) -> String {
+        "\(NumberFormatter.shared.format(sura)):\(NumberFormatter.shared.format(ayah))"
     }
 
     /// Sync identifies verses by sura and ayah, which every Hafs mushaf numbers the same.

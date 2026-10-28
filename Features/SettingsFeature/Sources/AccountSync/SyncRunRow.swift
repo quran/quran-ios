@@ -97,6 +97,8 @@ extension MobileSyncRunTrigger {
             l("sync.run.trigger.manual")
         case .localChange:
             l("sync.run.trigger.local-change")
+        case .foreground:
+            l("sync.run.trigger.foreground")
         case .periodic:
             // MobileSync syncs every 30 minutes.
             lFormat("sync.run.trigger.periodic", NumberFormatter.shared.format(30))

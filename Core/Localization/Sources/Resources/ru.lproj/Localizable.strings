@@ -733,6 +733,8 @@
 "sync.status.sending" = "Отправка ваших изменений";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "Не удалось синхронизировать";
+// Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
+"sync.status.retrying" = "%@ · Скоро повторная попытка";
 // Detail under the sync status: what syncs with Quran.com.
 "sync.status.all-items" = "Закладки, коллекции, заметки и прогресс чтения";
 // Why a sync failed: the device couldn't reach Quran.com.
@@ -813,6 +815,8 @@
 "sync.run.trigger.manual" = "Синхронизировать";
 // What started a sync: a change on this device.
 "sync.run.trigger.local-change" = "Изменение на этом устройстве";
+// What started a sync: the user returned to the app from the background.
+"sync.run.trigger.foreground" = "Возврат в приложение";
 // What started a sync: the periodic sync, where %@ is the number of minutes.
 "sync.run.trigger.periodic" = "Каждые %@ минут";
 // What started a sync: the app started.

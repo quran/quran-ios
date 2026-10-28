@@ -735,6 +735,8 @@
 "sync.status.sending" = "O‘zgarishlaringiz yuborilmoqda";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "Sinxronlab bo‘lmadi";
+// Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
+"sync.status.retrying" = "%@ · Tez orada qayta uriniladi";
 // Detail under the sync status: what syncs with Quran.com.
 "sync.status.all-items" = "Xatcho‘plar, to‘plamlar, eslatmalar va o‘qish jarayoni";
 // Why a sync failed: the device couldn't reach Quran.com.
@@ -815,6 +817,8 @@
 "sync.run.trigger.manual" = "Hozir sinxronlash";
 // What started a sync: a change on this device.
 "sync.run.trigger.local-change" = "Shu qurilmadagi o‘zgarish";
+// What started a sync: the user returned to the app from the background.
+"sync.run.trigger.foreground" = "Ilovaga qaytish";
 // What started a sync: the periodic sync, where %@ is the number of minutes.
 "sync.run.trigger.periodic" = "Har %@ daqiqada";
 // What started a sync: the app started.

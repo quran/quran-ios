@@ -14,6 +14,8 @@ import VLogging
 struct SyncActivity: Equatable {
     enum State: Equatable {
         case syncing
+        /// The latest attempt failed for `reason`, and the sync tries again soon on its own.
+        case retrying(MobileSyncRunError.Kind)
         /// The latest sync failed for `reason`, which is `nil` when it only couldn't send the local changes.
         case failed(MobileSyncRunError.Kind?)
         case synced(at: Date)
@@ -37,6 +39,9 @@ struct SyncActivity: Equatable {
     var state: State {
         if status == .syncing {
             return .syncing
+        }
+        if case .retrying(_, let error, _) = status {
+            return .retrying(error.kind)
         }
         let latestRun = runs.first { $0.result != .cancelled }
         // The status can change before the history does, so a newer success outranks the latest run.

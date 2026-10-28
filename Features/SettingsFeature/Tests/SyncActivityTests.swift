@@ -19,6 +19,16 @@ final class SyncActivityTests: XCTestCase {
         XCTAssertEqual(activity.state, .syncing)
     }
 
+    func test_state_isRetrying_whileAFailedAttemptWaitsToRetry() {
+        let error = MobileSyncRunError(kind: .network, httpStatus: nil, serverCode: nil, message: "offline")
+        let activity = SyncActivity(
+            status: .retrying(failedAt: date(300), error: error, nextAttemptAt: date(310)),
+            runs: [makeRun(.succeeded, endedAt: 100)]
+        )
+
+        XCTAssertEqual(activity.state, .retrying(.network))
+    }
+
     /// The status resets to idle at launch, so the stored runs say when it last synced.
     func test_state_isSyncedAtTheLatestSucceededRun_afterLaunch() {
         let activity = SyncActivity(status: .idle, runs: [makeRun(.succeeded, endedAt: 200), makeRun(.succeeded, endedAt: 100)])
@@ -103,6 +113,17 @@ final class SyncActivityTests: XCTestCase {
         XCTAssertEqual(summary.title, l("sync.status.failed"))
         XCTAssertEqual(summary.detail, l("sync.error.network"))
         XCTAssertEqual(summary.button, .tryAgain)
+    }
+
+    func test_summary_showsTheFailureReasonAndTryAgain_whileRetrying() {
+        let error = MobileSyncRunError(kind: .network, httpStatus: nil, serverCode: nil, message: "offline")
+        let summary = SyncStatusSummary(SyncActivity(status: .retrying(failedAt: date(300), error: error, nextAttemptAt: date(310))))
+
+        XCTAssertEqual(summary.icon, .failed)
+        XCTAssertEqual(summary.title, l("sync.status.failed"))
+        XCTAssertEqual(summary.detail, lFormat("sync.status.retrying", l("sync.error.network")))
+        XCTAssertEqual(summary.button, .tryAgain)
+        XCTAssertTrue(summary.button.isEnabled)
     }
 
     func test_summary_showsAnUnknownFailure_whenAFailedRunHasNoError() {

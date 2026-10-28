@@ -51,6 +51,12 @@ struct SyncStatusSummary: Equatable {
             title = l("sync.status.syncing")
             detail = l("sync.status.sending")
             button = .syncing
+        case .retrying(let reason):
+            // The retry comes within seconds, so "soon" says enough; Try again runs it now.
+            icon = .failed
+            title = l("sync.status.failed")
+            detail = lFormat("sync.status.retrying", reason.localizedDescription)
+            button = .tryAgain
         case .failed(let reason):
             icon = .failed
             title = l("sync.status.failed")

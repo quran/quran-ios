@@ -645,6 +645,8 @@
 "sync.status.sending" = "Đang gửi các thay đổi của bạn";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "Không thể đồng bộ";
+// Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
+"sync.status.retrying" = "%@ · Sẽ thử lại sau giây lát";
 // Detail under the sync status: what syncs with Quran.com.
 "sync.status.all-items" = "Dấu trang, bộ sưu tập, ghi chú và tiến độ đọc";
 // Why a sync failed: the device couldn't reach Quran.com.
@@ -725,6 +727,8 @@
 "sync.run.trigger.manual" = "Đồng bộ ngay";
 // What started a sync: a change on this device.
 "sync.run.trigger.local-change" = "Thay đổi trên thiết bị này";
+// What started a sync: the user returned to the app from the background.
+"sync.run.trigger.foreground" = "Quay lại ứng dụng";
 // What started a sync: the periodic sync, where %@ is the number of minutes.
 "sync.run.trigger.periodic" = "Mỗi %@ phút";
 // What started a sync: the app started.

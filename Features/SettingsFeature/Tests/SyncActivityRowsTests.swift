@@ -126,6 +126,12 @@ final class SyncActivityRowsTests: XCTestCase {
         XCTAssertEqual(row.title, lFormat("sync.run.title", formatter.string(from: date(100)), l("sync.run.trigger.app-start")))
     }
 
+    func test_runTitle_namesAReturnToTheApp() {
+        let row = SyncRunRow(makeRun(.succeeded, endedAt: 100, trigger: .foreground))
+
+        XCTAssertEqual(row.title, lFormat("sync.run.title", SyncRunRow.dateFormatter.string(from: date(100)), l("sync.run.trigger.foreground")))
+    }
+
     // MARK: Profile
 
     func test_profile_usesTheNameForInitials() {

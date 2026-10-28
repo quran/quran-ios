@@ -736,6 +736,8 @@
 "sync.status.sending" = "ئۆزگەرتىشلىرىڭىز يوللىنىۋاتىدۇ";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "ماسقەدەملىگىلى بولمىدى";
+// Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
+"sync.status.retrying" = "%@ · ھايال ئۆتمەي قايتا سىنايدۇ";
 // Detail under the sync status: what syncs with Quran.com.
 "sync.status.all-items" = "خەتكۈچ، توپلام، خاتىرە ۋە ئوقۇش ئىلگىرىلىشى";
 // Why a sync failed: the device couldn't reach Quran.com.
@@ -816,6 +818,8 @@
 "sync.run.trigger.manual" = "ھازىر ماسقەدەملەش";
 // What started a sync: a change on this device.
 "sync.run.trigger.local-change" = "بۇ ئۈسكۈنىدىكى ئۆزگەرتىش";
+// What started a sync: the user returned to the app from the background.
+"sync.run.trigger.foreground" = "ئەپكە قايتىش";
 // What started a sync: the periodic sync, where %@ is the number of minutes.
 "sync.run.trigger.periodic" = "ھەر %@ مىنۇتتا";
 // What started a sync: the app started.

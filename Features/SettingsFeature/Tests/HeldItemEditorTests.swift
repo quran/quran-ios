@@ -54,6 +54,39 @@ final class HeldItemEditorTests: XCTestCase {
         }
     }
 
+    func test_editNote_showsAnError_whenTheNoteIsGone() async {
+        let sut = makeSUT()
+
+        await sut.edit(.note(id: "deleted-on-another-device"))
+
+        XCTAssertTrue(sut.error is HeldItemEditor.ItemNotFoundError)
+    }
+
+    // MARK: First element
+
+    func test_firstElement_readsTheCurrentNotes() async throws {
+        try await database.quranDataService.createNote(
+            body: "Reflection", startSura: 2, startAyah: 255, endSura: 2, endAyah: 255, timestamp: Date()
+        )
+
+        let notes = try await firstElement(of: database.quranDataService.notesSequence())
+
+        XCTAssertEqual(notes?.map(\.body), ["Reflection"])
+    }
+
+    func test_firstElement_stopsWhenTheCallerIsCancelled() async throws {
+        let service = database.quranDataService
+        let read = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            return try await firstElement(of: service.notesSequence())
+        }
+
+        do {
+            _ = try await read.value
+            XCTFail("Expected the read to be cancelled")
+        } catch is CancellationError {}
+    }
+
     // MARK: Rows
 
     func test_rowEdit_opensTheNote_whenEditingCanFixIt() {
@@ -107,6 +140,7 @@ final class HeldItemEditorTests: XCTestCase {
         return HeldItemEditor(
             noteService: MobileSyncNoteService(quranDataService: database.quranDataService),
             collectionService: AyahBookmarkCollectionService(quranDataService: database.quranDataService),
+            readingPreferences: .shared,
             noteEditorBuilder: NoteEditorBuilder(container: container),
             navigationController: UINavigationController()
         )

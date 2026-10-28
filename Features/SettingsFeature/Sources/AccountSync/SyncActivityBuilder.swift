@@ -10,6 +10,7 @@ import AnnotationsService
 import AppDependencies
 import Localization
 import NoteEditorFeature
+import ReadingService
 import SwiftUI
 import UIKit
 
@@ -31,6 +32,7 @@ struct SyncActivityBuilder {
         HeldItemEditor(
             noteService: container.mobileSyncNoteService(),
             collectionService: container.ayahBookmarkCollectionService(),
+            readingPreferences: .shared,
             noteEditorBuilder: NoteEditorBuilder(container: container),
             navigationController: navigationController
         )

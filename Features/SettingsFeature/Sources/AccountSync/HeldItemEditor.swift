@@ -18,16 +18,21 @@ import VLogging
 /// Opens the editor that fixes a held item: the note editor for a note, the rename alert for a collection.
 @MainActor
 final class HeldItemEditor: ObservableObject, NoteEditorListener {
+    /// The held item is no longer on this device, such as a note deleted on another device since the list showed it.
+    struct ItemNotFoundError: Error {}
+
     // MARK: Lifecycle
 
     init(
         noteService: MobileSyncNoteService,
         collectionService: AyahBookmarkCollectionService,
+        readingPreferences: ReadingPreferences,
         noteEditorBuilder: NoteEditorBuilder,
         navigationController: UINavigationController?
     ) {
         self.noteService = noteService
         self.collectionService = collectionService
+        self.readingPreferences = readingPreferences
         self.noteEditorBuilder = noteEditorBuilder
         self.navigationController = navigationController
     }
@@ -80,6 +85,7 @@ final class HeldItemEditor: ObservableObject, NoteEditorListener {
 
     private let noteService: MobileSyncNoteService
     private let collectionService: AyahBookmarkCollectionService
+    private let readingPreferences: ReadingPreferences
     private let noteEditorBuilder: NoteEditorBuilder
     private weak var navigationController: UINavigationController?
     private var renamingCollectionID: String?
@@ -87,31 +93,19 @@ final class HeldItemEditor: ObservableObject, NoteEditorListener {
     private func editNote(id: String) async {
         logger.info("Quran Sync: editing a held note")
         do {
-            guard let note = try await currentNotes().first(where: { $0.id == id }) else {
+            let notes = try await firstElement(of: noteService.notesSequence(quran: readingPreferences.reading.quran))
+            guard let note = notes?.first(where: { $0.id == id }) else {
+                logger.error("Quran Sync: the held note to edit is no longer on this device")
+                error = ItemNotFoundError()
                 return
             }
             let viewController = noteEditorBuilder.build(withListener: self, mode: .edit(note))
             navigationController?.present(viewController, animated: true)
+        } catch is CancellationError {
+            return
         } catch {
             self.error = error
         }
-    }
-
-    /// The notes now. Cancelling the observing task, rather than breaking out of the loop, stops MobileSync's
-    /// collector.
-    private func currentNotes() async throws -> [Note] {
-        let sequence = noteService.notesSequence(quran: ReadingPreferences.shared.reading.quran)
-        let task = Task { () throws -> [Note] in
-            var first: [Note] = []
-            do {
-                for try await notes in sequence {
-                    first = notes
-                    withUnsafeCurrentTask { $0?.cancel() }
-                }
-            } catch is CancellationError {}
-            return first
-        }
-        return try await task.value
     }
 }
 #endif

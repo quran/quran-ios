@@ -97,7 +97,13 @@ struct SyncActivity: Equatable {
 
     mutating func apply(_ change: Change) {
         switch change {
-        case .status(let status): self.status = status
+        case .status(let status):
+            // Offline, MobileSync alternates between retrying and an attempt every second or so; showing each
+            // attempt would flip the status and its button. A failing sync shows as retrying until it ends.
+            if status == .syncing, case .retrying = self.status {
+                return
+            }
+            self.status = status
         case .runs(let runs): self.runs = runs
         case .heldItems(let heldItems): self.heldItems = heldItems
         }

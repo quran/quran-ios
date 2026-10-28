@@ -649,7 +649,7 @@
 // Sync status when the latest sync failed.
 "sync.status.failed" = "Synchroniseren mislukt";
 // Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
-"sync.status.retrying" = "%@ · Zo meteen opnieuw";
+"sync.status.retrying" = "%@ · Wordt zo opnieuw geprobeerd";
 // Detail under the sync status: what syncs with Quran.com.
 "sync.status.all-items" = "Bladwijzers, verzamelingen, notities en leesvoortgang";
 // Why a sync failed: the device couldn't reach Quran.com.

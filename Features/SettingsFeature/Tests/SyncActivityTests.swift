@@ -19,6 +19,39 @@ final class SyncActivityTests: XCTestCase {
         XCTAssertEqual(activity.state, .syncing)
     }
 
+    func test_apply_keepsRetryingThroughItsAttempts_untilTheSyncFails() {
+        let offline = MobileSyncRunError(kind: .network, httpStatus: nil, serverCode: nil, message: "offline")
+        let unavailable = MobileSyncRunError(kind: .server, httpStatus: 503, serverCode: nil, message: "unavailable")
+        var activity = SyncActivity()
+
+        activity.apply(.status(.retrying(failedAt: date(300), error: offline, nextAttemptAt: date(301))))
+        activity.apply(.status(.syncing))
+        XCTAssertEqual(activity.state, .retrying(.network))
+        XCTAssertTrue(SyncStatusSummary(activity).button.isEnabled)
+
+        activity.apply(.status(.retrying(failedAt: date(302), error: unavailable, nextAttemptAt: date(304))))
+        activity.apply(.status(.syncing))
+        XCTAssertEqual(activity.state, .retrying(.server))
+        XCTAssertEqual(SyncStatusSummary(activity).button, .tryAgain)
+
+        activity.apply(.status(.failed(at: date(310), error: unavailable)))
+        XCTAssertEqual(activity.state, .failed(.server))
+    }
+
+    func test_apply_keepsRetryingThroughItsAttempts_untilTheSyncSucceeds() {
+        let offline = MobileSyncRunError(kind: .network, httpStatus: nil, serverCode: nil, message: "offline")
+        var activity = SyncActivity()
+
+        activity.apply(.status(.retrying(failedAt: date(300), error: offline, nextAttemptAt: date(301))))
+        activity.apply(.status(.syncing))
+        XCTAssertEqual(activity.state, .retrying(.network))
+
+        activity.apply(.status(.succeeded(at: date(305))))
+        XCTAssertEqual(activity.state, .synced(at: date(305)))
+        activity.apply(.status(.syncing))
+        XCTAssertEqual(activity.state, .syncing)
+    }
+
     func test_state_isRetrying_whileAFailedAttemptWaitsToRetry() {
         let error = MobileSyncRunError(kind: .network, httpStatus: nil, serverCode: nil, message: "offline")
         let activity = SyncActivity(

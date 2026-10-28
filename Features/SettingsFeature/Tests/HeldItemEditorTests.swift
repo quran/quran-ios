@@ -62,6 +62,19 @@ final class HeldItemEditorTests: XCTestCase {
         XCTAssertTrue(sut.error is HeldItemEditor.ItemNotFoundError)
     }
 
+    /// A cancelled task usually reads no notes rather than throwing, which must not read as a missing note.
+    func test_editNote_staysQuiet_whenItsTaskIsCancelled() async {
+        let sut = makeSUT()
+        let edit = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            await sut.edit(.note(id: "deleted-on-another-device"))
+        }
+
+        await edit.value
+
+        XCTAssertNil(sut.error)
+    }
+
     func test_renameReadingBookmark_renamesItsSlot() async throws {
         _ = try await database.quranDataService.setAyahReadingBookmark(slot: .teal, sura: 78, ayah: 1)
         _ = try await database.quranDataService.renameReadingBookmark(slot: .teal, name: "Juz 30", mushaf: .madani1405)

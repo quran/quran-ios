@@ -20,6 +20,8 @@ extension View {
 /// The Edit button of a held item.
 struct HeldItemEditButton: View {
     let edit: HeldItemRow.Edit
+    /// The item's title, which VoiceOver reads with Edit.
+    let title: MultipartText
     let action: @MainActor (HeldItemRow.Edit) async -> Void
 
     var body: some View {
@@ -31,6 +33,7 @@ struct HeldItemEditButton: View {
                 .foregroundStyle(Color.accentColor)
         }
         .buttonStyle(.borderless)
+        .accessibilityLabel(l("sync.held.edit") + l("list.separator.comma") + title.accessibilityText)
     }
 }
 

@@ -52,7 +52,7 @@ private struct SyncActivityViewUI: View {
                     ForEach(heldRows) { row in
                         HeldItemRowView(row: row) {
                             if let rowEdit = row.edit {
-                                HeldItemEditButton(edit: rowEdit, action: edit)
+                                HeldItemEditButton(edit: rowEdit, title: row.title, action: edit)
                             }
                         }
                     }

@@ -15,7 +15,8 @@ import ReadingService
 import UIKit
 import VLogging
 
-/// Opens the editor that fixes a held item: the note editor for a note, the rename alert for a collection.
+/// Opens the editor that fixes a held item: the note editor for a note, the rename alert for a collection or a
+/// reading bookmark.
 @MainActor
 final class HeldItemEditor: ObservableObject, NoteEditorListener {
     /// The held item is no longer on this device, such as a note deleted on another device since the list showed it.
@@ -26,12 +27,14 @@ final class HeldItemEditor: ObservableObject, NoteEditorListener {
     init(
         noteService: MobileSyncNoteService,
         collectionService: AyahBookmarkCollectionService,
+        readingBookmarkService: MobileSyncReadingBookmarkService,
         readingPreferences: ReadingPreferences,
         noteEditorBuilder: NoteEditorBuilder,
         navigationController: UINavigationController?
     ) {
         self.noteService = noteService
         self.collectionService = collectionService
+        self.readingBookmarkService = readingBookmarkService
         self.readingPreferences = readingPreferences
         self.noteEditorBuilder = noteEditorBuilder
         self.navigationController = navigationController
@@ -40,6 +43,8 @@ final class HeldItemEditor: ObservableObject, NoteEditorListener {
     // MARK: Internal
 
     @Published var nameAlert = CollectionNameAlert.hidden
+    /// The reading bookmark the rename alert is for, or `nil` when it's hidden.
+    @Published var renamingReadingBookmark: ReadingBookmarkSlot?
     @Published var pendingName = ""
     @Published var error: Error?
 
@@ -52,6 +57,10 @@ final class HeldItemEditor: ObservableObject, NoteEditorListener {
             renamingCollectionID = id
             pendingName = name
             nameAlert = .editing
+        case .readingBookmark(let slot, let name):
+            logger.info("Quran Sync: renaming a held reading bookmark")
+            pendingName = name
+            renamingReadingBookmark = slot
         }
     }
 
@@ -77,6 +86,20 @@ final class HeldItemEditor: ObservableObject, NoteEditorListener {
         }
     }
 
+    /// Renames the reading bookmark in `slot`; an empty name clears it, so the bookmark goes by its color.
+    func renameReadingBookmark(in slot: ReadingBookmarkSlot) async {
+        let name = pendingName.trimmingCharacters(in: .whitespacesAndNewlines)
+        do {
+            try await readingBookmarkService.renameReadingBookmark(
+                in: slot,
+                name: name.isEmpty ? nil : name,
+                quran: readingPreferences.reading.quran
+            )
+        } catch {
+            self.error = error
+        }
+    }
+
     func dismissNoteEditor() {
         navigationController?.dismiss(animated: true)
     }
@@ -85,6 +108,7 @@ final class HeldItemEditor: ObservableObject, NoteEditorListener {
 
     private let noteService: MobileSyncNoteService
     private let collectionService: AyahBookmarkCollectionService
+    private let readingBookmarkService: MobileSyncReadingBookmarkService
     private let readingPreferences: ReadingPreferences
     private let noteEditorBuilder: NoteEditorBuilder
     private weak var navigationController: UINavigationController?

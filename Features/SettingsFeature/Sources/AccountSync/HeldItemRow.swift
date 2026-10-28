@@ -27,6 +27,8 @@ struct HeldItemRow: Identifiable {
         case note(id: String)
         /// Renames the collection, now called `name`.
         case collection(id: String, name: String)
+        /// Renames the reading bookmark in `slot`, now called `name`, or unnamed when it's empty.
+        case readingBookmark(slot: ReadingBookmarkSlot, name: String)
     }
 
     // MARK: Internal
@@ -108,6 +110,11 @@ struct HeldItemRow: Identifiable {
                 return nil
             }
             return .collection(id: item.id, name: collection.name)
+        case (.readingBookmark, .tooLong), (.readingBookmark, .rejectedByServer):
+            guard let bookmark = lookup.readingBookmarksByID[item.id] else {
+                return nil
+            }
+            return .readingBookmark(slot: ReadingBookmarkSlot(bookmark.slot), name: bookmark.name ?? "")
         default:
             return nil
         }

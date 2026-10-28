@@ -62,6 +62,22 @@ final class HeldItemEditorTests: XCTestCase {
         XCTAssertTrue(sut.error is HeldItemEditor.ItemNotFoundError)
     }
 
+    func test_renameReadingBookmark_renamesItsSlot() async throws {
+        _ = try await database.quranDataService.setAyahReadingBookmark(slot: .teal, sura: 78, ayah: 1)
+        _ = try await database.quranDataService.renameReadingBookmark(slot: .teal, name: "Juz 30", mushaf: .madani1405)
+        let sut = makeSUT()
+
+        await sut.edit(.readingBookmark(slot: .teal, name: "Juz 30"))
+        XCTAssertEqual(sut.renamingReadingBookmark, .teal)
+        XCTAssertEqual(sut.pendingName, "Juz 30")
+        sut.pendingName = " Juz Amma "
+        await sut.renameReadingBookmark(in: .teal)
+
+        XCTAssertNil(sut.error)
+        let bookmarks = try await firstElement(of: database.quranDataService.readingBookmarksSequence(mushaf: .madani1405))
+        XCTAssertEqual(bookmarks?.first { $0.slot == .teal }?.name, "Juz Amma")
+    }
+
     // MARK: First element
 
     func test_firstElement_readsTheCurrentNotes() async throws {
@@ -88,6 +104,19 @@ final class HeldItemEditorTests: XCTestCase {
     }
 
     // MARK: Rows
+
+    func test_rowEdit_renamesReadingBookmarks_thatAreTooLongOrRefused() {
+        let lookup = HeldItemLookup(readingBookmarks: [
+            MobileSyncReadingBookmark(id: "rb", slot: .orange, placement: .unplaced, name: "Ramadan", lastUpdated: Date()),
+        ])
+
+        let rows = HeldItemRow.rows(
+            for: [heldItem(.readingBookmark, id: "rb", reason: .tooLong), heldItem(.readingBookmark, id: "gone", reason: .tooLong)],
+            lookup: lookup
+        )
+
+        XCTAssertEqual(rows.map(\.edit), [.readingBookmark(slot: .orange, name: "Ramadan"), nil])
+    }
 
     func test_rowEdit_opensTheNote_whenEditingCanFixIt() {
         let lookup = HeldItemLookup(notes: [
@@ -140,6 +169,7 @@ final class HeldItemEditorTests: XCTestCase {
         return HeldItemEditor(
             noteService: MobileSyncNoteService(quranDataService: database.quranDataService),
             collectionService: AyahBookmarkCollectionService(quranDataService: database.quranDataService),
+            readingBookmarkService: MobileSyncReadingBookmarkService(quranDataService: database.quranDataService),
             readingPreferences: .shared,
             noteEditorBuilder: NoteEditorBuilder(container: container),
             navigationController: UINavigationController()

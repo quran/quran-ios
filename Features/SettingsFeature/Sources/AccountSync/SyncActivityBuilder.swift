@@ -32,6 +32,7 @@ struct SyncActivityBuilder {
         HeldItemEditor(
             noteService: container.mobileSyncNoteService(),
             collectionService: container.ayahBookmarkCollectionService(),
+            readingBookmarkService: container.readingBookmarkService(),
             readingPreferences: .shared,
             noteEditorBuilder: NoteEditorBuilder(container: container),
             navigationController: navigationController

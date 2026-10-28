@@ -210,7 +210,7 @@ final class SettingsRootViewModel: ObservableObject {
         logger.info("Settings: navigateToAccountSync")
         let viewController = accountSyncBuilder.build(
             user: loggedInUser,
-            signOut: { [weak self] in try await self?.signOutOfQuranCom() },
+            signOut: { [weak self] in try await self?.signOutOfQuranCom(from: .accountSync) },
             navigationController: navigationController
         )
         navigationController?.pushViewController(viewController, animated: true)
@@ -282,23 +282,23 @@ final class SettingsRootViewModel: ObservableObject {
 
     func logoutFromQuranCom() async {
         do {
-            try await signOutOfQuranCom()
+            try await signOutOfQuranCom(from: .settings)
         } catch {
             self.error = error
         }
     }
 
     /// Signs out, here or from the Account & Sync screen, which shows its own error.
-    func signOutOfQuranCom() async throws {
-        analytics.quranSyncSignOut(from: .settings)
-        logger.info("Quran Sync: starting sign out from Settings")
+    func signOutOfQuranCom(from source: QuranSyncAuthenticationSource) async throws {
+        analytics.quranSyncSignOut(from: source)
+        logger.info("Quran Sync: starting sign out from \(source)")
         // Stop legacy import before the logout reset, so legacy data never returns afterwards.
         await legacyDataImportCoordinator.disable()
         do {
             try await authenticationClient.logout()
             isAuthenticated = false
             loggedInUser = nil
-            logger.info("Quran Sync: sign out succeeded from Settings")
+            logger.info("Quran Sync: sign out succeeded from \(source)")
         } catch {
             logger.error("Failed to logout from Quran.com: \(error)")
             throw error

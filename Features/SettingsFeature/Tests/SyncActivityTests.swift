@@ -249,6 +249,18 @@ final class SyncActivityTests: XCTestCase {
         XCTAssertEqual(summary.detail, l("sync.error.unknown"))
     }
 
+    func test_cardSummary_showsAWaitingRetryInRed_withTryAgain() {
+        let error = MobileSyncRunError(kind: .server, httpStatus: 503, serverCode: nil, message: "unavailable")
+        let activity = SyncActivity(status: .retrying(failedAt: date(300), error: error, nextAttemptAt: date(310)))
+
+        let summary = SyncStatusSummary(activity, style: .card)
+
+        XCTAssertEqual(summary.tone, .failure)
+        XCTAssertEqual(summary.title, l("sync.status.failed"))
+        XCTAssertEqual(summary.detail, lFormat("sync.status.retrying", l("sync.error.server")))
+        XCTAssertTrue(summary.button.isEnabled)
+    }
+
     func test_summary_disablesTheButtonWhileSyncing() {
         let summary = SyncStatusSummary(SyncActivity(status: .syncing))
 

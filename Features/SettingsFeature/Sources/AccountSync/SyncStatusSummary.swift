@@ -70,6 +70,7 @@ struct SyncStatusSummary: Equatable {
         case .retrying(let reason):
             // The retry comes within seconds, so "soon" says enough; Try again runs it now.
             icon = .failed
+            tone = .failure
             title = l("sync.status.failed")
             detail = lFormat("sync.status.retrying", reason.localizedDescription)
             button = .tryAgain

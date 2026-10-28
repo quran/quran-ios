@@ -9,6 +9,7 @@ import AuthenticationClient
 import Combine
 import FeaturesSupport
 import Foundation
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import ReadingService

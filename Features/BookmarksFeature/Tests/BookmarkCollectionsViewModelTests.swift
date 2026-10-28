@@ -7,6 +7,7 @@ import Combine
 import Localization
 import MobileSync
 import MobileSyncTestSupport
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import QuranResources

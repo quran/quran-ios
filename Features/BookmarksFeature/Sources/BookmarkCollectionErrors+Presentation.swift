@@ -10,18 +10,6 @@ import Localization
 import NoorUI
 import QuranAnnotations
 
-extension DuplicateCollectionNameError {
-    var localizedMessage: String {
-        lFormat("bookmarks.collections.name.duplicate", name)
-    }
-}
-
-extension ReservedCollectionNameError {
-    var localizedMessage: String {
-        lFormat("bookmarks.collections.name.reserved", name)
-    }
-}
-
 /// The error alert shows this message when a collection turns read-only before a rename or delete lands.
 extension ReadOnlyCollectionError: @retroactive LocalizedError {
     public var errorDescription: String? {
@@ -29,16 +17,4 @@ extension ReadOnlyCollectionError: @retroactive LocalizedError {
     }
 }
 
-extension CollectionNameError {
-    var localizedMessage: String {
-        switch self {
-        case .textLength(let error):
-            error.localizedMessage
-        case .reserved(let error):
-            error.localizedMessage
-        case .duplicate(let error):
-            error.localizedMessage
-        }
-    }
-}
 #endif

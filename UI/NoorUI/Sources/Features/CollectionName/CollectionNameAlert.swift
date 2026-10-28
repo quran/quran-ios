@@ -9,18 +9,18 @@ import Localization
 import SwiftUI
 
 /// The alert that asks for a collection name, and the reason it rejected the last one.
-enum CollectionNameAlert: Equatable {
+public enum CollectionNameAlert: Equatable {
     case hidden
     case editing
     case rejected(CollectionNameError)
 
-    // MARK: Internal
+    // MARK: Public
 
-    var isPresented: Bool {
+    public var isPresented: Bool {
         self != .hidden
     }
 
-    var error: CollectionNameError? {
+    public var error: CollectionNameError? {
         guard case .rejected(let error) = self else {
             return nil
         }
@@ -28,7 +28,7 @@ enum CollectionNameAlert: Equatable {
     }
 }
 
-extension View {
+public extension View {
     /// Asks for a collection name; the confirm button repeats the title.
     ///
     /// The name stays outside `state` because dismissing the alert hides it before `submit` reads the name.

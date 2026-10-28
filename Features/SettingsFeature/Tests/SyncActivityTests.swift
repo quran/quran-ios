@@ -55,6 +55,14 @@ final class SyncActivityTests: XCTestCase {
         XCTAssertEqual(activity.state, .failed(error.kind))
     }
 
+    /// The status can report a success before the history records its run.
+    func test_state_isSynced_whenTheStatusSucceededAfterTheLatestRunFailed() {
+        let error = MobileSyncRunError(kind: .network, httpStatus: nil, serverCode: nil, message: "offline")
+        let activity = SyncActivity(status: .succeeded(at: date(300)), runs: [makeRun(.failed, endedAt: 200, error: error)])
+
+        XCTAssertEqual(activity.state, .synced(at: date(300)))
+    }
+
     func test_state_ignoresCancelledRuns() {
         let activity = SyncActivity(runs: [makeRun(.cancelled, endedAt: 300), makeRun(.succeeded, endedAt: 200)])
 

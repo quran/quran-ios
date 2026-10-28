@@ -39,6 +39,10 @@ struct SyncActivity: Equatable {
             return .syncing
         }
         let latestRun = runs.first { $0.result != .cancelled }
+        // The status can change before the history does, so a newer success outranks the latest run.
+        if case .succeeded(let at) = status, latestRun.map({ $0.endedAt <= at }) ?? true {
+            return .synced(at: lastSynced ?? at)
+        }
         if case .failed(let failedAt, let error) = status, latestRun.map({ $0.endedAt <= failedAt }) ?? true {
             return .failed(error.kind)
         }

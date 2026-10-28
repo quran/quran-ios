@@ -119,9 +119,9 @@
             <key>few</key>
             <string>%d عناصر لا تتم مزامنتها</string>
             <key>many</key>
-            <string>%d عنصرًا لا تتم مزامنتها</string>
+            <string>%d عنصرًا لا تتم مزامنته</string>
             <key>other</key>
-            <string>%d عنصر لا تتم مزامنتها</string>
+            <string>%d عنصر لا تتم مزامنته</string>
         </dict>
     </dict>
     <!-- How many bookmarked verses don't sync until the item above them does. -->

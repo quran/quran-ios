@@ -42,9 +42,16 @@ final class AccountSyncViewModelTests: XCTestCase {
             body: "Reflection", startSura: 2, startAyah: 255, endSura: 2, endAyah: 255, timestamp: Date()
         )
         let sut = makeSUT(client: signedInClient(email: "user@example.com"))
+        // The status, the runs and the held items each arrive once from MobileSync.
+        let activityArrived = expectation(description: "The sync activity arrived")
+        activityArrived.expectedFulfillmentCount = 3
+        activityArrived.assertForOverFulfill = false
+        let recording = sut.$activity.dropFirst().sink { _ in activityArrived.fulfill() }
         let observation = Task { await sut.start() }
 
+        await fulfillment(of: [activityArrived], timeout: 5)
         await waitUntil(sut.$lookup) { !$0.notesByID.isEmpty }
+        recording.cancel()
 
         XCTAssertEqual(sut.status.title, l("sync.status.never-synced"))
         XCTAssertTrue(sut.recentRuns.isEmpty)

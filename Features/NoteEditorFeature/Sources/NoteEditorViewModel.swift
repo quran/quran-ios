@@ -95,8 +95,9 @@ final class NoteEditorViewModel {
         trimmedNoteText.count >= minimumNoteBodyLength
     }
 
+    /// An unchanged note closes as it is, even one too short to save, such as a note that doesn't sync until fixed.
     var canDismissNote: Bool {
-        !hasNoteText || canSubmitNote
+        !hasChanges || !hasNoteText || canSubmitNote
     }
 
     var shouldAutoSaveOnDismiss: Bool {
@@ -148,15 +149,15 @@ final class NoteEditorViewModel {
         }
         #endif
 
-        guard !hasNoteText || canSubmitNote else {
-            return false
-        }
-
         guard hasChanges else {
             if dismissOnSave {
                 listener?.dismissNoteEditor()
             }
             return dismissOnSave
+        }
+
+        guard !hasNoteText || canSubmitNote else {
+            return false
         }
 
         do {

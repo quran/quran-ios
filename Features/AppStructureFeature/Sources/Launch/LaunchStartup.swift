@@ -106,6 +106,9 @@ public final class LaunchStartup {
     private var protectedDataStartupState = ProtectedDataStartupState()
     private var storeOpenStartupState = StoreOpenStartupState()
     private var foregroundObserver: NSObjectProtocol?
+    #if QURAN_SYNC
+    private var foregroundSync: ForegroundSync?
+    #endif
 
     private func perform(_ action: ProtectedDataStartupState.Action, window: UIWindow) {
         switch action {
@@ -184,6 +187,7 @@ public final class LaunchStartup {
             stopObservingForeground()
             #if QURAN_SYNC
             startLegacyDataImport()
+            syncOnReturningToForeground()
             #endif
             startReportingUserProperties()
             upgradeIfNeeded(window: window)
@@ -322,6 +326,14 @@ public final class LaunchStartup {
     private func startLegacyDataImport() {
         let coordinator = appBuilder.container.legacyDataImportCoordinator
         Task { await coordinator.start() }
+    }
+
+    /// Launch already syncs, so only later returns to the app sync.
+    private func syncOnReturningToForeground() {
+        guard foregroundSync == nil else { return }
+        let sync = ForegroundSync(quranDataService: appBuilder.container.quranDataService, notificationCenter: notificationCenter)
+        foregroundSync = sync
+        sync.start()
     }
     #endif
 

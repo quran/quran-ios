@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/rickclephas/KMP-NativeCoroutines.git",
       "state" : {
-        "revision" : "d6db2878cc0c6c06a0ccddb89f44b8f6f6d0b78f",
-        "version" : "1.0.0-ALPHA-48"
+        "revision" : "54a45fbb15bc0bebc54081f87683830d3bc9e84e",
+        "version" : "1.0.6"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/quran/mobile-sync-spm.git",
       "state" : {
-        "revision" : "59f9c15b7f92a6db37ef88d39325e360c9c3a89c",
-        "version" : "0.4.0"
+        "revision" : "50d547c414b60eb71b4d71e5501feb45149de5c0",
+        "version" : "0.4.1"
       }
     },
     {

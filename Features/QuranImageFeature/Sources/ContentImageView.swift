@@ -16,7 +16,8 @@ import SwiftUI
 struct ContentImageView: View {
     @StateObject var viewModel: ContentImageViewModel
     #if QURAN_SYNC
-    let onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void
+    let onAyahReadingBookmarkTap: (AyahNumber, CGPoint) -> Void
+    let onPageReadingBookmarkTap: (CGRect) -> Void
     #endif
 
     var body: some View {
@@ -26,7 +27,8 @@ struct ContentImageView: View {
                 decorations: viewModel.decorations,
                 ayahReadingBookmarks: viewModel.ayahReadingBookmarks,
                 pageReadingBookmarks: viewModel.pageReadingBookmarks,
-                onAyahIndicatorTap: onAyahIndicatorTap,
+                onAyahReadingBookmarkTap: onAyahReadingBookmarkTap,
+                onPageReadingBookmarkTap: onPageReadingBookmarkTap,
                 image: viewModel.imagePage?.image,
                 renderingMode: viewModel.imageRenderingMode,
                 page: viewModel.page,
@@ -66,7 +68,8 @@ private struct ContentImageViewBody: View {
     #if QURAN_SYNC
     var ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]] = [:]
     var pageReadingBookmarks: [ReadingBookmarkSlot] = []
-    var onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void = { _, _ in }
+    var onAyahReadingBookmarkTap: (AyahNumber, CGPoint) -> Void = { _, _ in }
+    var onPageReadingBookmarkTap: (CGRect) -> Void = { _ in }
     #endif
     let image: UIImage?
     let renderingMode: QuranThemedImage.RenderingMode
@@ -84,8 +87,8 @@ private struct ContentImageViewBody: View {
             ayahReadingBookmarks: ayahReadingBookmarks
         ) {
             image
-        } onAyahIndicatorTap: {
-            onAyahIndicatorTap($0, $1)
+        } onAyahReadingBookmarkTap: {
+            onAyahReadingBookmarkTap($0, $1)
         } onScaleChange: {
             onScaleChange($0)
         } onGlobalFrameChange: {
@@ -117,7 +120,7 @@ private struct ContentImageViewBody: View {
     private var header: some View {
         QuranPageHeader(quarterName: page.localizedQuarterName, suras: page.suras)
         #if QURAN_SYNC
-            .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks)
+            .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks, onTap: onPageReadingBookmarkTap)
         #endif
     }
 }

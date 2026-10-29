@@ -3,7 +3,6 @@
 //  PageReadingBookmarkRibbons.swift
 //
 
-import Localization
 import QuranAnnotations
 import QuranKit
 import QuranLocalization
@@ -14,10 +13,15 @@ extension View {
     ///
     /// Apply it to the header at the top of the page's scroll content, so the ribbons scroll with the page
     /// and the header text draws over them. Builds nothing when the page has no page bookmarks.
-    public func pageReadingBookmarkRibbons(page: Page, slots: [ReadingBookmarkSlot]) -> some View {
+    /// Tapping the ribbons calls `onTap` with their frame in global coordinates.
+    public func pageReadingBookmarkRibbons(
+        page: Page,
+        slots: [ReadingBookmarkSlot],
+        onTap: @escaping (CGRect) -> Void
+    ) -> some View {
         background {
             if !slots.isEmpty {
-                PageReadingBookmarkRibbons(page: page, slots: slots)
+                PageReadingBookmarkRibbons(page: page, slots: slots, onTap: onTap)
             }
         }
     }
@@ -31,6 +35,7 @@ struct PageReadingBookmarkRibbons: View {
 
     let page: Page
     let slots: [ReadingBookmarkSlot]
+    let onTap: (CGRect) -> Void
 
     var body: some View {
         let lengths = Self.ribbonLengths(count: slots.count, width: width, available: readableInsets.top)
@@ -45,19 +50,31 @@ struct PageReadingBookmarkRibbons: View {
         // One shadow for the whole stack.
         .compositingGroup()
         .shadow(color: .black.opacity(0.25), radius: 1, y: 1)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilityLabel)
+        .readingBookmarkPressed(isPressed, anchor: .top)
+        .onGlobalFrameChanged { globalFrame = $0 }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+        // Centered on the ribbons, so a larger touch target doesn't move them.
+        .overlay {
+            Button {
+                onTap(globalFrame)
+            } label: {
+                Color.clear
+                    .minimumTouchTarget()
+            }
+            .buttonStyle(ReadingBookmarkPressReportingStyle { isPressed = $0 })
+            .accessibilityLabel(accessibilityLabel)
+            .accessibilityIdentifier("page-reading-bookmark-\(page.pageNumber)")
+        }
         .padding(.trailing, readableInsets.trailing)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         // Always the physical right, whatever the reading direction.
         .environment(\.layoutDirection, .leftToRight)
         .ignoresSafeArea(edges: .top)
-        .allowsHitTesting(false)
     }
 
     var accessibilityLabel: String {
-        ([page.localizedName] + slots.map { AyahIndicator.readingBookmark($0).accessibilityLabel })
-            .joined(separator: l("list.separator"))
+        slots.accessibilityLabel(prefixedBy: page.localizedName)
     }
 
     /// Each ribbon's length, front to back. The last one fills `available`, from the screen's top edge
@@ -75,6 +92,8 @@ struct PageReadingBookmarkRibbons: View {
 
     @ScaledMetric(relativeTo: .footnote) private var width = 16.0
     @Environment(\.readableInsets) private var readableInsets
+    @State private var isPressed = false
+    @State private var globalFrame: CGRect = .zero
 }
 
 private struct PageReadingBookmarkRibbonsPreview: View {
@@ -83,11 +102,14 @@ private struct PageReadingBookmarkRibbonsPreview: View {
     var body: some View {
         VStack(spacing: 0) {
             QuranPageHeader(quarterName: "Juz 1", suras: page.suras)
-                .pageReadingBookmarkRibbons(page: page, slots: slots)
+                .pageReadingBookmarkRibbons(page: page, slots: slots) { _ in tapCount += 1 }
             Spacer()
             Text("The ribbons hang from the screen's top edge, behind the page header.")
                 .font(.footnote)
                 .padding()
+            Text(tapCount == 0 ? "Tap the ribbons" : "Ribbons tapped \(tapCount) time\(tapCount == 1 ? "" : "s")")
+                .font(.footnote.weight(.semibold))
+                .monospacedDigit()
             Spacer()
         }
         .font(.footnote)
@@ -97,6 +119,7 @@ private struct PageReadingBookmarkRibbonsPreview: View {
         .environment(\.themeStyle, .paper)
     }
 
+    @State private var tapCount = 0
     private let page = Quran.hafsMadani1405.pages[2]
 }
 

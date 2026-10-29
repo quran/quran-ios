@@ -12,12 +12,18 @@ import UIx
 ///
 /// Draw it behind the page image or lines so it never covers Quran text,
 /// and put `AyahReadingBookmarkTargets` above the page to make it tappable.
+/// Share one `pressedAyah` state between the two, so a pressed target dims its underline.
 public struct AyahReadingBookmarkUnderlines: View {
     // MARK: Lifecycle
 
-    public init(markers: [AyahMarkerPlacement], bookmarks: [AyahNumber: [ReadingBookmarkSlot]]) {
+    public init(
+        markers: [AyahMarkerPlacement],
+        bookmarks: [AyahNumber: [ReadingBookmarkSlot]],
+        pressedAyah: AyahNumber? = nil
+    ) {
         self.markers = markers
         self.bookmarks = bookmarks
+        self.pressedAyah = pressedAyah
     }
 
     // MARK: Public
@@ -35,6 +41,7 @@ public struct AyahReadingBookmarkUnderlines: View {
                         }
                     }
                     .clipShape(Capsule())
+                    .readingBookmarkPressed(placement.ayah == pressedAyah)
                     .placed(in: line)
                 }
             }
@@ -49,6 +56,7 @@ public struct AyahReadingBookmarkUnderlines: View {
 
     private let markers: [AyahMarkerPlacement]
     private let bookmarks: [AyahNumber: [ReadingBookmarkSlot]]
+    private let pressedAyah: AyahNumber?
 }
 
 extension [AyahMarkerPlacement] {
@@ -64,7 +72,7 @@ private struct AyahReadingBookmarkUnderlinesPreview: View {
                 .font(.caption)
 
             ZStack(alignment: .topLeading) {
-                AyahReadingBookmarkUnderlines(markers: markers, bookmarks: bookmarks)
+                AyahReadingBookmarkUnderlines(markers: markers, bookmarks: bookmarks, pressedAyah: pressedAyah)
 
                 ForEach(markers, id: \.ayah) { placement in
                     AyahNumberView(number: placement.ayah.ayah)
@@ -83,7 +91,7 @@ private struct AyahReadingBookmarkUnderlinesPreview: View {
             .frame(width: 300, height: 260)
             .allowsHitTesting(false)
             .overlay {
-                AyahReadingBookmarkTargets(markers: markers, bookmarks: bookmarks) { ayah, _ in
+                AyahReadingBookmarkTargets(markers: markers, bookmarks: bookmarks, pressedAyah: $pressedAyah) { ayah, _ in
                     tappedAyah = ayah
                 }
             }
@@ -97,6 +105,7 @@ private struct AyahReadingBookmarkUnderlinesPreview: View {
     }
 
     @State private var tappedAyah: AyahNumber?
+    @State private var pressedAyah: AyahNumber?
     private let ayahs = Array(Quran.hafsMadani1405.suras[1].verses.prefix(4))
 
     private var markers: [AyahMarkerPlacement] {

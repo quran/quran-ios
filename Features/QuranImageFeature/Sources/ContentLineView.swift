@@ -19,7 +19,8 @@ import UIx
 struct ContentLineView: View {
     @StateObject var viewModel: ContentLineViewModel
     #if QURAN_SYNC
-    let onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void
+    let onAyahReadingBookmarkTap: (AyahNumber, CGPoint) -> Void
+    let onPageReadingBookmarkTap: (CGRect) -> Void
     #endif
 
     var body: some View {
@@ -37,7 +38,8 @@ struct ContentLineView: View {
             imageRenderingMode: viewModel.imageRenderingMode,
             imageForLine: viewModel.lineImage(for:),
             imageForSideline: viewModel.sidelineImage(for:),
-            onAyahIndicatorTap: onAyahIndicatorTap,
+            onAyahReadingBookmarkTap: onAyahReadingBookmarkTap,
+            onPageReadingBookmarkTap: onPageReadingBookmarkTap,
             onGlobalFrameChange: viewModel.updateContentFrame
         )
         #else
@@ -87,7 +89,8 @@ private struct ContentLineViewBody: View {
     let imageForLine: (Int) -> UIImage?
     let imageForSideline: (String) -> UIImage?
     #if QURAN_SYNC
-    let onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void
+    let onAyahReadingBookmarkTap: (AyahNumber, CGPoint) -> Void
+    let onPageReadingBookmarkTap: (CGRect) -> Void
     #endif
     let onGlobalFrameChange: (CGRect) -> Void
 
@@ -98,7 +101,7 @@ private struct ContentLineViewBody: View {
                 suras: page.suras
             )
             #if QURAN_SYNC
-            .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks)
+            .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks, onTap: onPageReadingBookmarkTap)
             #endif
         } footer: {
             QuranPageFooter(page: page.localizedNumber)
@@ -114,6 +117,9 @@ private struct ContentLineViewBody: View {
     // MARK: Private
 
     @Environment(\.themeColorScheme) private var themeColorScheme
+    #if QURAN_SYNC
+    @State private var pressedReadingBookmarkAyah: AyahNumber?
+    #endif
 
     private var chromePalette: LinePageChromePalette {
         chromeStyle.palette(for: themeColorScheme)
@@ -132,7 +138,11 @@ private struct ContentLineViewBody: View {
 
                 #if QURAN_SYNC
                 // Behind the line images, so underlines never cover Quran text.
-                AyahReadingBookmarkUnderlines(markers: markerPlacements(layout), bookmarks: ayahReadingBookmarks)
+                AyahReadingBookmarkUnderlines(
+                    markers: markerPlacements(layout),
+                    bookmarks: ayahReadingBookmarks,
+                    pressedAyah: pressedReadingBookmarkAyah
+                )
                 #endif
 
                 lineImages(layout)
@@ -156,7 +166,8 @@ private struct ContentLineViewBody: View {
                     AyahReadingBookmarkTargets(
                         markers: markerPlacements(layout),
                         bookmarks: ayahReadingBookmarks,
-                        onTap: onAyahIndicatorTap
+                        pressedAyah: $pressedReadingBookmarkAyah,
+                        onTap: onAyahReadingBookmarkTap
                     )
                 }
             }

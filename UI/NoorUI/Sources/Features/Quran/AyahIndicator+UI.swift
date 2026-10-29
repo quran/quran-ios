@@ -30,4 +30,12 @@ extension AyahIndicator {
         }
     }
 }
+
+extension [ReadingBookmarkSlot] {
+    /// `name` followed by each slot's reading bookmark label, as one accessibility label.
+    func accessibilityLabel(prefixedBy name: String) -> String {
+        ([name] + map { AyahIndicator.readingBookmark($0).accessibilityLabel })
+            .joined(separator: l("list.separator"))
+    }
+}
 #endif

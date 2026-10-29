@@ -103,6 +103,15 @@ final class AyahReadingBookmarkIndicatorTests: XCTestCase {
         XCTAssertEqual(layout.hitFrame, marker)
     }
 
+    func test_pressedAyah_followsTheLatestPressAndClearsOnlyOnItsOwnRelease() {
+        let first = Quran.hafsMadani1405.suras[1].verses[0]
+        let second = Quran.hafsMadani1405.suras[1].verses[1]
+
+        XCTAssertEqual(AyahReadingBookmarkTargets.pressedAyah(nil, after: first, isPressed: true), first)
+        XCTAssertNil(AyahReadingBookmarkTargets.pressedAyah(first, after: first, isPressed: false))
+        XCTAssertEqual(AyahReadingBookmarkTargets.pressedAyah(second, after: first, isPressed: false), second)
+    }
+
     func test_bookmarkedMarkers_skipMarkersWithoutReadingBookmarks() {
         let ayahs = Array(Quran.hafsMadani1405.suras[1].verses.prefix(3))
         let markers = ayahs.map { AyahMarkerPlacement(ayah: $0, frame: .zero) }
@@ -113,7 +122,7 @@ final class AyahReadingBookmarkIndicatorTests: XCTestCase {
     }
 
     func test_pageRibbons_accessibilityLabelNamesThePageAndEverySlot() {
-        let ribbons = PageReadingBookmarkRibbons(page: Quran.hafsMadani1405.pages[2], slots: [.teal, .red])
+        let ribbons = PageReadingBookmarkRibbons(page: Quran.hafsMadani1405.pages[2], slots: [.teal, .red], onTap: { _ in })
 
         XCTAssertEqual(ribbons.accessibilityLabel, "Page 3; Reading Bookmark: Teal; Reading Bookmark: Red")
     }

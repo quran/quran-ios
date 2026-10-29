@@ -22,20 +22,6 @@ struct ReadingImageView: View {
     }
 
     private var content: some View {
-        #if QURAN_SYNC
-        AdaptiveImageScrollView(
-            decorations: decorations,
-            renderingMode: renderingMode,
-            ayahReadingBookmarks: [:]
-        ) {
-            image
-        } onAyahIndicatorTap: { _, _ in
-        } onScaleChange: { _ in
-        } onGlobalFrameChange: { _ in
-        } header: {
-        } footer: {
-        }
-        #else
         AdaptiveImageScrollView(decorations: decorations, renderingMode: renderingMode) {
             image
         } onScaleChange: { _ in
@@ -43,7 +29,6 @@ struct ReadingImageView: View {
         } header: {
         } footer: {
         }
-        #endif
     }
 
     private var decorations: ImageDecorations {

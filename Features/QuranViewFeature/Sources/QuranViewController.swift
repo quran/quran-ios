@@ -219,6 +219,16 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         presentPopover(viewController, pointingTo: readingBookmarkMenuNavigationButton)
     }
 
+    func presentReadingBookmarkMenu(_ viewController: UIViewController, in sourceView: UIView, at rect: CGRect) {
+        popoverPresenter.present(
+            presenting: self,
+            presented: viewController,
+            pointingTo: sourceView,
+            at: rect,
+            permittedArrowDirections: []
+        )
+    }
+
     func presentBookmarkAyahs(_ viewController: UIViewController) {
         presentPageSheet(viewController)
     }

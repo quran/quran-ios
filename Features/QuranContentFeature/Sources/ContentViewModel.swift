@@ -27,6 +27,9 @@ public protocol ContentListener: AnyObject {
     func userWillBeginDragScroll()
     func contentViewDidChangeVisiblePage()
     func presentAyahMenu(in sourceView: UIView, at point: CGPoint, verses: [AyahNumber])
+    #if QURAN_SYNC
+    func presentReadingBookmarkMenu(for page: Page, in sourceView: UIView, at rect: CGRect)
+    #endif
 }
 
 @MainActor
@@ -133,7 +136,7 @@ public final class ContentViewModel: ObservableObject {
     @PublishedBinding var twoPagesEnabled: Bool
     @Published var geometryActions: [PageGeometryActions] = []
     #if QURAN_SYNC
-    weak var ayahMenuSourceView: UIView?
+    weak var menuSourceView: UIView?
     #endif
 
     @PublishedBinding var overlays: VerseOverlays
@@ -181,12 +184,20 @@ public final class ContentViewModel: ObservableObject {
 
     #if QURAN_SYNC
     func onAyahNumberTapped(_ ayah: AyahNumber, at globalPoint: CGPoint) {
-        guard let sourceView = ayahMenuSourceView else {
+        guard let sourceView = menuSourceView else {
             return
         }
         let point = sourceView.convert(globalPoint, from: nil)
         onViewLongPressStarted(at: point, sourceView: sourceView, verse: ayah)
         onViewLongPressEnded()
+    }
+
+    func onPageReadingBookmarkTapped(_ page: Page, at globalFrame: CGRect) {
+        guard let sourceView = menuSourceView else {
+            return
+        }
+        let rect = sourceView.convert(globalFrame, from: nil)
+        listener?.presentReadingBookmarkMenu(for: page, in: sourceView, at: rect)
     }
     #endif
 

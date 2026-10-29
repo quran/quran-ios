@@ -39,16 +39,16 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     public init(
         decorations: ImageDecorations,
         renderingMode: QuranThemedImage.RenderingMode = .tinted,
-        ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]],
+        ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]] = [:],
         image: () -> UIImage?,
-        onAyahIndicatorTap: @escaping (AyahNumber, CGPoint) -> Void,
+        onAyahReadingBookmarkTap: @escaping (AyahNumber, CGPoint) -> Void = { _, _ in },
         onScaleChange: @escaping (WordFrameScale) -> Void,
         onGlobalFrameChange: @escaping (CGRect) -> Void,
         @ViewBuilder header: () -> Header,
         @ViewBuilder footer: () -> Footer
     ) {
         self.ayahReadingBookmarks = ayahReadingBookmarks
-        self.onAyahIndicatorTap = onAyahIndicatorTap
+        self.onAyahReadingBookmarkTap = onAyahReadingBookmarkTap
         self.decorations = decorations
         self.image = image()
         self.renderingMode = renderingMode
@@ -88,7 +88,8 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     @State private var imageViewSize: CGSize = .zero
     #if QURAN_SYNC
     private let ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]]
-    private let onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void
+    private let onAyahReadingBookmarkTap: (AyahNumber, CGPoint) -> Void
+    @State private var pressedReadingBookmarkAyah: AyahNumber?
     #endif
     private let onScaleChange: (WordFrameScale) -> Void
     private let onGlobalFrameChange: (CGRect) -> Void
@@ -110,7 +111,11 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                     ImageDecorationsView(layout: layout)
                     #if QURAN_SYNC
                     // Behind the image, so underlines never cover Quran text.
-                    AyahReadingBookmarkUnderlines(markers: layout.ayahMarkers, bookmarks: ayahReadingBookmarks)
+                    AyahReadingBookmarkUnderlines(
+                        markers: layout.ayahMarkers,
+                        bookmarks: ayahReadingBookmarks,
+                        pressedAyah: pressedReadingBookmarkAyah
+                    )
                     #endif
                 }
             }
@@ -132,7 +137,8 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                 AyahReadingBookmarkTargets(
                     markers: layout.ayahMarkers,
                     bookmarks: ayahReadingBookmarks,
-                    onTap: onAyahIndicatorTap
+                    pressedAyah: $pressedReadingBookmarkAyah,
+                    onTap: onAyahReadingBookmarkTap
                 )
             }
         #endif
@@ -155,18 +161,21 @@ private struct IndicatedAyahImagePreview: View {
             ayahReadingBookmarks: ayah.map { [$0: [.teal, .red]] } ?? [:]
         ) {
             UIImage(contentsOfFile: testResourceURL("images/page604.png").path)
-        } onAyahIndicatorTap: { _, _ in tapCount += 1
+        } onAyahReadingBookmarkTap: { _, _ in tapCount += 1
         } onScaleChange: { _ in
         } onGlobalFrameChange: { _ in
         } header: {
             QuranPageHeader(quarterName: "Juz 30", suras: Quran.hafsMadani1405.pages[603].suras)
+                .pageReadingBookmarkRibbons(page: Quran.hafsMadani1405.pages[603], slots: [.orange]) { _ in
+                    ribbonTapCount += 1
+                }
         } footer: {
             QuranPageFooter(page: "604")
         }
         .font(.footnote)
         .populateReadableInsets()
         .overlay(alignment: .bottom) {
-            Text(tapCount == 0 ? "Tap the bookmarked marker" : "Ayah menu tapped \(tapCount) time\(tapCount == 1 ? "" : "s")")
+            Text("Ayah menu tapped \(tapCount) time\(tapCount == 1 ? "" : "s"), ribbon \(ribbonTapCount)")
                 .font(.footnote.weight(.semibold))
                 .monospacedDigit()
                 .padding(.horizontal)
@@ -199,10 +208,11 @@ private struct IndicatedAyahImagePreview: View {
     }
 
     @State private var tapCount = 0
+    @State private var ribbonTapCount = 0
     private let ayah = AyahNumber(quran: .hafsMadani1405, sura: 112, ayah: 1)
 }
 
-#Preview("Reading bookmark underline on Madani 1405") {
+#Preview("Reading bookmark underline and ribbon on Madani 1405") {
     IndicatedAyahImagePreview()
 }
 

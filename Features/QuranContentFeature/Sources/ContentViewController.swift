@@ -36,7 +36,7 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
     override public func viewDidLoad() {
         super.viewDidLoad()
         #if QURAN_SYNC
-        viewModel.ayahMenuSourceView = view
+        viewModel.menuSourceView = view
         #endif
         setUpGesture()
         setUpPagesView()

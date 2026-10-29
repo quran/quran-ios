@@ -15,6 +15,7 @@ import QuranKit
 import ReadingService
 import SwiftUI
 import UIKit
+import Utilities
 import VLogging
 
 @MainActor
@@ -245,8 +246,11 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     }
 
     private func observeHighlights() async {
+        let highlightsSequence = readingPreferences.readings().flatMapLatest { [ayahHighlightService] reading in
+            ayahHighlightService.highlightsSequence(quran: reading.quran)
+        }
         do {
-            for try await highlights in ayahHighlightService.highlightsSequence() {
+            for try await highlights in highlightsSequence {
                 self.highlights = highlights
             }
         } catch {
@@ -257,8 +261,11 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     }
 
     private func observeCollections() async {
+        let collectionsSequence = readingPreferences.readings().flatMapLatest { [ayahBookmarkCollectionService] reading in
+            ayahBookmarkCollectionService.collectionsSequence(quran: reading.quran)
+        }
         do {
-            for try await collections in ayahBookmarkCollectionService.collectionsSequence() {
+            for try await collections in collectionsSequence {
                 let collections = Self.sorted(collections)
                 self.collections = collections
                 if Self.deletableCollections(from: collections).isEmpty {
@@ -273,29 +280,17 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     }
 
     private func observeReadingBookmark() async {
-        let readings = readingPreferences.$reading
-            .prepend(readingPreferences.reading)
-            .values()
-        var observationTask: Task<Void, Never>?
-        defer { observationTask?.cancel() }
-
-        for await reading in readings {
-            observationTask?.cancel()
-            let sequence = readingBookmarkService.placedReadingBookmarksSequence(quran: reading.quran)
-            observationTask = Task { [weak self] in
-                do {
-                    for try await bookmarks in sequence {
-                        guard !Task.isCancelled else { return }
-                        self?.readingBookmarks = PlacedReadingBookmark.sortedByDate(bookmarks)
-                    }
-                } catch is CancellationError {
-                    return
-                } catch {
-                    guard !Task.isCancelled else { return }
-                    logger.error("Quran Sync: failed to observe reading bookmark in Bookmarks: \(error)")
-                    self?.error = error
-                }
+        let bookmarksSequence = readingPreferences.readings().flatMapLatest { [readingBookmarkService] reading in
+            readingBookmarkService.placedReadingBookmarksSequence(quran: reading.quran)
+        }
+        do {
+            for try await bookmarks in bookmarksSequence {
+                readingBookmarks = PlacedReadingBookmark.sortedByDate(bookmarks)
             }
+        } catch {
+            guard !Task.isCancelled else { return }
+            logger.error("Quran Sync: failed to observe reading bookmark in Bookmarks: \(error)")
+            self.error = error
         }
     }
 }

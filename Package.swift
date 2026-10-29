@@ -549,6 +549,7 @@ private func domainTargets() -> [[Target]] {
             "Preferences",
             "BatchDownloader",
             "SystemDependencies",
+            "Utilities",
             .product(name: "CombineSchedulers", package: "combine-schedulers"),
         ], testDependencies: [
             "AsyncUtilitiesForTesting",
@@ -564,7 +565,6 @@ private func domainTargets() -> [[Target]] {
             "PageBookmarkPersistence",
             "Preferences",
             "QuranTextKit",
-            "ReadingService",
             "Localization",
             "Analytics",
             "Utilities",

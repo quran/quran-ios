@@ -62,14 +62,14 @@ final class QuranAnnotationsObserver {
             observer.updateNotes(notes)
         }
         observe(
-            highlightService.highlightsSequence(),
+            highlightService.highlightsSequence(quran: quran),
             task: \.highlightsTask,
             failureReason: "Failed to observe saved highlights in Quran"
         ) { observer, highlights in
             observer.updateHighlights(highlights)
         }
         observe(
-            collectionService.collectionsSequence(),
+            collectionService.collectionsSequence(quran: quran),
             task: \.collectionsTask,
             failureReason: "Failed to observe bookmark collections in Quran"
         ) { observer, collections in

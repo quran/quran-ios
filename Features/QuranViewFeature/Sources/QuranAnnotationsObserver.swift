@@ -82,8 +82,6 @@ final class QuranAnnotationsObserver {
         ) { observer, bookmarks in
             observer.updateReadingBookmarks(bookmarks)
         }
-        // The reader shows reading bookmarks only. The stored preference is kept for when the More menu offers it again.
-        overlayService.overlays.indicatorVisibility = .readingBookmark
         #else
         guard notesObservation == nil else { return }
         notesObservation = noteService.notes(quran: quran)

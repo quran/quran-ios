@@ -41,7 +41,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
 
         XCTAssertEqual(observer.notes(interacting: [ayah(2)]).map(\.text), ["Stored note"])
         XCTAssertTrue(observer.notes(interacting: [ayah(3)]).isEmpty)
-        XCTAssertTrue(overlayService.overlays.indicators(for: ayah(1)).isEmpty)
+        XCTAssertEqual(overlayService.overlays.notedVerses, [ayah(1), ayah(2)])
     }
 
     func test_noteDeletionRemovesObservedAnnotation() async throws {
@@ -87,7 +87,7 @@ final class QuranAnnotationsObserverTests: XCTestCase {
         XCTAssertEqual(observer.collections.count, 2)
         XCTAssertTrue(observer.collections.contains { $0.isDefault })
         XCTAssertTrue(observer.collections.contains { $0.name == "Duas" })
-        XCTAssertTrue(overlayService.overlays.indicators(for: ayah(1)).isEmpty)
+        XCTAssertEqual(overlayService.overlays.collectionVerses, [ayah(1)])
         XCTAssertTrue(overlayService.overlays.colorHighlights.isEmpty)
     }
 
@@ -269,27 +269,24 @@ final class QuranAnnotationsObserverTests: XCTestCase {
     private var collectionService: AyahBookmarkCollectionService!
     private var readingBookmarkService: MobileSyncReadingBookmarkService!
 
-    func test_start_showsOnlyReadingBookmarksWhateverTheStoredPreference() async throws {
-        QuranContentStatePreferences.shared.ayahIndicatorVisibility = .all
-        try await noteService.createNote(body: "Hidden note", startAyah: ayah(5), endAyah: ayah(5))
+    func test_start_exposesEveryIndicatorWhateverTheStoredPreference() async throws {
+        QuranContentStatePreferences.shared.ayahIndicatorVisibility = .none
+        try await noteService.createNote(body: "Test note", startAyah: ayah(5), endAyah: ayah(5))
         try await readingBookmarkService.addReadingBookmark(at: .ayah(ayah(5)), slot: .teal)
+        var iterator = collectionService.collectionsSequence().makeAsyncIterator()
+        let collections = try await iterator.next() ?? []
+        let collection = try XCTUnwrap(collections.first { $0.isDefault })
+        try await collectionService.addAyahBookmarkToCollection(collectionId: collection.id, ayah: ayah(5))
         let overlayService = VerseOverlayService()
         let observer = makeObserver(overlayService: overlayService)
         defer { observer.stop() }
 
         observer.start()
         await waitForOverlays(overlayService) {
-            $0.notedVerses == [self.ayah(5)] && $0.readingBookmarks.map(\.slot) == [.teal]
+            $0.notedVerses == [self.ayah(5)] && $0.collectionVerses == [self.ayah(5)] && !$0.readingBookmarks.isEmpty
         }
 
-        XCTAssertEqual(overlayService.overlays.indicatorVisibility, .readingBookmark)
-        XCTAssertEqual(overlayService.overlays.indicators(for: ayah(5)), [.readingBookmark(.teal)])
-        XCTAssertEqual(overlayService.overlays.readingBookmarkSlotsByVerse, [ayah(5): [.teal]])
-
-        QuranContentStatePreferences.shared.ayahIndicatorVisibility = .none
-
-        XCTAssertEqual(overlayService.overlays.indicatorVisibility, .readingBookmark)
-        XCTAssertEqual(overlayService.overlays.readingBookmarkSlotsByVerse, [ayah(5): [.teal]])
+        XCTAssertEqual(overlayService.overlays.indicators(for: ayah(5)), [.note, .collection, .readingBookmark(.teal)])
     }
 
     private func makeObserver(overlayService: VerseOverlayService) -> QuranAnnotationsObserver {

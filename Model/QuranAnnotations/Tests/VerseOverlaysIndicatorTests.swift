@@ -1,6 +1,5 @@
 #if QURAN_SYNC
 import QuranKit
-import QuranText
 import XCTest
 @testable import QuranAnnotations
 
@@ -127,20 +126,6 @@ final class VerseOverlaysIndicatorTests: XCTestCase {
         XCTAssertTrue(overlays.pageReadingBookmarkSlots(on: Quran.hafsMadani1405.pages[1]).isEmpty)
     }
 
-    func test_readingBookmarkIndicators_hideNotesAndCollections() {
-        let noted = Quran.hafsMadani1405.suras[1].verses[4]
-        let bookmarked = Quran.hafsMadani1405.suras[1].verses[5]
-        var overlays = VerseOverlays()
-        overlays.indicatorVisibility = .readingBookmark
-        overlays.notedVerses = [noted, bookmarked]
-        overlays.collectionVerses = [noted, bookmarked]
-        overlays.readingBookmarks = [bookmark(.teal, at: bookmarked)]
-
-        XCTAssertTrue(overlays.indicators(for: noted).isEmpty)
-        XCTAssertEqual(overlays.indicators(for: bookmarked), [.readingBookmark(.teal)])
-        XCTAssertEqual(overlays.readingBookmarkSlotsByVerse, [bookmarked: [.teal]])
-    }
-
     func test_readingBookmarkSlots_neverIncludeNotesOrCollections() {
         let ayah = Quran.hafsMadani1405.suras[1].verses[4]
         var overlays = VerseOverlays()
@@ -149,29 +134,6 @@ final class VerseOverlaysIndicatorTests: XCTestCase {
 
         XCTAssertEqual(overlays.indicators(for: ayah), [.note, .collection])
         XCTAssertTrue(overlays.readingBookmarkSlotsByVerse.isEmpty)
-    }
-
-    func test_noIndicators_hideEveryAnnotation() {
-        let ayah = Quran.hafsMadani1405.suras[1].verses[4]
-        var overlays = VerseOverlays()
-        overlays.indicatorVisibility = .none
-        overlays.notedVerses = [ayah]
-        overlays.collectionVerses = [ayah]
-        overlays.readingBookmarks = [
-            bookmark(.teal, at: ayah),
-            PlacedReadingBookmark(id: "page", slot: .red, placement: .page(ayah.page), modifiedOn: .distantPast),
-        ]
-
-        XCTAssertTrue(overlays.indicators(for: ayah).isEmpty)
-        XCTAssertTrue(overlays.readingBookmarkSlotsByVerse.isEmpty)
-        XCTAssertTrue(overlays.pageReadingBookmarkSlots(on: ayah.page).isEmpty)
-    }
-
-    func test_restricted_keepsAyahIndicators() {
-        var overlays = VerseOverlays()
-        overlays.indicatorVisibility = .none
-
-        XCTAssertEqual(overlays.restricted(to: Quran.hafsMadani1405.pages[0]).indicatorVisibility, .none)
     }
 
     private func bookmark(_ slot: ReadingBookmarkSlot, at ayah: AyahNumber, name: String? = nil) -> PlacedReadingBookmark {

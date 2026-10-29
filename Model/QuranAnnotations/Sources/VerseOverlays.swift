@@ -6,7 +6,6 @@
 //
 
 import QuranKit
-import QuranText
 
 public struct VerseOverlays: Equatable {
     // MARK: Lifecycle
@@ -23,15 +22,13 @@ public struct VerseOverlays: Equatable {
     #if QURAN_SYNC
     public var collectionVerses: Set<AyahNumber> = []
     public var readingBookmarks: [PlacedReadingBookmark] = []
-    /// Which indicators `indicators(for:)` and the reading bookmark accessors expose.
-    public var indicatorVisibility = AyahIndicatorVisibility.all
     #endif
 
     public var pointedWord: Word?
 }
 
 extension VerseOverlays {
-    /// Filters overlays for rendering one page while preserving indicator visibility.
+    /// Filters overlays for rendering one page.
     public func restricted(to page: Page) -> Self {
         var overlays = self
         overlays.playingVerses = playingVerses.filter { $0.page == page }
@@ -53,27 +50,23 @@ extension VerseOverlays {
     }
 
     #if QURAN_SYNC
+    /// Every indicator on `verse`, which the translation view shows.
     public func indicators(for verse: AyahNumber) -> Set<AyahIndicator> {
         var indicators: Set<AyahIndicator> = []
-        if indicatorVisibility.showsNotesAndCollections {
-            if notedVerses.contains(verse) {
-                indicators.insert(.note)
-            }
-            if collectionVerses.contains(verse) {
-                indicators.insert(.collection)
-            }
+        if notedVerses.contains(verse) {
+            indicators.insert(.note)
         }
-        if indicatorVisibility.showsReadingBookmarks {
-            for bookmark in readingBookmarks where bookmark.isAt(verse) {
-                indicators.insert(.readingBookmark(bookmark.slot))
-            }
+        if collectionVerses.contains(verse) {
+            indicators.insert(.collection)
+        }
+        for bookmark in readingBookmarks where bookmark.isAt(verse) {
+            indicators.insert(.readingBookmark(bookmark.slot))
         }
         return indicators
     }
 
     /// The reading bookmark slots on each bookmarked ayah, in `ReadingBookmarkSlot.allCases` order.
     public var readingBookmarkSlotsByVerse: [AyahNumber: [ReadingBookmarkSlot]] {
-        guard indicatorVisibility.showsReadingBookmarks else { return [:] }
         var slotsByVerse: [AyahNumber: [ReadingBookmarkSlot]] = [:]
         for bookmark in readingBookmarks {
             if case .ayah(let ayah) = bookmark.placement {
@@ -85,8 +78,7 @@ extension VerseOverlays {
 
     /// The reading bookmark slots placed on `page` itself, in `ReadingBookmarkSlot.allCases` order.
     public func pageReadingBookmarkSlots(on page: Page) -> [ReadingBookmarkSlot] {
-        guard indicatorVisibility.showsReadingBookmarks else { return [] }
-        return Self.ordered(readingBookmarks.compactMap { bookmark in
+        Self.ordered(readingBookmarks.compactMap { bookmark in
             bookmark.placement == .page(page) ? bookmark.slot : nil
         })
     }

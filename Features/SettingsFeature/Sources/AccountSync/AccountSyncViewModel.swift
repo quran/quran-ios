@@ -55,6 +55,9 @@ final class AccountSyncViewModel: ObservableObject {
     @Published var scrollsToHeldItems = false
     @Published var error: Error?
 
+    /// The profile fetch the Manage account sheet's closing started, if any.
+    private(set) var profileRefresh: Task<Void, Never>?
+
     var status: SyncStatusSummary {
         SyncStatusSummary(activity)
     }
@@ -97,6 +100,7 @@ final class AccountSyncViewModel: ObservableObject {
     func openQuranComProfile() {
         logger.info("Account & Sync: Open Quran.com profile.")
         let viewController = SFSafariViewController(url: quranProfileURL)
+        viewController.delegate = quranComProfileDelegate
         navigationController?.present(viewController, animated: true)
     }
 
@@ -141,6 +145,11 @@ final class AccountSyncViewModel: ObservableObject {
     private let syncActivityBuilder: SyncActivityBuilder
     private let signOut: @MainActor () async throws -> Void
     private weak var navigationController: UINavigationController?
+    /// The Manage account sheet's delegate; the sheet holds it weakly.
+    private lazy var quranComProfileDelegate = SafariSheetDelegate { [weak self] in
+        // The user may have changed their name or photo there.
+        self?.refreshProfile()
+    }
 
     private func observeUser() async {
         do {
@@ -158,6 +167,19 @@ final class AccountSyncViewModel: ObservableObject {
             return
         } catch {
             logger.error("Quran Sync: failed to observe the signed-in user from Account & Sync: \(error)")
+        }
+    }
+
+    /// Fetches the profile the user may have just edited on Quran.com; the screen follows the user it publishes. A
+    /// failure keeps the user shown.
+    private func refreshProfile() {
+        logger.info("Account & Sync: Quran.com profile closed, refreshing the profile")
+        profileRefresh = Task { [quranDataService] in
+            do {
+                try await quranDataService.refreshProfile()
+            } catch {
+                logger.error("Quran Sync: failed to refresh the profile after Manage account closed: \(error)")
+            }
         }
     }
 

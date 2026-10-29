@@ -632,7 +632,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Шығу";
 "setting.quran_account.sign_out.confirmation.title" = "Quran.com сайтынан шығасыз ба?";
-"setting.quran_account.sign_out.confirmation.message" = "Бетбелгілеріңіз бен жазбаларыңыз осы құрылғыдан жойылады және қайта кіргенде қалпына келтіріледі.";
+"setting.quran_account.sign_out.confirmation.message" = "Барлығы Quran.com-мен синхрондалды. Бетбелгілеріңіз, жинақтарыңыз бен жазбаларыңыз осы құрылғыдан жойылады және қайта кіргенде қалпына келтіріледі.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Бетбелгілерді барлық құрылғыларда синхрондау";
 
@@ -835,3 +835,9 @@
 "sync.held.show-all" = "Барлығын көрсету (%@)";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "Барлық әрекеттерді көру";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "Quran.com-мен әлі синхрондалмаған өзгерістер шықсаңыз жоғалады.";
+// Sign-out warning, after how many changes haven't synced: what signing out does to them.
+"sync.sign-out.unsynced-lost" = "Шықсаңыз, синхрондалмағанның бәрі жоғалады.";
+// Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
+"sync.sign-out.review" = "Қарап шығу";

@@ -138,5 +138,67 @@
             <string>%d tentatives</string>
         </dict>
     </dict>
+    <!-- Sign-out warning: how many changes the next sync would send, which signing out loses. -->
+    <key>sync.sign-out.pending</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d modification attend encore d’être synchronisée avec Quran.com.</string>
+            <key>other</key>
+            <string>%d modifications attendent encore d’être synchronisées avec Quran.com.</string>
+        </dict>
+    </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them, which signing out loses. -->
+    <key>sync.sign-out.held</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d élément ne peut pas être synchronisé tant que vous ne l’avez pas corrigé.</string>
+            <key>other</key>
+            <string>%d éléments ne peuvent pas être synchronisés tant que vous ne les avez pas corrigés.</string>
+        </dict>
+    </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them (held), and how many more wait on those. -->
+    <key>sync.sign-out.held-waiting</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%1$#@held@, et %2$#@waiting@</string>
+        <key>held</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%1$d élément ne peut pas être synchronisé tant que vous ne l’avez pas corrigé</string>
+            <key>other</key>
+            <string>%1$d éléments ne peuvent pas être synchronisés tant que vous ne les avez pas corrigés</string>
+        </dict>
+        <key>waiting</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%2$d autre attendra jusque-là.</string>
+            <key>other</key>
+            <string>%2$d autres attendront jusque-là.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

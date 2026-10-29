@@ -44,10 +44,18 @@ final class AccountSyncViewModel: ObservableObject {
     @Published private(set) var activity = SyncActivity()
     @Published private(set) var lookup = HeldItemLookup()
     @Published var isSignOutConfirmationPresented = false
+    /// The items that hadn't synced when sign-out was requested, or `nil` when they couldn't be read.
+    @Published private(set) var unsyncedItems: MobileSyncUnsyncedItemCounts?
+    /// Set to scroll to the items that don't sync; the view clears it once it has.
+    @Published var scrollsToHeldItems = false
     @Published var error: Error?
 
     var status: SyncStatusSummary {
         SyncStatusSummary(activity)
+    }
+
+    var signOutWarning: SignOutWarning {
+        SignOutWarning(unsynced: unsyncedItems, activity: activity)
     }
 
     var heldRows: [HeldItemRow] {
@@ -84,9 +92,28 @@ final class AccountSyncViewModel: ObservableObject {
         navigationController?.present(viewController, animated: true)
     }
 
-    func requestSignOut() {
+    /// Asks the user to confirm, warning about the changes that haven't synced, which sign-out deletes.
+    func requestSignOut() async {
         logger.info("Quran Sync: requested sign out confirmation from Account & Sync")
+        let unsynced: MobileSyncUnsyncedItemCounts?
+        do {
+            unsynced = try await quranDataService.unsyncedItemsSequence().first { _ in true }
+        } catch {
+            logger.error("Quran Sync: failed to read the unsynced items before signing out: \(error)")
+            unsynced = nil
+        }
+        // A cancelled read, such as a double tap's first, ends without counts; it mustn't replace a real read's.
+        guard !Task.isCancelled else {
+            return
+        }
+        unsyncedItems = unsynced
         isSignOutConfirmationPresented = true
+    }
+
+    /// Stays on this screen instead of signing out, showing the items that don't sync when there are any.
+    func reviewUnsyncedItems() {
+        logger.info("Quran Sync: reviewing unsynced items instead of signing out")
+        scrollsToHeldItems = signOutWarning.showsHeldItems
     }
 
     func signOutOfQuranCom() async {

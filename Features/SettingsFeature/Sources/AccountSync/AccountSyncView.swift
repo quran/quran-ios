@@ -21,14 +21,17 @@ struct AccountSyncView: View {
             heldRows: viewModel.heldRows,
             recentRuns: viewModel.recentRuns,
             error: $viewModel.error,
+            scrollsToHeldItems: $viewModel.scrollsToHeldItems,
             start: { await viewModel.start() },
             syncNow: { viewModel.syncNow() },
             showActivity: { viewModel.showActivity() },
             openProfile: { viewModel.openQuranComProfile() },
-            signOut: { viewModel.requestSignOut() }
+            signOut: { await viewModel.requestSignOut() }
         )
         .signOutConfirmation(
             isPresented: $viewModel.isSignOutConfirmationPresented,
+            warning: viewModel.signOutWarning,
+            review: { viewModel.reviewUnsyncedItems() },
             signOut: { await viewModel.signOutOfQuranCom() }
         )
     }
@@ -42,13 +45,37 @@ private struct AccountSyncViewUI: View {
     let heldRows: [HeldItemRow]
     let recentRuns: [SyncRunRow]
     @Binding var error: Error?
+    @Binding var scrollsToHeldItems: Bool
     let start: AsyncAction
     let syncNow: Action
     let showActivity: Action
     let openProfile: Action
-    let signOut: Action
+    let signOut: AsyncAction
 
     var body: some View {
+        ScrollViewReader { proxy in
+            list
+                .onChange(of: scrollsToHeldItems) { scrolls in
+                    guard scrolls else { return }
+                    scrollsToHeldItems = false
+                    withAnimation(NoorAnimation.standard) {
+                        proxy.scrollTo(Self.heldItemsID, anchor: .top)
+                    }
+                }
+        }
+        .task { await start() }
+        .errorAlert(error: $error)
+        .noorListIconColumn()
+    }
+
+    // MARK: Private
+
+    private static let heldItemsID = "held-items"
+
+    @ScaledMetric private var avatarLength = 88.0
+    @ScaledMetric private var headerSpacing = 6.0
+
+    private var list: some View {
         NoorList {
             Section {
                 header
@@ -78,6 +105,7 @@ private struct AccountSyncViewUI: View {
                         )
                     }
                 }
+                .id(Self.heldItemsID)
             }
 
             NoorBasicSection(title: l("sync.runs.header")) {
@@ -103,19 +131,11 @@ private struct AccountSyncViewUI: View {
                     image: .init(.signOut, color: .red),
                     title: .text(l("setting.quran_account.sign_out")),
                     titleColor: .red,
-                    action: .sync { signOut() }
+                    action: .async { await signOut() }
                 )
             }
         }
-        .task { await start() }
-        .errorAlert(error: $error)
-        .noorListIconColumn()
     }
-
-    // MARK: Private
-
-    @ScaledMetric private var avatarLength = 88.0
-    @ScaledMetric private var headerSpacing = 6.0
 
     private var header: some View {
         VStack(spacing: headerSpacing) {
@@ -175,6 +195,7 @@ private struct AccountSyncViewUI: View {
             )),
         ],
         error: .constant(nil),
+        scrollsToHeldItems: .constant(false),
         start: {},
         syncNow: {},
         showActivity: {},

@@ -654,7 +654,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "退出登录";
 "setting.quran_account.sign_out.confirmation.title" = "要退出 Quran.com 账户吗？";
-"setting.quran_account.sign_out.confirmation.message" = "你的书签和笔记将从此设备上移除，重新登录后即可恢复。";
+"setting.quran_account.sign_out.confirmation.message" = "所有内容均已同步到 Quran.com。你的书签、收藏集和笔记将从此设备上移除，重新登录后即可恢复。";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "在所有设备间同步书签";
 
@@ -857,3 +857,9 @@
 "sync.held.show-all" = "显示全部 %@ 项";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "查看全部记录";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "尚未同步到 Quran.com 的更改会在退出登录后丢失。";
+// Sign-out warning, after how many changes haven't synced: what signing out does to them.
+"sync.sign-out.unsynced-lost" = "如果退出登录，所有尚未同步的内容都将丢失。";
+// Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
+"sync.sign-out.review" = "查看";

@@ -170,5 +170,83 @@
             <string>%d попытки</string>
         </dict>
     </dict>
+    <!-- Sign-out warning: how many changes the next sync would send, which signing out loses. -->
+    <key>sync.sign-out.pending</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d изменение ещё ждёт синхронизации с Quran.com.</string>
+            <key>few</key>
+            <string>%d изменения ещё ждут синхронизации с Quran.com.</string>
+            <key>many</key>
+            <string>%d изменений ещё ждут синхронизации с Quran.com.</string>
+            <key>other</key>
+            <string>%d изменения ещё ждут синхронизации с Quran.com.</string>
+        </dict>
+    </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them, which signing out loses. -->
+    <key>sync.sign-out.held</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@items@</string>
+        <key>items</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%d элемент не синхронизируется, пока вы его не исправите.</string>
+            <key>few</key>
+            <string>%d элемента не синхронизируются, пока вы их не исправите.</string>
+            <key>many</key>
+            <string>%d элементов не синхронизируются, пока вы их не исправите.</string>
+            <key>other</key>
+            <string>%d элемента не синхронизируются, пока вы их не исправите.</string>
+        </dict>
+    </dict>
+    <!-- Sign-out warning: how many items don't sync until the user fixes them (held), and how many more wait on those. -->
+    <key>sync.sign-out.held-waiting</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%1$#@held@, и ещё %2$#@waiting@</string>
+        <key>held</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%1$d элемент не синхронизируется, пока вы его не исправите</string>
+            <key>few</key>
+            <string>%1$d элемента не синхронизируются, пока вы их не исправите</string>
+            <key>many</key>
+            <string>%1$d элементов не синхронизируются, пока вы их не исправите</string>
+            <key>other</key>
+            <string>%1$d элемента не синхронизируются, пока вы их не исправите</string>
+        </dict>
+        <key>waiting</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>%2$d подождёт до тех пор.</string>
+            <key>few</key>
+            <string>%2$d подождут до тех пор.</string>
+            <key>many</key>
+            <string>%2$d подождут до тех пор.</string>
+            <key>other</key>
+            <string>%2$d подождут до тех пор.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

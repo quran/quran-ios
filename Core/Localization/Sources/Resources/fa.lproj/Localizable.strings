@@ -650,7 +650,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "خروج";
 "setting.quran_account.sign_out.confirmation.title" = "از Quran.com خارج می‌شوید؟";
-"setting.quran_account.sign_out.confirmation.message" = "نشانک‌ها و یادداشت‌های شما از این دستگاه حذف می‌شوند و با ورود دوباره بازگردانده می‌شوند.";
+"setting.quran_account.sign_out.confirmation.message" = "همه‌چیز با Quran.com همگام‌سازی شده است. نشانک‌ها، مجموعه‌ها و یادداشت‌های شما از این دستگاه حذف می‌شوند و با ورود دوباره بازگردانده می‌شوند.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "همگام‌سازی نشانک‌ها در همهٔ دستگاه‌ها";
 
@@ -853,3 +853,9 @@
 "sync.held.show-all" = "نمایش همهٔ %@ مورد";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "دیدن همهٔ فعالیت‌ها";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "تغییراتی که هنوز با Quran.com همگام‌سازی نشده‌اند، با خروج از دست می‌روند.";
+// Sign-out warning, after how many changes haven't synced: what signing out does to them.
+"sync.sign-out.unsynced-lost" = "اگر خارج شوید، هر چیزی که همگام‌سازی نشده از دست می‌رود.";
+// Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
+"sync.sign-out.review" = "بررسی";

@@ -96,7 +96,7 @@
 "setting.quran_account.profile" = "Manage account";
 "setting.quran_account.sign_out" = "Sign out";
 "setting.quran_account.sign_out.confirmation.title" = "Sign out of Quran.com?";
-"setting.quran_account.sign_out.confirmation.message" = "Your bookmarks and notes will be removed from this device and restored when you sign in again.";
+"setting.quran_account.sign_out.confirmation.message" = "Everything has synced to Quran.com. Your bookmarks, collections and notes will be removed from this device and come back when you sign in again.";
 "setting.quran_account.sync_devices" = "Sync your bookmarks across all devices";
 "setting.quran_account.custom_collections" = "Keep your custom collections in sync";
 "setting.quran_account.attach_notes" = "Keep your verse notes in sync";
@@ -604,3 +604,9 @@
 "sync.held.show-all" = "Show all %@";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "See all activity";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "Changes that haven't synced to Quran.com yet will be lost if you sign out.";
+// Sign-out warning, after how many changes haven't synced: what signing out does to them.
+"sync.sign-out.unsynced-lost" = "If you sign out, anything that hasn't synced will be lost.";
+// Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
+"sync.sign-out.review" = "Review";

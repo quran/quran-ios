@@ -591,7 +591,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Çıkış yap";
 "setting.quran_account.sign_out.confirmation.title" = "Quran.com oturumu kapatılsın mı?";
-"setting.quran_account.sign_out.confirmation.message" = "Yer imleriniz ve notlarınız bu cihazdan kaldırılır ve tekrar oturum açtığınızda geri yüklenir.";
+"setting.quran_account.sign_out.confirmation.message" = "Her şey Quran.com ile eşitlendi. Yer imleriniz, koleksiyonlarınız ve notlarınız bu cihazdan kaldırılır ve tekrar oturum açtığınızda geri yüklenir.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Yer imlerinizi tüm cihazlarda eşitleyin";
 
@@ -794,3 +794,9 @@
 "sync.held.show-all" = "Tümünü göster (%@)";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "Tüm etkinliği gör";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "Quran.com ile henüz eşitlenmemiş değişiklikler, çıkış yaparsanız kaybolur.";
+// Sign-out warning, after how many changes haven't synced: what signing out does to them.
+"sync.sign-out.unsynced-lost" = "Çıkış yaparsanız eşitlenmemiş her şey kaybolur.";
+// Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
+"sync.sign-out.review" = "İncele";

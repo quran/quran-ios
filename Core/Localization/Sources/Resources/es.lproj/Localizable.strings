@@ -648,7 +648,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Cerrar sesión";
 "setting.quran_account.sign_out.confirmation.title" = "¿Cerrar sesión en Quran.com?";
-"setting.quran_account.sign_out.confirmation.message" = "Tus marcadores y notas se eliminarán de este dispositivo y se restaurarán cuando vuelvas a iniciar sesión.";
+"setting.quran_account.sign_out.confirmation.message" = "Todo está sincronizado con Quran.com. Tus marcadores, colecciones y notas se eliminarán de este dispositivo y se restaurarán cuando vuelvas a iniciar sesión.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Sincroniza tus marcadores en todos tus dispositivos";
 
@@ -851,3 +851,9 @@
 "sync.held.show-all" = "Mostrar los %@";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "Ver toda la actividad";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "Los cambios que aún no se han sincronizado con Quran.com se perderán si cierras sesión.";
+// Sign-out warning, after how many changes haven't synced: what signing out does to them.
+"sync.sign-out.unsynced-lost" = "Si cierras sesión, se perderá todo lo que no se haya sincronizado.";
+// Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
+"sync.sign-out.review" = "Revisar";

@@ -648,7 +648,7 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Abmelden";
 "setting.quran_account.sign_out.confirmation.title" = "Von Quran.com abmelden?";
-"setting.quran_account.sign_out.confirmation.message" = "Deine Lesezeichen und Notizen werden von diesem Gerät entfernt und bei der nächsten Anmeldung wiederhergestellt.";
+"setting.quran_account.sign_out.confirmation.message" = "Alles ist mit Quran.com synchronisiert. Deine Lesezeichen, Sammlungen und Notizen werden von diesem Gerät entfernt und bei der nächsten Anmeldung wiederhergestellt.";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sync_devices" = "Lesezeichen auf allen Geräten synchronisieren";
 
@@ -851,3 +851,9 @@
 "sync.held.show-all" = "Alle %@ anzeigen";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "Gesamten Verlauf anzeigen";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "Änderungen, die noch nicht mit Quran.com synchronisiert sind, gehen beim Abmelden verloren.";
+// Sign-out warning, after how many changes haven't synced: what signing out does to them.
+"sync.sign-out.unsynced-lost" = "Wenn du dich abmeldest, geht alles verloren, was noch nicht synchronisiert ist.";
+// Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
+"sync.sign-out.review" = "Überprüfen";

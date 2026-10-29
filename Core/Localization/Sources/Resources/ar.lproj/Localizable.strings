@@ -84,7 +84,7 @@
 "setting.quran_account.profile" = "إدارة الحساب";
 "setting.quran_account.sign_out" = "تسجيل الخروج";
 "setting.quran_account.sign_out.confirmation.title" = "تسجيل الخروج من Quran.com؟";
-"setting.quran_account.sign_out.confirmation.message" = "ستُزال علاماتك المرجعية وملاحظاتك من هذا الجهاز، وتعود عند تسجيل الدخول مرة أخرى.";
+"setting.quran_account.sign_out.confirmation.message" = "تمت مزامنة كل شيء مع Quran.com. ستُزال علاماتك المرجعية ومجموعاتك وملاحظاتك من هذا الجهاز، وتعود عند تسجيل الدخول مرة أخرى.";
 "setting.quran_account.sync_devices" = "مزامنة العلامات عبر جميع الأجهزة";
 "setting.quran_account.custom_collections" = "إبقاء مجموعاتك المخصصة متزامنة";
 "setting.quran_account.attach_notes" = "إبقاء ملاحظات الآيات متزامنة";
@@ -601,3 +601,9 @@
 "sync.held.show-all" = "عرض الكل (%@)";
 // Link under the latest syncs that opens every sync.
 "sync.runs.see-all" = "عرض كل النشاط";
+// Sign-out confirmation when the app couldn't count the changes that haven't synced.
+"sync.sign-out.unsynced-unknown" = "ستُفقد التغييرات التي لم تتم مزامنتها مع Quran.com بعد إذا سجّلت الخروج.";
+// Sign-out warning, after how many changes haven't synced: what signing out does to them.
+"sync.sign-out.unsynced-lost" = "إذا سجّلت الخروج، فسيُفقد كل ما لم تتم مزامنته.";
+// Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
+"sync.sign-out.review" = "مراجعة";

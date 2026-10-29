@@ -14,7 +14,7 @@ import UIKit
 import VLogging
 
 @MainActor
-final class AccountSyncViewModel: NSObject, ObservableObject {
+final class AccountSyncViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init(
@@ -35,7 +35,6 @@ final class AccountSyncViewModel: NSObject, ObservableObject {
         self.editor = editor
         self.signOut = signOut
         self.navigationController = navigationController
-        super.init()
     }
 
     // MARK: Internal
@@ -101,7 +100,7 @@ final class AccountSyncViewModel: NSObject, ObservableObject {
     func openQuranComProfile() {
         logger.info("Account & Sync: Open Quran.com profile.")
         let viewController = SFSafariViewController(url: quranProfileURL)
-        viewController.delegate = self
+        viewController.delegate = quranComProfileDelegate
         navigationController?.present(viewController, animated: true)
     }
 
@@ -146,6 +145,11 @@ final class AccountSyncViewModel: NSObject, ObservableObject {
     private let syncActivityBuilder: SyncActivityBuilder
     private let signOut: @MainActor () async throws -> Void
     private weak var navigationController: UINavigationController?
+    /// The Manage account sheet's delegate; the sheet holds it weakly.
+    private lazy var quranComProfileDelegate = SafariSheetDelegate { [weak self] in
+        // The user may have changed their name or photo there.
+        self?.refreshProfile()
+    }
 
     private func observeUser() async {
         do {
@@ -197,15 +201,6 @@ final class AccountSyncViewModel: NSObject, ObservableObject {
             return
         }
         navigationController.popToViewController(settings, animated: navigationController.view.window != nil)
-    }
-}
-
-// MARK: - SFSafariViewControllerDelegate
-
-extension AccountSyncViewModel: @preconcurrency SFSafariViewControllerDelegate {
-    /// The Manage account sheet closed. The user may have changed their name or photo there.
-    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        refreshProfile()
     }
 }
 #endif

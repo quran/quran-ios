@@ -56,6 +56,8 @@ public enum NoorSystemImage: String {
     case stream = "cloud"
     case infinity
     case storageFull = "externaldrive.badge.exclamationmark"
+    case rotateToPortrait = "rectangle.portrait.rotate"
+    case rotateToLandscape = "rectangle.landscape.rotate"
 
     // MARK: Public
 

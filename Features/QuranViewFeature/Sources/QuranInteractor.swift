@@ -220,19 +220,22 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let noteService = deps.noteService
         let notesToDelete = notesInteractingVerses(verses)
         if !notesToDelete.isEmpty {
-            presenter?.confirmNoteDelete(
-                delete: { [weak self] in
-                    do {
-                        self?.contentViewModel?.removeAyahMenuHighlight()
-                        for note in notesToDelete {
-                            try await noteService.removeNote(note)
+            // The ayah menu may still be dismissing; presenting during that would be dropped.
+            presenter?.dismissPresentedViewController {
+                self.presenter?.confirmNoteDelete(
+                    delete: { [weak self] in
+                        do {
+                            self?.contentViewModel?.removeAyahMenuHighlight()
+                            for note in notesToDelete {
+                                try await noteService.removeNote(note)
+                            }
+                        } catch {
+                            crasher.recordError(error, reason: "Failed to delete synced notes")
                         }
-                    } catch {
-                        crasher.recordError(error, reason: "Failed to delete synced notes")
-                    }
-                },
-                cancel: { self.contentViewModel?.removeAyahMenuHighlight() }
-            )
+                    },
+                    cancel: { self.contentViewModel?.removeAyahMenuHighlight() }
+                )
+            }
         }
         #else
         let notes = notesInteractingVerses(verses)
@@ -240,11 +243,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             !(note.text ?? "").isEmpty
         }
         if containsText {
-            // confirm deletion first if there is text
-            presenter?.confirmNoteDelete(
-                delete: { await self.forceDeleteNotes(notes, verses: verses) },
-                cancel: { self.contentViewModel?.removeAyahMenuHighlight() }
-            )
+            // confirm deletion first if there is text, once the ayah menu finishes dismissing
+            presenter?.dismissPresentedViewController {
+                self.presenter?.confirmNoteDelete(
+                    delete: { await self.forceDeleteNotes(notes, verses: verses) },
+                    cancel: { self.contentViewModel?.removeAyahMenuHighlight() }
+                )
+            }
         } else {
             // delete highlight
             await forceDeleteNotes(notes, verses: verses)
@@ -255,7 +260,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint) {
         logger.info("Quran: share text")
         dismissAyahMenu()
-        presenter?.shareText(lines, in: sourceView, at: point, completion: {})
+        presenter?.dismissPresentedViewController { [weak self] in
+            self?.presenter?.shareText(lines, in: sourceView, at: point, completion: {})
+        }
     }
 
     func showError(_ error: Error) {
@@ -563,7 +570,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         dismissAyahMenu()
         presenter?.rotateToPortraitIfPhone()
         let viewController = deps.noteEditorBuilder.build(withListener: self, note: note)
-        presenter?.present(viewController, animated: true)
+        presenter?.dismissPresentedViewController { [weak self] in
+            self?.presenter?.present(viewController, animated: true)
+        }
     }
     #endif
 

@@ -7,6 +7,7 @@ import Foundation
 import Localization
 import MobileSync
 import MobileSyncTestSupport
+import SafariServices
 import UIKit
 import XCTest
 @testable import SettingsFeature
@@ -99,6 +100,24 @@ final class AccountSyncViewModelTests: XCTestCase {
 
         XCTAssertEqual(navigationController.viewControllers.count, 2)
         XCTAssertEqual(navigationController.topViewController?.title, l("sync.activity.title"))
+    }
+
+    /// The test database has no signed-in session, so MobileSync fetches nothing; the refresh still runs to its end.
+    func test_closingManageAccount_refreshesTheProfile() async throws {
+        let navigationController = UINavigationController(rootViewController: UIViewController())
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
+        let sut = makeSUT(client: signedInClient(email: "user@example.com"), navigationController: navigationController)
+        sut.openQuranComProfile()
+        let sheet = try XCTUnwrap(navigationController.presentedViewController as? SFSafariViewController)
+        XCTAssertNil(sut.profileRefresh, "opening the sheet fetches nothing")
+
+        sheet.delegate?.safariViewControllerDidFinish?(sheet)
+
+        let refresh = try XCTUnwrap(sut.profileRefresh, "closing the sheet refreshes the profile")
+        await refresh.value
+        window.isHidden = true
     }
 
     func test_requestSignOut_saysEverythingSynced_withNothingUnsynced() async {

@@ -19,5 +19,29 @@
 //
 
 import UIKit
+import UIx
+import VLogging
 
-open class BaseViewController: UIViewController { }
+open class BaseViewController: UIViewController {
+    // MARK: Open
+
+    // Presenting mid-transition can leave UIKit stuck (see `isPresentationTransitioning`), so
+    // drop the presentation instead. A dropped presentation never calls `completion`; it calls
+    // `presentationWasDropped(_:)` instead.
+    override open func present(
+        _ viewControllerToPresent: UIViewController,
+        animated flag: Bool,
+        completion: (() -> Void)? = nil
+    ) {
+        guard !isPresentationTransitioning else {
+            logger.warning("Dropped presenting \(type(of: viewControllerToPresent)) during a presentation transition")
+            presentationWasDropped(viewControllerToPresent)
+            return
+        }
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
+    }
+
+    /// Called when a presentation is dropped, so subclasses can undo state set up for it.
+    open func presentationWasDropped(_ viewController: UIViewController) {
+    }
+}

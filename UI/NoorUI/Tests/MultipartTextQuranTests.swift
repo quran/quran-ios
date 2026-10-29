@@ -248,6 +248,28 @@ final class MultipartTextQuranTests: XCTestCase {
         XCTAssertEqual(text.accessibilityText, "Al-Baqarah, Ayah 255 - 2:256; Āli-ʿImrān, Ayah 18")
     }
 
+    // MARK: Page references
+
+    func test_pageReference_inNonArabicLocale_usesFirstSuraNameAndPage() {
+        let text: MultipartText = "\(page: page)"
+
+        XCTAssertEqual(text.rawValue(locale: english), "At-Tawbah, Page 200")
+    }
+
+    func test_pageReference_inArabicLocale_usesFirstSuraGlyphAndAppLanguagePage() {
+        let text: MultipartText = "\(page: page)"
+
+        XCTAssertEqual(text.rawValue(locale: arabic), "\u{E90E}, Page 200")
+    }
+
+    func test_textPageReference_inArabicLocale_usesPlainArabicNameWithoutGlyph() {
+        let text: MultipartText = "\(page: page, nameStyle: .text)"
+        let rawValue = text.rawValue(locale: arabic)
+
+        XCTAssertEqual(rawValue, "\(page.startSura.localizedName(language: .arabic)), Page 200")
+        XCTAssertFalse(containsDecoratedGlyph(rawValue))
+    }
+
     // MARK: Accessibility
 
     func test_references_useLocalizedAccessibilityTextInEveryStyle() {
@@ -255,10 +277,12 @@ final class MultipartTextQuranTests: XCTestCase {
             let suraText: MultipartText = "\(sura: sura, emphasizingSura: true, nameStyle: style)"
             let ayahText: MultipartText = "\(ayah: ayah, nameStyle: style)"
             let surasText: MultipartText = "\(suras: Array(Quran.hafsMadani1405.suras[0 ... 1]), nameStyle: style)"
+            let pageText: MultipartText = "\(page: page, nameStyle: style)"
 
             XCTAssertEqual(suraText.accessibilityText, sura.localizedName(), "\(style)")
             XCTAssertEqual(ayahText.accessibilityText, ayah.localizedName, "\(style)")
             XCTAssertEqual(surasText.accessibilityText, "Al-Fātihah, Al-Baqarah", "\(style)")
+            XCTAssertEqual(pageText.accessibilityText, "At-Tawbah, Page 200", "\(style)")
         }
     }
 
@@ -326,6 +350,7 @@ final class MultipartTextQuranTests: XCTestCase {
 
     private let sura = Quran.hafsMadani1405.suras[1]
     private let ayah = Quran.hafsMadani1405.suras[1].verses[254]
+    private let page = Quran.hafsMadani1405.pages[199]
     private let english = Locale(identifier: "en-CA")
     private let arabic = Locale(identifier: "ar-SA")
     private let chinese = Locale(identifier: "zh")

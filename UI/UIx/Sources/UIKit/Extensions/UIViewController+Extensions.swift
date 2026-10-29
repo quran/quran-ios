@@ -50,6 +50,20 @@ public extension UIViewController {
         return deepPresented
     }
 
+    /// Whether the presented view controller is still being presented or dismissed.
+    ///
+    /// On iOS 26 a dismissing popover morphs back into its source for about a second while the
+    /// screen stays interactive. Presenting during that transition corrupts UIKit's state: the next
+    /// presented sheet keeps `isBeingDismissed` stuck and ignores every dismiss. Check this before
+    /// presenting and drop the presentation instead, as `presentPopover(_:pointingTo:)`,
+    /// NoorUI's `BaseViewController` and `ModalPresentationCoordinator` do.
+    var isPresentationTransitioning: Bool {
+        guard let presentedViewController else {
+            return false
+        }
+        return presentedViewController.isBeingPresented || presentedViewController.isBeingDismissed
+    }
+
     /// Searches the receiver and its containment hierarchy breadth-first for a view controller of the requested type.
     func findViewController<T: UIViewController>(ofType type: T.Type) -> T? {
         var queue = [self]

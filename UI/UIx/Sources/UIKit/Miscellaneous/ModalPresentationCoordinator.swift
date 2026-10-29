@@ -115,12 +115,30 @@ public final class ModalPresentationCoordinator: NSObject, ObservableObject, UIA
         currentKind = metadata.kind
         recordCurrentPresentation(phase: "presenting", interactive: false)
         presentedViewController = viewController
+        // Presenting mid-transition can leave UIKit stuck, so drop the request instead.
+        guard !presentingViewController.isPresentationTransitioning else {
+            didDropPresentation(of: viewController)
+            return
+        }
         presentingViewController.present(viewController, animated: true) { [weak self, weak viewController] in
             guard let self, presentedViewController === viewController else { return }
             recordCurrentPresentation(phase: "presented", interactive: false)
             perform(stateMachine.didPresent())
         }
         viewController.presentationController?.delegate = self
+    }
+
+    private func didDropPresentation(of viewController: UIViewController) {
+        guard presentedViewController === viewController else { return }
+        presentedViewController = nil
+        let droppedOwner = currentOwner
+        currentOwner = nil
+        currentKind = nil
+        stateMachine.cancel()
+        if let droppedOwner {
+            crashContext.clearPresentation(owner: droppedOwner)
+            logger.warning("Modal presentation dropped: \(droppedOwner)")
+        }
     }
 
     private func dismiss() {

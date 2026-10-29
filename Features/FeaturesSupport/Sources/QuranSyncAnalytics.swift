@@ -5,6 +5,7 @@ public enum QuranSyncAuthenticationSource: String, Sendable {
     case bookmarks
     case notes
     case settings
+    case accountSync = "account_sync"
 }
 
 public extension AnalyticsLibrary {

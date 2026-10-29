@@ -56,6 +56,7 @@ public enum NoorSystemImage: String {
     case stream = "cloud"
     case infinity
     case storageFull = "externaldrive.badge.exclamationmark"
+    case externalLink = "arrow.up.right"
 
     // MARK: Public
 

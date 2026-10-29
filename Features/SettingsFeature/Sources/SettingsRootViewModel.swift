@@ -40,6 +40,7 @@ final class SettingsRootViewModel: ObservableObject {
         diagnosticsBuilder: DiagnosticsBuilder,
         appIconService: AppIconService,
         appIconBuilder: AppIconBuilder,
+        accountSyncBuilder: AccountSyncBuilder,
         quranProfileURL: URL,
         navigationController: UINavigationController
     ) {
@@ -56,6 +57,7 @@ final class SettingsRootViewModel: ObservableObject {
         self.readingSelectorBuilder = readingSelectorBuilder
         self.diagnosticsBuilder = diagnosticsBuilder
         self.appIconBuilder = appIconBuilder
+        self.accountSyncBuilder = accountSyncBuilder
         self.quranProfileURL = quranProfileURL
         self.navigationController = navigationController
 
@@ -203,6 +205,16 @@ final class SettingsRootViewModel: ObservableObject {
         let viewController = SFSafariViewController(url: quranProfileURL)
         navigationController?.present(viewController, animated: true)
     }
+
+    func navigateToAccountSync() {
+        logger.info("Settings: navigateToAccountSync")
+        let viewController = accountSyncBuilder.build(
+            user: loggedInUser,
+            signOut: { [weak self] in try await self?.signOutOfQuranCom(from: .accountSync) },
+            navigationController: navigationController
+        )
+        navigationController?.pushViewController(viewController, animated: true)
+    }
     #endif
 
     func navigateToDiagnotics() {
@@ -269,18 +281,27 @@ final class SettingsRootViewModel: ObservableObject {
     }
 
     func logoutFromQuranCom() async {
-        analytics.quranSyncSignOut(from: .settings)
-        logger.info("Quran Sync: starting sign out from Settings")
+        do {
+            try await signOutOfQuranCom(from: .settings)
+        } catch {
+            self.error = error
+        }
+    }
+
+    /// Signs out, here or from the Account & Sync screen, which shows its own error.
+    func signOutOfQuranCom(from source: QuranSyncAuthenticationSource) async throws {
+        analytics.quranSyncSignOut(from: source)
+        logger.info("Quran Sync: starting sign out from \(source)")
         // Stop legacy import before the logout reset, so legacy data never returns afterwards.
         await legacyDataImportCoordinator.disable()
         do {
             try await authenticationClient.logout()
             isAuthenticated = false
             loggedInUser = nil
-            logger.info("Quran Sync: sign out succeeded from Settings")
+            logger.info("Quran Sync: sign out succeeded from \(source)")
         } catch {
             logger.error("Failed to logout from Quran.com: \(error)")
-            self.error = error
+            throw error
         }
     }
     #endif
@@ -288,6 +309,7 @@ final class SettingsRootViewModel: ObservableObject {
     // MARK: Private
 
     #if QURAN_SYNC
+    private let accountSyncBuilder: AccountSyncBuilder
     private let quranProfileURL: URL
     private var authenticationClient: any AuthenticationClient
     private let legacyDataImportCoordinator: LegacyDataImportCoordinator

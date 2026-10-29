@@ -722,3 +722,119 @@
 
 /* Separates the items of a list, such as a note's verse ranges. A semicolon, because items can contain commas ("Al-Fātihah, Ayah 1") */
 "list.separator" = "; ";
+// Title of the Quran.com Account & Sync screen, opened from the account card in Settings.
+"sync.account.title" = "Conta e sincronização";
+// Sync status when the last sync succeeded: %@ is a relative time, such as "2 minutes ago".
+"sync.status.synced" = "Sincronizado %@";
+// How long ago a sync was when it was within the last minute, as in "Synced just now".
+"sync.status.just-now" = "agora mesmo";
+// Sync status before the first sync with Quran.com.
+"sync.status.never-synced" = "Ainda não sincronizado";
+// Sync status while a sync runs.
+"sync.status.syncing" = "Sincronizando…";
+// Detail under the sync status while a sync runs.
+"sync.status.sending" = "Enviando suas alterações";
+// Sync status when the latest sync failed.
+"sync.status.failed" = "Não foi possível sincronizar";
+// Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
+"sync.status.retrying" = "%@ · Nova tentativa em breve";
+// Detail under the sync status: what syncs with Quran.com.
+"sync.status.all-items" = "Marcadores, coleções, notas e progresso de leitura";
+// Why a sync failed: the device couldn't reach Quran.com.
+"sync.error.network" = "Sem conexão";
+// Why a sync failed: Quran.com didn't accept the signed-in session.
+"sync.error.authentication" = "O Quran.com não aceitou seu login";
+// Why a sync failed: Quran.com's server failed or was unavailable.
+"sync.error.server" = "O Quran.com não está disponível";
+// Why a sync failed: Quran.com rejected the request.
+"sync.error.rejected" = "O Quran.com não aceitou as alterações";
+// Why a sync failed, when the reason is unknown.
+"sync.error.unknown" = "Algo deu errado";
+// Detail when the latest sync received changes but couldn't send this device's changes.
+"sync.error.paused" = "Suas alterações não estão sendo enviadas";
+// Button that syncs with Quran.com right away.
+"sync.action.sync-now" = "Sincronizar agora";
+// The disabled sync button while a sync runs.
+"sync.action.syncing" = "Sincronizando";
+// Button that syncs again after a sync failed.
+"sync.action.try-again" = "Tentar novamente";
+// Header of the list of items that don't sync: %@ is how many.
+"sync.held.header" = "Não sincronizados · %@";
+// Footer under the list of items that don't sync.
+"sync.held.footer" = "Eles ficam neste dispositivo até você corrigi-los. Todo o resto continua sincronizando.";
+// An item that doesn't sync: a note, where %@ is its verse range, such as "Al-Baqarah 2:255".
+"sync.held.note" = "Nota em %@";
+// An item that doesn't sync: a collection, where %@ is its name.
+"sync.held.collection" = "Coleção “%@”";
+// An item that doesn't sync: a verse bookmark, where %@ is the verse, such as "Al-Kahf 18:10".
+"sync.held.bookmark" = "Marcador em %@";
+// An item that doesn't sync: a reading bookmark, where %@ is its name or color.
+"sync.held.reading-bookmark" = "Marcador de leitura “%@”";
+// An item that doesn't sync: the user's reading progress.
+"sync.held.reading-progress" = "Progresso de leitura";
+// An item that doesn't sync: a note deleted on this device.
+"sync.held.deleted-note" = "Nota excluída";
+// An item that doesn't sync: a collection deleted on this device.
+"sync.held.deleted-collection" = "Coleção excluída";
+// An item that doesn't sync: a bookmark deleted on this device.
+"sync.held.deleted-bookmark" = "Marcador excluído";
+// Why an item doesn't sync: its text is shorter than Quran.com accepts.
+"sync.held.reason.too-short" = "Curto demais para o Quran.com.";
+// Why an item doesn't sync: its text is longer than Quran.com accepts.
+"sync.held.reason.too-long" = "Longo demais para o Quran.com.";
+// Why an item doesn't sync: its verses don't exist.
+"sync.held.reason.invalid-verses" = "O Quran.com não reconhece estas ayahs.";
+// Why an item doesn't sync: a reading bookmark's location doesn't exist.
+"sync.held.reason.invalid-location" = "O Quran.com não reconhece este local.";
+// Why an item doesn't sync: Quran.com reserves the collection's name.
+"sync.held.reason.reserved-name" = "O Quran.com reserva este nome para a própria lista.";
+// Why an item doesn't sync: Quran.com doesn't let users rename or delete the collection.
+"sync.held.reason.read-only" = "O Quran.com não permite alterações nesta coleção.";
+// Why an item doesn't sync: Quran.com refused the change.
+"sync.held.reason.not-accepted" = "O Quran.com não aceitou esta alteração.";
+// Why a note doesn't sync: Quran.com refused it.
+"sync.held.reason.not-accepted.note" = "O Quran.com não aceitou esta nota.";
+// Why a collection doesn't sync: Quran.com refused it.
+"sync.held.reason.not-accepted.collection" = "O Quran.com não aceitou esta coleção.";
+// Why a bookmark doesn't sync: Quran.com refused it.
+"sync.held.reason.not-accepted.bookmark" = "O Quran.com não aceitou este marcador.";
+// Why an item doesn't sync: its collection doesn't sync yet.
+"sync.held.reason.waiting-on-collection" = "Aguardando a sincronização da coleção.";
+// Why an item doesn't sync: another item that doesn't sync uses its name or slot.
+"sync.held.reason.waiting-on-other" = "Aguardando a sincronização de outro item.";
+// Why an item doesn't sync: it syncs after the first sync brings Quran.com's copy.
+"sync.held.reason.not-linked" = "Aguardando a primeira sincronização com o Quran.com.";
+// Header of the list of the latest syncs.
+"sync.runs.header" = "Sincronizações recentes";
+// Shown in the list of the latest syncs before the first sync.
+"sync.runs.empty.title" = "Nenhuma sincronização ainda";
+// Shown in the list of the latest syncs before the first sync.
+"sync.runs.empty.body" = "Cada sincronização com o Quran.com aparece aqui.";
+// A sync in the list of syncs: %1$@ is when it ran, such as "Today, 10:42", and %2$@ is what started it, such as "Sync now".
+"sync.run.title" = "%1$@ · %2$@";
+// Separates the parts of a sync's details, such as "Sent 3 · Received 1".
+"sync.separator" = " · ";
+// What started a sync: the user tapped Sync now.
+"sync.run.trigger.manual" = "Sincronizar agora";
+// What started a sync: a change on this device.
+"sync.run.trigger.local-change" = "Alteração neste dispositivo";
+// What started a sync: the user returned to the app from the background.
+"sync.run.trigger.foreground" = "Retorno ao app";
+// What started a sync: the periodic sync, where %@ is the number of minutes.
+"sync.run.trigger.periodic" = "A cada %@ minutos";
+// What started a sync: the app started.
+"sync.run.trigger.app-start" = "Início do app";
+// What started a sync: the user signed in.
+"sync.run.trigger.sign-in" = "Login";
+// A sync's details: %@ is how many changes it sent to Quran.com.
+"sync.run.sent" = "%@ enviados";
+// A sync's details: %@ is how many changes it received from Quran.com.
+"sync.run.received" = "%@ recebidos";
+// A sync's details: %@ is how many items didn't sync.
+"sync.run.held" = "%@ retidos";
+// A sync's details: it received changes but didn't send this device's changes.
+"sync.run.sending-paused" = "Envio pausado";
+// A sync's details: it was stopped before it finished, such as by another sync.
+"sync.run.stopped" = "Interrompida";
+// A sync's details: there was nothing to send or receive.
+"sync.run.up-to-date" = "Tudo atualizado";

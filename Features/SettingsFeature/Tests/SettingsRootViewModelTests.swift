@@ -361,6 +361,15 @@ final class SettingsRootViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_signOutFromAccountSync_reportsTheAccountSyncSource() async throws {
+        let analytics = AnalyticsLibrarySpy()
+        let sut = makeSUT(analytics: analytics, authenticationClient: AuthenticationClientFake())
+
+        try await sut.signOutOfQuranCom(from: .accountSync)
+
+        XCTAssertEqual(analytics.events, [.init(name: "QuranSyncSignOut", value: "account_sync")])
+    }
+
     func test_logout_disablesLegacyImport() async throws {
         let store = TemporaryCoreDataStore()
         let stack = store.stack()
@@ -412,6 +421,7 @@ final class SettingsRootViewModelTests: XCTestCase {
             diagnosticsBuilder: DiagnosticsBuilder(container: container),
             appIconService: container.appIconService(),
             appIconBuilder: AppIconBuilder(container: container),
+            accountSyncBuilder: AccountSyncBuilder(container: container),
             quranProfileURL: container.quranProfileURL,
             navigationController: navigationController
         )

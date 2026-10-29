@@ -1,6 +1,7 @@
 #if QURAN_SYNC
 import AnnotationsService
 import Combine
+import Localization
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
@@ -206,6 +207,20 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         let storedBookmark = try await storedBookmark(in: .orange)
 
         XCTAssertEqual(storedBookmark?.placement, .page(firstPage))
+    }
+
+    func test_selectUnsetSlotAtPageTarget_toastNamesPageWithItsFirstSura() async {
+        let page = Quran.hafsMadani1405.pages[199]
+        let sut = makeSUT(target: .pages(page, [page]))
+        let startTask = await start(sut)
+        defer { startTask.cancel() }
+
+        let toast = await sut.select(.orange)
+
+        XCTAssertEqual(
+            toast?.message.accessibilityText,
+            lFormat("ayah.menu.reading-bookmark.saved", "At-Tawbah, Page 200")
+        )
     }
 
     func test_pageTarget_exposesBookmarkOnCurrentPage() async throws {

@@ -235,6 +235,12 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             parts.append(.ayah(ayah, emphasizesSura: emphasizingSura, nameStyle: nameStyle))
         }
 
+        /// Appends the page's first sura and the localized page, such as "At-Tawbah, Page 200".
+        public mutating func appendInterpolation(page: Page, nameStyle: SuraNameStyle = .standard) {
+            let sura: MultipartText = "\(sura: page.startSura, nameStyle: nameStyle)"
+            parts.append(contentsOf: MultipartText.localizedFormat("quran.page.location", sura, .text(page.localizedName)).parts)
+        }
+
         public mutating func appendInterpolation(ayahRange range: ClosedRange<AyahNumber>) {
             parts.append(contentsOf: MultipartText.ayahRange(range).parts)
         }

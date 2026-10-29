@@ -42,11 +42,14 @@ final class ReadingBookmarkMenuRowTests: XCTestCase {
     }
 
     func test_pageBookmarkAtAyahTarget_offersMoveHere() {
-        let page = Quran.hafsMadani1405.pages[0]
+        let page = Quran.hafsMadani1405.pages[199]
         let row = makeRow(placement: .page(page), target: .ayah(ayah(2)))
 
         XCTAssertEqual(row.action, .moveHere)
-        XCTAssertEqual(row.subtitle.accessibilityText, lFormat("bookmarks.reading.location", page.localizedName))
+        XCTAssertEqual(
+            row.subtitle.accessibilityText,
+            lFormat("bookmarks.reading.location", "At-Tawbah, Page 200")
+        )
     }
 
     private func makeRow(

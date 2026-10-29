@@ -67,11 +67,13 @@ final class LocalizationCatalogTests: XCTestCase {
             let comma = commas[localization, default: ", "]
             XCTAssertEqual(localized["list.separator.comma"], comma, "\(localization) list.separator.comma")
             // Translators may reorder the placeholders, so only check the comma is there.
-            let ayahComma = comma.trimmingCharacters(in: .whitespaces)
-            XCTAssertTrue(
-                localized["quran.ayah.name", default: ""].contains(ayahComma),
-                "\(localization) quran.ayah.name is missing \(ayahComma)"
-            )
+            let referenceComma = comma.trimmingCharacters(in: .whitespaces)
+            for key in ["quran.ayah.name", "quran.page.location"] {
+                XCTAssertTrue(
+                    localized[key, default: ""].contains(referenceComma),
+                    "\(localization) \(key) is missing \(referenceComma)"
+                )
+            }
         }
     }
 

@@ -2,7 +2,6 @@
 import Localization
 import NoorUI
 import QuranAnnotations
-import QuranLocalization
 
 enum ReadingBookmarkUndoToast {
     static func saved(_ bookmark: PlacedReadingBookmark) -> Toast {
@@ -46,7 +45,7 @@ enum ReadingBookmarkUndoToast {
         case .ayah(let ayah):
             return "\(ayah: ayah)"
         case .page(let page):
-            return .text(page.localizedName)
+            return "\(page: page)"
         }
     }
 }

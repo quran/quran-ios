@@ -25,14 +25,11 @@ struct ContentImageView: View {
             ContentImageViewBody(
                 decorations: viewModel.decorations,
                 ayahReadingBookmarks: viewModel.ayahReadingBookmarks,
-                quranPage: viewModel.page,
                 pageReadingBookmarks: viewModel.pageReadingBookmarks,
                 onAyahIndicatorTap: onAyahIndicatorTap,
                 image: viewModel.imagePage?.image,
                 renderingMode: viewModel.imageRenderingMode,
-                quarterName: viewModel.page.localizedQuarterName,
-                suras: viewModel.page.suras,
-                page: viewModel.page.localizedNumber,
+                page: viewModel.page,
                 scrollToVerse: viewModel.scrollToVerse,
                 wordFrames: viewModel.imagePage?.wordFrames,
                 onScaleChange: { viewModel.scale = $0 },
@@ -43,9 +40,7 @@ struct ContentImageView: View {
                 decorations: viewModel.decorations,
                 image: viewModel.imagePage?.image,
                 renderingMode: viewModel.imageRenderingMode,
-                quarterName: viewModel.page.localizedQuarterName,
-                suras: viewModel.page.suras,
-                page: viewModel.page.localizedNumber,
+                page: viewModel.page,
                 scrollToVerse: viewModel.scrollToVerse,
                 wordFrames: viewModel.imagePage?.wordFrames,
                 onScaleChange: { viewModel.scale = $0 },
@@ -70,15 +65,12 @@ private struct ContentImageViewBody: View {
     let decorations: ImageDecorations
     #if QURAN_SYNC
     var ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]] = [:]
-    var quranPage: Page?
     var pageReadingBookmarks: [ReadingBookmarkSlot] = []
     var onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void = { _, _ in }
     #endif
     let image: UIImage?
     let renderingMode: QuranThemedImage.RenderingMode
-    let quarterName: String
-    let suras: [Sura]
-    let page: String
+    let page: Page
     let scrollToVerse: AyahNumber?
     let wordFrames: WordFrameCollection?
     let onScaleChange: (WordFrameScale) -> Void
@@ -101,7 +93,7 @@ private struct ContentImageViewBody: View {
         } header: {
             header
         } footer: {
-            QuranPageFooter(page: page)
+            QuranPageFooter(page: page.localizedNumber)
         }
         #else
         let content = AdaptiveImageScrollView(decorations: decorations, renderingMode: renderingMode) {
@@ -113,7 +105,7 @@ private struct ContentImageViewBody: View {
         } header: {
             header
         } footer: {
-            QuranPageFooter(page: page)
+            QuranPageFooter(page: page.localizedNumber)
         }
         #endif
         return content
@@ -122,16 +114,10 @@ private struct ContentImageViewBody: View {
             .quranScrolling(scrollToValue: scrollToVerse) { AyahScrollTarget(ayah: $0) }
     }
 
-    @ViewBuilder private var header: some View {
-        let header = QuranPageHeader(quarterName: quarterName, suras: suras)
+    private var header: some View {
+        QuranPageHeader(quarterName: page.localizedQuarterName, suras: page.suras)
         #if QURAN_SYNC
-        if let quranPage {
-            header.pageReadingBookmarkRibbons(page: quranPage, slots: pageReadingBookmarks)
-        } else {
-            header
-        }
-        #else
-        header
+            .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks)
         #endif
     }
 }
@@ -148,9 +134,7 @@ private struct ContentImageViewBody: View {
         decorations: decorations,
         image: UIImage(contentsOfFile: testResourceURL("images/page604.png").path)!,
         renderingMode: .tinted,
-        quarterName: "ABC",
-        suras: Quran.hafsMadani1405.pages[603].suras,
-        page: "604",
+        page: Quran.hafsMadani1405.pages[603],
         scrollToVerse: nil,
         wordFrames: nil,
         onScaleChange: { _ in },

@@ -826,3 +826,11 @@
 "sync.status.everything-else-synced" = "Yang lain disegerakkan %@";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Semak yang tidak disegerakkan";
+// Title of the screen with every item that doesn't sync and the latest syncs.
+"sync.activity.title" = "Aktiviti penyegerakan";
+// Footer under the list of syncs: %@ is how many syncs the app keeps.
+"sync.activity.footer" = "%@ penyegerakan terakhir pada peranti ini.";
+// Link under the first items that don't sync: %@ is how many there are in all.
+"sync.held.show-all" = "Tunjukkan semua %@";
+// Link under the latest syncs that opens every sync.
+"sync.runs.see-all" = "Lihat semua aktiviti";

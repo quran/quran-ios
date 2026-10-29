@@ -849,3 +849,11 @@
 "sync.status.everything-else-synced" = "其他内容%@已同步";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "查看未同步的内容";
+// Title of the screen with every item that doesn't sync and the latest syncs.
+"sync.activity.title" = "同步记录";
+// Footer under the list of syncs: %@ is how many syncs the app keeps.
+"sync.activity.footer" = "此设备上最近 %@ 次同步。";
+// Link under the first items that don't sync: %@ is how many there are in all.
+"sync.held.show-all" = "显示全部 %@ 项";
+// Link under the latest syncs that opens every sync.
+"sync.runs.see-all" = "查看全部记录";

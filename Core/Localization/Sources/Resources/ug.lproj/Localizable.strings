@@ -846,3 +846,11 @@
 "sync.status.everything-else-synced" = "باشقا ھەممىسى %@ ماسقەدەملەندى";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "ماسقەدەملەنمىگەنلەرنى كۆرۈش";
+// Title of the screen with every item that doesn't sync and the latest syncs.
+"sync.activity.title" = "ماسقەدەملەش پائالىيىتى";
+// Footer under the list of syncs: %@ is how many syncs the app keeps.
+"sync.activity.footer" = "بۇ ئۈسكۈنىدىكى ئاخىرقى %@ قېتىملىق ماسقەدەملەش.";
+// Link under the first items that don't sync: %@ is how many there are in all.
+"sync.held.show-all" = "ھەممىسىنى كۆرسىتىش (%@)";
+// Link under the latest syncs that opens every sync.
+"sync.runs.see-all" = "بارلىق پائالىيەتنى كۆرۈش";

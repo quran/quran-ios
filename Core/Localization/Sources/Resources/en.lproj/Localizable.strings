@@ -596,3 +596,11 @@
 "sync.status.everything-else-synced" = "Everything else synced %@";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Review what isn't syncing";
+// Title of the screen with every item that doesn't sync and the latest syncs.
+"sync.activity.title" = "Sync activity";
+// Footer under the list of syncs: %@ is how many syncs the app keeps.
+"sync.activity.footer" = "The last %@ syncs on this device.";
+// Link under the first items that don't sync: %@ is how many there are in all.
+"sync.held.show-all" = "Show all %@";
+// Link under the latest syncs that opens every sync.
+"sync.runs.see-all" = "See all activity";

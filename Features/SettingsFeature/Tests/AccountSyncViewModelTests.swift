@@ -91,6 +91,16 @@ final class AccountSyncViewModelTests: XCTestCase {
         XCTAssertEqual(navigationController.viewControllers.count, 2)
     }
 
+    func test_showActivity_opensSyncActivity() {
+        let navigationController = UINavigationController(rootViewController: UIViewController())
+        let sut = makeSUT(client: signedInClient(email: "user@example.com"), navigationController: navigationController)
+
+        sut.showActivity()
+
+        XCTAssertEqual(navigationController.viewControllers.count, 2)
+        XCTAssertEqual(navigationController.topViewController?.title, l("sync.activity.title"))
+    }
+
     func test_requestSignOut_presentsTheConfirmation() {
         let sut = makeSUT(client: signedInClient(email: "user@example.com"))
 
@@ -120,6 +130,7 @@ final class AccountSyncViewModelTests: XCTestCase {
             authenticationClient: client,
             quranDataService: database.quranDataService,
             quranProfileURL: URL(string: "https://quran.com/profile")!,
+            syncActivityBuilder: SyncActivityBuilder(container: AppDependenciesStub()),
             signOut: signOut,
             navigationController: navigationController
         )

@@ -843,3 +843,11 @@
 "sync.status.everything-else-synced" = "Всё остальное синхронизировано %@";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Посмотреть, что не синхронизируется";
+// Title of the screen with every item that doesn't sync and the latest syncs.
+"sync.activity.title" = "История синхронизации";
+// Footer under the list of syncs: %@ is how many syncs the app keeps.
+"sync.activity.footer" = "Последние %@ синхронизаций на этом устройстве.";
+// Link under the first items that don't sync: %@ is how many there are in all.
+"sync.held.show-all" = "Показать все (%@)";
+// Link under the latest syncs that opens every sync.
+"sync.runs.see-all" = "Вся история";

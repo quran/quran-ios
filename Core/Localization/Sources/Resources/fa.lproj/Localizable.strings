@@ -845,3 +845,11 @@
 "sync.status.everything-else-synced" = "بقیهٔ موارد %@ همگام‌سازی شدند";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "بررسی مواردی که همگام‌سازی نمی‌شوند";
+// Title of the screen with every item that doesn't sync and the latest syncs.
+"sync.activity.title" = "فعالیت همگام‌سازی";
+// Footer under the list of syncs: %@ is how many syncs the app keeps.
+"sync.activity.footer" = "%@ همگام‌سازی اخیر در این دستگاه.";
+// Link under the first items that don't sync: %@ is how many there are in all.
+"sync.held.show-all" = "نمایش همهٔ %@ مورد";
+// Link under the latest syncs that opens every sync.
+"sync.runs.see-all" = "دیدن همهٔ فعالیت‌ها";

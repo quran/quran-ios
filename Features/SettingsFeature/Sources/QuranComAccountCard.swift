@@ -8,6 +8,11 @@ import UIx
 @MainActor
 struct QuranComAccountCard: View {
     @ScaledMetric private var avatarSize = 48.0
+    @ScaledMetric private var profileAvatarSize = 56.0
+    @ScaledMetric private var statusIconSize = 22.0
+    @ScaledMetric private var reviewCornerRadius = 14.0
+    @ScaledMetric private var buttonHorizontalPadding = 14.0
+    @ScaledMetric private var buttonVerticalPadding = 8.0
     @ScaledMetric private var cardCornerRadius = 20.0
     @ScaledMetric private var cardPadding = 16.0
     @ScaledMetric private var headerSpacing = 12.0
@@ -16,11 +21,11 @@ struct QuranComAccountCard: View {
     @ScaledMetric private var signInVerticalPadding = 12.0
 
     let isAuthenticated: Bool
-    let email: String?
+    let profile: AccountProfile
+    let status: SyncStatusSummary
     let openAccountAction: Action
-    let manageAccountAction: AsyncAction
+    let syncNowAction: Action
     let signInAction: AsyncAction
-    let signOutAction: Action
 
     var body: some View {
         Group {
@@ -78,23 +83,19 @@ struct QuranComAccountCard: View {
         VStack(spacing: 0) {
             Button(action: openAccountAction) {
                 HStack(spacing: headerSpacing) {
-                    Text(accountInitial)
-                        .font(.title3.weight(.semibold))
-                        .foregroundStyle(Color.accentColor)
-                        .frame(width: avatarSize, height: avatarSize)
-                        .background(Color.accentColor.opacity(0.1), in: Circle())
-                        .accessibilityHidden(true)
+                    AccountAvatar(profile: profile, length: profileAvatarSize)
 
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(l("setting.quran_account.signed_in"))
-                            .font(.caption.weight(.bold))
-                            .foregroundStyle(Color.accentColor)
-                            .textCase(.uppercase)
-
-                        Text(email ?? l("setting.quran_account.profile"))
-                            .font(.subheadline)
+                        Text(profile.name ?? profile.email ?? l("setting.quran_account.signed_in"))
+                            .font(.headline)
                             .foregroundStyle(Color.label)
-                            .lineLimit(1)
+
+                        if profile.name != nil, let email = profile.email {
+                            Text(email)
+                                .font(.subheadline)
+                                .foregroundStyle(Color.secondaryLabel)
+                                .lineLimit(1)
+                        }
                     }
 
                     Spacer(minLength: 0)
@@ -107,50 +108,81 @@ struct QuranComAccountCard: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .accessibilityElement(children: .combine)
             .accessibilityHint(l("sync.account.title"))
             .padding(.bottom, cardPadding)
 
             Divider()
 
-            AsyncButton(action: manageAccountAction) {
-                HStack {
-                    Text(l("setting.quran_account.profile"))
-                        .foregroundStyle(Color.label)
+            statusRow
+                .padding(.top, rowVerticalPadding)
 
-                    Spacer()
-
-                    Image(systemName: "chevron.right")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(Color.tertiaryLabel)
-                        .accessibilityHidden(true)
-                }
-                .frame(maxWidth: .infinity)
-                .contentShape(Rectangle())
-                .padding(.vertical, rowVerticalPadding)
-            }
-            .buttonStyle(.plain)
-
-            Divider()
-
-            Button(action: signOutAction) {
-                Text(l("setting.quran_account.sign_out"))
-                    .foregroundStyle(Color.red)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
+            if status.hasHeldItems {
+                reviewHeldItems
                     .padding(.top, rowVerticalPadding)
             }
-            .buttonStyle(.plain)
         }
     }
 
-    private var accountInitial: String {
-        guard let firstCharacter = email?
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .first
-        else {
-            return "Q"
+    private var statusRow: some View {
+        HStack(spacing: headerSpacing) {
+            if let icon = status.icon {
+                SyncStatusIcon(icon: icon)
+                    .font(.title3)
+                    .frame(width: statusIconSize, height: statusIconSize)
+            }
+
+            VStack(alignment: .leading, spacing: 0) {
+                Text(status.title)
+                    .font(.body)
+                    .foregroundStyle(titleColor)
+                Text(status.detail)
+                    .font(.footnote)
+                    .foregroundStyle(Color.secondaryLabel)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityElement(children: .combine)
+
+            Button(action: syncNowAction) {
+                Text(status.button.title)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color.accentColor)
+                    .padding(.horizontal, buttonHorizontalPadding)
+                    .padding(.vertical, buttonVerticalPadding)
+                    .background(Color.accentColor.opacity(0.1), in: Capsule())
+            }
+            .buttonStyle(.plain)
+            .disabled(!status.button.isEnabled)
+            .opacity(status.button.isEnabled ? 1 : 0.45)
         }
-        return String(firstCharacter).uppercased()
+    }
+
+    private var reviewHeldItems: some View {
+        Button(action: openAccountAction) {
+            HStack {
+                Text(l("sync.held.review"))
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color.caution)
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Color.caution)
+                    .accessibilityHidden(true)
+            }
+            .padding(.horizontal, headerSpacing)
+            .padding(.vertical, rowVerticalPadding)
+            .background(Color.cautionBackground, in: RoundedRectangle(cornerRadius: reviewCornerRadius, style: .continuous))
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var titleColor: Color {
+        switch status.tone {
+        case .normal: Color.label
+        case .failure: Color.red
+        case .caution: Color.caution
+        }
     }
 }
 
@@ -158,11 +190,11 @@ struct QuranComAccountCard: View {
     List {
         QuranComAccountCard(
             isAuthenticated: false,
-            email: nil,
+            profile: AccountProfile(nil),
+            status: SyncStatusSummary(SyncActivity(), style: .card),
             openAccountAction: {},
-            manageAccountAction: {},
-            signInAction: {},
-            signOutAction: {}
+            syncNowAction: {},
+            signInAction: {}
         )
         .listRowInsets(.zero)
         .listRowBackground(Color.clear)
@@ -174,11 +206,11 @@ struct QuranComAccountCard: View {
     List {
         QuranComAccountCard(
             isAuthenticated: true,
-            email: "user@example.com",
+            profile: AccountProfile(.init(id: "1", name: "Aisha Rahman", email: "aisha.rahman@example.com")),
+            status: SyncStatusSummary(SyncActivity(status: .succeeded(at: Date().addingTimeInterval(-120))), style: .card),
             openAccountAction: {},
-            manageAccountAction: {},
-            signInAction: {},
-            signOutAction: {}
+            syncNowAction: {},
+            signInAction: {}
         )
         .listRowInsets(.zero)
         .listRowBackground(Color.clear)

@@ -23,6 +23,7 @@ struct AccountProfile: Equatable {
             .first { !$0.isEmpty }
         email = user?.email?.trimmingCharacters(in: .whitespacesAndNewlines).nonEmpty
         initials = Self.initials(name: name, email: email)
+        photoURL = user?.photoURL.flatMap { URL(string: $0) }
     }
 
     // MARK: Internal
@@ -31,6 +32,7 @@ struct AccountProfile: Equatable {
     let email: String?
     /// Up to two letters from the name, else the email's first letter.
     let initials: String
+    let photoURL: URL?
 
     // MARK: Private
 

@@ -31,16 +31,13 @@ struct SettingsRootView: View {
             contactUs: { viewModel.contactUs() },
             navigateToDiagnotics: { viewModel.navigateToDiagnotics() },
             isAuthenticated: viewModel.isAuthenticated,
-            loggedInUserEmail: viewModel.currentUserEmail,
+            profile: AccountProfile(viewModel.loggedInUser),
+            syncActivity: viewModel.syncActivity,
             navigateToAccountSync: { viewModel.navigateToAccountSync() },
-            openQuranComProfile: { viewModel.openQuranComProfile() },
             observeAuthentication: { await viewModel.observeAuthentication() },
-            loginAction: { await viewModel.loginToQuranCom() },
-            signOutAction: { viewModel.requestSignOut() }
-        )
-        .signOutConfirmation(
-            isPresented: $viewModel.isSignOutConfirmationPresented,
-            signOut: { await viewModel.logoutFromQuranCom() }
+            observeSyncActivity: { await viewModel.observeSyncActivity() },
+            syncNow: { viewModel.syncNow() },
+            loginAction: { await viewModel.loginToQuranCom() }
         )
         #else
         SettingsRootViewUI(
@@ -90,26 +87,30 @@ private struct SettingsRootViewUI: View {
 
     #if QURAN_SYNC
     let isAuthenticated: Bool
-    let loggedInUserEmail: String?
+    let profile: AccountProfile
+    let syncActivity: SyncActivity
     let navigateToAccountSync: Action
-    let openQuranComProfile: AsyncAction
     let observeAuthentication: AsyncAction
+    let observeSyncActivity: AsyncAction
+    let syncNow: Action
     let loginAction: AsyncAction
-    let signOutAction: Action
     #endif
 
     var body: some View {
         NoorList {
             #if QURAN_SYNC
             NoorBasicSection {
-                QuranComAccountCard(
-                    isAuthenticated: isAuthenticated,
-                    email: loggedInUserEmail,
-                    openAccountAction: { navigateToAccountSync() },
-                    manageAccountAction: { await openQuranComProfile() },
-                    signInAction: { await loginAction() },
-                    signOutAction: { signOutAction() }
-                )
+                // Refreshes "2 minutes ago".
+                TimelineView(.periodic(from: .now, by: 60)) { _ in
+                    QuranComAccountCard(
+                        isAuthenticated: isAuthenticated,
+                        profile: profile,
+                        status: SyncStatusSummary(syncActivity, style: .card),
+                        openAccountAction: { navigateToAccountSync() },
+                        syncNowAction: { syncNow() },
+                        signInAction: { await loginAction() }
+                    )
+                }
                 .listRowInsets(.zero)
                 .listRowBackground(Color.clear)
             }
@@ -204,9 +205,10 @@ private struct SettingsRootViewUI: View {
         }
         #if QURAN_SYNC
         .task { await observeAuthentication() }
+            .task { await observeSyncActivity() }
         #endif
-        .errorAlert(error: $error)
-        .noorListIconColumn()
+            .errorAlert(error: $error)
+            .noorListIconColumn()
     }
 
     // MARK: Private
@@ -235,12 +237,13 @@ private struct SettingsRootViewUI: View {
                 contactUs: {},
                 navigateToDiagnotics: {},
                 isAuthenticated: false,
-                loggedInUserEmail: nil,
+                profile: AccountProfile(nil),
+                syncActivity: SyncActivity(),
                 navigateToAccountSync: {},
-                openQuranComProfile: {},
                 observeAuthentication: {},
-                loginAction: {},
-                signOutAction: {}
+                observeSyncActivity: {},
+                syncNow: {},
+                loginAction: {}
             )
             #else
             SettingsRootViewUI(

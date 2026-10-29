@@ -752,3 +752,9 @@
 "sync.run.stopped" = "Gestopt";
 // A sync's details: there was nothing to send or receive.
 "sync.run.up-to-date" = "Alles bijgewerkt";
+// Sync status on the Settings account card when everything synced. The time shows under it.
+"sync.status.synced.short" = "Gesynchroniseerd";
+// Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
+"sync.status.everything-else-synced" = "Al het andere gesynchroniseerd %@";
+// Link on the Settings account card that opens the items that don't sync.
+"sync.held.review" = "Bekijk wat niet synchroniseert";

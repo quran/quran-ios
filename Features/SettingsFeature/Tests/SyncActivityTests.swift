@@ -184,6 +184,99 @@ final class SyncActivityTests: XCTestCase {
         XCTAssertEqual(summary.detail, l("sync.error.unknown"))
     }
 
+    func test_cardSummary_leadsWithTheHeldCount_andPutsTheTimeInTheDetail() {
+        let syncedAt = Date().addingTimeInterval(-120)
+        let activity = SyncActivity(
+            runs: [makeRun(.succeeded, endedAt: syncedAt.timeIntervalSince1970)],
+            heldItems: [heldItem(.note, id: "n1", reason: .tooShort)]
+        )
+
+        let summary = SyncStatusSummary(activity, style: .card)
+
+        XCTAssertEqual(summary.tone, .caution)
+        XCTAssertEqual(summary.title, lFormat("sync.held.count", 1))
+        XCTAssertEqual(summary.detail, lFormat("sync.status.everything-else-synced", syncedAt.timeAgo()))
+    }
+
+    func test_cardSummary_showsSynced_withTheTimeInTheDetail() {
+        let syncedAt = Date().addingTimeInterval(-120)
+        let activity = SyncActivity(runs: [makeRun(.succeeded, endedAt: syncedAt.timeIntervalSince1970)])
+
+        let summary = SyncStatusSummary(activity, style: .card)
+
+        // The time starts the line, so its first letter is capitalized, such as "Just now".
+        let timeAgo = syncedAt.timeAgo()
+        XCTAssertEqual(summary.icon, .synced)
+        XCTAssertEqual(summary.tone, .normal)
+        XCTAssertEqual(summary.title, l("sync.status.synced.short"))
+        XCTAssertEqual(summary.detail, timeAgo.prefix(1).capitalized(with: .fixedCurrentLocaleNumbers) + timeAgo.dropFirst())
+        XCTAssertFalse(summary.hasHeldItems)
+    }
+
+    func test_cardSummary_saysJustNow_forASyncInTheLastMinute() {
+        let syncedAt = Date().addingTimeInterval(-5)
+        let synced = SyncActivity(runs: [makeRun(.succeeded, endedAt: syncedAt.timeIntervalSince1970)])
+        let held = SyncActivity(
+            runs: [makeRun(.succeeded, endedAt: syncedAt.timeIntervalSince1970)],
+            heldItems: [heldItem(.note, id: "n1", reason: .tooShort)]
+        )
+
+        let justNow = l("sync.status.just-now")
+        XCTAssertEqual(
+            SyncStatusSummary(synced, style: .card).detail,
+            justNow.prefix(1).capitalized(with: .fixedCurrentLocaleNumbers) + justNow.dropFirst()
+        )
+        XCTAssertEqual(SyncStatusSummary(held, style: .card).detail, lFormat("sync.status.everything-else-synced", justNow))
+    }
+
+    /// The card keeps offering to review held items while it syncs or after a failure.
+    func test_cardSummary_keepsHeldItems_whileSyncing() {
+        let activity = SyncActivity(status: .syncing, heldItems: [heldItem(.note, id: "n1", reason: .tooShort)])
+
+        let summary = SyncStatusSummary(activity, style: .card)
+
+        XCTAssertEqual(summary.icon, .syncing)
+        XCTAssertTrue(summary.hasHeldItems)
+    }
+
+    func test_cardSummary_keepsHeldItems_afterAFailure() {
+        let activity = SyncActivity(
+            runs: [makeRun(.failed, endedAt: 100)],
+            heldItems: [heldItem(.note, id: "n1", reason: .tooShort)]
+        )
+
+        let summary = SyncStatusSummary(activity, style: .card)
+
+        XCTAssertEqual(summary.icon, .failed)
+        XCTAssertTrue(summary.hasHeldItems)
+    }
+
+    func test_cardSummary_hasNoHeldItems_whenOnlyWaitingItemsAreLeft() {
+        let parent = heldItem(.collection, id: "c1", reason: .reservedName)
+        let activity = SyncActivity(heldItems: [heldItem(.collectionBookmark, id: "2:255", reason: .waitingOnParent, waitingOn: parent)])
+
+        XCTAssertFalse(SyncStatusSummary(activity, style: .card).hasHeldItems)
+    }
+
+    func test_cardSummary_showsTheFailureInRed() {
+        let summary = SyncStatusSummary(SyncActivity(runs: [makeRun(.failed, endedAt: 100)]), style: .card)
+
+        XCTAssertEqual(summary.tone, .failure)
+        XCTAssertEqual(summary.detail, l("sync.error.unknown"))
+    }
+
+    func test_cardSummary_showsAWaitingRetryInRed_withTryAgain() {
+        let error = MobileSyncRunError(kind: .server, httpStatus: 503, serverCode: nil, message: "unavailable")
+        let activity = SyncActivity(status: .retrying(failedAt: date(300), error: error, nextAttemptAt: date(310)))
+
+        let summary = SyncStatusSummary(activity, style: .card)
+
+        XCTAssertEqual(summary.tone, .failure)
+        XCTAssertEqual(summary.title, l("sync.status.failed"))
+        XCTAssertEqual(summary.detail, lFormat("sync.status.retrying", l("sync.error.server")))
+        XCTAssertTrue(summary.button.isEnabled)
+    }
+
     func test_summary_disablesTheButtonWhileSyncing() {
         let summary = SyncStatusSummary(SyncActivity(status: .syncing))
 

@@ -843,3 +843,9 @@
 "sync.run.stopped" = "已停止";
 // A sync's details: there was nothing to send or receive.
 "sync.run.up-to-date" = "已是最新";
+// Sync status on the Settings account card when everything synced. The time shows under it.
+"sync.status.synced.short" = "已同步";
+// Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
+"sync.status.everything-else-synced" = "其他内容%@已同步";
+// Link on the Settings account card that opens the items that don't sync.
+"sync.held.review" = "查看未同步的内容";

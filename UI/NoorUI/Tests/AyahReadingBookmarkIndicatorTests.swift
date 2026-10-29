@@ -36,43 +36,62 @@ final class AyahReadingBookmarkIndicatorTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(size.height, 44)
     }
 
-    func test_underlineLayout_centersAThinBarJustBelowTheMarker() throws {
+    func test_underlineLayout_centersOneThinLineJustBelowAndWiderThanTheMarker() throws {
         let marker = CGRect(x: 100, y: 200, width: 40, height: 40)
 
         let layout = AyahReadingBookmarkUnderlineLayout(markerFrame: marker, count: 1)
 
-        XCTAssertEqual(layout.underlineFrames.count, 1)
-        let underline = try XCTUnwrap(layout.underlineFrames.first)
-        XCTAssertEqual(underline.midX, marker.midX, accuracy: 0.001)
-        XCTAssertLessThanOrEqual(underline.width, marker.width)
-        XCTAssertLessThan(underline.height, marker.height / 4)
-        XCTAssertGreaterThan(underline.minY, marker.maxY)
-        XCTAssertLessThan(underline.minY - marker.maxY, marker.height / 2)
-        XCTAssertEqual(layout.hitFrame, marker.union(underline))
+        let line = try XCTUnwrap(layout.lineFrame)
+        XCTAssertEqual(line.midX, marker.midX, accuracy: 0.001)
+        XCTAssertEqual(line.width, 48, accuracy: 0.001)
+        XCTAssertEqual(line.height, 4.8, accuracy: 0.001)
+        XCTAssertEqual(line.minY, 246, accuracy: 0.001)
+        XCTAssertEqual(layout.hitFrame, marker.union(line))
     }
 
-    func test_underlineLayout_stacksEachBookmarkBelowThePreviousOne() {
-        let marker = CGRect(x: 0, y: 0, width: 20, height: 20)
+    func test_underlineLayout_lineDoesNotDependOnTheBookmarkCount() {
+        let marker = CGRect(x: 10, y: 20, width: 30, height: 30)
 
-        let frames = AyahReadingBookmarkUnderlineLayout(markerFrame: marker, count: 3).underlineFrames
+        let layouts = (1 ... 3).map { AyahReadingBookmarkUnderlineLayout(markerFrame: marker, count: $0) }
 
-        XCTAssertEqual(frames.count, 3)
-        for (upper, lower) in zip(frames, frames.dropFirst()) {
-            XCTAssertGreaterThan(lower.minY, upper.maxY)
-            XCTAssertEqual(lower.midX, upper.midX)
-            XCTAssertEqual(lower.size, upper.size)
-        }
+        XCTAssertEqual(layouts.map(\.lineFrame), Array(repeating: layouts[0].lineFrame, count: 3))
+        XCTAssertEqual(layouts.map(\.hitFrame), Array(repeating: layouts[0].hitFrame, count: 3))
+        XCTAssertEqual(layouts.map(\.gap), Array(repeating: layouts[0].gap, count: 3))
     }
 
-    func test_underlineLayout_scalesWithTheMarkerAndKeepsAVisibleMinimum() throws {
-        let small = AyahReadingBookmarkUnderlineLayout(markerFrame: CGRect(x: 0, y: 0, width: 10, height: 10), count: 1)
-        let large = AyahReadingBookmarkUnderlineLayout(markerFrame: CGRect(x: 0, y: 0, width: 60, height: 60), count: 1)
-        let smallUnderline = try XCTUnwrap(small.underlineFrames.first)
-        let largeUnderline = try XCTUnwrap(large.underlineFrames.first)
+    func test_underlineLayout_scalesWithTheMarker() throws {
+        let small = AyahReadingBookmarkUnderlineLayout(markerFrame: CGRect(x: 0, y: 0, width: 30, height: 30), count: 3)
+        let large = AyahReadingBookmarkUnderlineLayout(markerFrame: CGRect(x: 0, y: 0, width: 60, height: 60), count: 3)
+        let smallLine = try XCTUnwrap(small.lineFrame)
+        let largeLine = try XCTUnwrap(large.lineFrame)
 
-        XCTAssertGreaterThanOrEqual(smallUnderline.height, 2)
-        XCTAssertEqual(largeUnderline.width, 6 * smallUnderline.width, accuracy: 0.001)
-        XCTAssertGreaterThan(largeUnderline.height, smallUnderline.height)
+        XCTAssertEqual(largeLine.width, 2 * smallLine.width, accuracy: 0.001)
+        XCTAssertEqual(largeLine.height, 2 * smallLine.height, accuracy: 0.001)
+        XCTAssertEqual(largeLine.minY, 2 * smallLine.minY, accuracy: 0.001)
+        XCTAssertEqual(small.gap, 1.5, accuracy: 0.001)
+        XCTAssertEqual(large.gap, 3, accuracy: 0.001)
+    }
+
+    func test_underlineLayout_smallMarker_keepsAVisibleHeightAndGap() throws {
+        let layout = AyahReadingBookmarkUnderlineLayout(markerFrame: CGRect(x: 0, y: 0, width: 10, height: 10), count: 2)
+
+        let line = try XCTUnwrap(layout.lineFrame)
+        XCTAssertEqual(line.height, 2.5, accuracy: 0.001)
+        XCTAssertEqual(layout.gap, 1, accuracy: 0.001)
+    }
+
+    func test_underlineLayout_tinyMarker_leavesRoomForEverySegment() throws {
+        let layout = AyahReadingBookmarkUnderlineLayout(markerFrame: CGRect(x: 0, y: 0, width: 1, height: 1), count: 3)
+
+        let line = try XCTUnwrap(layout.lineFrame)
+        XCTAssertGreaterThan(line.width - 2 * layout.gap, 0)
+    }
+
+    func test_underlineLayout_zeroSizeMarker_hasNoLine() {
+        let layout = AyahReadingBookmarkUnderlineLayout(markerFrame: .zero, count: 3)
+
+        XCTAssertNil(layout.lineFrame)
+        XCTAssertEqual(layout.hitFrame, .zero)
     }
 
     func test_underlineLayout_withoutBookmarks_coversOnlyTheMarker() {
@@ -80,7 +99,7 @@ final class AyahReadingBookmarkIndicatorTests: XCTestCase {
 
         let layout = AyahReadingBookmarkUnderlineLayout(markerFrame: marker, count: 0)
 
-        XCTAssertTrue(layout.underlineFrames.isEmpty)
+        XCTAssertNil(layout.lineFrame)
         XCTAssertEqual(layout.hitFrame, marker)
     }
 

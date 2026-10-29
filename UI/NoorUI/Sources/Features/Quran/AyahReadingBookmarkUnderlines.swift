@@ -8,7 +8,7 @@ import QuranKit
 import SwiftUI
 import UIx
 
-/// Reading bookmark underlines under bookmarked ayah markers.
+/// Reading bookmark underlines under bookmarked ayah markers, one coloured segment per bookmark.
 ///
 /// Draw it behind the page image or lines so it never covers Quran text,
 /// and put `AyahReadingBookmarkTargets` above the page to make it tappable.
@@ -27,10 +27,15 @@ public struct AyahReadingBookmarkUnderlines: View {
             ForEach(markers.bookmarked(by: bookmarks), id: \.ayah) { placement in
                 let slots = bookmarks[placement.ayah, default: []]
                 let layout = AyahReadingBookmarkUnderlineLayout(markerFrame: placement.frame, count: slots.count)
-                ForEach(Array(zip(slots, layout.underlineFrames)), id: \.0) { slot, frame in
-                    Capsule()
-                        .fill(slot.swiftUIColor)
-                        .placed(in: frame)
+                if let line = layout.lineFrame {
+                    HStack(spacing: layout.gap) {
+                        ForEach(slots, id: \.self) { slot in
+                            Rectangle()
+                                .fill(slot.swiftUIColor)
+                        }
+                    }
+                    .clipShape(Capsule())
+                    .placed(in: line)
                 }
             }
         }
@@ -106,7 +111,7 @@ private struct AyahReadingBookmarkUnderlinesPreview: View {
     private var bookmarks: [AyahNumber: [ReadingBookmarkSlot]] {
         [
             ayahs[0]: [.teal],
-            ayahs[1]: [.orange],
+            ayahs[1]: [.orange, .red],
             ayahs[2]: ReadingBookmarkSlot.allCases,
         ]
     }

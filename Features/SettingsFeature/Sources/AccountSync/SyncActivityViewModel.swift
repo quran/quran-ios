@@ -14,11 +14,15 @@ import VLogging
 final class SyncActivityViewModel: ObservableObject {
     // MARK: Lifecycle
 
-    init(quranDataService: MobileSyncDataService) {
+    init(quranDataService: MobileSyncDataService, editor: HeldItemEditor) {
         self.quranDataService = quranDataService
+        self.editor = editor
     }
 
     // MARK: Internal
+
+    /// Fixes the held items.
+    let editor: HeldItemEditor
 
     @Published private(set) var activity = SyncActivity()
     @Published private(set) var lookup = HeldItemLookup()

@@ -24,6 +24,7 @@ struct AccountSyncView: View {
             scrollsToHeldItems: $viewModel.scrollsToHeldItems,
             start: { await viewModel.start() },
             syncNow: { viewModel.syncNow() },
+            edit: { await viewModel.editor.edit($0) },
             showActivity: { viewModel.showActivity() },
             openProfile: { viewModel.openQuranComProfile() },
             signOut: { await viewModel.requestSignOut() }
@@ -34,6 +35,7 @@ struct AccountSyncView: View {
             review: { viewModel.reviewUnsyncedItems() },
             signOut: { await viewModel.signOutOfQuranCom() }
         )
+        .heldItemEditing(viewModel.editor)
     }
 }
 
@@ -48,6 +50,7 @@ private struct AccountSyncViewUI: View {
     @Binding var scrollsToHeldItems: Bool
     let start: AsyncAction
     let syncNow: Action
+    let edit: @MainActor (HeldItemRow.Edit) async -> Void
     let showActivity: Action
     let openProfile: Action
     let signOut: AsyncAction
@@ -95,7 +98,11 @@ private struct AccountSyncViewUI: View {
                     footer: l("sync.held.footer")
                 ) {
                     ForEach(heldRows.prefix(AccountSyncViewModel.previewCount)) { row in
-                        HeldItemRowView(row: row)
+                        HeldItemRowView(row: row) {
+                            if let rowEdit = row.edit {
+                                HeldItemEditButton(edit: rowEdit, title: row.title, action: edit)
+                            }
+                        }
                     }
                     if heldRows.count > AccountSyncViewModel.previewCount {
                         SyncLinkRow(
@@ -198,6 +205,7 @@ private struct AccountSyncViewUI: View {
         scrollsToHeldItems: .constant(false),
         start: {},
         syncNow: {},
+        edit: { _ in },
         showActivity: {},
         openProfile: {},
         signOut: {}

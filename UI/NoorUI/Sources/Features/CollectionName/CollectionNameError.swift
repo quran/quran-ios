@@ -5,17 +5,18 @@
 //  Created by Mohamed Afifi on 2026-10-14.
 //
 
+import Localization
 import QuranAnnotations
 
 /// Why a typed collection name was rejected; the name alert shows it and keeps the name for editing.
-enum CollectionNameError: Equatable {
+public enum CollectionNameError: Equatable {
     case textLength(TextLengthLimitError)
     case reserved(ReservedCollectionNameError)
     case duplicate(DuplicateCollectionNameError)
 
     // MARK: Lifecycle
 
-    init?(_ error: Error) {
+    public init?(_ error: Error) {
         switch error {
         case let error as TextLengthLimitError:
             self = .textLength(error)
@@ -28,10 +29,10 @@ enum CollectionNameError: Equatable {
         }
     }
 
-    // MARK: Internal
+    // MARK: Public
 
     /// Describes the rejection without the name, which may be private.
-    var logDescription: String {
+    public var logDescription: String {
         switch self {
         case .textLength(let error):
             "bound: \(error.bound), limit: \(error.limit)"
@@ -40,6 +41,29 @@ enum CollectionNameError: Equatable {
         case .duplicate:
             "another collection has the name"
         }
+    }
+
+    public var localizedMessage: String {
+        switch self {
+        case .textLength(let error):
+            error.localizedMessage
+        case .reserved(let error):
+            error.localizedMessage
+        case .duplicate(let error):
+            error.localizedMessage
+        }
+    }
+}
+
+extension DuplicateCollectionNameError {
+    var localizedMessage: String {
+        lFormat("bookmarks.collections.name.duplicate", name)
+    }
+}
+
+extension ReservedCollectionNameError {
+    var localizedMessage: String {
+        lFormat("bookmarks.collections.name.reserved", name)
     }
 }
 #endif

@@ -80,6 +80,27 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertFalse(sut.listener.didDismiss)
     }
 
+    /// A note too short to sync, opened to fix it, closes as it is until it's changed.
+    func test_unchangedTooShortNote_closesWithoutSavingInSync() async throws {
+        let sut = makeSyncSUT(mode: .edit(syncedNote(body: "Hi")))
+        let editableNote = try await sut.viewModel.fetchNote()
+
+        XCTAssertTrue(sut.viewModel.canDismissNote)
+        XCTAssertTrue(sut.viewModel.allowsInteractiveDismissal)
+        let didFinish = await sut.viewModel.commitEditsAndExit(dismissOnSave: true)
+
+        XCTAssertTrue(didFinish)
+        XCTAssertTrue(sut.listener.didDismiss)
+        XCTAssertNil(sut.viewModel.textLengthLimitError)
+        XCTAssertTrue(sut.analytics.events.isEmpty)
+        let notes = try await storedNotes()
+        XCTAssertTrue(notes.isEmpty)
+
+        editableNote.note = "Hi!"
+        XCTAssertFalse(sut.viewModel.canDismissNote)
+        XCTAssertFalse(sut.viewModel.allowsInteractiveDismissal)
+    }
+
     func test_emptyNote_doneDismissesWithoutSavingInSync() async throws {
         let sut = makeSyncSUT(mode: .create(verses: [ayah(1)]))
         _ = try await sut.viewModel.fetchNote()
@@ -285,6 +306,21 @@ final class NoteEditorViewModelTests: XCTestCase {
         XCTAssertFalse(didSave)
         XCTAssertTrue(sut.noteService.setNoteCalls.isEmpty)
         XCTAssertFalse(sut.listener.didDismiss)
+    }
+
+    func test_unchangedTooShortNote_closesWithoutSavingInLegacy() async throws {
+        let sut = makeLegacySUT(noteBody: "Hi")
+        let editableNote = try await sut.viewModel.fetchNote()
+
+        XCTAssertTrue(sut.viewModel.allowsInteractiveDismissal)
+        let didFinish = await sut.viewModel.commitEditsAndExit(dismissOnSave: true)
+
+        XCTAssertTrue(didFinish)
+        XCTAssertTrue(sut.listener.didDismiss)
+        XCTAssertTrue(sut.noteService.setNoteCalls.isEmpty)
+
+        editableNote.note = "Hi!"
+        XCTAssertFalse(sut.viewModel.canDismissNote)
     }
 
     func test_emptyNote_doneSavesLegacyHighlightColorAndDismisses() async throws {

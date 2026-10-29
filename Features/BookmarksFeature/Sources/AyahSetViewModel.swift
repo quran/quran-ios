@@ -1,5 +1,6 @@
 #if QURAN_SYNC
 import Combine
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import QuranText

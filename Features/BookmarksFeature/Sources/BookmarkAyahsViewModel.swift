@@ -7,6 +7,7 @@ import Analytics
 import AnnotationsService
 import Combine
 import Foundation
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import VLogging

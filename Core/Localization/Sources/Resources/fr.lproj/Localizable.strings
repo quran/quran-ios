@@ -857,3 +857,5 @@
 "sync.sign-out.unsynced-lost" = "Si vous vous déconnectez, tout ce qui n’a pas été synchronisé sera perdu.";
 // Sign-out warning button that closes it to look at what hasn't synced instead of signing out.
 "sync.sign-out.review" = "Vérifier";
+// Button on an item that doesn't sync: opens its note editor or renames its collection.
+"sync.held.edit" = "Modifier";

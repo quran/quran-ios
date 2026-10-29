@@ -26,6 +26,9 @@ final class VerseOverlaysIndicatorTests: XCTestCase {
         XCTAssertEqual(restricted.readingBookmarks, [ayahBookmark, pageBookmark])
         XCTAssertEqual(restricted.indicators(for: page.firstVerse), [.collection, .readingBookmark(.teal)])
         XCTAssertTrue(restricted.indicators(for: otherPage.firstVerse).isEmpty)
+        XCTAssertEqual(restricted.readingBookmarkSlotsByVerse, [page.firstVerse: [.teal]])
+        XCTAssertEqual(restricted.pageReadingBookmarkSlots(on: page), [.orange])
+        XCTAssertTrue(restricted.pageReadingBookmarkSlots(on: otherPage).isEmpty)
     }
 
     func test_annotationTypes_combinesBadgesWithoutTreatingHighlightsOrPageBookmarksAsBadges() {
@@ -42,7 +45,7 @@ final class VerseOverlaysIndicatorTests: XCTestCase {
 
         XCTAssertEqual(overlays.indicators(for: verse), [.note, .collection, .readingBookmark(.teal), .readingBookmark(.orange)])
         XCTAssertTrue(overlays.indicators(for: page.verses[1]).isEmpty)
-        XCTAssertEqual(overlays.indicatorsByVerse, [verse: overlays.indicators(for: verse)])
+        XCTAssertEqual(overlays.readingBookmarkSlotsByVerse, [verse: [.teal, .orange]])
     }
 
     func test_renamingBookmark_preservesAnnotationWithoutScrolling() {
@@ -52,11 +55,11 @@ final class VerseOverlaysIndicatorTests: XCTestCase {
         var renamed = original
         renamed.readingBookmarks = [bookmark(.teal, at: ayah, name: "Hifz")]
 
-        XCTAssertEqual(renamed.indicatorsByVerse, [ayah: [.readingBookmark(.teal)]])
+        XCTAssertEqual(renamed.readingBookmarkSlotsByVerse, [ayah: [.teal]])
         XCTAssertNotEqual(renamed, original)
         XCTAssertFalse(renamed.needsScrolling(comparingTo: original))
         renamed.readingBookmarks = [bookmark(.teal, at: ayah)]
-        XCTAssertEqual(renamed.indicatorsByVerse, original.indicatorsByVerse)
+        XCTAssertEqual(renamed.readingBookmarkSlotsByVerse, original.readingBookmarkSlotsByVerse)
     }
 
     func test_annotations_preserveAllPinsAndOtherTypesOnTheSameAyah() {
@@ -66,10 +69,25 @@ final class VerseOverlaysIndicatorTests: XCTestCase {
         overlays.collectionVerses = [ayah]
         overlays.readingBookmarks = ReadingBookmarkSlot.allCases.map { bookmark($0, at: ayah) }
 
-        XCTAssertEqual(overlays.indicatorsByVerse, [ayah: [
+        XCTAssertEqual(overlays.indicators(for: ayah), [
             .readingBookmark(.teal), .readingBookmark(.orange),
             .readingBookmark(.red), .collection, .note,
-        ]])
+        ])
+        XCTAssertEqual(overlays.readingBookmarkSlotsByVerse, [ayah: ReadingBookmarkSlot.allCases])
+    }
+
+    func test_readingBookmarkSlots_followSlotOrderWhateverTheBookmarkOrder() {
+        let page = Quran.hafsMadani1405.pages[1]
+        var overlays = VerseOverlays()
+        overlays.readingBookmarks = [
+            bookmark(.red, at: page.firstVerse),
+            PlacedReadingBookmark(id: "page-red", slot: .red, placement: .page(page), modifiedOn: .distantPast),
+            bookmark(.teal, at: page.firstVerse),
+            PlacedReadingBookmark(id: "page-teal", slot: .teal, placement: .page(page), modifiedOn: .distantPast),
+        ]
+
+        XCTAssertEqual(overlays.readingBookmarkSlotsByVerse, [page.firstVerse: [.teal, .red]])
+        XCTAssertEqual(overlays.pageReadingBookmarkSlots(on: page), [.teal, .red])
     }
 
     func test_movingAndClearingPins_preservesOtherAnnotations() {
@@ -81,7 +99,9 @@ final class VerseOverlaysIndicatorTests: XCTestCase {
 
         overlays.readingBookmarks = [bookmark(.teal, at: second)]
 
-        XCTAssertEqual(overlays.indicatorsByVerse, [first: [.note], second: [.readingBookmark(.teal)]])
+        XCTAssertEqual(overlays.indicators(for: first), [.note])
+        XCTAssertEqual(overlays.indicators(for: second), [.readingBookmark(.teal)])
+        XCTAssertEqual(overlays.readingBookmarkSlotsByVerse, [second: [.teal]])
     }
 
     func test_annotationChanges_doNotScrollTheReader() {
@@ -93,14 +113,18 @@ final class VerseOverlaysIndicatorTests: XCTestCase {
         XCTAssertNil(updated.verseToScrollTo(comparingTo: original))
     }
 
-    func test_pageBookmarks_doNotProduceAyahAnnotations() {
+    func test_pageBookmarks_areExposedForThePageRibbonOnly() {
+        let page = Quran.hafsMadani1405.pages[0]
         var overlays = VerseOverlays()
         overlays.readingBookmarks = [PlacedReadingBookmark(
-            id: "teal", slot: .teal, placement: .page(Quran.hafsMadani1405.pages[0]),
+            id: "teal", slot: .teal, placement: .page(page),
             modifiedOn: .distantPast, name: "Hifz"
         )]
 
-        XCTAssertTrue(overlays.indicatorsByVerse.isEmpty)
+        XCTAssertTrue(overlays.readingBookmarkSlotsByVerse.isEmpty)
+        XCTAssertTrue(overlays.indicators(for: page.firstVerse).isEmpty)
+        XCTAssertEqual(overlays.pageReadingBookmarkSlots(on: page), [.teal])
+        XCTAssertTrue(overlays.pageReadingBookmarkSlots(on: Quran.hafsMadani1405.pages[1]).isEmpty)
     }
 
     func test_readingBookmarkIndicators_hideNotesAndCollections() {
@@ -109,12 +133,22 @@ final class VerseOverlaysIndicatorTests: XCTestCase {
         var overlays = VerseOverlays()
         overlays.indicatorVisibility = .readingBookmark
         overlays.notedVerses = [noted, bookmarked]
-        overlays.collectionVerses = [noted]
+        overlays.collectionVerses = [noted, bookmarked]
         overlays.readingBookmarks = [bookmark(.teal, at: bookmarked)]
 
         XCTAssertTrue(overlays.indicators(for: noted).isEmpty)
         XCTAssertEqual(overlays.indicators(for: bookmarked), [.readingBookmark(.teal)])
-        XCTAssertEqual(overlays.indicatorsByVerse, [bookmarked: [.readingBookmark(.teal)]])
+        XCTAssertEqual(overlays.readingBookmarkSlotsByVerse, [bookmarked: [.teal]])
+    }
+
+    func test_readingBookmarkSlots_neverIncludeNotesOrCollections() {
+        let ayah = Quran.hafsMadani1405.suras[1].verses[4]
+        var overlays = VerseOverlays()
+        overlays.notedVerses = [ayah]
+        overlays.collectionVerses = [ayah]
+
+        XCTAssertEqual(overlays.indicators(for: ayah), [.note, .collection])
+        XCTAssertTrue(overlays.readingBookmarkSlotsByVerse.isEmpty)
     }
 
     func test_noIndicators_hideEveryAnnotation() {
@@ -123,10 +157,14 @@ final class VerseOverlaysIndicatorTests: XCTestCase {
         overlays.indicatorVisibility = .none
         overlays.notedVerses = [ayah]
         overlays.collectionVerses = [ayah]
-        overlays.readingBookmarks = [bookmark(.teal, at: ayah)]
+        overlays.readingBookmarks = [
+            bookmark(.teal, at: ayah),
+            PlacedReadingBookmark(id: "page", slot: .red, placement: .page(ayah.page), modifiedOn: .distantPast),
+        ]
 
         XCTAssertTrue(overlays.indicators(for: ayah).isEmpty)
-        XCTAssertTrue(overlays.indicatorsByVerse.isEmpty)
+        XCTAssertTrue(overlays.readingBookmarkSlotsByVerse.isEmpty)
+        XCTAssertTrue(overlays.pageReadingBookmarkSlots(on: ayah.page).isEmpty)
     }
 
     func test_restricted_keepsAyahIndicators() {

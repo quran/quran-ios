@@ -15,7 +15,6 @@ final class VerseOverlaysTests: XCTestCase {
         overlays.colorHighlights = [first: .green, other: .blue]
         overlays.notedVerses = [second, other]
         overlays.pointedWord = Word(verse: second, wordNumber: 1)
-        overlays.indicatorsHidden = true
 
         let restricted = overlays.restricted(to: page)
 
@@ -25,7 +24,6 @@ final class VerseOverlaysTests: XCTestCase {
         XCTAssertEqual(restricted.colorHighlights, [first: .green])
         XCTAssertEqual(restricted.notedVerses, [second])
         XCTAssertEqual(restricted.pointedWord, overlays.pointedWord)
-        XCTAssertTrue(restricted.indicatorsHidden)
         XCTAssertEqual(overlays.playingVerses, [second, other, first])
     }
 
@@ -40,16 +38,6 @@ final class VerseOverlaysTests: XCTestCase {
 
         XCTAssertNil(restricted.navigationTarget)
         XCTAssertNil(restricted.pointedWord)
-    }
-
-    func test_visibilityChange_changesEqualityWithoutRequestingScrolling() {
-        let original = VerseOverlays()
-        var hidden = original
-        hidden.indicatorsHidden = true
-
-        XCTAssertNotEqual(original, hidden)
-        XCTAssertFalse(hidden.needsScrolling(comparingTo: original))
-        XCTAssertNil(hidden.verseToScrollTo(comparingTo: original))
     }
 
     func test_scrollingTarget_prefersPlayingVerseOverNavigation() {

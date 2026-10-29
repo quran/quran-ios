@@ -59,12 +59,6 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
         return nil
     }
 
-    #if QURAN_SYNC
-    public func setAyahIndicatorsHidden(_ hidden: Bool) {
-        viewModel.overlays.indicatorsHidden = hidden
-    }
-    #endif
-
     // MARK: Internal
 
     @objc

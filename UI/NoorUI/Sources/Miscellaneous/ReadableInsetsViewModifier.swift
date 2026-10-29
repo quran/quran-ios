@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-private extension EnvironmentValues {
+extension EnvironmentValues {
+    /// The page's readable insets, set by `populateReadableInsets()`.
     var readableInsets: EdgeInsets {
         get { self[ReadableInsetsKey.self] }
         set { self[ReadableInsetsKey.self] = newValue }

@@ -39,8 +39,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     public init(
         decorations: ImageDecorations,
         renderingMode: QuranThemedImage.RenderingMode = .tinted,
-        ayahIndicators: [AyahNumber: Set<AyahIndicator>],
-        indicatorsHidden: Bool,
+        ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]],
         image: () -> UIImage?,
         onAyahIndicatorTap: @escaping (AyahNumber, CGPoint) -> Void,
         onScaleChange: @escaping (WordFrameScale) -> Void,
@@ -48,8 +47,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
         @ViewBuilder header: () -> Header,
         @ViewBuilder footer: () -> Footer
     ) {
-        self.ayahIndicators = ayahIndicators
-        self.indicatorsHidden = indicatorsHidden
+        self.ayahReadingBookmarks = ayahReadingBookmarks
         self.onAyahIndicatorTap = onAyahIndicatorTap
         self.decorations = decorations
         self.image = image()
@@ -89,8 +87,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     private let decorations: ImageDecorations
     @State private var imageViewSize: CGSize = .zero
     #if QURAN_SYNC
-    private let ayahIndicators: [AyahNumber: Set<AyahIndicator>]
-    private let indicatorsHidden: Bool
+    private let ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]]
     private let onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void
     #endif
     private let onScaleChange: (WordFrameScale) -> Void
@@ -111,6 +108,10 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                 ZStack(alignment: .topLeading) {
                     AyahScrollAnchorsView(wordFrames: decorations.wordFrames, scale: scale)
                     ImageDecorationsView(layout: layout)
+                    #if QURAN_SYNC
+                    // Behind the image, so underlines never cover Quran text.
+                    AyahReadingBookmarkUnderlines(markers: layout.ayahMarkers, bookmarks: ayahReadingBookmarks)
+                    #endif
                 }
             }
             .onGlobalFrameChanged { frame in
@@ -128,11 +129,10 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
             .allowsHitTesting(false)
         #if QURAN_SYNC
             .overlay {
-                AyahIndicatorsView(
+                AyahReadingBookmarkTargets(
                     markers: layout.ayahMarkers,
-                    indicators: ayahIndicators,
-                    indicatorsHidden: indicatorsHidden,
-                    onAyahIndicatorTap: onAyahIndicatorTap
+                    bookmarks: ayahReadingBookmarks,
+                    onTap: onAyahIndicatorTap
                 )
             }
         #endif
@@ -152,8 +152,7 @@ private struct IndicatedAyahImagePreview: View {
     var body: some View {
         AdaptiveImageScrollView(
             decorations: decorations,
-            ayahIndicators: ayah.map { [$0: [.collection, .note]] } ?? [:],
-            indicatorsHidden: false
+            ayahReadingBookmarks: ayah.map { [$0: [.teal, .red]] } ?? [:]
         ) {
             UIImage(contentsOfFile: testResourceURL("images/page604.png").path)
         } onAyahIndicatorTap: { _, _ in tapCount += 1
@@ -167,7 +166,7 @@ private struct IndicatedAyahImagePreview: View {
         .font(.footnote)
         .populateReadableInsets()
         .overlay(alignment: .bottom) {
-            Text(tapCount == 0 ? "Tap the indicator icons" : "Ayah menu tapped \(tapCount) time\(tapCount == 1 ? "" : "s")")
+            Text(tapCount == 0 ? "Tap the bookmarked marker" : "Ayah menu tapped \(tapCount) time\(tapCount == 1 ? "" : "s")")
                 .font(.footnote.weight(.semibold))
                 .monospacedDigit()
                 .padding(.horizontal)
@@ -203,7 +202,7 @@ private struct IndicatedAyahImagePreview: View {
     private let ayah = AyahNumber(quran: .hafsMadani1405, sura: 112, ayah: 1)
 }
 
-#Preview("Ayah indicator on Madani 1405") {
+#Preview("Reading bookmark underline on Madani 1405") {
     IndicatedAyahImagePreview()
 }
 

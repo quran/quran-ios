@@ -26,8 +26,7 @@ struct ReadingImageView: View {
         AdaptiveImageScrollView(
             decorations: decorations,
             renderingMode: renderingMode,
-            ayahIndicators: [:],
-            indicatorsHidden: false
+            ayahReadingBookmarks: [:]
         ) {
             image
         } onAyahIndicatorTap: { _, _ in

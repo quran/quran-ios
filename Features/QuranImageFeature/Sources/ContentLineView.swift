@@ -30,8 +30,8 @@ struct ContentLineView: View {
             scrollToVerse: viewModel.scrollToVerse,
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
-            ayahIndicators: viewModel.ayahIndicators,
-            indicatorsHidden: viewModel.indicatorsHidden,
+            ayahReadingBookmarks: viewModel.ayahReadingBookmarks,
+            pageReadingBookmarks: viewModel.pageReadingBookmarks,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
             chromeStyle: viewModel.chromeStyle,
             imageRenderingMode: viewModel.imageRenderingMode,
@@ -78,8 +78,8 @@ private struct ContentLineViewBody: View {
     let wordFrames: WordFrameCollection
     let highlightColorsByVerse: [AyahNumber: Color]
     #if QURAN_SYNC
-    let ayahIndicators: [AyahNumber: Set<AyahIndicator>]
-    let indicatorsHidden: Bool
+    let ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]]
+    let pageReadingBookmarks: [ReadingBookmarkSlot]
     #endif
     let drawsAyahNumbersAndSuraHeaders: Bool
     let chromeStyle: LinePageChromeStyle
@@ -97,6 +97,9 @@ private struct ContentLineViewBody: View {
                 quarterName: page.localizedQuarterName,
                 suras: page.suras
             )
+            #if QURAN_SYNC
+            .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks)
+            #endif
         } footer: {
             QuranPageFooter(page: page.localizedNumber)
         } content: { availableContentSize in
@@ -127,6 +130,11 @@ private struct ContentLineViewBody: View {
             if let layout {
                 AyahScrollAnchorsView(wordFrames: wordFrames, layout: layout)
 
+                #if QURAN_SYNC
+                // Behind the line images, so underlines never cover Quran text.
+                AyahReadingBookmarkUnderlines(markers: markerPlacements(layout), bookmarks: ayahReadingBookmarks)
+                #endif
+
                 lineImages(layout)
                 lineDividers(layout)
 
@@ -145,13 +153,10 @@ private struct ContentLineViewBody: View {
         #if QURAN_SYNC
             .overlay {
                 if let layout {
-                    AyahIndicatorsView(
-                        markers: layout.ayahMarkerPlacements.map {
-                            AyahMarkerPlacement(ayah: $0.marker.ayah, frame: $0.frame)
-                        },
-                        indicators: ayahIndicators,
-                        indicatorsHidden: indicatorsHidden,
-                        onAyahIndicatorTap: onAyahIndicatorTap
+                    AyahReadingBookmarkTargets(
+                        markers: markerPlacements(layout),
+                        bookmarks: ayahReadingBookmarks,
+                        onTap: onAyahIndicatorTap
                     )
                 }
             }
@@ -159,6 +164,14 @@ private struct ContentLineViewBody: View {
             .environment(\.layoutDirection, .leftToRight)
             .onGlobalFrameChanged(onGlobalFrameChange)
     }
+
+    #if QURAN_SYNC
+    private func markerPlacements(_ layout: LinePageLayout) -> [AyahMarkerPlacement] {
+        layout.ayahMarkerPlacements.map {
+            AyahMarkerPlacement(ayah: $0.marker.ayah, frame: $0.frame)
+        }
+    }
+    #endif
 
     @ViewBuilder
     private func sidelines(_ layout: LinePageLayout) -> some View {

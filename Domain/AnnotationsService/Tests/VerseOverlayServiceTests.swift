@@ -30,41 +30,6 @@ final class VerseOverlayServiceTests: XCTestCase {
         XCTAssertEqual(received.last?.notedVerses, [page.firstVerse])
     }
 
-    func test_visibilityChanges_reachEveryPageSubscription() {
-        let pages = Array(Quran.hafsMadani1405.pages.prefix(2))
-        let service = VerseOverlayService()
-        var visibilityByPage: [Page: [Bool]] = [:]
-        let subscriptions = pages.map { page in
-            service.$overlays
-                .map { $0.restricted(to: page) }
-                .removeDuplicates()
-                .sink { visibilityByPage[page, default: []].append($0.indicatorsHidden) }
-        }
-        defer { subscriptions.forEach { $0.cancel() } }
-
-        service.overlays.indicatorsHidden = true
-        service.overlays.indicatorsHidden = true
-        service.overlays.indicatorsHidden = false
-
-        for page in pages {
-            XCTAssertEqual(visibilityByPage[page], [false, true, false])
-        }
-    }
-
-    func test_newPageSubscription_receivesCurrentVisibility() {
-        let service = VerseOverlayService()
-        service.overlays.indicatorsHidden = true
-        var received: [Bool] = []
-
-        let subscription = service.$overlays
-            .map { $0.restricted(to: Quran.hafsMadani1405.pages[1]) }
-            .removeDuplicates()
-            .sink { received.append($0.indicatorsHidden) }
-        defer { subscription.cancel() }
-
-        XCTAssertEqual(received, [true])
-    }
-
     func test_scrollRequests_includeNavigationOutsideTheObservedPage() {
         let service = VerseOverlayService()
         let page = Quran.hafsMadani1405.pages[0]
@@ -104,15 +69,13 @@ final class VerseOverlayServiceTests: XCTestCase {
         XCTAssertEqual(scrollCount, 4)
     }
 
-    func test_annotationVisibilityAndSelectionChanges_doNotRequestScrolling() {
+    func test_annotationAndSelectionChanges_doNotRequestScrolling() {
         let service = VerseOverlayService()
         let verse = Quran.hafsMadani1405.pages[0].firstVerse
         var scrollCount = 0
         let subscription = service.scrollRequests.sink { scrollCount += 1 }
         defer { subscription.cancel() }
 
-        service.overlays.indicatorsHidden = true
-        service.overlays.indicatorsHidden = false
         service.overlays.notedVerses = [verse]
         service.overlays.colorHighlights = [verse: .green]
         service.overlays.selectedVerses = [verse]

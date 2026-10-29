@@ -200,7 +200,6 @@ final class ContentTranslationViewModelTests: XCTestCase {
 
         service.overlays.colorHighlights = [other: .green]
         service.overlays.notedVerses = [verse]
-        service.overlays.indicatorsHidden = true
 
         XCTAssertEqual(updates, 0)
 

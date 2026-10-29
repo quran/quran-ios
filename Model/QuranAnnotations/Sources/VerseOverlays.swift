@@ -20,11 +20,10 @@ public struct VerseOverlays: Equatable {
     public var navigationTarget: AyahNumber?
     public var colorHighlights: [AyahNumber: HighlightColor] = [:]
     public var notedVerses: Set<AyahNumber> = []
-    public var indicatorsHidden = false
     #if QURAN_SYNC
     public var collectionVerses: Set<AyahNumber> = []
     public var readingBookmarks: [PlacedReadingBookmark] = []
-    /// The reader's indicator preference, applied by `indicators(for:)` and `indicatorsByVerse`.
+    /// Which indicators `indicators(for:)` and the reading bookmark accessors expose.
     public var indicatorVisibility = AyahIndicatorVisibility.all
     #endif
 
@@ -72,19 +71,28 @@ extension VerseOverlays {
         return indicators
     }
 
-    public var indicatorsByVerse: [AyahNumber: Set<AyahIndicator>] {
-        var verses: Set<AyahNumber> = []
-        if indicatorVisibility.showsNotesAndCollections {
-            verses.formUnion(notedVerses)
-            verses.formUnion(collectionVerses)
+    /// The reading bookmark slots on each bookmarked ayah, in `ReadingBookmarkSlot.allCases` order.
+    public var readingBookmarkSlotsByVerse: [AyahNumber: [ReadingBookmarkSlot]] {
+        guard indicatorVisibility.showsReadingBookmarks else { return [:] }
+        var slotsByVerse: [AyahNumber: [ReadingBookmarkSlot]] = [:]
+        for bookmark in readingBookmarks {
+            if case .ayah(let ayah) = bookmark.placement {
+                slotsByVerse[ayah, default: []].append(bookmark.slot)
+            }
         }
-        if indicatorVisibility.showsReadingBookmarks {
-            verses.formUnion(readingBookmarks.compactMap { bookmark -> AyahNumber? in
-                guard case .ayah(let ayah) = bookmark.placement else { return nil }
-                return ayah
-            })
-        }
-        return Dictionary(uniqueKeysWithValues: verses.map { ($0, indicators(for: $0)) })
+        return slotsByVerse.mapValues(Self.ordered)
+    }
+
+    /// The reading bookmark slots placed on `page` itself, in `ReadingBookmarkSlot.allCases` order.
+    public func pageReadingBookmarkSlots(on page: Page) -> [ReadingBookmarkSlot] {
+        guard indicatorVisibility.showsReadingBookmarks else { return [] }
+        return Self.ordered(readingBookmarks.compactMap { bookmark in
+            bookmark.placement == .page(page) ? bookmark.slot : nil
+        })
+    }
+
+    private static func ordered(_ slots: [ReadingBookmarkSlot]) -> [ReadingBookmarkSlot] {
+        ReadingBookmarkSlot.allCases.filter(slots.contains)
     }
     #endif
 

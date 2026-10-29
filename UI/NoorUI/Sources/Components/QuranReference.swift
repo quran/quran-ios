@@ -429,6 +429,8 @@ private struct QuranReferencePreview: View {
                 .view(ofSize: .body)
             MultipartText("\(ayah: quran.suras[0].verses[5], nameStyle: style)")
                 .view(ofSize: .body)
+            MultipartText("\(page: quran.pages[199], nameStyle: style)")
+                .view(ofSize: .body)
         }
         .textCase(nil)
     }

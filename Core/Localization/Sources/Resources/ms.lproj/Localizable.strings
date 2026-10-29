@@ -41,6 +41,8 @@
 "quran.ayah.name" = "%1$@, %2$@";
 // A page reference: %@ is the localized page number, such as "Page 42".
 "quran.page.name" = "Halaman %@";
+// A page location: %1$@ is the name of the page's first surah and %2$@ is the localized page, such as "At-Tawbah, Page 200". Translators may reorder the placeholders.
+"quran.page.location" = "%1$@, %2$@";
 // A range of Quran references: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257". Translators may reorder the placeholders.
 "quran.range" = "%1$@ - %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".

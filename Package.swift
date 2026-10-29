@@ -652,7 +652,6 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "QuranAnnotations",
             "QuranKit",
-            "QuranLocalization",
             "UIx",
         ], testDependencies: mobileSyncTestSupportDependencies),
 

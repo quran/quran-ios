@@ -42,7 +42,7 @@ struct AyahReadingBookmarkUnderlineLayout {
     private static let heightRatio: CGFloat = 0.09
     private static let minimumHeight: CGFloat = 2
     private static let spacingRatio: CGFloat = 0.07
-    /// The first underline's top, from the marker's top; leaves a small gap below the marker.
-    private static let topRatio: CGFloat = 1.28
+    /// The first underline's top, from the marker's top; leaves a thin gap so it hugs the marker.
+    private static let topRatio: CGFloat = 1.1
 }
 #endif

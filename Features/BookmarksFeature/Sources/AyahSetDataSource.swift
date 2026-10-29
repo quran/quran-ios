@@ -2,6 +2,7 @@
 import AnnotationsService
 import QuranAnnotations
 import QuranKit
+import ReadingService
 import Utilities
 
 struct AyahSetContent {
@@ -39,7 +40,10 @@ struct BookmarkCollectionAyahSetDataSource: ManageableAyahSetDataSource {
         let collectionID = collectionID
         let initialContent = initialContent
         return .init(
-            service.collectionsSequence()
+            readingPreferences.readings()
+                .flatMapLatest { [service] reading in
+                    service.collectionsSequence(quran: reading.quran)
+                }
                 .map { collections in
                     guard let collection = collections.first(where: { $0.id == collectionID }) else {
                         return initialContent
@@ -63,6 +67,7 @@ struct BookmarkCollectionAyahSetDataSource: ManageableAyahSetDataSource {
 
     private let collectionID: String
     private let service: AyahBookmarkCollectionService
+    private let readingPreferences = ReadingPreferences.shared
 
     private nonisolated static func content(_ collection: AyahBookmarkCollection) -> AyahSetContent {
         AyahSetContent(
@@ -91,7 +96,10 @@ struct HighlightAyahSetDataSource: AyahSetDataSource {
     func contentSequence() -> AnyAsyncSequence<AyahSetContent> {
         let color = color
         return .init(
-            service.highlightsSequence()
+            readingPreferences.readings()
+                .flatMapLatest { [service] reading in
+                    service.highlightsSequence(quran: reading.quran)
+                }
                 .map { highlights in
                     let ayahs = highlights
                         .filter { $0.value == color }
@@ -107,6 +115,7 @@ struct HighlightAyahSetDataSource: AyahSetDataSource {
 
     private let color: HighlightColor
     private let service: MobileSyncAyahHighlightService
+    private let readingPreferences = ReadingPreferences.shared
 
     private nonisolated static func content(color: HighlightColor, ayahs: [AyahNumber]) -> AyahSetContent {
         AyahSetContent(

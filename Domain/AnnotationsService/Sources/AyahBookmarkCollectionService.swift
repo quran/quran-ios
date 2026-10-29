@@ -9,18 +9,13 @@ import Foundation
 import MobileSync
 import QuranAnnotations
 import QuranKit
-import ReadingService
 import Utilities
 
 public struct AyahBookmarkCollectionService {
     // MARK: Lifecycle
 
-    public init(
-        quranDataService: MobileSyncDataService,
-        readingPreferences: ReadingPreferences = .shared
-    ) {
+    public init(quranDataService: MobileSyncDataService) {
         self.quranDataService = quranDataService
-        self.readingPreferences = readingPreferences
     }
 
     // MARK: Public
@@ -65,7 +60,10 @@ public struct AyahBookmarkCollectionService {
     }
 
     public func addAyahs(_ ayahs: [AyahNumber], toCollectionWithID collectionID: String) async throws {
-        let collections = try await loadStoredCollections()
+        guard let quran = ayahs.first?.quran else {
+            return
+        }
+        let collections = try await loadStoredCollections(quran: quran)
         guard let collection = collections.first(where: { $0.id == collectionID }) else {
             return
         }
@@ -74,7 +72,10 @@ public struct AyahBookmarkCollectionService {
     }
 
     public func removeAyahs(_ ayahs: [AyahNumber], fromCollectionWithID collectionID: String) async throws {
-        let collections = try await loadStoredCollections()
+        guard let quran = ayahs.first?.quran else {
+            return
+        }
+        let collections = try await loadStoredCollections(quran: quran)
         guard let collection = collections.first(where: { $0.id == collectionID }) else {
             return
         }
@@ -82,11 +83,10 @@ public struct AyahBookmarkCollectionService {
         try await removeAyahs(ayahs, from: [collection])
     }
 
-    public func collectionsSequence() -> AnyAsyncSequence<[AyahBookmarkCollection]> {
-        let readingPreferences = readingPreferences
+    public func collectionsSequence(quran: Quran) -> AnyAsyncSequence<[AyahBookmarkCollection]> {
         let sequence = quranDataService.collectionsWithBookmarksSequence()
             .map { collections in
-                Self.collections(from: collections, quran: readingPreferences.reading.quran)
+                Self.collections(from: collections, quran: quran)
             }
         return .init(sequence)
     }
@@ -124,12 +124,11 @@ public struct AyahBookmarkCollectionService {
     // MARK: Private
 
     private let quranDataService: MobileSyncDataService
-    private let readingPreferences: ReadingPreferences
 
-    private func loadStoredCollections() async throws -> [AyahBookmarkCollection] {
+    private func loadStoredCollections(quran: Quran) async throws -> [AyahBookmarkCollection] {
         let iterator = quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
         let collections = try await iterator.next() ?? []
-        return Self.collections(from: collections, quran: readingPreferences.reading.quran)
+        return Self.collections(from: collections, quran: quran)
     }
 
     private func addAyahsIfNeeded(

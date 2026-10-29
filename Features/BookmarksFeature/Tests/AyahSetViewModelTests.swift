@@ -8,6 +8,7 @@ import QuranAnnotations
 import QuranKit
 import QuranResources
 import QuranTextKit
+import ReadingService
 import XCTest
 @testable import AnnotationsService
 @testable import BookmarksFeature
@@ -330,6 +331,66 @@ final class AyahSetViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_start_remapsCollectionAyahs_whenReadingChanges() async throws {
+        let readingPreferences = ReadingPreferences.shared
+        let originalReading = readingPreferences.reading
+        readingPreferences.reading = .hafs_1405
+        defer { readingPreferences.reading = originalReading }
+        let madaniAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
+        let indoPakAyah = try XCTUnwrap(AyahNumber(quran: .hafsIndoPak, sura: 2, ayah: 255))
+        let service = makeService()
+        try await service.createCollection(named: "Personal")
+        let personal = try await collection(named: "Personal")
+        try await service.addAyahBookmarkToCollection(collectionId: personal.id, ayah: madaniAyah)
+        let sut = makeSUT(collection: personal, service: service)
+
+        await assertContentAyahs(of: sut, are: [madaniAyah], thenAfterSwitchingTo: .indoPak, are: [indoPakAyah])
+    }
+
+    func test_start_remapsHighlightAyahs_whenReadingChanges() async throws {
+        let readingPreferences = ReadingPreferences.shared
+        let originalReading = readingPreferences.reading
+        readingPreferences.reading = .hafs_1405
+        defer { readingPreferences.reading = originalReading }
+        let madaniAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
+        let indoPakAyah = try XCTUnwrap(AyahNumber(quran: .hafsIndoPak, sura: 2, ayah: 255))
+        let service = makeHighlightService()
+        try await service.setHighlight(.pink, for: [madaniAyah])
+        let sut = makeHighlightSUT(color: .pink, service: service)
+
+        await assertContentAyahs(of: sut, are: [madaniAyah], thenAfterSwitchingTo: .indoPak, are: [indoPakAyah])
+    }
+
+    private func assertContentAyahs(
+        of sut: AyahSetViewModel,
+        are initialAyahs: [AyahNumber],
+        thenAfterSwitchingTo reading: Reading,
+        are remappedAyahs: [AyahNumber]
+    ) async {
+        let observedInitial = expectation(description: "Observes the ayahs in the initial Quran")
+        let observedRemapped = expectation(description: "Observes the ayahs in the new Quran")
+        observedInitial.assertForOverFulfill = false
+        observedRemapped.assertForOverFulfill = false
+        let observation = sut.$content.sink { content in
+            if content.ayahs == initialAyahs {
+                observedInitial.fulfill()
+            } else if content.ayahs == remappedAyahs {
+                observedRemapped.fulfill()
+            }
+        }
+        let task = Task { await sut.start() }
+        defer {
+            task.cancel()
+            observation.cancel()
+        }
+        await fulfillment(of: [observedInitial], timeout: 2)
+
+        ReadingPreferences.shared.reading = reading
+
+        await fulfillment(of: [observedRemapped], timeout: 2)
+        XCTAssertEqual(sut.content.ayahs.map(\.quran), remappedAyahs.map(\.quran))
+    }
+
     private func makeSUT(
         collection: AyahBookmarkCollection,
         service: AyahBookmarkCollectionService? = nil,
@@ -418,7 +479,7 @@ final class AyahSetViewModelTests: XCTestCase {
         using service: MobileSyncAyahHighlightService,
         where predicate: ([AyahNumber: HighlightColor]) -> Bool
     ) async throws -> [AyahNumber: HighlightColor] {
-        var iterator = service.highlightsSequence().makeAsyncIterator()
+        var iterator = service.highlightsSequence(quran: .hafsMadani1405).makeAsyncIterator()
         while let highlights = try await iterator.next() {
             if predicate(highlights) {
                 return highlights

@@ -221,8 +221,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
     }
 
     private func observeCollections() async {
+        guard let quran = verses.first?.quran else {
+            return
+        }
         do {
-            for try await collections in ayahBookmarkCollectionService.collectionsSequence() {
+            for try await collections in ayahBookmarkCollectionService.collectionsSequence(quran: quran) {
                 updateCollections(collections)
             }
         } catch {
@@ -233,8 +236,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
     }
 
     private func observeHighlights() async {
+        guard let quran = verses.first?.quran else {
+            return
+        }
         do {
-            for try await highlights in ayahHighlightService.highlightsSequence() {
+            for try await highlights in ayahHighlightService.highlightsSequence(quran: quran) {
                 guard !isUpdatingHighlight else { continue }
                 highlightSelection = Self.highlightSelection(for: verses, in: highlights)
             }

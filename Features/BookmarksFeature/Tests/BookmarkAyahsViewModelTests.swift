@@ -232,7 +232,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         using service: MobileSyncAyahHighlightService? = nil
     ) async throws -> [AyahNumber: HighlightColor] {
         let service = service ?? makeHighlightService()
-        var iterator = service.highlightsSequence().makeAsyncIterator()
+        var iterator = service.highlightsSequence(quran: .hafsMadani1405).makeAsyncIterator()
         return try await iterator.next() ?? [:]
     }
 

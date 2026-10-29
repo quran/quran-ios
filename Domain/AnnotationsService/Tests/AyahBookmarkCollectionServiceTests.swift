@@ -102,7 +102,7 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
     func test_collectionsSequence_excludesSystemHighlightCollections() async throws {
         let highlightService = MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
         try await highlightService.setHighlight(.purple, for: [ayah(1)])
-        var iterator = service.collectionsSequence().makeAsyncIterator()
+        var iterator = service.collectionsSequence(quran: .hafsMadani1405).makeAsyncIterator()
 
         let collections = try await iterator.next() ?? []
 
@@ -111,7 +111,7 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
     }
 
     func test_collectionsSequence_marksFavoritesReadOnly() async throws {
-        var iterator = service.collectionsSequence().makeAsyncIterator()
+        var iterator = service.collectionsSequence(quran: .hafsMadani1405).makeAsyncIterator()
 
         let collections = try await iterator.next() ?? []
 
@@ -119,6 +119,34 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         XCTAssertTrue(favorites.isReadOnly)
         XCTAssertFalse(favorites.canRename)
         XCTAssertFalse(favorites.canDelete)
+    }
+
+    func test_collectionsSequence_mapsAyahsToTheGivenQuran() async throws {
+        try await service.createCollection(named: "Personal")
+        let stored = try await storedCollection(named: "Personal")
+        try await service.addAyahBookmarkToCollection(collectionId: stored.collection.id, ayah: ayah(1))
+        _ = try await storedCollection(named: "Personal") { $0.bookmarks.count == 1 }
+        var iterator = service.collectionsSequence(quran: .hafsIndoPak).makeAsyncIterator()
+
+        let collections = try await iterator.next() ?? []
+
+        let personal = try XCTUnwrap(collections.first { $0.name == "Personal" })
+        let indoPakAyah = try XCTUnwrap(AyahNumber(quran: .hafsIndoPak, sura: 1, ayah: 1))
+        XCTAssertEqual(personal.bookmarks.map(\.ayah), [indoPakAyah])
+        XCTAssertEqual(personal.bookmarks.map(\.ayah.quran), [.hafsIndoPak])
+    }
+
+    func test_removeAyahs_matchesAyahsFromTheirOwnQuran() async throws {
+        try await service.createCollection(named: "Personal")
+        let stored = try await storedCollection(named: "Personal")
+        let indoPakAyah = try XCTUnwrap(AyahNumber(quran: .hafsIndoPak, sura: 1, ayah: 1))
+        try await service.addAyahs([indoPakAyah], toCollectionWithID: stored.collection.id)
+        _ = try await storedCollection(named: "Personal") { $0.bookmarks.count == 1 }
+
+        try await service.removeAyahs([indoPakAyah], fromCollectionWithID: stored.collection.id)
+
+        let emptied = try await storedCollection(named: "Personal") { $0.bookmarks.isEmpty }
+        XCTAssertTrue(emptied.bookmarks.isEmpty)
     }
 
     func test_collections_keepsReadOnlyCollectionsFromOlderApps() {
@@ -182,7 +210,7 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
     }
 
     func test_renameAndRemoveFavorites_throwReadOnlyCollectionError() async throws {
-        var iterator = service.collectionsSequence().makeAsyncIterator()
+        var iterator = service.collectionsSequence(quran: .hafsMadani1405).makeAsyncIterator()
         let collections = try await iterator.next() ?? []
         let favorites = try XCTUnwrap(collections.first { $0.isDefault })
         let expected = ReadOnlyCollectionError(collectionID: favorites.id)

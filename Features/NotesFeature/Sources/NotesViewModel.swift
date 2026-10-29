@@ -114,9 +114,11 @@ final class NotesViewModel: ObservableObject {
         #if QURAN_SYNC
         isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
         logger.info("Quran Sync: restored authentication from Notes. Authenticated: \(isAuthenticated)")
+        let notesSequence = readingPreferences.readings().flatMapLatest { [noteService] reading in
+            noteService.notesSequence(quran: reading.quran)
+        }
         do {
-            let sequence = noteService.notesSequence(quran: reading.quran)
-            for try await notes in sequence {
+            for try await notes in notesSequence {
                 self.notes = await noteItems(with: notes)
                     .filter { !pendingDeletionIDs.contains($0.id) }
             }

@@ -63,10 +63,21 @@ final class MobileSyncAyahHighlightServiceTests: XCTestCase {
         XCTAssertEqual(colors.sorted(), ["blue 1:3", "green 1:2", "pink 1:1", "purple 1:5", "yellow 1:4"])
     }
 
+    func test_highlightsSequence_mapsAyahsToTheGivenQuran() async throws {
+        try await service.setHighlight(.green, for: [ayah(1)])
+
+        let highlights = try await storedHighlights(quran: .hafsIndoPak, where: { !$0.isEmpty })
+
+        let indoPakAyah = try XCTUnwrap(AyahNumber(quran: .hafsIndoPak, sura: 1, ayah: 1))
+        XCTAssertEqual(highlights, [indoPakAyah: .green])
+        XCTAssertEqual(highlights.keys.map(\.quran), [.hafsIndoPak])
+    }
+
     private func storedHighlights(
+        quran: Quran = .hafsMadani1405,
         where predicate: ([AyahNumber: HighlightColor]) -> Bool
     ) async throws -> [AyahNumber: HighlightColor] {
-        var iterator = service.highlightsSequence().makeAsyncIterator()
+        var iterator = service.highlightsSequence(quran: quran).makeAsyncIterator()
         while let highlights = try await iterator.next() {
             if predicate(highlights) {
                 return highlights

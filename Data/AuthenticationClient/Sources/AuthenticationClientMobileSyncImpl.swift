@@ -55,7 +55,7 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
         let previousState = authenticationState
         defer { reportStateChange(from: previousState) }
         do {
-            try await authService.signOut()
+            try await authService.logout()
         } catch {
             logger.error("Failed to logout via mobile sync: \(error)")
             throw AuthenticationClientError(error)

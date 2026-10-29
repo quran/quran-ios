@@ -118,6 +118,24 @@ final class AyahReadingBookmarkIndicatorTests: XCTestCase {
         XCTAssertEqual(ribbons.accessibilityLabel, "Page 3; Reading Bookmark: Teal; Reading Bookmark: Red")
     }
 
+    func test_pageRibbons_stepByAFractionOfTheirWidth() {
+        let lengths = PageReadingBookmarkRibbons.ribbonLengths(count: 3, width: 16, available: 59)
+
+        XCTAssertEqual(lengths.count, 3)
+        XCTAssertEqual(lengths[0], 44.6, accuracy: 0.001)
+        XCTAssertEqual(lengths[1], 51.8, accuracy: 0.001)
+        XCTAssertEqual(lengths[2], 59, accuracy: 0.001)
+    }
+
+    func test_pageRibbons_wideRibbonsInAShortTopStayDistinct() {
+        let lengths = PageReadingBookmarkRibbons.ribbonLengths(count: 3, width: 40, available: 32)
+
+        XCTAssertEqual(lengths.count, 3)
+        XCTAssertEqual(lengths[0], 16, accuracy: 0.001)
+        XCTAssertEqual(lengths[1], 24, accuracy: 0.001)
+        XCTAssertEqual(lengths[2], 32, accuracy: 0.001)
+    }
+
     func test_readingPins_useSlotAccessibleNames() {
         let teal = AyahIndicator.readingBookmark(.teal)
         let orange = AyahIndicator.readingBookmark(.orange)

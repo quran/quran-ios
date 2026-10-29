@@ -33,11 +33,12 @@ struct PageReadingBookmarkRibbons: View {
     let slots: [ReadingBookmarkSlot]
 
     var body: some View {
+        let lengths = Self.ribbonLengths(count: slots.count, width: width, available: readableInsets.top)
         ZStack(alignment: .top) {
             ForEach(Array(slots.enumerated()), id: \.element) { index, slot in
                 BookmarkRibbonShape()
                     .fill(slot.swiftUIColor)
-                    .frame(width: width, height: ribbonLength(at: index))
+                    .frame(width: width, height: lengths[index])
                     .zIndex(Double(slots.count - index))
             }
         }
@@ -59,6 +60,14 @@ struct PageReadingBookmarkRibbons: View {
             .joined(separator: l("list.separator"))
     }
 
+    /// Each ribbon's length, front to back. The last one fills `available`, from the screen's top edge
+    /// to the page header's top; each earlier one is a step shorter. The step shrinks when `available`
+    /// is short for the ribbon width, so every ribbon in the stack stays visible.
+    static func ribbonLengths(count: Int, width: CGFloat, available: CGFloat) -> [CGFloat] {
+        let step = min(width * stackStepRatio, available / CGFloat(count + 1))
+        return (0 ..< count).map { available - CGFloat(count - 1 - $0) * step }
+    }
+
     // MARK: Private
 
     /// How much shorter each earlier ribbon is, as a ratio of the ribbon width.
@@ -66,12 +75,6 @@ struct PageReadingBookmarkRibbons: View {
 
     @ScaledMetric(relativeTo: .footnote) private var width = 16.0
     @Environment(\.readableInsets) private var readableInsets
-
-    /// The last ribbon reaches from the screen's top edge to the page header's top.
-    private func ribbonLength(at index: Int) -> CGFloat {
-        let step = width * Self.stackStepRatio
-        return max(step, readableInsets.top - CGFloat(slots.count - 1 - index) * step)
-    }
 }
 
 private struct PageReadingBookmarkRibbonsPreview: View {

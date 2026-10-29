@@ -1,3 +1,4 @@
+#if QURAN_SYNC
 //
 //  BookmarkRibbonShape.swift
 //
@@ -13,7 +14,7 @@ struct BookmarkRibbonShape: Shape {
         self.notchDepth = notchDepth
     }
 
-    // MARK: Public
+    // MARK: Internal
 
     func path(in rect: CGRect) -> Path {
         let notch = min(rect.width * notchDepth, rect.height)
@@ -43,3 +44,4 @@ struct BookmarkRibbonShape: Shape {
     }
     .padding()
 }
+#endif

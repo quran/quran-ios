@@ -520,6 +520,36 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertTrue(sut.readingBookmarks.isEmpty)
     }
 
+    func test_start_remapsHighlightsAndCollections_whenReadingChanges() async throws {
+        let readingPreferences = ReadingPreferences.shared
+        let originalReading = readingPreferences.reading
+        readingPreferences.reading = .hafs_1405
+        defer { readingPreferences.reading = originalReading }
+        let collectionService = makeService()
+        try await collectionService.createCollection(named: "Personal")
+        let stored = try await storedCollections { $0.contains { $0.collection.name == "Personal" } }
+        let personal = try XCTUnwrap(stored.first { $0.collection.name == "Personal" })
+        let madaniAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
+        let indoPakAyah = try XCTUnwrap(AyahNumber(quran: .hafsIndoPak, sura: 2, ayah: 255))
+        try await collectionService.addAyahBookmarkToCollection(collectionId: personal.collection.id, ayah: madaniAyah)
+        try await makeHighlightService().setHighlight(.purple, for: [madaniAyah])
+        let sut = makeSUT(collectionService: collectionService)
+        let task = Task { await sut.start() }
+        defer { task.cancel() }
+        await waitUntil {
+            sut.highlights == [madaniAyah: .purple]
+                && sut.collections.first { $0.name == "Personal" }?.bookmarks.map(\.ayah) == [madaniAyah]
+        }
+
+        readingPreferences.reading = .indoPak
+
+        await waitUntil {
+            sut.highlights == [indoPakAyah: .purple]
+                && sut.collections.first { $0.name == "Personal" }?.bookmarks.map(\.ayah) == [indoPakAyah]
+        }
+        XCTAssertEqual(sut.highlights.keys.map(\.quran), [.hafsIndoPak])
+    }
+
     func test_navigateToPageReadingBookmark_navigatesToPage() {
         let page = Quran.hafsMadani1405.pages[269]
         let bookmark = QuranAnnotations.PlacedReadingBookmark(

@@ -11,6 +11,7 @@ import QuranKit
 import QuranLocalization
 import QuranResources
 import QuranTextKit
+import ReadingService
 import UIKit
 import XCTest
 @testable import NotesFeature
@@ -105,6 +106,39 @@ final class NotesViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
         task.cancel()
         observation.cancel()
+    }
+
+    func test_start_remapsNotes_whenReadingChanges() async throws {
+        let readingPreferences = ReadingPreferences.shared
+        let originalReading = readingPreferences.reading
+        readingPreferences.reading = .hafs_1405
+        defer { readingPreferences.reading = originalReading }
+        let madaniAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
+        let indoPakAyah = try XCTUnwrap(AyahNumber(quran: .hafsIndoPak, sura: 2, ayah: 255))
+        try await noteService.createNote(body: "Observed note", startAyah: madaniAyah, endAyah: madaniAyah)
+        let sut = makeSUT()
+        let observedMadani = expectation(description: "Observes the note in the Madani Quran")
+        let observedIndoPak = expectation(description: "Observes the note in the IndoPak Quran")
+        observedMadani.assertForOverFulfill = false
+        observedIndoPak.assertForOverFulfill = false
+        let observation = sut.$notes.sink { notes in
+            switch notes.map(\.note.startAyah) {
+            case [madaniAyah]: observedMadani.fulfill()
+            case [indoPakAyah]: observedIndoPak.fulfill()
+            default: break
+            }
+        }
+        let task = Task { await sut.start() }
+        defer {
+            task.cancel()
+            observation.cancel()
+        }
+        await fulfillment(of: [observedMadani], timeout: 2)
+
+        readingPreferences.reading = .indoPak
+
+        await fulfillment(of: [observedIndoPak], timeout: 2)
+        XCTAssertEqual(sut.notes.map(\.note.startAyah.quran), [.hafsIndoPak])
     }
 
     func test_start_setsAuthenticatedState_whenRestoreSucceeds() async {

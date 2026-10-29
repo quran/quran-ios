@@ -14,7 +14,7 @@ import UIKit
 import VLogging
 
 @MainActor
-final class AccountSyncViewModel: ObservableObject {
+final class AccountSyncViewModel: NSObject, ObservableObject {
     // MARK: Lifecycle
 
     init(
@@ -35,6 +35,7 @@ final class AccountSyncViewModel: ObservableObject {
         self.editor = editor
         self.signOut = signOut
         self.navigationController = navigationController
+        super.init()
     }
 
     // MARK: Internal
@@ -54,6 +55,9 @@ final class AccountSyncViewModel: ObservableObject {
     /// Set to scroll to the items that don't sync; the view clears it once it has.
     @Published var scrollsToHeldItems = false
     @Published var error: Error?
+
+    /// The profile fetch the Manage account sheet's closing started, if any.
+    private(set) var profileRefresh: Task<Void, Never>?
 
     var status: SyncStatusSummary {
         SyncStatusSummary(activity)
@@ -97,6 +101,7 @@ final class AccountSyncViewModel: ObservableObject {
     func openQuranComProfile() {
         logger.info("Account & Sync: Open Quran.com profile.")
         let viewController = SFSafariViewController(url: quranProfileURL)
+        viewController.delegate = self
         navigationController?.present(viewController, animated: true)
     }
 
@@ -161,6 +166,19 @@ final class AccountSyncViewModel: ObservableObject {
         }
     }
 
+    /// Fetches the profile the user may have just edited on Quran.com; the screen follows the user it publishes. A
+    /// failure keeps the user shown.
+    private func refreshProfile() {
+        logger.info("Account & Sync: Quran.com profile closed, refreshing the profile")
+        profileRefresh = Task { [quranDataService] in
+            do {
+                try await quranDataService.refreshProfile()
+            } catch {
+                logger.error("Quran Sync: failed to refresh the profile after Manage account closed: \(error)")
+            }
+        }
+    }
+
     private func observeActivity() async {
         for await change in SyncActivity.changes(of: quranDataService) {
             activity.apply(change)
@@ -179,6 +197,15 @@ final class AccountSyncViewModel: ObservableObject {
             return
         }
         navigationController.popToViewController(settings, animated: navigationController.view.window != nil)
+    }
+}
+
+// MARK: - SFSafariViewControllerDelegate
+
+extension AccountSyncViewModel: @preconcurrency SFSafariViewControllerDelegate {
+    /// The Manage account sheet closed. The user may have changed their name or photo there.
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        refreshProfile()
     }
 }
 #endif

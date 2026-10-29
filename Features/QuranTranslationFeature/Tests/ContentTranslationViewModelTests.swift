@@ -48,6 +48,27 @@ final class ContentTranslationViewModelTests: XCTestCase {
         XCTAssertEqual(try verseNumberItem(in: sut), originalItem)
     }
 
+    func testIndicatorsShowEveryAnnotationWhateverTheStoredPreference() {
+        let preferences = QuranContentStatePreferences.shared
+        let originalVisibility = preferences.ayahIndicatorVisibility
+        defer { preferences.ayahIndicatorVisibility = originalVisibility }
+        let verse = Quran.hafsMadani1405.firstVerse
+        let service = VerseOverlayService()
+        service.overlays.notedVerses = [verse]
+        service.overlays.collectionVerses = [verse]
+        service.overlays.readingBookmarks = [
+            .init(id: "teal", slot: .teal, placement: .ayah(verse), modifiedOn: .distantPast),
+        ]
+
+        for visibility in [AyahIndicatorVisibility.none, .readingBookmark] {
+            preferences.ayahIndicatorVisibility = visibility
+            let sut = makeSUT(overlayService: service)
+            sut.verses = [verse]
+
+            XCTAssertEqual(sut.indicatorsByVerse, [verse: [.note, .collection, .readingBookmark(.teal)]], "\(visibility)")
+        }
+    }
+
     func testIndicatorsFollowChangesToDisplayedVerses() {
         let first = Quran.hafsMadani1405.pages[0].firstVerse
         let second = Quran.hafsMadani1405.pages[1].firstVerse

@@ -4,8 +4,6 @@ import Combine
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
-import QuranText
-import QuranTextKit
 import XCTest
 @testable import QuranViewFeature
 
@@ -21,7 +19,6 @@ final class QuranAnnotationsObserverTests: XCTestCase {
     }
 
     override func tearDown() async throws {
-        QuranContentStatePreferences.shared.ayahIndicatorVisibility = .readingBookmark
         try await database.reset()
         noteService = nil
         highlightService = nil
@@ -268,26 +265,6 @@ final class QuranAnnotationsObserverTests: XCTestCase {
     private var highlightService: MobileSyncAyahHighlightService!
     private var collectionService: AyahBookmarkCollectionService!
     private var readingBookmarkService: MobileSyncReadingBookmarkService!
-
-    func test_start_exposesEveryIndicatorWhateverTheStoredPreference() async throws {
-        QuranContentStatePreferences.shared.ayahIndicatorVisibility = .none
-        try await noteService.createNote(body: "Test note", startAyah: ayah(5), endAyah: ayah(5))
-        try await readingBookmarkService.addReadingBookmark(at: .ayah(ayah(5)), slot: .teal)
-        var iterator = collectionService.collectionsSequence().makeAsyncIterator()
-        let collections = try await iterator.next() ?? []
-        let collection = try XCTUnwrap(collections.first { $0.isDefault })
-        try await collectionService.addAyahBookmarkToCollection(collectionId: collection.id, ayah: ayah(5))
-        let overlayService = VerseOverlayService()
-        let observer = makeObserver(overlayService: overlayService)
-        defer { observer.stop() }
-
-        observer.start()
-        await waitForOverlays(overlayService) {
-            $0.notedVerses == [self.ayah(5)] && $0.collectionVerses == [self.ayah(5)] && !$0.readingBookmarks.isEmpty
-        }
-
-        XCTAssertEqual(overlayService.overlays.indicators(for: ayah(5)), [.note, .collection, .readingBookmark(.teal)])
-    }
 
     private func makeObserver(overlayService: VerseOverlayService) -> QuranAnnotationsObserver {
         QuranAnnotationsObserver(

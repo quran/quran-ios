@@ -19,6 +19,7 @@
 //
 
 import UIKit
+import VLogging
 
 @MainActor
 public protocol PopoverPresenterDelegate: AnyObject {
@@ -74,6 +75,12 @@ extension UIViewController {
         animated: Bool = true,
         completion: (() -> Void)? = nil
     ) {
+        // Bar buttons stay tappable while a popover morphs back into them; see
+        // `isPresentationTransitioning`.
+        guard !isPresentationTransitioning else {
+            logger.warning("Dropped presenting popover \(type(of: presented)) during a presentation transition")
+            return
+        }
         presented.modalPresentationStyle = .popover
         presented.presentationController?.delegate = PhoneAdapativeController.shared
         presented.popoverPresentationController?.barButtonItem = barButtonItem

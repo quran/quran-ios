@@ -32,7 +32,7 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
         let previousState = authenticationState
         defer { reportStateChange(from: previousState) }
         do {
-            try await authService.signInWithReauthentication()
+            try await authService.login()
         } catch {
             logger.error("Failed to login via mobile sync: \(error)")
             throw AuthenticationClientError(error)

@@ -205,6 +205,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
 
     func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint) {
+        ayahMenuViewController = viewController
         popoverPresenter.present(
             presenting: self,
             presented: viewController,
@@ -266,19 +267,29 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         super.dismiss(animated: flag, completion: completion)
     }
 
+    override func presentationWasDropped(_ viewController: UIViewController) {
+        // Undo what the presentation set up: a monitored sheet's dismissal handler clears its
+        // highlight, and the ayah menu's highlight is cleared like a dismissed popover's.
+        presentationsMonitor.dismiss(viewController)
+        if viewController === ayahMenuViewController {
+            interactor.didDismissPopover()
+        }
+    }
+
     func dismissPresentedViewController(completion: (() -> Void)?) {
         // The user may have already dismissed it, e.g. by tapping outside a popover.
         guard let presentedViewController else {
             completion?()
             return
         }
-        // Dismissing again mid-transition may be ignored, so its completion would never run.
-        if presentedViewController.isBeingDismissed {
-            guard let transitionCoordinator = presentedViewController.transitionCoordinator ?? transitionCoordinator else {
-                completion?()
-                return
-            }
-            transitionCoordinator.animate(alongsideTransition: nil) { _ in
+        // Dismissing mid-transition may be ignored, and presenting would be dropped, so retry once
+        // the transition ends. UIKit may still report it inside the completion, so wait a turn.
+        if presentedViewController.isBeingDismissed || presentedViewController.isBeingPresented {
+            let coordinator = presentedViewController.transitionCoordinator ?? transitionCoordinator
+            let queued = coordinator?.animate(alongsideTransition: nil) { [weak self] _ in
+                DispatchQueue.main.async { self?.dismissPresentedViewController(completion: completion) }
+            } ?? false
+            if !queued {
                 completion?()
             }
             return
@@ -324,6 +335,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     private var cancellables: Set<AnyCancellable> = []
     private lazy var popoverPresenter = PhonePopoverPresenter(delegate: self)
     private let presentationsMonitor = PresentationsMonitor()
+    private weak var ayahMenuViewController: UIViewController?
 
     // MARK: - Navigation bars
 
@@ -424,6 +436,13 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     private func onTranslationsSelectionDoneTapped() {
         logger.info("Quran: translations selection dismissed")
+        // UIKit ignores dismiss once a presentation is stuck mid-dismissal; record it in case
+        // BaseViewController's present guard misses a path.
+        if let presentedViewController, presentedViewController.isBeingDismissed,
+           presentedViewController.transitionCoordinator == nil
+        {
+            crasher.recordError(PresentationError.stuckDismissal, reason: "Translations sheet dismissal is stuck")
+        }
         dismiss(animated: true)
     }
 
@@ -490,4 +509,8 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     private func onMoreBarButtonTapped(_ barButton: UIBarButtonItem) {
         interactor.onMoreBarButtonTapped()
     }
+}
+
+private enum PresentationError: Error {
+    case stuckDismissal
 }

@@ -52,7 +52,7 @@ public struct SyncSignInCard: View {
 
             Spacer(minLength: 0)
 
-            AsyncButton(action: signInAction) {
+            AsyncButton(tapPolicy: .ignoreWhileRunning, action: signInAction) {
                 Text(actionLabel)
                     .font(.headline)
                     .foregroundStyle(Color.onAccent)

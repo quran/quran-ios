@@ -239,7 +239,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     func renameReadingBookmark(in slot: ReadingBookmarkSlot) async {
         let name = readingBookmarkName.trimmingCharacters(in: .whitespacesAndNewlines)
         // The bookmark can be cleared while the alert is open.
-        guard let current = readingBookmarks.first(where: { $0.slot == slot }), name != (current.name ?? "") else {
+        guard readingBookmarks.contains(where: { $0.slot == slot }) else {
             return
         }
         do {

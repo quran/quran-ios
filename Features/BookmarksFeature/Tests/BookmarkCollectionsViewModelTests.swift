@@ -659,7 +659,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
-    func test_renameReadingBookmark_unchangedNameDoesNotWrite() async throws {
+    func test_renameReadingBookmark_unchangedNameKeepsModifiedDate() async throws {
         let service = makeReadingBookmarkService()
         let quran = ReadingPreferences.shared.reading.quran
         try await service.addReadingBookmark(at: .page(quran.pages[269]), slot: .teal)

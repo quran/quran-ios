@@ -3,6 +3,7 @@
 //
 //
 
+import Combine
 import XCTest
 @testable import UIx
 
@@ -56,6 +57,8 @@ final class AsyncActionRunnerTests: XCTestCase {
 
     func test_cancelPrevious_cancelledActionEndingLateKeepsItsReplacementRunning() async {
         let runner = AsyncActionRunner()
+        var states: [Bool] = []
+        let cancellable = runner.$isRunning.sink { states.append($0) }
         let first = BlockingAction()
         let second = BlockingAction()
         let firstTask = runner.run(.cancelPrevious, action: { await first.run() })
@@ -64,10 +67,43 @@ final class AsyncActionRunnerTests: XCTestCase {
         await firstTask?.value
 
         XCTAssertTrue(runner.isRunning)
+        XCTAssertEqual(states, [false, true])
         runner.run(.cancelPrevious, action: {})
         second.finish()
         await secondTask?.value
         XCTAssertEqual(second.cancellations, 1)
+        cancellable.cancel()
+    }
+
+    func test_isRunning_publishesTrueWhileTheActionRunsAndFalseAfterItFinishes() async {
+        let runner = AsyncActionRunner()
+        var states: [Bool] = []
+        let cancellable = runner.$isRunning.sink { states.append($0) }
+        let action = BlockingAction()
+
+        let task = runner.run(.ignoreWhileRunning, action: { await action.run() })
+
+        XCTAssertTrue(runner.isRunning)
+        action.finish()
+        await task?.value
+        XCTAssertFalse(runner.isRunning)
+        XCTAssertEqual(states, [false, true, false])
+        cancellable.cancel()
+    }
+
+    func test_isRunning_ignoredTapPublishesNothing() async {
+        let runner = AsyncActionRunner()
+        var states: [Bool] = []
+        let cancellable = runner.$isRunning.sink { states.append($0) }
+        let action = BlockingAction()
+        let task = runner.run(.ignoreWhileRunning, action: { await action.run() })
+
+        runner.run(.ignoreWhileRunning, action: {})
+
+        XCTAssertEqual(states, [false, true])
+        action.finish()
+        await task?.value
+        cancellable.cancel()
     }
 }
 

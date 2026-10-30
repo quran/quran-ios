@@ -3,12 +3,15 @@
 //
 //
 
+import Combine
+
 /// Runs an async control's action for each tap, applying an `AsyncTapPolicy` to taps made while one is running.
 @MainActor
-final class AsyncActionRunner {
+final class AsyncActionRunner: ObservableObject {
     // MARK: Internal
 
-    var isRunning: Bool { currentTask != nil }
+    /// Whether an action is running, published so a control can show progress while it runs.
+    @Published private(set) var isRunning = false
 
     /// Starts `action`, or returns nil when `policy` ignores the tap because an action is still running.
     @discardableResult
@@ -34,8 +37,17 @@ final class AsyncActionRunner {
 
     // MARK: Private
 
-    private var currentTask: Task<Void, Never>?
     private var runCount = 0
+
+    private var currentTask: Task<Void, Never>? {
+        didSet {
+            // Publish only real changes, so replacing a running action doesn't redraw its control.
+            let isRunning = currentTask != nil
+            if self.isRunning != isRunning {
+                self.isRunning = isRunning
+            }
+        }
+    }
 
     private func finish(_ run: Int) {
         // A cancelled run that ends after its replacement started must not clear the replacement.

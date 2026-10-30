@@ -26,10 +26,26 @@ public struct AsyncButton<Label: View>: View {
     // MARK: Lifecycle
 
     /// `tapPolicy` says what a tap does while an earlier tap's action is still running.
-    public init(tapPolicy: AsyncTapPolicy = .cancelPrevious, action: @escaping AsyncAction, label: () -> Label) {
+    public init(
+        tapPolicy: AsyncTapPolicy = .cancelPrevious,
+        action: @escaping AsyncAction,
+        @ViewBuilder label: () -> Label
+    ) {
+        let label = label()
+        self.init(tapPolicy: tapPolicy, action: action) { _ in label }
+    }
+
+    /// `label` receives whether the action is running, so it can show progress while it runs.
+    ///
+    /// With `.ignoreWhileRunning`, the button is also disabled while the action runs, since it ignores taps.
+    public init(
+        tapPolicy: AsyncTapPolicy = .cancelPrevious,
+        action: @escaping AsyncAction,
+        @ViewBuilder label: @escaping (_ isRunning: Bool) -> Label
+    ) {
         self.tapPolicy = tapPolicy
         self.action = action
-        self.label = label()
+        self.label = label
     }
 
     // MARK: Public
@@ -38,17 +54,18 @@ public struct AsyncButton<Label: View>: View {
         Button {
             runner.run(tapPolicy, action: action)
         } label: {
-            label
+            label(runner.isRunning)
         }
+        .disabled(tapPolicy == .ignoreWhileRunning && runner.isRunning)
     }
 
     // MARK: Private
 
     private let tapPolicy: AsyncTapPolicy
     private let action: AsyncAction
-    private let label: Label
+    private let label: (_ isRunning: Bool) -> Label
 
-    @State private var runner = AsyncActionRunner()
+    @StateObject private var runner = AsyncActionRunner()
 }
 
 extension View {
@@ -71,5 +88,6 @@ private struct AsyncTapGestureModifier: ViewModifier {
 
     // MARK: Private
 
+    // Deliberately not `@StateObject`: nothing here observes `isRunning`, so it needs no redraws.
     @State private var runner = AsyncActionRunner()
 }

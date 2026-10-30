@@ -49,6 +49,15 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     let navigationBar = UINavigationBar()
     let navigationItem = UINavigationItem()
 
+    /// How far the audio bar reaches above the window's bottom edge, or 0 while it's hidden.
+    var bottomBarsHeight: CGFloat {
+        guard let audioView, !audioBarHidden, let window else {
+            return 0
+        }
+        let audioBarTop = audioView.convert(audioView.bounds, to: window).minY
+        return max(0, window.bounds.height - audioBarTop)
+    }
+
     override func layoutSubviews() {
         navigationItem.titleView?.setNeedsLayout()
         super.layoutSubviews()

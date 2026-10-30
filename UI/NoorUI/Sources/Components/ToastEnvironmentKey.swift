@@ -17,8 +17,14 @@ extension EnvironmentValues {
 }
 
 extension View {
-    public func enableToastPresenter() -> some View {
-        modifier(ToastPresenterModifier())
+    /// Lets this view and its descendants show toasts through `showToast`, lifted above the bars
+    /// at the bottom of the presenting view's screen, like a tab bar.
+    ///
+    /// - Parameter bottomBarsHeight: How far bars that the presenting view's screen can't report
+    ///   through its safe area, like a floating bar beneath a popover, reach above the window's
+    ///   bottom edge. Read when a toast shows.
+    public func enableToastPresenter(bottomBarsHeight: (@MainActor () -> CGFloat)? = nil) -> some View {
+        modifier(ToastPresenterModifier(bottomBarsHeight: bottomBarsHeight))
     }
 }
 
@@ -27,6 +33,8 @@ private struct ToastPresenterKey: EnvironmentKey {
 }
 
 private struct ToastPresenterModifier: ViewModifier {
+    let bottomBarsHeight: (@MainActor () -> CGFloat)?
+
     @State private var anchor = ToastAnchor()
     @ScaledMetric private var bottomBarsSpacing = 8
 
@@ -40,7 +48,8 @@ private struct ToastPresenterModifier: ViewModifier {
                     logger.error("Failed to obtain windowScene")
                     return
                 }
-                let placedToast = toast.clearingBottomBars(height: view.bottomBarsHeight, spacing: bottomBarsSpacing)
+                let height = max(view.bottomBarsHeight, bottomBarsHeight?() ?? 0)
+                let placedToast = toast.clearingBottomBars(height: height, spacing: bottomBarsSpacing)
                 ToastPresenter.shared.showToast(placedToast, in: windowScene)
             }
     }

@@ -30,8 +30,7 @@ struct SettingsRootView: View {
             writeReview: { viewModel.writeReview() },
             contactUs: { viewModel.contactUs() },
             navigateToDiagnotics: { viewModel.navigateToDiagnotics() },
-            isAuthenticated: viewModel.isAuthenticated,
-            profile: AccountProfile(viewModel.loggedInUser),
+            accountState: viewModel.accountState,
             syncActivity: viewModel.syncActivity,
             navigateToAccountSync: { viewModel.navigateToAccountSync() },
             observeAuthentication: { await viewModel.observeAuthentication() },
@@ -86,8 +85,7 @@ private struct SettingsRootViewUI: View {
     let navigateToDiagnotics: Action
 
     #if QURAN_SYNC
-    let isAuthenticated: Bool
-    let profile: AccountProfile
+    let accountState: QuranComAccountState
     let syncActivity: SyncActivity
     let navigateToAccountSync: Action
     let observeAuthentication: AsyncAction
@@ -103,8 +101,7 @@ private struct SettingsRootViewUI: View {
                 // Refreshes "2 minutes ago".
                 TimelineView(.periodic(from: .now, by: 60)) { _ in
                     QuranComAccountCard(
-                        isAuthenticated: isAuthenticated,
-                        profile: profile,
+                        accountState: accountState,
                         status: SyncStatusSummary(syncActivity, style: .card),
                         openAccountAction: { navigateToAccountSync() },
                         syncNowAction: { syncNow() },
@@ -236,8 +233,7 @@ private struct SettingsRootViewUI: View {
                 writeReview: {},
                 contactUs: {},
                 navigateToDiagnotics: {},
-                isAuthenticated: false,
-                profile: AccountProfile(nil),
+                accountState: .signedOut,
                 syncActivity: SyncActivity(),
                 navigateToAccountSync: {},
                 observeAuthentication: {},

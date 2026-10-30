@@ -1,6 +1,7 @@
 #if QURAN_SYNC
 import Foundation
 import Localization
+import MobileSync
 import NoorUI
 import SwiftUI
 import UIx
@@ -20,8 +21,7 @@ struct QuranComAccountCard: View {
     @ScaledMetric private var rowVerticalPadding = 14.0
     @ScaledMetric private var signInVerticalPadding = 12.0
 
-    let isAuthenticated: Bool
-    let profile: AccountProfile
+    let accountState: QuranComAccountState
     let status: SyncStatusSummary
     let openAccountAction: Action
     let syncNowAction: Action
@@ -29,15 +29,30 @@ struct QuranComAccountCard: View {
 
     var body: some View {
         Group {
-            if isAuthenticated {
-                authenticatedContent
-            } else {
+            switch accountState {
+            case .unknown:
+                placeholderContent
+            case .signedOut:
                 unauthenticatedContent
+            case .signedIn(let user):
+                authenticatedContent(profile: AccountProfile(user))
             }
         }
         .padding(cardPadding)
         .background(Color.secondarySystemGroupedBackground)
         .clipShape(RoundedRectangle(cornerRadius: cardCornerRadius, style: .continuous))
+    }
+
+    /// The signed-in layout, redacted, until MobileSync has read the stored session, so a signed-in user never
+    /// sees the sign-in card first.
+    private var placeholderContent: some View {
+        // A name and an email line, like a typical profile; redacted, so the text never shows.
+        let text = l("setting.quran_account.signed_in")
+        return authenticatedContent(profile: AccountProfile(MobileSyncUser(id: "", name: text, email: text)))
+            .redacted(reason: .placeholder)
+            .allowsHitTesting(false)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(lAndroid("loading"))
     }
 
     private var unauthenticatedContent: some View {
@@ -79,7 +94,7 @@ struct QuranComAccountCard: View {
         }
     }
 
-    private var authenticatedContent: some View {
+    private func authenticatedContent(profile: AccountProfile) -> some View {
         VStack(spacing: 0) {
             Button(action: openAccountAction) {
                 HStack(spacing: headerSpacing) {
@@ -186,11 +201,25 @@ struct QuranComAccountCard: View {
     }
 }
 
+#Preview("Restoring") {
+    List {
+        QuranComAccountCard(
+            accountState: .unknown,
+            status: SyncStatusSummary(SyncActivity(), style: .card),
+            openAccountAction: {},
+            syncNowAction: {},
+            signInAction: {}
+        )
+        .listRowInsets(.zero)
+        .listRowBackground(Color.clear)
+    }
+    .listStyle(.insetGrouped)
+}
+
 #Preview("Signed out") {
     List {
         QuranComAccountCard(
-            isAuthenticated: false,
-            profile: AccountProfile(nil),
+            accountState: .signedOut,
             status: SyncStatusSummary(SyncActivity(), style: .card),
             openAccountAction: {},
             syncNowAction: {},
@@ -205,8 +234,7 @@ struct QuranComAccountCard: View {
 #Preview("Signed in") {
     List {
         QuranComAccountCard(
-            isAuthenticated: true,
-            profile: AccountProfile(.init(id: "1", name: "Aisha Rahman", email: "aisha.rahman@example.com")),
+            accountState: .signedIn(.init(id: "1", name: "Aisha Rahman", email: "aisha.rahman@example.com")),
             status: SyncStatusSummary(SyncActivity(status: .succeeded(at: Date().addingTimeInterval(-120))), style: .card),
             openAccountAction: {},
             syncNowAction: {},

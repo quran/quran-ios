@@ -116,8 +116,7 @@ final class SettingsRootViewModel: ObservableObject {
 
     @Published var error: Error? = nil
     #if QURAN_SYNC
-    @Published var isAuthenticated: Bool = false
-    @Published var loggedInUser: MobileSyncUser? = nil
+    @Published var accountState: QuranComAccountState = .unknown
     @Published private(set) var syncActivity = SyncActivity()
     #endif
 
@@ -196,6 +195,14 @@ final class SettingsRootViewModel: ObservableObject {
     }
 
     #if QURAN_SYNC
+    var loggedInUser: MobileSyncUser? {
+        if case .signedIn(let user) = accountState {
+            user
+        } else {
+            nil
+        }
+    }
+
     var currentUserEmail: String? {
         loggedInUser?.email
     }
@@ -218,29 +225,21 @@ final class SettingsRootViewModel: ObservableObject {
     }
 
     #if QURAN_SYNC
-    /// Restores the session, then keeps the account card on the signed-in user until the task is cancelled,
-    /// such as after signing in or when a background token refresh updates the profile.
+    /// Keeps the account card on the signed-in user until the task is cancelled, such as after signing in or
+    /// when a background token refresh updates the profile, and restores the session alongside.
     ///
-    /// The card's user comes only from these updates. After any other error, the card stops updating
+    /// The card's state comes from these updates, so it stays unknown until the first one, which MobileSync
+    /// yields once it has read the stored session, without waiting for the restore's token refresh. When they
+    /// fail before it, the card shows the restored state instead. After any other error, the card stops updating
     /// until Settings appears again.
     func observeAuthentication() async {
-        let restoredState = await authenticationClient.safelyRestoreState()
-        logger.info("Quran Sync: restored authentication from Settings. State: \(restoredState)")
-        // A signed-in card waits for the first update, which brings the user with it.
-        if restoredState != .authenticated {
-            isAuthenticated = false
-            loggedInUser = nil
-        }
-        runningAuthenticationObservations += 1
-        defer { runningAuthenticationObservations -= 1 }
-        do {
-            for try await user in authenticationClient.loggedInUserUpdates {
-                await showLoggedInUser(user)
-            }
-        } catch is CancellationError {
-            return
-        } catch {
-            logger.error("Quran Sync: failed to observe the signed-in user from Settings: \(error)")
+        async let restoredState = restoreAuthentication()
+        let updatesFailed = await observeLoggedInUser()
+        let state = await restoredState
+        // The restore returns once the session is known, unlike `authenticationState` while MobileSync is
+        // still reading it.
+        if updatesFailed, accountState == .unknown {
+            accountState = state == .authenticated ? .signedIn(loggedInUser) : .signedOut
         }
     }
 
@@ -269,7 +268,7 @@ final class SettingsRootViewModel: ObservableObject {
             logger.info("Quran Sync: sign in completed from Settings. State: \(state)")
             // While observing, the updates show the card signed in together with the user.
             if runningAuthenticationObservations == 0 {
-                isAuthenticated = state == .authenticated
+                accountState = state == .authenticated ? .signedIn(loggedInUser) : .signedOut
             }
         } catch AuthenticationClientError.cancelled {
             logger.info("Quran Sync: sign in cancelled from Settings")
@@ -288,8 +287,7 @@ final class SettingsRootViewModel: ObservableObject {
         await legacyDataImportCoordinator.disable()
         do {
             try await authenticationClient.logout()
-            isAuthenticated = false
-            loggedInUser = nil
+            accountState = .signedOut
             logger.info("Quran Sync: sign out succeeded from \(source)")
         } catch {
             logger.error("Failed to logout from Quran.com: \(error)")
@@ -310,18 +308,58 @@ final class SettingsRootViewModel: ObservableObject {
     /// SwiftUI can start the next `.task` before the cancelled one ends.
     private var runningAuthenticationObservations = 0
 
+    /// - Returns: Whether the updates failed with an error other than cancellation.
+    private func observeLoggedInUser() async -> Bool {
+        runningAuthenticationObservations += 1
+        defer { runningAuthenticationObservations -= 1 }
+        do {
+            for try await user in authenticationClient.loggedInUserUpdates {
+                await showLoggedInUser(user)
+            }
+        } catch is CancellationError {
+            return false
+        } catch {
+            logger.error("Quran Sync: failed to observe the signed-in user from Settings: \(error)")
+            return true
+        }
+        return false
+    }
+
+    /// Refreshes the session's tokens. The card doesn't wait for it: the updates bring the session first.
+    private func restoreAuthentication() async -> AuthenticationState {
+        let restoredState = await authenticationClient.safelyRestoreState()
+        logger.info("Quran Sync: restored authentication from Settings. State: \(restoredState)")
+        return restoredState
+    }
+
     /// The authentication state decides whether the user is signed in, because a nil user can also be
     /// a signed-in session whose profile isn't known yet. That keeps the last known profile.
     private func showLoggedInUser(_ user: MobileSyncUser?) async {
-        isAuthenticated = await authenticationClient.authenticationState == .authenticated
-        if !isAuthenticated {
-            loggedInUser = nil
-        } else if let user {
-            loggedInUser = user
+        guard await authenticationClient.authenticationState == .authenticated else {
+            accountState = .signedOut
+            return
+        }
+        if let user {
+            accountState = .signedIn(user)
+        } else if case .signedIn = accountState {
+            return
+        } else {
+            accountState = .signedIn(nil)
         }
     }
     #endif
 }
+
+#if QURAN_SYNC
+/// What the Quran.com account card shows.
+enum QuranComAccountState: Equatable {
+    /// Not known yet: MobileSync hasn't read the stored session.
+    case unknown
+    case signedOut
+    /// The user is nil for a signed-in session whose profile isn't known yet.
+    case signedIn(MobileSyncUser?)
+}
+#endif
 
 private extension AnalyticsLibrary {
     func changeAppearanceMode(_ mode: AppearanceMode) {

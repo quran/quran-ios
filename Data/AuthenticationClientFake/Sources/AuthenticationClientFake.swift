@@ -24,8 +24,11 @@ public final class AuthenticationClientFake: AuthenticationClient {
     public var loggedInUserAfterLogin: MobileSyncUser?
     /// Setting it also publishes the user to ``loggedInUserUpdates``.
     public var loggedInUserValue: MobileSyncUser? {
-        didSet { loggedInUserSubject.send(loggedInUserValue) }
+        didSet { loggedInUserSubject.send(.some(loggedInUserValue)) }
     }
+
+    /// While set, ``restoreState()`` waits for it to finish, like a token refresh waiting on the network.
+    public var restoreStateWaitsFor: AsyncStream<Void>?
 
     public var loginResult: Result<Void, AuthenticationClientError> = .success(())
     public var restoreStateResult: Result<AuthenticationState, AuthenticationClientError> = .success(.notAuthenticated)
@@ -33,7 +36,11 @@ public final class AuthenticationClientFake: AuthenticationClient {
     public var authenticationHeadersResult: Result<[String: String], AuthenticationClientError> = .success([:])
     public var events: [Event] = []
 
-    public init() {}
+    /// - Parameter restoringSession: Whether MobileSync is still reading the stored session at launch, so
+    ///   ``loggedInUserUpdates`` yields nothing until ``loggedInUserValue`` is set.
+    public init(restoringSession: Bool = false) {
+        loggedInUserSubject = CurrentValueSubject(restoringSession ? .none : .some(nil))
+    }
 
     public var authenticationState: AuthenticationState {
         get async {
@@ -48,7 +55,7 @@ public final class AuthenticationClientFake: AuthenticationClient {
 
     /// ``loggedInUserValue`` now and after every change, without repeats.
     public var loggedInUserUpdates: AnyAsyncSequence<MobileSyncUser?> {
-        AnyAsyncSequence(loggedInUserSubject.removeDuplicates().values())
+        AnyAsyncSequence(loggedInUserSubject.compactMap { $0 }.removeDuplicates().values())
     }
 
     /// Ends every current and later ``loggedInUserUpdates`` observation with `error`.
@@ -69,6 +76,9 @@ public final class AuthenticationClientFake: AuthenticationClient {
 
     public func restoreState() async throws(AuthenticationClientError) -> AuthenticationState {
         events.append(.restoreState)
+        if let restoreStateWaitsFor {
+            for await _ in restoreStateWaitsFor {}
+        }
         return try restoreStateResult.get()
     }
 
@@ -92,7 +102,8 @@ public final class AuthenticationClientFake: AuthenticationClient {
     // MARK: Private
 
     private let stateChanges = PassthroughSubject<AuthenticationState, Never>()
-    private let loggedInUserSubject = CurrentValueSubject<MobileSyncUser?, Error>(nil)
+    /// `.none` until MobileSync has read the stored session.
+    private let loggedInUserSubject: CurrentValueSubject<MobileSyncUser??, Error>
 
     private func changeState(to state: AuthenticationState) {
         guard state != authenticationStateValue else { return }

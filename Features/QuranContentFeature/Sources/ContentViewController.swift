@@ -64,7 +64,7 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
     @objc
     func onViewPanned(_ gesture: UIPanGestureRecognizer) {
         if gesture.state == .began {
-            viewModel.listener?.userWillBeginDragScroll()
+            viewModel.onUserWillBeginDragScroll()
         }
     }
 

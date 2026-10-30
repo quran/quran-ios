@@ -7,6 +7,7 @@
 
 import Combine
 import QuranAnnotations
+import QuranKit
 import VLogging
 
 public final class VerseOverlayService {
@@ -22,7 +23,7 @@ public final class VerseOverlayService {
         }
     }
 
-    /// Signals playback or navigation target changes using the complete overlay state.
+    /// Signals playback changes or a new navigation target using the complete overlay state.
     public var scrollRequests: AnyPublisher<Void, Never> {
         $overlays
             .zip($overlays.dropFirst())
@@ -31,6 +32,14 @@ public final class VerseOverlayService {
             }
             .map { _ in }
             .eraseToAnyPublisher()
+    }
+
+    /// Clears the navigation target once content has scrolled to `ayah`, unless navigation has moved on.
+    public func consumeNavigationTarget(_ ayah: AyahNumber) {
+        guard overlays.navigationTarget == ayah else {
+            return
+        }
+        overlays.navigationTarget = nil
     }
 
     public func reset() {

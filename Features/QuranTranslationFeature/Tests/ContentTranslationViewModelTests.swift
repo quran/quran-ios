@@ -294,6 +294,105 @@ final class ContentTranslationViewModelTests: XCTestCase {
         withExtendedLifetime(cancellable) { }
     }
 
+    func testSlowContentLoadScrollsToTheNavigationTargetOnceThenConsumesIt() async {
+        let verses = Array(Quran.hafsMadani1405.pages[2].verses.prefix(3))
+        let target = verses[1]
+        let service = VerseOverlayService()
+        let sut = makeSUT(overlayService: service)
+        sut.onAppear()
+        sut.verses = verses
+        let scrolls = recordScrolls(of: sut)
+
+        service.overlays.navigationTarget = target
+        await drainMainQueue()
+
+        XCTAssertEqual(scrolls.values, [])
+        XCTAssertEqual(service.overlays.navigationTarget, target)
+
+        commitContent(verses, translationCount: 1, to: sut)
+        await drainMainQueue()
+
+        XCTAssertEqual(scrolls.values, [target])
+        XCTAssertNil(service.overlays.navigationTarget)
+    }
+
+    func testConsumedNavigationTargetDoesNotScrollBackWhenPlaybackStops() async {
+        let verses = Array(Quran.hafsMadani1405.pages[2].verses.prefix(3))
+        let service = VerseOverlayService()
+        service.overlays.navigationTarget = verses[1]
+        let sut = makeSUT(overlayService: service)
+        sut.onAppear()
+        sut.verses = verses
+        commitContent(verses, translationCount: 1, to: sut)
+        await drainMainQueue()
+        let scrolls = recordScrolls(of: sut)
+
+        service.overlays.playingVerses = [verses[2]]
+        await drainMainQueue()
+        service.overlays.playingVerses = []
+        await drainMainQueue()
+
+        XCTAssertEqual(scrolls.values, [verses[2]])
+    }
+
+    func testConsumedNavigationTargetDoesNotScrollBackWhenContentReloads() async {
+        let verses = Array(Quran.hafsMadani1405.pages[2].verses.prefix(3))
+        let service = VerseOverlayService()
+        service.overlays.navigationTarget = verses[1]
+        let sut = makeSUT(overlayService: service)
+        sut.onAppear()
+        sut.verses = verses
+        commitContent(verses, translationCount: 1, to: sut)
+        await drainMainQueue()
+        let scrolls = recordScrolls(of: sut)
+
+        commitContent(verses, translationCount: 2, to: sut)
+        await drainMainQueue()
+
+        XCTAssertEqual(scrolls.values, [])
+    }
+
+    func testOffScreenContentDoesNotConsumeTheNavigationTarget() async {
+        let verses = Array(Quran.hafsMadani1405.pages[2].verses.prefix(3))
+        let service = VerseOverlayService()
+        let sut = makeSUT(overlayService: service)
+        sut.onAppear()
+        sut.verses = verses
+        commitContent(verses, translationCount: 1, to: sut)
+        await drainMainQueue()
+        let scrolls = recordScrolls(of: sut)
+
+        service.overlays.navigationTarget = verses[1]
+        sut.onDisappear()
+        await drainMainQueue()
+        commitContent(verses, translationCount: 2, to: sut)
+        await drainMainQueue()
+
+        XCTAssertEqual(scrolls.values, [])
+        XCTAssertEqual(service.overlays.navigationTarget, verses[1])
+    }
+
+    func testContentAppearingAfterTheTargetWasSetScrollsToItOnce() async {
+        let verses = Array(Quran.hafsMadani1405.pages[2].verses.prefix(3))
+        let service = VerseOverlayService()
+        let sut = makeSUT(overlayService: service)
+        sut.verses = verses
+        commitContent(verses, translationCount: 1, to: sut)
+        service.overlays.navigationTarget = verses[1]
+        await drainMainQueue()
+        let scrolls = recordScrolls(of: sut)
+
+        XCTAssertEqual(service.overlays.navigationTarget, verses[1])
+
+        sut.onAppear()
+        await drainMainQueue()
+        commitContent(verses, translationCount: 2, to: sut)
+        await drainMainQueue()
+
+        XCTAssertEqual(scrolls.values, [verses[1]])
+        XCTAssertNil(service.overlays.navigationTarget)
+    }
+
     override func setUp() {
         super.setUp()
         QuranContentStatePreferences.shared.showArabicInTranslation = true
@@ -320,6 +419,34 @@ final class ContentTranslationViewModelTests: XCTestCase {
             guard case .suraName(let suraName, _) = item else { return nil }
             return suraName
         }.first)
+    }
+
+    private final class ScrollRecorder {
+        var values: [AyahNumber?] = []
+        var subscription: AnyCancellable?
+    }
+
+    private func recordScrolls(of viewModel: ContentTranslationViewModel) -> ScrollRecorder {
+        let recorder = ScrollRecorder()
+        recorder.subscription = viewModel.$scrollToItem
+            .dropFirst()
+            .sink { [unowned recorder] in recorder.values.append($0?.ayah) }
+        return recorder
+    }
+
+    private func commitContent(_ verses: [AyahNumber], translationCount: Int, to viewModel: ContentTranslationViewModel) {
+        viewModel.commitLoadedContent(
+            verses: verses,
+            translations: (0 ..< translationCount).map { makeTranslation(id: $0 + 1) },
+            verseTexts: Dictionary(uniqueKeysWithValues: verses.map { ($0, makeVerseText(translationCount: translationCount)) })
+        )
+    }
+
+    /// Runs the view model's scrolls, which it defers to the next main-queue turn.
+    private func drainMainQueue() async {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.main.async { continuation.resume() }
+        }
     }
 
     private func makeSUT(overlayService: VerseOverlayService = .init()) -> ContentTranslationViewModel {

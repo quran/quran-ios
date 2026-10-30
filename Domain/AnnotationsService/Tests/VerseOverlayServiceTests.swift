@@ -53,7 +53,7 @@ final class VerseOverlayServiceTests: XCTestCase {
         XCTAssertEqual(service.overlays.firstScrollingVerse(), target)
     }
 
-    func test_scrollRequests_preservePlaybackAndNavigationTriggers() {
+    func test_scrollRequests_preservePlaybackAndNewNavigationTriggers() {
         let service = VerseOverlayService()
         let verses = Quran.hafsMadani1405.pages[0].verses
         var scrollCount = 0
@@ -64,9 +64,49 @@ final class VerseOverlayServiceTests: XCTestCase {
         service.overlays.navigationTarget = verses[0]
         service.overlays.playingVerses = [verses[1]]
         service.overlays.playingVerses = []
-        service.overlays.navigationTarget = nil
+        service.overlays.navigationTarget = verses[2]
 
         XCTAssertEqual(scrollCount, 4)
+    }
+
+    func test_consumeNavigationTarget_clearsItWithoutRequestingScrolling() {
+        let service = VerseOverlayService()
+        let target = Quran.hafsMadani1405.pages[0].firstVerse
+        service.overlays.navigationTarget = target
+        service.overlays.navigationHighlight = target
+        var scrollCount = 0
+        let subscription = service.scrollRequests.sink { scrollCount += 1 }
+        defer { subscription.cancel() }
+
+        service.consumeNavigationTarget(target)
+
+        XCTAssertNil(service.overlays.navigationTarget)
+        XCTAssertNil(service.overlays.firstScrollingVerse())
+        XCTAssertEqual(service.overlays.navigationHighlight, target)
+        XCTAssertEqual(scrollCount, 0)
+    }
+
+    func test_consumeNavigationTarget_keepsANewerTarget() {
+        let service = VerseOverlayService()
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        service.overlays.navigationTarget = verses[1]
+
+        service.consumeNavigationTarget(verses[0])
+
+        XCTAssertEqual(service.overlays.navigationTarget, verses[1])
+    }
+
+    func test_navigationHighlightChanges_doNotRequestScrolling() {
+        let service = VerseOverlayService()
+        let verse = Quran.hafsMadani1405.pages[0].firstVerse
+        var scrollCount = 0
+        let subscription = service.scrollRequests.sink { scrollCount += 1 }
+        defer { subscription.cancel() }
+
+        service.overlays.navigationHighlight = verse
+        service.overlays.navigationHighlight = nil
+
+        XCTAssertEqual(scrollCount, 0)
     }
 
     func test_annotationAndSelectionChanges_doNotRequestScrolling() {

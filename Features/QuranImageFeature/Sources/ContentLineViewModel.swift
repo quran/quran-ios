@@ -198,6 +198,16 @@ final class ContentLineViewModel: ObservableObject {
         assets?.sidelines.first(where: { $0.imageURL.lastPathComponent == id })?.image
     }
 
+    /// Scrolls only while the view is on screen, so content being replaced can't use up the navigation target.
+    func onAppear() {
+        isVisible = true
+        scrollToVerseIfNeeded()
+    }
+
+    func onDisappear() {
+        isVisible = false
+    }
+
     func updateContentFrame(_ frame: CGRect) {
         contentFrame = frame
     }
@@ -224,15 +234,24 @@ final class ContentLineViewModel: ObservableObject {
     private let wordFrameAdapter = LinePageWordFrameAdapter()
     private let geometryEngine = LinePageGeometryEngine()
     private var cancellables: Set<AnyCancellable> = []
+    private var isVisible = false
     private var currentLayout: LinePageLayout?
     private var contentFrame: CGRect = .zero
 
     private func scrollToVerseIfNeededSynchronously() {
+        // Wait until the view is on screen and `loadLinePage()` has the page's verse geometry.
+        guard isVisible, !geometryData.highlightSpans.isEmpty else {
+            return
+        }
         let ayah = overlayService.overlays.firstScrollingVerse()
         if let ayah {
             logger.info("Quran Line Page: scrollToVerseIfNeeded \(ayah.nonLocalizedDescription)")
         }
         scrollToVerse = ayah
+        if let ayah, ayah.page == page {
+            // Scroll to the navigation target once; later requests keep the reader's position.
+            overlayService.consumeNavigationTarget(ayah)
+        }
     }
 
     private func scrollToVerseIfNeeded() {

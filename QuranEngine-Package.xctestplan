@@ -322,6 +322,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "QuranContentFeatureTests",
+        "name" : "QuranContentFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "QuranViewFeatureTests",
         "name" : "QuranViewFeatureTests"
       }

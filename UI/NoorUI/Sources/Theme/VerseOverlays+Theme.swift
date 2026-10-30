@@ -48,8 +48,8 @@ extension VerseOverlays {
             }
         }
 
-        if let navigationTarget {
-            versesByHighlights[navigationTarget] = Self.navigationColor
+        if let navigationHighlight {
+            versesByHighlights[navigationHighlight] = Self.navigationColor
         }
         add(verses: playingVerses, color: Self.playingColor)
         add(verses: selectedVerses, color: Self.selectionColor)

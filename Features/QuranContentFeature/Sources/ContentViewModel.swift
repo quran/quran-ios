@@ -9,6 +9,7 @@
 import Analytics
 import AnnotationsService
 import Combine
+import CombineSchedulers
 import Crashing
 import QuranAnnotations
 import QuranImageFeature
@@ -48,6 +49,11 @@ public final class ContentViewModel: ObservableObject {
         let translationDataSourceBuilder: ContentTranslationBuilder
     }
 
+    private struct ContentLayout: Equatable {
+        let quranMode: QuranMode
+        let pagingStrategy: PagingStrategy
+    }
+
     private struct LongPressData {
         let sourceView: UIView
         let startPosition: CGPoint
@@ -58,13 +64,14 @@ public final class ContentViewModel: ObservableObject {
 
     // MARK: Lifecycle
 
-    init(deps: Deps, input: QuranInput) {
+    init(deps: Deps, input: QuranInput, scheduler: AnySchedulerOf<DispatchQueue> = .main) {
         self.deps = deps
         self.input = input
 
         visiblePages = [input.initialPage]
 
         let overlayService = deps.overlayService
+        navigationHighlighter = NavigationHighlighter(overlayService: overlayService, scheduler: scheduler)
         _overlays = PublishedBinding(
             wrappedValue: overlayService.overlays,
             updates: overlayService.$overlays,
@@ -85,6 +92,9 @@ public final class ContentViewModel: ObservableObject {
 
         $overlays
             .zip($overlays.dropFirst())
+            // `VerseOverlayService` publishes before storing; a page change that writes overlays
+            // within that emission would be overwritten, so react once the change is stored.
+            .receive(on: scheduler)
             .sink { [weak self] oldValue, newValue in
                 if let ayah = newValue.verseToScrollTo(comparingTo: oldValue) {
                     self?.visiblePages = [ayah.page]
@@ -123,6 +133,10 @@ public final class ContentViewModel: ObservableObject {
     }
 
     public func highlightReadingAyah(_ ayah: AyahNumber?) {
+        if ayah != nil {
+            // Playback takes over scrolling; don't pull the reader back to the navigated verse when it stops.
+            navigationHighlighter.hide()
+        }
         overlays.playingVerses = [ayah].compactMap { $0 }
     }
 
@@ -146,6 +160,7 @@ public final class ContentViewModel: ObservableObject {
     }
 
     func onViewLongPressStarted(at point: CGPoint, sourceView: UIView, verse: AyahNumber) {
+        navigationHighlighter.hide()
         longPressData = LongPressData(
             sourceView: sourceView,
             startPosition: point,
@@ -178,6 +193,20 @@ public final class ContentViewModel: ObservableObject {
         longPressData = nil
     }
 
+    func onUserWillBeginDragScroll() {
+        navigationHighlighter.hide()
+        listener?.userWillBeginDragScroll()
+    }
+
+    /// Scrolls content rebuilt for another mode or pagination to the navigated verse again.
+    func onPageContentAppear(pagingStrategy: PagingStrategy) {
+        let layout = ContentLayout(quranMode: quranMode, pagingStrategy: pagingStrategy)
+        defer { contentLayout = layout }
+        if let contentLayout, contentLayout != layout {
+            navigationHighlighter.rearm()
+        }
+    }
+
     func onVisiblePageChanged() {
         listener?.contentViewDidChangeVisiblePage()
     }
@@ -206,6 +235,9 @@ public final class ContentViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
 
     private let input: QuranInput
+    private let navigationHighlighter: NavigationHighlighter
+    /// The layout pages last appeared in; nil until they first appear.
+    private var contentLayout: ContentLayout?
 
     private var longPressData: LongPressData? {
         didSet {
@@ -227,12 +259,12 @@ public final class ContentViewModel: ObservableObject {
 
     private func configureInitialPage() {
         deps.lastPageUpdater.configure(initialPage: input.initialPage, lastPage: input.lastPage)
-        overlays.navigationTarget = input.navigationAyah
+        navigationHighlighter.navigate(to: input.navigationAyah)
     }
 
     private func visiblePagesUpdated() {
-        // Remove the navigation highlight when the reader changes pages.
-        overlays.navigationTarget = nil
+        // Forget the navigation when the reader leaves its page.
+        navigationHighlighter.visiblePagesChanged(to: visiblePages)
 
         let pages = visiblePages
         let isTranslationView = deps.quranContentStatePreferences.quranMode == .translation

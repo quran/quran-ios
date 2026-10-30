@@ -57,6 +57,8 @@ struct ContentImageView: View {
                 verse: { point in viewModel.wordAtGlobalPoint(point)?.verse }
             )
         )
+        .onAppear { viewModel.onAppear() }
+        .onDisappear { viewModel.onDisappear() }
         .task {
             await viewModel.loadImagePage()
         }

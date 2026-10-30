@@ -21,12 +21,15 @@ struct BookmarkCollectionsView: View {
 
     var body: some View {
         BookmarkCollectionsContent(viewModel: viewModel)
+            .enableToastPresenter()
     }
 }
 
 @MainActor
 private struct BookmarkCollectionsContent: View {
     @ObservedObject var viewModel: BookmarkCollectionsViewModel
+
+    @Environment(\.showToast) private var showToast
 
     var body: some View {
         NoorList {
@@ -49,7 +52,10 @@ private struct BookmarkCollectionsContent: View {
                 readingBookmarks: viewModel.readingBookmarks,
                 lastPages: [],
                 selectReadingBookmark: { viewModel.navigateTo($0) },
-                selectLastPage: { _ in }
+                selectLastPage: { _ in },
+                deleteReadingBookmark: { bookmark in
+                    { await deleteReadingBookmark(bookmark) }
+                }
             )
 
             NoorBasicSection(title: l("bookmarks.highlights")) {
@@ -111,6 +117,12 @@ private struct BookmarkCollectionsContent: View {
                 HighlightColorsView.Item(color: color, count: viewModel.highlights.values.count { $0 == color })
             }
             .sorted { $0.count > $1.count }
+    }
+
+    private func deleteReadingBookmark(_ bookmark: PlacedReadingBookmark) async {
+        if let toast = await viewModel.deleteReadingBookmark(bookmark) {
+            showToast?(toast)
+        }
     }
 
     private func collectionRow(

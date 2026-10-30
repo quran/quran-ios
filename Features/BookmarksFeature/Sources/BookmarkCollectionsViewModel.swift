@@ -76,8 +76,8 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         Self.deletableCollections(from: collections)
     }
 
-    var hasDeletableCollections: Bool {
-        !deletableCollections.isEmpty
+    var hasDeletableItems: Bool {
+        !deletableCollections.isEmpty || !readingBookmarks.isEmpty
     }
 
     static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
@@ -211,6 +211,22 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         )
     }
 
+    func deleteReadingBookmark(_ bookmark: PlacedReadingBookmark) async -> Toast? {
+        do {
+            try await readingBookmarkService.clearReadingBookmark(in: bookmark.slot)
+        } catch {
+            logger.error("Quran Sync: failed to clear reading bookmark from Bookmarks: \(error)")
+            self.error = error
+            return nil
+        }
+        // The toast can outlive this screen, so Undo keeps the view model alive until it restores.
+        return ReadingBookmarkUndoToast.removed(bookmark) {
+            Task { @MainActor in
+                await self.restoreReadingBookmark(bookmark)
+            }
+        }
+    }
+
     func navigateTo(_ readingBookmark: PlacedReadingBookmark) {
         switch readingBookmark.placement {
         case .ayah(let ayahNumber):
@@ -245,6 +261,21 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         }
     }
 
+    private func exitEditModeIfNothingIsDeletable() {
+        if !hasDeletableItems {
+            editMode = .inactive
+        }
+    }
+
+    private func restoreReadingBookmark(_ bookmark: PlacedReadingBookmark) async {
+        do {
+            try await readingBookmarkService.addReadingBookmark(at: bookmark.placement, slot: bookmark.slot)
+        } catch {
+            logger.error("Quran Sync: failed to restore reading bookmark from Bookmarks: \(error)")
+            self.error = error
+        }
+    }
+
     private func observeHighlights() async {
         let highlightsSequence = readingPreferences.readings().flatMapLatest { [ayahHighlightService] reading in
             ayahHighlightService.highlightsSequence(quran: reading.quran)
@@ -268,9 +299,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             for try await collections in collectionsSequence {
                 let collections = Self.sorted(collections)
                 self.collections = collections
-                if Self.deletableCollections(from: collections).isEmpty {
-                    editMode = .inactive
-                }
+                exitEditModeIfNothingIsDeletable()
             }
         } catch {
             guard !Task.isCancelled else { return }
@@ -286,6 +315,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         do {
             for try await bookmarks in bookmarksSequence {
                 readingBookmarks = PlacedReadingBookmark.sortedByDate(bookmarks)
+                exitEditModeIfNothingIsDeletable()
             }
         } catch {
             guard !Task.isCancelled else { return }

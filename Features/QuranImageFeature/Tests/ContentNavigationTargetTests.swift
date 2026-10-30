@@ -131,6 +131,98 @@ final class ContentNavigationTargetTests: XCTestCase {
         XCTAssertNil(service.overlays.navigationTarget)
     }
 
+    func testReaderScrollForgetsTheVerseSoReappearingDoesNotScrollBack() async throws {
+        let target = try XCTUnwrap(AyahNumber(quran: reading.quran, sura: 114, ayah: 1))
+        let service = VerseOverlayService()
+        service.overlays.navigationTarget = target
+        let model = makeModel(overlayService: service)
+        model.onAppear()
+        await model.loadImagePage()
+        await drainMainQueue()
+        XCTAssertEqual(model.scrollToVerse, target)
+
+        model.onReaderScroll()
+        XCTAssertNil(model.scrollToVerse)
+
+        model.onDisappear()
+        model.onAppear()
+        await drainMainQueue()
+        XCTAssertNil(model.scrollToVerse)
+    }
+
+    func testSameVerseRequestedAfterReaderScrollScrollsAgain() async throws {
+        let target = try XCTUnwrap(AyahNumber(quran: reading.quran, sura: 114, ayah: 1))
+        let service = VerseOverlayService()
+        service.overlays.navigationTarget = target
+        let model = makeModel(overlayService: service)
+        model.onAppear()
+        await model.loadImagePage()
+        await drainMainQueue()
+        var scrolls: [AyahNumber?] = []
+        let subscription = model.$scrollToVerse.dropFirst().sink { scrolls.append($0) }
+        defer { subscription.cancel() }
+
+        model.onReaderScroll()
+        service.overlays.navigationTarget = target
+        await drainMainQueue()
+
+        XCTAssertEqual(scrolls, [nil, target])
+        XCTAssertNil(service.overlays.navigationTarget)
+    }
+
+    func testNextPlayingVerseScrollsAfterReaderScrolledAway() async throws {
+        let first = try XCTUnwrap(AyahNumber(quran: reading.quran, sura: 113, ayah: 1))
+        let second = try XCTUnwrap(AyahNumber(quran: reading.quran, sura: 113, ayah: 2))
+        let service = VerseOverlayService()
+        let model = makeModel(overlayService: service)
+        model.onAppear()
+        await model.loadImagePage()
+        service.overlays.playingVerses = [first]
+        await drainMainQueue()
+        var scrolls: [AyahNumber?] = []
+        let subscription = model.$scrollToVerse.dropFirst().sink { scrolls.append($0) }
+        defer { subscription.cancel() }
+
+        model.onReaderScroll()
+        service.overlays.playingVerses = [second]
+        await drainMainQueue()
+
+        XCTAssertEqual(scrolls, [nil, second])
+    }
+
+    func testLinePageReaderScrollForgetsTheVerseUntilTheNextRequest() async throws {
+        let reading = Reading.hafs_1441
+        let metrics = try XCTUnwrap(reading.linePageMetrics)
+        let root = try makeLinePageFiles(metrics: metrics)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let page = reading.quran.pages[0]
+        let target = page.verses[3]
+        let service = VerseOverlayService()
+        service.overlays.navigationTarget = target
+        let model = ContentLineViewModel(
+            reading: reading,
+            page: page,
+            linePageAssetService: LinePageAssetService(
+                readingDirectory: root, metrics: metrics, quran: reading.quran, ayahMarkerURL: nil
+            ),
+            overlayService: service
+        )
+        model.onAppear()
+        await model.loadLinePage()
+        await drainMainQueue()
+        XCTAssertEqual(model.scrollToVerse, target)
+
+        model.onReaderScroll()
+        model.onDisappear()
+        model.onAppear()
+        await drainMainQueue()
+        XCTAssertNil(model.scrollToVerse)
+
+        service.overlays.navigationTarget = target
+        await drainMainQueue()
+        XCTAssertEqual(model.scrollToVerse, target)
+    }
+
     // MARK: Private
 
     private let reading = Reading.hafs_1405

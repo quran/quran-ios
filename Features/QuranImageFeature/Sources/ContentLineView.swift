@@ -29,6 +29,7 @@ struct ContentLineView: View {
             page: viewModel.page,
             layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false) },
             scrollToVerse: viewModel.scrollToVerse,
+            onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
             ayahReadingBookmarks: viewModel.ayahReadingBookmarks,
@@ -47,6 +48,7 @@ struct ContentLineView: View {
             page: viewModel.page,
             layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false) },
             scrollToVerse: viewModel.scrollToVerse,
+            onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
@@ -79,6 +81,7 @@ private struct ContentLineViewBody: View {
     let page: Page
     let layoutForSize: (CGSize) -> LinePageLayout?
     let scrollToVerse: AyahNumber?
+    let onReaderScroll: () -> Void
     let wordFrames: WordFrameCollection
     let highlightColorsByVerse: [AyahNumber: Color]
     #if QURAN_SYNC
@@ -113,7 +116,7 @@ private struct ContentLineViewBody: View {
         .font(.footnote)
         .populateReadableInsets()
         .themedBackground()
-        .quranScrolling(scrollToValue: scrollToVerse) { AyahScrollTarget(ayah: $0) }
+        .quranScrolling(scrollToValue: scrollToVerse, onReaderScroll: onReaderScroll) { AyahScrollTarget(ayah: $0) }
     }
 
     // MARK: Private

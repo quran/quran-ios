@@ -34,6 +34,7 @@ struct ContentImageView: View {
                 page: viewModel.page,
                 scrollToVerse: viewModel.scrollToVerse,
                 wordFrames: viewModel.imagePage?.wordFrames,
+                onReaderScroll: { viewModel.onReaderScroll() },
                 onScaleChange: { viewModel.scale = $0 },
                 onGlobalFrameChange: { viewModel.imageFrame = $0 }
             )
@@ -45,6 +46,7 @@ struct ContentImageView: View {
                 page: viewModel.page,
                 scrollToVerse: viewModel.scrollToVerse,
                 wordFrames: viewModel.imagePage?.wordFrames,
+                onReaderScroll: { viewModel.onReaderScroll() },
                 onScaleChange: { viewModel.scale = $0 },
                 onGlobalFrameChange: { viewModel.imageFrame = $0 }
             )
@@ -78,6 +80,7 @@ private struct ContentImageViewBody: View {
     let page: Page
     let scrollToVerse: AyahNumber?
     let wordFrames: WordFrameCollection?
+    let onReaderScroll: () -> Void
     let onScaleChange: (WordFrameScale) -> Void
     let onGlobalFrameChange: (CGRect) -> Void
 
@@ -116,7 +119,7 @@ private struct ContentImageViewBody: View {
         return content
             .font(.footnote)
             .populateReadableInsets()
-            .quranScrolling(scrollToValue: scrollToVerse) { AyahScrollTarget(ayah: $0) }
+            .quranScrolling(scrollToValue: scrollToVerse, onReaderScroll: onReaderScroll) { AyahScrollTarget(ayah: $0) }
     }
 
     private var header: some View {
@@ -142,6 +145,7 @@ private struct ContentImageViewBody: View {
         page: Quran.hafsMadani1405.pages[603],
         scrollToVerse: nil,
         wordFrames: nil,
+        onReaderScroll: {},
         onScaleChange: { _ in },
         onGlobalFrameChange: { _ in }
     )

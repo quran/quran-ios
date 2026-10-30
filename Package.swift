@@ -799,7 +799,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranLocalization",
             "QuranTextKit",
             "Caching",
-        ], testDependencies: ["TestResources"]),
+        ], testDependencies: ["TestResources", "UIx"]),
 
         target(type, name: "ReadingSelectorFeature", hasTests: false, dependencies: [
             "AppDependencies",
@@ -819,6 +819,7 @@ private func featuresTargets() -> [[Target]] {
         ], testDependencies: [
             "QuranKit",
             "QuranText",
+            "UIx",
         ]),
 
         target(type, name: "QuranContentFeature", dependencies: [

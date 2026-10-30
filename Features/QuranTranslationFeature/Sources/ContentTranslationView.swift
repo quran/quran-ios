@@ -39,6 +39,7 @@ public struct ContentTranslationView: View {
             translationFontSize: viewModel.translationFontSize,
             highlights: viewModel.highlights,
             scrollToItem: viewModel.scrollToItem,
+            onReaderScroll: { viewModel.onReaderScroll() },
             tracker: viewModel.tracker,
             footnote: $viewModel.footnote,
             openURL: { viewModel.openURL($0) },
@@ -51,6 +52,7 @@ public struct ContentTranslationView: View {
             translationFontSize: viewModel.translationFontSize,
             highlights: viewModel.highlights,
             scrollToItem: viewModel.scrollToItem,
+            onReaderScroll: { viewModel.onReaderScroll() },
             tracker: viewModel.tracker,
             footnote: $viewModel.footnote,
             openURL: { viewModel.openURL($0) }
@@ -82,6 +84,7 @@ private struct ContentTranslationViewBody: View {
     let translationFontSize: FontSize
     let highlights: [AyahNumber: Color]
     let scrollToItem: TranslationItemId?
+    let onReaderScroll: () -> Void
     let tracker: CollectionTracker<TranslationItemId>
 
     @Binding var footnote: TranslationFootnote?
@@ -107,7 +110,7 @@ private struct ContentTranslationViewBody: View {
         .openTranslationURL(openURL)
         .trackCollection(with: tracker)
         .sheet(item: $footnote) { $0 }
-        .quranScrolling(scrollToValue: scrollToItem) { item in
+        .quranScrolling(scrollToValue: scrollToItem, onReaderScroll: onReaderScroll) { item in
             items.contains { $0.id == item } ? item : nil
         }
     }

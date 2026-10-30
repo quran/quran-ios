@@ -118,6 +118,15 @@ class ContentImageViewModel: ObservableObject {
         isVisible = false
     }
 
+    /// The reader scrolled the page themselves; forget the last scroll so it isn't applied again
+    /// on appearance or size changes, and so the next request scrolls even to the same verse.
+    func onReaderScroll() {
+        // Every drag reports; publishing an unchanged nil would still redraw the page.
+        if scrollToVerse != nil {
+            scrollToVerse = nil
+        }
+    }
+
     func wordAtGlobalPoint(_ point: CGPoint) -> Word? {
         let localPoint = CGPoint(
             x: point.x - imageFrame.minX,

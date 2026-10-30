@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import UIx
 
 @MainActor
 final class QuranScrollScheduler<ID: Hashable>: ObservableObject {
@@ -50,6 +51,7 @@ final class QuranScrollScheduler<ID: Hashable>: ObservableObject {
 struct QuranScrollingViewModifier<Value: Equatable, ID: Hashable>: ViewModifier {
     let scrollToValue: Value?
     let anchor: UnitPoint
+    let onReaderScroll: () -> Void
     let transform: (Value) -> ID?
     @StateObject private var scheduler = QuranScrollScheduler<ID>()
 
@@ -59,6 +61,12 @@ struct QuranScrollingViewModifier<Value: Equatable, ID: Hashable>: ViewModifier 
         let target = scrollToValue.flatMap(transform)
         ScrollViewReader { scrollView in
             content
+                .onScrollDragBegan {
+                    // The reader takes over; the owner clears `scrollToValue` so later appearances,
+                    // size changes, and rotations don't pull them back to it.
+                    scheduler.cancel()
+                    onReaderScroll()
+                }
                 .onAppear {
                     scroll(to: target, using: scrollView)
                 }
@@ -85,18 +93,33 @@ struct QuranScrollingViewModifier<Value: Equatable, ID: Hashable>: ViewModifier 
 }
 
 extension View {
+    /// Scrolls to `scrollToValue` when it changes, and keeps it in view on appearance and size changes.
+    ///
+    /// `onReaderScroll` runs when the reader starts dragging the content. Clear `scrollToValue` there,
+    /// so the content stays where the reader put it and a later request for the same value scrolls again.
     public func quranScrolling<Value: Equatable>(
         scrollToValue: Value?,
         anchor: UnitPoint = UnitPoint(x: 0, y: 0.2),
+        onReaderScroll: @escaping () -> Void,
         transform: @escaping (Value) -> (some Hashable)?
     ) -> some View {
-        modifier(QuranScrollingViewModifier(scrollToValue: scrollToValue, anchor: anchor, transform: transform))
+        modifier(QuranScrollingViewModifier(
+            scrollToValue: scrollToValue,
+            anchor: anchor,
+            onReaderScroll: onReaderScroll,
+            transform: transform
+        ))
     }
 
     public func quranScrolling(
         scrollToValue: (some Hashable)?,
-        anchor: UnitPoint = UnitPoint(x: 0, y: 0.2)
+        anchor: UnitPoint = UnitPoint(x: 0, y: 0.2),
+        onReaderScroll: @escaping () -> Void
     ) -> some View {
-        modifier(QuranScrollingViewModifier(scrollToValue: scrollToValue, anchor: anchor) { $0 })
+        modifier(QuranScrollingViewModifier(
+            scrollToValue: scrollToValue,
+            anchor: anchor,
+            onReaderScroll: onReaderScroll
+        ) { $0 })
     }
 }

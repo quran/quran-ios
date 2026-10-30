@@ -311,6 +311,15 @@ public final class ContentTranslationViewModel: ObservableObject {
         isVisible = false
     }
 
+    /// The reader scrolled the page themselves; forget the last scroll so it isn't applied again
+    /// on appearance or size changes, and so the next request scrolls even to the same verse.
+    func onReaderScroll() {
+        // Every drag reports; publishing an unchanged nil would still redraw the page.
+        if scrollToItem != nil {
+            scrollToItem = nil
+        }
+    }
+
     func openURL(_ url: TranslationURL) {
         switch url {
         case .footnote(let translationId, let sura, let ayah, let footnoteIndex):

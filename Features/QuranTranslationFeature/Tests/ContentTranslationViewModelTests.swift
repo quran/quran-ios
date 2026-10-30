@@ -442,48 +442,7 @@ final class ContentTranslationViewModelTests: XCTestCase {
         )
     }
 
-    /// Runs the view model's scrolls, which it defers to the next main-queue turn.
-    private func drainMainQueue() async {
-        await withCheckedContinuation { continuation in
-            DispatchQueue.main.async { continuation.resume() }
-        }
-    }
-
     private func makeSUT(overlayService: VerseOverlayService = .init()) -> ContentTranslationViewModel {
-        let unavailableURL = URL(fileURLWithPath: "/tmp/unavailable-quran-translation-test")
-        return ContentTranslationViewModel(
-            localTranslationsRetriever: .init(databasesURL: unavailableURL),
-            dataService: .init(databasesURL: unavailableURL, quranFileURL: unavailableURL),
-            overlayService: overlayService
-        )
-    }
-
-    private func makeTranslation(id: Translation.ID) -> Translation {
-        Translation(
-            id: id,
-            displayName: "Translation \(id)",
-            translator: nil,
-            translatorForeign: nil,
-            fileURL: URL(string: "https://example.com/translation-\(id).zip")!,
-            fileName: "translation-\(id).db",
-            languageCode: "en",
-            version: 1
-        )
-    }
-
-    private func makeVerseText(translationCount: Int) -> VerseText {
-        VerseText(
-            arabicText: "Arabic",
-            translations: (0 ..< translationCount).map { index in
-                .string(.init(
-                    text: "Translation \(index)",
-                    quranRanges: [],
-                    footnoteRanges: [],
-                    footnotes: []
-                ))
-            },
-            arabicPrefix: [],
-            arabicSuffix: []
-        )
+        makeContentTranslationViewModel(overlayService: overlayService)
     }
 }

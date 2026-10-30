@@ -55,7 +55,8 @@ private struct BookmarkCollectionsContent: View {
                 selectLastPage: { _ in },
                 deleteReadingBookmark: { bookmark in
                     { await deleteReadingBookmark(bookmark) }
-                }
+                },
+                renameReadingBookmark: { viewModel.presentRenameReadingBookmark($0) }
             )
 
             NoorBasicSection(title: l("bookmarks.highlights")) {
@@ -102,6 +103,11 @@ private struct BookmarkCollectionsContent: View {
             state: $viewModel.nameAlert,
             name: $viewModel.newCollectionName,
             submit: { await viewModel.createPendingCollection() }
+        )
+        .readingBookmarkNameAlert(
+            slot: $viewModel.renamingReadingBookmark,
+            name: $viewModel.readingBookmarkName,
+            submit: { await viewModel.renameReadingBookmark(in: $0) }
         )
         .collectionDeleteConfirmation(
             item: $viewModel.collectionPendingDeletion,

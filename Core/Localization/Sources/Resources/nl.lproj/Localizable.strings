@@ -614,6 +614,9 @@
 // VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.name.accessibility-label" = "Naam van bladwijzer %@";
+// Long-press menu action that opens the Quran at a reading bookmark.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.open" = "Openen";
 // VoiceOver label for the reader's reading bookmarks button.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.choose.accessibility-label" = "Leesbladwijzer kiezen";

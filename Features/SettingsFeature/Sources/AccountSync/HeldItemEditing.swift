@@ -48,24 +48,11 @@ private struct HeldItemEditingModifier: ViewModifier {
                 name: $editor.pendingName,
                 submit: { await editor.renamePending() }
             )
-            .alert(
-                l("bookmarks.collections.rename"),
-                isPresented: Binding(
-                    get: { editor.renamingReadingBookmark != nil },
-                    set: { isPresented in
-                        if !isPresented {
-                            editor.renamingReadingBookmark = nil
-                        }
-                    }
-                ),
-                presenting: editor.renamingReadingBookmark
-            ) { slot in
-                TextField(lFormat("bookmarks.reading.name.accessibility-label", slot.displayName), text: $editor.pendingName)
-                Button(lAndroid("cancel"), role: .cancel) {}
-                Button(l("bookmarks.collections.rename")) {
-                    Task { await editor.renameReadingBookmark(in: slot) }
-                }
-            }
+            .readingBookmarkNameAlert(
+                slot: $editor.renamingReadingBookmark,
+                name: $editor.pendingName,
+                submit: { await editor.renameReadingBookmark(in: $0) }
+            )
             .errorAlert(error: $editor.error)
     }
 }

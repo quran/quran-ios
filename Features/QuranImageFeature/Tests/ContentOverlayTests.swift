@@ -2,6 +2,7 @@
 import AnnotationsService
 import Combine
 import ImageService
+import QuranAnnotations
 import QuranKit
 import ReadingService
 import TestResources
@@ -10,12 +11,10 @@ import XCTest
 
 @MainActor
 final class ContentOverlayTests: XCTestCase {
-    func test_imagePage_ignoresUnrelatedIndicatorsAndReceivesVisibilityChanges() {
+    func test_imagePage_showsOnlyItsReadingBookmarks() {
         let reading = Reading.hafs_1405
         let page = reading.quran.pages[0]
-        let other = reading.quran.pages[1].firstVerse
         let service = VerseOverlayService()
-        service.overlays.indicatorsHidden = true
         let model = ContentImageViewModel(
             reading: reading,
             page: page,
@@ -26,32 +25,20 @@ final class ContentOverlayTests: XCTestCase {
             ),
             overlayService: service
         )
-        XCTAssertTrue(model.indicatorsHidden)
-        var updates = 0
-        let subscription = model.objectWillChange.sink { updates += 1 }
-        defer { subscription.cancel() }
 
-        service.overlays.notedVerses = [other]
-        XCTAssertEqual(updates, 0)
-        XCTAssertTrue(model.ayahIndicators.isEmpty)
-
-        service.overlays.notedVerses.insert(page.firstVerse)
-        XCTAssertEqual(updates, 1)
-        XCTAssertEqual(model.ayahIndicators, [page.firstVerse: [.note]])
-
-        service.overlays.indicatorsHidden = false
-        XCTAssertFalse(model.indicatorsHidden)
-        service.overlays.indicatorsHidden = true
-        XCTAssertTrue(model.indicatorsHidden)
-        XCTAssertEqual(model.ayahIndicators, [page.firstVerse: [.note]])
+        assertShowsOnlyThisPagesAyahAndPageReadingBookmarks(
+            service: service,
+            page: page,
+            objectWillChange: model.objectWillChange,
+            ayahReadingBookmarks: { model.ayahReadingBookmarks },
+            pageReadingBookmarks: { model.pageReadingBookmarks }
+        )
     }
 
-    func test_linePage_ignoresUnrelatedIndicatorsAndReceivesVisibilityChanges() throws {
+    func test_linePage_showsOnlyItsReadingBookmarks() throws {
         let reading = Reading.hafs_1441
         let page = reading.quran.pages[0]
-        let other = reading.quran.pages[1].firstVerse
         let service = VerseOverlayService()
-        service.overlays.indicatorsHidden = true
         let model = ContentLineViewModel(
             reading: reading,
             page: page,
@@ -63,24 +50,52 @@ final class ContentOverlayTests: XCTestCase {
             ),
             overlayService: service
         )
-        XCTAssertTrue(model.indicatorsHidden)
+
+        assertShowsOnlyThisPagesAyahAndPageReadingBookmarks(
+            service: service,
+            page: page,
+            objectWillChange: model.objectWillChange,
+            ayahReadingBookmarks: { model.ayahReadingBookmarks },
+            pageReadingBookmarks: { model.pageReadingBookmarks }
+        )
+    }
+
+    private func assertShowsOnlyThisPagesAyahAndPageReadingBookmarks(
+        service: VerseOverlayService,
+        page: Page,
+        objectWillChange: ObservableObjectPublisher,
+        ayahReadingBookmarks: () -> [AyahNumber: [ReadingBookmarkSlot]],
+        pageReadingBookmarks: () -> [ReadingBookmarkSlot],
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let other = page.quran.pages[1]
         var updates = 0
-        let subscription = model.objectWillChange.sink { updates += 1 }
+        let subscription = objectWillChange.sink { updates += 1 }
         defer { subscription.cancel() }
 
-        service.overlays.notedVerses = [other]
-        XCTAssertEqual(updates, 0)
-        XCTAssertTrue(model.ayahIndicators.isEmpty)
+        service.overlays.readingBookmarks = [
+            bookmark(.teal, at: .ayah(other.firstVerse)),
+            bookmark(.orange, at: .page(other)),
+        ]
+        XCTAssertEqual(updates, 0, file: file, line: line)
+        XCTAssertTrue(ayahReadingBookmarks().isEmpty, file: file, line: line)
+        XCTAssertTrue(pageReadingBookmarks().isEmpty, file: file, line: line)
 
-        service.overlays.notedVerses.insert(page.firstVerse)
-        XCTAssertEqual(updates, 1)
-        XCTAssertEqual(model.ayahIndicators, [page.firstVerse: [.note]])
+        service.overlays.notedVerses = [page.firstVerse]
+        service.overlays.collectionVerses = [page.firstVerse]
+        XCTAssertTrue(ayahReadingBookmarks().isEmpty, file: file, line: line)
 
-        service.overlays.indicatorsHidden = false
-        XCTAssertFalse(model.indicatorsHidden)
-        service.overlays.indicatorsHidden = true
-        XCTAssertTrue(model.indicatorsHidden)
-        XCTAssertEqual(model.ayahIndicators, [page.firstVerse: [.note]])
+        service.overlays.readingBookmarks += [
+            bookmark(.red, at: .ayah(page.firstVerse)),
+            bookmark(.teal, at: .page(page)),
+        ]
+        XCTAssertEqual(ayahReadingBookmarks(), [page.firstVerse: [.red]], file: file, line: line)
+        XCTAssertEqual(pageReadingBookmarks(), [.teal], file: file, line: line)
+    }
+
+    private func bookmark(_ slot: ReadingBookmarkSlot, at placement: PlacedReadingBookmark.Placement) -> PlacedReadingBookmark {
+        PlacedReadingBookmark(id: "\(slot)-\(placement)", slot: slot, placement: placement, modifiedOn: .distantPast)
     }
 }
 #endif

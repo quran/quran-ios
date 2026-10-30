@@ -80,16 +80,15 @@ public struct AyahNumberView: View {
         let ayah = Quran.hafsMadani1405.suras[1].verses[99]
         AyahNumberView(number: 100)
             .frame(height: 40)
-            .overlay {
+            .background {
                 GeometryReader { geometry in
-                    AyahIndicatorsView(
+                    AyahReadingBookmarkUnderlines(
                         markers: [.init(ayah: ayah, frame: CGRect(origin: .zero, size: geometry.size))],
-                        indicators: [ayah: [.collection, .note]],
-                        indicatorsHidden: false,
-                        onAyahIndicatorTap: { _, _ in }
+                        bookmarks: [ayah: [.teal, .orange]]
                     )
                 }
             }
+            .padding(.bottom, 20)
         #endif
     }
     .themedBackground()

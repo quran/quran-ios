@@ -6,9 +6,6 @@ import Crashing
 import Foundation
 import QuranAnnotations
 import QuranKit
-#if QURAN_SYNC
-import QuranTextKit
-#endif
 
 @MainActor
 final class QuranAnnotationsObserver {
@@ -85,7 +82,6 @@ final class QuranAnnotationsObserver {
         ) { observer, bookmarks in
             observer.updateReadingBookmarks(bookmarks)
         }
-        observeIndicatorVisibility()
         #else
         guard notesObservation == nil else { return }
         notesObservation = noteService.notes(quran: quran)
@@ -104,7 +100,6 @@ final class QuranAnnotationsObserver {
         collectionsTask = nil
         readingBookmarksTask?.cancel()
         readingBookmarksTask = nil
-        indicatorVisibilityObservation = nil
         #else
         notesObservation?.cancel()
         notesObservation = nil
@@ -136,7 +131,6 @@ final class QuranAnnotationsObserver {
     private var highlightsTask: Task<Void, Never>?
     private var collectionsTask: Task<Void, Never>?
     private var readingBookmarksTask: Task<Void, Never>?
-    private var indicatorVisibilityObservation: AnyCancellable?
     #else
     private let noteService: NoteService
     private var notesObservation: AnyCancellable?
@@ -183,14 +177,6 @@ final class QuranAnnotationsObserver {
                 }
             }
         }
-    }
-
-    private func observeIndicatorVisibility() {
-        guard indicatorVisibilityObservation == nil else { return }
-        let preferences = QuranContentStatePreferences.shared
-        overlayService.overlays.indicatorVisibility = preferences.ayahIndicatorVisibility
-        indicatorVisibilityObservation = preferences.$ayahIndicatorVisibility
-            .sink { [weak self] in self?.overlayService.overlays.indicatorVisibility = $0 }
     }
 
     private func updateHighlights(_ verses: [AyahNumber: HighlightColor]) {

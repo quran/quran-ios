@@ -33,7 +33,8 @@ public struct ContentImageBuilder {
     @ViewBuilder
     public func build(
         at page: Page,
-        onAyahIndicatorTap: @escaping (AyahNumber, CGPoint) -> Void
+        onAyahReadingBookmarkTap: @escaping (AyahNumber, CGPoint) -> Void,
+        onPageReadingBookmarkTap: @escaping (CGRect) -> Void
     ) -> some View {
         let reading = ReadingPreferences.shared.reading
         if reading.usesLinePages {
@@ -46,7 +47,8 @@ public struct ContentImageBuilder {
             )
             ContentLineView(
                 viewModel: viewModel,
-                onAyahIndicatorTap: onAyahIndicatorTap
+                onAyahReadingBookmarkTap: onAyahReadingBookmarkTap,
+                onPageReadingBookmarkTap: onPageReadingBookmarkTap
             )
         } else {
             let imageService = Self.buildImageDataService(reading: reading, container: container)
@@ -58,7 +60,8 @@ public struct ContentImageBuilder {
             )
             ContentImageView(
                 viewModel: viewModel,
-                onAyahIndicatorTap: onAyahIndicatorTap
+                onAyahReadingBookmarkTap: onAyahReadingBookmarkTap,
+                onPageReadingBookmarkTap: onPageReadingBookmarkTap
             )
         }
     }

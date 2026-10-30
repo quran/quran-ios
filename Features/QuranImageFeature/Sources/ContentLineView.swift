@@ -19,7 +19,8 @@ import UIx
 struct ContentLineView: View {
     @StateObject var viewModel: ContentLineViewModel
     #if QURAN_SYNC
-    let onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void
+    let onAyahReadingBookmarkTap: (AyahNumber, CGPoint) -> Void
+    let onPageReadingBookmarkTap: (CGRect) -> Void
     #endif
 
     var body: some View {
@@ -30,14 +31,15 @@ struct ContentLineView: View {
             scrollToVerse: viewModel.scrollToVerse,
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
-            ayahIndicators: viewModel.ayahIndicators,
-            indicatorsHidden: viewModel.indicatorsHidden,
+            ayahReadingBookmarks: viewModel.ayahReadingBookmarks,
+            pageReadingBookmarks: viewModel.pageReadingBookmarks,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
             chromeStyle: viewModel.chromeStyle,
             imageRenderingMode: viewModel.imageRenderingMode,
             imageForLine: viewModel.lineImage(for:),
             imageForSideline: viewModel.sidelineImage(for:),
-            onAyahIndicatorTap: onAyahIndicatorTap,
+            onAyahReadingBookmarkTap: onAyahReadingBookmarkTap,
+            onPageReadingBookmarkTap: onPageReadingBookmarkTap,
             onGlobalFrameChange: viewModel.updateContentFrame
         )
         #else
@@ -78,8 +80,8 @@ private struct ContentLineViewBody: View {
     let wordFrames: WordFrameCollection
     let highlightColorsByVerse: [AyahNumber: Color]
     #if QURAN_SYNC
-    let ayahIndicators: [AyahNumber: Set<AyahIndicator>]
-    let indicatorsHidden: Bool
+    let ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]]
+    let pageReadingBookmarks: [ReadingBookmarkSlot]
     #endif
     let drawsAyahNumbersAndSuraHeaders: Bool
     let chromeStyle: LinePageChromeStyle
@@ -87,7 +89,8 @@ private struct ContentLineViewBody: View {
     let imageForLine: (Int) -> UIImage?
     let imageForSideline: (String) -> UIImage?
     #if QURAN_SYNC
-    let onAyahIndicatorTap: (AyahNumber, CGPoint) -> Void
+    let onAyahReadingBookmarkTap: (AyahNumber, CGPoint) -> Void
+    let onPageReadingBookmarkTap: (CGRect) -> Void
     #endif
     let onGlobalFrameChange: (CGRect) -> Void
 
@@ -97,6 +100,9 @@ private struct ContentLineViewBody: View {
                 quarterName: page.localizedQuarterName,
                 suras: page.suras
             )
+            #if QURAN_SYNC
+            .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks, onTap: onPageReadingBookmarkTap)
+            #endif
         } footer: {
             QuranPageFooter(page: page.localizedNumber)
         } content: { availableContentSize in
@@ -111,6 +117,9 @@ private struct ContentLineViewBody: View {
     // MARK: Private
 
     @Environment(\.themeColorScheme) private var themeColorScheme
+    #if QURAN_SYNC
+    @State private var pressedReadingBookmarkAyah: AyahNumber?
+    #endif
 
     private var chromePalette: LinePageChromePalette {
         chromeStyle.palette(for: themeColorScheme)
@@ -126,6 +135,15 @@ private struct ContentLineViewBody: View {
 
             if let layout {
                 AyahScrollAnchorsView(wordFrames: wordFrames, layout: layout)
+
+                #if QURAN_SYNC
+                // Behind the line images, so underlines never cover Quran text.
+                AyahReadingBookmarkUnderlines(
+                    markers: markerPlacements(layout),
+                    bookmarks: ayahReadingBookmarks,
+                    pressedAyah: pressedReadingBookmarkAyah
+                )
+                #endif
 
                 lineImages(layout)
                 lineDividers(layout)
@@ -145,13 +163,11 @@ private struct ContentLineViewBody: View {
         #if QURAN_SYNC
             .overlay {
                 if let layout {
-                    AyahIndicatorsView(
-                        markers: layout.ayahMarkerPlacements.map {
-                            AyahMarkerPlacement(ayah: $0.marker.ayah, frame: $0.frame)
-                        },
-                        indicators: ayahIndicators,
-                        indicatorsHidden: indicatorsHidden,
-                        onAyahIndicatorTap: onAyahIndicatorTap
+                    AyahReadingBookmarkTargets(
+                        markers: markerPlacements(layout),
+                        bookmarks: ayahReadingBookmarks,
+                        pressedAyah: $pressedReadingBookmarkAyah,
+                        onTap: onAyahReadingBookmarkTap
                     )
                 }
             }
@@ -159,6 +175,14 @@ private struct ContentLineViewBody: View {
             .environment(\.layoutDirection, .leftToRight)
             .onGlobalFrameChanged(onGlobalFrameChange)
     }
+
+    #if QURAN_SYNC
+    private func markerPlacements(_ layout: LinePageLayout) -> [AyahMarkerPlacement] {
+        layout.ayahMarkerPlacements.map {
+            AyahMarkerPlacement(ayah: $0.marker.ayah, frame: $0.frame)
+        }
+    }
+    #endif
 
     @ViewBuilder
     private func sidelines(_ layout: LinePageLayout) -> some View {

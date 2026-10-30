@@ -61,6 +61,7 @@ protocol QuranPresentable: UIViewController {
     func presentAyahMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint)
     #if QURAN_SYNC
     func presentReadingBookmarkMenu(_ viewController: UIViewController)
+    func presentReadingBookmarkMenu(_ viewController: UIViewController, in sourceView: UIView, at rect: CGRect)
     func presentBookmarkAyahs(_ viewController: UIViewController)
     func presentAyahNotes(_ viewController: UIViewController)
     #endif
@@ -183,9 +184,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         var state = MoreMenuControlsState()
         state.wordPointer = readingPreferences.reading.supportsWordPositions ? .conditional : .alwaysOff
         state.linePageDisplay = readingPreferences.reading == .indoPak ? .conditional : .alwaysOff
-        #if QURAN_SYNC
-        state.ayahIndicators = .alwaysOn
-        #endif
         // TODO: Enable vertical scrolling.
         state.verticalScrolling = .alwaysOff
         let model = MoreMenuModel(isWordPointerActive: isWordPointerActive, state: state)
@@ -441,6 +439,12 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
         let viewController = deps.readingBookmarkMenuBuilder.build(page: firstPage, pages: visiblePages)
         presenter?.presentReadingBookmarkMenu(viewController)
+    }
+
+    func presentReadingBookmarkMenu(for page: Page, in sourceView: UIView, at rect: CGRect) {
+        logger.info("Quran: present reading bookmarks from page \(page.pageNumber) ribbon")
+        let viewController = deps.readingBookmarkMenuBuilder.build(page: page, pages: visiblePages)
+        presenter?.presentReadingBookmarkMenu(viewController, in: sourceView, at: rect)
     }
     #else
     func toogleBookmark() async {

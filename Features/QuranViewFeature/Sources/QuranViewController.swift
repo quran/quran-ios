@@ -220,6 +220,16 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         presentPopover(viewController, pointingTo: readingBookmarkMenuNavigationButton)
     }
 
+    func presentReadingBookmarkMenu(_ viewController: UIViewController, in sourceView: UIView, at rect: CGRect) {
+        popoverPresenter.present(
+            presenting: self,
+            presented: viewController,
+            pointingTo: sourceView,
+            at: rect,
+            permittedArrowDirections: []
+        )
+    }
+
     func presentBookmarkAyahs(_ viewController: UIViewController) {
         presentPageSheet(viewController)
     }
@@ -238,9 +248,6 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     #endif
 
     func presentQuranContent(_ viewController: ContentViewController) {
-        #if QURAN_SYNC
-        viewController.setAyahIndicatorsHidden(statusBarHidden)
-        #endif
         addContent(viewController)
     }
 
@@ -417,11 +424,6 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         stopBarHiddenTimer()
 
         quranView?.setBarsHidden(hidden, animated: true)
-        #if QURAN_SYNC
-        for contentViewController in children.compactMap({ $0 as? ContentViewController }) {
-            contentViewController.setAyahIndicatorsHidden(hidden)
-        }
-        #endif
 
         NoorAnimation.animate {
             self.statusBarHidden = hidden

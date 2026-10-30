@@ -18,26 +18,6 @@ extension Set<AyahIndicator> {
     }
 }
 
-extension Set<AyahIndicator> {
-    /// Every reading bookmark, or else a note before a collection.
-    var markerIndicators: [AyahIndicator] {
-        let bookmarks = ordered.filter {
-            if case .readingBookmark = $0 {
-                true
-            } else {
-                false
-            }
-        }
-        if !bookmarks.isEmpty {
-            return bookmarks
-        }
-        if contains(.note) {
-            return [.note]
-        }
-        return contains(.collection) ? [.collection] : []
-    }
-}
-
 extension AyahIndicator {
     var accessibilityLabel: String {
         switch self {
@@ -48,6 +28,14 @@ extension AyahIndicator {
         case .note:
             l("tab.notes")
         }
+    }
+}
+
+extension [ReadingBookmarkSlot] {
+    /// `name` followed by each slot's reading bookmark label, as one accessibility label.
+    func accessibilityLabel(prefixedBy name: String) -> String {
+        ([name] + map { AyahIndicator.readingBookmark($0).accessibilityLabel })
+            .joined(separator: l("list.separator"))
     }
 }
 #endif

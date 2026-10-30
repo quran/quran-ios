@@ -69,10 +69,12 @@ class ContentImageViewModel: ObservableObject {
     }
 
     #if QURAN_SYNC
-    var indicatorsHidden: Bool { overlays.indicatorsHidden }
+    var ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]] {
+        overlays.readingBookmarkSlotsByVerse
+    }
 
-    var ayahIndicators: [AyahNumber: Set<AyahIndicator>] {
-        overlays.indicatorsByVerse
+    var pageReadingBookmarks: [ReadingBookmarkSlot] {
+        overlays.pageReadingBookmarkSlots(on: page)
     }
     #endif
 

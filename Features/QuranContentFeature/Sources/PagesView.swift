@@ -27,6 +27,8 @@ struct PagesView: View {
                         #if QURAN_SYNC
                         viewModel.deps.imageDataSourceBuilder.build(at: page) {
                             viewModel.onAyahNumberTapped($0, at: $1)
+                        } onPageReadingBookmarkTap: {
+                            viewModel.onPageReadingBookmarkTapped(page, at: $0)
                         }
                         #else
                         viewModel.deps.imageDataSourceBuilder.build(at: page)

@@ -591,8 +591,8 @@
 "sync.status.everything-else-synced" = "تمت مزامنة كل ما عداها %@";
 // Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
 "sync.status.synced.card" = "العلامات المرجعية والملاحظات والمزيد · %@";
-// Detail under "Syncing…" while a sync runs.
-"sync.status.sending.items" = "جارٍ إرسال علاماتك المرجعية وملاحظاتك";
+// Detail under "Syncing…" on the Settings account card: what syncs, as under "Synced" without the time.
+"sync.status.items.short" = "العلامات المرجعية والملاحظات والمزيد";
 // Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
 "sync.status.failed.kept" = "تبقى العلامات المرجعية والملاحظات على هذا الجهاز · %@";
 // Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.

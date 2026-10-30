@@ -847,8 +847,8 @@
 "sync.status.everything-else-synced" = "其他内容%@已同步";
 // Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
 "sync.status.synced.card" = "书签、笔记等 · %@";
-// Detail under "Syncing…" while a sync runs.
-"sync.status.sending.items" = "正在发送你的书签和笔记";
+// Detail under "Syncing…" on the Settings account card: what syncs, as under "Synced" without the time.
+"sync.status.items.short" = "书签、笔记等";
 // Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
 "sync.status.failed.kept" = "书签和笔记仍保留在此设备上 · %@";
 // Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.

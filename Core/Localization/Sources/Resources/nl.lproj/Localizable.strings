@@ -756,8 +756,8 @@
 "sync.status.everything-else-synced" = "Al het andere gesynchroniseerd %@";
 // Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
 "sync.status.synced.card" = "Bladwijzers, notities en meer · %@";
-// Detail under "Syncing…" while a sync runs.
-"sync.status.sending.items" = "Je bladwijzers en notities worden verzonden";
+// Detail under "Syncing…" on the Settings account card: what syncs, as under "Synced" without the time.
+"sync.status.items.short" = "Bladwijzers, notities en meer";
 // Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
 "sync.status.failed.kept" = "Bladwijzers en notities blijven op dit apparaat · %@";
 // Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.

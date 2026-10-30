@@ -753,8 +753,8 @@
 "sync.status.everything-else-synced" = "Mọi thứ khác đã đồng bộ %@";
 // Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
 "sync.status.synced.card" = "Dấu trang, ghi chú và nhiều mục khác · %@";
-// Detail under "Syncing…" while a sync runs.
-"sync.status.sending.items" = "Đang gửi dấu trang và ghi chú của bạn";
+// Detail under "Syncing…" on the Settings account card: what syncs, as under "Synced" without the time.
+"sync.status.items.short" = "Dấu trang, ghi chú và nhiều mục khác";
 // Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
 "sync.status.failed.kept" = "Dấu trang và ghi chú ở lại trên thiết bị này · %@";
 // Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.

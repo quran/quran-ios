@@ -248,7 +248,7 @@ final class SyncActivityTests: XCTestCase {
         let summary = SyncStatusSummary(activity, style: .card)
 
         XCTAssertEqual(summary.icon, .syncing)
-        XCTAssertEqual(summary.detail, l("sync.status.sending.items"))
+        XCTAssertEqual(summary.detail, l("sync.status.items.short"))
         XCTAssertTrue(summary.hasHeldItems)
     }
 
@@ -271,11 +271,11 @@ final class SyncActivityTests: XCTestCase {
         XCTAssertFalse(SyncStatusSummary(activity, style: .card).hasHeldItems)
     }
 
-    func test_cardSummary_saysWhatIsSending_whileSyncing() {
+    func test_cardSummary_saysWhatSyncs_whileSyncing() {
         let summary = SyncStatusSummary(SyncActivity(status: .syncing), style: .card)
 
         XCTAssertEqual(summary.title, l("sync.status.syncing"))
-        XCTAssertEqual(summary.detail, l("sync.status.sending.items"))
+        XCTAssertEqual(summary.detail, l("sync.status.items.short"))
     }
 
     func test_cardSummary_showsTheFailureInRed_withWhatStaysOnTheDevice() {
@@ -319,11 +319,11 @@ final class SyncActivityTests: XCTestCase {
         XCTAssertEqual(summary.detail, l("sync.status.all-items"))
     }
 
-    func test_screenSummary_saysWhatIsSending_whileSyncing() {
+    func test_screenSummary_saysWhatSyncs_whileSyncing() {
         let summary = SyncStatusSummary(SyncActivity(status: .syncing))
 
         XCTAssertEqual(summary.title, l("sync.status.syncing"))
-        XCTAssertEqual(summary.detail, l("sync.status.sending.items"))
+        XCTAssertEqual(summary.detail, l("sync.status.all-items"))
     }
 
     /// A run that only pulled has no error, so the screen only says what stays on the device.

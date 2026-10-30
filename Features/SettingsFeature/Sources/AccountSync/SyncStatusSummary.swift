@@ -65,7 +65,8 @@ struct SyncStatusSummary: Equatable {
             icon = .syncing
             tone = .normal
             title = l("sync.status.syncing")
-            detail = l("sync.status.sending.items")
+            // A sync both sends and receives, so the detail says what syncs, like the synced line.
+            detail = style == .card ? l("sync.status.items.short") : l("sync.status.all-items")
             button = .syncing
         case .retrying(let reason):
             icon = .failed

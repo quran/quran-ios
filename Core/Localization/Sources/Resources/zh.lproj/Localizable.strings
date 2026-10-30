@@ -739,8 +739,6 @@
 "sync.status.never-synced" = "尚未同步";
 // Sync status while a sync runs.
 "sync.status.syncing" = "正在同步…";
-// Detail under the sync status while a sync runs.
-"sync.status.sending" = "正在发送你的更改";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "无法同步";
 // Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
@@ -757,8 +755,6 @@
 "sync.error.rejected" = "Quran.com 未接受这些更改";
 // Why a sync failed, when the reason is unknown.
 "sync.error.unknown" = "出了点问题";
-// Detail when the latest sync received changes but couldn't send this device's changes.
-"sync.error.paused" = "你的更改未在发送";
 // Button that syncs with Quran.com right away.
 "sync.action.sync-now" = "立即同步";
 // The disabled sync button while a sync runs.
@@ -849,6 +845,14 @@
 "sync.status.synced.short" = "已同步";
 // Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
 "sync.status.everything-else-synced" = "其他内容%@已同步";
+// Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
+"sync.status.synced.card" = "书签、笔记等 · %@";
+// Detail under "Syncing…" on the Settings account card: what syncs, as under "Synced" without the time.
+"sync.status.items.short" = "书签、笔记等";
+// Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
+"sync.status.failed.kept" = "书签和笔记仍保留在此设备上 · %@";
+// Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.
+"sync.status.failed.kept.paused" = "书签和笔记仍保留在此设备上";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "查看未同步的内容";
 // Title of the screen with every item that doesn't sync and the latest syncs.

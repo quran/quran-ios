@@ -65,20 +65,28 @@ struct SyncStatusSummary: Equatable {
             icon = .syncing
             tone = .normal
             title = l("sync.status.syncing")
-            detail = l("sync.status.sending")
+            // A sync both sends and receives, so the detail says what syncs, like the synced line.
+            detail = style == .card ? l("sync.status.items.short") : l("sync.status.all-items")
             button = .syncing
         case .retrying(let reason):
-            // The retry comes within seconds, so "soon" says enough; Try again runs it now.
             icon = .failed
             tone = .failure
             title = l("sync.status.failed")
-            detail = lFormat("sync.status.retrying", reason.localizedDescription)
+            switch style {
+            case .screen:
+                // The retry comes within seconds, so "soon" says enough; Try again runs it now.
+                detail = lFormat("sync.status.failed.kept", lFormat("sync.status.retrying", reason.localizedDescription))
+            case .card:
+                // The red title and Try again already say it isn't done; the card's line stays short beside the button.
+                detail = lFormat("sync.status.failed.kept", reason.localizedDescription)
+            }
             button = .tryAgain
         case .failed(let reason):
             icon = .failed
             tone = .failure
             title = l("sync.status.failed")
-            detail = reason?.localizedDescription ?? l("sync.error.paused")
+            // Without a reason, the latest sync only received changes, so saying they stay on this device is enough.
+            detail = reason.map { lFormat("sync.status.failed.kept", $0.localizedDescription) } ?? l("sync.status.failed.kept.paused")
             button = .tryAgain
         case .synced(let date):
             icon = held == nil ? .synced : .held
@@ -91,11 +99,11 @@ struct SyncStatusSummary: Equatable {
             case (.card, nil):
                 tone = .normal
                 title = l("sync.status.synced.short")
-                detail = date.syncedTimeAgo().capitalizingFirstLetter()
+                detail = lFormat("sync.status.synced.card", date.syncedTimeAgo().nonBreaking)
             case (.card, let held?):
                 tone = .caution
                 title = held
-                detail = lFormat("sync.status.everything-else-synced", date.syncedTimeAgo())
+                detail = lFormat("sync.status.everything-else-synced", date.syncedTimeAgo().nonBreaking)
             }
         case .neverSynced:
             icon = held == nil ? nil : .held
@@ -138,9 +146,9 @@ extension Date {
 }
 
 private extension String {
-    /// "2 minutes ago" starts a line on the card.
-    func capitalizingFirstLetter() -> String {
-        prefix(1).capitalized(with: .fixedCurrentLocaleNumbers) + dropFirst()
+    /// Keeps "2 minutes ago" on one line in the card's narrow detail.
+    var nonBreaking: String {
+        replacingOccurrences(of: " ", with: "\u{00A0}")
     }
 }
 #endif

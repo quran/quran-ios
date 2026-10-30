@@ -733,8 +733,6 @@
 "sync.status.never-synced" = "Aún no sincronizado";
 // Sync status while a sync runs.
 "sync.status.syncing" = "Sincronizando…";
-// Detail under the sync status while a sync runs.
-"sync.status.sending" = "Enviando tus cambios";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "No se pudo sincronizar";
 // Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
@@ -751,8 +749,6 @@
 "sync.error.rejected" = "Quran.com no aceptó los cambios";
 // Why a sync failed, when the reason is unknown.
 "sync.error.unknown" = "Algo salió mal";
-// Detail when the latest sync received changes but couldn't send this device's changes.
-"sync.error.paused" = "Tus cambios no se están enviando";
 // Button that syncs with Quran.com right away.
 "sync.action.sync-now" = "Sincronizar ahora";
 // The disabled sync button while a sync runs.
@@ -843,6 +839,14 @@
 "sync.status.synced.short" = "Sincronizado";
 // Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
 "sync.status.everything-else-synced" = "Todo lo demás sincronizado %@";
+// Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
+"sync.status.synced.card" = "Marcadores, notas y más · %@";
+// Detail under "Syncing…" on the Settings account card: what syncs, as under "Synced" without the time.
+"sync.status.items.short" = "Marcadores, notas y más";
+// Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
+"sync.status.failed.kept" = "Los marcadores y las notas se quedan en este dispositivo · %@";
+// Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.
+"sync.status.failed.kept.paused" = "Los marcadores y las notas se quedan en este dispositivo";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Revisar lo que no se sincroniza";
 // Title of the screen with every item that doesn't sync and the latest syncs.

@@ -735,8 +735,6 @@
 "sync.status.never-synced" = "هنوز همگام‌سازی نشده";
 // Sync status while a sync runs.
 "sync.status.syncing" = "در حال همگام‌سازی…";
-// Detail under the sync status while a sync runs.
-"sync.status.sending" = "در حال ارسال تغییرات شما";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "همگام‌سازی انجام نشد";
 // Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
@@ -753,8 +751,6 @@
 "sync.error.rejected" = "Quran.com تغییرات را نپذیرفت";
 // Why a sync failed, when the reason is unknown.
 "sync.error.unknown" = "مشکلی پیش آمد";
-// Detail when the latest sync received changes but couldn't send this device's changes.
-"sync.error.paused" = "تغییرات شما ارسال نمی‌شوند";
 // Button that syncs with Quran.com right away.
 "sync.action.sync-now" = "همگام‌سازی اکنون";
 // The disabled sync button while a sync runs.
@@ -845,6 +841,14 @@
 "sync.status.synced.short" = "همگام‌سازی شد";
 // Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
 "sync.status.everything-else-synced" = "بقیهٔ موارد %@ همگام‌سازی شدند";
+// Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
+"sync.status.synced.card" = "نشانک‌ها، یادداشت‌ها و موارد دیگر · %@";
+// Detail under "Syncing…" on the Settings account card: what syncs, as under "Synced" without the time.
+"sync.status.items.short" = "نشانک‌ها، یادداشت‌ها و موارد دیگر";
+// Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
+"sync.status.failed.kept" = "نشانک‌ها و یادداشت‌ها روی این دستگاه می‌مانند · %@";
+// Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.
+"sync.status.failed.kept.paused" = "نشانک‌ها و یادداشت‌ها روی این دستگاه می‌مانند";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "بررسی مواردی که همگام‌سازی نمی‌شوند";
 // Title of the screen with every item that doesn't sync and the latest syncs.

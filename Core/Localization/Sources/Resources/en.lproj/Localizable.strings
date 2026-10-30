@@ -486,8 +486,6 @@
 "sync.status.never-synced" = "Not synced yet";
 // Sync status while a sync runs.
 "sync.status.syncing" = "Syncing…";
-// Detail under the sync status while a sync runs.
-"sync.status.sending" = "Sending your changes";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "Couldn't sync";
 // Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
@@ -504,8 +502,6 @@
 "sync.error.rejected" = "Quran.com didn't accept the changes";
 // Why a sync failed, when the reason is unknown.
 "sync.error.unknown" = "Something went wrong";
-// Detail when the latest sync received changes but couldn't send this device's changes.
-"sync.error.paused" = "Your changes aren't being sent";
 // Button that syncs with Quran.com right away.
 "sync.action.sync-now" = "Sync now";
 // The disabled sync button while a sync runs.
@@ -596,6 +592,14 @@
 "sync.status.synced.short" = "Synced";
 // Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
 "sync.status.everything-else-synced" = "Everything else synced %@";
+// Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
+"sync.status.synced.card" = "Bookmarks, notes and more · %@";
+// Detail under "Syncing…" on the Settings account card: what syncs, as under "Synced" without the time.
+"sync.status.items.short" = "Bookmarks, notes and more";
+// Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
+"sync.status.failed.kept" = "Bookmarks and notes stay on this device · %@";
+// Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.
+"sync.status.failed.kept.paused" = "Bookmarks and notes stay on this device";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Review what isn't syncing";
 // Title of the screen with every item that doesn't sync and the latest syncs.

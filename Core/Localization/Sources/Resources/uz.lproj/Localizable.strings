@@ -735,8 +735,6 @@
 "sync.status.never-synced" = "Hali sinxronlanmagan";
 // Sync status while a sync runs.
 "sync.status.syncing" = "Sinxronlanmoqda…";
-// Detail under the sync status while a sync runs.
-"sync.status.sending" = "O‘zgarishlaringiz yuborilmoqda";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "Sinxronlab bo‘lmadi";
 // Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
@@ -753,8 +751,6 @@
 "sync.error.rejected" = "Quran.com o‘zgarishlarni qabul qilmadi";
 // Why a sync failed, when the reason is unknown.
 "sync.error.unknown" = "Nimadir xato ketdi";
-// Detail when the latest sync received changes but couldn't send this device's changes.
-"sync.error.paused" = "O‘zgarishlaringiz yuborilmayapti";
 // Button that syncs with Quran.com right away.
 "sync.action.sync-now" = "Hozir sinxronlash";
 // The disabled sync button while a sync runs.
@@ -845,6 +841,14 @@
 "sync.status.synced.short" = "Sinxronlandi";
 // Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
 "sync.status.everything-else-synced" = "Qolgan hammasi %@ sinxronlandi";
+// Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
+"sync.status.synced.card" = "Xatcho‘plar, eslatmalar va boshqalar · %@";
+// Detail under "Syncing…" on the Settings account card: what syncs, as under "Synced" without the time.
+"sync.status.items.short" = "Xatcho‘plar, eslatmalar va boshqalar";
+// Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
+"sync.status.failed.kept" = "Xatcho‘plar va eslatmalar shu qurilmada qoladi · %@";
+// Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.
+"sync.status.failed.kept.paused" = "Xatcho‘plar va eslatmalar shu qurilmada qoladi";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Sinxronlanmayotganlarni ko‘rish";
 // Title of the screen with every item that doesn't sync and the latest syncs.

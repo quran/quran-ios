@@ -648,8 +648,6 @@
 "sync.status.never-synced" = "Nog niet gesynchroniseerd";
 // Sync status while a sync runs.
 "sync.status.syncing" = "Synchroniseren…";
-// Detail under the sync status while a sync runs.
-"sync.status.sending" = "Je wijzigingen worden verzonden";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "Synchroniseren mislukt";
 // Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
@@ -666,8 +664,6 @@
 "sync.error.rejected" = "Quran.com heeft de wijzigingen niet geaccepteerd";
 // Why a sync failed, when the reason is unknown.
 "sync.error.unknown" = "Er is iets misgegaan";
-// Detail when the latest sync received changes but couldn't send this device's changes.
-"sync.error.paused" = "Je wijzigingen worden niet verzonden";
 // Button that syncs with Quran.com right away.
 "sync.action.sync-now" = "Nu synchroniseren";
 // The disabled sync button while a sync runs.
@@ -758,6 +754,14 @@
 "sync.status.synced.short" = "Gesynchroniseerd";
 // Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
 "sync.status.everything-else-synced" = "Al het andere gesynchroniseerd %@";
+// Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
+"sync.status.synced.card" = "Bladwijzers, notities en meer · %@";
+// Detail under "Syncing…" on the Settings account card: what syncs, as under "Synced" without the time.
+"sync.status.items.short" = "Bladwijzers, notities en meer";
+// Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
+"sync.status.failed.kept" = "Bladwijzers en notities blijven op dit apparaat · %@";
+// Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.
+"sync.status.failed.kept.paused" = "Bladwijzers en notities blijven op dit apparaat";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Bekijk wat niet synchroniseert";
 // Title of the screen with every item that doesn't sync and the latest syncs.

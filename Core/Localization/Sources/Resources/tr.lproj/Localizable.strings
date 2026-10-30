@@ -676,8 +676,6 @@
 "sync.status.never-synced" = "Henüz eşitlenmedi";
 // Sync status while a sync runs.
 "sync.status.syncing" = "Eşitleniyor…";
-// Detail under the sync status while a sync runs.
-"sync.status.sending" = "Değişiklikleriniz gönderiliyor";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "Eşitlenemedi";
 // Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
@@ -694,8 +692,6 @@
 "sync.error.rejected" = "Quran.com değişiklikleri kabul etmedi";
 // Why a sync failed, when the reason is unknown.
 "sync.error.unknown" = "Bir sorun oluştu";
-// Detail when the latest sync received changes but couldn't send this device's changes.
-"sync.error.paused" = "Değişiklikleriniz gönderilmiyor";
 // Button that syncs with Quran.com right away.
 "sync.action.sync-now" = "Şimdi eşitle";
 // The disabled sync button while a sync runs.
@@ -786,6 +782,14 @@
 "sync.status.synced.short" = "Eşitlendi";
 // Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
 "sync.status.everything-else-synced" = "Diğer her şey %@ eşitlendi";
+// Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
+"sync.status.synced.card" = "Yer imleri, notlar ve daha fazlası · %@";
+// Detail under "Syncing…" on the Settings account card: what syncs, as under "Synced" without the time.
+"sync.status.items.short" = "Yer imleri, notlar ve daha fazlası";
+// Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
+"sync.status.failed.kept" = "Yer imleri ve notlar bu cihazda kalır · %@";
+// Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.
+"sync.status.failed.kept.paused" = "Yer imleri ve notlar bu cihazda kalır";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Eşitlenmeyenleri gözden geçir";
 // Title of the screen with every item that doesn't sync and the latest syncs.

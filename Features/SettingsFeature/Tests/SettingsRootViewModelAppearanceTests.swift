@@ -7,6 +7,7 @@
 
 import Analytics
 import AnalyticsFake
+import AppDependenciesFake
 import AppIconFeature
 import AudioDownloadsFeature
 import Localization
@@ -148,7 +149,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
         navigationController: UINavigationController? = nil
     ) -> SettingsRootViewModel {
         let navigationController = navigationController ?? UINavigationController()
-        let container = AppDependenciesStub(appIconCatalog: catalog)
+        let container = AppDependenciesFake(appIconCatalog: catalog)
         let appIconService = appIconService ?? makeService()
         #if QURAN_SYNC
         return SettingsRootViewModel(

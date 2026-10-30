@@ -14,10 +14,20 @@ public typealias ItemAction<Item> = @MainActor @Sendable (Item) -> Void
 public typealias AsyncItemAction<Item> = @MainActor @Sendable (Item) async -> Void
 public typealias ItemDeletionAction<Item> = @MainActor @Sendable (Item) -> AsyncAction?
 
+/// What a tap on an async control does while the action started by an earlier tap is still running.
+public enum AsyncTapPolicy: Sendable {
+    /// Cancels the running action and starts a new one.
+    case cancelPrevious
+    /// Ignores the tap and lets the running action finish.
+    case ignoreWhileRunning
+}
+
 public struct AsyncButton<Label: View>: View {
     // MARK: Lifecycle
 
-    public init(action: @escaping AsyncAction, label: () -> Label) {
+    /// `tapPolicy` says what a tap does while an earlier tap's action is still running.
+    public init(tapPolicy: AsyncTapPolicy = .cancelPrevious, action: @escaping AsyncAction, label: () -> Label) {
+        self.tapPolicy = tapPolicy
         self.action = action
         self.label = label()
     }
@@ -26,13 +36,7 @@ public struct AsyncButton<Label: View>: View {
 
     public var body: some View {
         Button {
-            // Cancel the previous task
-            currentTask?.cancel()
-
-            // Start a new task
-            currentTask = Task {
-                await action()
-            }
+            runner.run(tapPolicy, action: action)
         } label: {
             label
         }
@@ -40,10 +44,11 @@ public struct AsyncButton<Label: View>: View {
 
     // MARK: Private
 
+    private let tapPolicy: AsyncTapPolicy
     private let action: AsyncAction
     private let label: Label
 
-    @State private var currentTask: Task<Void, Never>? = nil
+    @State private var runner = AsyncActionRunner()
 }
 
 extension View {
@@ -60,17 +65,11 @@ private struct AsyncTapGestureModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content.onTapGesture(count: count, perform: {
-            // Cancel the previous task
-            currentTask?.cancel()
-
-            // Start a new task
-            currentTask = Task {
-                await action()
-            }
+            runner.run(.cancelPrevious, action: action)
         })
     }
 
     // MARK: Private
 
-    @State private var currentTask: Task<Void, Never>? = nil
+    @State private var runner = AsyncActionRunner()
 }

@@ -67,7 +67,7 @@ struct QuranComAccountCard: View {
                 Spacer(minLength: 0)
             }
 
-            AsyncButton(action: signInAction) {
+            AsyncButton(tapPolicy: .ignoreWhileRunning, action: signInAction) {
                 Text(l("setting.quran_account.sign_in"))
                     .font(.headline)
                     .foregroundStyle(Color.onAccent)

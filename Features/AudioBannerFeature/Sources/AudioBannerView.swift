@@ -13,7 +13,6 @@ import UIx
 struct AudioBannerView: View {
     @StateObject var viewModel: AudioBannerViewModel
     @Environment(\.showToast) private var showToast
-    @ScaledMetric private var toastOffset = 100
 
     var body: some View {
         let actions = AudioBannerActions(
@@ -35,7 +34,7 @@ struct AudioBannerView: View {
         )
         .onReceive(viewModel.$toast.compactMap { $0 }) { toast in
             viewModel.toast = nil
-            showToast?(Toast(toast.message, action: toast.action, bottomOffset: toastOffset))
+            showToast?(Toast(toast.message, action: toast.action))
         }
         .serializedModalPresentation(request: $viewModel.modalRequest)
         .errorAlert(error: $viewModel.error)

@@ -59,9 +59,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     var pagesView: UIView { quranView!.contentView! }
 
-    #if QURAN_SYNC
     var bottomBarsHeight: CGFloat { quranView?.bottomBarsHeight ?? 0 }
-    #endif
 
     // MARK: - View hierarchy
 

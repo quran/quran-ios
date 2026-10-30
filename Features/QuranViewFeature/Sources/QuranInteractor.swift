@@ -48,10 +48,11 @@ protocol QuranPresentable: UIViewController {
     func hideBars()
     func refreshBarScrollEdgeInteractions()
 
-    func setVisiblePages(_ pages: [Page])
-    #if QURAN_SYNC
     /// How far the reader's bars at the bottom, like the audio bar, reach above the window's bottom edge.
     var bottomBarsHeight: CGFloat { get }
+
+    func setVisiblePages(_ pages: [Page])
+    #if QURAN_SYNC
     func updateReadingBookmark(_ bookmark: PlacedReadingBookmark?)
     #else
     func updateBookmark(_ isBookmarked: Bool)
@@ -525,11 +526,9 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
-    #if QURAN_SYNC
     private var presenterBottomBarsHeight: @MainActor () -> CGFloat {
         { [weak presenter] in presenter?.bottomBarsHeight ?? 0 }
     }
-    #endif
 
     #if !QURAN_SYNC
     private var isBookmarkMutationInFlight = false
@@ -547,7 +546,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     private func loadContent() {
-        let (viewController, viewModel) = deps.audioBannerBuilder.build(withListener: self)
+        let (viewController, viewModel) = deps.audioBannerBuilder.build(
+            withListener: self,
+            bottomBarsHeight: presenterBottomBarsHeight
+        )
         audioBanner = viewModel
         presenter?.presentAudioBanner(viewController)
 

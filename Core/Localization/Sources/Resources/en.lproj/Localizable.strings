@@ -459,6 +459,8 @@
 "bookmarks.reading.set-here" = "Set here";
 // VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
 "bookmarks.reading.name.accessibility-label" = "%@ bookmark name";
+// Long-press menu action that opens the Quran at a reading bookmark.
+"bookmarks.reading.open" = "Open";
 // VoiceOver label for the reader's reading bookmarks button.
 "bookmarks.reading.choose.accessibility-label" = "Choose reading bookmark";
 // VoiceOver state when the additional reading bookmarks are visible.

@@ -14,7 +14,8 @@ public struct ContinueReadingSection: View {
         lastPages: [LastPage],
         selectReadingBookmark: @escaping (PlacedReadingBookmark) -> Void,
         selectLastPage: @escaping (LastPage) -> Void,
-        deleteReadingBookmark: ItemDeletionAction<PlacedReadingBookmark>? = nil
+        deleteReadingBookmark: ItemDeletionAction<PlacedReadingBookmark>? = nil,
+        renameReadingBookmark: ((PlacedReadingBookmark) -> Void)? = nil
     ) {
         self.title = title
         self.readingBookmarks = readingBookmarks
@@ -22,6 +23,7 @@ public struct ContinueReadingSection: View {
         self.selectReadingBookmark = selectReadingBookmark
         self.selectLastPage = selectLastPage
         self.deleteReadingBookmark = deleteReadingBookmark
+        self.renameReadingBookmark = renameReadingBookmark
     }
     #else
     public init(title: String, lastPages: [LastPage], selectLastPage: @escaping (LastPage) -> Void) {
@@ -39,6 +41,7 @@ public struct ContinueReadingSection: View {
     #if QURAN_SYNC
     private let selectReadingBookmark: (PlacedReadingBookmark) -> Void
     private let deleteReadingBookmark: ItemDeletionAction<PlacedReadingBookmark>?
+    private let renameReadingBookmark: ((PlacedReadingBookmark) -> Void)?
     @Environment(\.editMode) private var editMode
     #endif
     private let selectLastPage: (LastPage) -> Void
@@ -103,12 +106,21 @@ public struct ContinueReadingSection: View {
         return { deleteReadingBookmark($0.bookmark) }
     }
 
+    private func contextMenu(for bookmark: PlacedReadingBookmark) -> ReadingBookmarkContextMenu {
+        ReadingBookmarkContextMenu(
+            isEnabled: !isEditingBookmarks,
+            open: { selectReadingBookmark(bookmark) },
+            rename: renameReadingBookmark.map { rename in { rename(bookmark) } }
+        )
+    }
+
     @ViewBuilder
     private var bookmarks: some View {
         NoorListRows(visibleBookmarks, onDelete: deleteVisibleBookmark) { item in
             ContinueReadingBookmarkRow(bookmark: item.bookmark) {
                 selectReadingBookmark(item.bookmark)
             }
+            .modifier(contextMenu(for: item.bookmark))
         }
         if readingBookmarks.count > 1, !isEditingBookmarks {
             Button {
@@ -185,6 +197,37 @@ private struct SlotIdentifiedBookmark: Identifiable {
     let bookmark: PlacedReadingBookmark
 
     var id: ReadingBookmarkSlot { bookmark.slot }
+}
+
+/// The long-press menu, which rows without rename or delete actions, like Home's, don't get.
+/// Delete goes through the row's own delete, which also backs its swipe and Edit mode.
+private struct ReadingBookmarkContextMenu: ViewModifier {
+    let isEnabled: Bool
+    let open: @MainActor () -> Void
+    let rename: (@MainActor () -> Void)?
+
+    @Environment(\.noorListRowDelete) private var delete
+
+    func body(content: Content) -> some View {
+        content
+            .contextMenu {
+                if isEnabled, rename != nil || delete != nil {
+                    Button(action: open) {
+                        Label { Text(l("bookmarks.reading.open")) } icon: { NoorSystemImage.book.image }
+                    }
+                    if let rename {
+                        Button(action: rename) {
+                            Label { Text(l("bookmarks.collections.rename")) } icon: { NoorSystemImage.edit.image }
+                        }
+                    }
+                    if let delete {
+                        Button(role: .destructive, action: delete) {
+                            Label { Text(l("button.delete")) } icon: { NoorSystemImage.cancel.image }
+                        }
+                    }
+                }
+            }
+    }
 }
 #endif
 

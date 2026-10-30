@@ -34,23 +34,37 @@ public struct ContinueReadingBookmarkRow: View {
         .accessibilityIdentifier("home.readingBookmark.\(bookmark.slot)")
     }
 
-    private var title: MultipartText {
+    /// A named bookmark shows its name, and its location moves to the subtitle.
+    var title: MultipartText {
+        if let name = bookmark.name {
+            return .text(name)
+        }
+        return placementText
+    }
+
+    /// Keeps the page number out of the title so long sura names never truncate it.
+    var subtitle: MultipartText {
+        let timeAgo = bookmark.modifiedOn.timeAgo()
+        switch bookmark.placement {
+        case .ayah:
+            if bookmark.name == nil {
+                return .text(timeAgo)
+            }
+            return "\(placementText) · \(timeAgo)"
+        case .page(let page):
+            if bookmark.name == nil {
+                return "\(page.localizedName) · \(timeAgo)"
+            }
+            return "\(placementText) · \(page.localizedName) · \(timeAgo)"
+        }
+    }
+
+    private var placementText: MultipartText {
         switch bookmark.placement {
         case .ayah(let ayah):
             "\(ayah: ayah)"
         case .page(let page):
             "\(suras: page.suras)"
-        }
-    }
-
-    /// Keeps the page number out of the title so long sura names never truncate it.
-    private var subtitle: MultipartText {
-        let timeAgo = bookmark.modifiedOn.timeAgo()
-        switch bookmark.placement {
-        case .ayah:
-            return .text(timeAgo)
-        case .page(let page):
-            return "\(page.localizedName) · \(timeAgo)"
         }
     }
 
@@ -66,10 +80,10 @@ public struct ContinueReadingBookmarkRow: View {
 
 @MainActor
 private struct ContinueReadingBookmarkRowPreview: View {
-    init(placement: PlacedReadingBookmark.Placement, slot: ReadingBookmarkSlot = .orange) {
+    init(placement: PlacedReadingBookmark.Placement, slot: ReadingBookmarkSlot = .orange, name: String? = nil) {
         bookmark = PlacedReadingBookmark(
             id: "preview", slot: slot, placement: placement,
-            modifiedOn: Date(timeIntervalSinceNow: -36000)
+            modifiedOn: Date(timeIntervalSinceNow: -36000), name: name
         )
         if UIFont(name: "icomoon", size: 20) == nil {
             FontName.registerFonts()
@@ -94,6 +108,12 @@ private struct ContinueReadingBookmarkRowPreview: View {
             .environment(\.locale, Locale(identifier: "en"))
 
         ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[574]), slot: .teal)
+            .environment(\.locale, Locale(identifier: "en"))
+
+        ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[2]), slot: .red, name: "Khatmah")
+            .environment(\.locale, Locale(identifier: "en"))
+
+        ContinueReadingBookmarkRowPreview(placement: .ayah(Quran.hafsMadani1405.suras[17].verses[9]), name: "Hifz")
             .environment(\.locale, Locale(identifier: "en"))
 
         ContinueReadingBookmarkRowPreview(placement: .ayah(Quran.hafsMadani1405.suras[35].verses[57]), slot: .red)

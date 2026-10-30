@@ -57,6 +57,9 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     @Published var nameAlert: CollectionNameAlert = .hidden
     @Published var newCollectionName = ""
     @Published var readingBookmarks: [PlacedReadingBookmark] = []
+    /// The reading bookmark the rename alert is for, or `nil` when it's hidden.
+    @Published var renamingReadingBookmark: ReadingBookmarkSlot?
+    @Published var readingBookmarkName = ""
 
     var shouldShowSyncBanner: Bool {
         !isAuthenticated && !isSyncBannerDismissed
@@ -224,6 +227,30 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             Task { @MainActor in
                 await self.restoreReadingBookmark(bookmark)
             }
+        }
+    }
+
+    func presentRenameReadingBookmark(_ bookmark: PlacedReadingBookmark) {
+        readingBookmarkName = bookmark.name ?? ""
+        renamingReadingBookmark = bookmark.slot
+    }
+
+    /// Renames the reading bookmark in `slot`; an empty name clears it, so the bookmark goes by its color.
+    func renameReadingBookmark(in slot: ReadingBookmarkSlot) async {
+        let name = readingBookmarkName.trimmingCharacters(in: .whitespacesAndNewlines)
+        // The bookmark can be cleared while the alert is open.
+        guard let current = readingBookmarks.first(where: { $0.slot == slot }), name != (current.name ?? "") else {
+            return
+        }
+        do {
+            try await readingBookmarkService.renameReadingBookmark(
+                in: slot,
+                name: name.isEmpty ? nil : name,
+                quran: readingPreferences.reading.quran
+            )
+        } catch {
+            logger.error("Quran Sync: failed to rename reading bookmark from Bookmarks: \(error)")
+            self.error = error
         }
     }
 

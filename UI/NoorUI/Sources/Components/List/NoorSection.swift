@@ -137,32 +137,33 @@ public struct NoorListRows<Item: Identifiable, Row: View>: View {
         @ViewBuilder row: @escaping (Item) -> Row
     ) {
         self.items = items
+        self.canDelete = canDelete
         self.onDelete = onDelete
         self.onMove = onMove
-        rows = ForEach(items) { item in
-            NoorDeletableRow(
-                item: item,
-                content: row(item),
-                isDeleteEnabled: onDelete != nil && canDelete(item),
-                onDelete: onDelete
-            )
-        }
+        self.row = row
     }
 
     // MARK: Public
 
     public var body: some View {
-        rows
-            .onDelete(perform: deleteAction)
-            .onMove(perform: onMove)
+        ForEach(items) { item in
+            NoorDeletableRow(
+                content: row(item),
+                isDeleteEnabled: onDelete != nil && canDelete(item) && !deletingItemIDs.contains(item.id),
+                delete: { delete(item) }
+            )
+        }
+        .onDelete(perform: deleteAction)
+        .onMove(perform: onMove)
     }
 
     // MARK: Private
 
     private let items: [Item]
+    private let canDelete: @MainActor @Sendable (Item) -> Bool
     private let onDelete: ItemDeletionAction<Item>?
     private let onMove: ((IndexSet, Int) -> Void)?
-    private let rows: ForEach<[Item], Item.ID, NoorDeletableRow<Item, Row>>
+    private let row: (Item) -> Row
 
     @State private var deletingItemIDs: Set<Item.ID> = []
 
@@ -267,30 +268,34 @@ private struct NoorDeleteSwipeActionModifier: ViewModifier {
     }
 }
 
-private struct NoorDeletableRow<Item, Content: View>: View {
-    let item: Item
+/// Swipe, Edit mode, and the row's own controls share one delete, so a row is deleted once at a time.
+private struct NoorDeletableRow<Content: View>: View {
     let content: Content
     let isDeleteEnabled: Bool
-    let onDelete: ItemDeletionAction<Item>?
-
-    @State private var isDeleting = false
+    let delete: Action
 
     var body: some View {
         content
-            .noorDeleteSwipeAction(isEnabled: isDeleteEnabled && !isDeleting) {
-                delete()
-            }
+            .environment(\.noorListRowDelete, availableDelete)
+            .noorDeleteSwipeAction(isEnabled: isDeleteEnabled, action: delete)
     }
 
-    private func delete() {
-        guard !isDeleting, let operation = onDelete?(item) else {
-            return
+    private var availableDelete: Action? {
+        guard isDeleteEnabled else {
+            return nil
         }
-        isDeleting = true
+        return delete
+    }
+}
 
-        Task { @MainActor in
-            await operation()
-            isDeleting = false
-        }
+private struct NoorListRowDeleteKey: EnvironmentKey {
+    static let defaultValue: Action? = nil
+}
+
+extension EnvironmentValues {
+    /// Deletes the enclosing `NoorListRows` row, or `nil` when it can't be deleted right now.
+    var noorListRowDelete: Action? {
+        get { self[NoorListRowDeleteKey.self] }
+        set { self[NoorListRowDeleteKey.self] = newValue }
     }
 }

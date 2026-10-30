@@ -596,6 +596,91 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_presentRenameReadingBookmark_prefillsCustomName() throws {
+        let ayah = try XCTUnwrap(AyahNumber(quran: ReadingPreferences.shared.reading.quran, sura: 2, ayah: 255))
+        let bookmark = PlacedReadingBookmark(id: "teal", slot: .teal, placement: .ayah(ayah), modifiedOn: .distantPast, name: "Hifz")
+        let sut = makeSUT()
+
+        sut.presentRenameReadingBookmark(bookmark)
+
+        XCTAssertEqual(sut.renamingReadingBookmark, .teal)
+        XCTAssertEqual(sut.readingBookmarkName, "Hifz")
+    }
+
+    func test_presentRenameReadingBookmark_startsEmptyForUnnamedBookmark() {
+        let page = ReadingPreferences.shared.reading.quran.pages[269]
+        let bookmark = PlacedReadingBookmark(id: "red", slot: .red, placement: .page(page), modifiedOn: .distantPast)
+        let sut = makeSUT()
+        sut.readingBookmarkName = "Previous draft"
+
+        sut.presentRenameReadingBookmark(bookmark)
+
+        XCTAssertEqual(sut.renamingReadingBookmark, .red)
+        XCTAssertEqual(sut.readingBookmarkName, "")
+    }
+
+    func test_renameReadingBookmark_storesTrimmedNameInMobileSync() async throws {
+        let service = makeReadingBookmarkService()
+        let page = ReadingPreferences.shared.reading.quran.pages[269]
+        try await service.addReadingBookmark(at: .page(page), slot: .orange)
+        let sut = makeSUT(readingBookmarkService: service)
+        let task = Task { await sut.start() }
+        defer { task.cancel() }
+        await waitUntil { sut.readingBookmarks.contains { $0.slot == .orange } }
+        let bookmark = try XCTUnwrap(sut.readingBookmarks.first { $0.slot == .orange })
+        sut.presentRenameReadingBookmark(bookmark)
+        sut.readingBookmarkName = "  Khatmah \n"
+
+        await sut.renameReadingBookmark(in: .orange)
+
+        let stored = await waitUntilStoredReadingBookmarks { $0.first { $0.slot == .orange }?.name != nil }
+        let renamed = try XCTUnwrap(stored.first { $0.slot == .orange })
+        XCTAssertEqual(renamed.name, "Khatmah")
+        XCTAssertEqual(renamed.placement, .page(page))
+        XCTAssertNil(sut.error)
+    }
+
+    func test_renameReadingBookmark_emptyNameClearsCustomName() async throws {
+        let service = makeReadingBookmarkService()
+        let quran = ReadingPreferences.shared.reading.quran
+        try await service.addReadingBookmark(at: .page(quran.pages[269]), slot: .red)
+        try await service.renameReadingBookmark(in: .red, name: "Night reading", quran: quran)
+        let sut = makeSUT(readingBookmarkService: service)
+        let task = Task { await sut.start() }
+        defer { task.cancel() }
+        await waitUntil { sut.readingBookmarks.first { $0.slot == .red }?.name == "Night reading" }
+        let bookmark = try XCTUnwrap(sut.readingBookmarks.first { $0.slot == .red })
+        sut.presentRenameReadingBookmark(bookmark)
+        sut.readingBookmarkName = "   "
+
+        await sut.renameReadingBookmark(in: .red)
+
+        await waitUntilStoredReadingBookmarks { $0.contains { $0.slot == .red && $0.name == nil } }
+        XCTAssertNil(sut.error)
+    }
+
+    func test_renameReadingBookmark_unchangedNameDoesNotWrite() async throws {
+        let service = makeReadingBookmarkService()
+        let quran = ReadingPreferences.shared.reading.quran
+        try await service.addReadingBookmark(at: .page(quran.pages[269]), slot: .teal)
+        let renamed = try await service.renameReadingBookmark(in: .teal, name: "Hifz", quran: quran)
+        let sut = makeSUT(readingBookmarkService: service)
+        let task = Task { await sut.start() }
+        defer { task.cancel() }
+        await waitUntil { sut.readingBookmarks.first { $0.slot == .teal }?.name == "Hifz" }
+        let bookmark = try XCTUnwrap(sut.readingBookmarks.first { $0.slot == .teal })
+        sut.presentRenameReadingBookmark(bookmark)
+        sut.readingBookmarkName = " Hifz  "
+
+        await sut.renameReadingBookmark(in: .teal)
+
+        let stored = await waitUntilStoredReadingBookmarks { $0.contains { $0.slot == .teal } }
+        let current = try XCTUnwrap(stored.first { $0.slot == .teal })
+        XCTAssertEqual(current.name, "Hifz")
+        XCTAssertEqual(current.modifiedOn, renamed.modifiedOn)
+        XCTAssertNil(sut.error)
+    }
+
     func test_collectionsViewController_showsEditButtonForReadingBookmarksWithoutCustomCollections() async throws {
         let service = makeReadingBookmarkService()
         let page = ReadingPreferences.shared.reading.quran.pages[269]

@@ -733,8 +733,6 @@
 "sync.status.never-synced" = "Ещё не синхронизировано";
 // Sync status while a sync runs.
 "sync.status.syncing" = "Синхронизация…";
-// Detail under the sync status while a sync runs.
-"sync.status.sending" = "Отправка ваших изменений";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "Не удалось синхронизировать";
 // Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
@@ -751,8 +749,6 @@
 "sync.error.rejected" = "Quran.com не принял изменения";
 // Why a sync failed, when the reason is unknown.
 "sync.error.unknown" = "Что-то пошло не так";
-// Detail when the latest sync received changes but couldn't send this device's changes.
-"sync.error.paused" = "Ваши изменения не отправляются";
 // Button that syncs with Quran.com right away.
 "sync.action.sync-now" = "Синхронизировать";
 // The disabled sync button while a sync runs.
@@ -843,6 +839,14 @@
 "sync.status.synced.short" = "Синхронизировано";
 // Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
 "sync.status.everything-else-synced" = "Всё остальное синхронизировано %@";
+// Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
+"sync.status.synced.card" = "Закладки, заметки и не только · %@";
+// Detail under "Syncing…" while a sync runs.
+"sync.status.sending.items" = "Отправка ваших закладок и заметок";
+// Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
+"sync.status.failed.kept" = "Закладки и заметки остаются на этом устройстве · %@";
+// Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.
+"sync.status.failed.kept.paused" = "Закладки и заметки остаются на этом устройстве";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Посмотреть, что не синхронизируется";
 // Title of the screen with every item that doesn't sync and the latest syncs.

@@ -716,8 +716,6 @@
 "sync.status.never-synced" = "Belum disegerakkan";
 // Sync status while a sync runs.
 "sync.status.syncing" = "Menyegerak…";
-// Detail under the sync status while a sync runs.
-"sync.status.sending" = "Menghantar perubahan anda";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "Tidak dapat menyegerak";
 // Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
@@ -734,8 +732,6 @@
 "sync.error.rejected" = "Quran.com tidak menerima perubahan itu";
 // Why a sync failed, when the reason is unknown.
 "sync.error.unknown" = "Ada yang tidak kena";
-// Detail when the latest sync received changes but couldn't send this device's changes.
-"sync.error.paused" = "Perubahan anda tidak dihantar";
 // Button that syncs with Quran.com right away.
 "sync.action.sync-now" = "Segerakkan sekarang";
 // The disabled sync button while a sync runs.
@@ -826,6 +822,14 @@
 "sync.status.synced.short" = "Disegerakkan";
 // Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
 "sync.status.everything-else-synced" = "Yang lain disegerakkan %@";
+// Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
+"sync.status.synced.card" = "Penanda halaman, nota dan lain-lain · %@";
+// Detail under "Syncing…" while a sync runs.
+"sync.status.sending.items" = "Menghantar penanda halaman dan nota anda";
+// Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
+"sync.status.failed.kept" = "Penanda halaman dan nota kekal pada peranti ini · %@";
+// Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.
+"sync.status.failed.kept.paused" = "Penanda halaman dan nota kekal pada peranti ini";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Semak yang tidak disegerakkan";
 // Title of the screen with every item that doesn't sync and the latest syncs.

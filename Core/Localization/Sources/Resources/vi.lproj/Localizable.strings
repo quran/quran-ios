@@ -645,8 +645,6 @@
 "sync.status.never-synced" = "Chưa đồng bộ";
 // Sync status while a sync runs.
 "sync.status.syncing" = "Đang đồng bộ…";
-// Detail under the sync status while a sync runs.
-"sync.status.sending" = "Đang gửi các thay đổi của bạn";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "Không thể đồng bộ";
 // Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
@@ -663,8 +661,6 @@
 "sync.error.rejected" = "Quran.com không chấp nhận các thay đổi";
 // Why a sync failed, when the reason is unknown.
 "sync.error.unknown" = "Đã xảy ra lỗi";
-// Detail when the latest sync received changes but couldn't send this device's changes.
-"sync.error.paused" = "Các thay đổi của bạn chưa được gửi";
 // Button that syncs with Quran.com right away.
 "sync.action.sync-now" = "Đồng bộ ngay";
 // The disabled sync button while a sync runs.
@@ -755,6 +751,14 @@
 "sync.status.synced.short" = "Đã đồng bộ";
 // Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
 "sync.status.everything-else-synced" = "Mọi thứ khác đã đồng bộ %@";
+// Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
+"sync.status.synced.card" = "Dấu trang, ghi chú và nhiều mục khác · %@";
+// Detail under "Syncing…" while a sync runs.
+"sync.status.sending.items" = "Đang gửi dấu trang và ghi chú của bạn";
+// Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
+"sync.status.failed.kept" = "Dấu trang và ghi chú ở lại trên thiết bị này · %@";
+// Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.
+"sync.status.failed.kept.paused" = "Dấu trang và ghi chú ở lại trên thiết bị này";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "Xem lại các mục không đồng bộ";
 // Title of the screen with every item that doesn't sync and the latest syncs.

@@ -736,8 +736,6 @@
 "sync.status.never-synced" = "تېخى ماسقەدەملەنمىدى";
 // Sync status while a sync runs.
 "sync.status.syncing" = "ماسقەدەملىنىۋاتىدۇ…";
-// Detail under the sync status while a sync runs.
-"sync.status.sending" = "ئۆزگەرتىشلىرىڭىز يوللىنىۋاتىدۇ";
 // Sync status when the latest sync failed.
 "sync.status.failed" = "ماسقەدەملىگىلى بولمىدى";
 // Detail under "Couldn't sync" while the failed sync waits to retry on its own: %@ is why it failed, such as "No connection".
@@ -754,8 +752,6 @@
 "sync.error.rejected" = "Quran.com ئۆزگەرتىشلەرنى قوبۇل قىلمىدى";
 // Why a sync failed, when the reason is unknown.
 "sync.error.unknown" = "بىر خاتالىق كۆرۈلدى";
-// Detail when the latest sync received changes but couldn't send this device's changes.
-"sync.error.paused" = "ئۆزگەرتىشلىرىڭىز يوللانمايۋاتىدۇ";
 // Button that syncs with Quran.com right away.
 "sync.action.sync-now" = "ھازىر ماسقەدەملەش";
 // The disabled sync button while a sync runs.
@@ -846,6 +842,14 @@
 "sync.status.synced.short" = "ماسقەدەملەندى";
 // Detail on the Settings account card when some items don't sync: %@ is a relative time, such as "2 minutes ago".
 "sync.status.everything-else-synced" = "باشقا ھەممىسى %@ ماسقەدەملەندى";
+// Detail under "Synced" on the Settings account card: %@ is a relative time, such as "2 minutes ago" or "just now".
+"sync.status.synced.card" = "خەتكۈچ، خاتىرە ۋە باشقىلار · %@";
+// Detail under "Syncing…" while a sync runs.
+"sync.status.sending.items" = "خەتكۈچ ۋە خاتىرىلىرىڭىز يوللىنىۋاتىدۇ";
+// Detail under "Couldn't sync": %@ is why it failed, such as "No connection" or "No connection · Retrying soon".
+"sync.status.failed.kept" = "خەتكۈچ ۋە خاتىرىلەر بۇ ئۈسكۈنىدە قالىدۇ · %@";
+// Detail under "Couldn't sync" when the latest sync received changes but couldn't send this device's changes.
+"sync.status.failed.kept.paused" = "خەتكۈچ ۋە خاتىرىلەر بۇ ئۈسكۈنىدە قالىدۇ";
 // Link on the Settings account card that opens the items that don't sync.
 "sync.held.review" = "ماسقەدەملەنمىگەنلەرنى كۆرۈش";
 // Title of the screen with every item that doesn't sync and the latest syncs.

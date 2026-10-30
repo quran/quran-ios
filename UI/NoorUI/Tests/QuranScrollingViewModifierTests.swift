@@ -131,7 +131,7 @@ private struct ScrollingListBody: View {
             }
         }
         .listStyle(.plain)
-        .quranScrolling(scrollToValue: target) { target in
+        .quranScrolling(scrollToValue: target, onReaderScroll: {}) { target in
             items.contains(target) ? target : nil
         }
     }

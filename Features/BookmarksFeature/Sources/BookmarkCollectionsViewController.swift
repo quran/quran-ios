@@ -24,7 +24,7 @@ final class BookmarkCollectionsViewController: UIHostingController<BookmarkColle
     }
 
     private var currentEditMode: EditMode? {
-        viewModel.hasDeletableCollections ? viewModel.editMode : nil
+        viewModel.hasDeletableItems ? viewModel.editMode : nil
     }
 
     private let viewModel: BookmarkCollectionsViewModel

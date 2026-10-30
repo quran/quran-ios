@@ -13,13 +13,15 @@ public struct ContinueReadingSection: View {
         readingBookmarks: [PlacedReadingBookmark],
         lastPages: [LastPage],
         selectReadingBookmark: @escaping (PlacedReadingBookmark) -> Void,
-        selectLastPage: @escaping (LastPage) -> Void
+        selectLastPage: @escaping (LastPage) -> Void,
+        deleteReadingBookmark: ItemDeletionAction<PlacedReadingBookmark>? = nil
     ) {
         self.title = title
         self.readingBookmarks = readingBookmarks
         self.lastPages = lastPages
         self.selectReadingBookmark = selectReadingBookmark
         self.selectLastPage = selectLastPage
+        self.deleteReadingBookmark = deleteReadingBookmark
     }
     #else
     public init(title: String, lastPages: [LastPage], selectLastPage: @escaping (LastPage) -> Void) {
@@ -36,6 +38,8 @@ public struct ContinueReadingSection: View {
     private let lastPages: [LastPage]
     #if QURAN_SYNC
     private let selectReadingBookmark: (PlacedReadingBookmark) -> Void
+    private let deleteReadingBookmark: ItemDeletionAction<PlacedReadingBookmark>?
+    @Environment(\.editMode) private var editMode
     #endif
     private let selectLastPage: (LastPage) -> Void
 
@@ -82,14 +86,31 @@ public struct ContinueReadingSection: View {
     }
 
     #if QURAN_SYNC
+    /// Editing shows every bookmark, so each one can be deleted.
+    private var isEditingBookmarks: Bool {
+        deleteReadingBookmark != nil && editMode?.wrappedValue.isEditing == true
+    }
+
+    private var visibleBookmarks: [SlotIdentifiedBookmark] {
+        let showsAll = bookmarksExpanded || isEditingBookmarks
+        return readingBookmarks.prefix(showsAll ? readingBookmarks.count : 1).map(SlotIdentifiedBookmark.init)
+    }
+
+    private var deleteVisibleBookmark: ItemDeletionAction<SlotIdentifiedBookmark>? {
+        guard let deleteReadingBookmark else {
+            return nil
+        }
+        return { deleteReadingBookmark($0.bookmark) }
+    }
+
     @ViewBuilder
     private var bookmarks: some View {
-        ForEach(Array(readingBookmarks.prefix(bookmarksExpanded ? readingBookmarks.count : 1)), id: \.slot) { bookmark in
-            ContinueReadingBookmarkRow(bookmark: bookmark) {
-                selectReadingBookmark(bookmark)
+        NoorListRows(visibleBookmarks, onDelete: deleteVisibleBookmark) { item in
+            ContinueReadingBookmarkRow(bookmark: item.bookmark) {
+                selectReadingBookmark(item.bookmark)
             }
         }
-        if readingBookmarks.count > 1 {
+        if readingBookmarks.count > 1, !isEditingBookmarks {
             Button {
                 withAnimation(reduceMotion ? nil : NoorAnimation.standard) {
                     bookmarksExpanded.toggle()
@@ -157,6 +178,15 @@ public struct ContinueReadingSection: View {
         .padding(.vertical)
     }
 }
+
+#if QURAN_SYNC
+/// Keeps each row's identity tied to its slot, so moving a bookmark doesn't recreate its row.
+private struct SlotIdentifiedBookmark: Identifiable {
+    let bookmark: PlacedReadingBookmark
+
+    var id: ReadingBookmarkSlot { bookmark.slot }
+}
+#endif
 
 // MARK: - Previews
 

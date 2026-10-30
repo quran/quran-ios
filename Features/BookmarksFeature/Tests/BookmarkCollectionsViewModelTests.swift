@@ -550,6 +550,84 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertEqual(sut.highlights.keys.map(\.quran), [.hafsIndoPak])
     }
 
+    func test_deleteReadingBookmark_clearsBookmarkInMobileSync() async throws {
+        let service = makeReadingBookmarkService()
+        let page = ReadingPreferences.shared.reading.quran.pages[269]
+        let bookmark = try await service.addReadingBookmark(at: .page(page), slot: .orange)
+        let sut = makeSUT(readingBookmarkService: service)
+
+        let toast = await sut.deleteReadingBookmark(bookmark)
+
+        await waitUntilStoredReadingBookmarks { !$0.contains { $0.slot == .orange } }
+        XCTAssertEqual(toast?.action?.title, lAndroid("undo"))
+        XCTAssertNil(sut.error)
+    }
+
+    func test_deleteReadingBookmark_undoRestoresBookmarkInMobileSync() async throws {
+        let service = makeReadingBookmarkService()
+        let ayah = try XCTUnwrap(AyahNumber(quran: ReadingPreferences.shared.reading.quran, sura: 2, ayah: 255))
+        let bookmark = try await service.addReadingBookmark(at: .ayah(ayah), slot: .teal)
+        let sut = makeSUT(readingBookmarkService: service)
+        let toast = await sut.deleteReadingBookmark(bookmark)
+
+        try XCTUnwrap(toast?.action).handler()
+
+        let stored = await waitUntilStoredReadingBookmarks { $0.contains { $0.slot == .teal } }
+        XCTAssertEqual(stored.first { $0.slot == .teal }?.placement, .ayah(ayah))
+        XCTAssertNil(sut.error)
+    }
+
+    func test_deleteReadingBookmark_undoKeepsBookmarkName() async throws {
+        let service = makeReadingBookmarkService()
+        let quran = ReadingPreferences.shared.reading.quran
+        let page = quran.pages[269]
+        try await service.addReadingBookmark(at: .page(page), slot: .red)
+        let renamed = try await service.renameReadingBookmark(in: .red, name: "Night reading", quran: quran)
+        let bookmark = try XCTUnwrap(PlacedReadingBookmark(renamed))
+        let sut = makeSUT(readingBookmarkService: service)
+        let toast = await sut.deleteReadingBookmark(bookmark)
+
+        try XCTUnwrap(toast?.action).handler()
+
+        let stored = await waitUntilStoredReadingBookmarks { $0.contains { $0.slot == .red } }
+        let restored = try XCTUnwrap(stored.first { $0.slot == .red })
+        XCTAssertEqual(restored.name, "Night reading")
+        XCTAssertEqual(restored.placement, .page(page))
+        XCTAssertNil(sut.error)
+    }
+
+    func test_collectionsViewController_showsEditButtonForReadingBookmarksWithoutCustomCollections() async throws {
+        let service = makeReadingBookmarkService()
+        let page = ReadingPreferences.shared.reading.quran.pages[269]
+        try await service.addReadingBookmark(at: .page(page), slot: .orange)
+        let sut = makeSUT(readingBookmarkService: service)
+        let viewController = BookmarkCollectionsViewController(viewModel: sut)
+        let task = Task { await sut.start() }
+        defer { task.cancel() }
+
+        await waitUntil { viewController.navigationItem.rightBarButtonItems?.count == 2 }
+
+        let systemEditTitle = UIBarButtonItem(barButtonSystemItem: .edit, target: nil, action: nil).title
+        XCTAssertTrue(sut.deletableCollections.isEmpty)
+        XCTAssertEqual(viewController.navigationItem.rightBarButtonItems?.first?.title, systemEditTitle)
+    }
+
+    func test_deleteReadingBookmark_exitsEditModeWhenNothingDeletableRemains() async throws {
+        let service = makeReadingBookmarkService()
+        let page = ReadingPreferences.shared.reading.quran.pages[269]
+        let bookmark = try await service.addReadingBookmark(at: .page(page), slot: .orange)
+        let sut = makeSUT(readingBookmarkService: service)
+        let task = Task { await sut.start() }
+        defer { task.cancel() }
+        await waitUntil { sut.readingBookmarks.contains { $0.slot == .orange } }
+        sut.editMode = .active
+
+        _ = await sut.deleteReadingBookmark(bookmark)
+        await waitUntil { sut.readingBookmarks.isEmpty }
+
+        XCTAssertEqual(sut.editMode, .inactive)
+    }
+
     func test_navigateToPageReadingBookmark_navigatesToPage() {
         let page = Quran.hafsMadani1405.pages[269]
         let bookmark = QuranAnnotations.PlacedReadingBookmark(
@@ -703,6 +781,26 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         throw TestError.collectionNotFound
     }
 
+    /// Observes the stored reading bookmarks until they match, failing the test after `waitUntil`'s timeout.
+    @discardableResult
+    private func waitUntilStoredReadingBookmarks(
+        file: StaticString = #filePath,
+        line: UInt = #line,
+        where predicate: @escaping @MainActor ([PlacedReadingBookmark]) -> Bool
+    ) async -> [PlacedReadingBookmark] {
+        let latest = LatestReadingBookmarks()
+        let sequence = makeReadingBookmarkService().placedReadingBookmarksSequence(quran: ReadingPreferences.shared.reading.quran)
+        let observation = Task { @MainActor in
+            for try await bookmarks in sequence {
+                latest.value = bookmarks
+            }
+        }
+        defer { observation.cancel() }
+
+        await waitUntil(condition: { latest.value.map(predicate) ?? false }, file: file, line: line)
+        return latest.value ?? []
+    }
+
     private func collection(
         name: String,
         id: String? = nil,
@@ -732,6 +830,11 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 private enum TestError: Error, Equatable {
     case collectionNotFound
     case loginFailed
+}
+
+@MainActor
+private final class LatestReadingBookmarks {
+    var value: [PlacedReadingBookmark]?
 }
 
 #endif

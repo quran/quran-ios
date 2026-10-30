@@ -1,14 +1,14 @@
 #if QURAN_SYNC
 import Localization
-import NoorUI
 import QuranAnnotations
 
-enum ReadingBookmarkUndoToast {
-    static func saved(_ bookmark: PlacedReadingBookmark) -> Toast {
+/// The toasts shown after saving, moving, or removing a reading bookmark.
+public enum ReadingBookmarkUndoToast {
+    public static func saved(_ bookmark: PlacedReadingBookmark) -> Toast {
         Toast(MultipartText.localizedFormat("ayah.menu.reading-bookmark.saved", locationTitle(bookmark.placement)))
     }
 
-    static func moved(
+    public static func moved(
         from previousBookmark: PlacedReadingBookmark,
         to currentBookmark: PlacedReadingBookmark,
         undo: @escaping () -> Void
@@ -23,7 +23,7 @@ enum ReadingBookmarkUndoToast {
         )
     }
 
-    static func removed(
+    public static func removed(
         _ bookmark: PlacedReadingBookmark,
         undo: @escaping () -> Void
     ) -> Toast {

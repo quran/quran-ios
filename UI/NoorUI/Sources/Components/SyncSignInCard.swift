@@ -52,10 +52,9 @@ public struct SyncSignInCard: View {
 
             Spacer(minLength: 0)
 
-            AsyncButton(tapPolicy: .ignoreWhileRunning, action: signInAction) {
-                Text(actionLabel)
+            AsyncButton(tapPolicy: .ignoreWhileRunning, action: signInAction) { isRunning in
+                ProgressTitle(actionLabel, isInProgress: isRunning, color: .onAccent)
                     .font(.headline)
-                    .foregroundStyle(Color.onAccent)
                     .padding(.horizontal, actionHorizontalPadding)
                     .padding(.vertical, actionVerticalPadding)
                     .background(Color.accentColor, in: Capsule())

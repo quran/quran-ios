@@ -82,10 +82,9 @@ struct QuranComAccountCard: View {
                 Spacer(minLength: 0)
             }
 
-            AsyncButton(tapPolicy: .ignoreWhileRunning, action: signInAction) {
-                Text(l("setting.quran_account.sign_in"))
+            AsyncButton(tapPolicy: .ignoreWhileRunning, action: signInAction) { isRunning in
+                ProgressTitle(l("setting.quran_account.sign_in"), isInProgress: isRunning, color: .onAccent)
                     .font(.headline)
-                    .foregroundStyle(Color.onAccent)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, signInVerticalPadding)
                     .background(Color.accentColor, in: Capsule())

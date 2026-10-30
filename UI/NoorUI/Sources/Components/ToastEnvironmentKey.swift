@@ -27,48 +27,58 @@ private struct ToastPresenterKey: EnvironmentKey {
 }
 
 private struct ToastPresenterModifier: ViewModifier {
-    @State private var windowScene: UIWindowScene?
+    @State private var anchor = ToastAnchor()
+    @ScaledMetric private var bottomBarsSpacing = 8
 
     func body(content: Content) -> some View {
         content
             .background(
-                WindowSceneReader(windowScene: $windowScene)
+                ToastAnchorReader(anchor: anchor)
             )
-            .onPreferenceChange(WindowScenePreferenceKey.self) { windowScene in
-                self.windowScene = windowScene
-            }
             .environment(\.showToast) { toast in
-                if let windowScene {
-                    ToastPresenter.shared.showToast(toast, in: windowScene)
-                } else {
+                guard let view = anchor.view, let windowScene = view.window?.windowScene else {
                     logger.error("Failed to obtain windowScene")
+                    return
                 }
+                let placedToast = toast.clearingBottomBars(height: view.bottomBarsHeight, spacing: bottomBarsSpacing)
+                ToastPresenter.shared.showToast(placedToast, in: windowScene)
             }
     }
 }
 
-private struct WindowScenePreferenceKey: PreferenceKey {
-    static var defaultValue: UIWindowScene? = nil
-
-    static func reduce(value: inout UIWindowScene?, nextValue: () -> UIWindowScene?) {
-        value = value ?? nextValue()
-    }
+/// The presenting view, read when a toast shows to find its window and the bars at the bottom of its screen.
+@MainActor
+private final class ToastAnchor {
+    weak var view: UIView?
 }
 
-private struct WindowSceneReader: UIViewRepresentable {
-    @Binding var windowScene: UIWindowScene?
+private struct ToastAnchorReader: UIViewRepresentable {
+    let anchor: ToastAnchor
 
     func makeUIView(context: Context) -> UIView {
         let view = UIView()
-        DispatchQueue.main.async {
-            windowScene = view.window?.windowScene
-        }
+        view.isUserInteractionEnabled = false
+        anchor.view = view
         return view
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
-        DispatchQueue.main.async {
-            windowScene = uiView.window?.windowScene
+        anchor.view = uiView
+    }
+}
+
+private extension UIView {
+    /// How far the bars at the bottom of this view's screen, like a tab bar, reach above the window's bottom edge.
+    var bottomBarsHeight: CGFloat {
+        let screenView = sequence(first: self, next: \.superview).first { $0.next is UIViewController }
+        guard let window, let screenView else {
+            return 0
         }
+        return Toast.bottomBarsHeight(
+            windowHeight: window.bounds.height,
+            windowBottomInset: window.safeAreaInsets.bottom,
+            screenBottom: screenView.convert(screenView.bounds, to: window).maxY,
+            screenBottomInset: screenView.safeAreaInsets.bottom
+        )
     }
 }

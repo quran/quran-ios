@@ -41,6 +41,33 @@ public struct Toast {
     }
 }
 
+extension Toast {
+    /// How far a screen's bottom bars, like a tab bar, reach above the window's bottom edge.
+    /// Only a screen that reaches the window's bottom edge has bars, and only when its bottom inset
+    /// is taller than the home indicator's; a popover, even one with a down arrow, has none.
+    /// A screen that stops above an opaque tab bar isn't detected, and the height is read when the
+    /// toast is requested, so rotating while it shows doesn't move it.
+    static func bottomBarsHeight(
+        windowHeight: CGFloat,
+        windowBottomInset: CGFloat,
+        screenBottom: CGFloat,
+        screenBottomInset: CGFloat
+    ) -> CGFloat {
+        guard screenBottom >= windowHeight - 0.5, screenBottomInset > windowBottomInset else {
+            return 0
+        }
+        return screenBottomInset
+    }
+
+    /// Keeps the toast at its own offset unless bars at the bottom of the screen would cover it.
+    func clearingBottomBars(height: CGFloat, spacing: CGFloat) -> Toast {
+        guard height > 0 else {
+            return self
+        }
+        return Toast(message, action: action, duration: duration, bottomOffset: max(bottomOffset, height + spacing))
+    }
+}
+
 private struct ToastView: View {
     let message: MultipartText
     let action: ToastAction?

@@ -1,6 +1,7 @@
 #if QURAN_SYNC
 
 import AnnotationsService
+import AppDependenciesFake
 import Foundation
 import MobileSync
 import MobileSyncTestSupport
@@ -153,7 +154,7 @@ final class HeldItemEditorTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared
 
     private func makeSUT() -> HeldItemEditor {
-        let container = AppDependenciesStub()
+        let container = AppDependenciesFake()
         return HeldItemEditor(
             noteService: MobileSyncNoteService(quranDataService: database.quranDataService),
             collectionService: AyahBookmarkCollectionService(quranDataService: database.quranDataService),

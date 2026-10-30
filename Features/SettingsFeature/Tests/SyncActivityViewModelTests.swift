@@ -1,5 +1,6 @@
 #if QURAN_SYNC
 
+import AppDependenciesFake
 import Combine
 import Foundation
 import MobileSync
@@ -62,7 +63,7 @@ final class SyncActivityViewModelTests: XCTestCase {
     private func makeSUT() -> SyncActivityViewModel {
         SyncActivityViewModel(
             quranDataService: database.quranDataService,
-            editor: SyncActivityBuilder(container: AppDependenciesStub()).heldItemEditor(navigationController: nil)
+            editor: SyncActivityBuilder(container: AppDependenciesFake()).heldItemEditor(navigationController: nil)
         )
     }
 }

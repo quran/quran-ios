@@ -617,6 +617,24 @@ private func featuresTargets() -> [[Target]] {
             "SystemDependencies",
         ] + mobileSyncTargetDependencies),
 
+        target(type, name: "AppDependenciesFake", hasTests: false, dependencies: [
+            "Analytics",
+            "AnalyticsFake",
+            "AppDependencies",
+            "AuthenticationClient",
+            "AuthenticationClientFake",
+            "BatchDownloader",
+            "CoreDataPersistence",
+            "CoreDataPersistenceTestSupport",
+            "LastPagePersistence",
+            "LegacyDataMigration",
+            "LegacyDataPersistence",
+            "NoorUI",
+            "NotePersistence",
+            "PageBookmarkPersistence",
+            "ReadingService",
+        ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
+
         target(type, name: "FeaturesSupport", hasTests: false, dependencies: [
             "BatchDownloader",
             "Analytics",
@@ -812,9 +830,7 @@ private func featuresTargets() -> [[Target]] {
         ], testDependencies: [
             "AnalyticsFake",
             "AnnotationsService",
-            "AppDependencies",
-            "CoreDataPersistenceTestSupport",
-            "LastPagePersistence",
+            "AppDependenciesFake",
             "QuranAnnotations",
             "QuranKit",
             .product(name: "CombineSchedulers", package: "combine-schedulers"),
@@ -950,6 +966,7 @@ private func featuresTargets() -> [[Target]] {
             "Analytics",
             "AnalyticsFake",
             "AppDependencies",
+            "AppDependenciesFake",
             "AppIconFeature",
             "AudioDownloadsFeature",
             "AuthenticationClient",

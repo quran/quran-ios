@@ -3,6 +3,7 @@
 import Analytics
 import AnalyticsFake
 import AppDependencies
+import AppDependenciesFake
 import AppIconFeature
 import AudioDownloadsFeature
 import AuthenticationClient
@@ -426,7 +427,7 @@ final class SettingsRootViewModelTests: XCTestCase {
         navigationController: UINavigationController? = nil
     ) -> SettingsRootViewModel {
         let navigationController = navigationController ?? UINavigationController()
-        let container = AppDependenciesStub(authenticationClient: authenticationClient ?? UnavailableAuthenticationClient())
+        let container = AppDependenciesFake(authenticationClient: authenticationClient ?? UnavailableAuthenticationClient())
         return SettingsRootViewModel(
             analytics: analytics,
             reviewService: ReviewService(analytics: AnalyticsLibrarySpy()),

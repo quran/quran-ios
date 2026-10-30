@@ -2,6 +2,7 @@
 
 import AnalyticsFake
 import AppDependencies
+import AppDependenciesFake
 import AppIconFeature
 import AudioDownloadsFeature
 import AuthenticationClient
@@ -65,7 +66,7 @@ final class SettingsRootViewModelSyncActivityTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared
 
     private func makeSUT(authenticationClient: any AuthenticationClient) -> SettingsRootViewModel {
-        let container = AppDependenciesStub(authenticationClient: authenticationClient)
+        let container = AppDependenciesFake(authenticationClient: authenticationClient)
         return SettingsRootViewModel(
             analytics: AnalyticsLibrarySpy(),
             reviewService: ReviewService(analytics: AnalyticsLibrarySpy()),

@@ -702,7 +702,7 @@
 // Button that places an unplaced reading bookmark at the current ayah or page.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.set-here" = "设在这里";
-// VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
+// A reading bookmark's name field, with the bookmark's color name: the rename alert's placeholder and a VoiceOver label.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.name.accessibility-label" = "%@书签名称";
 // Long-press menu action that opens the Quran at a reading bookmark.

@@ -89,12 +89,23 @@ final class HeldItemEditor: ObservableObject, NoteEditorListener {
     /// Renames the reading bookmark in `slot`; an empty name clears it, so the bookmark goes by its color.
     func renameReadingBookmark(in slot: ReadingBookmarkSlot) async {
         let name = pendingName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let quran = readingPreferences.reading.quran
         do {
+            // A rename stamps the bookmark as updated, so keeping its stored name, which another device may have
+            // changed since the list showed it, must not write.
+            let bookmarks = try await readingBookmarkService.readingBookmarksSequence(quran: quran).first { _ in true }
+            try Task.checkCancellation()
+            // The held list reads MobileSync directly and can show a bookmark this list drops, which still renames.
+            if let current = bookmarks?.first(where: { $0.slot == slot }), name == (current.name ?? "") {
+                return
+            }
             try await readingBookmarkService.renameReadingBookmark(
                 in: slot,
                 name: name.isEmpty ? nil : name,
-                quran: readingPreferences.reading.quran
+                quran: quran
             )
+        } catch is CancellationError {
+            return
         } catch {
             self.error = error
         }

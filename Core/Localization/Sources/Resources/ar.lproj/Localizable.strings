@@ -454,7 +454,7 @@
 "bookmarks.reading.move-here" = "انقل إلى هنا";
 // Button that places an unplaced reading bookmark at the current ayah or page.
 "bookmarks.reading.set-here" = "ضع هنا";
-// VoiceOver label for a reading bookmark's name field, with the bookmark's color name.
+// A reading bookmark's name field, with the bookmark's color name: the rename alert's placeholder and a VoiceOver label.
 "bookmarks.reading.name.accessibility-label" = "اسم العلامة %@";
 // Long-press menu action that opens the Quran at a reading bookmark.
 "bookmarks.reading.open" = "فتح";

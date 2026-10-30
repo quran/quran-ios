@@ -91,6 +91,50 @@ final class HeldItemEditorTests: XCTestCase {
         XCTAssertEqual(bookmarks?.first { $0.slot == .teal }?.name, "Juz Amma")
     }
 
+    /// A rename stamps the bookmark as updated, which would sort it first and sync a change nobody made.
+    func test_renameReadingBookmark_skipsTheWrite_whenTheNameIsUnchanged() async throws {
+        let original = try await renamedTealBookmark("Juz 30", at: Date(timeIntervalSinceNow: -3600))
+        let sut = makeSUT()
+
+        await sut.edit(.readingBookmark(slot: .teal, name: "Juz 30"))
+        sut.pendingName = " Juz 30 \n"
+        await sut.renameReadingBookmark(in: .teal)
+
+        XCTAssertNil(sut.error)
+        let stored = try await storedReadingBookmark(in: .teal)
+        XCTAssertEqual(stored?.name, "Juz 30")
+        XCTAssertEqual(stored?.lastUpdated, original.lastUpdated)
+    }
+
+    func test_renameReadingBookmark_comparesWithTheStoredName_whenItChangedSinceTheListShowedIt() async throws {
+        _ = try await renamedTealBookmark("Juz 30", at: Date(timeIntervalSinceNow: -3600))
+        let sut = makeSUT()
+
+        await sut.edit(.readingBookmark(slot: .teal, name: "Juz 30"))
+        let renamedElsewhere = try await renamedTealBookmark("Juz Amma", at: Date(timeIntervalSinceNow: -60))
+        sut.pendingName = "Juz Amma"
+        await sut.renameReadingBookmark(in: .teal)
+
+        XCTAssertNil(sut.error)
+        let stored = try await storedReadingBookmark(in: .teal)
+        XCTAssertEqual(stored?.name, "Juz Amma")
+        XCTAssertEqual(stored?.lastUpdated, renamedElsewhere.lastUpdated)
+    }
+
+    func test_renameReadingBookmark_clearsTheName_whenItIsEmptied() async throws {
+        let original = try await renamedTealBookmark("Juz 30", at: Date(timeIntervalSinceNow: -3600))
+        let sut = makeSUT()
+
+        await sut.edit(.readingBookmark(slot: .teal, name: "Juz 30"))
+        sut.pendingName = "  "
+        await sut.renameReadingBookmark(in: .teal)
+
+        XCTAssertNil(sut.error)
+        let stored = try await storedReadingBookmark(in: .teal)
+        XCTAssertNil(stored?.name)
+        XCTAssertNotEqual(stored?.lastUpdated, original.lastUpdated)
+    }
+
     // MARK: Rows
 
     func test_rowEdit_renamesReadingBookmarks_thatAreTooLongOrRefused() {
@@ -162,6 +206,16 @@ final class HeldItemEditorTests: XCTestCase {
             noteEditorBuilder: NoteEditorBuilder(container: container),
             navigationController: UINavigationController()
         )
+    }
+
+    private func renamedTealBookmark(_ name: String, at timestamp: Date) async throws -> MobileSyncReadingBookmark {
+        _ = try await database.quranDataService.setAyahReadingBookmark(slot: .teal, sura: 78, ayah: 1, timestamp: timestamp)
+        return try await database.quranDataService.renameReadingBookmark(slot: .teal, name: name, mushaf: .madani1405, timestamp: timestamp)
+    }
+
+    private func storedReadingBookmark(in slot: MobileSyncReadingBookmarkSlot) async throws -> MobileSyncReadingBookmark? {
+        let bookmarks = try await database.quranDataService.readingBookmarksSequence(mushaf: .madani1405).first { _ in true }
+        return bookmarks?.first { $0.slot == slot }
     }
 
     private func collectionNames() async throws -> [String] {

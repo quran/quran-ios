@@ -4,7 +4,7 @@ import XCTest
 @MainActor
 final class QuranScrollSchedulerTests: XCTestCase {
     func testSchedulingNewScrollCancelsPendingScroll() async {
-        let scheduler = QuranScrollScheduler()
+        let scheduler = QuranScrollScheduler<Int>()
         let staleScroll = expectation(description: "Stale scroll is cancelled")
         staleScroll.isInverted = true
         let latestScroll = expectation(description: "Latest scroll runs")
@@ -20,29 +20,34 @@ final class QuranScrollSchedulerTests: XCTestCase {
     }
 
     func testRemovingScrollTargetCancelsPendingScroll() async {
-        let scheduler = QuranScrollScheduler()
+        let scheduler = QuranScrollScheduler<Int>()
         let staleScroll = expectation(description: "Stale scroll is cancelled")
         staleScroll.isInverted = true
 
-        scheduler.scheduleScroll(to: 1, transform: { $0 }) { _ in
+        scheduler.scroll(to: 1) { _ in
             staleScroll.fulfill()
         }
-        scheduler.scheduleScroll(to: nil as Int?, transform: { $0 }) { _ in
+        scheduler.scroll(to: nil) { _ in
             XCTFail("A removed target must not scroll")
         }
 
         await fulfillment(of: [staleScroll], timeout: 0.1)
+        XCTAssertNil(scheduler.target)
     }
 
-    func testInvalidScrollTargetDoesNotRunAction() async {
-        let scheduler = QuranScrollScheduler()
-        let invalidScroll = expectation(description: "Invalid scroll does not run")
-        invalidScroll.isInverted = true
+    func testScrollRecordsTargetAndScrollsToIt() async {
+        let scheduler = QuranScrollScheduler<Int>()
+        let scroll = expectation(description: "Target scrolls")
+        var scrolledTarget: Int?
 
-        scheduler.scheduleScroll(to: 1, transform: { _ in nil as Int? }) { _ in
-            invalidScroll.fulfill()
+        scheduler.scroll(to: 2) {
+            scrolledTarget = $0
+            scroll.fulfill()
         }
 
-        await fulfillment(of: [invalidScroll], timeout: 0.1)
+        // Size changes re-scroll to the recorded target.
+        XCTAssertEqual(scheduler.target, 2)
+        await fulfillment(of: [scroll], timeout: 0.1)
+        XCTAssertEqual(scrolledTarget, 2)
     }
 }

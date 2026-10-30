@@ -1,5 +1,6 @@
 import AnalyticsFake
 import AnnotationsService
+import AppDependenciesFake
 import CombineSchedulers
 import QuranAnnotations
 import QuranImageFeature
@@ -177,7 +178,7 @@ final class ContentViewModelTests: XCTestCase {
 
     private let service = VerseOverlayService()
     private let scheduler = DispatchQueue.test
-    private let container = AppDependenciesStub()
+    private let container = AppDependenciesFake()
     private var previousQuranMode = QuranMode.arabic
 
     private func verse(_ ayah: Int) -> AyahNumber {

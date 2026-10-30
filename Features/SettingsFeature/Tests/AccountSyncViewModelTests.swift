@@ -1,5 +1,6 @@
 #if QURAN_SYNC
 
+import AppDependenciesFake
 import AuthenticationClient
 import AuthenticationClientFake
 import Combine
@@ -301,7 +302,7 @@ final class AccountSyncViewModelTests: XCTestCase {
         signOut: @escaping @MainActor () async throws -> Void = {},
         navigationController: UINavigationController? = nil
     ) -> AccountSyncViewModel {
-        let container = AppDependenciesStub()
+        let container = AppDependenciesFake()
         return AccountSyncViewModel(
             user: nil,
             authenticationClient: client,

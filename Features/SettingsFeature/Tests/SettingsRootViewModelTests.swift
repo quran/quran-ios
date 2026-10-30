@@ -3,23 +3,19 @@
 import Analytics
 import AnalyticsFake
 import AppDependencies
+import AppDependenciesFake
 import AppIconFeature
 import AudioDownloadsFeature
 import AuthenticationClient
 import AuthenticationClientFake
-import BatchDownloader
 import Combine
 import CoreDataPersistence
 import CoreDataPersistenceTestSupport
 import Foundation
-import LastPagePersistence
 import LegacyDataPersistence
 import MobileSync
 import MobileSyncTestSupport
-import NotePersistence
-import PageBookmarkPersistence
 import ReadingSelectorFeature
-import ReadingService
 import SettingsService
 import TranslationsFeature
 import UIKit
@@ -426,7 +422,7 @@ final class SettingsRootViewModelTests: XCTestCase {
         navigationController: UINavigationController? = nil
     ) -> SettingsRootViewModel {
         let navigationController = navigationController ?? UINavigationController()
-        let container = AppDependenciesStub(authenticationClient: authenticationClient ?? UnavailableAuthenticationClient())
+        let container = AppDependenciesFake(authenticationClient: authenticationClient ?? UnavailableAuthenticationClient())
         return SettingsRootViewModel(
             analytics: analytics,
             reviewService: ReviewService(analytics: AnalyticsLibrarySpy()),

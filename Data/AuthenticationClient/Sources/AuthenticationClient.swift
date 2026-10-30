@@ -70,8 +70,9 @@ public protocol AuthenticationClient {
     /// The signed-in user now and after every change, such as a token refresh that updates the profile.
     ///
     /// nil means signed out, a sign-in in progress, or a signed-in session whose profile isn't known yet,
-    /// so read ``authenticationState`` to tell them apart. Cancel the observing task to stop; the sequence
-    /// then ends or throws `CancellationError`.
+    /// so read ``authenticationState`` to tell them apart. At launch the first user waits until the stored
+    /// session is read, not for ``restoreState()``'s token refresh. Cancel the observing task to stop; the
+    /// sequence then ends or throws `CancellationError`.
     var loggedInUserUpdates: AnyAsyncSequence<MobileSyncUser?> { get }
 
     /// Emits only changes, not the current state.

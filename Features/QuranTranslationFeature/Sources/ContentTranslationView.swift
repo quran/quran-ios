@@ -67,6 +67,8 @@ public struct ContentTranslationView: View {
                     verse: { point in viewModel.ayahAtPoint(point) }
                 )
             )
+            .onAppear { viewModel.onAppear() }
+            .onDisappear { viewModel.onDisappear() }
             .task(id: Pair(viewModel.verses, viewModel.selectedTranslations)) {
                 await viewModel.load()
             }

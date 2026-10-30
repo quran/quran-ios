@@ -16,7 +16,10 @@ public struct VerseOverlays: Equatable {
 
     public var playingVerses: [AyahNumber] = []
     public var selectedVerses: [AyahNumber] = []
+    /// The verse content scrolls to after navigation; content clears it once it has scrolled there.
     public var navigationTarget: AyahNumber?
+    /// The verse briefly painted after navigation. Visual only; it never requests scrolling.
+    public var navigationHighlight: AyahNumber?
     public var colorHighlights: [AyahNumber: HighlightColor] = [:]
     public var notedVerses: Set<AyahNumber> = []
     #if QURAN_SYNC
@@ -34,6 +37,7 @@ extension VerseOverlays {
         overlays.playingVerses = playingVerses.filter { $0.page == page }
         overlays.selectedVerses = selectedVerses.filter { $0.page == page }
         overlays.navigationTarget = navigationTarget.flatMap { $0.page == page ? $0 : nil }
+        overlays.navigationHighlight = navigationHighlight.flatMap { $0.page == page ? $0 : nil }
         overlays.colorHighlights = colorHighlights.filter { $0.key.page == page }
         overlays.notedVerses = notedVerses.filter { $0.page == page }
         overlays.pointedWord = pointedWord.flatMap { $0.verse.page == page ? $0 : nil }
@@ -92,7 +96,8 @@ extension VerseOverlays {
         if oldValue.playingVerses != playingVerses {
             return true
         }
-        if oldValue.navigationTarget != navigationTarget {
+        // Only a new target scrolls; clearing a consumed target must not.
+        if navigationTarget != nil, oldValue.navigationTarget != navigationTarget {
             return true
         }
         return false

@@ -108,6 +108,16 @@ class ContentImageViewModel: ObservableObject {
         }
     }
 
+    /// Scrolls only while the view is on screen, so content being replaced can't use up the navigation target.
+    func onAppear() {
+        isVisible = true
+        scrollToVerseIfNeeded()
+    }
+
+    func onDisappear() {
+        isVisible = false
+    }
+
     func wordAtGlobalPoint(_ point: CGPoint) -> Word? {
         let localPoint = CGPoint(
             x: point.x - imageFrame.minX,
@@ -122,13 +132,19 @@ class ContentImageViewModel: ObservableObject {
     private let overlayService: VerseOverlayService
     private let reading: Reading
     private var cancellables: Set<AnyCancellable> = []
+    private var isVisible = false
 
     private func scrollToVerseIfNeededSynchronously() {
-        guard let ayah = overlayService.overlays.firstScrollingVerse() else {
+        // Wait until the view is on screen and `loadImagePage()` has the page.
+        guard isVisible, imagePage != nil, let ayah = overlayService.overlays.firstScrollingVerse() else {
             return
         }
         logger.info("Quran Image: scrollToVerseIfNeeded \(ayah.nonLocalizedDescription)")
         scrollToVerse = ayah
+        if ayah.page == page {
+            // Scroll to the navigation target once; later requests keep the reader's position.
+            overlayService.consumeNavigationTarget(ayah)
+        }
     }
 
     private func scrollToVerseIfNeeded() {

@@ -15,8 +15,9 @@ struct PagesView: View {
 
     var body: some View {
         GeometryReader { geometry in
+            let strategy = pagingStrategy(with: geometry)
             QuranPaginationView(
-                pagingStrategy: pagingStrategy(with: geometry),
+                pagingStrategy: strategy,
                 selection: $viewModel.visiblePages,
                 pages: viewModel.deps.quran.pages,
                 onVisiblePageChanged: viewModel.onVisiblePageChanged
@@ -43,6 +44,7 @@ struct PagesView: View {
                         #endif
                     }
                 }
+                .onAppear { viewModel.onPageContentAppear(pagingStrategy: strategy) }
             }
             .id(viewModel.quranMode)
         }

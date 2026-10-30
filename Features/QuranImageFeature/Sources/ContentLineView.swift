@@ -65,6 +65,8 @@ struct ContentLineView: View {
                     verse: { point in viewModel.verseAtGlobalPoint(point) }
                 )
             )
+            .onAppear { viewModel.onAppear() }
+            .onDisappear { viewModel.onDisappear() }
             .task {
                 await viewModel.loadLinePage()
             }

@@ -12,6 +12,7 @@ final class VerseOverlaysTests: XCTestCase {
         overlays.playingVerses = [second, other, first]
         overlays.selectedVerses = [other, first, second]
         overlays.navigationTarget = first
+        overlays.navigationHighlight = second
         overlays.colorHighlights = [first: .green, other: .blue]
         overlays.notedVerses = [second, other]
         overlays.pointedWord = Word(verse: second, wordNumber: 1)
@@ -21,6 +22,7 @@ final class VerseOverlaysTests: XCTestCase {
         XCTAssertEqual(restricted.playingVerses, [second, first])
         XCTAssertEqual(restricted.selectedVerses, [first, second])
         XCTAssertEqual(restricted.navigationTarget, first)
+        XCTAssertEqual(restricted.navigationHighlight, second)
         XCTAssertEqual(restricted.colorHighlights, [first: .green])
         XCTAssertEqual(restricted.notedVerses, [second])
         XCTAssertEqual(restricted.pointedWord, overlays.pointedWord)
@@ -32,11 +34,13 @@ final class VerseOverlaysTests: XCTestCase {
         let other = Quran.hafsMadani1405.pages[1].firstVerse
         var overlays = VerseOverlays()
         overlays.navigationTarget = other
+        overlays.navigationHighlight = other
         overlays.pointedWord = Word(verse: other, wordNumber: 1)
 
         let restricted = overlays.restricted(to: page)
 
         XCTAssertNil(restricted.navigationTarget)
+        XCTAssertNil(restricted.navigationHighlight)
         XCTAssertNil(restricted.pointedWord)
     }
 
@@ -51,6 +55,30 @@ final class VerseOverlaysTests: XCTestCase {
         overlays.playingVerses = []
 
         XCTAssertEqual(overlays.firstScrollingVerse(), verses[2])
+    }
+
+    func test_needsScrolling_onlyForANewNavigationTarget() {
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        let original = VerseOverlays()
+        var targeted = original
+        targeted.navigationTarget = verses[0]
+        var retargeted = targeted
+        retargeted.navigationTarget = verses[1]
+        var consumed = retargeted
+        consumed.navigationTarget = nil
+
+        XCTAssertTrue(targeted.needsScrolling(comparingTo: original))
+        XCTAssertTrue(retargeted.needsScrolling(comparingTo: targeted))
+        XCTAssertFalse(consumed.needsScrolling(comparingTo: retargeted))
+    }
+
+    func test_needsScrolling_ignoresTheNavigationHighlight() {
+        let original = VerseOverlays()
+        var highlighted = original
+        highlighted.navigationHighlight = Quran.hafsMadani1405.firstVerse
+
+        XCTAssertFalse(highlighted.needsScrolling(comparingTo: original))
+        XCTAssertFalse(original.needsScrolling(comparingTo: highlighted))
     }
 
     func test_pageNavigation_prefersLastSelectedVerseOverLastPlayingVerse() {

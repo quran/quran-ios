@@ -293,13 +293,22 @@ public final class ContentTranslationViewModel: ObservableObject {
                 translations: requestedTranslations,
                 verseTexts: requestedVerseTexts
             )
-            scrollToVerseIfNeeded()
         } catch is CancellationError {
             logger.info("Cancelled translations data load")
         } catch {
             // TODO: should show error to the user
             crasher.recordError(error, reason: "Failed to retrieve quran page details")
         }
+    }
+
+    /// Scrolls only while the view is on screen, so content being replaced can't use up the navigation target.
+    func onAppear() {
+        isVisible = true
+        scrollToVerseIfNeeded()
+    }
+
+    func onDisappear() {
+        isVisible = false
     }
 
     func openURL(_ url: TranslationURL) {
@@ -326,6 +335,7 @@ public final class ContentTranslationViewModel: ObservableObject {
             translations: translations,
             verseTexts: verseTexts
         )
+        scrollToVerseIfNeeded()
     }
 
     // MARK: Private
@@ -334,6 +344,7 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     private var cancellables: Set<AnyCancellable> = []
     private var listGeneration = 0
+    private var isVisible = false
     private var recordedRowCount = 0
     private let overlayService: VerseOverlayService
     private let dataService: QuranTextDataService
@@ -426,16 +437,16 @@ public final class ContentTranslationViewModel: ObservableObject {
     }
 
     private func scrollToVerseIfNeededSynchronously() {
-        guard let ayah = overlayService.overlays.firstScrollingVerse() else {
+        guard isVisible,
+              let ayah = overlayService.overlays.firstScrollingVerse(),
+              let item = items(quranFont: reading.quranFont).first(where: { $0.id.ayah == ayah })
+        else {
             return
         }
-        for item in items(quranFont: reading.quranFont) {
-            if item.id.ayah == ayah {
-                logger.info("Quran Translation: scrollToVerseIfNeeded \(ayah.nonLocalizedDescription)")
-                scrollToItem = item.id
-                break
-            }
-        }
+        logger.info("Quran Translation: scrollToVerseIfNeeded \(ayah.nonLocalizedDescription)")
+        scrollToItem = item.id
+        // Scroll to the navigation target once; later reloads keep the reader's position.
+        overlayService.consumeNavigationTarget(ayah)
     }
 
     private func scrollToVerseIfNeeded() {

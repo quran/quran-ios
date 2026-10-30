@@ -804,11 +804,21 @@ private func featuresTargets() -> [[Target]] {
             "QuranText",
         ]),
 
-        target(type, name: "QuranContentFeature", hasTests: false, dependencies: [
+        target(type, name: "QuranContentFeature", dependencies: [
             "QuranImageFeature",
             "QuranTranslationFeature",
             "Utilities",
-        ]),
+            .product(name: "CombineSchedulers", package: "combine-schedulers"),
+        ], testDependencies: [
+            "AnalyticsFake",
+            "AnnotationsService",
+            "AppDependencies",
+            "CoreDataPersistenceTestSupport",
+            "LastPagePersistence",
+            "QuranAnnotations",
+            "QuranKit",
+            .product(name: "CombineSchedulers", package: "combine-schedulers"),
+        ] + mobileSyncTestSupportDependencies),
 
         target(type, name: "TranslationsFeature", dependencies: [
             "AppDependencies",

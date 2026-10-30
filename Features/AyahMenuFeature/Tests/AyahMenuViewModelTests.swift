@@ -104,6 +104,27 @@ final class AyahMenuViewModelTests: XCTestCase {
         XCTAssertEqual(sut.readingBookmarkState, .available(bookmark: bookmark))
     }
 
+    func test_showReadingBookmarkMenu_forwardsSingleSelectedAyah() {
+        let selectedAyah = verses[0]
+        let sut = makeSUT(verses: [selectedAyah])
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        sut.showReadingBookmarkMenu()
+
+        XCTAssertEqual(listener.readingBookmarkMenuAyah, selectedAyah)
+    }
+
+    func test_showReadingBookmarkMenu_forwardsNothingForMultipleAyahs() {
+        let sut = makeSUT()
+        let listener = BookmarkListenerSpy()
+        sut.listener = listener
+
+        sut.showReadingBookmarkMenu()
+
+        XCTAssertNil(listener.readingBookmarkMenuAyah)
+    }
+
     func test_editNote_requestsNotesListAndNewNoteWhenSelectionHasNoNotes() async {
         let sut = makeSUT()
         let listener = BookmarkListenerSpy()
@@ -250,6 +271,7 @@ private final class BookmarkListenerSpy: AyahMenuListener {
     private(set) var didDismiss = false
     private(set) var sharedLines: [String]?
     private(set) var shownErrors: [Error] = []
+    private(set) var readingBookmarkMenuAyah: AyahNumber?
 
     func dismissAyahMenu() {
         didDismiss = true
@@ -277,6 +299,8 @@ private final class BookmarkListenerSpy: AyahMenuListener {
         bookmarkedVerses = verses
     }
 
-    func showReadingBookmarkMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint) {}
+    func showReadingBookmarkMenu(for ayah: AyahNumber, in sourceView: UIView, at point: CGPoint) {
+        readingBookmarkMenuAyah = ayah
+    }
 }
 #endif

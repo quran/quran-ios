@@ -38,7 +38,7 @@ public protocol AyahMenuListener: AnyObject {
     func deleteNotes(in verses: [AyahNumber]) async
     #if QURAN_SYNC
     func showCollectionEditor(for verses: [AyahNumber])
-    func showReadingBookmarkMenu(_ viewController: UIViewController, in sourceView: UIView, at point: CGPoint)
+    func showReadingBookmarkMenu(for ayah: AyahNumber, in sourceView: UIView, at point: CGPoint)
     #endif
 }
 
@@ -205,10 +205,13 @@ final class AyahMenuViewModel {
     #endif
 
     #if QURAN_SYNC
-    func showReadingBookmarkMenu(_ viewController: UIViewController) {
+    func showReadingBookmarkMenu() {
+        guard let ayah = selectedAyah else {
+            return
+        }
         logger.info("AyahMenu: show reading bookmark menu. Verses: \(deps.verses.map(\.nonLocalizedDescription).joined(separator: ", "))")
         listener?.showReadingBookmarkMenu(
-            viewController,
+            for: ayah,
             in: deps.sourceView,
             at: deps.pointInView
         )

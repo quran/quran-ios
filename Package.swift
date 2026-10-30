@@ -653,7 +653,6 @@ private func featuresTargets() -> [[Target]] {
             "AnnotationsService",
             "NoorUI",
             "QuranLocalization",
-            "ReadingBookmarkMenuFeature",
             "Utilities",
         ], testDependencies: [
             "AnalyticsFake",

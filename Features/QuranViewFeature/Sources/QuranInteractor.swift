@@ -50,6 +50,8 @@ protocol QuranPresentable: UIViewController {
 
     func setVisiblePages(_ pages: [Page])
     #if QURAN_SYNC
+    /// How far the reader's bars at the bottom, like the audio bar, reach above the window's bottom edge.
+    var bottomBarsHeight: CGFloat { get }
     func updateReadingBookmark(_ bookmark: PlacedReadingBookmark?)
     #else
     func updateBookmark(_ isBookmarked: Bool)
@@ -324,10 +326,14 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     func showReadingBookmarkMenu(
-        _ viewController: UIViewController,
+        for ayah: AyahNumber,
         in sourceView: UIView,
         at point: CGPoint
     ) {
+        let viewController = deps.readingBookmarkMenuBuilder.build(
+            ayah: ayah,
+            bottomBarsHeight: presenterBottomBarsHeight
+        )
         contentViewModel?.removeAyahMenuHighlight()
         presenter?.dismissPresentedViewController { [weak self] in
             self?.presenter?.presentAyahMenu(viewController, in: sourceView, at: point)
@@ -437,13 +443,21 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             logger.info("Quran: ignore reading bookmarks tap when no visible pages")
             return
         }
-        let viewController = deps.readingBookmarkMenuBuilder.build(page: firstPage, pages: visiblePages)
+        let viewController = deps.readingBookmarkMenuBuilder.build(
+            page: firstPage,
+            pages: visiblePages,
+            bottomBarsHeight: presenterBottomBarsHeight
+        )
         presenter?.presentReadingBookmarkMenu(viewController)
     }
 
     func presentReadingBookmarkMenu(for page: Page, in sourceView: UIView, at rect: CGRect) {
         logger.info("Quran: present reading bookmarks from page \(page.pageNumber) ribbon")
-        let viewController = deps.readingBookmarkMenuBuilder.build(page: page, pages: visiblePages)
+        let viewController = deps.readingBookmarkMenuBuilder.build(
+            page: page,
+            pages: visiblePages,
+            bottomBarsHeight: presenterBottomBarsHeight
+        )
         presenter?.presentReadingBookmarkMenu(viewController, in: sourceView, at: rect)
     }
     #else
@@ -510,6 +524,12 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
                 .sink { [weak self] in self?.setVisiblePages($0) }
         }
     }
+
+    #if QURAN_SYNC
+    private var presenterBottomBarsHeight: @MainActor () -> CGFloat {
+        { [weak presenter] in presenter?.bottomBarsHeight ?? 0 }
+    }
+    #endif
 
     #if !QURAN_SYNC
     private var isBookmarkMutationInFlight = false

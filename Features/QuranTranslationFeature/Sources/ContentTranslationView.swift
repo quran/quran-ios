@@ -41,7 +41,6 @@ public struct ContentTranslationView: View {
             scrollToItem: viewModel.scrollToItem,
             onReaderScroll: { viewModel.onReaderScroll() },
             tracker: viewModel.tracker,
-            footnote: $viewModel.footnote,
             openURL: { viewModel.openURL($0) },
             onAyahNumberTapped: onAyahNumberTapped
         )
@@ -54,7 +53,6 @@ public struct ContentTranslationView: View {
             scrollToItem: viewModel.scrollToItem,
             onReaderScroll: { viewModel.onReaderScroll() },
             tracker: viewModel.tracker,
-            footnote: $viewModel.footnote,
             openURL: { viewModel.openURL($0) }
         )
         #endif
@@ -87,8 +85,6 @@ private struct ContentTranslationViewBody: View {
     let onReaderScroll: () -> Void
     let tracker: CollectionTracker<TranslationItemId>
 
-    @Binding var footnote: TranslationFootnote?
-
     let openURL: (TranslationURL) -> Void
     #if QURAN_SYNC
     let onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?
@@ -109,7 +105,6 @@ private struct ContentTranslationViewBody: View {
         .populateReadableInsets()
         .openTranslationURL(openURL)
         .trackCollection(with: tracker)
-        .sheet(item: $footnote) { $0 }
         .quranScrolling(scrollToValue: scrollToItem, onReaderScroll: onReaderScroll) { item in
             items.contains { $0.id == item } ? item : nil
         }

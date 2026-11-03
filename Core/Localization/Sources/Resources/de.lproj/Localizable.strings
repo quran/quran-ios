@@ -659,8 +659,6 @@
 "translation.text.ayah-number" = "%d:%d";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-number" = "[%d]";
-// Metadata: Translated by ChatGPT; human review required.
-"translation.text.footnote-title" = "Fußnote Nr. %d";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "Vers %@";

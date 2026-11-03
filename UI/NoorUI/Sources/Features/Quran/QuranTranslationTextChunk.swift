@@ -21,20 +21,18 @@ public struct QuranTranslationTextChunk: View {
 
     let firstChunk: Bool
     let readMoreURL: URL?
-    let footnoteURL: (Int) -> URL
 
     let font: Font
     let fontSize: FontSize
     let characterDirection: Locale.LanguageDirection
 
-    public init(text: String, chunk: Range<String.Index>, footnoteRanges: [Range<String.Index>], quranRanges: [Range<String.Index>], firstChunk: Bool, readMoreURL: URL?, footnoteURL: @escaping (Int) -> URL, font: Font, fontSize: FontSize, characterDirection: Locale.LanguageDirection) {
+    public init(text: String, chunk: Range<String.Index>, footnoteRanges: [Range<String.Index>], quranRanges: [Range<String.Index>], firstChunk: Bool, readMoreURL: URL?, font: Font, fontSize: FontSize, characterDirection: Locale.LanguageDirection) {
         self.text = text
         self.chunk = chunk
         self.footnoteRanges = footnoteRanges
         self.quranRanges = quranRanges
         self.firstChunk = firstChunk
         self.readMoreURL = readMoreURL
-        self.footnoteURL = footnoteURL
         self.font = font
         self.fontSize = fontSize
         self.characterDirection = characterDirection
@@ -53,9 +51,8 @@ public struct QuranTranslationTextChunk: View {
         let chunkText = text[chunk]
 
         var string = AttributedString(chunkText)
-        for (index, footnoteRange) in footnoteRanges.enumerated() {
+        for footnoteRange in footnoteRanges {
             if let range = string.range(from: footnoteRange, overallRange: chunk, overallText: text) {
-                string[range].link = footnoteURL(index)
                 // TODO: Should get footnote from environment.
                 string[range].font = .footnote
                 string[range].baselineOffset = baselineOffset

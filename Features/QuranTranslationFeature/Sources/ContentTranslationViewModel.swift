@@ -151,8 +151,6 @@ public final class ContentTranslationViewModel: ObservableObject {
     @Published private(set) var indicatorsByVerse: [AyahNumber: Set<AyahIndicator>] = [:]
     #endif
 
-    @Published var footnote: TranslationFootnote?
-
     @Published var scrollToItem: TranslationItemId?
 
     var translations: [Translation] {
@@ -248,6 +246,22 @@ public final class ContentTranslationViewModel: ObservableObject {
                             )
                         )
                     }
+
+                    // Show the footnotes whose markers are in the shown text; Read more shows the rest.
+                    let shownTextEnd = chunks.last?.upperBound ?? string.text.endIndex
+                    for (footnoteIndex, footnoteRange) in string.footnoteRanges.enumerated() where footnoteRange.upperBound <= shownTextEnd {
+                        items.append(
+                            .translationFootnote(
+                                TranslationFootnote(
+                                    verse: verse,
+                                    translation: translation,
+                                    string: string,
+                                    footnoteIndex: footnoteIndex,
+                                    translationFontSize: translationFontSize
+                                ), decoration
+                            )
+                        )
+                    }
                 }
 
                 // Show translator if showing more than a single translation.
@@ -334,9 +348,6 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     func openURL(_ url: TranslationURL) {
         switch url {
-        case .footnote(let translationId, let sura, let ayah, let footnoteIndex):
-            setFootnoteIfNeeded(translationId: translationId, sura: sura, ayah: ayah, footnoteIndex: footnoteIndex)
-
         case .readMore(let translationId, let sura, let ayah):
             expandTranslationIfNeeded(translationId: translationId, sura: sura, ayah: ayah)
         }
@@ -428,17 +439,6 @@ public final class ContentTranslationViewModel: ObservableObject {
                 let truncatedChunks = string.text.chunkRanges(range: cutoffChunk.upperBound ..< string.text.endIndex, maxChunkSize: Self.maxChunkSize)
                 expandedTranslations[ayah, default: [:]][translation] = [cutoffChunk] + truncatedChunks
             }
-        }
-    }
-
-    private func setFootnoteIfNeeded(translationId: Translation.ID, sura: Int, ayah: Int, footnoteIndex: Int) {
-        performOnTranslationText(translationId: translationId, sura: sura, ayah: ayah) { ayah, translation, string in
-            footnote = TranslationFootnote(
-                string: string,
-                footnoteIndex: footnoteIndex,
-                translation: translation,
-                translationFontSize: translationFontSize
-            )
         }
     }
 

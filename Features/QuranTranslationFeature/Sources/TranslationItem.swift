@@ -21,6 +21,7 @@ enum TranslationItemId: Hashable, Sendable {
     case translator(AyahNumber, translationId: Translation.ID)
     case translationReference(AyahNumber, translationId: Translation.ID)
     case translationTextChunk(AyahNumber, translationId: Translation.ID, chunkIndex: Int)
+    case translationFootnote(AyahNumber, translationId: Translation.ID, footnoteIndex: Int)
 
     var ayah: AyahNumber? {
         switch self {
@@ -33,7 +34,8 @@ enum TranslationItemId: Hashable, Sendable {
              .verseNumber(let ayahNumber),
              .translator(let ayahNumber, _),
              .translationReference(let ayahNumber, _),
-             .translationTextChunk(let ayahNumber, _, _):
+             .translationTextChunk(let ayahNumber, _, _),
+             .translationFootnote(let ayahNumber, _, _):
             ayahNumber
         }
     }
@@ -98,6 +100,30 @@ struct TranslationTextChunk: Identifiable & Hashable {
     var id: TranslationItemId { .translationTextChunk(verse, translationId: translation.id, chunkIndex: chunkIndex) }
 }
 
+struct TranslationFootnote: Identifiable & Hashable {
+    let verse: AyahNumber
+    let translation: Translation
+    let string: TranslationString
+    let footnoteIndex: Int
+
+    let translationFontSize: FontSize
+
+    var id: TranslationItemId { .translationFootnote(verse, translationId: translation.id, footnoteIndex: footnoteIndex) }
+
+    /// The marker that refers to the footnote in the translation text.
+    var marker: String {
+        String(string.text[string.footnoteRanges[footnoteIndex]])
+    }
+
+    /// The footnote text, without the `[[` and `]]` around it in the translation database.
+    var text: String {
+        string.footnotes[footnoteIndex]
+            .dropFirst(2)
+            .dropLast(2)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
 struct TranslationReferenceVerse: Identifiable & Hashable {
     let verse: AyahNumber
 
@@ -132,6 +158,7 @@ enum TranslationItem: Identifiable & Hashable {
     case arabicText(TranslationArabicText, TranslationVerseDecoration)
     case verseNumber(TranslationVerseNumber, TranslationVerseDecoration)
     case translationTextChunk(TranslationTextChunk, TranslationVerseDecoration)
+    case translationFootnote(TranslationFootnote, TranslationVerseDecoration)
     case translationReferenceVerse(TranslationReferenceVerse, TranslationVerseDecoration)
     case translatorText(TranslatorText, TranslationVerseDecoration)
 
@@ -144,6 +171,7 @@ enum TranslationItem: Identifiable & Hashable {
         case .arabicText(let item, _): return item.id
         case .verseNumber(let item, _): return item.id
         case .translationTextChunk(let item, _): return item.id
+        case .translationFootnote(let item, _): return item.id
         case .translationReferenceVerse(let item, _): return item.id
         case .translatorText(let item, _): return item.id
         }
@@ -158,6 +186,7 @@ enum TranslationItem: Identifiable & Hashable {
              .arabicText(_, let decoration),
              .verseNumber(_, let decoration),
              .translationTextChunk(_, let decoration),
+             .translationFootnote(_, let decoration),
              .translationReferenceVerse(_, let decoration),
              .translatorText(_, let decoration):
             return decoration

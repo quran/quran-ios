@@ -25,6 +25,9 @@ import ViewConstrainer
 @MainActor
 protocol QuranViewDelegate: AnyObject {
     func onQuranViewTapped(_ quranView: QuranView)
+    /// Whether the space bar can pause or resume the recitation, which is while it's playing or paused.
+    func canTogglePlayPause(in quranView: QuranView) -> Bool
+    func onQuranViewPlayPauseKeyPressed(_ quranView: QuranView)
 }
 
 class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
@@ -56,6 +59,17 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
         }
         let audioBarTop = audioView.convert(audioView.bounds, to: window).minY
         return max(0, window.bounds.height - audioBarTop)
+    }
+
+    /// Space pauses and resumes the recitation from a hardware keyboard, as on a Mac. It takes priority over the system,
+    /// which would otherwise activate the focused verse, and is left alone while text in the reader is being edited.
+    /// Editors presented over the reader aren't in its responder chain, so they keep space for typing.
+    override var keyCommands: [UIKeyCommand]? {
+        let commands = super.keyCommands ?? []
+        guard canTogglePlayPause else {
+            return commands.isEmpty ? nil : commands
+        }
+        return commands + [playPauseCommand]
     }
 
     override func layoutSubviews() {
@@ -172,6 +186,29 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     private var barsVisibilityAnimationID = 0
     private var navigationBarScrollEdgeInteraction: (any UIInteraction)?
     private var audioBarScrollEdgeInteraction: (any UIInteraction)?
+
+    private lazy var playPauseCommand: UIKeyCommand = {
+        let command = UIKeyCommand(input: " ", modifierFlags: [], action: #selector(toggleRecitation))
+        command.wantsPriorityOverSystemBehavior = true
+        return command
+    }()
+
+    private var canTogglePlayPause: Bool {
+        guard let delegate, delegate.canTogglePlayPause(in: self) else {
+            return false
+        }
+        // Text being edited in the reader keeps space for typing.
+        return !(findFirstResponder() is UITextInput)
+    }
+
+    /// Mirrors tapping the audio bar's play or pause button.
+    @objc
+    private func toggleRecitation() {
+        guard canTogglePlayPause else {
+            return
+        }
+        delegate?.onQuranViewPlayPauseKeyPressed(self)
+    }
 
     private func configureNavigationBarScrollEdgeEffectIfNeeded() {
         guard #available(iOS 26.0, *) else { return }

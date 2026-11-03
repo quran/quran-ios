@@ -211,6 +211,48 @@ final class QuranViewTests: XCTestCase {
         XCTAssertEqual(context.sut.bottomBarsHeight, 0)
     }
 
+    func test_spaceIsLeftAloneWhileTheRecitationCannotBeToggled() {
+        let context = makeSut()
+        let delegate = QuranViewDelegateSpy(canTogglePlayPause: false)
+        context.sut.delegate = delegate
+
+        XCTAssertNil(spaceCommand(of: context.sut), "Space is left alone while nothing is playing or paused")
+    }
+
+    // Regression: in the iPad app on a Mac, space activated the focused verse instead of pausing the recitation.
+    func test_spaceTogglesTheRecitationFromTheReaderContent() throws {
+        let context = makeSut()
+        let delegate = QuranViewDelegateSpy(canTogglePlayPause: true)
+        context.sut.delegate = delegate
+
+        let space = try XCTUnwrap(spaceCommand(of: context.sut))
+        XCTAssertEqual(space.modifierFlags, [])
+        XCTAssertTrue(space.wantsPriorityOverSystemBehavior)
+        let action = try XCTUnwrap(space.action)
+        let contentView = try XCTUnwrap(context.sut.contentView)
+        XCTAssertIdentical(contentView.target(forAction: action, withSender: space) as AnyObject?, context.sut)
+
+        context.sut.perform(action, with: space)
+
+        XCTAssertEqual(delegate.playPauseKeyPresses, 1)
+    }
+
+    func test_spaceIsLeftToTextBeingEditedInTheReader() {
+        let context = makeSut()
+        let delegate = QuranViewDelegateSpy(canTogglePlayPause: true)
+        context.sut.delegate = delegate
+        let textField = UITextField(frame: CGRect(x: 0, y: 0, width: 200, height: 44))
+        context.sut.addSubview(textField)
+        let window = UIWindow(frame: context.sut.frame)
+        window.rootViewController = context.retainedHostViewController
+        window.makeKeyAndVisible()
+        defer { window.isHidden = true }
+
+        XCTAssertTrue(textField.becomeFirstResponder())
+
+        XCTAssertNil(spaceCommand(of: context.sut), "Space types into the text being edited")
+    }
+
     private struct TestContext {
         let retainedHostViewController: UIViewController
         let sut: QuranView
@@ -222,6 +264,26 @@ final class QuranViewTests: XCTestCase {
     private struct ReaderContext {
         let retainedWindow: UIWindow
         let sut: QuranView
+    }
+
+    private final class QuranViewDelegateSpy: QuranViewDelegate {
+        init(canTogglePlayPause: Bool) {
+            isPlayingOrPaused = canTogglePlayPause
+        }
+
+        private(set) var playPauseKeyPresses = 0
+
+        func onQuranViewTapped(_ quranView: QuranView) {}
+
+        func canTogglePlayPause(in quranView: QuranView) -> Bool {
+            isPlayingOrPaused
+        }
+
+        func onQuranViewPlayPauseKeyPressed(_ quranView: QuranView) {
+            playPauseKeyPresses += 1
+        }
+
+        private let isPlayingOrPaused: Bool
     }
 
     private func makeSut() -> TestContext {
@@ -281,6 +343,10 @@ final class QuranViewTests: XCTestCase {
         }
         window.layoutIfNeeded()
         return ReaderContext(retainedWindow: window, sut: sut)
+    }
+
+    private func spaceCommand(of quranView: QuranView) -> UIKeyCommand? {
+        quranView.keyCommands?.first { $0.input == " " }
     }
 
     @available(iOS 26.0, *)

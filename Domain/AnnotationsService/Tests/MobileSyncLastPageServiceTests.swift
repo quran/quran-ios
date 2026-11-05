@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import MobileSync
 import MobileSyncTestSupport
 import QuranKit
 import XCTest
@@ -103,6 +104,69 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
         let sessions = database.quranDataService.readingSessionsSequence().makeAsyncIterator()
         let nextStoredSessions = try await sessions.next()
         let storedSessions = try XCTUnwrap(nextStoredSessions)
+        XCTAssertEqual(storedSessions.map(\.id), [destination.id])
+    }
+
+    func test_updateAfterSignOutRemovedSession_recordsVisitWithNewID() async throws {
+        let quran = Quran.hafsMadani1405
+        let original = try await service.add(page: quran.pages[10])
+        try await database.reset()
+
+        let updated = try await service.update(lastPage: original, toPage: quran.pages[20])
+
+        XCTAssertNotEqual(updated.id, original.id)
+        XCTAssertEqual(updated.page, quran.pages[20])
+        let storedSessions = try await storedReadingSessions()
+        XCTAssertEqual(storedSessions.map(\.id), [updated.id])
+        XCTAssertEqual(storedSessions.first?.sura, quran.pages[20].firstVerse.sura.suraNumber)
+        XCTAssertEqual(storedSessions.first?.ayah, quran.pages[20].firstVerse.ayah)
+    }
+
+    func test_updatePrunedSession_recordsVisitWithNewIDAndKeepsPrunedSessionRemoved() async throws {
+        let quran = Quran.hafsMadani1405
+        let originalVerse = quran.pages[10].firstVerse
+        let originalSession = try await database.quranDataService.addReadingSession(
+            sura: originalVerse.sura.suraNumber,
+            ayah: originalVerse.ayah,
+            timestamp: Date(timeIntervalSince1970: 1)
+        )
+        var iterator = service.lastPages(quran: quran).makeAsyncIterator()
+        let originalValue = try await iterator.next()
+        let original = try XCTUnwrap(originalValue?.first)
+        for (index, page) in quran.pages[100 ..< 120].enumerated() {
+            let verse = page.firstVerse
+            _ = try await database.quranDataService.addReadingSession(
+                sura: verse.sura.suraNumber,
+                ayah: verse.ayah,
+                timestamp: Date(timeIntervalSince1970: TimeInterval(index + 2))
+            )
+        }
+        let sessionsAfterPrune = try await storedReadingSessions()
+        XCTAssertFalse(sessionsAfterPrune.map(\.id).contains(originalSession.id))
+
+        let updated = try await service.update(lastPage: original, toPage: quran.pages[20])
+
+        XCTAssertNotEqual(updated.id, originalSession.id)
+        XCTAssertEqual(updated.page, quran.pages[20])
+        let storedSessions = try await storedReadingSessions()
+        let storedUpdated = try XCTUnwrap(storedSessions.first { $0.id == updated.id })
+        XCTAssertEqual(storedUpdated.sura, quran.pages[20].firstVerse.sura.suraNumber)
+        XCTAssertEqual(storedUpdated.ayah, quran.pages[20].firstVerse.ayah)
+        XCTAssertFalse(storedSessions.map(\.id).contains(originalSession.id))
+    }
+
+    func test_updateRemovedSessionOntoOccupiedVerse_returnsExistingSession() async throws {
+        let quran = Quran.hafsMadani1405
+        let original = try await service.add(page: quran.pages[10])
+        try await database.reset()
+        let destination = try await service.add(page: quran.pages[20])
+        XCTAssertNotEqual(destination.id, original.id)
+
+        let updated = try await service.update(lastPage: original, toPage: quran.pages[20])
+
+        XCTAssertEqual(updated.id, destination.id)
+        XCTAssertEqual(updated.page, quran.pages[20])
+        let storedSessions = try await storedReadingSessions()
         XCTAssertEqual(storedSessions.map(\.id), [destination.id])
     }
 
@@ -244,6 +308,11 @@ final class MobileSyncLastPageServiceTests: XCTestCase {
 
         XCTAssertEqual(lastPages.map(\.id), tiedSessionIds + newestFirst.map { sessionIds[$0] })
         XCTAssertEqual(lastPages.map(\.modifiedOn), [timestamps[1], timestamps[2]] + newestFirst.map { timestamps[$0] })
+    }
+
+    private func storedReadingSessions() async throws -> [MobileSyncReadingSession] {
+        let iterator = database.quranDataService.readingSessionsSequence().makeAsyncIterator()
+        return try await iterator.next() ?? []
     }
 }
 #endif

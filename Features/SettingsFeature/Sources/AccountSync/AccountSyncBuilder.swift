@@ -30,6 +30,7 @@ struct AccountSyncBuilder {
             syncActivityBuilder: syncActivityBuilder,
             editor: syncActivityBuilder.heldItemEditor(navigationController: navigationController),
             signOut: signOut,
+            openWebPage: WebAuthenticationPage().open,
             navigationController: navigationController
         )
         let viewController = UIHostingController(rootView: AccountSyncView(viewModel: viewModel))

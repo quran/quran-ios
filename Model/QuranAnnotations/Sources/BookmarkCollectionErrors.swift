@@ -19,7 +19,7 @@ public struct ReadOnlyCollectionError: Error, Equatable, Sendable {
     public let collectionID: String
 }
 
-/// Renaming a collection to a name another collection has. Names compare trimmed and case-insensitively.
+/// Creating or renaming a collection with a name another collection has. Names compare trimmed and case-insensitively.
 public struct DuplicateCollectionNameError: Error, Equatable, Sendable {
     // MARK: Lifecycle
 

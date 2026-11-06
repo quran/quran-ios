@@ -50,16 +50,25 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     @Published var collections: [AyahBookmarkCollection] = []
     @Published var highlights: [AyahNumber: HighlightColor] = [:]
     @Published var collectionPendingDeletion: AyahBookmarkCollection?
+    /// The collection whose ayahs the Delete All confirmation is for.
+    @Published var collectionPendingRemoveAll: AyahBookmarkCollection?
+    /// The highlight color the Delete All confirmation is for.
+    @Published var highlightColorPendingRemoveAll: HighlightColor?
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
     @Published var isAuthenticated = false
     @Published var isSyncBannerDismissed: Bool
     @Published var nameAlert: CollectionNameAlert = .hidden
     @Published var newCollectionName = ""
+    @Published var renameAlert: CollectionNameAlert = .hidden
+    @Published var renamedCollectionName = ""
     @Published var readingBookmarks: [PlacedReadingBookmark] = []
     /// The reading bookmark the rename alert is for, or `nil` when it's hidden.
     @Published var renamingReadingBookmark: ReadingBookmarkSlot?
     @Published var readingBookmarkName = ""
+    /// The collections and colors whose Delete All is running, so it can't start twice.
+    @Published private(set) var collectionIDsRemovingAllAyahs: Set<String> = []
+    @Published private(set) var colorsRemovingAllHighlights: Set<HighlightColor> = []
 
     var shouldShowSyncBanner: Bool {
         !isAuthenticated && !isSyncBannerDismissed
@@ -81,6 +90,20 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     var hasDeletableItems: Bool {
         !deletableCollections.isEmpty || !readingBookmarks.isEmpty
+    }
+
+    /// Long-press menus are off in Edit mode, which has its own delete.
+    var isItemMenuEnabled: Bool {
+        !editMode.isEditing
+    }
+
+    /// Read-only collections can't be deleted, so their menu empties them instead, unless that's already running.
+    func canRemoveAllAyahs(from collection: AyahBookmarkCollection) -> Bool {
+        collection.canRemoveAllAyahs && !collectionIDsRemovingAllAyahs.contains(collection.id)
+    }
+
+    func canRemoveAllHighlights(_ color: HighlightColor) -> Bool {
+        !colorsRemovingAllHighlights.contains(color)
     }
 
     static func sorted(_ collections: [AyahBookmarkCollection]) -> [AyahBookmarkCollection] {
@@ -192,6 +215,83 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         }
     }
 
+    func presentRenameCollection(_ collection: AyahBookmarkCollection) {
+        guard collection.canRename else {
+            return
+        }
+        renamingCollection = collection
+        renamedCollectionName = collection.displayName
+        renameAlert = .editing
+    }
+
+    func renamePendingCollection() async {
+        guard let collection = renamingCollection else {
+            return
+        }
+        let name = renamedCollectionName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty else {
+            return
+        }
+        // The field starts with the displayed name, which is localized for Old Page Bookmarks: writing it back
+        // unchanged would turn that collection into a user collection.
+        guard name != collection.displayName else {
+            renameAlert = .hidden
+            renamingCollection = nil
+            return
+        }
+
+        do {
+            try await ayahBookmarkCollectionService.renameCollection(id: collection.id, to: name)
+            renameAlert = .hidden
+            renamingCollection = nil
+        } catch {
+            if let nameError = CollectionNameError(error) {
+                logger.info("Quran Sync: bookmark collection name rejected. \(nameError.logDescription)")
+                renameAlert = .rejected(nameError)
+            } else {
+                logger.error("Quran Sync: failed to rename bookmark collection: \(error)")
+                self.error = error
+            }
+        }
+    }
+
+    func requestRemoveAllAyahs(from collection: AyahBookmarkCollection) {
+        collectionPendingRemoveAll = collection
+    }
+
+    /// Removes the collection's ayahs but keeps the collection.
+    func removeAllAyahs(from collection: AyahBookmarkCollection) async {
+        guard collectionIDsRemovingAllAyahs.insert(collection.id).inserted else {
+            return
+        }
+        defer { collectionIDsRemovingAllAyahs.remove(collection.id) }
+        logger.info("Quran Sync: remove all ayahs from bookmark collection")
+        do {
+            try await ayahBookmarkCollectionService.removeAllAyahs(fromCollectionWithID: collection.id)
+        } catch {
+            logger.error("Quran Sync: failed to remove all ayahs from bookmark collection: \(error)")
+            self.error = error
+        }
+    }
+
+    func requestRemoveAllHighlights(_ color: HighlightColor) {
+        highlightColorPendingRemoveAll = color
+    }
+
+    func removeAllHighlights(_ color: HighlightColor) async {
+        guard colorsRemovingAllHighlights.insert(color).inserted else {
+            return
+        }
+        defer { colorsRemovingAllHighlights.remove(color) }
+        logger.info("Quran Sync: remove all \(color) highlights")
+        do {
+            try await ayahHighlightService.removeAllHighlights(color)
+        } catch {
+            logger.error("Quran Sync: failed to remove all highlights: \(error)")
+            self.error = error
+        }
+    }
+
     func showCollection(_ collection: AyahBookmarkCollection) {
         navigationController?.pushViewController(
             ayahSetBuilder.buildCollection(
@@ -205,11 +305,8 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     }
 
     func showHighlights(_ color: HighlightColor) {
-        let ayahs = highlights.compactMap { ayah, highlightColor in
-            highlightColor == color ? ayah : nil
-        }
         navigationController?.pushViewController(
-            ayahSetBuilder.buildHighlights(color: color, ayahs: ayahs),
+            ayahSetBuilder.buildHighlights(color: color, ayahs: ayahs(highlightedIn: color)),
             animated: true
         )
     }
@@ -276,6 +373,8 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     private let preferences = AuthenticationPreferences.shared
     private let readingPreferences = ReadingPreferences.shared
     private weak var navigationController: UINavigationController?
+    /// The collection the rename alert is for.
+    private var renamingCollection: AyahBookmarkCollection?
 
     private static func displayedCollectionSortIndex(_ collection: AyahBookmarkCollection) -> Int {
         switch collection.kind {
@@ -285,6 +384,12 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             1
         case .user:
             2
+        }
+    }
+
+    private func ayahs(highlightedIn color: HighlightColor) -> [AyahNumber] {
+        highlights.compactMap { ayah, highlightColor in
+            highlightColor == color ? ayah : nil
         }
     }
 

@@ -30,6 +30,11 @@ extension AyahBookmarkCollection {
     var displayImageColor: Color {
         .secondaryLabel
     }
+
+    /// Read-only collections can't be deleted, so they offer to remove their ayahs instead.
+    var canRemoveAllAyahs: Bool {
+        isReadOnly && !bookmarks.isEmpty
+    }
 }
 
 extension HighlightColor {

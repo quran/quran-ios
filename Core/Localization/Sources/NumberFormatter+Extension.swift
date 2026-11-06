@@ -55,14 +55,33 @@ extension NumberFormatter {
 }
 
 public extension Locale {
+    /// Returns the locale used to display numbers.
+    ///
+    /// A locale that already uses a non-Latin numbering system is returned unchanged.
+    /// Arabic uses Arabic-Indic digits when it would otherwise show Latin digits, either
+    /// by default (for example `ar_CA`) or through an explicit `numbers=latn`.
+    /// Other locales drop an explicit `numbers=latn` and use their default numbering system.
     func fixedLocaleNumbers() -> Locale {
-        let latinSuffix = "@numbers=latn"
-        if identifier.hasSuffix(latinSuffix) {
-            let localeIdentifier = identifier.replacingOccurrences(of: latinSuffix, with: "")
-            return Locale(identifier: localeIdentifier)
-        } else {
+        let numbersKey = "numbers"
+        let latinNumbers = "latn"
+        if #available(iOS 16, *), numberingSystem.identifier != latinNumbers {
             return self
         }
+
+        var components = Locale.components(fromIdentifier: identifier)
+        let numbers = components[numbersKey]
+        if isArabicLanguage {
+            guard numbers == nil || numbers == latinNumbers else {
+                return self
+            }
+            components[numbersKey] = "arab"
+        } else {
+            guard numbers == latinNumbers else {
+                return self
+            }
+            components[numbersKey] = nil
+        }
+        return Locale(identifier: Locale.identifier(fromComponents: components))
     }
 
     static var fixedCurrentLocaleNumbers: Locale {

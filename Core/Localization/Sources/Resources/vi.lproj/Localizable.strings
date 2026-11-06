@@ -428,6 +428,12 @@
 "bookmarks.collections" = "Bộ sưu tập";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.add" = "Thêm bộ sưu tập";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "Bạn có chắc muốn xóa tất cả các tô sáng màu “%@” không?";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "Bạn có chắc muốn xóa tất cả các ayah khỏi “%@” không?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Vuốt dấu trang sang trái để xóa.";
 // Metadata: Translated by ChatGPT; human review required.

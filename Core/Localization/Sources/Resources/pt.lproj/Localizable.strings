@@ -517,6 +517,12 @@
 "bookmarks.collections" = "Coleções";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.add" = "Adicionar coleção";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "Tem certeza de que deseja remover todos os destaques com a cor “%@”?";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "Tem certeza de que deseja remover todas as ayahs de “%@”?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Deslize um marcador para excluí-lo.";
 // Metadata: Translated by ChatGPT; human review required.

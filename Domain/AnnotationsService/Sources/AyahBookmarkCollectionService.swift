@@ -83,6 +83,11 @@ public struct AyahBookmarkCollectionService {
         try await removeAyahs(ayahs, from: [collection])
     }
 
+    /// Removes every ayah from the collection, in one write, and keeps the collection, even a read-only one.
+    public func removeAllAyahs(fromCollectionWithID collectionID: String) async throws {
+        try await quranDataService.removeAllAyahBookmarksFromCollection(collectionID: collectionID)
+    }
+
     public func collectionsSequence(quran: Quran) -> AnyAsyncSequence<[AyahBookmarkCollection]> {
         let sequence = quranDataService.collectionsWithBookmarksSequence()
             .map { collections in

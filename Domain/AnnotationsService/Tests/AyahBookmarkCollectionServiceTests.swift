@@ -99,6 +99,24 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         XCTAssertEqual(Set(updatedStudy.bookmarks.map(\.ayah)), [1, 2])
     }
 
+    func test_removeAllAyahs_emptiesReadOnlyFavoritesAndKeepsOtherMemberships() async throws {
+        try await service.createCollection(named: "Personal")
+        let personal = try await storedCollection(named: "Personal")
+        let stored = try await storedCollections { $0.contains { $0.collection.isDefault } }
+        let favoritesID = try XCTUnwrap(stored.first { $0.collection.isDefault }).collection.id
+        try await service.addAyahs([ayah(1), ayah(2)], toCollectionWithID: favoritesID)
+        try await service.addAyahBookmarkToCollection(collectionId: personal.collection.id, ayah: ayah(1))
+
+        try await service.removeAllAyahs(fromCollectionWithID: favoritesID)
+
+        let collections = try await storedCollections {
+            $0.first { $0.collection.id == favoritesID }?.bookmarks.isEmpty == true
+        }
+        XCTAssertTrue(collections.contains { $0.collection.id == favoritesID })
+        let updatedPersonal = try XCTUnwrap(collections.first { $0.collection.id == personal.collection.id })
+        XCTAssertEqual(updatedPersonal.bookmarks.map(\.ayah), [1])
+    }
+
     func test_collectionsSequence_excludesSystemHighlightCollections() async throws {
         let highlightService = MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
         try await highlightService.setHighlight(.purple, for: [ayah(1)])

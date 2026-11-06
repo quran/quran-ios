@@ -163,6 +163,14 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         }
     }
 
+    func canTogglePlayPause(in quranView: QuranView) -> Bool {
+        interactor.canTogglePlayPause
+    }
+
+    func onQuranViewPlayPauseKeyPressed(_ quranView: QuranView) {
+        interactor.togglePlayPauseFromKeyboard()
+    }
+
     // MARK: - View Controllable
 
     func shareText(_ lines: [String], in sourceView: UIView, at point: CGPoint, completion: @escaping () -> Void) {

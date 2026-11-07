@@ -196,6 +196,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let isRegularWidthAndHeight = window.map {
             $0.traitCollection.horizontalSizeClass == .regular && $0.traitCollection.verticalSizeClass == .regular
         } ?? false
+        // An unfolded iPhone Duo resizes instead of rotating, so the rotate buttons would do nothing.
+        if isRegularWidthAndHeight, window?.traitCollection.userInterfaceIdiom == .phone {
+            state.orientation = .alwaysOff
+        }
         let model = MoreMenuModel(
             isWordPointerActive: isWordPointerActive,
             state: state,

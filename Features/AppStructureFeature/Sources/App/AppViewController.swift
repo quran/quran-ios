@@ -89,9 +89,7 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         let targetMask = tabBarController.supportedInterfaceOrientations
         if let currentMask = tabBarController.view.window?.windowScene?.interfaceOrientation.asMask {
             if !targetMask.contains(currentMask) {
-                if let interface = targetMask.asOrientation {
-                    UIDevice.current.setValue(interface.rawValue, forKey: "orientation")
-                }
+                tabBarController.requestInterfaceOrientations(targetMask)
             }
         }
     }
@@ -150,22 +148,6 @@ private extension UIInterfaceOrientation {
         case .landscapeLeft: return .landscapeLeft
         case .landscapeRight: return .landscapeRight
         default: return nil
-        }
-    }
-}
-
-private extension UIInterfaceOrientationMask {
-    var asOrientation: UIInterfaceOrientation? {
-        if contains(.portrait) {
-            return .portrait
-        } else if contains(.landscapeLeft) {
-            return .landscapeLeft
-        } else if contains(.landscapeRight) {
-            return .landscapeRight
-        } else if contains(.portraitUpsideDown) {
-            return .portraitUpsideDown
-        } else {
-            return nil
         }
     }
 }

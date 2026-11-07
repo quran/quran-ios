@@ -259,8 +259,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "同步您的笔记";
-"notes.sync.body" = "登录 Quran.com，让您的笔记可在所有设备上使用。";
 "notes.sync.no-data.title" = "还没有笔记";
 "notes.sync.no-data.text" = "阅读时长按一节经文，然后轻点“添加笔记”来写下您的第一条笔记。";
 
@@ -581,12 +579,6 @@
 "bookmarks.editor.error.highlight-unavailable" = "高亮颜色仍在加载，请重试。";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "旧页面书签";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "登录";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "登录 Quran.com，让您的收藏集可在所有设备上使用。";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "同步您的收藏集";
 
 // Highlight Colors
 // Metadata: Translated by ChatGPT; human review required.

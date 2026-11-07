@@ -1,6 +1,4 @@
 #if QURAN_SYNC
-import Analytics
-import AnalyticsFake
 import AuthenticationClient
 import AuthenticationClientFake
 import Combine
@@ -26,11 +24,9 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         try await database.reset()
-        AuthenticationPreferences.shared.isCollectionsSyncBannerDismissed = false
     }
 
     override func tearDown() async throws {
-        AuthenticationPreferences.shared.isCollectionsSyncBannerDismissed = false
         try await database.reset()
         try await super.tearDown()
     }
@@ -246,67 +242,6 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         task.cancel()
     }
 
-    func test_login_setsAuthenticated_whenLoginSucceeds() async {
-        let client = AuthenticationClientFake()
-        client.authenticationStateValue = .authenticated
-        let analytics = AnalyticsLibrarySpy()
-        let navigationController = UINavigationController()
-        let sut = makeSUT(
-            analytics: analytics,
-            authenticationClient: client,
-            navigationController: navigationController
-        )
-
-        await sut.loginToQuranCom()
-
-        XCTAssertTrue(sut.isAuthenticated)
-        XCTAssertEqual(client.events, [.login, .readAuthenticationState])
-        XCTAssertEqual(analytics.events, [.init(name: "QuranSyncSignIn", value: "bookmarks")])
-        XCTAssertNil(sut.error)
-    }
-
-    func test_login_setsError_whenLoginFails() async {
-        let client = AuthenticationClientFake()
-        client.loginResult = .failure(.authenticationFailed(underlying: TestError.loginFailed))
-        let navigationController = UINavigationController()
-        let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
-
-        await sut.loginToQuranCom()
-
-        XCTAssertFalse(sut.isAuthenticated)
-        guard case .authenticationFailed = sut.error as? AuthenticationClientError else {
-            return XCTFail("Expected authenticationFailed, got \(String(describing: sut.error))")
-        }
-    }
-
-    func test_login_ignoresCancellation() async {
-        let client = AuthenticationClientFake()
-        client.loginResult = .failure(.cancelled)
-        let navigationController = UINavigationController()
-        let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
-
-        await sut.loginToQuranCom()
-
-        XCTAssertFalse(sut.isAuthenticated)
-        XCTAssertEqual(client.events, [.login])
-        XCTAssertNil(sut.error)
-    }
-
-    func test_dismissSyncBanner_persistsDismissal() {
-        let analytics = AnalyticsLibrarySpy()
-        let sut = makeSUT(analytics: analytics)
-
-        sut.dismissSyncBanner()
-
-        XCTAssertTrue(sut.isSyncBannerDismissed)
-        XCTAssertTrue(AuthenticationPreferences.shared.isCollectionsSyncBannerDismissed)
-        XCTAssertFalse(sut.shouldShowSyncBanner)
-        XCTAssertEqual(
-            analytics.events,
-            [.init(name: "QuranSyncSignInBannerDismissed", value: "bookmarks")]
-        )
-    }
-
     func test_canRefresh_requiresSignIn_andStaysWhileEditing() {
         let sut = makeSUT()
         XCTAssertFalse(sut.canRefresh)
@@ -342,11 +277,9 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
         try await client.login(on: UIViewController())
         await waitUntil { sut.canRefresh }
-        XCTAssertFalse(sut.shouldShowSyncBanner)
 
         try await client.logout()
         await waitUntil { !sut.canRefresh }
-        XCTAssertTrue(sut.shouldShowSyncBanner)
     }
 
     func test_createPendingCollection_persistsThroughRealMobileSyncDatabase() async throws {
@@ -1014,7 +947,6 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     }
 
     private func makeSUT(
-        analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
         authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient(),
         collectionService: AyahBookmarkCollectionService? = nil,
         readingBookmarkService: MobileSyncReadingBookmarkService? = nil,
@@ -1032,7 +964,6 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             navigateToAyah: { _ in }
         )
         return BookmarkCollectionsViewModel(
-            analytics: analytics,
             authenticationClient: authenticationClient,
             quranDataService: database.quranDataService,
             ayahBookmarkCollectionService: collectionService,
@@ -1166,7 +1097,6 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
 private enum TestError: Error, Equatable {
     case collectionNotFound
-    case loginFailed
 }
 
 @MainActor

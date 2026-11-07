@@ -28,7 +28,6 @@ struct BookmarkCollectionsBuilder {
             }
         )
         let viewModel = BookmarkCollectionsViewModel(
-            analytics: container.analytics,
             authenticationClient: container.authenticationClient,
             quranDataService: container.quranDataService,
             ayahBookmarkCollectionService: collectionService,

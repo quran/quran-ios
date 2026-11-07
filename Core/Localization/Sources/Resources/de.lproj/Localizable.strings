@@ -254,8 +254,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "Notizen synchronisieren";
-"notes.sync.body" = "Melde dich bei Quran.com an, damit deine Notizen auf allen Geräten verfügbar bleiben.";
 "notes.sync.no-data.title" = "Noch keine Notizen";
 "notes.sync.no-data.text" = "Halte beim Lesen eine Ayah gedrückt und tippe dann auf „Notiz hinzufügen“, um deine erste Notiz zu schreiben.";
 
@@ -575,12 +573,6 @@
 "bookmarks.editor.error.highlight-unavailable" = "Die Hervorhebungsfarben werden noch geladen. Bitte versuche es erneut.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Alte Seitenlesezeichen";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "Anmelden";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Melde dich bei Quran.com an, damit deine Sammlungen auf allen Geräten verfügbar bleiben.";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Sammlungen synchronisieren";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

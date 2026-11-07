@@ -1,6 +1,4 @@
 #if QURAN_SYNC
-import Analytics
-import AnalyticsFake
 import AnnotationsService
 import AuthenticationClient
 import AuthenticationClientFake
@@ -20,21 +18,16 @@ import XCTest
 @MainActor
 final class NotesViewModelTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared
-    private var navigationController: UINavigationController!
     private var noteService: MobileSyncNoteService!
 
     override func setUp() async throws {
         try await super.setUp()
         try await database.reset()
-        AuthenticationPreferences.shared.isNotesSyncBannerDismissed = false
-        navigationController = UINavigationController()
         noteService = MobileSyncNoteService(quranDataService: database.quranDataService)
     }
 
     override func tearDown() async throws {
         try await database.reset()
-        AuthenticationPreferences.shared.isNotesSyncBannerDismissed = false
-        navigationController = nil
         noteService = nil
         try await super.tearDown()
     }
@@ -47,10 +40,8 @@ final class NotesViewModelTests: XCTestCase {
         let item = NoteItem(note: note, quranText: "Verse")
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         let sut = NotesViewModel(
-            analytics: AnalyticsLibrarySpy(),
             authenticationClient: UnavailableAuthenticationClient(),
             quranDataService: database.quranDataService,
-            navigationController: UINavigationController(),
             noteService: noteService,
             textService: QuranTextDataService(
                 databasesURL: unavailableDatabase,
@@ -79,10 +70,8 @@ final class NotesViewModelTests: XCTestCase {
         try await noteService.createNote(body: "Observed note", startAyah: ayah, endAyah: ayah)
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         let sut = NotesViewModel(
-            analytics: AnalyticsLibrarySpy(),
             authenticationClient: UnavailableAuthenticationClient(),
             quranDataService: database.quranDataService,
-            navigationController: UINavigationController(),
             noteService: noteService,
             textService: QuranTextDataService(
                 databasesURL: unavailableDatabase,
@@ -153,62 +142,7 @@ final class NotesViewModelTests: XCTestCase {
         await waitUntil { sut.isAuthenticated }
 
         XCTAssertEqual(client.events.first, .restoreState)
-        XCTAssertFalse(sut.shouldShowSyncBanner)
         task.cancel()
-    }
-
-    func test_login_setsAuthenticated_whenLoginSucceeds() async {
-        let client = AuthenticationClientFake()
-        client.authenticationStateValue = .authenticated
-        let analytics = AnalyticsLibrarySpy()
-        let sut = makeSUT(analytics: analytics, authenticationClient: client)
-
-        await sut.loginToQuranCom()
-
-        XCTAssertTrue(sut.isAuthenticated)
-        XCTAssertEqual(client.events, [.login, .readAuthenticationState])
-        XCTAssertEqual(analytics.events, [.init(name: "QuranSyncSignIn", value: "notes")])
-        XCTAssertNil(sut.error)
-    }
-
-    func test_login_setsError_whenLoginFails() async {
-        let client = AuthenticationClientFake()
-        client.loginResult = .failure(.authenticationFailed(underlying: TestError.loginFailed))
-        let sut = makeSUT(authenticationClient: client)
-
-        await sut.loginToQuranCom()
-
-        XCTAssertFalse(sut.isAuthenticated)
-        guard case .authenticationFailed = sut.error as? AuthenticationClientError else {
-            return XCTFail("Expected authenticationFailed, got \(String(describing: sut.error))")
-        }
-    }
-
-    func test_login_ignoresCancellation() async {
-        let client = AuthenticationClientFake()
-        client.loginResult = .failure(.cancelled)
-        let sut = makeSUT(authenticationClient: client)
-
-        await sut.loginToQuranCom()
-
-        XCTAssertFalse(sut.isAuthenticated)
-        XCTAssertEqual(client.events, [.login])
-        XCTAssertNil(sut.error)
-    }
-
-    func test_dismissSyncBanner_persistsDismissal() {
-        let analytics = AnalyticsLibrarySpy()
-        let sut = makeSUT(analytics: analytics)
-
-        sut.dismissSyncBanner()
-
-        XCTAssertTrue(sut.isSyncBannerDismissed)
-        XCTAssertTrue(AuthenticationPreferences.shared.isNotesSyncBannerDismissed)
-        XCTAssertFalse(sut.shouldShowSyncBanner)
-        XCTAssertEqual(
-            analytics.events,
-            [.init(name: "QuranSyncSignInBannerDismissed", value: "notes")]
-        )
     }
 
     func test_canRefresh_requiresSignIn_andStaysWhileEditing() {
@@ -246,11 +180,9 @@ final class NotesViewModelTests: XCTestCase {
 
         try await client.login(on: UIViewController())
         await waitUntil { sut.canRefresh }
-        XCTAssertFalse(sut.shouldShowSyncBanner)
 
         try await client.logout()
         await waitUntil { !sut.canRefresh }
-        XCTAssertTrue(sut.shouldShowSyncBanner)
     }
 
     func test_prepareNotesForSharing_usesShareableVerseText() async throws {
@@ -263,10 +195,8 @@ final class NotesViewModelTests: XCTestCase {
         )
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-translations-database")
         let sut = NotesViewModel(
-            analytics: AnalyticsLibrarySpy(),
             authenticationClient: UnavailableAuthenticationClient(),
             quranDataService: database.quranDataService,
-            navigationController: UINavigationController(),
             noteService: noteService,
             textService: QuranTextDataService(
                 databasesURL: unavailableDatabase,
@@ -301,10 +231,8 @@ final class NotesViewModelTests: XCTestCase {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         var navigatedAyah: AyahNumber?
         let sut = NotesViewModel(
-            analytics: AnalyticsLibrarySpy(),
             authenticationClient: UnavailableAuthenticationClient(),
             quranDataService: database.quranDataService,
-            navigationController: UINavigationController(),
             noteService: noteService,
             textService: QuranTextDataService(
                 databasesURL: unavailableDatabase,
@@ -345,15 +273,12 @@ final class NotesViewModelTests: XCTestCase {
     }
 
     private func makeSUT(
-        analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
         authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient()
     ) -> NotesViewModel {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         return NotesViewModel(
-            analytics: analytics,
             authenticationClient: authenticationClient,
             quranDataService: database.quranDataService,
-            navigationController: navigationController,
             noteService: noteService,
             textService: QuranTextDataService(
                 databasesURL: unavailableDatabase,
@@ -382,10 +307,6 @@ final class NotesViewModelTests: XCTestCase {
         }
         XCTFail("Condition was not met in time", file: file, line: line)
     }
-}
-
-private enum TestError: Error {
-    case loginFailed
 }
 
 #endif

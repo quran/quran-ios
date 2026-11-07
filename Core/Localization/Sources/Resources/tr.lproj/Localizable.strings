@@ -213,8 +213,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "Notlarınızı eşitleyin";
-"notes.sync.body" = "Notlarınızı tüm cihazlarda kullanılabilir tutmak için Quran.com’da oturum açın.";
 "notes.sync.no-data.title" = "Henüz not yok";
 "notes.sync.no-data.text" = "Okurken bir ayete basılı tutun, ardından ilk notunuzu yazmak için “Not Ekle”ye dokunun.";
 
@@ -518,12 +516,6 @@
 "bookmarks.editor.error.highlight-unavailable" = "Vurgu renkleri hâlâ yükleniyor. Lütfen tekrar deneyin.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Eski sayfa yer imleri";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "Giriş yap";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Koleksiyonlarınızı tüm cihazlarda kullanılabilir tutmak için Quran.com’da oturum açın.";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Koleksiyonlarınızı eşitleyin";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

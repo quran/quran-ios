@@ -235,10 +235,6 @@
 // VoiceOver label for the reader's button that removes the current page bookmark.
 "bookmarks.page.remove" = "Remove page bookmark";
 
-"bookmarks.sync.title" = "Sync your collections";
-"bookmarks.sync.body" = "Sign in to Quran.com to keep your collections available across devices.";
-"bookmarks.sync.action" = "Sign In";
-
 "bookmarks.collections" = "Collections";
 "bookmarks.collections.add" = "Add Collection";
 "bookmarks.highlights" = "Highlights";
@@ -271,8 +267,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "Sync your notes";
-"notes.sync.body" = "Sign in to Quran.com to keep your notes available across devices.";
 "notes.sync.no-data.title" = "No notes yet";
 "notes.sync.no-data.text" = "Tap and hold an Ayah while reading, then tap Add Note to write your first note.";
 

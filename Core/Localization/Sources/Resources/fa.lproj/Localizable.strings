@@ -254,8 +254,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "همگام‌سازی یادداشت‌هایتان";
-"notes.sync.body" = "برای دسترسی به یادداشت‌هایتان در همهٔ دستگاه‌ها، وارد Quran.com شوید.";
 "notes.sync.no-data.title" = "هنوز یادداشتی ندارید";
 "notes.sync.no-data.text" = "هنگام خواندن، یک آیه را لمس کنید و نگه دارید، سپس برای نوشتن اولین یادداشت خود روی «افزودن یادداشت» بزنید.";
 
@@ -577,12 +575,6 @@
 "bookmarks.editor.error.highlight-unavailable" = "رنگ‌های برجسته‌سازی هنوز در حال بارگیری هستند. دوباره تلاش کنید.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "نشانک‌های قدیمی صفحات";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "ورود";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "برای دسترسی به مجموعه‌هایتان در همهٔ دستگاه‌ها، وارد Quran.com شوید.";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "همگام‌سازی مجموعه‌هایتان";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

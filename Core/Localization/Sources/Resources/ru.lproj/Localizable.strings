@@ -254,8 +254,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "Синхронизация заметок";
-"notes.sync.body" = "Войдите в Quran.com, чтобы ваши заметки были доступны на всех устройствах.";
 "notes.sync.no-data.title" = "Заметок пока нет";
 "notes.sync.no-data.text" = "Во время чтения нажмите и удерживайте аят, затем нажмите «Добавить заметку», чтобы написать первую заметку.";
 
@@ -575,12 +573,6 @@
 "bookmarks.editor.error.highlight-unavailable" = "Цвета выделения ещё загружаются. Повторите попытку.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Старые закладки страниц";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "Войти";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Войдите в Quran.com, чтобы ваши коллекции были доступны на всех устройствах.";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Синхронизация коллекций";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

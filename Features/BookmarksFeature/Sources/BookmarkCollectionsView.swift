@@ -33,20 +33,6 @@ private struct BookmarkCollectionsContent: View {
 
     var body: some View {
         NoorList {
-            if viewModel.shouldShowSyncBanner {
-                NoorBasicSection {
-                    SyncSignInCard(
-                        title: l("bookmarks.sync.title"),
-                        subtitle: l("bookmarks.sync.body"),
-                        actionLabel: l("bookmarks.sync.action"),
-                        dismiss: { viewModel.dismissSyncBanner() },
-                        signInAction: { await viewModel.loginToQuranCom() }
-                    )
-                    .listRowInsets(.zero)
-                    .listRowBackground(Color.clear)
-                }
-            }
-
             ContinueReadingSection(
                 title: l("bookmarks.reading.title"),
                 readingBookmarks: viewModel.readingBookmarks,

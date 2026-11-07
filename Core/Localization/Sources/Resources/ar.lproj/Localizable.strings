@@ -235,10 +235,6 @@
 "bookmarks.collections.ayahs.no-data.colored.text" = "ستظهر هنا الآيات التي تميّزها باللون %@ أثناء القراءة.";
 "bookmarks.old-page-bookmarks" = "إشارات الصفحات المرجعية القديمة";
 
-"bookmarks.sync.title" = "زامن مجموعاتك";
-"bookmarks.sync.body" = "سجّل الدخول إلى Quran.com للاحتفاظ بمجموعاتك متاحة عبر أجهزتك.";
-"bookmarks.sync.action" = "تسجيل الدخول";
-
 "bookmarks.editor.collection.unselected" = "غير محددة";
 "bookmarks.editor.collection.mixed" = "محددة جزئيًا";
 "bookmarks.editor.collection.selected" = "محددة";
@@ -246,8 +242,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "زامن ملاحظاتك";
-"notes.sync.body" = "سجّل الدخول إلى Quran.com للاحتفاظ بملاحظاتك متاحة عبر أجهزتك.";
 "notes.sync.no-data.title" = "لا توجد ملاحظات بعد";
 "notes.sync.no-data.text" = "اضغط مطولًا على آية أثناء القراءة، ثم اضغط على «اضف ملاحظة» لكتابة ملاحظتك الأولى.";
 

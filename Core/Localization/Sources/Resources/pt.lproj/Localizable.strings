@@ -599,6 +599,15 @@
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
 "bookmarks.old-page-bookmarks.explanation" = "Salvas a partir dos seus marcadores de páginas. Cada página agora é a sua primeira ayah.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.title" = "Seus marcadores de página estão aqui";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.text" = "Cada página que você marcou na versão %@ agora é a primeira ayah dela, em Marcadores de páginas antigos. Para guardar seu lugar durante a leitura, use os marcadores de leitura.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.open" = "Abrir Marcadores de páginas antigos";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

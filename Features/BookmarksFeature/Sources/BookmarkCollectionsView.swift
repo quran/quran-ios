@@ -30,9 +30,17 @@ private struct BookmarkCollectionsContent: View {
     @ObservedObject var viewModel: BookmarkCollectionsViewModel
 
     @Environment(\.showToast) private var showToast
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         NoorList {
+            if viewModel.showsOldPageBookmarksTip {
+                Section {
+                    oldPageBookmarksTip
+                        .tipCardListRow()
+                }
+            }
+
             ContinueReadingSection(
                 title: l("bookmarks.reading.title"),
                 readingBookmarks: viewModel.readingBookmarks,
@@ -55,6 +63,7 @@ private struct BookmarkCollectionsContent: View {
 
             collectionsSection
         }
+        .animation(reduceMotion ? nil : NoorAnimation.standard, value: viewModel.showsOldPageBookmarksTip)
         .refreshable(isEnabled: viewModel.canRefresh) { await viewModel.refresh() }
         .task { await viewModel.start() }
         .collectionNameAlert(
@@ -94,6 +103,21 @@ private struct BookmarkCollectionsContent: View {
         )
         .errorAlert(error: $viewModel.error)
         .environment(\.editMode, $viewModel.editMode)
+    }
+
+    /// The release whose page bookmarks became Old Page Bookmarks.
+    private var pageBookmarksVersion: String {
+        [3, 0].map { NumberFormatter.shared.format($0) }.joined(separator: ".")
+    }
+
+    private var oldPageBookmarksTip: some View {
+        TipCard(
+            title: l("bookmarks.old-page-bookmarks-tip.title"),
+            text: lFormat("bookmarks.old-page-bookmarks-tip.text", pageBookmarksVersion),
+            image: .book,
+            action: TipCard.Action(l("bookmarks.old-page-bookmarks.open")) { viewModel.openOldPageBookmarks() },
+            dismiss: { viewModel.dismissOldPageBookmarksTip() }
+        )
     }
 
     private var collectionsSection: some View {

@@ -7,6 +7,7 @@ import AnnotationsService
 import AuthenticationClient
 import Combine
 import Foundation
+import LegacyDataMigration
 import MobileSync
 import NoorUI
 import QuranAnnotations
@@ -41,11 +42,17 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         self.navigationController = navigationController
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
+        hadLegacyPageBookmarks = legacyImportPreferences.hadPageBookmarks
+        isOldPageBookmarksTipDismissed = bookmarksPreferences.isOldPageBookmarksTipDismissed
         // Follow sign-in and sign-out elsewhere, such as in Settings.
         authenticationClient.authenticationStateChanges
             .map { $0 == .authenticated }
             .receive(on: DispatchQueue.main)
             .assign(to: &$isAuthenticated)
+        // A late CloudKit arrival can bring 3.0 page bookmarks after Bookmarks appears.
+        legacyImportPreferences.$hadPageBookmarks
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$hadLegacyPageBookmarks)
     }
 
     // MARK: Internal
@@ -71,6 +78,8 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     /// The collections and colors whose Delete All is running, so it can't start twice.
     @Published private(set) var collectionIDsRemovingAllAyahs: Set<String> = []
     @Published private(set) var colorsRemovingAllHighlights: Set<HighlightColor> = []
+    @Published private(set) var hadLegacyPageBookmarks: Bool
+    @Published private(set) var isOldPageBookmarksTipDismissed: Bool
 
     /// Pull-to-refresh, when signed in. Not tied to edit mode: toggling it rebuilds the list.
     var canRefresh: Bool {
@@ -81,6 +90,15 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         collections.first {
             $0.kind == .oldPageBookmarks
         }
+    }
+
+    /// The "Your page bookmarks are here" card, for upgraders whose 3.0 page bookmarks became Old Page Bookmarks.
+    var showsOldPageBookmarksTip: Bool {
+        guard let oldPageBookmarksCollection, !oldPageBookmarksCollection.bookmarks.isEmpty else {
+            return false
+        }
+        // Android names a collection Old Page Bookmarks too, so only a 3.0 import shows the card.
+        return hadLegacyPageBookmarks && !isOldPageBookmarksTipDismissed && !editMode.isEditing
     }
 
     var displayedCollections: [AyahBookmarkCollection] {
@@ -300,6 +318,20 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         )
     }
 
+    /// Opens Old Page Bookmarks and retires the card.
+    func openOldPageBookmarks() {
+        guard let oldPageBookmarksCollection else {
+            return
+        }
+        dismissOldPageBookmarksTip()
+        showCollection(oldPageBookmarksCollection)
+    }
+
+    func dismissOldPageBookmarksTip() {
+        bookmarksPreferences.isOldPageBookmarksTipDismissed = true
+        isOldPageBookmarksTipDismissed = true
+    }
+
     func showHighlights(_ color: HighlightColor) {
         navigationController?.pushViewController(
             ayahSetBuilder.buildHighlights(color: color, ayahs: ayahs(highlightedIn: color)),
@@ -367,6 +399,8 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     private let navigateToPage: (Page) -> Void
     private let navigateToAyah: (AyahNumber) -> Void
     private let readingPreferences = ReadingPreferences.shared
+    private let bookmarksPreferences = BookmarksPreferences.shared
+    private let legacyImportPreferences = LegacyImportPreferences.shared
     private weak var navigationController: UINavigationController?
     /// The collection the rename alert is for.
     private var renamingCollection: AyahBookmarkCollection?

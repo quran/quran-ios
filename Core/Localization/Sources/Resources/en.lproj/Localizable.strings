@@ -442,6 +442,12 @@
 "bookmarks.old-page-bookmarks" = "Old Page Bookmarks";
 // Header of the Old Page Bookmarks collection.
 "bookmarks.old-page-bookmarks.explanation" = "Saved from your page bookmarks. Each page is now its first ayah.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+"bookmarks.old-page-bookmarks-tip.title" = "Your page bookmarks are here";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+"bookmarks.old-page-bookmarks-tip.text" = "Each page you bookmarked in %@ is now its first ayah, in Old Page Bookmarks. To keep your place while reading, use reading bookmarks.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+"bookmarks.old-page-bookmarks.open" = "Open Old Page Bookmarks";
 
 "notes.minimum-length.alert.title" = "Note is too short";
 "notes.minimum-length.alert.body" = "Notes must be at least %d characters.";

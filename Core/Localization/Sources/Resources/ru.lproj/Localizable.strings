@@ -598,6 +598,15 @@
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
 "bookmarks.old-page-bookmarks.explanation" = "Сохранены из ваших закладок страниц. Теперь каждая страница — это её первый аят.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.title" = "Ваши закладки страниц здесь";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.text" = "Каждая страница, которую вы добавили в закладки в версии %@, теперь стала её первым аятом в разделе «Старые закладки страниц». Чтобы не терять место при чтении, используйте закладки для чтения.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.open" = "Открыть «Старые закладки страниц»";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

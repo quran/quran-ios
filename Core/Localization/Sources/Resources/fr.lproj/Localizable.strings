@@ -598,6 +598,15 @@
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
 "bookmarks.old-page-bookmarks.explanation" = "Enregistrées depuis vos signets de page. Chaque page correspond désormais à sa première ayah.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.title" = "Vos signets de page sont ici";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.text" = "Chaque page que vous aviez mise en signet dans la version %@ est désormais sa première ayah, dans Anciens signets de page. Pour garder votre place pendant la lecture, utilisez les marque-pages de lecture.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.open" = "Ouvrir Anciens signets de page";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

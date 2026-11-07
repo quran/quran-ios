@@ -4,12 +4,9 @@ import AuthenticationClientFake
 import Combine
 import Localization
 import MobileSync
-import MobileSyncTestSupport
 import NoorUI
 import QuranAnnotations
 import QuranKit
-import QuranResources
-import QuranTextKit
 import ReadingService
 import UIKit
 import XCTest
@@ -17,19 +14,8 @@ import XCTest
 @testable import BookmarksFeature
 
 @MainActor
-final class BookmarkCollectionsViewModelTests: XCTestCase {
-    private let database = MobileSyncTestDatabase.shared
+final class BookmarkCollectionsViewModelTests: BookmarkCollectionsTestCase {
     private let oldPageBookmarksCollectionName = AyahBookmarkCollection.oldPageBookmarksName
-
-    override func setUp() async throws {
-        try await super.setUp()
-        try await database.reset()
-    }
-
-    override func tearDown() async throws {
-        try await database.reset()
-        try await super.tearDown()
-    }
 
     func test_sorted_sortsCollectionsByName() {
         let collections = BookmarkCollectionsViewModel.sorted([
@@ -454,7 +440,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     func test_start_readsOldPageBookmarkCountFromMobileSync() async throws {
         let service = makeService()
         try await service.createCollection(named: oldPageBookmarksCollectionName)
-        let collection = try await storedOldPageBookmarksCollection()
+        let collection = try await storedCollection(named: oldPageBookmarksCollectionName)
         try await service.addAyahBookmarkToCollection(
             collectionId: collection.collection.id,
             ayah: AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
@@ -471,7 +457,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     func test_start_updatesOldPageBookmarkCount_whenMobileSyncChanges() async throws {
         let service = makeService()
         try await service.createCollection(named: oldPageBookmarksCollectionName)
-        let collection = try await storedOldPageBookmarksCollection()
+        let collection = try await storedCollection(named: oldPageBookmarksCollectionName)
         let sut = makeSUT(collectionService: service)
         let task = Task { await sut.start() }
 
@@ -946,48 +932,6 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
-    private func makeSUT(
-        authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient(),
-        collectionService: AyahBookmarkCollectionService? = nil,
-        readingBookmarkService: MobileSyncReadingBookmarkService? = nil,
-        navigationController: UINavigationController? = nil,
-        navigateToPage: @escaping (Page) -> Void = { _ in },
-        navigateToAyah: @escaping (AyahNumber) -> Void = { _ in }
-    ) -> BookmarkCollectionsViewModel {
-        let collectionService = collectionService ?? makeService()
-        let readingBookmarkService = readingBookmarkService ?? makeReadingBookmarkService()
-        let navigationController = navigationController ?? UINavigationController()
-        let ayahSetBuilder = AyahSetBuilder(
-            ayahBookmarkCollectionService: collectionService,
-            ayahHighlightService: makeHighlightService(),
-            quranTextDataService: makeQuranTextDataService(),
-            navigateToAyah: { _ in }
-        )
-        return BookmarkCollectionsViewModel(
-            authenticationClient: authenticationClient,
-            quranDataService: database.quranDataService,
-            ayahBookmarkCollectionService: collectionService,
-            ayahHighlightService: makeHighlightService(),
-            readingBookmarkService: readingBookmarkService,
-            ayahSetBuilder: ayahSetBuilder,
-            navigationController: navigationController,
-            navigateToPage: navigateToPage,
-            navigateToAyah: navigateToAyah
-        )
-    }
-
-    private func makeService() -> AyahBookmarkCollectionService {
-        AyahBookmarkCollectionService(quranDataService: database.quranDataService)
-    }
-
-    private func makeHighlightService() -> MobileSyncAyahHighlightService {
-        MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
-    }
-
-    private func makeReadingBookmarkService() -> MobileSyncReadingBookmarkService {
-        MobileSyncReadingBookmarkService(quranDataService: database.quranDataService)
-    }
-
     private func makeCollectionDetailsViewModel(
         collection: AyahBookmarkCollection
     ) -> AyahSetViewModel {
@@ -1001,37 +945,6 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             navigateToAyah: { _ in },
             dataSourceDeleted: {}
         )
-    }
-
-    private func makeQuranTextDataService() -> QuranTextDataService {
-        QuranTextDataService(
-            databasesURL: URL(fileURLWithPath: "/tmp/unavailable-translations-database"),
-            quranFileURL: QuranResources.quranUthmaniV2Database
-        )
-    }
-
-    private func storedOldPageBookmarksCollection() async throws -> MobileSyncCollectionWithBookmarks {
-        let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
-        while let collections = try await iterator.next() {
-            if let collection = collections.first(where: {
-                $0.collection.name == oldPageBookmarksCollectionName
-            }) {
-                return collection
-            }
-        }
-        throw TestError.collectionNotFound
-    }
-
-    private func storedCollections(
-        where predicate: ([MobileSyncCollectionWithBookmarks]) -> Bool = { _ in true }
-    ) async throws -> [MobileSyncCollectionWithBookmarks] {
-        let iterator = database.quranDataService.collectionsWithBookmarksSequence().makeAsyncIterator()
-        while let collections = try await iterator.next() {
-            if predicate(collections) {
-                return collections
-            }
-        }
-        throw TestError.collectionNotFound
     }
 
     private func ayah(_ sura: Int, _ ayah: Int) throws -> AyahNumber {
@@ -1077,26 +990,6 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
     ) -> AyahBookmarkCollection {
         AyahBookmarkCollection(id: id ?? name, name: name, isDefault: isDefault, isReadOnly: isReadOnly, bookmarks: [])
     }
-
-    private func waitUntil(
-        timeout: TimeInterval = 10,
-        condition: @escaping @MainActor () -> Bool,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) async {
-        let deadline = Date().addingTimeInterval(timeout)
-        while Date() < deadline {
-            if condition() {
-                return
-            }
-            try? await Task.sleep(nanoseconds: 10_000_000)
-        }
-        XCTFail("Condition was not met in time", file: file, line: line)
-    }
-}
-
-private enum TestError: Error, Equatable {
-    case collectionNotFound
 }
 
 @MainActor

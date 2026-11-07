@@ -236,6 +236,12 @@
 "bookmarks.old-page-bookmarks" = "إشارات الصفحات المرجعية القديمة";
 // Header of the Old Page Bookmarks collection.
 "bookmarks.old-page-bookmarks.explanation" = "حُفظت من إشارات الصفحات المرجعية. أصبحت كل صفحة الآن أول آية فيها.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+"bookmarks.old-page-bookmarks-tip.title" = "إشارات صفحاتك المرجعية هنا";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+"bookmarks.old-page-bookmarks-tip.text" = "أصبحت كل صفحة أضفت لها إشارة مرجعية في الإصدار %@ أولَ آية فيها، ضمن «إشارات الصفحات المرجعية القديمة». لتحتفظ بموضعك أثناء القراءة، استخدم علامات موضع القراءة.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+"bookmarks.old-page-bookmarks.open" = "فتح إشارات الصفحات المرجعية القديمة";
 
 "bookmarks.editor.collection.unselected" = "غير محددة";
 "bookmarks.editor.collection.mixed" = "محددة جزئيًا";

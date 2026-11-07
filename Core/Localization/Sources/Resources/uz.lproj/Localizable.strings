@@ -600,6 +600,15 @@
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
 "bookmarks.old-page-bookmarks.explanation" = "Sahifa xatcho‘plaringizdan saqlangan. Endi har bir sahifa uning birinchi oyatiga aylandi.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.title" = "Sahifa xatchoʻplaringiz shu yerda";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.text" = "%@ versiyasida xatchoʻp qoʻygan har bir sahifangiz endi Eski sahifa xatcho‘plari ichida oʻsha sahifaning birinchi oyati sifatida turibdi. Oʻqish paytida joyingizni saqlash uchun oʻqish xatchoʻplaridan foydalaning.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.open" = "Eski sahifa xatcho‘plarini ochish";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

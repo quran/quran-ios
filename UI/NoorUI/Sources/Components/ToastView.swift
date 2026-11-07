@@ -40,15 +40,11 @@ struct ToastView: View {
             }
         }
         .padding()
-        .toastBackground(cornerRadius: Self.cornerRadius, shadowRadius: Self.shadowRadius, shadowOffset: Self.shadowOffset)
+        .toastBackground()
         .padding(.horizontal)
     }
 
     // MARK: Private
-
-    private static let cornerRadius: CGFloat = 28
-    private static let shadowOffset: CGFloat = 6
-    private static let shadowRadius: CGFloat = 16
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -136,7 +132,10 @@ private extension View {
     }
 
     @ViewBuilder
-    func toastBackground(cornerRadius: CGFloat, shadowRadius: CGFloat, shadowOffset: CGFloat) -> some View {
+    func toastBackground() -> some View {
+        let cornerRadius: CGFloat = 28
+        let shadowOffset: CGFloat = 6
+        let shadowRadius: CGFloat = 16
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         // Matches the audio banner: glassEffect can fail at runtime on iOS 26.0.
         if #available(iOS 26.1, *) {

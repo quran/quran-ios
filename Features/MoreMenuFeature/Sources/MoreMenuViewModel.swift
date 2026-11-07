@@ -32,7 +32,7 @@ final class MoreMenuViewModel: ObservableObject {
         wordPointerType = wordTextPreferences.wordTextType
         translationFontSize = fontSizePreferences.translationFontSize
         arabicFontSize = fontSizePreferences.arabicFontSize
-        twoPagesEnabled = preferences.twoPagesEnabled
+        twoPagesEnabled = preferences.twoPagesEnabled ?? model.twoPagesEnabledByDefault
         verticalScrollingEnabled = preferences.verticalScrollingEnabled
         showLinePageDividers = preferences.showLinePageDividers
         showLinePageSidelines = preferences.showLinePageSidelines
@@ -42,8 +42,6 @@ final class MoreMenuViewModel: ObservableObject {
         indicatorVisibility = preferences.ayahIndicatorVisibility
         #endif
         appearanceMode = themeService.appearanceMode
-
-        state.twoPages = (model.state.twoPages == .conditional && TwoPagesUtils.hasEnoughHorizontalSpace()) ? .conditional : .alwaysOff
 
         $mode
             .dropFirst()

@@ -795,6 +795,182 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertEqual(navigationController.topViewController?.title, HighlightColor.purple.localizedName)
     }
 
+    func test_renamePendingCollection_renamesCollectionInMobileSync() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Personal")
+        let personal = try await storedAyahBookmarkCollection { $0.name == "Personal" }
+        let sut = makeSUT(collectionService: service)
+        sut.presentRenameCollection(personal)
+        XCTAssertEqual(sut.renameAlert, .editing)
+        XCTAssertEqual(sut.renamedCollectionName, "Personal")
+        sut.renamedCollectionName = " Duas "
+
+        await sut.renamePendingCollection()
+
+        let renamed = try await storedAyahBookmarkCollection { $0.id == personal.id && $0.name == "Duas" }
+        XCTAssertEqual(renamed.name, "Duas")
+        XCTAssertEqual(sut.renameAlert, .hidden)
+        XCTAssertEqual(sut.nameAlert, .hidden)
+        XCTAssertEqual(sut.newCollectionName, "")
+        XCTAssertNil(sut.error)
+    }
+
+    func test_renamePendingCollection_rejectsDuplicateName() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Study")
+        try await service.createCollection(named: "Personal")
+        let personal = try await storedAyahBookmarkCollection { $0.name == "Personal" }
+        let sut = makeSUT(collectionService: service)
+        sut.presentRenameCollection(personal)
+        sut.renamedCollectionName = "study"
+
+        await sut.renamePendingCollection()
+
+        XCTAssertEqual(sut.renameAlert, .rejected(.duplicate(DuplicateCollectionNameError(name: "Study"))))
+        XCTAssertEqual(sut.renamedCollectionName, "study")
+        XCTAssertEqual(sut.nameAlert, .hidden)
+        XCTAssertEqual(sut.newCollectionName, "")
+        XCTAssertNil(sut.error)
+        let unchanged = try await storedAyahBookmarkCollection { $0.id == personal.id }
+        XCTAssertEqual(unchanged.name, "Personal")
+    }
+
+    func test_removeAllAyahs_emptiesReadOnlyFavoritesAndKeepsIt() async throws {
+        let service = makeService()
+        let emptyFavorites = try await storedAyahBookmarkCollection(where: \.isDefault)
+        XCTAssertTrue(emptyFavorites.isReadOnly)
+        let ayahs = try [(1, 1), (2, 255)].map { try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: $0, ayah: $1)) }
+        try await service.addAyahs(ayahs, toCollectionWithID: emptyFavorites.id)
+        let favorites = try await storedAyahBookmarkCollection { $0.isDefault && $0.bookmarks.count == 2 }
+        let sut = makeSUT(collectionService: service)
+
+        await sut.removeAllAyahs(from: favorites)
+
+        let emptied = try await storedAyahBookmarkCollection { $0.id == favorites.id && $0.bookmarks.isEmpty }
+        XCTAssertTrue(emptied.isDefault)
+        XCTAssertTrue(emptied.bookmarks.isEmpty)
+        XCTAssertNil(sut.error)
+    }
+
+    func test_renamePendingCollection_unchangedOldPageBookmarksNameDoesNotWrite() async throws {
+        let service = makeService()
+        try await service.createCollection(named: oldPageBookmarksCollectionName)
+        let oldPageBookmarks = try await storedAyahBookmarkCollection { $0.kind == .oldPageBookmarks }
+        let before = try await storedCollections()
+        let lastUpdated = try XCTUnwrap(before.first { $0.collection.id == oldPageBookmarks.id }).collection.lastUpdated
+        let sut = makeSUT(collectionService: service)
+        sut.presentRenameCollection(oldPageBookmarks)
+        XCTAssertEqual(sut.renamedCollectionName, l("bookmarks.old-page-bookmarks"))
+
+        await sut.renamePendingCollection()
+
+        XCTAssertEqual(sut.renameAlert, .hidden)
+        XCTAssertNil(sut.error)
+        let after = try await storedCollections()
+        let stored = try XCTUnwrap(after.first { $0.collection.id == oldPageBookmarks.id })
+        XCTAssertEqual(stored.collection.name, oldPageBookmarksCollectionName)
+        XCTAssertEqual(stored.collection.lastUpdated, lastUpdated)
+    }
+
+    func test_userCollection_canBeRenamedAndHasNoRemoveAll() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Personal")
+        let empty = try await storedAyahBookmarkCollection { $0.name == "Personal" }
+        try await service.addAyahs([try ayah(1, 1)], toCollectionWithID: empty.id)
+        let personal = try await storedAyahBookmarkCollection { $0.id == empty.id && $0.bookmarks.count == 1 }
+        let sut = makeSUT(collectionService: service)
+
+        XCTAssertTrue(personal.canRename)
+        XCTAssertTrue(personal.canDelete)
+        XCTAssertFalse(sut.canRemoveAllAyahs(from: personal))
+    }
+
+    func test_favoritesWithAyahs_canRemoveAll() async throws {
+        let service = makeService()
+        let empty = try await storedAyahBookmarkCollection(where: \.isDefault)
+        try await service.addAyahs([try ayah(1, 1)], toCollectionWithID: empty.id)
+        let favorites = try await storedAyahBookmarkCollection { $0.isDefault && $0.bookmarks.count == 1 }
+        let sut = makeSUT(collectionService: service)
+
+        XCTAssertFalse(favorites.canRename)
+        XCTAssertFalse(favorites.canDelete)
+        XCTAssertTrue(sut.canRemoveAllAyahs(from: favorites))
+    }
+
+    func test_emptyFavorites_hasNoMenuActions() async throws {
+        let favorites = try await storedAyahBookmarkCollection(where: \.isDefault)
+        let sut = makeSUT()
+
+        XCTAssertTrue(favorites.bookmarks.isEmpty)
+        XCTAssertFalse(favorites.canRename)
+        XCTAssertFalse(favorites.canDelete)
+        XCTAssertFalse(sut.canRemoveAllAyahs(from: favorites))
+    }
+
+    func test_editMode_turnsItemMenusOff() {
+        let sut = makeSUT()
+        XCTAssertTrue(sut.isItemMenuEnabled)
+
+        sut.editMode = .active
+
+        XCTAssertFalse(sut.isItemMenuEnabled)
+    }
+
+    func test_removeAllAyahs_removesAyahsAddedAfterTheMenuOpened() async throws {
+        let service = makeService()
+        let empty = try await storedAyahBookmarkCollection(where: \.isDefault)
+        try await service.addAyahs([try ayah(1, 1)], toCollectionWithID: empty.id)
+        let sut = makeSUT(collectionService: service)
+        let task = Task { await sut.start() }
+        defer { task.cancel() }
+        await waitUntil { sut.collections.first(where: \.isDefault)?.bookmarks.count == 1 }
+        let staleFavorites = try XCTUnwrap(sut.collections.first(where: \.isDefault))
+        // Added after the menu opened, and possibly before this screen sees it.
+        try await service.addAyahs([try ayah(1, 2)], toCollectionWithID: empty.id)
+
+        await sut.removeAllAyahs(from: staleFavorites)
+
+        let emptied = try await storedAyahBookmarkCollection { $0.isDefault && $0.bookmarks.isEmpty }
+        XCTAssertTrue(emptied.bookmarks.isEmpty)
+        XCTAssertNil(sut.error)
+    }
+
+    func test_removeAllAyahs_holdsDeleteAllWhileRunning() async throws {
+        let service = makeService()
+        let empty = try await storedAyahBookmarkCollection(where: \.isDefault)
+        try await service.addAyahs([try ayah(1, 1)], toCollectionWithID: empty.id)
+        let favorites = try await storedAyahBookmarkCollection { $0.isDefault && $0.bookmarks.count == 1 }
+        let sut = makeSUT(collectionService: service)
+        var isRunning: [Bool] = []
+        let observation = sut.$collectionIDsRemovingAllAyahs.sink { isRunning.append($0.contains(favorites.id)) }
+        defer { observation.cancel() }
+
+        await sut.removeAllAyahs(from: favorites)
+
+        XCTAssertEqual(isRunning, [false, true, false])
+        XCTAssertTrue(sut.canRemoveAllAyahs(from: favorites))
+    }
+
+    func test_removeAllHighlights_removesOnlySelectedColor() async throws {
+        let highlightService = makeHighlightService()
+        let pinkAyahs = try [1, 2].map { try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: $0)) }
+        let greenAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 3))
+        try await highlightService.setHighlight(.pink, for: pinkAyahs)
+        try await highlightService.setHighlight(.green, for: [greenAyah])
+        let sut = makeSUT()
+        let task = Task { await sut.start() }
+        defer { task.cancel() }
+        await waitUntil { sut.highlights.count == 3 }
+
+        await sut.removeAllHighlights(.pink)
+
+        await waitUntil { sut.highlights == [greenAyah: .green] }
+        var iterator = highlightService.highlightsSequence(quran: .hafsMadani1405).makeAsyncIterator()
+        let stored = try await iterator.next()
+        XCTAssertEqual(stored, [greenAyah: .green])
+        XCTAssertNil(sut.error)
+    }
+
     private func makeSUT(
         analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
         authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient(),
@@ -882,6 +1058,21 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
             }
         }
         throw TestError.collectionNotFound
+    }
+
+    private func ayah(_ sura: Int, _ ayah: Int) throws -> AyahNumber {
+        try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: sura, ayah: ayah))
+    }
+
+    private func storedAyahBookmarkCollection(
+        where matches: (AyahBookmarkCollection) -> Bool
+    ) async throws -> AyahBookmarkCollection {
+        let stored = try await storedCollections {
+            AyahBookmarkCollectionService.collections(from: $0, quran: .hafsMadani1405).contains(where: matches)
+        }
+        return try XCTUnwrap(
+            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405).first(where: matches)
+        )
     }
 
     /// Observes the stored reading bookmarks until they match, failing the test after `waitUntil`'s timeout.

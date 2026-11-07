@@ -10,26 +10,41 @@ import SwiftUI
 extension View {
     /// Reads the window's safe area insets.
     ///
-    /// - Parameter excludingVerticalBar: Whether to leave out the column the system reserves for the vertical bar,
-    ///   like on iPhone Duo. Pass `true` only for full-bleed reading content in a screen without system bars,
-    ///   which hides the status bar while reading, so the column is empty.
-    public func readWindowSafeAreaInsets(_ safeAreaInsets: Binding<EdgeInsets>, excludingVerticalBar: Bool = false) -> some View {
-        modifier(WindowSafeAreaInsetsReaderViewModifier(safeAreaInsets: safeAreaInsets, excludingVerticalBar: excludingVerticalBar))
+    /// - Parameters:
+    ///   - excludingVerticalBar: Whether to leave out the column the system reserves for the vertical bar,
+    ///     like on iPhone Duo. Pass `true` only for full-bleed reading content in a screen without system bars,
+    ///     which hides the status bar while reading, so the column is empty.
+    ///   - hasVerticalBar: Set to whether the window reserves a column for the vertical bar, like on iPhone Duo.
+    public func readWindowSafeAreaInsets(
+        _ safeAreaInsets: Binding<EdgeInsets>,
+        excludingVerticalBar: Bool = false,
+        hasVerticalBar: Binding<Bool> = .constant(false)
+    ) -> some View {
+        modifier(WindowSafeAreaInsetsReaderViewModifier(
+            safeAreaInsets: safeAreaInsets,
+            hasVerticalBar: hasVerticalBar,
+            excludingVerticalBar: excludingVerticalBar
+        ))
     }
 }
 
 private struct WindowSafeAreaInsetsReaderViewModifier: ViewModifier {
     @Binding var safeAreaInsets: EdgeInsets
+    @Binding var hasVerticalBar: Bool
     let excludingVerticalBar: Bool
 
     func body(content: Content) -> some View {
         content
             .background(
-                WindowSafeAreaInsetsReader(safeAreaInsets: $safeAreaInsets, excludingVerticalBar: excludingVerticalBar)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 0.5)
-                    .accessibility(hidden: true)
-                    .allowsHitTesting(false)
+                WindowSafeAreaInsetsReader(
+                    safeAreaInsets: $safeAreaInsets,
+                    hasVerticalBar: $hasVerticalBar,
+                    excludingVerticalBar: excludingVerticalBar
+                )
+                .frame(maxWidth: .infinity)
+                .frame(height: 0.5)
+                .accessibility(hidden: true)
+                .allowsHitTesting(false)
             )
     }
 }
@@ -38,8 +53,9 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
     class WindowSafeAreaInsetsReaderView: UIView {
         // MARK: Lifecycle
 
-        init(safeAreaInsets: Binding<EdgeInsets>, excludingVerticalBar: Bool) {
+        init(safeAreaInsets: Binding<EdgeInsets>, hasVerticalBar: Binding<Bool>, excludingVerticalBar: Bool) {
             _safeAreaInsetsBinding = safeAreaInsets
+            _hasVerticalBarBinding = hasVerticalBar
             self.excludingVerticalBar = excludingVerticalBar
             super.init(frame: .zero)
             backgroundColor = UIColor.clear
@@ -53,6 +69,7 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
         // MARK: Internal
 
         @Binding var safeAreaInsetsBinding: EdgeInsets
+        @Binding var hasVerticalBarBinding: Bool
         var excludingVerticalBar: Bool
 
         override func layoutSubviews() {
@@ -82,21 +99,41 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
                 if safeAreaInsetsBinding != newInsets {
                     safeAreaInsetsBinding = newInsets
                 }
+                let hasVerticalBar = verticalBarEdge(of: window) != nil
+                if hasVerticalBarBinding != hasVerticalBar {
+                    hasVerticalBarBinding = hasVerticalBar
+                }
+            }
+        }
+
+        private enum VerticalBarEdge {
+            case leading
+            case trailing
+        }
+
+        private func verticalBarEdge(of window: UIWindow) -> VerticalBarEdge? {
+            guard #available(iOS 27.1, *) else {
+                return nil
+            }
+            switch window.traitCollection.verticalBarEdge {
+            case .leading: return .leading
+            case .trailing: return .trailing
+            default: return nil
             }
         }
 
         private func insets(of window: UIWindow) -> UIEdgeInsets {
             var insets = window.safeAreaInsets
-            guard excludingVerticalBar, #available(iOS 27.1, *) else {
+            guard excludingVerticalBar else {
                 return insets
             }
             let isRightToLeft = window.effectiveUserInterfaceLayoutDirection == .rightToLeft
-            switch window.traitCollection.verticalBarEdge {
+            switch verticalBarEdge(of: window) {
             case .leading:
                 if isRightToLeft { insets.right = 0 } else { insets.left = 0 }
             case .trailing:
                 if isRightToLeft { insets.left = 0 } else { insets.right = 0 }
-            default:
+            case nil:
                 break
             }
             return insets
@@ -104,10 +141,15 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
     }
 
     @Binding var safeAreaInsets: EdgeInsets
+    @Binding var hasVerticalBar: Bool
     let excludingVerticalBar: Bool
 
     func makeUIView(context: Context) -> UIView {
-        let view = WindowSafeAreaInsetsReaderView(safeAreaInsets: $safeAreaInsets, excludingVerticalBar: excludingVerticalBar)
+        let view = WindowSafeAreaInsetsReaderView(
+            safeAreaInsets: $safeAreaInsets,
+            hasVerticalBar: $hasVerticalBar,
+            excludingVerticalBar: excludingVerticalBar
+        )
         view.isAccessibilityElement = false
         view.isHidden = true
         view.isOpaque = true

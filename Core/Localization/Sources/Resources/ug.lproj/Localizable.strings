@@ -277,6 +277,18 @@
 "notes.search.no-results.title" = "\"%@\" گە ماس كېلىدىغان خاتىرە يوق";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "ساقلىغان خاتىرىڭىزدىكى باشقا سۆزنى ياكى سۈرە نامىنى سىناپ كۆرۈڭ.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "يورۇتۇشلار ئەمدى خەتكۈچلەردە";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "ئىزاھاتلار پەقەت سىز يازغانلارنىلا ساقلايدۇ. يورۇتقان ئايەتلىرىڭىز رەڭ بويىچە خەتكۈچلەر بەتكۈچىدە.";
+// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "يورۇتۇشلارنى كۆرسىتىش";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "يورۇتۇشلىرىڭىز خەتكۈچلەر بەتكۈچىدە.";
 
 // MARK: - Ayah Menu
 

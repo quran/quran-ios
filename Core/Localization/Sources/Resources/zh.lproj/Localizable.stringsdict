@@ -176,5 +176,20 @@
             <string>%2$d 项需等到那时才能同步。</string>
         </dict>
     </dict>
+    <!-- Notes empty state line for upgraders whose 3.0 notes held highlights: how many ayahs are highlighted. -->
+    <key>notes.no-data.highlights.count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@highlights@</string>
+        <key>highlights</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>other</key>
+            <string>您的 %d 处高亮现已移至“收藏”标签页。</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

@@ -277,6 +277,18 @@
 "notes.search.no-results.title" = "Нет заметок, соответствующих \"%@\"";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Попробуйте другое слово из сохранённой заметки или название суры.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Выделения теперь в Закладках";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "В Заметках остаётся только то, что вы пишете. Выделенные аяты находятся на вкладке «Закладки», по цветам.";
+// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Показать выделения";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Ваши выделения находятся на вкладке «Закладки».";
 
 // MARK: - Ayah Menu
 

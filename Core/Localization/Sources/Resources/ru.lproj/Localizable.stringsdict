@@ -248,5 +248,26 @@
             <string>%2$d подождут до тех пор.</string>
         </dict>
     </dict>
+    <!-- Notes empty state line for upgraders whose 3.0 notes held highlights: how many ayahs are highlighted. -->
+    <key>notes.no-data.highlights.count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@highlights@</string>
+        <key>highlights</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>one</key>
+            <string>Ваше %d выделение теперь на вкладке «Закладки».</string>
+            <key>few</key>
+            <string>Ваши %d выделения теперь на вкладке «Закладки».</string>
+            <key>many</key>
+            <string>Ваши %d выделений теперь на вкладке «Закладки».</string>
+            <key>other</key>
+            <string>Ваши %d выделения теперь на вкладке «Закладки».</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

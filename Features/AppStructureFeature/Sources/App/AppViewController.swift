@@ -82,6 +82,19 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         }
     }
 
+    /// Switches to the Bookmarks tab at its root, where highlights are listed.
+    func showBookmarks() {
+        guard let index = viewControllers?.firstIndex(where: { $0 is BookmarksTabViewController }),
+              let bookmarksTab = viewControllers?[index] as? BookmarksTabViewController
+        else {
+            logger.error("Bookmarks: bookmarks tab is unavailable")
+            return
+        }
+        bookmarksTab.popToRootViewController(animated: false)
+        selectedIndex = index
+        updateCrashContext(selectedIndex: index)
+    }
+
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         crashContext.setNavigationPhase("tab_switching")
         updateCrashContext(selectedIndex: tabBarController.selectedIndex)

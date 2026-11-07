@@ -277,6 +277,18 @@
 "notes.search.no-results.title" = "No hay notas que coincidan con \"%@\"";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Prueba con otra palabra de una nota guardada o el nombre de una sura.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Los resaltados ahora están en Favoritos";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "Notas guarda solo lo que escribes. Tus aleyas resaltadas están en la pestaña Favoritos, por color.";
+// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Mostrar resaltados";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Tus resaltados están en la pestaña Favoritos.";
 
 // MARK: - Ayah Menu
 

@@ -265,6 +265,14 @@
 "notes.search.placeholder.text" = "ابحث في ملاحظاتك";
 "notes.search.no-results.title" = "لا توجد ملاحظات تطابق \"%@\"";
 "notes.search.no-results.text" = "جرب كلمة مختلفة من ملاحظة قمت بحفظها أو اسم سورة.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+"notes.highlights-tip.title" = "التحديدات أصبحت في المرجعيات";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+"notes.highlights-tip.text" = "تحتفظ الملاحظات بما تكتبه فقط. الآيات التي حدّدتها موجودة في تبويب المرجعيات، مرتبة حسب اللون.";
+// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+"notes.highlights.show" = "عرض التحديدات";
+// Notes empty state line when the user has highlights.
+"notes.no-data.highlights.text" = "تحديداتك موجودة في تبويب المرجعيات.";
 
 // MARK: - Ayah Menu
 

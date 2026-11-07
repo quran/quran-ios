@@ -14,11 +14,14 @@ import UIKit
 
 struct NotesTabBuilder: TabBuildable {
     let container: AppDependencies
+    /// Opens the Bookmarks tab.
+    let showBookmarks: () -> Void
 
     func build() -> UIViewController {
         let interactor = NotesTabInteractor(
             quranBuilder: QuranBuilder(container: container),
-            notesBuilder: NotesBuilder(container: container)
+            notesBuilder: NotesBuilder(container: container),
+            showBookmarks: showBookmarks
         )
         let viewController = NotesTabViewController(interactor: interactor)
         viewController.navigationBar.prefersLargeTitles = true
@@ -29,21 +32,23 @@ struct NotesTabBuilder: TabBuildable {
 private final class NotesTabInteractor: TabInteractor {
     // MARK: Lifecycle
 
-    init(quranBuilder: QuranBuilder, notesBuilder: NotesBuilder) {
+    init(quranBuilder: QuranBuilder, notesBuilder: NotesBuilder, showBookmarks: @escaping () -> Void) {
         self.notesBuilder = notesBuilder
+        self.showBookmarks = showBookmarks
         super.init(quranBuilder: quranBuilder)
     }
 
     // MARK: Internal
 
     override func start() {
-        let rootViewController = notesBuilder.build(withListener: self)
+        let rootViewController = notesBuilder.build(withListener: self, showHighlights: showBookmarks)
         presenter?.setViewControllers([rootViewController], animated: false)
     }
 
     // MARK: Private
 
     private let notesBuilder: NotesBuilder
+    private let showBookmarks: () -> Void
 }
 
 private class NotesTabViewController: TabViewController {

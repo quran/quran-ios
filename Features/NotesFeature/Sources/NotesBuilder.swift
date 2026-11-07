@@ -24,7 +24,11 @@ public struct NotesBuilder {
 
     // MARK: Public
 
-    public func build(withListener listener: QuranNavigator) -> UIViewController {
+    /// - Parameter showHighlights: Opens the Bookmarks tab, where highlights are listed.
+    public func build(
+        withListener listener: QuranNavigator,
+        showHighlights: @escaping () -> Void
+    ) -> UIViewController {
         let viewControllerReference = NotesViewControllerReference()
         let editNote: (Note) -> Void = { [viewControllerReference] note in
             viewControllerReference.value?.editNote(note)
@@ -40,12 +44,14 @@ public struct NotesBuilder {
             authenticationClient: container.authenticationClient,
             quranDataService: container.quranDataService,
             noteService: noteService,
+            ayahHighlightService: container.ayahHighlightService(),
             textService: textService,
             textRetriever: textRetriever,
             navigateTo: { [weak listener] verse in
                 listener?.navigateTo(ayah: verse, lastPage: nil)
             },
-            editNote: editNote
+            editNote: editNote,
+            showHighlights: showHighlights
         )
         #else
         let viewModel = NotesViewModel(

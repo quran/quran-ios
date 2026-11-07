@@ -293,5 +293,30 @@
             <string>%2$d عنصر آخر لا يمكن مزامنته حتى ذلك الحين.</string>
         </dict>
     </dict>
+    <!-- Notes empty state line for upgraders whose 3.0 notes held highlights: how many ayahs are highlighted. -->
+    <key>notes.no-data.highlights.count</key>
+    <dict>
+        <key>NSStringLocalizedFormatKey</key>
+        <string>%#@highlights@</string>
+        <key>highlights</key>
+        <dict>
+            <key>NSStringFormatSpecTypeKey</key>
+            <string>NSStringPluralRuleType</string>
+            <key>NSStringFormatValueTypeKey</key>
+            <string>d</string>
+            <key>zero</key>
+            <string>تحديداتك أصبحت الآن في تبويب المرجعيات.</string>
+            <key>one</key>
+            <string>تحديدك الوحيد أصبح الآن في تبويب المرجعيات.</string>
+            <key>two</key>
+            <string>تحديداك أصبحا الآن في تبويب المرجعيات.</string>
+            <key>few</key>
+            <string>تحديداتك الـ %d أصبحت الآن في تبويب المرجعيات.</string>
+            <key>many</key>
+            <string>تحديداتك الـ %d أصبحت الآن في تبويب المرجعيات.</string>
+            <key>other</key>
+            <string>تحديداتك الـ %d أصبحت الآن في تبويب المرجعيات.</string>
+        </dict>
+    </dict>
 </dict>
 </plist>

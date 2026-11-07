@@ -222,6 +222,18 @@
 "notes.search.no-results.title" = "Không có ghi chú nào khớp với \"%@\"";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Hãy thử một từ khác từ ghi chú bạn đã lưu hoặc tên sura.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Tô sáng giờ nằm trong Đánh dấu";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "Ghi chú chỉ giữ những gì bạn viết. Các ayah bạn tô sáng nằm trong tab Đánh dấu, theo màu.";
+// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Hiện tô sáng";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Các tô sáng của bạn nằm trong tab Đánh dấu.";
 
 // MARK: - Ayah Menu
 

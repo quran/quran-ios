@@ -13,22 +13,30 @@ import QuranTextKit
 import ReadingService
 import UIKit
 import XCTest
+@testable import LegacyDataMigration
 @testable import NotesFeature
 
 @MainActor
 final class NotesViewModelTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared
     private var noteService: MobileSyncNoteService!
+    private var highlightService: MobileSyncAyahHighlightService!
 
     override func setUp() async throws {
         try await super.setUp()
         try await database.reset()
+        LegacyImportPreferences.reset()
+        NotesPreferences.reset()
         noteService = MobileSyncNoteService(quranDataService: database.quranDataService)
+        highlightService = MobileSyncAyahHighlightService(quranDataService: database.quranDataService)
     }
 
     override func tearDown() async throws {
         try await database.reset()
+        LegacyImportPreferences.reset()
+        NotesPreferences.reset()
         noteService = nil
+        highlightService = nil
         try await super.tearDown()
     }
 
@@ -43,6 +51,7 @@ final class NotesViewModelTests: XCTestCase {
             authenticationClient: UnavailableAuthenticationClient(),
             quranDataService: database.quranDataService,
             noteService: noteService,
+            ayahHighlightService: highlightService,
             textService: QuranTextDataService(
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
@@ -52,7 +61,8 @@ final class NotesViewModelTests: XCTestCase {
                 quranFileURL: unavailableDatabase
             ),
             navigateTo: { _ in },
-            editNote: { _ in }
+            editNote: { _ in },
+            showHighlights: {}
         )
 
         sut.notes = [item]
@@ -73,6 +83,7 @@ final class NotesViewModelTests: XCTestCase {
             authenticationClient: UnavailableAuthenticationClient(),
             quranDataService: database.quranDataService,
             noteService: noteService,
+            ayahHighlightService: highlightService,
             textService: QuranTextDataService(
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
@@ -82,7 +93,8 @@ final class NotesViewModelTests: XCTestCase {
                 quranFileURL: unavailableDatabase
             ),
             navigateTo: { _ in },
-            editNote: { _ in }
+            editNote: { _ in },
+            showHighlights: {}
         )
         let observed = expectation(description: "Observes persisted note")
         let observation = sut.$notes.sink { notes in
@@ -198,6 +210,7 @@ final class NotesViewModelTests: XCTestCase {
             authenticationClient: UnavailableAuthenticationClient(),
             quranDataService: database.quranDataService,
             noteService: noteService,
+            ayahHighlightService: highlightService,
             textService: QuranTextDataService(
                 databasesURL: unavailableDatabase,
                 quranFileURL: QuranResources.quranUthmaniV2Database
@@ -207,7 +220,8 @@ final class NotesViewModelTests: XCTestCase {
                 quranFileURL: QuranResources.quranUthmaniV2Database
             ),
             navigateTo: { _ in },
-            editNote: { _ in }
+            editNote: { _ in },
+            showHighlights: {}
         )
         sut.notes = [NoteItem(note: note, quranText: "Verse")]
         QuranContentStatePreferences.shared.quranMode = .arabic
@@ -234,6 +248,7 @@ final class NotesViewModelTests: XCTestCase {
             authenticationClient: UnavailableAuthenticationClient(),
             quranDataService: database.quranDataService,
             noteService: noteService,
+            ayahHighlightService: highlightService,
             textService: QuranTextDataService(
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
@@ -243,7 +258,8 @@ final class NotesViewModelTests: XCTestCase {
                 quranFileURL: unavailableDatabase
             ),
             navigateTo: { navigatedAyah = $0 },
-            editNote: { _ in }
+            editNote: { _ in },
+            showHighlights: {}
         )
 
         sut.navigateTo(NoteItem(note: note, quranText: nil))
@@ -267,19 +283,105 @@ final class NotesViewModelTests: XCTestCase {
         XCTAssertEqual(sut.filteredNotes.map(\.id), ["note"])
     }
 
+    func test_highlightsTip_showsForUpgraderWithHighlights() async throws {
+        LegacyImportPreferences.shared.hadHighlights = true
+        try await highlightService.setHighlight(.yellow, for: [ayah(2, 255)])
+        let sut = makeSUT()
+
+        let task = Task { await sut.start() }
+        defer { task.cancel() }
+
+        await waitUntil { sut.showsHighlightsTip }
+    }
+
+    func test_highlightsTip_hiddenWithoutLegacyHighlights() {
+        let sut = makeSUT()
+
+        sut.highlights = [ayah(2, 255): .yellow]
+
+        XCTAssertFalse(sut.showsHighlightsTip)
+    }
+
+    func test_highlightsTip_hiddenWithoutCurrentHighlights() {
+        LegacyImportPreferences.shared.hadHighlights = true
+
+        let sut = makeSUT()
+
+        XCTAssertFalse(sut.showsHighlightsTip)
+    }
+
+    func test_dismissHighlightsTip_retiresItForLaterLaunches() {
+        LegacyImportPreferences.shared.hadHighlights = true
+        let sut = makeSUT()
+        sut.highlights = [ayah(2, 255): .yellow]
+
+        sut.dismissHighlightsTip()
+
+        XCTAssertFalse(sut.showsHighlightsTip)
+        let relaunched = makeSUT()
+        relaunched.highlights = [ayah(2, 255): .yellow]
+        XCTAssertFalse(relaunched.showsHighlightsTip)
+    }
+
+    func test_showHighlights_opensBookmarks_andRetiresTip() {
+        LegacyImportPreferences.shared.hadHighlights = true
+        var showedHighlights = false
+        let sut = makeSUT(showHighlights: { showedHighlights = true })
+        sut.highlights = [ayah(2, 255): .yellow]
+
+        sut.showHighlights()
+
+        XCTAssertTrue(showedHighlights)
+        XCTAssertFalse(sut.showsHighlightsTip)
+    }
+
+    func test_highlightsSummary_forUpgrader_countsAyahs_andShowsUpToFourColors() {
+        LegacyImportPreferences.shared.hadHighlights = true
+        let sut = makeSUT()
+
+        sut.highlights = [
+            ayah(1, 1): .purple, ayah(1, 2): .pink, ayah(1, 3): .blue,
+            ayah(1, 4): .green, ayah(1, 5): .yellow, ayah(1, 6): .yellow,
+        ]
+
+        XCTAssertEqual(sut.highlightsSummary, NotesHighlightsSummary(colors: [.yellow, .green, .blue, .pink], upgraderCount: 6))
+    }
+
+    func test_highlightsSummary_forOthers_hasNoCount() {
+        let sut = makeSUT()
+
+        sut.highlights = [ayah(1, 1): .green]
+
+        XCTAssertEqual(sut.highlightsSummary, NotesHighlightsSummary(colors: [.green], upgraderCount: nil))
+    }
+
+    func test_highlightsSummary_withoutHighlights_isNil() {
+        LegacyImportPreferences.shared.hadHighlights = true
+
+        let sut = makeSUT()
+
+        XCTAssertNil(sut.highlightsSummary)
+    }
+
+    private func ayah(_ sura: Int, _ ayah: Int) -> AyahNumber {
+        AyahNumber(quran: .hafsMadani1405, sura: sura, ayah: ayah)!
+    }
+
     private func storedNotes() async throws -> [QuranAnnotations.Note] {
         var iterator = noteService.notesSequence(quran: .hafsMadani1405).makeAsyncIterator()
         return try await iterator.next() ?? []
     }
 
     private func makeSUT(
-        authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient()
+        authenticationClient: any AuthenticationClient = UnavailableAuthenticationClient(),
+        showHighlights: @escaping () -> Void = {}
     ) -> NotesViewModel {
         let unavailableDatabase = URL(fileURLWithPath: "/tmp/unavailable-quran-database")
         return NotesViewModel(
             authenticationClient: authenticationClient,
             quranDataService: database.quranDataService,
             noteService: noteService,
+            ayahHighlightService: highlightService,
             textService: QuranTextDataService(
                 databasesURL: unavailableDatabase,
                 quranFileURL: unavailableDatabase
@@ -289,7 +391,8 @@ final class NotesViewModelTests: XCTestCase {
                 quranFileURL: unavailableDatabase
             ),
             navigateTo: { _ in },
-            editNote: { _ in }
+            editNote: { _ in },
+            showHighlights: showHighlights
         )
     }
 

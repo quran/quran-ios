@@ -282,6 +282,18 @@
 "notes.search.no-results.title" = "没有笔记与 \"%@\" 匹配";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "请尝试您保存的笔记中的其他词或章节名称。";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "高亮现已移至收藏";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "笔记只保留您写下的内容。您高亮的经文按颜色列在“收藏”标签页中。";
+// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "显示高亮";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "您的高亮在“收藏”标签页中。";
 
 // MARK: - Ayah Menu
 

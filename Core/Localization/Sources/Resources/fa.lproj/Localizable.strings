@@ -277,6 +277,18 @@
 "notes.search.no-results.title" = "هیچ یادداشتی با \"%@\" مطابقت ندارد";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "کلمه دیگری را از یادداشتی که ذخیره کرده‌اید یا نام سوره امتحان کنید.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "برجسته‌سازی‌ها اکنون در نشانک‌ها هستند";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "یادداشت‌ها فقط چیزهایی را که می‌نویسید نگه می‌دارد. آیات برجسته‌شدهٔ شما بر اساس رنگ در زبانهٔ نشانک‌ها هستند.";
+// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "نمایش برجسته‌سازی‌ها";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "برجسته‌سازی‌های شما در زبانهٔ نشانک‌ها هستند.";
 
 // MARK: - Ayah Menu
 

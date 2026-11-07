@@ -277,6 +277,18 @@
 "notes.search.no-results.title" = "Nenhuma nota corresponde a \"%@\"";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Tente outra palavra de uma nota salva ou o nome de uma sura.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Os destaques agora ficam em Favoritos";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "Notas guarda apenas o que você escreve. Suas ayahs destacadas estão na aba Favoritos, por cor.";
+// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Mostrar destaques";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Seus destaques estão na aba Favoritos.";
 
 // MARK: - Ayah Menu
 

@@ -52,7 +52,7 @@ private final class BookmarksTabInteractor: TabInteractor {
     private let bookmarksBuilder: BookmarksBuilder
 }
 
-private class BookmarksTabViewController: TabViewController {
+final class BookmarksTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
         UITabBarItem(
             title: lAndroid("menu_bookmarks"),

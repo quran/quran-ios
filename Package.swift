@@ -857,12 +857,15 @@ private func featuresTargets() -> [[Target]] {
             "QuranTextKit",
             "AppDependencies",
             "FeaturesSupport",
+            "LegacyDataMigration",
+            "Preferences",
             "ReadingService",
             "NoorUI",
             "QuranLocalization",
             "NoteEditorFeature",
         ] + mobileSyncTargetDependencies, testDependencies: [
             "AuthenticationClientFake",
+            "LegacyDataMigration",
             "QuranResources",
         ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 

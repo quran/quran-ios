@@ -224,9 +224,9 @@ struct QuranReferenceView: View {
         let arabicName = reference.arabicName
         return HStack(alignment: arabicName.isIndoPakText ? .firstTextBaseline : .center, spacing: spacing) {
             if let localizedName = reference.localizedName(locale: locale) {
-                Text(localizedName)
-                    .font(size.plainFont)
-                    .fontWeight(emphasizesSura ? .heavy : nil)
+                // A nil weight would drop one set by an enclosing view, like a toast's semibold title.
+                let name = Text(localizedName).font(size.plainFont)
+                emphasizesSura ? name.fontWeight(.heavy) : name
             }
 
             if reference.showsArabicName(locale: locale) {

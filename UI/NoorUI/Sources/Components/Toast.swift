@@ -50,18 +50,13 @@ public struct Toast {
 
         /// - Parameter color: The glyph and tile color; `nil` uses the app tint.
         public init(_ systemImage: NoorSystemImage, color: Color? = nil) {
-            self.init(systemImage.image, color: color)
-        }
-
-        /// - Parameter color: The glyph and tile color; `nil` uses the app tint.
-        public init(_ image: Image, color: Color? = nil) {
-            self.image = image
+            self.systemImage = systemImage
             self.color = color
         }
 
         // MARK: Internal
 
-        let image: Image
+        let systemImage: NoorSystemImage
         let color: Color?
     }
 

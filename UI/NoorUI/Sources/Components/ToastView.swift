@@ -16,6 +16,51 @@ struct ToastView: View {
     let dismiss: () -> Void
 
     var body: some View {
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                // The text gets the full width; the action moves under it.
+                VStack(alignment: .trailing, spacing: contentSpacing) {
+                    HStack(alignment: .top, spacing: contentSpacing) {
+                        iconAndText
+                        dismissButtonIfShown
+                    }
+                    if let action = toast.action {
+                        actionButton(action)
+                    }
+                }
+            } else {
+                HStack(spacing: contentSpacing) {
+                    iconAndText
+                    if let action = toast.action {
+                        actionButton(action)
+                            .fixedSize()
+                    }
+                    dismissButtonIfShown
+                }
+            }
+        }
+        .padding()
+        .toastBackground(cornerRadius: Self.cornerRadius, shadowRadius: Self.shadowRadius, shadowOffset: Self.shadowOffset)
+        .padding(.horizontal)
+    }
+
+    // MARK: Private
+
+    private static let cornerRadius: CGFloat = 28
+    private static let shadowOffset: CGFloat = 6
+    private static let shadowRadius: CGFloat = 16
+
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    @ScaledMetric(relativeTo: .subheadline) private var actionHorizontalPadding = 14.0
+    @ScaledMetric(relativeTo: .subheadline) private var actionVerticalPadding = 7.0
+    @ScaledMetric private var contentSpacing = 12.0
+    @ScaledMetric private var dismissButtonSize = 28.0
+    @ScaledMetric private var dismissHitTargetSize = 44.0
+    @ScaledMetric private var iconTileSize = 36.0
+    @ScaledMetric private var titleSpacing = 2.0
+
+    private var iconAndText: some View {
         HStack(spacing: contentSpacing) {
             if let icon = toast.icon {
                 iconTile(icon)
@@ -30,49 +75,31 @@ struct ToastView: View {
                         .foregroundColor(.secondaryLabel)
                 }
             }
+            .accessibilityElement(children: .combine)
 
             Spacer(minLength: 0)
-
-            if let action = toast.action {
-                actionButton(action)
-            }
-
-            if toast.showsDismissButton {
-                dismissButton
-            }
         }
-        .padding()
-        .toastBackground(cornerRadius: cornerRadius, shadowRadius: shadowRadius, shadowOffset: shadowOffset)
-        .padding(.horizontal)
     }
 
-    // MARK: Private
-
-    @ScaledMetric private var actionHorizontalPadding = 14.0
-    @ScaledMetric private var actionVerticalPadding = 7.0
-    @ScaledMetric private var contentSpacing = 12.0
-    @ScaledMetric private var cornerRadius = 28.0
-    @ScaledMetric private var dismissButtonSize = 28.0
-    @ScaledMetric private var iconTileSize = 36.0
-    @ScaledMetric private var shadowOffset = 6.0
-    @ScaledMetric private var shadowRadius = 16.0
-    @ScaledMetric private var titleSpacing = 2.0
-
-    private var dismissButton: some View {
-        Button(action: dismiss) {
-            NoorSystemImage.cancel.image
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(Color.secondaryLabel)
-                .frame(width: dismissButtonSize, height: dismissButtonSize)
-                .background(Color.systemGray5, in: Circle())
+    @ViewBuilder private var dismissButtonIfShown: some View {
+        if toast.showsDismissButton {
+            Button(action: dismiss) {
+                NoorSystemImage.cancel.image
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Color.secondaryLabel)
+                    .frame(width: dismissButtonSize, height: dismissButtonSize)
+                    .background(Color.systemGray5, in: Circle())
+                    .frame(minWidth: dismissHitTargetSize, minHeight: dismissHitTargetSize)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(l("button.close"))
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(l("button.close"))
     }
 
     private func iconTile(_ icon: Toast.Icon) -> some View {
         let color = icon.color ?? .accentColor
-        return icon.image
+        return icon.systemImage.image
             .font(.body.weight(.semibold))
             .foregroundStyle(color)
             .frame(width: iconTileSize, height: iconTileSize)
@@ -93,7 +120,6 @@ struct ToastView: View {
                 .background(Color.accentColor, in: Capsule())
         }
         .buttonStyle(.plain)
-        .fixedSize()
     }
 }
 

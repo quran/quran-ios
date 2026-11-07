@@ -27,6 +27,20 @@ final class EdgeInsetsTextColumnTests: XCTestCase {
         XCTAssertEqual(insets, EdgeInsets(top: 0, leading: 50, bottom: 0, trailing: 25))
     }
 
+    func testTrimmedMarginsMeasureTheTextInTheVisiblePart() {
+        // Only x 50 to 950 of the image fills an image view 450 wide, scaled by 0.5, so the text is 25 to 450 points.
+        let insets = EdgeInsets(
+            textColumn: 100 ... 950,
+            imageSize: imageSize,
+            visibleRect: CGRect(x: 50, y: 0, width: 900, height: 2000),
+            imageViewSize: CGSize(width: 450, height: 1000),
+            contentWidth: 600,
+            layoutDirection: .leftToRight
+        )
+
+        XCTAssertEqual(insets, EdgeInsets(top: 0, leading: 100, bottom: 0, trailing: 75))
+    }
+
     // MARK: Private
 
     private let imageSize = CGSize(width: 1000, height: 2000)

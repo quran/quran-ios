@@ -18,7 +18,9 @@ protocol AyahSetDataSource {
     var initialContent: AyahSetContent { get }
 
     func contentSequence() -> AnyAsyncSequence<AyahSetContent>
-    func removeAyah(_ ayah: AyahNumber) async throws
+    func removeAyahs(_ ayahs: [AyahNumber]) async throws
+    /// Removes every ayah, including any added since the content was read.
+    func removeAllAyahs() async throws
 }
 
 @MainActor
@@ -53,8 +55,12 @@ struct BookmarkCollectionAyahSetDataSource: ManageableAyahSetDataSource {
         )
     }
 
-    func removeAyah(_ ayah: AyahNumber) async throws {
-        try await service.removeAyahs([ayah], fromCollectionWithID: collectionID)
+    func removeAyahs(_ ayahs: [AyahNumber]) async throws {
+        try await service.removeAyahs(ayahs, fromCollectionWithID: collectionID)
+    }
+
+    func removeAllAyahs() async throws {
+        try await service.removeAllAyahs(fromCollectionWithID: collectionID)
     }
 
     func rename(to name: String) async throws {
@@ -109,8 +115,12 @@ struct HighlightAyahSetDataSource: AyahSetDataSource {
         )
     }
 
-    func removeAyah(_ ayah: AyahNumber) async throws {
-        try await service.removeHighlight(for: [ayah])
+    func removeAyahs(_ ayahs: [AyahNumber]) async throws {
+        try await service.removeHighlight(for: ayahs)
+    }
+
+    func removeAllAyahs() async throws {
+        try await service.removeAllHighlights(color)
     }
 
     private let color: HighlightColor

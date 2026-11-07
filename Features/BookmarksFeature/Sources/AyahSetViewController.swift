@@ -40,10 +40,14 @@ private final class AyahSetMenuController {
         self.viewController = viewController
         self.viewModel = viewModel
 
-        updateNavigationItem(editMode: viewModel.editMode, content: viewModel.content)
-        Publishers.CombineLatest(viewModel.$editMode, viewModel.$content)
-            .sink { [weak self] editMode, content in
-                self?.updateNavigationItem(editMode: editMode, content: content)
+        updateNavigationItem(
+            editMode: viewModel.editMode,
+            content: viewModel.content,
+            isRemovingAllAyahs: viewModel.isRemovingAllAyahs
+        )
+        Publishers.CombineLatest3(viewModel.$editMode, viewModel.$content, viewModel.$isRemovingAllAyahs)
+            .sink { [weak self] editMode, content, isRemovingAllAyahs in
+                self?.updateNavigationItem(editMode: editMode, content: content, isRemovingAllAyahs: isRemovingAllAyahs)
             }
             .store(in: &cancellables)
     }
@@ -51,13 +55,27 @@ private final class AyahSetMenuController {
     private weak var viewController: UIViewController?
     private let viewModel: AyahSetViewModel
     private var cancellables: Set<AnyCancellable> = []
+    private weak var removeAllConfirmation: UIAlertController?
 
-    private func updateNavigationItem(editMode: EditMode, content: AyahSetContent) {
+    private lazy var removeAllButton = NavigationBarButton.deleteAll { [weak self] in
+        self?.confirmRemoveAll(sourceBarButtonItem: $0)
+    }
+
+    private func updateNavigationItem(editMode: EditMode, content: AyahSetContent, isRemovingAllAyahs: Bool) {
         guard let viewController else {
             return
         }
 
         updateTitle(for: content, in: viewController)
+        // Delete All replaces Back, which iOS 26 otherwise shows beside a leading item.
+        if editMode.isEditing, !content.ayahs.isEmpty, !isRemovingAllAyahs {
+            viewController.navigationItem.leftBarButtonItem = removeAllButton
+            viewController.navigationItem.hidesBackButton = true
+        } else {
+            viewController.navigationItem.leftBarButtonItem = nil
+            viewController.navigationItem.hidesBackButton = false
+            dismissRemoveAllConfirmation()
+        }
         if editMode.isEditing {
             viewController.navigationItem.rightBarButtonItems = [
                 NavigationBarButton.done { [weak self] in
@@ -76,6 +94,37 @@ private final class AyahSetMenuController {
                 viewController.navigationItem.rightBarButtonItems = [editButton, menuButton]
             }
         }
+    }
+
+    private func confirmRemoveAll(sourceBarButtonItem: UIBarButtonItem) {
+        let alert = DeleteAllConfirmation.make(
+            message: removeAllConfirmationMessage(for: viewModel.content),
+            sourceBarButtonItem: sourceBarButtonItem
+        ) { [weak self] in
+            guard let self, viewModel.editMode.isEditing else {
+                return
+            }
+            Task { await self.viewModel.removeAllAyahs() }
+        }
+        removeAllConfirmation = alert
+        viewController?.present(alert, animated: true)
+    }
+
+    /// Done, or a sync that empties the page, takes Delete All away, so its confirmation goes too.
+    private func dismissRemoveAllConfirmation() {
+        guard let removeAllConfirmation, removeAllConfirmation.presentingViewController != nil,
+              !removeAllConfirmation.isBeingDismissed
+        else {
+            return
+        }
+        removeAllConfirmation.dismiss(animated: true)
+    }
+
+    private func removeAllConfirmationMessage(for content: AyahSetContent) -> String {
+        guard let highlightColor = content.highlightColor else {
+            return DeleteAllConfirmation.message(collectionName: content.title)
+        }
+        return DeleteAllConfirmation.message(highlightColor: highlightColor)
     }
 
     private func updateTitle(for content: AyahSetContent, in viewController: UIViewController) {

@@ -518,6 +518,12 @@
 "bookmarks.collections" = "مجموعه‌ها";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.add" = "افزودن مجموعه";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "آیا از حذف همهٔ برجسته‌سازی‌های رنگ «%@» مطمئن هستید؟";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "آیا از حذف همهٔ آیات از «%@» مطمئن هستید؟";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "برای حذف نشانک، آن را بکشید.";
 // Metadata: Translated by ChatGPT; human review required.

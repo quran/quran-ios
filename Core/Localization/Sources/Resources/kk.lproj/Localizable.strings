@@ -500,6 +500,12 @@
 "bookmarks.collections" = "Жинақтар";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.add" = "Жинақ қосу";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "«%@» түспен бөлектелген барлық аяттарды алып тастағыңыз келетініне сенімдісіз бе?";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "«%@» ішіндегі барлық аяттарды алып тастағыңыз келетініне сенімдісіз бе?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Бетбелгіні жою үшін оны сырғытыңыз.";
 // Metadata: Translated by ChatGPT; human review required.

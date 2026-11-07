@@ -257,6 +257,10 @@
 "bookmarks.collections.no-data.title" = "No collections yet";
 "bookmarks.collections.no-data.text" = "Create a collection to organize ayahs by theme, dua, or memorization plan.";
 "bookmarks.collections.ayahs.delete-hint" = "Swipe a bookmark to delete it.";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "Are you sure you want to remove all ayahs from “%@”?";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "Are you sure you want to remove all “%@” highlights?";
 "bookmarks.collections.ayahs.open-hint" = "Opens this ayah in the Quran.";
 "bookmarks.collections.ayahs.no-data.text" = "Ayahs you bookmark while reading will appear here.";
 "bookmarks.collections.ayahs.no-data.colored.text" = "Ayahs you highlight in %@ while reading will appear here.";

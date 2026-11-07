@@ -519,6 +519,12 @@
 "bookmarks.collections" = "توپلاملار";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.add" = "توپلام قوشۇش";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "«%@» رەڭدە يورۇتۇلغان بارلىق ئايەتلەرنى چىقىرىۋەتمەكچى بولغىنىڭىزغا ئىشىنەمسىز؟";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "«%@» دىكى بارلىق ئايەتلەرنى چىقىرىۋەتمەكچى بولغىنىڭىزغا ئىشىنەمسىز؟";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "خەتكۈچنى ئۆچۈرۈش ئۈچۈن سىيرىڭ.";
 // Metadata: Translated by ChatGPT; human review required.

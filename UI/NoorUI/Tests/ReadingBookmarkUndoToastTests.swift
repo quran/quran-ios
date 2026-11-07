@@ -13,7 +13,7 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
     }
 
     func test_saved_showsFilledRibbonInSlotColor() {
-        let toast = ReadingBookmarkUndoToast.saved(bookmark(slot: .teal))
+        let toast = ReadingBookmarkUndoToast.saved(bookmark(slot: .teal), showsExplanation: false)
 
         XCTAssertEqual(toast.icon?.systemImage, .bookmark)
         XCTAssertEqual(toast.icon?.color, ReadingBookmarkSlot.teal.swiftUIColor)

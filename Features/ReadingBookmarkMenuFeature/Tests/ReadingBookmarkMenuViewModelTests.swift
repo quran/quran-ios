@@ -16,11 +16,13 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         try await database.reset()
+        resetExplanationPreferences()
         service = MobileSyncReadingBookmarkService(quranDataService: database.quranDataService)
     }
 
     override func tearDown() async throws {
         try await database.reset()
+        resetExplanationPreferences()
         service = nil
         try await super.tearDown()
     }
@@ -94,6 +96,34 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         XCTAssertNotNil(storedBookmark)
         XCTAssertEqual(storedBookmark?.placement, .unplaced)
         XCTAssertNotNil(toast?.action)
+    }
+
+    func test_firstSave_explainsSavingOnce() async throws {
+        let sut = makeSUT(target: .ayah(ayah(2)))
+        let startTask = await start(sut)
+        defer { startTask.cancel() }
+
+        let firstToast = await sut.select(.orange)
+        let secondToast = await sut.select(.red)
+
+        XCTAssertEqual(firstToast?.subtitle?.accessibilityText, l("ayah.menu.reading-bookmark.saved.explanation"))
+        XCTAssertNil(secondToast?.subtitle)
+        XCTAssertGreaterThan(try XCTUnwrap(firstToast?.duration), try XCTUnwrap(secondToast?.duration))
+    }
+
+    func test_firstMove_explainsMovingOnce() async throws {
+        try await service.addReadingBookmark(at: .ayah(ayah(1)), slot: .teal)
+        try await service.addReadingBookmark(at: .ayah(ayah(3)), slot: .red)
+        let sut = makeSUT(target: .ayah(ayah(2)))
+        let startTask = await start(sut)
+        defer { startTask.cancel() }
+
+        let firstToast = await sut.select(.teal)
+        let secondToast = await sut.select(.red)
+
+        XCTAssertEqual(firstToast?.subtitle?.accessibilityText, l("ayah.menu.reading-bookmark.moved.explanation"))
+        XCTAssertNil(secondToast?.subtitle)
+        XCTAssertGreaterThan(try XCTUnwrap(firstToast?.duration), try XCTUnwrap(secondToast?.duration))
     }
 
     func test_removedBookmarkUndo_restoresPreviousLocation() async throws {
@@ -434,6 +464,11 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         XCTAssertEqual(stored, submitted)
         sut.beginEditing()
         XCTAssertTrue(sut.draftNames.isEmpty)
+    }
+
+    private func resetExplanationPreferences() {
+        ReadingBookmarkExplanationPreferences.shared.hasExplainedSave = false
+        ReadingBookmarkExplanationPreferences.shared.hasExplainedMove = false
     }
 
     private func makeSUT(target: ReadingBookmarkMenuViewModel.Target) -> ReadingBookmarkMenuViewModel {

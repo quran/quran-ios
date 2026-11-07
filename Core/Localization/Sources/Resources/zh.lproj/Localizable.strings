@@ -507,9 +507,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "阅读书签已从 %@ 移至 %@";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "阅读书签由你移动，而不是新增。若要保留经文，请将其保存到收藏集。";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "已移除 %@ 的阅读书签";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "阅读书签已保存至 %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "随着阅读移动它。你有三个，每段阅读进度各用一个。";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "请选择一节经文";
 // Metadata: Translated by ChatGPT; human review required.

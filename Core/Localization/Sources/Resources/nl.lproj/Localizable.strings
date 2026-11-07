@@ -416,9 +416,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Leesbladwijzer verplaatst van %@ naar %@";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "Je verplaatst leesbladwijzers in plaats van nieuwe toe te voegen. Bewaar ayahs in een verzameling om ze te houden.";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Leesbladwijzer verwijderd van %@";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Leesbladwijzer opgeslagen bij %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "Verplaats hem terwijl je leest. Je hebt er drie, een voor elke leesronde.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Selecteer één ayah";
 // Metadata: Translated by ChatGPT; human review required.

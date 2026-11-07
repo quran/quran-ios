@@ -408,8 +408,10 @@
 
 // Reading bookmark
 "ayah.menu.reading-bookmark.moved" = "تم نقل علامة موضع القراءة من %@ إلى %@";
+"ayah.menu.reading-bookmark.moved.explanation" = "أنت تنقل علامات موضع القراءة بدلًا من إضافة علامات جديدة. للاحتفاظ بالآيات، احفظها في مجموعة.";
 "ayah.menu.reading-bookmark.removed" = "تمت إزالة علامة موضع القراءة من %@";
 "ayah.menu.reading-bookmark.saved" = "تم حفظ علامة موضع القراءة عند %@";
+"ayah.menu.reading-bookmark.saved.explanation" = "انقلها كلما تقدمت في القراءة. لديك ثلاث علامات، واحدة لكل ختمة أو وِرد.";
 "ayah.menu.reading-bookmark.single-ayah-only" = "حدد آية واحدة";
 "ayah.menu.reading-bookmark.title" = "علامة موضع القراءة";
 /* VoiceOver label for a reading bookmark on an ayah. %1$@ is "ayah.menu.reading-bookmark.title" and %2$@ is the bookmark's color, such as "Teal" */

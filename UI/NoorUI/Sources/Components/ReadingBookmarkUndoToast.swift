@@ -1,19 +1,23 @@
 #if QURAN_SYNC
+import Foundation
 import Localization
 import QuranAnnotations
 
 /// The toasts shown after saving, moving, or removing a reading bookmark.
 public enum ReadingBookmarkUndoToast {
-    public static func saved(_ bookmark: PlacedReadingBookmark) -> Toast {
+    public static func saved(_ bookmark: PlacedReadingBookmark, showsExplanation: Bool) -> Toast {
         Toast(
             MultipartText.localizedFormat("ayah.menu.reading-bookmark.saved", locationTitle(bookmark.placement)),
-            icon: icon(bookmark, style: .filled)
+            subtitle: showsExplanation ? .text(l("ayah.menu.reading-bookmark.saved.explanation")) : nil,
+            icon: icon(bookmark, style: .filled),
+            duration: showsExplanation ? explanationDuration : Toast.defaultDuration
         )
     }
 
     public static func moved(
         from previousBookmark: PlacedReadingBookmark,
         to currentBookmark: PlacedReadingBookmark,
+        showsExplanation: Bool,
         undo: @escaping () -> Void
     ) -> Toast {
         makeToast(
@@ -22,7 +26,9 @@ public enum ReadingBookmarkUndoToast {
                 locationTitle(previousBookmark.placement),
                 locationTitle(currentBookmark.placement)
             ),
+            subtitle: showsExplanation ? .text(l("ayah.menu.reading-bookmark.moved.explanation")) : nil,
             icon: icon(currentBookmark, style: .filled),
+            duration: showsExplanation ? explanationDuration : Toast.defaultDuration,
             undo: undo
         )
     }
@@ -38,11 +44,21 @@ public enum ReadingBookmarkUndoToast {
         )
     }
 
-    private static func makeToast(_ message: MultipartText, icon: Toast.Icon, undo: @escaping () -> Void) -> Toast {
+    private static let explanationDuration: TimeInterval = 6
+
+    private static func makeToast(
+        _ message: MultipartText,
+        subtitle: MultipartText? = nil,
+        icon: Toast.Icon,
+        duration: TimeInterval = Toast.defaultDuration,
+        undo: @escaping () -> Void
+    ) -> Toast {
         Toast(
             message,
+            subtitle: subtitle,
             icon: icon,
-            action: ToastAction(title: lAndroid("undo"), handler: undo)
+            action: ToastAction(title: lAndroid("undo"), handler: undo),
+            duration: duration
         )
     }
 

@@ -484,9 +484,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Penanda bacaan dialihkan dari %@ ke %@";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "Anda mengalihkan penanda bacaan dan bukannya menambah yang baharu. Untuk menyimpan ayat, simpan ayat itu dalam koleksi.";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Penanda bacaan pada %@ telah dialih keluar";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Penanda bacaan disimpan pada %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "Alihkannya semasa anda membaca. Anda ada tiga, satu untuk setiap bacaan.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Pilih satu ayat sahaja";
 // Metadata: Translated by ChatGPT; human review required.

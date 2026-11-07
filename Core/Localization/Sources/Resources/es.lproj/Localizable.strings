@@ -501,9 +501,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Marcador de lectura movido de %@ a %@";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "Mueves los marcadores de lectura en lugar de añadir otros nuevos. Para guardar aleyas, añádelas a una colección.";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Marcador de lectura eliminado de %@";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Marcador de lectura guardado en %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "Muévelo a medida que lees. Tienes tres, uno para cada lectura.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Selecciona una sola aleya";
 // Metadata: Translated by ChatGPT; human review required.

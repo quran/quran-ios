@@ -444,9 +444,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Okuma yer imi %@ konumundan %@ konumuna taşındı";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "Okuma yer imlerini yenilerini eklemek yerine taşırsınız. Ayetleri saklamak için onları bir koleksiyona kaydedin.";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "%@ konumundaki okuma yer imi kaldırıldı";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Okuma yer imi %@ konumuna kaydedildi";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "Okudukça onu taşıyın. Her okuma için bir tane olmak üzere üç taneniz var.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Tek bir ayet seçin";
 // Metadata: Translated by ChatGPT; human review required.

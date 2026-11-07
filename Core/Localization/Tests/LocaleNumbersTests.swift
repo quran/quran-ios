@@ -105,7 +105,7 @@ final class LocaleNumbersTests: XCTestCase {
     }
 
     func testPerAppPersianDropsInheritedLatinNumbersAndKeepsRegionOverride() {
-        let locale = perApp("fa_CA@numbers=latn;rg=cazzzz", system: ["en-CA"])
+        let locale = perApp("fa_US@numbers=latn;rg=cazzzz", system: ["en-CA"])
 
         XCTAssertEqual(numberFormatterString(45, locale: locale), "۴۵")
         XCTAssertEqual(components(of: locale)["rg"], "cazzzz")

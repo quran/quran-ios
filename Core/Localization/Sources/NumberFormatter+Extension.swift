@@ -107,7 +107,13 @@ extension Locale {
             }
             components[Self.numbersKey] = nil
         }
-        return Locale(identifier: Locale.identifier(fromComponents: components))
+        guard #available(iOS 16, *) else {
+            return Locale(identifier: Locale.identifier(fromComponents: components))
+        }
+        // Unlike the identifier, these keep the user's preferences, such as 24-hour time.
+        var localeComponents = Locale.Components(locale: self)
+        localeComponents.numberingSystem = components[Self.numbersKey].map { Locale.NumberingSystem($0) }
+        return Locale(components: localeComponents)
     }
 
     // MARK: Private

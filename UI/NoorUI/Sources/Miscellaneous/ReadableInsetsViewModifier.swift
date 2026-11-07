@@ -119,6 +119,11 @@ extension View {
         environment(\.pageInnerSide, side)
     }
 
+    /// Tightens the spacing of the page header and footer, for a page whose height limits its size.
+    public func compactsPageChrome(_ compacts: Bool) -> some View {
+        environment(\.compactsPageChrome, compacts)
+    }
+
     public func readableInsetsPadding(_ edges: Edge.Set = .all) -> some View {
         modifier(ReadableInsetsPadding(edges: edges))
     }

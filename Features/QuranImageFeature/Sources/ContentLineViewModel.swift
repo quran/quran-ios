@@ -183,6 +183,8 @@ final class ContentLineViewModel: ObservableObject {
                 showHeaderFooter: showHeaderFooter,
                 showSidelines: showSidelines,
                 showLineDividers: showLineDividers,
+                // Only changes pages whose height limits their size, like each page of a two-page spread.
+                usesDenseLines: true,
                 highlightedVerses: Set(highlightColorsByVerse.keys)
             )
         )

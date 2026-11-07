@@ -100,18 +100,21 @@ private struct ContentLineViewBody: View {
     let onGlobalFrameChange: (CGRect) -> Void
 
     var body: some View {
-        AdaptiveQuranScrollView {
-            QuranPageHeader(
-                quarterName: page.localizedQuarterName,
-                suras: page.suras
-            )
-            #if QURAN_SYNC
-            .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks, onTap: onPageReadingBookmarkTap)
-            #endif
-        } footer: {
-            QuranPageFooter(page: page.localizedNumber)
-        } content: { availableContentSize in
-            lineCanvas(layoutForSize(availableContentSize))
+        GeometryReader { geometry in
+            AdaptiveQuranScrollView {
+                QuranPageHeader(
+                    quarterName: page.localizedQuarterName,
+                    suras: page.suras
+                )
+                #if QURAN_SYNC
+                .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks, onTap: onPageReadingBookmarkTap)
+                #endif
+            } footer: {
+                QuranPageFooter(page: page.localizedNumber)
+            } content: { availableContentSize in
+                lineCanvas(layoutForSize(availableContentSize))
+            }
+            .compactsPageChrome(isLimitedByHeight(geometry.size))
         }
         .font(.footnote)
         .populateReadableInsets()
@@ -128,6 +131,12 @@ private struct ContentLineViewBody: View {
 
     private var chromePalette: LinePageChromePalette {
         chromeStyle.palette(for: themeColorScheme)
+    }
+
+    /// Whether the page's height limits its size, so the header and page number use tighter spacing.
+    /// Line pages are at least 1.6 times as tall as they're wide.
+    private func isLimitedByHeight(_ size: CGSize) -> Bool {
+        size.height > 0 && size.width <= size.height && size.width / size.height > 1 / 1.6
     }
 
     private func lineCanvas(_ layout: LinePageLayout?) -> some View {

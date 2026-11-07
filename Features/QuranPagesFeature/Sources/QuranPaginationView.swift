@@ -118,11 +118,14 @@ private struct QuranDoublePaginationView<Content: View>: View {
             onVisiblePageChanged: onVisiblePageChanged
         ) {
             ForEach(doublePages) { doublePage in
+                // Right to left: the first page is on the right, so its left side faces the second page.
                 HStack(spacing: 0) {
                     QuranSeparators.PageSideSeparator(leading: true)
                     content(doublePage.first)
+                        .pageInnerSide(.left)
                     QuranSeparators.PageMiddleSeparator()
                     content(doublePage.second)
+                        .pageInnerSide(.right)
                     QuranSeparators.PageSideSeparator(leading: false)
                 }
             }

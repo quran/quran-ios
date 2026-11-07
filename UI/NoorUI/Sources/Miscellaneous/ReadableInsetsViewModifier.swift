@@ -15,17 +15,74 @@ extension EnvironmentValues {
     }
 }
 
+/// The side of a page, as seen on screen, that faces another page instead of the window's edge.
+public enum PageInnerSide {
+    case left
+    case right
+}
+
+extension EnvironmentValues {
+    /// The side of the page that faces another page in a two-page spread, if any.
+    var pageInnerSide: PageInnerSide? {
+        get { self[PageInnerSideKey.self] }
+        set { self[PageInnerSideKey.self] = newValue }
+    }
+
+    /// The window's safe area insets, set by `populateReadableInsets()`.
+    var windowSafeAreaInsets: EdgeInsets {
+        get { self[WindowSafeAreaInsetsKey.self] }
+        set { self[WindowSafeAreaInsetsKey.self] = newValue }
+    }
+
+    /// Whether the page header and footer use tighter spacing, because the page's height limits its size.
+    var compactsPageChrome: Bool {
+        get { self[CompactsPageChromeKey.self] }
+        set { self[CompactsPageChromeKey.self] = newValue }
+    }
+}
+
+private struct WindowSafeAreaInsetsKey: EnvironmentKey {
+    static let defaultValue = EdgeInsets()
+}
+
+private struct CompactsPageChromeKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
 private struct ReadableInsetsKey: EnvironmentKey {
     static let defaultValue = EdgeInsets()
 }
 
+private struct PageInnerSideKey: EnvironmentKey {
+    static let defaultValue: PageInnerSide? = nil
+}
+
 private struct ReadableInsetsModifier: ViewModifier {
     @State var windowSafeAreaInsets: EdgeInsets = .zero
+    @Environment(\.pageInnerSide) var pageInnerSide
+    @Environment(\.layoutDirection) var layoutDirection
 
     func body(content: Content) -> some View {
         content
-            .readWindowSafeAreaInsets($windowSafeAreaInsets)
-            .environment(\.readableInsets, ContentDimension.readableInsets(of: windowSafeAreaInsets))
+            // Quran pages hide the status bar while reading, so they can use the empty vertical bar column.
+            .readWindowSafeAreaInsets($windowSafeAreaInsets, excludingVerticalBar: true)
+            .environment(\.readableInsets, ContentDimension.readableInsets(of: pageSafeAreaInsets))
+            .environment(\.windowSafeAreaInsets, pageSafeAreaInsets)
+    }
+
+    /// The window's safe area, except on the side facing the other page, which is away from the window's edge.
+    private var pageSafeAreaInsets: EdgeInsets {
+        var insets = windowSafeAreaInsets
+        guard let pageInnerSide else {
+            return insets
+        }
+        let innerSideIsLeading = (pageInnerSide == .left) == (layoutDirection == .leftToRight)
+        if innerSideIsLeading {
+            insets.leading = 0
+        } else {
+            insets.trailing = 0
+        }
+        return insets
     }
 }
 
@@ -55,6 +112,11 @@ private struct ReadableInsetsReader: ViewModifier {
 extension View {
     public func populateReadableInsets() -> some View {
         modifier(ReadableInsetsModifier())
+    }
+
+    /// Marks the page's side that faces another page, so its readable insets skip the window's safe area there.
+    public func pageInnerSide(_ side: PageInnerSide) -> some View {
+        environment(\.pageInnerSide, side)
     }
 
     public func readableInsetsPadding(_ edges: Edge.Set = .all) -> some View {

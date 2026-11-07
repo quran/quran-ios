@@ -62,19 +62,23 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     // MARK: Public
 
     public var body: some View {
-        AdaptiveQuranScrollView {
-            header
-        } footer: {
-            footer
-        } content: { availableContentSize in
-            Group {
-                if let image {
-                    imageContent(image)
-                } else {
-                    Color.clear
+        GeometryReader { geometry in
+            let isLimitedByHeight = isLimitedByHeight(geometry.size)
+            AdaptiveQuranScrollView {
+                header
+            } footer: {
+                footer
+            } content: { availableContentSize in
+                Group {
+                    if let image {
+                        imageContent(image, visibleRect: visibleRect(of: image, trimsMargins: isLimitedByHeight))
+                    } else {
+                        Color.clear
+                    }
                 }
+                .frame(height: imageHeight(for: availableContentSize))
             }
-            .frame(height: imageHeight(for: availableContentSize))
+            .environment(\.compactsPageChrome, isLimitedByHeight)
         }
     }
 
@@ -96,15 +100,39 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
 
     private struct SizeInfo: Equatable {
         let imageSize: CGSize
+        let visibleRect: CGRect
         let viewSize: CGSize
+
+        var scale: WordFrameScale {
+            WordFrameScale.scaling(imageSize: imageSize, visibleRect: visibleRect, into: viewSize)
+        }
     }
 
-    private func imageContent(_ image: UIImage) -> some View {
-        let sizeInfo = SizeInfo(imageSize: image.size, viewSize: imageViewSize)
-        let scale = WordFrameScale.scaling(imageSize: sizeInfo.imageSize, into: sizeInfo.viewSize)
+    /// The part of the image to show. Where the page's height limits its size, the image's own blank
+    /// margins are trimmed, so the Quran text gets bigger.
+    private func visibleRect(of image: UIImage, trimsMargins: Bool) -> CGRect {
+        guard trimsMargins else {
+            return CGRect(origin: .zero, size: image.size)
+        }
+        let contentFrames = decorations.wordFrames.frames.map(\.rect)
+            + decorations.suraHeaders.map(\.rect)
+        return PageMarginTrimming.visibleRect(imageSize: image.size, contentFrames: contentFrames)
+    }
+
+    private func imageContent(_ image: UIImage, visibleRect: CGRect) -> some View {
+        let sizeInfo = SizeInfo(imageSize: image.size, visibleRect: visibleRect, viewSize: imageViewSize)
+        let scale = sizeInfo.scale
         let layout = ImageDecorationsLayout(decorations: decorations, imageSize: image.size, scale: scale)
 
-        return QuranThemedImage(image: image, renderingMode: renderingMode)
+        // The view has the visible part's shape. The image is placed so that part fills the view.
+        return Color.clear
+            .aspectRatio(visibleRect.width / visibleRect.height, contentMode: .fit)
+            .overlay(alignment: .topLeading) {
+                QuranThemedImage(image: image, renderingMode: renderingMode)
+                    .frame(width: image.size.width * scale.scale, height: image.size.height * scale.scale)
+                    .offset(x: scale.xOffset, y: scale.yOffset)
+            }
+            .clipped()
             .background {
                 ZStack(alignment: .topLeading) {
                     AyahScrollAnchorsView(wordFrames: decorations.wordFrames, scale: scale)
@@ -126,10 +154,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                 onGlobalFrameChange(frame)
             }
             .onChangeWithInitial(of: sizeInfo) { sizeInfo in
-                onScaleChange(WordFrameScale.scaling(
-                    imageSize: sizeInfo.imageSize,
-                    into: sizeInfo.viewSize
-                ))
+                onScaleChange(sizeInfo.scale)
             }
             .allowsHitTesting(false)
         #if QURAN_SYNC
@@ -142,6 +167,15 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                 )
             }
         #endif
+    }
+
+    /// Whether the page fits its height and leaves room at the sides, so every point the header
+    /// and footer give back makes the page bigger. Each page of a two-page spread is like that.
+    private func isLimitedByHeight(_ size: CGSize) -> Bool {
+        guard let imageSize = image?.size, imageSize.height > 0, size.height > 0, size.width <= size.height else {
+            return false
+        }
+        return size.width / size.height > imageSize.width / imageSize.height
     }
 
     private func imageHeight(for availableContentSize: CGSize) -> CGFloat {

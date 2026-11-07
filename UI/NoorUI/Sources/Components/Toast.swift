@@ -23,22 +23,55 @@ public struct ToastAction {
 }
 
 public struct Toast {
-    public let message: MultipartText
-    public let action: ToastAction?
-    public let duration: TimeInterval
-    public let bottomOffset: CGFloat
+    // MARK: Lifecycle
 
     public init(
         _ message: MultipartText,
+        subtitle: MultipartText? = nil,
+        icon: Icon? = nil,
         action: ToastAction? = nil,
+        showsDismissButton: Bool = false,
         duration: TimeInterval = 4.0,
         bottomOffset: CGFloat = 40
     ) {
         self.message = message
+        self.subtitle = subtitle
+        self.icon = icon
         self.action = action
+        self.showsDismissButton = showsDismissButton
         self.duration = duration
         self.bottomOffset = bottomOffset
     }
+
+    // MARK: Public
+
+    public struct Icon {
+        // MARK: Lifecycle
+
+        /// - Parameter color: The glyph and tile color; `nil` uses the app tint.
+        public init(_ systemImage: NoorSystemImage, color: Color? = nil) {
+            self.init(systemImage.image, color: color)
+        }
+
+        /// - Parameter color: The glyph and tile color; `nil` uses the app tint.
+        public init(_ image: Image, color: Color? = nil) {
+            self.image = image
+            self.color = color
+        }
+
+        // MARK: Internal
+
+        let image: Image
+        let color: Color?
+    }
+
+    public let message: MultipartText
+    public let subtitle: MultipartText?
+    public let icon: Icon?
+    public let action: ToastAction?
+    public let showsDismissButton: Bool
+    public let duration: TimeInterval
+    public private(set) var bottomOffset: CGFloat
 }
 
 extension Toast {
@@ -64,47 +97,15 @@ extension Toast {
         guard height > 0 else {
             return self
         }
-        return Toast(message, action: action, duration: duration, bottomOffset: max(bottomOffset, height + spacing))
-    }
-}
-
-private struct ToastView: View {
-    let message: MultipartText
-    let action: ToastAction?
-    let dismiss: () -> Void
-    @ScaledMetric var shadowRadius = 5
-
-    var body: some View {
-        HStack {
-            message.view(ofSize: .body)
-                .foregroundColor(.systemBackground)
-            Spacer()
-            if let action {
-                Button(action.title) {
-                    action.handler()
-                    dismiss()
-                }
-                .foregroundColor(.systemBackground)
-            }
-        }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.label.opacity(0.8))
-                .shadow(color: .label.opacity(0.33), radius: shadowRadius)
-        )
-        .padding(.horizontal)
+        var toast = self
+        toast.bottomOffset = max(bottomOffset, height + spacing)
+        return toast
     }
 }
 
 private class ToastHostingController: UIHostingController<ToastView> {
     init(toast: Toast, dismiss: @escaping () -> Void) {
-        let rootView = ToastView(
-            message: toast.message,
-            action: toast.action,
-            dismiss: dismiss
-        )
-        super.init(rootView: rootView)
+        super.init(rootView: ToastView(toast: toast, dismiss: dismiss))
         view.backgroundColor = .clear
     }
 
@@ -259,6 +260,9 @@ private class ToastWindow: UIWindow {
         super.init(windowScene: windowScene)
         windowLevel = UIWindow.Level.statusBar + 1
         backgroundColor = .clear
+        // A new window inherits neither the app tint nor the user's appearance.
+        tintColor = AppIconAccent.current.color
+        overrideUserInterfaceStyle = ThemeService.shared.userInterfaceStyle
         isHidden = false
     }
 
@@ -359,17 +363,5 @@ public class ToastPresenter {
             guard self.currentToastID == id else { return }
             self.currentContainerVC?.dismissToast()
         }
-    }
-}
-
-#Preview {
-    VStack {
-        Spacer()
-        ToastView(
-            message: "This is a toast message",
-            action: ToastAction(title: "Dismiss", handler: {}),
-            dismiss: {}
-        )
-        .padding(.bottom, 40)
     }
 }

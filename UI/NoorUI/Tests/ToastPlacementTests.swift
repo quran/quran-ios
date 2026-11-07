@@ -1,3 +1,4 @@
+import SwiftUI
 import XCTest
 @testable import NoorUI
 
@@ -42,6 +43,27 @@ final class ToastPlacementTests: XCTestCase {
     func testToastKeepsLargerOffsetThanBottomBars() {
         let toast = Toast("Removed", bottomOffset: 100).clearingBottomBars(height: 83, spacing: 8)
         XCTAssertEqual(toast.bottomOffset, 100)
+    }
+
+    func testToastKeepsItsContentWhenMovedAboveBottomBars() {
+        let toast = Toast(
+            "Removed",
+            subtitle: "Page 42",
+            icon: Toast.Icon(.bookmarkOutline, color: .red),
+            action: ToastAction(title: "Undo", handler: {}),
+            showsDismissButton: true,
+            duration: 6
+        )
+        .clearingBottomBars(height: 83, spacing: 8)
+
+        XCTAssertEqual(toast.message.accessibilityText, "Removed")
+        XCTAssertEqual(toast.subtitle?.accessibilityText, "Page 42")
+        XCTAssertEqual(toast.icon?.image, NoorSystemImage.bookmarkOutline.image)
+        XCTAssertEqual(toast.icon?.color, .red)
+        XCTAssertEqual(toast.action?.title, "Undo")
+        XCTAssertTrue(toast.showsDismissButton)
+        XCTAssertEqual(toast.duration, 6)
+        XCTAssertEqual(toast.bottomOffset, 91)
     }
 
     func testToastKeepsItsOffsetWithoutBottomBars() {

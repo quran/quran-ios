@@ -102,7 +102,7 @@ public final class AudioBannerViewModel: ObservableObject {
     weak var listener: AudioBannerListener?
 
     @Published var error: Error?
-    @Published var toast: (message: MultipartText, action: ToastAction?)?
+    @Published var toast: Toast?
     @Published var modalRequest: ModalPresentationRequest?
     @Published var playbackRate: Float
 
@@ -434,7 +434,7 @@ public final class AudioBannerViewModel: ObservableObject {
             return
         }
         let message = audioMessage("audio.downloading.message", audioRange: audioRange)
-        toast = (message, action: nil)
+        toast = Toast(message, icon: Toast.Icon(.download))
     }
 
     private func updateDownloadProgress() async {
@@ -454,9 +454,10 @@ public final class AudioBannerViewModel: ObservableObject {
         }
 
         let message = audioMessage("audio.playing.message", audioRange: audioRange)
-        toast = (message, action: ToastAction(title: l("audio.playing.action.modify")) { [weak self] in
+        let modify = ToastAction(title: l("audio.playing.action.modify")) { [weak self] in
             self?.showAdvancedAudioOptions()
-        })
+        }
+        toast = Toast(message, icon: Toast.Icon(.play), action: modify)
     }
 
     private func playbackFailed(_ error: Error) {

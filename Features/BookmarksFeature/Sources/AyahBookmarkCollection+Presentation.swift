@@ -27,6 +27,14 @@ extension AyahBookmarkCollection {
         }
     }
 
+    /// The collection is read-only, so it explains where its ayahs came from and where new ones go.
+    var ayahsHeader: String? {
+        guard kind == .oldPageBookmarks, !bookmarks.isEmpty else {
+            return nil
+        }
+        return l("bookmarks.old-page-bookmarks.explanation")
+    }
+
     var displayImageColor: Color {
         .secondaryLabel
     }

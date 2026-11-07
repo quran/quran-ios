@@ -234,6 +234,8 @@
 "bookmarks.collections.ayahs.no-data.text" = "ستظهر هنا الآيات التي تضيف لها إشارة مرجعية أثناء القراءة.";
 "bookmarks.collections.ayahs.no-data.colored.text" = "ستظهر هنا الآيات التي تميّزها باللون %@ أثناء القراءة.";
 "bookmarks.old-page-bookmarks" = "إشارات الصفحات المرجعية القديمة";
+// Header of the Old Page Bookmarks collection.
+"bookmarks.old-page-bookmarks.explanation" = "حُفظت من إشارات الصفحات المرجعية. أصبحت كل صفحة الآن أول آية فيها. يمكنك إزالة الآيات من هنا، لكن الآيات الجديدة تُضاف إلى مجموعاتك الخاصة.";
 
 "bookmarks.editor.collection.unselected" = "غير محددة";
 "bookmarks.editor.collection.mixed" = "محددة جزئيًا";

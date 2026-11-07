@@ -1,12 +1,19 @@
 #if QURAN_SYNC
 import AnnotationsService
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import ReadingService
 import Utilities
 
+struct AyahSetHeader: Equatable {
+    let text: String
+    let image: NoorSystemImage
+}
+
 struct AyahSetContent {
     let title: String
+    let header: AyahSetHeader?
     let ayahs: [AyahNumber]
     let highlightColor: HighlightColor?
     let canRename: Bool
@@ -78,6 +85,7 @@ struct BookmarkCollectionAyahSetDataSource: ManageableAyahSetDataSource {
     private nonisolated static func content(_ collection: AyahBookmarkCollection) -> AyahSetContent {
         AyahSetContent(
             title: collection.displayName,
+            header: collection.ayahsHeader.map { AyahSetHeader(text: $0, image: collection.displayImage) },
             ayahs: collection.bookmarks.map(\.ayah),
             highlightColor: nil,
             canRename: collection.canRename,
@@ -130,6 +138,7 @@ struct HighlightAyahSetDataSource: AyahSetDataSource {
     private nonisolated static func content(color: HighlightColor, ayahs: [AyahNumber]) -> AyahSetContent {
         AyahSetContent(
             title: color.localizedName,
+            header: nil,
             ayahs: ayahs.sorted(),
             highlightColor: color,
             canRename: false,

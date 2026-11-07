@@ -79,7 +79,22 @@ final class AyahSetViewModelTests: XCTestCase {
         observation.cancel()
     }
 
-    func test_deleteBookmark_removesOldPageBookmarkFromMobileSyncDatabase() async throws {
+    func test_content_userCollectionHasNoHeader() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Duas")
+        let created = try await firstCollection()
+        try await service.addAyahBookmarkToCollection(
+            collectionId: created.id,
+            ayah: XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
+        )
+        let collection = try await storedCollection(id: created.id, bookmarkCount: 1)
+
+        let sut = makeSUT(collection: collection, service: service)
+
+        XCTAssertNil(sut.content.header)
+    }
+
+    func test_deleteBookmark_removesOldPageBookmarkFromMobileSyncDatabaseAndItsHeader() async throws {
         let service = makeService()
         try await service.createCollection(named: oldPageBookmarksCollectionName)
         var stored = try await storedCollections()
@@ -100,6 +115,20 @@ final class AyahSetViewModelTests: XCTestCase {
         )
         let bookmark = try XCTUnwrap(collection.bookmarks.first)
         let sut = makeSUT(collection: collection, service: service)
+        XCTAssertEqual(
+            sut.content.header,
+            AyahSetHeader(text: l("bookmarks.old-page-bookmarks.explanation"), image: .book)
+        )
+        let headerRemoved = expectation(description: "Header removed with the last ayah")
+        let observation = sut.$content
+            .filter { $0.ayahs.isEmpty && $0.header == nil }
+            .prefix(1)
+            .sink { _ in headerRemoved.fulfill() }
+        let task = Task { await sut.start() }
+        defer {
+            task.cancel()
+            observation.cancel()
+        }
 
         await sut.removeAyah(bookmark.ayah)
 
@@ -110,6 +139,7 @@ final class AyahSetViewModelTests: XCTestCase {
             stored.first { $0.collection.name == oldPageBookmarksCollectionName }
         )
         XCTAssertTrue(updatedCollection.bookmarks.isEmpty)
+        await fulfillment(of: [headerRemoved], timeout: 2)
         XCTAssertNil(sut.error)
     }
 

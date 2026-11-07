@@ -577,6 +577,9 @@
 "bookmarks.editor.error.highlight-unavailable" = "Цвета выделения ещё загружаются. Повторите попытку.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Старые закладки страниц";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Сохранены из ваших закладок страниц. Теперь каждая страница — это её первый аят. Здесь можно удалять аяты, но новые попадают в ваши собственные коллекции.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

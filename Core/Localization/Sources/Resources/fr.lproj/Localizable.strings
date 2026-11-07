@@ -577,6 +577,9 @@
 "bookmarks.editor.error.highlight-unavailable" = "Les couleurs de surlignage sont encore en cours de chargement. Veuillez réessayer.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Anciens signets de page";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Enregistrées depuis vos signets de page. Chaque page correspond désormais à sa première ayah. Vous pouvez retirer des ayahs ici, mais les nouvelles vont dans vos propres collections.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

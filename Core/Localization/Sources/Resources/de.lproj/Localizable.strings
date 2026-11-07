@@ -577,6 +577,9 @@
 "bookmarks.editor.error.highlight-unavailable" = "Die Hervorhebungsfarben werden noch geladen. Bitte versuche es erneut.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Alte Seitenlesezeichen";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Aus deinen Seitenlesezeichen übernommen. Jede Seite ist jetzt ihre erste Ayah. Du kannst hier Ayahs entfernen, neue kommen aber in deine eigenen Sammlungen.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

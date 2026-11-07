@@ -560,6 +560,9 @@
 "bookmarks.editor.error.highlight-unavailable" = "Warna serlahan masih dimuatkan. Sila cuba lagi.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Penanda halaman lama";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Disimpan daripada penanda halaman anda. Setiap halaman kini menjadi ayat pertamanya. Anda boleh membuang ayat di sini, tetapi ayat baharu akan masuk ke koleksi anda sendiri.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

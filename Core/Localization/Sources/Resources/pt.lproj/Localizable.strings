@@ -578,6 +578,9 @@
 "bookmarks.editor.error.highlight-unavailable" = "As cores de destaque ainda estão sendo carregadas. Tente novamente.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Marcadores de páginas antigos";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Salvas a partir dos seus marcadores de páginas. Cada página agora é a sua primeira ayah. Você pode remover ayahs aqui, mas as novas vão para as suas próprias coleções.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

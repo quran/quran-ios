@@ -489,6 +489,9 @@
 "bookmarks.editor.error.highlight-unavailable" = "Màu tô sáng vẫn đang tải. Vui lòng thử lại.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Dấu trang trang cũ";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Được lưu từ các dấu trang theo trang của bạn. Mỗi trang giờ là ayah đầu tiên của trang đó. Bạn có thể xóa ayah tại đây, nhưng ayah mới sẽ được thêm vào bộ sưu tập của riêng bạn.";
 
 // Highlight Colors
 // Metadata: Translated by ChatGPT; human review required.

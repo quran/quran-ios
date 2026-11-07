@@ -68,6 +68,13 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
         }
     }
 
+    var isFirstRun: Bool {
+        // Not while editing, so a slot cleared elsewhere can't hide the Done button mid-edit.
+        // A named slot means the user has set these up before, so they keep the Edit button.
+        let items = items
+        return !editMode.isEditing && !items.isEmpty && items.allSatisfy { $0.placement == .unplaced && $0.name == nil }
+    }
+
     var editModeBinding: Binding<EditMode> {
         Binding(
             get: { self.editMode },

@@ -599,6 +599,15 @@
 // Reading bookmarks menu explanation below its title.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.description" = "Dùng một dấu trang cho mỗi lần đọc, như khatmah hoặc học thuộc lòng của bạn.";
+// Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.title" = "Giữ vị trí của bạn trong tối đa ba lần đọc";
+// Reading bookmarks menu explanation below its title, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.description" = "Chọn một dấu trang cho mỗi lần đọc, như khatmah hoặc hifz của bạn. Hãy di chuyển nó khi bạn đọc, nên bạn sẽ không bao giờ cần quá ba.";
+// Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.suggested" = "Gợi ý cho lần đọc đầu tiên của bạn";
 // Reading bookmark row subtitle when the bookmark is at the current ayah or page.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.saved-here" = "Đã lưu tại đây";

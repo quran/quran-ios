@@ -451,6 +451,12 @@
 "bookmarks.reading.show-less" = "Show less";
 // Reading bookmarks menu explanation below its title.
 "bookmarks.reading.description" = "Use one for each reading, like your khatmah or memorization.";
+// Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
+"bookmarks.reading.first-run.title" = "Keep your place in up to three readings";
+// Reading bookmarks menu explanation below its title, shown while no reading bookmark is placed.
+"bookmarks.reading.first-run.description" = "Pick one for each reading, like your khatmah or hifz. Move it as you read, so you never need more than three.";
+// Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
+"bookmarks.reading.first-run.suggested" = "Suggested for your first reading";
 // Reading bookmark row subtitle when the bookmark is at the current ayah or page.
 "bookmarks.reading.saved-here" = "Saved here";
 // Reading bookmark row subtitle when the bookmark has no position.

@@ -693,6 +693,15 @@
 // Reading bookmarks menu explanation below its title.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.description" = "每项阅读各用一个，例如通读全经或背诵。";
+// Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.title" = "最多可在三项阅读中记住位置";
+// Reading bookmarks menu explanation below its title, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.description" = "每项阅读各选一个，例如通读全经或背诵。阅读时随手移动书签，因此你永远不需要超过三个。";
+// Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.suggested" = "建议用于你的第一项阅读";
 // Reading bookmark row subtitle when the bookmark is at the current ayah or page.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.saved-here" = "已保存在这里";

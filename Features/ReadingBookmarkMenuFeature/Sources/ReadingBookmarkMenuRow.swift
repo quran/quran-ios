@@ -14,8 +14,15 @@ struct ReadingBookmarkMenuRow: View {
         case setHere
     }
 
+    enum ActionStyle {
+        case destructive
+        case prominent
+        case tinted
+    }
+
     let item: ReadingBookmarkMenuViewModel.Item
     let target: PlacedReadingBookmark.Placement
+    let isFirstRun: Bool
     @Binding var name: String
     let isEnabled: Bool
     let editMode: EditMode
@@ -39,12 +46,22 @@ struct ReadingBookmarkMenuRow: View {
         }
     }
 
+    var actionStyle: ActionStyle {
+        switch action {
+        case .remove:
+            .destructive
+        case .moveHere, .setHere:
+            // On first run, only the suggested slot keeps the filled capsule so it reads as the default choice.
+            isFirstRun && !isSuggested ? .tinted : .prominent
+        }
+    }
+
     var subtitle: MultipartText {
         switch action {
         case .remove:
             return .text(l("bookmarks.reading.saved-here"))
         case .setHere:
-            return .text(l("bookmarks.reading.not-placed"))
+            return .text(l(isSuggested ? "bookmarks.reading.first-run.suggested" : "bookmarks.reading.not-placed"))
         case .moveHere:
             switch item.placement {
             case .ayah(let ayah):
@@ -66,6 +83,10 @@ struct ReadingBookmarkMenuRow: View {
             }
         }
         .disabled(!isEnabled)
+    }
+
+    private var isSuggested: Bool {
+        isFirstRun && item.slot == .teal
     }
 
     private var editingRow: some View {
@@ -124,20 +145,26 @@ struct ReadingBookmarkMenuRow: View {
 
     private var actionLabel: some View {
         Group {
-            switch action {
-            case .remove:
+            switch actionStyle {
+            case .destructive:
                 Text(action.title)
                     .foregroundStyle(Color.systemRed)
-            case .moveHere, .setHere:
-                Text(action.title)
-                    .foregroundStyle(Color.onAccent)
-                    .padding(.horizontal, actionHorizontalPadding)
-                    .padding(.vertical, actionVerticalPadding)
-                    .background(Color.accentColor, in: Capsule())
+            case .prominent:
+                capsule(foreground: Color.onAccent, background: Color.accentColor)
+            case .tinted:
+                capsule(foreground: Color.accentColor, background: Color.accentColor.opacity(0.12))
             }
         }
         .font(.footnote.bold())
         .fixedSize()
+    }
+
+    private func capsule(foreground: Color, background: Color) -> some View {
+        Text(action.title)
+            .foregroundStyle(foreground)
+            .padding(.horizontal, actionHorizontalPadding)
+            .padding(.vertical, actionVerticalPadding)
+            .background(background, in: Capsule())
     }
 }
 
@@ -149,6 +176,7 @@ struct ReadingBookmarkMenuRow: View {
             placement: .page(Quran.hafsMadani1405.pages[0])
         ),
         target: .page(Quran.hafsMadani1405.pages[0]),
+        isFirstRun: false,
         name: .constant(""),
         isEnabled: true,
         editMode: .active,

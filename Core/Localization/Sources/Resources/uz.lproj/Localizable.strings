@@ -689,6 +689,15 @@
 // Reading bookmarks menu explanation below its title.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.description" = "Har bir o‘qish uchun bittasini ishlating, masalan, xatm yoki yodlash uchun.";
+// Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.title" = "Uchtagacha o‘qishda joyingizni saqlang";
+// Reading bookmarks menu explanation below its title, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.description" = "Har bir o‘qish uchun bittasini tanlang, masalan, xatm yoki hifz uchun. O‘qiganingiz sari uni siljitib boring, shunda sizga hech qachon uchtadan ko‘pi kerak bo‘lmaydi.";
+// Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.suggested" = "Birinchi o‘qishingiz uchun tavsiya etiladi";
 // Reading bookmark row subtitle when the bookmark is at the current ayah or page.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.saved-here" = "Shu yerda saqlangan";

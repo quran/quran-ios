@@ -690,6 +690,15 @@
 // Reading bookmarks menu explanation below its title.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.description" = "ھەر بىر ئوقۇش ئۈچۈن بىرنى ئىشلىتىڭ، مەسىلەن خەتمە ياكى يادلاش ئۈچۈن.";
+// Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.title" = "ئەڭ كۆپ ئۈچ ئوقۇشتا ئورنىڭىزنى ساقلاڭ";
+// Reading bookmarks menu explanation below its title, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.description" = "ھەر بىر ئوقۇش ئۈچۈن بىرنى تاللاڭ، مەسىلەن خەتمە ياكى ھىفز ئۈچۈن. ئوقۇغانسېرى ئۇنى يۆتكەڭ، شۇنداق قىلسىڭىز ھەرگىز ئۈچتىن ئارتۇق لازىم بولمايدۇ.";
+// Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.suggested" = "تۇنجى ئوقۇشىڭىز ئۈچۈن تەۋسىيە قىلىنىدۇ";
 // Reading bookmark row subtitle when the bookmark is at the current ayah or page.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.saved-here" = "بۇ يەردە ساقلاندى";

@@ -11,6 +11,7 @@ import AuthenticationClientFake
 import Combine
 import CoreDataPersistence
 import CoreDataPersistenceTestSupport
+import FeaturesSupport
 import Foundation
 import LegacyDataPersistence
 import MobileSync
@@ -31,11 +32,13 @@ final class SettingsRootViewModelTests: XCTestCase {
         try await super.setUp()
         try await database.reset()
         LegacyImportPreferences.reset()
+        SyncSignInNudgePreferences.shared.reset()
     }
 
     override func tearDown() async throws {
         try await database.reset()
         LegacyImportPreferences.reset()
+        SyncSignInNudgePreferences.shared.reset()
         try await super.tearDown()
     }
 
@@ -286,6 +289,34 @@ final class SettingsRootViewModelTests: XCTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_login_stopsTheSignInReminder() async {
+        let client = AuthenticationClientFake()
+        client.authenticationStateAfterLogin = .authenticated
+        let navigationController = UINavigationController()
+        let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
+
+        await sut.loginToQuranCom()
+
+        let toast = await makeSignedOutSignInNudge().toast(after: .note)
+        XCTAssertNil(toast)
+    }
+
+    func test_cancelledOrFailedLogin_keepsTheSignInReminder() async {
+        let results: [AuthenticationClientError] = [.cancelled, .networkFailure(underlying: URLError(.notConnectedToInternet))]
+        for error in results {
+            SyncSignInNudgePreferences.shared.reset()
+            let client = AuthenticationClientFake()
+            client.loginResult = .failure(error)
+            let navigationController = UINavigationController()
+            let sut = makeSUT(authenticationClient: client, navigationController: navigationController)
+
+            await sut.loginToQuranCom()
+
+            let toast = await makeSignedOutSignInNudge().toast(after: .note)
+            XCTAssertNotNil(toast, "\(error)")
+        }
+    }
+
     func test_login_showsSignedInUser_whileObserving() async {
         let client = AuthenticationClientFake()
         client.authenticationStateAfterLogin = .authenticated
@@ -414,6 +445,14 @@ final class SettingsRootViewModelTests: XCTestCase {
     }
 
     // MARK: Private
+
+    private func makeSignedOutSignInNudge() -> SyncSignInNudge {
+        SyncSignInNudge(
+            authenticationClient: AuthenticationClientFake(),
+            analytics: AnalyticsLibrarySpy(),
+            signInViewControllers: { [] }
+        )
+    }
 
     private func makeSUT(
         analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),

@@ -62,7 +62,7 @@ final class NotesViewController: UIHostingController<NotesView>, UISearchBarDele
 
     func editNote(_ note: Note) {
         #if QURAN_SYNC
-        let viewController = noteEditorBuilder.build(withListener: self, mode: .edit(note))
+        let viewController = noteEditorBuilder.build(withListener: self, mode: .edit(note), bottomBarsHeight: { 0 })
         #else
         let viewController = noteEditorBuilder.build(withListener: self, note: note)
         #endif

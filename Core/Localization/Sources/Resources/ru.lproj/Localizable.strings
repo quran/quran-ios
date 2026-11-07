@@ -906,3 +906,11 @@
 "sync.sign-out.review" = "Просмотреть";
 // Button on an item that doesn't sync: opens its note editor or renames its collection.
 "sync.held.edit" = "Изменить";
+// Sign-in reminder toast title after a signed-out user saves a new note.
+"sync.nudge.note-saved" = "Заметка сохранена";
+// Sign-in reminder toast title after a signed-out user creates a collection.
+"sync.nudge.collection-created" = "Коллекция создана";
+// Sign-in reminder toast subtitle under "Note saved" or "Collection created": "it" is the note or collection.
+"sync.nudge.subtitle" = "Войдите, чтобы она была на всех ваших устройствах.";
+// Sign-in reminder toast button that starts signing in to Quran.com.
+"sync.nudge.sign-in" = "Войти";

@@ -908,3 +908,11 @@
 "sync.sign-out.review" = "Ko‘rib chiqish";
 // Button on an item that doesn't sync: opens its note editor or renames its collection.
 "sync.held.edit" = "Tahrirlash";
+// Sign-in reminder toast title after a signed-out user saves a new note.
+"sync.nudge.note-saved" = "Qayd saqlandi";
+// Sign-in reminder toast title after a signed-out user creates a collection.
+"sync.nudge.collection-created" = "To‘plam yaratildi";
+// Sign-in reminder toast subtitle under "Note saved" or "Collection created": "it" is the note or collection.
+"sync.nudge.subtitle" = "Uni barcha qurilmalaringizda saqlash uchun tizimga kiring.";
+// Sign-in reminder toast button that starts signing in to Quran.com.
+"sync.nudge.sign-in" = "Kirish";

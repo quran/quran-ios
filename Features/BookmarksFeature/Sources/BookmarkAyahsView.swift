@@ -13,6 +13,19 @@ import UIx
 @MainActor
 struct BookmarkAyahsView: View {
     @ObservedObject var viewModel: BookmarkAyahsViewModel
+    let bottomBarsHeight: @MainActor () -> CGFloat
+
+    var body: some View {
+        BookmarkAyahsContent(viewModel: viewModel)
+            .enableToastPresenter(bottomBarsHeight: bottomBarsHeight)
+    }
+}
+
+@MainActor
+private struct BookmarkAyahsContent: View {
+    @ObservedObject var viewModel: BookmarkAyahsViewModel
+
+    @Environment(\.showToast) private var showToast
 
     var body: some View {
         NoorList {
@@ -62,7 +75,11 @@ struct BookmarkAyahsView: View {
             l("bookmarks.collections.add"),
             state: $viewModel.nameAlert,
             name: $viewModel.newCollectionName,
-            submit: { await viewModel.createPendingCollection() }
+            submit: {
+                if let toast = await viewModel.createPendingCollection() {
+                    showToast?(toast)
+                }
+            }
         )
         .errorAlert(error: $viewModel.error)
     }

@@ -1,11 +1,14 @@
 #if QURAN_SYNC
+import AnalyticsFake
 import AuthenticationClient
 import AuthenticationClientFake
+import FeaturesSupport
 import MobileSync
 import MobileSyncTestSupport
 import QuranKit
 import QuranResources
 import QuranTextKit
+import SystemDependenciesFake
 import UIKit
 import XCTest
 @testable import AnnotationsService
@@ -19,9 +22,11 @@ class BookmarkCollectionsTestCase: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         try await database.reset()
+        SyncSignInNudgePreferences.shared.reset()
     }
 
     override func tearDown() async throws {
+        SyncSignInNudgePreferences.shared.reset()
         try await database.reset()
         try await super.tearDown()
     }
@@ -50,6 +55,12 @@ class BookmarkCollectionsTestCase: XCTestCase {
             ayahHighlightService: makeHighlightService(),
             readingBookmarkService: readingBookmarkService,
             ayahSetBuilder: ayahSetBuilder,
+            signInNudge: SyncSignInNudge(
+                authenticationClient: authenticationClient,
+                analytics: AnalyticsLibrarySpy(),
+                time: SystemTimeFake(),
+                signInViewControllers: { [navigationController] }
+            ),
             navigationController: navigationController,
             navigateToPage: navigateToPage,
             navigateToAyah: navigateToAyah

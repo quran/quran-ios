@@ -6,6 +6,7 @@
 import AnnotationsService
 import AuthenticationClient
 import Combine
+import FeaturesSupport
 import Foundation
 import LegacyDataMigration
 import MobileSync
@@ -29,6 +30,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         ayahHighlightService: MobileSyncAyahHighlightService,
         readingBookmarkService: MobileSyncReadingBookmarkService,
         ayahSetBuilder: AyahSetBuilder,
+        signInNudge: SyncSignInNudge,
         navigationController: UINavigationController,
         navigateToPage: @escaping (Page) -> Void,
         navigateToAyah: @escaping (AyahNumber) -> Void
@@ -39,6 +41,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         self.ayahHighlightService = ayahHighlightService
         self.readingBookmarkService = readingBookmarkService
         self.ayahSetBuilder = ayahSetBuilder
+        self.signInNudge = signInNudge
         self.navigationController = navigationController
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
@@ -186,15 +189,17 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         nameAlert = .editing
     }
 
-    func createPendingCollection() async {
+    /// - Returns: The sign-in reminder to show after the collection is created.
+    func createPendingCollection() async -> Toast? {
         let name = newCollectionName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty else {
-            return
+            return nil
         }
 
         do {
             try await ayahBookmarkCollectionService.createCollection(named: name)
             nameAlert = .hidden
+            return await signInNudge.toast(after: .collection)
         } catch {
             if let nameError = CollectionNameError(error) {
                 logger.info("Quran Sync: bookmark collection name rejected. \(nameError.logDescription)")
@@ -204,6 +209,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
                 self.error = error
             }
         }
+        return nil
     }
 
     func requestDeleteCollection(_ collection: AyahBookmarkCollection) async {
@@ -396,6 +402,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     private let ayahHighlightService: MobileSyncAyahHighlightService
     private let readingBookmarkService: MobileSyncReadingBookmarkService
     private let ayahSetBuilder: AyahSetBuilder
+    private let signInNudge: SyncSignInNudge
     private let navigateToPage: (Page) -> Void
     private let navigateToAyah: (AyahNumber) -> Void
     private let readingPreferences = ReadingPreferences.shared

@@ -634,10 +634,20 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
         ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
-        target(type, name: "FeaturesSupport", hasTests: false, dependencies: [
+        target(type, name: "FeaturesSupport", dependencies: [
             "BatchDownloader",
             "Analytics",
+            "AuthenticationClient",
+            "Localization",
+            "NoorUI",
+            "Preferences",
             "QuranAnnotations",
+            "SystemDependencies",
+            "VLogging",
+        ], testDependencies: [
+            "AnalyticsFake",
+            "AuthenticationClientFake",
+            "SystemDependenciesFake",
         ]),
 
         target(type, name: "ReciterListFeature", hasTests: false, dependencies: [
@@ -750,16 +760,19 @@ private func featuresTargets() -> [[Target]] {
             "Analytics",
             "AppDependencies",
             "AnnotationsService",
+            "FeaturesSupport",
             "NoorUI",
             "QuranTextKit",
         ], testDependencies: [
             "Analytics",
             "AnalyticsFake",
             "AnnotationsService",
+            "AuthenticationClientFake",
             "NoorUI",
             "QuranAnnotations",
             "QuranKit",
             "QuranResources",
+            "SystemDependenciesFake",
         ] + mobileSyncTestSupportDependencies),
 
         target(type, name: "BookmarksFeature", dependencies: [
@@ -784,6 +797,7 @@ private func featuresTargets() -> [[Target]] {
             "LegacyDataMigration",
             "PageBookmarkPersistence",
             "QuranResources",
+            "SystemDependenciesFake",
         ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "QuranPagesFeature", hasTests: false, dependencies: [

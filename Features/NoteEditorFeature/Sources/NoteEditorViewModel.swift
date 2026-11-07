@@ -10,6 +10,9 @@ import Analytics
 import AnnotationsService
 import Combine
 import Crashing
+#if QURAN_SYNC
+import FeaturesSupport
+#endif
 import Foundation
 import NoorUI
 import QuranAnnotations
@@ -33,12 +36,16 @@ final class NoteEditorViewModel {
         noteService: MobileSyncNoteService,
         analytics: AnalyticsLibrary,
         mode: NoteEditorMode,
-        textService: QuranTextDataService
+        textService: QuranTextDataService,
+        signInNudge: SyncSignInNudge,
+        showToast: @escaping (Toast) -> Void
     ) {
         self.noteService = noteService
         self.analytics = analytics
         self.mode = mode
         self.textService = textService
+        self.signInNudge = signInNudge
+        self.showToast = showToast
         reading = ReadingPreferences.shared.reading
         observeReadingChanges()
     }
@@ -180,6 +187,11 @@ final class NoteEditorViewModel {
             )
             #endif
             logger.info("NoteEditor: note saved")
+            #if QURAN_SYNC
+            if case .create = mode, let toast = await signInNudge.toast(after: .note) {
+                showToast(toast)
+            }
+            #endif
             if dismissOnSave {
                 listener?.dismissNoteEditor()
             }
@@ -222,6 +234,9 @@ final class NoteEditorViewModel {
     private let noteService: MobileSyncNoteService
     private let analytics: AnalyticsLibrary
     private let mode: NoteEditorMode
+    private let signInNudge: SyncSignInNudge
+    /// Shows the sign-in reminder after a new note saves, before the editor closes.
+    private let showToast: (Toast) -> Void
     #else
     private let noteService: NoteEditorLegacyServicing
     private let note: Note

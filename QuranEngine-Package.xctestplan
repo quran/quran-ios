@@ -301,6 +301,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "FeaturesSupportTests",
+        "name" : "FeaturesSupportTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "NoteEditorFeatureTests",
         "name" : "NoteEditorFeatureTests"
       }

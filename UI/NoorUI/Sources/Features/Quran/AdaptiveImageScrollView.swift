@@ -59,7 +59,8 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
 
     public var body: some View {
         GeometryReader { geometry in
-            let isLimitedByHeight = isLimitedByHeight(geometry.size)
+            // iPhone Duo only: iPhone and iPad keep their page layout.
+            let isLimitedByHeight = isLimitedByHeight(geometry.size) && windowHasVerticalBar
             let visibleRect = image.map { visibleRect(of: $0, trimsMargins: isLimitedByHeight) }
             AdaptiveQuranScrollView {
                 header
@@ -91,6 +92,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     @State private var imageViewSize: CGSize = .zero
     @State private var contentWidth: CGFloat = 0
     @Environment(\.layoutDirection) private var layoutDirection
+    @Environment(\.windowHasVerticalBar) private var windowHasVerticalBar
     #if QURAN_SYNC
     private let ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]]
     private let onAyahReadingBookmarkTap: (AyahNumber, CGPoint) -> Void

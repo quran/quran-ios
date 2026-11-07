@@ -27,7 +27,7 @@ struct ContentLineView: View {
         #if QURAN_SYNC
         let content = ContentLineViewBody(
             page: viewModel.page,
-            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false) },
+            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false, usesDenseLines: $1) },
             scrollToVerse: viewModel.scrollToVerse,
             onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
@@ -46,7 +46,7 @@ struct ContentLineView: View {
         #else
         let content = ContentLineViewBody(
             page: viewModel.page,
-            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false) },
+            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false, usesDenseLines: $1) },
             scrollToVerse: viewModel.scrollToVerse,
             onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
@@ -79,7 +79,8 @@ private struct ContentLineViewBody: View {
     // MARK: Internal
 
     let page: Page
-    let layoutForSize: (CGSize) -> LinePageLayout?
+    /// The layout for an available size, and whether lines may sit closer together.
+    let layoutForSize: (CGSize, Bool) -> LinePageLayout?
     let scrollToVerse: AyahNumber?
     let onReaderScroll: () -> Void
     let wordFrames: WordFrameCollection
@@ -112,9 +113,12 @@ private struct ContentLineViewBody: View {
             } footer: {
                 QuranPageFooter(page: page.localizedNumber)
             } content: { availableContentSize in
-                lineCanvas(layoutForSize(availableContentSize))
+                // Denser lines only on iPhone Duo, so iPhone and iPad keep their page layout.
+                VerticalBarReader { windowHasVerticalBar in
+                    lineCanvas(layoutForSize(availableContentSize, windowHasVerticalBar))
+                }
             }
-            .compactsPageChrome(isLimitedByHeight(geometry.size))
+            .compactsPageChromeOnVerticalBarDisplays(isLimitedByHeight: isLimitedByHeight(geometry.size))
         }
         .font(.footnote)
         .populateReadableInsets()

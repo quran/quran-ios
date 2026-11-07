@@ -39,6 +39,18 @@ extension EnvironmentValues {
         get { self[CompactsPageChromeKey.self] }
         set { self[CompactsPageChromeKey.self] = newValue }
     }
+
+    /// Whether the window reserves a column for the vertical bar, like on iPhone Duo. Set by `populateReadableInsets()`.
+    ///
+    /// The Quran page layout uses it to apply iPhone Duo's adjustments only there, so iPhone and iPad keep their layout.
+    public internal(set) var windowHasVerticalBar: Bool {
+        get { self[WindowHasVerticalBarKey.self] }
+        set { self[WindowHasVerticalBarKey.self] = newValue }
+    }
+}
+
+private struct WindowHasVerticalBarKey: EnvironmentKey {
+    static let defaultValue = false
 }
 
 private struct WindowSafeAreaInsetsKey: EnvironmentKey {
@@ -59,21 +71,23 @@ private struct PageInnerSideKey: EnvironmentKey {
 
 private struct ReadableInsetsModifier: ViewModifier {
     @State var windowSafeAreaInsets: EdgeInsets = .zero
+    @State var windowHasVerticalBar = false
     @Environment(\.pageInnerSide) var pageInnerSide
     @Environment(\.layoutDirection) var layoutDirection
 
     func body(content: Content) -> some View {
         content
             // Quran pages hide the status bar while reading, so they can use the empty vertical bar column.
-            .readWindowSafeAreaInsets($windowSafeAreaInsets, excludingVerticalBar: true)
+            .readWindowSafeAreaInsets($windowSafeAreaInsets, excludingVerticalBar: true, hasVerticalBar: $windowHasVerticalBar)
             .environment(\.readableInsets, ContentDimension.readableInsets(of: pageSafeAreaInsets))
             .environment(\.windowSafeAreaInsets, pageSafeAreaInsets)
+            .environment(\.windowHasVerticalBar, windowHasVerticalBar)
     }
 
-    /// The window's safe area, except on the side facing the other page, which is away from the window's edge.
+    /// The window's safe area, except on iPhone Duo on the side facing the other page, which is away from the window's edge.
     private var pageSafeAreaInsets: EdgeInsets {
         var insets = windowSafeAreaInsets
-        guard let pageInnerSide else {
+        guard let pageInnerSide, windowHasVerticalBar else {
             return insets
         }
         let innerSideIsLeading = (pageInnerSide == .left) == (layoutDirection == .leftToRight)
@@ -84,6 +98,35 @@ private struct ReadableInsetsModifier: ViewModifier {
         }
         return insets
     }
+}
+
+private struct CompactsPageChromeModifier: ViewModifier {
+    @Environment(\.windowHasVerticalBar) var windowHasVerticalBar
+    let isLimitedByHeight: Bool
+
+    func body(content: Content) -> some View {
+        content.environment(\.compactsPageChrome, isLimitedByHeight && windowHasVerticalBar)
+    }
+}
+
+/// Reads whether the window reserves a column for the vertical bar, like on iPhone Duo.
+public struct VerticalBarReader<Content: View>: View {
+    // MARK: Lifecycle
+
+    public init(@ViewBuilder content: @escaping (Bool) -> Content) {
+        self.content = content
+    }
+
+    // MARK: Public
+
+    public var body: some View {
+        content(windowHasVerticalBar)
+    }
+
+    // MARK: Private
+
+    @Environment(\.windowHasVerticalBar) private var windowHasVerticalBar
+    private let content: (Bool) -> Content
 }
 
 private struct ReadableInsetsPadding: ViewModifier {
@@ -119,9 +162,9 @@ extension View {
         environment(\.pageInnerSide, side)
     }
 
-    /// Tightens the spacing of the page header and footer, for a page whose height limits its size.
-    public func compactsPageChrome(_ compacts: Bool) -> some View {
-        environment(\.compactsPageChrome, compacts)
+    /// Tightens the spacing of the page header and footer on iPhone Duo, for a page whose height limits its size.
+    public func compactsPageChromeOnVerticalBarDisplays(isLimitedByHeight: Bool) -> some View {
+        modifier(CompactsPageChromeModifier(isLimitedByHeight: isLimitedByHeight))
     }
 
     public func readableInsetsPadding(_ edges: Edge.Set = .all) -> some View {

@@ -25,6 +25,8 @@ struct NotesView: View {
             shouldShowSyncBanner: shouldShowSyncBanner,
             dismissSyncBanner: { dismissSyncBanner() },
             signInAction: { await signIn() },
+            canRefresh: canRefresh,
+            refresh: { await refresh() },
             notes: viewModel.filteredNotes,
             searchTerm: viewModel.searchTerm,
             quranFont: viewModel.reading.quranFont,
@@ -43,9 +45,23 @@ struct NotesView: View {
         #endif
     }
 
+    private var canRefresh: Bool {
+        #if QURAN_SYNC
+        viewModel.canRefresh
+        #else
+        false
+        #endif
+    }
+
     private func dismissSyncBanner() {
         #if QURAN_SYNC
         viewModel.dismissSyncBanner()
+        #endif
+    }
+
+    private func refresh() async {
+        #if QURAN_SYNC
+        await viewModel.refresh()
         #endif
     }
 
@@ -66,6 +82,8 @@ private struct NotesViewUI: View {
     let shouldShowSyncBanner: Bool
     let dismissSyncBanner: @MainActor @Sendable () -> Void
     let signInAction: AsyncAction
+    let canRefresh: Bool
+    let refresh: AsyncAction
     let notes: [NoteItem]
     let searchTerm: String
     let quranFont: QuranFont
@@ -99,6 +117,8 @@ private struct NotesViewUI: View {
             if notes.isEmpty {
                 if isSearching {
                     noResults
+                } else if canRefresh {
+                    pullableNoData
                 } else {
                     noData
                 }
@@ -111,6 +131,7 @@ private struct NotesViewUI: View {
                             .listRowSeparator(.hidden)
                     }
                 }
+                .refreshable(isEnabled: canRefresh, action: refresh)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -132,6 +153,17 @@ private struct NotesViewUI: View {
             image: .note,
             style: .prominent(imageColor: .accentColor)
         )
+    }
+
+    /// Pull-to-refresh needs a scroll view; this one keeps ``noData`` centered.
+    private var pullableNoData: some View {
+        GeometryReader { proxy in
+            ScrollView {
+                noData
+                    .frame(minWidth: proxy.size.width, minHeight: proxy.size.height)
+            }
+            .refreshable { await refresh() }
+        }
     }
 
     private var noDataTitle: String {
@@ -261,6 +293,8 @@ struct NotesView_Previews: PreviewProvider {
                     shouldShowSyncBanner: false,
                     dismissSyncBanner: {},
                     signInAction: {},
+                    canRefresh: false,
+                    refresh: {},
                     notes: items,
                     searchTerm: searchTerm,
                     quranFont: .uthmanicHafs,
@@ -314,6 +348,8 @@ private struct NotesEmptyPreview: View {
                 shouldShowSyncBanner: showsSignInCard,
                 dismissSyncBanner: {},
                 signInAction: {},
+                canRefresh: false,
+                refresh: {},
                 notes: [],
                 searchTerm: "",
                 quranFont: .uthmanicHafs,

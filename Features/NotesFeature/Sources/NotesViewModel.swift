@@ -11,7 +11,9 @@ import Combine
 #else
 import Analytics
 import AuthenticationClient
+import Combine
 import FeaturesSupport
+import MobileSync
 #endif
 import AnnotationsService
 import Crashing
@@ -37,6 +39,7 @@ final class NotesViewModel: ObservableObject {
     init(
         analytics: AnalyticsLibrary,
         authenticationClient: any AuthenticationClient,
+        quranDataService: MobileSyncDataService,
         navigationController: UINavigationController,
         noteService: MobileSyncNoteService,
         textService: QuranTextDataService,
@@ -46,6 +49,7 @@ final class NotesViewModel: ObservableObject {
     ) {
         self.analytics = analytics
         self.authenticationClient = authenticationClient
+        self.quranDataService = quranDataService
         self.navigationController = navigationController
         self.noteService = noteService
         self.textService = textService
@@ -56,6 +60,11 @@ final class NotesViewModel: ObservableObject {
         isSyncBannerDismissed = preferences.isNotesSyncBannerDismissed
         readingPreferences.$reading
             .assign(to: &$reading)
+        // Follow sign-in and sign-out elsewhere, such as in Settings.
+        authenticationClient.authenticationStateChanges
+            .map { $0 == .authenticated }
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isAuthenticated)
     }
     #else
     init(
@@ -93,6 +102,11 @@ final class NotesViewModel: ObservableObject {
     #if QURAN_SYNC
     var shouldShowSyncBanner: Bool {
         !isAuthenticated && !isSyncBannerDismissed
+    }
+
+    /// Pull-to-refresh, when signed in. Not tied to edit mode: toggling it rebuilds the list.
+    var canRefresh: Bool {
+        isAuthenticated
     }
     #endif
 
@@ -162,6 +176,26 @@ final class NotesViewModel: ObservableObject {
             logger.error("Failed to login to Quran.com from notes: \(error)")
             self.error = error
         }
+    }
+
+    /// Waits for a sync; failures are only logged, as Settings › Sync shows them.
+    /// - Returns: `nil` when signed out or it stopped waiting.
+    @discardableResult
+    func refresh() async -> MobileSyncNowResult? {
+        guard isAuthenticated else {
+            return nil
+        }
+        logger.info("Quran Sync: userRequestedRefresh from Notes")
+        do {
+            let result = try await quranDataService.syncNow()
+            logger.info("Quran Sync: refresh from Notes finished. \(result)")
+            return result
+        } catch is CancellationError {
+            logger.info("Quran Sync: stopped waiting for the refresh from Notes; the sync goes on")
+        } catch {
+            logger.error("Quran Sync: refresh from Notes failed: \(error)")
+        }
+        return nil
     }
 
     func dismissSyncBanner() {
@@ -254,6 +288,7 @@ final class NotesViewModel: ObservableObject {
     private let analytics: AnalyticsLibrary
     #if QURAN_SYNC
     private let authenticationClient: any AuthenticationClient
+    private let quranDataService: MobileSyncDataService
     private let noteService: MobileSyncNoteService
     private weak var navigationController: UINavigationController?
     private let preferences = AuthenticationPreferences.shared

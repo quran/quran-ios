@@ -288,7 +288,7 @@
 // Body of the Notes card about highlights moving to the Bookmarks tab.
 // Metadata: Translated by AI; human review required.
 "notes.highlights-tip.text" = "笔记只保留您写下的内容。您高亮的经文按颜色列在“收藏”标签页中。";
-// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+// Opens the Bookmarks tab from the Notes card and empty state.
 // Metadata: Translated by AI; human review required.
 "notes.highlights.show" = "显示高亮";
 // Notes empty state line when the user has highlights.

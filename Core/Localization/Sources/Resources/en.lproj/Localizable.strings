@@ -292,7 +292,7 @@
 "notes.highlights-tip.title" = "Highlights now live in Bookmarks";
 // Body of the Notes card about highlights moving to the Bookmarks tab.
 "notes.highlights-tip.text" = "Notes keeps only what you write. Your highlighted ayahs are in the Bookmarks tab, by color.";
-// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+// Opens the Bookmarks tab from the Notes card and empty state.
 "notes.highlights.show" = "Show Highlights";
 // Notes empty state line when the user has highlights.
 "notes.no-data.highlights.text" = "Your highlights are in the Bookmarks tab.";

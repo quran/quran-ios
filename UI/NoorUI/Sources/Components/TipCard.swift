@@ -3,7 +3,6 @@
 //
 
 import Localization
-import QuranAnnotations
 import SwiftUI
 import UIx
 
@@ -11,10 +10,6 @@ import UIx
 public struct TipCard: View {
     // MARK: Lifecycle
 
-    /// - Parameters:
-    ///   - imageColor: The glyph's color.
-    ///   - imageBackground: The circle behind the glyph.
-    ///   - action: The card's button; without one, the card shows no button.
     public init(
         title: String,
         text: String,
@@ -138,12 +133,10 @@ public struct TipCard: View {
 #Preview {
     VStack {
         TipCard(
-            title: "Highlights now live in Bookmarks",
-            text: "Notes keeps only what you write. Your highlighted ayahs are in the Bookmarks tab, by color.",
-            image: .highlighter,
-            imageColor: .black.opacity(0.75),
-            imageBackground: HighlightColor.yellow.color,
-            action: TipCard.Action("Show Highlights") {},
+            title: "A tip with an action",
+            text: "It points to something new and offers a way to see it.",
+            image: .bookmark,
+            action: TipCard.Action("Show Me") {},
             dismiss: {}
         )
         TipCard(

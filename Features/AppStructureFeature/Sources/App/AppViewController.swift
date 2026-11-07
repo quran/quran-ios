@@ -82,7 +82,7 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         }
     }
 
-    /// Switches to the Bookmarks tab at its root, where highlights are listed.
+    /// Switches to the Bookmarks tab at its root.
     func showBookmarks() {
         guard let index = viewControllers?.firstIndex(where: { $0 is BookmarksTabViewController }),
               let bookmarksTab = viewControllers?[index] as? BookmarksTabViewController

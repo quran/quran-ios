@@ -283,7 +283,7 @@
 // Body of the Notes card about highlights moving to the Bookmarks tab.
 // Metadata: Translated by AI; human review required.
 "notes.highlights-tip.text" = "Notizen enthält nur noch, was du schreibst. Deine hervorgehobenen Ayahs findest du nach Farbe im Tab „Lesezeichen“.";
-// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+// Opens the Bookmarks tab from the Notes card and empty state.
 // Metadata: Translated by AI; human review required.
 "notes.highlights.show" = "Hervorhebungen anzeigen";
 // Notes empty state line when the user has highlights.

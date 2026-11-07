@@ -283,7 +283,7 @@
 // Body of the Notes card about highlights moving to the Bookmarks tab.
 // Metadata: Translated by AI; human review required.
 "notes.highlights-tip.text" = "Notas guarda solo lo que escribes. Tus aleyas resaltadas están en la pestaña Favoritos, por color.";
-// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+// Opens the Bookmarks tab from the Notes card and empty state.
 // Metadata: Translated by AI; human review required.
 "notes.highlights.show" = "Mostrar resaltados";
 // Notes empty state line when the user has highlights.

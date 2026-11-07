@@ -14,7 +14,6 @@ import UIKit
 
 struct NotesTabBuilder: TabBuildable {
     let container: AppDependencies
-    /// Opens the Bookmarks tab.
     let showBookmarks: () -> Void
 
     func build() -> UIViewController {

@@ -283,7 +283,7 @@
 // Body of the Notes card about highlights moving to the Bookmarks tab.
 // Metadata: Translated by AI; human review required.
 "notes.highlights-tip.text" = "ئىزاھاتلار پەقەت سىز يازغانلارنىلا ساقلايدۇ. يورۇتقان ئايەتلىرىڭىز رەڭ بويىچە خەتكۈچلەر بەتكۈچىدە.";
-// Button on the Notes card and empty state that opens the Bookmarks tab, where highlights are listed.
+// Opens the Bookmarks tab from the Notes card and empty state.
 // Metadata: Translated by AI; human review required.
 "notes.highlights.show" = "يورۇتۇشلارنى كۆرسىتىش";
 // Notes empty state line when the user has highlights.

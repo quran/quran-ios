@@ -197,7 +197,7 @@
             <string>%2$d more can't sync until then.</string>
         </dict>
     </dict>
-    <!-- Notes empty state line for upgraders whose 3.0 notes held highlights: how many ayahs are highlighted. -->
+    <!-- Notes empty state for 3.0 upgraders: how many ayahs are highlighted. -->
     <key>notes.no-data.highlights.count</key>
     <dict>
         <key>NSStringLocalizedFormatKey</key>

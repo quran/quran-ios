@@ -199,6 +199,32 @@ final class AyahBookmarkCollectionServiceTests: XCTestCase {
         XCTAssertEqual(stored.collection.id, collection.collection.id)
     }
 
+    func test_createCollection_throwsDuplicateCollectionNameErrorWithoutAddingCollection() async throws {
+        try await service.createCollection(named: "Study")
+        let study = try await storedCollection(named: "Study")
+
+        for name in [" study ", "STUDY"] {
+            await assertThrows(DuplicateCollectionNameError(name: "Study")) {
+                try await service.createCollection(named: name)
+            }
+        }
+
+        let collections = try await storedCollections { _ in true }
+        XCTAssertEqual(collections.filter { !$0.collection.isDefault }.map(\.collection.id), [study.collection.id])
+    }
+
+    func test_createCollection_allowsNameOfRemovedCollection() async throws {
+        try await service.createCollection(named: "Study")
+        let removed = try await storedCollection(named: "Study")
+        try await service.removeCollection(id: removed.collection.id)
+        _ = try await storedCollections { !$0.contains { $0.collection.name == "Study" } }
+
+        try await service.createCollection(named: "Study")
+
+        let collections = try await storedCollections { $0.contains { $0.collection.name == "Study" } }
+        XCTAssertEqual(collections.filter { $0.collection.name == "Study" }.count, 1)
+    }
+
     func test_renameCollection_throwsDuplicateCollectionNameErrorAndKeepsName() async throws {
         try await service.createCollection(named: "Study")
         try await service.createCollection(named: "Personal")

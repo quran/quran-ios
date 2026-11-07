@@ -20,8 +20,8 @@ public struct AyahBookmarkCollectionService {
 
     // MARK: Public
 
-    /// - Throws: `ReservedCollectionNameError` when the name is reserved, and `TextLengthLimitError` when the name
-    ///   is too short or too long.
+    /// - Throws: `ReservedCollectionNameError` when the name is reserved, `DuplicateCollectionNameError` when
+    ///   another collection has the name, and `TextLengthLimitError` when the name is too short or too long.
     public func createCollection(named name: String) async throws {
         _ = try await mapCollectionErrors {
             try await quranDataService.createCollection(named: name)

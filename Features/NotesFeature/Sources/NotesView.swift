@@ -69,7 +69,6 @@ private struct NotesViewUI: View {
 
     var body: some View {
         content
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.systemGroupedBackground)
     }
 

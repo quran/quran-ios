@@ -10,7 +10,6 @@ import Combine
 #else
 import AuthenticationClient
 import Combine
-import FeaturesSupport
 import MobileSync
 #endif
 import AnnotationsService
@@ -24,7 +23,6 @@ import QuranLocalization
 import QuranTextKit
 import ReadingService
 import SwiftUI
-import UIKit
 import UIx
 import Utilities
 import VLogging

@@ -6,7 +6,6 @@
 import AnnotationsService
 import AuthenticationClient
 import Combine
-import FeaturesSupport
 import Foundation
 import MobileSync
 import NoorUI

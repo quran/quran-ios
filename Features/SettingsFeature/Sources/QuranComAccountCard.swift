@@ -38,7 +38,6 @@ struct QuranComAccountCard: View {
                 authenticatedContent(profile: AccountProfile(user))
             }
         }
-        .padding(cardPadding)
         .background(Color.secondarySystemGroupedBackground)
         .clipShape(RoundedRectangle(cornerRadius: cardCornerRadius, style: .continuous))
     }
@@ -91,8 +90,10 @@ struct QuranComAccountCard: View {
             }
             .buttonStyle(.plain)
         }
+        .padding(cardPadding)
     }
 
+    /// Each row pads its own content, so a pressed row highlights edge to edge across the card.
     private func authenticatedContent(profile: AccountProfile) -> some View {
         VStack(spacing: 0) {
             Button(action: openAccountAction) {
@@ -114,36 +115,38 @@ struct QuranComAccountCard: View {
 
                     Spacer(minLength: 0)
 
-                    Image(systemName: "chevron.right")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(Color.tertiaryLabel)
-                        .accessibilityHidden(true)
+                    chevron
                 }
+                .padding(cardPadding)
                 .contentShape(Rectangle())
             }
-            .buttonStyle(.plain)
+            .buttonStyle(BackgroundHighlightingStyle())
             .accessibilityElement(children: .combine)
             .accessibilityHint(l("sync.account.title"))
-            .padding(.bottom, cardPadding)
 
             Divider()
+                .padding(.horizontal, cardPadding)
 
             statusRow
-                .padding(.top, rowVerticalPadding)
 
             if status.hasHeldItems {
                 reviewHeldItems
-                    .padding(.top, rowVerticalPadding)
+                    .padding(.horizontal, cardPadding)
+                    .padding(.bottom, cardPadding)
             }
         }
     }
 
+    /// Opens Account & Sync from anywhere on the row except the Sync now capsule. The navigation button sits
+    /// behind the row and the row's text ignores hit testing, so taps fall through to it, while the capsule,
+    /// drawn on top, keeps its own taps and never highlights the row, even while it's disabled.
     private var statusRow: some View {
         HStack(spacing: headerSpacing) {
             if let icon = status.icon {
                 SyncStatusIcon(icon: icon)
                     .font(.title3)
                     .frame(width: statusIconSize, height: statusIconSize)
+                    .allowsHitTesting(false)
             }
 
             VStack(alignment: .leading, spacing: 0) {
@@ -155,20 +158,59 @@ struct QuranComAccountCard: View {
                     .foregroundStyle(Color.secondaryLabel)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .allowsHitTesting(false)
             .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(.isButton)
+            .accessibilityHint(l("sync.account.title"))
+            .accessibilityAction { openAccountAction() }
 
-            Button(action: syncNowAction) {
-                Text(status.button.title)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Color.accentColor)
-                    .padding(.horizontal, buttonHorizontalPadding)
-                    .padding(.vertical, buttonVerticalPadding)
-                    .background(Color.accentColor.opacity(0.1), in: Capsule())
-            }
-            .buttonStyle(.plain)
-            .disabled(!status.button.isEnabled)
-            .opacity(status.button.isEnabled ? 1 : 0.45)
+            syncNowButton
+
+            chevron
+                .allowsHitTesting(false)
         }
+        .padding(.horizontal, cardPadding)
+        .padding(.top, rowVerticalPadding)
+        .padding(.bottom, status.hasHeldItems ? rowVerticalPadding : cardPadding)
+        .background {
+            Button(action: openAccountAction) {
+                Color.clear
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(BackgroundHighlightingStyle())
+            .accessibilityHidden(true)
+        }
+    }
+
+    private var syncNowButton: some View {
+        Button(action: syncNowAction) {
+            Text(status.button.title)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Color.accentColor)
+                .padding(.horizontal, buttonHorizontalPadding)
+                .padding(.vertical, buttonVerticalPadding)
+                .background(Color.accentColor.opacity(0.1), in: Capsule())
+        }
+        .buttonStyle(.plain)
+        .disabled(!status.button.isEnabled)
+        .background {
+            // Outside the disabled scope, so a tap on the disabled capsule stops here instead of opening the row.
+            if !status.button.isEnabled {
+                Color.clear
+                    .contentShape(Capsule())
+                    .onTapGesture {}
+                    .accessibilityHidden(true)
+            }
+        }
+        .opacity(status.button.isEnabled ? 1 : 0.45)
+    }
+
+    private var chevron: some View {
+        Image(systemName: "chevron.right")
+            .font(.footnote.weight(.semibold))
+            .foregroundStyle(Color.tertiaryLabel)
+            .flipsForRightToLeftLayoutDirection(true)
+            .accessibilityHidden(true)
     }
 
     private var reviewHeldItems: some View {

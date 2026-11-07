@@ -307,6 +307,48 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         )
     }
 
+    func test_canRefresh_requiresSignIn_andStaysWhileEditing() {
+        let sut = makeSUT()
+        XCTAssertFalse(sut.canRefresh)
+
+        sut.isAuthenticated = true
+        XCTAssertTrue(sut.canRefresh)
+
+        sut.editMode = .active
+        XCTAssertTrue(sut.canRefresh)
+    }
+
+    func test_refresh_whileSignedOut_doesNotSync() async {
+        let result = await makeSUT().refresh()
+
+        XCTAssertNil(result)
+    }
+
+    func test_refresh_whenMobileSyncHasNoSession_returnsTheSyncsSignedOutResult() async {
+        let sut = makeSUT()
+        sut.isAuthenticated = true
+
+        // MobileSync has no session here, so its sync ends at once.
+        let result = await sut.refresh()
+
+        XCTAssertEqual(result, .signedOut)
+        XCTAssertNil(sut.error)
+    }
+
+    func test_signInAndSignOutElsewhere_showAndHidePullToRefresh() async throws {
+        let client = AuthenticationClientFake()
+        client.authenticationStateAfterLogin = .authenticated
+        let sut = makeSUT(authenticationClient: client)
+
+        try await client.login(on: UIViewController())
+        await waitUntil { sut.canRefresh }
+        XCTAssertFalse(sut.shouldShowSyncBanner)
+
+        try await client.logout()
+        await waitUntil { !sut.canRefresh }
+        XCTAssertTrue(sut.shouldShowSyncBanner)
+    }
+
     func test_createPendingCollection_persistsThroughRealMobileSyncDatabase() async throws {
         let sut = makeSUT()
         sut.newCollectionName = " Personal "
@@ -992,6 +1034,7 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         return BookmarkCollectionsViewModel(
             analytics: analytics,
             authenticationClient: authenticationClient,
+            quranDataService: database.quranDataService,
             ayahBookmarkCollectionService: collectionService,
             ayahHighlightService: makeHighlightService(),
             readingBookmarkService: readingBookmarkService,

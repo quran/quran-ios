@@ -69,6 +69,7 @@ private struct BookmarkCollectionsContent: View {
 
             collectionsSection
         }
+        .refreshable(isEnabled: viewModel.canRefresh) { await viewModel.refresh() }
         .task { await viewModel.start() }
         .collectionNameAlert(
             l("bookmarks.collections.add"),

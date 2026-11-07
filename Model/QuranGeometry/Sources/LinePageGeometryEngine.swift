@@ -146,7 +146,10 @@ public struct LinePageGeometryEngine {
         let availableWidth = input.availableSize.width
         let availableHeight = input.availableSize.height
         let effectiveHeaderFooterHeightRatio = input.displaySettings.showHeaderFooter ? headerFooterHeightRatio : 0
-        let minimumPageWidthToHeightRatio = 1 / minimumPageHeightToWidthRatio(data: input.data)
+        let minimumPageWidthToHeightRatio = 1 / minimumPageHeightToWidthRatio(
+            data: input.data,
+            usesDenseLines: input.displaySettings.usesDenseLines
+        )
 
         let sidelineWidth = input.displaySettings.showSidelines
             ? floor(availableWidth * sidelineWidthRatio)
@@ -215,9 +218,9 @@ public struct LinePageGeometryEngine {
         }
     }
 
-    private func minimumPageHeightToWidthRatio(data: LinePageGeometryData) -> CGFloat {
+    private func minimumPageHeightToWidthRatio(data: LinePageGeometryData, usesDenseLines: Bool = false) -> CGFloat {
         guard !data.metrics.allowLineOverlap else {
-            return overlappingPageMinimumHeightToWidthRatio
+            return usesDenseLines ? denseOverlappingPageMinimumHeightToWidthRatio : overlappingPageMinimumHeightToWidthRatio
         }
 
         return max(
@@ -510,6 +513,8 @@ public struct LinePageGeometryEngine {
 
 private let headerFooterHeightRatio: CGFloat = 0.04
 private let overlappingPageMinimumHeightToWidthRatio: CGFloat = 1.60
+/// Lines overlap by about 41% of their height instead of 36%, so the page can be about 6% wider.
+private let denseOverlappingPageMinimumHeightToWidthRatio: CGFloat = 1.50
 private let pageMaxWidthToHeightRatio: CGFloat = 1 / 1.84
 private let headerFooterMarginRatio: CGFloat = 0.027
 private let lineDividerHeight: CGFloat = 1

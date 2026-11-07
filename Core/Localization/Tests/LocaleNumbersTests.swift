@@ -51,6 +51,13 @@ final class LocaleNumbersTests: XCTestCase {
         XCTAssertEqual(locale.identifier, "ar_US@rg=sazzzz")
     }
 
+    func testPerAppArabicWithArabicRegionOverrideIgnoresInheritedLatinNumbers() {
+        let locale = perApp("ar_US@rg=sazzzz;numbers=latn", system: ["en-US"])
+
+        XCTAssertEqual(numberFormatterString(45, locale: locale), "٤٥")
+        XCTAssertNil(components(of: locale)["numbers"])
+    }
+
     func testPerAppArabicWithLatinDefaultRegionOverrideUsesArabicIndicDigits() {
         let locale = perApp("ar_SA@rg=uszzzz", system: ["en-US"])
 
@@ -113,10 +120,29 @@ final class LocaleNumbersTests: XCTestCase {
 
     // MARK: - Whole phone
 
-    func testWholePhoneArabicInCanadaIsUnchanged() {
+    func testWholePhoneArabicInCanadaUsesArabicIndicDigits() {
         let locale = wholePhone("ar_CA", system: ["ar-CA", "en-CA"])
 
-        XCTAssertEqual(locale.identifier, "ar_CA")
+        XCTAssertEqual(numberFormatterString(45, locale: locale), "٤٥")
+        XCTAssertEqual(components(of: locale)[NSLocale.Key.countryCode.rawValue], "CA")
+    }
+
+    func testWholePhoneArabicInUnitedStatesUsesArabicIndicDigits() {
+        let locale = wholePhone("ar_US", system: ["ar-US"])
+
+        XCTAssertEqual(numberFormatterString(45, locale: locale), "٤٥")
+    }
+
+    func testWholePhoneArabicWithoutRegionUsesArabicIndicDigits() {
+        let locale = wholePhone("ar", system: ["ar"])
+
+        XCTAssertEqual(numberFormatterString(45, locale: locale), "٤٥")
+    }
+
+    func testWholePhoneArabicInCanadaRespectsExplicitLatinNumbers() {
+        let locale = wholePhone("ar_CA@numbers=latn", system: ["ar-CA"])
+
+        XCTAssertEqual(locale.identifier, "ar_CA@numbers=latn")
         XCTAssertEqual(numberFormatterString(45, locale: locale), "45")
     }
 
@@ -133,6 +159,41 @@ final class LocaleNumbersTests: XCTestCase {
         XCTAssertEqual(numberFormatterString(45, locale: locale), "٤٥")
     }
 
+    func testWholePhoneArabicInMoroccoUsesRegionDefaultLatinDigits() {
+        let locale = wholePhone("ar_MA", system: ["ar-MA"])
+
+        XCTAssertEqual(locale.identifier, "ar_MA")
+        XCTAssertEqual(numberFormatterString(45, locale: locale), "45")
+    }
+
+    func testWholePhoneArabicInSaudiArabiaIsUnchanged() {
+        let locale = wholePhone("ar_SA", system: ["ar-SA"])
+
+        XCTAssertEqual(locale.identifier, "ar_SA")
+        XCTAssertEqual(numberFormatterString(45, locale: locale), "٤٥")
+    }
+
+    func testWholePhoneArabicWithArabicRegionOverrideIsUnchanged() {
+        let locale = wholePhone("ar_US@rg=sazzzz", system: ["ar-US"])
+
+        XCTAssertEqual(locale.identifier, "ar_US@rg=sazzzz")
+        XCTAssertEqual(numberFormatterString(45, locale: locale), "٤٥")
+    }
+
+    func testWholePhoneArabicWithLatinDefaultRegionOverrideUsesArabicIndicDigits() {
+        let locale = wholePhone("ar_SA@rg=uszzzz", system: ["ar-SA"])
+
+        XCTAssertEqual(numberFormatterString(45, locale: locale), "٤٥")
+        XCTAssertEqual(components(of: locale)["rg"], "uszzzz")
+    }
+
+    func testWholePhoneArabicKeepsCalendar() {
+        let locale = wholePhone("ar_CA@calendar=islamic", system: ["ar-CA"])
+
+        XCTAssertEqual(numberFormatterString(45, locale: locale), "٤٥")
+        XCTAssertEqual(locale.calendar.identifier, .islamic)
+    }
+
     func testWholePhoneFallingBackToArabicRespectsExplicitLatinNumbers() {
         // Urdu isn't an app language, so the app runs in the phone's second language.
         let locale = wholePhone("ar_PK@numbers=latn", system: ["ur-PK", "ar-PK"])
@@ -141,10 +202,25 @@ final class LocaleNumbersTests: XCTestCase {
         XCTAssertEqual(numberFormatterString(45, locale: locale), "45")
     }
 
-    func testPrimarySystemLanguageMatchingLocaleIsUnchanged() {
-        let locale = Locale(identifier: "ar_CA").fixedLocaleNumbers(systemLanguages: ["ar-CA"], appLanguages: ["ar"])
+    func testWholePhoneFallingBackToArabicUsesArabicIndicDigits() {
+        let locale = wholePhone("ar_PK", system: ["ur-PK", "ar-PK"])
 
-        XCTAssertEqual(locale.identifier, "ar_CA")
+        XCTAssertEqual(numberFormatterString(45, locale: locale), "٤٥")
+    }
+
+    func testPrimarySystemLanguageMatchingLocaleRespectsExplicitLatinNumbers() {
+        let locale = Locale(identifier: "ar_CA@numbers=latn")
+            .fixedLocaleNumbers(systemLanguages: ["ar-CA"], appLanguages: ["ar"])
+
+        XCTAssertEqual(locale.identifier, "ar_CA@numbers=latn")
+        XCTAssertEqual(numberFormatterString(45, locale: locale), "45")
+    }
+
+    func testPrimarySystemLanguageMatchingPersianLocaleRespectsExplicitLatinNumbers() {
+        let locale = Locale(identifier: "fa_IR@numbers=latn")
+            .fixedLocaleNumbers(systemLanguages: ["fa-IR"], appLanguages: ["fa"])
+
+        XCTAssertEqual(locale.identifier, "fa_IR@numbers=latn")
         XCTAssertEqual(numberFormatterString(45, locale: locale), "45")
     }
 
@@ -164,7 +240,7 @@ final class LocaleNumbersTests: XCTestCase {
     // MARK: - Unknown system languages
 
     func testUnknownSystemLanguagesArabicInCanadaUsesArabicIndicDigits() {
-        let locale = Locale(identifier: "ar_CA").fixedLocaleNumbers(systemLanguages: [], appLanguages: [])
+        let locale = Locale(identifier: "ar_CA@numbers=latn").fixedLocaleNumbers(systemLanguages: [], appLanguages: [])
 
         XCTAssertEqual(numberFormatterString(45, locale: locale), "٤٥")
     }

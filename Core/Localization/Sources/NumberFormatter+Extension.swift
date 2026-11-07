@@ -57,21 +57,10 @@ extension NumberFormatter {
 public extension Locale {
     /// Returns the locale used to display numbers.
     ///
-    /// When the whole phone is set up in this locale's language, the locale is returned unchanged.
-    /// That respects region defaults and any number format the user picked, matching the rest of iOS.
-    /// It's the whole phone when the app has no per-app language (its preferred languages equal the
-    /// system's), or when the primary system language is this locale's language.
-    ///
-    /// Otherwise the language comes from a per-app language (Settings › Apps › Quran › Language), and
-    /// any `numbers=latn` was inherited from the phone's other language:
-    /// - Arabic keeps an explicit non-Latin numbering system. In a region with its own Arabic data
-    ///   (for example `ar_SA` or `ar_MA`), it uses that region's default digits. Elsewhere (for example
-    ///   `ar_CA` or `ar_US`, whose default is Latin), it uses Arabic-Indic digits.
-    /// - Other languages drop an explicit `numbers=latn` and use their default numbering system.
-    ///
-    /// The system and app languages are read once, because changing either relaunches the app.
-    /// Changing the number format doesn't relaunch it, so the receiver (such as `Locale.current`)
-    /// is not cached here.
+    /// Arabic uses Arabic-Indic digits unless the locale picks another numbering system, the whole phone
+    /// picks `numbers=latn`, or its region has its own Arabic data (such as `ar_SA` or `ar_MA`), whose
+    /// default applies. A per-app language may inherit `numbers=latn` from the phone's other language,
+    /// so Arabic ignores it and other languages drop it.
     func fixedLocaleNumbers() -> Locale {
         fixedLocaleNumbers(systemLanguages: Self.systemPreferredLanguages, appLanguages: Self.appPreferredLanguages)
     }
@@ -84,25 +73,26 @@ public extension Locale {
 extension Locale {
     // MARK: Internal
 
+    /// On the whole phone (the app languages equal the system's, or the primary system language has
+    /// this locale's language), `numbers=latn` is the user's own choice.
+    ///
     /// - Parameters:
     ///   - systemLanguages: The phone's preferred languages, ignoring any per-app language.
     ///   - appLanguages: The app's preferred languages, including any per-app language.
     func fixedLocaleNumbers(systemLanguages: [String], appLanguages: [String]) -> Locale {
-        if let systemLanguage = systemLanguages.first,
-           appLanguages == systemLanguages || Locale(identifier: systemLanguage).languageCode == languageCode
-        {
-            return self
-        }
         if #available(iOS 16, *), numberingSystem.identifier != Self.latinNumbers {
             return self
         }
-
         var components = Locale.components(fromIdentifier: identifier)
         let numbers = components[Self.numbersKey]
+        guard numbers == nil || numbers == Self.latinNumbers else {
+            return self
+        }
+        if numbers == Self.latinNumbers, isWholePhone(systemLanguages: systemLanguages, appLanguages: appLanguages) {
+            return self
+        }
+
         if isArabicLanguage {
-            guard numbers == nil || numbers == Self.latinNumbers else {
-                return self
-            }
             if Self.arabicRegions.contains(Self.numbersRegion(of: components) ?? "") {
                 guard numbers == Self.latinNumbers else {
                     return self
@@ -122,11 +112,10 @@ extension Locale {
 
     // MARK: Private
 
-    /// The phone's preferred languages, ignoring any per-app language.
+    // Changing either language list relaunches the app, so they're read once.
     private static let systemPreferredLanguages: [String] =
         CFPreferencesCopyAppValue("AppleLanguages" as CFString, kCFPreferencesAnyApplication) as? [String] ?? []
 
-    /// The app's preferred languages, starting with any per-app language.
     private static let appPreferredLanguages = Locale.preferredLanguages
 
     private static let numbersKey = "numbers"
@@ -151,5 +140,12 @@ extension Locale {
             return regionOverride.prefix(2).uppercased()
         }
         return components[NSLocale.Key.countryCode.rawValue]
+    }
+
+    private func isWholePhone(systemLanguages: [String], appLanguages: [String]) -> Bool {
+        guard let systemLanguage = systemLanguages.first else {
+            return false
+        }
+        return appLanguages == systemLanguages || Locale(identifier: systemLanguage).languageCode == languageCode
     }
 }

@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2021-12-18.
 //
 
+import GRDB
 import QuranKit
 import QuranText
 import TranslationServiceFake
@@ -130,6 +131,30 @@ final class QuranTextDataServiceTests: XCTestCase {
         XCTAssertEqual(expected, versesText)
     }
 
+    func testTranslationDecodesHTMLEntitiesBeforeFindingFootnotesAndQuranText() async throws {
+        let translations = try await translationTexts(
+            storedText: "He said: &quot;{ABC}&quot; it&#39;s &#x2014; [[Sam, Ham, &amp; Yafis]] &lt;FG&gt;"
+        )
+
+        let text = "He said: \"{ABC}\" it's — [1] <FG>"
+        let string = TranslationString(
+            text: text,
+            quranRanges: [text.range(of: "{ABC}")].compactMap { $0 },
+            footnoteRanges: [text.range(of: "[1]")].compactMap { $0 },
+            footnotes: ["[[Sam, Ham, & Yafis]]"]
+        )
+        XCTAssertEqual(translations, [.string(string)])
+    }
+
+    func testTranslationKeepsAmpersandsThatAreNotHTMLEntities() async throws {
+        let storedText = "Koran & Soennah &unknown; &#xD800; &#1114112; &amp"
+
+        let translations = try await translationTexts(storedText: storedText)
+
+        let string = TranslationString(text: storedText, quranRanges: [], footnoteRanges: [], footnotes: [])
+        XCTAssertEqual(translations, [.string(string)])
+    }
+
     func testNumberedArabicTextSortsAndFormatsVerses() async throws {
         let first = quran.suras[0].verses[0]
         let second = quran.suras[0].verses[1]
@@ -158,4 +183,35 @@ final class QuranTextDataServiceTests: XCTestCase {
         TestData.khanTranslation,
         TestData.sahihTranslation,
     ]
+
+    private func translationTexts(storedText: String) async throws -> [TranslationText] {
+        let verse = quran.firstVerse
+        let databaseURL = try makeTranslationDatabase(text: storedText, for: verse)
+        defer { try? FileManager.default.removeItem(at: databaseURL) }
+
+        let service = QuranTextDataService(
+            localTranslationRetriever: localTranslationsFake.retriever,
+            arabicPersistence: GRDBQuranVerseTextPersistence(mode: .arabic, fileURL: TestData.quranTextURL),
+            translationsPersistenceBuilder: { _ in GRDBTranslationVerseTextPersistence(fileURL: databaseURL) }
+        )
+        let versesText = try await service.textForVerses([verse], translations: [TestData.khanTranslation])
+        return try XCTUnwrap(versesText[verse]).translations
+    }
+
+    private func makeTranslationDatabase(text: String, for verse: AyahNumber) throws -> URL {
+        let databaseURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension("sqlite")
+        let database = try DatabaseQueue(path: databaseURL.path)
+        try database.write { db in
+            try db.execute(sql: """
+            CREATE VIRTUAL TABLE verses USING fts3(sura INTEGER, ayah INTEGER, text TEXT);
+            """)
+            try db.execute(
+                sql: "INSERT INTO verses(sura, ayah, text) VALUES (?, ?, ?)",
+                arguments: [verse.sura.suraNumber, verse.ayah, text]
+            )
+        }
+        return databaseURL
+    }
 }

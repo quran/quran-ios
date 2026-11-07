@@ -90,6 +90,12 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         if let currentMask = tabBarController.view.window?.windowScene?.interfaceOrientation.asMask {
             if !targetMask.contains(currentMask) {
                 tabBarController.requestInterfaceOrientations(targetMask)
+            } else if let deviceMask = UIDevice.current.orientation.asInterfaceMask,
+                      deviceMask != currentMask, targetMask.contains(deviceMask)
+            {
+                // Leaving a portrait-only tab, like Search, while the device is in landscape:
+                // rotate back to match the device.
+                tabBarController.requestInterfaceOrientations(deviceMask)
             }
         }
     }
@@ -137,6 +143,20 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         crashContext.setSelectedTab(tab)
         crashContext.setScreen(tab)
         logger.info("Crash context: selected tab \(tab)")
+    }
+}
+
+private extension UIDeviceOrientation {
+    /// The interface orientation that matches this device orientation. Landscape is mirrored:
+    /// a device rotated to its left shows the interface in landscape right.
+    var asInterfaceMask: UIInterfaceOrientationMask? {
+        switch self {
+        case .portrait: return .portrait
+        case .portraitUpsideDown: return .portraitUpsideDown
+        case .landscapeLeft: return .landscapeRight
+        case .landscapeRight: return .landscapeLeft
+        default: return nil
+        }
     }
 }
 

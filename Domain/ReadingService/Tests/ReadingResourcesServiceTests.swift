@@ -526,6 +526,33 @@ final class ReadingResourcesServiceTests: XCTestCase {
         try await downloadTask.value
     }
 
+    func test_availableReadings_includeDownloadableAndBundledReadings() async {
+        let service = makeService(remoteResources: remoteResources, bundledReadings: [.hafs_1405])
+
+        let available = await service.availableReadings()
+
+        XCTAssertEqual(available, Set(Reading.allReadings))
+    }
+
+    func test_availableReadings_withoutRemoteResources_areTheBundledReadings() async {
+        let service = makeService(remoteResources: nil, bundledReadings: [.hafs_1405])
+
+        let available = await service.availableReadings()
+
+        XCTAssertEqual(available, [.hafs_1405])
+    }
+
+    func test_unavailableReading_switchesToTheBundledReading() async {
+        // Regression: picking a reading that is neither downloadable nor bundled crashed the reader.
+        ReadingPreferences.shared.reading = .hafs_1441
+        let service = makeService(remoteResources: nil, bundledReadings: [.hafs_1405])
+
+        await service.startLoadingResources()
+        await finishLoadingNoDownload()
+
+        XCTAssertEqual(ReadingPreferences.shared.reading, .hafs_1405)
+    }
+
     // MARK: Private
 
     private var service: ReadingResourcesService!
@@ -568,6 +595,20 @@ final class ReadingResourcesServiceTests: XCTestCase {
         let download = try XCTUnwrap(nextDownload)
         session.failDownloadTask(download, error: error)
         await preferenceLoadingCompleted.waitForNextEvent()
+    }
+
+    private func makeService(remoteResources: ReadingRemoteResources?, bundledReadings: Set<Reading>) -> ReadingResourcesService {
+        ReadingResourcesService(
+            fileManager: fileManager,
+            zipper: zipper,
+            scheduler: testScheduler,
+            throttleInterval: .zero,
+            preferencesObservingStarted: preferencesObservingStarted,
+            preferenceLoadingCompleted: preferenceLoadingCompleted,
+            downloader: downloader,
+            remoteResources: remoteResources,
+            bundledReadings: bundledReadings
+        )
     }
 
     private func finishLoadingNoDownload(initial: Bool = true) async {

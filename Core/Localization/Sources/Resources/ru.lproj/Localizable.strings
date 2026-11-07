@@ -573,6 +573,9 @@
 "bookmarks.editor.collection.unselected" = "Не выбрано";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "Цвета выделения ещё загружаются. Повторите попытку.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "Сохраняйте аяты в Избранное или в свои коллекции, например «Дуа» или «Повторение хифза». Цвета выделения тоже здесь.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Старые закладки страниц";
 // Metadata: Translated by ChatGPT; human review required.

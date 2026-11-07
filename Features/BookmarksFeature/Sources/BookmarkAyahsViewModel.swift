@@ -40,6 +40,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
         self.analytics = analytics
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
         self.ayahHighlightService = ayahHighlightService
+        isCollectionsIntroVisible = !preferences.isCollectionsIntroRetired
         updateCollections(collections)
         highlightSelection = Self.highlightSelection(for: self.verses, in: highlights)
     }
@@ -51,6 +52,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
     @Published private(set) var highlightSelection: HighlightSelection = .none
     @Published private(set) var isUpdatingHighlight = false
     @Published private(set) var updatingCollectionIDs: Set<String> = []
+    @Published private(set) var isCollectionsIntroVisible: Bool
     @Published var error: Error?
     @Published var nameAlert: CollectionNameAlert = .hidden
     @Published var newCollectionName = ""
@@ -81,6 +83,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
         _ = await (observeCollections, observeHighlights)
     }
 
+    func dismissCollectionsIntro() {
+        isCollectionsIntroVisible = false
+        retireCollectionsIntro()
+    }
+
     func selectHighlight(_ color: HighlightColor?) async {
         let selection = color.map(HighlightSelection.color) ?? .none
         guard selection != highlightSelection, !isUpdatingHighlight else {
@@ -101,6 +108,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
                 try await ayahHighlightService.removeHighlight(for: verses)
                 analytics.unhighlight(verses: verses)
             }
+            retireCollectionsIntro()
         } catch is CancellationError {
             highlightSelection = previousSelection
         } catch {
@@ -141,6 +149,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
                 try await ayahBookmarkCollectionService.removeAyahs(verses, fromCollectionWithID: id)
             }
             logger.info("Quran Sync: updated bookmark collection membership for \(verses.count) ayah(s)")
+            retireCollectionsIntro()
         } catch is CancellationError {
             collectionSelections[id] = previousSelection
         } catch {
@@ -169,6 +178,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
             try await ayahBookmarkCollectionService.createCollection(named: name)
             newCollectionName = ""
             nameAlert = .hidden
+            retireCollectionsIntro()
         } catch {
             if let nameError = CollectionNameError(error) {
                 logger.info("Quran Sync: bookmark collection name rejected. \(nameError.logDescription)")
@@ -185,6 +195,13 @@ final class BookmarkAyahsViewModel: ObservableObject {
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let ayahHighlightService: MobileSyncAyahHighlightService
     private let analytics: AnalyticsLibrary
+    private let preferences = BookmarksPreferences.shared
+
+    /// Persists only; the intro stays until the sheet closes so rows don't shift under the finger.
+    private func retireCollectionsIntro() {
+        guard !preferences.isCollectionsIntroRetired else { return }
+        preferences.isCollectionsIntroRetired = true
+    }
 
     private func updateCollections(_ collections: [AyahBookmarkCollection]) {
         let collections = BookmarkCollectionsViewModel.sorted(collections)

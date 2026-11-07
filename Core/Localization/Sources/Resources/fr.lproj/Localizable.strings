@@ -573,6 +573,9 @@
 "bookmarks.editor.collection.unselected" = "Non sélectionné";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "Les couleurs de surlignage sont encore en cours de chargement. Veuillez réessayer.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "Enregistrez des ayahs dans les Favoris ou dans vos propres collections, comme Douas ou Révision du hifz. Les couleurs de surlignage sont aussi ici.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Anciens signets de page";
 // Metadata: Translated by ChatGPT; human review required.

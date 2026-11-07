@@ -13,13 +13,21 @@ import XCTest
 @MainActor
 final class BookmarkAyahsViewModelTests: XCTestCase {
     private let database = MobileSyncTestDatabase.shared
+    private typealias Fixture = (
+        collectionService: AyahBookmarkCollectionService,
+        highlightService: MobileSyncAyahHighlightService,
+        collections: [AyahBookmarkCollection],
+        highlights: [AyahNumber: HighlightColor]
+    )
 
     override func setUp() async throws {
         try await super.setUp()
         try await database.reset()
+        BookmarksPreferences.shared.isCollectionsIntroRetired = false
     }
 
     override func tearDown() async throws {
+        BookmarksPreferences.shared.isCollectionsIntroRetired = false
         try await database.reset()
         try await super.tearDown()
     }
@@ -122,6 +130,50 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         XCTAssertEqual(sut.partiallySelectedHighlightColors, [.pink, .green])
     }
 
+    func test_dismissingCollectionsIntro_hidesItForThisAndLaterSheets() async throws {
+        let fixture = try await makeFixture()
+        let sut = makeViewModel(fixture)
+        XCTAssertTrue(sut.isCollectionsIntroVisible)
+
+        sut.dismissCollectionsIntro()
+
+        XCTAssertFalse(sut.isCollectionsIntroVisible)
+        XCTAssertFalse(makeViewModel(fixture).isCollectionsIntroVisible)
+    }
+
+    func test_togglingCollection_retiresCollectionsIntroForLaterSheets() async throws {
+        let fixture = try await makeFixture()
+        let sut = makeViewModel(fixture)
+        let study = try XCTUnwrap(sut.displayedCollections.first { $0.name == "Study" })
+
+        await sut.toggleCollection(study)
+
+        XCTAssertTrue(sut.isCollectionsIntroVisible)
+        XCTAssertFalse(makeViewModel(fixture).isCollectionsIntroVisible)
+    }
+
+    func test_changingHighlight_retiresCollectionsIntroForLaterSheets() async throws {
+        let fixture = try await makeFixture()
+        let sut = makeViewModel(fixture)
+
+        await sut.selectHighlight(.green)
+
+        XCTAssertTrue(sut.isCollectionsIntroVisible)
+        XCTAssertFalse(makeViewModel(fixture).isCollectionsIntroVisible)
+    }
+
+    func test_creatingCollection_retiresCollectionsIntroForLaterSheets() async throws {
+        let fixture = try await makeFixture()
+        let sut = makeViewModel(fixture)
+        sut.presentAddCollection()
+        sut.newCollectionName = "Duas"
+
+        await sut.createPendingCollection()
+
+        XCTAssertTrue(sut.isCollectionsIntroVisible)
+        XCTAssertFalse(makeViewModel(fixture).isCollectionsIntroVisible)
+    }
+
     func test_titleShowsSingleAyah() {
         let title = BookmarkAyahsViewController.title(for: [verses[0]])
 
@@ -145,13 +197,8 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
     }
 
     func test_createPendingCollection_keepsTooLongNameAndShowsLimit() async throws {
-        let sut = BookmarkAyahsViewModel(
-            verses: verses,
-            collections: [],
-            analytics: AnalyticsLibrarySpy(),
-            ayahBookmarkCollectionService: makeCollectionService(),
-            ayahHighlightService: makeHighlightService()
-        )
+        let fixture = try await makeFixture()
+        let sut = makeViewModel(fixture)
         let longName = String(repeating: "a", count: 256)
         sut.presentAddCollection()
         sut.nameAlert = .hidden
@@ -166,7 +213,8 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         XCTAssertEqual(sut.newCollectionName, longName)
         XCTAssertNil(sut.error)
         let collections = try await storedCollections()
-        XCTAssertEqual(collections.count, 1)
+        XCTAssertEqual(collections.count, 2)
+        XCTAssertTrue(makeViewModel(fixture).isCollectionsIntroVisible)
     }
 
     func test_createPendingCollection_hidesAlertAfterRejectedNameIsFixed() async throws {
@@ -219,12 +267,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         XCTAssertEqual(collections.count, 2)
     }
 
-    private func makeFixture() async throws -> (
-        collectionService: AyahBookmarkCollectionService,
-        highlightService: MobileSyncAyahHighlightService,
-        collections: [AyahBookmarkCollection],
-        highlights: [AyahNumber: HighlightColor]
-    ) {
+    private func makeFixture() async throws -> Fixture {
         let collectionService = makeCollectionService()
         let highlightService = makeHighlightService()
         try await collectionService.createCollection(named: "Study")
@@ -237,6 +280,17 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         try await collectionService.addAyahBookmarkToCollection(collectionId: study.id, ayah: verses[0])
         collections = try await mappedCollections()
         return (collectionService, highlightService, collections, try await storedHighlights(using: highlightService))
+    }
+
+    private func makeViewModel(_ fixture: Fixture) -> BookmarkAyahsViewModel {
+        BookmarkAyahsViewModel(
+            verses: verses,
+            collections: fixture.collections,
+            highlights: fixture.highlights,
+            analytics: AnalyticsLibrarySpy(),
+            ayahBookmarkCollectionService: fixture.collectionService,
+            ayahHighlightService: fixture.highlightService
+        )
     }
 
     private func mappedCollections() async throws -> [AyahBookmarkCollection] {

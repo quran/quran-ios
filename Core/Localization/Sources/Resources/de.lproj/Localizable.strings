@@ -573,6 +573,9 @@
 "bookmarks.editor.collection.unselected" = "Nicht ausgewählt";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "Die Hervorhebungsfarben werden noch geladen. Bitte versuche es erneut.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "Speichere Ayahs in den Favoriten oder in eigenen Sammlungen, etwa Duas oder Hifz-Wiederholung. Auch die Hervorhebungsfarben findest du hier.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Alte Seitenlesezeichen";
 // Metadata: Translated by ChatGPT; human review required.

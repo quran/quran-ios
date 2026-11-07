@@ -488,6 +488,9 @@
 "bookmarks.editor.collection.unselected" = "Niet geselecteerd";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "De markeringskleuren worden nog geladen. Probeer het opnieuw.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "Bewaar ayahs in Favorieten of in je eigen verzamelingen, zoals Dua's of Hifz-herhaling. De markeringskleuren staan hier ook.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Oude paginabladwijzers";
 // Metadata: Translated by ChatGPT; human review required.

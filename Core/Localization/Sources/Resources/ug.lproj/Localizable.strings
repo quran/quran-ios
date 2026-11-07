@@ -576,6 +576,9 @@
 "bookmarks.editor.collection.unselected" = "تاللانمىغان";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "يورۇتۇش رەڭلىرى تېخى يۈكلىنىۋاتىدۇ. قايتا سىناڭ.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "ئايەتلەرنى ياقتۇرىدىغانلارغا ياكى دۇئالار، يادلاش تەكرارى قاتارلىق ئۆز توپلاملىرىڭىزغا ساقلاڭ. يورۇتۇش رەڭلىرىمۇ مۇشۇ يەردە.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "كونا بەت خەتكۈچلىرى";
 // Metadata: Translated by ChatGPT; human review required.

@@ -97,6 +97,7 @@ private struct BookmarkCollectionsContent: View {
                 .deleteDisabled(true)
             }
         }
+        .refreshable(isEnabled: viewModel.canRefresh) { await viewModel.refresh() }
         .task { await viewModel.start() }
         .collectionNameAlert(
             l("bookmarks.collections.add"),

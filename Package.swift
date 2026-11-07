@@ -772,7 +772,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranLocalization",
             "ReadingService",
             "Utilities",
-        ], testDependencies: [
+        ] + mobileSyncTargetDependencies, testDependencies: [
             "Analytics",
             "AnalyticsFake",
             "AnnotationsService",
@@ -860,11 +860,11 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "QuranLocalization",
             "NoteEditorFeature",
-        ], testDependencies: [
+        ] + mobileSyncTargetDependencies, testDependencies: [
             "AnalyticsFake",
             "AuthenticationClientFake",
             "QuranResources",
-        ] + mobileSyncTestSupportDependencies),
+        ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "TranslationVerseFeature", hasTests: false, dependencies: [
             "AppDependencies",

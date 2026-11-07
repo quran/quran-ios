@@ -42,6 +42,7 @@ public struct NotesBuilder {
         let viewModel = NotesViewModel(
             analytics: container.analytics,
             authenticationClient: container.authenticationClient,
+            quranDataService: container.quranDataService,
             navigationController: navigationController,
             noteService: noteService,
             textService: textService,

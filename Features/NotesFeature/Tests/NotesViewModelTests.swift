@@ -5,6 +5,7 @@ import AnnotationsService
 import AuthenticationClient
 import AuthenticationClientFake
 import Combine
+import MobileSync
 import MobileSyncTestSupport
 import QuranAnnotations
 import QuranKit
@@ -48,6 +49,7 @@ final class NotesViewModelTests: XCTestCase {
         let sut = NotesViewModel(
             analytics: AnalyticsLibrarySpy(),
             authenticationClient: UnavailableAuthenticationClient(),
+            quranDataService: database.quranDataService,
             navigationController: UINavigationController(),
             noteService: noteService,
             textService: QuranTextDataService(
@@ -79,6 +81,7 @@ final class NotesViewModelTests: XCTestCase {
         let sut = NotesViewModel(
             analytics: AnalyticsLibrarySpy(),
             authenticationClient: UnavailableAuthenticationClient(),
+            quranDataService: database.quranDataService,
             navigationController: UINavigationController(),
             noteService: noteService,
             textService: QuranTextDataService(
@@ -208,6 +211,50 @@ final class NotesViewModelTests: XCTestCase {
         )
     }
 
+    func test_canRefresh_requiresSignIn_andStaysWhileEditing() {
+        let sut = makeSUT()
+        XCTAssertFalse(sut.canRefresh, "signed out, the sign-in banner is offered instead")
+
+        sut.isAuthenticated = true
+        XCTAssertTrue(sut.canRefresh)
+
+        sut.editMode = .active
+        XCTAssertTrue(sut.canRefresh, "turning it off would rebuild the list")
+    }
+
+    func test_refresh_whileSignedOut_doesNotSync() async {
+        let sut = makeSUT()
+
+        let result = await sut.refresh()
+
+        XCTAssertNil(result)
+    }
+
+    func test_refresh_whenMobileSyncHasNoSession_returnsTheSyncsSignedOutResult() async {
+        let sut = makeSUT()
+        sut.isAuthenticated = true
+
+        // MobileSync has no session here, so its sync ends at once without contacting a server.
+        let result = await sut.refresh()
+
+        XCTAssertEqual(result, .signedOut)
+        XCTAssertNil(sut.error, "a refresh never shows an alert")
+    }
+
+    func test_signInAndSignOutElsewhere_showAndHidePullToRefresh() async throws {
+        let client = AuthenticationClientFake()
+        client.authenticationStateAfterLogin = .authenticated
+        let sut = makeSUT(authenticationClient: client)
+
+        try await client.login(on: UIViewController())
+        await waitUntil { sut.canRefresh }
+        XCTAssertFalse(sut.shouldShowSyncBanner)
+
+        try await client.logout()
+        await waitUntil { !sut.canRefresh }
+        XCTAssertTrue(sut.shouldShowSyncBanner)
+    }
+
     func test_prepareNotesForSharing_usesShareableVerseText() async throws {
         let ayah = AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 1)!
         let note = QuranAnnotations.Note(
@@ -220,6 +267,7 @@ final class NotesViewModelTests: XCTestCase {
         let sut = NotesViewModel(
             analytics: AnalyticsLibrarySpy(),
             authenticationClient: UnavailableAuthenticationClient(),
+            quranDataService: database.quranDataService,
             navigationController: UINavigationController(),
             noteService: noteService,
             textService: QuranTextDataService(
@@ -257,6 +305,7 @@ final class NotesViewModelTests: XCTestCase {
         let sut = NotesViewModel(
             analytics: AnalyticsLibrarySpy(),
             authenticationClient: UnavailableAuthenticationClient(),
+            quranDataService: database.quranDataService,
             navigationController: UINavigationController(),
             noteService: noteService,
             textService: QuranTextDataService(
@@ -305,6 +354,7 @@ final class NotesViewModelTests: XCTestCase {
         return NotesViewModel(
             analytics: analytics,
             authenticationClient: authenticationClient,
+            quranDataService: database.quranDataService,
             navigationController: navigationController,
             noteService: noteService,
             textService: QuranTextDataService(

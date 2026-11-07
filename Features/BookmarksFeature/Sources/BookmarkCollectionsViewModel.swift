@@ -9,6 +9,7 @@ import AuthenticationClient
 import Combine
 import FeaturesSupport
 import Foundation
+import MobileSync
 import NoorUI
 import QuranAnnotations
 import QuranKit
@@ -25,6 +26,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     init(
         analytics: AnalyticsLibrary,
         authenticationClient: any AuthenticationClient,
+        quranDataService: MobileSyncDataService,
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
         ayahHighlightService: MobileSyncAyahHighlightService,
         readingBookmarkService: MobileSyncReadingBookmarkService,
@@ -35,6 +37,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     ) {
         self.analytics = analytics
         self.authenticationClient = authenticationClient
+        self.quranDataService = quranDataService
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
         self.ayahHighlightService = ayahHighlightService
         self.readingBookmarkService = readingBookmarkService
@@ -43,6 +46,11 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
         isSyncBannerDismissed = preferences.isCollectionsSyncBannerDismissed
+        // A sign-in or sign-out elsewhere, such as in Settings, shows or hides the sign-in banner and pull-to-refresh.
+        authenticationClient.authenticationStateChanges
+            .map { $0 == .authenticated }
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isAuthenticated)
     }
 
     // MARK: Internal
@@ -63,6 +71,12 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     var shouldShowSyncBanner: Bool {
         !isAuthenticated && !isSyncBannerDismissed
+    }
+
+    /// Pull-to-refresh syncs, so it's offered only when signed in. It stays while editing: turning it on or off
+    /// rebuilds the list.
+    var canRefresh: Bool {
+        isAuthenticated
     }
 
     var oldPageBookmarksCollection: AyahBookmarkCollection? {
@@ -135,6 +149,28 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             logger.error("Failed to login to Quran.com from bookmarks: \(error)")
             self.error = error
         }
+    }
+
+    /// Syncs for a pull-to-refresh and returns once the sync is over: it ended, or it failed and waits to retry. The
+    /// lists update from their sequences; Settings › Sync shows any failure, so it's only logged here.
+    ///
+    /// - Returns: How the sync went; `nil` when it didn't sync because no one is signed in, or it stopped waiting.
+    @discardableResult
+    func refresh() async -> MobileSyncNowResult? {
+        guard isAuthenticated else {
+            return nil
+        }
+        logger.info("Quran Sync: userRequestedRefresh from Bookmarks")
+        do {
+            let result = try await quranDataService.syncNow()
+            logger.info("Quran Sync: refresh from Bookmarks finished. \(result)")
+            return result
+        } catch is CancellationError {
+            logger.info("Quran Sync: stopped waiting for the refresh from Bookmarks; the sync goes on")
+        } catch {
+            logger.error("Quran Sync: refresh from Bookmarks failed: \(error)")
+        }
+        return nil
     }
 
     func dismissSyncBanner() {
@@ -267,6 +303,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     private let analytics: AnalyticsLibrary
     private let authenticationClient: any AuthenticationClient
+    private let quranDataService: MobileSyncDataService
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let ayahHighlightService: MobileSyncAyahHighlightService
     private let readingBookmarkService: MobileSyncReadingBookmarkService

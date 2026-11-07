@@ -226,6 +226,10 @@
 "bookmarks.collections.no-data.title" = "لا توجد مجموعات حتى الآن";
 "bookmarks.collections.no-data.text" = "أنشئ مجموعة لتنظيم الآيات حسب الموضوع أو الدعاء أو خطة الحفظ.";
 "bookmarks.collections.ayahs.delete-hint" = "اسحب الإشارة المرجعية لحذفها.";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "هل أنت متأكد من رغبتك في إزالة جميع الآيات من “%@”؟";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "هل أنت متأكد من رغبتك في إزالة جميع التظليلات باللون “%@”؟";
 "bookmarks.collections.ayahs.open-hint" = "يفتح هذه الآية في القرآن.";
 "bookmarks.collections.ayahs.no-data.text" = "ستظهر هنا الآيات التي تضيف لها إشارة مرجعية أثناء القراءة.";
 "bookmarks.collections.ayahs.no-data.colored.text" = "ستظهر هنا الآيات التي تميّزها باللون %@ أثناء القراءة.";

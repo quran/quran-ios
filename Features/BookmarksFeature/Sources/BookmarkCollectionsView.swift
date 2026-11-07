@@ -60,42 +60,14 @@ private struct BookmarkCollectionsContent: View {
             )
 
             NoorBasicSection(title: l("bookmarks.highlights")) {
-                HighlightColorsView(items: highlightColors) { viewModel.showHighlights($0) }
-            }
-
-            NoorBasicSection(title: l("bookmarks.collections.mine")) {
-                if viewModel.displayedCollections.isEmpty {
-                    NoorListEmptyState(
-                        title: l("bookmarks.collections.no-data.title"),
-                        text: l("bookmarks.collections.no-data.text"),
-                        image: .star
-                    )
-                }
-
-                NoorListRows(
-                    viewModel.displayedCollections,
-                    canDelete: { $0.canDelete },
-                    onDelete: { collection in
-                        { await viewModel.requestDeleteCollection(collection) }
-                    }
-                ) { collection in
-                    collectionRow(
-                        title: collection.displayName,
-                        image: collection.displayImage,
-                        imageColor: collection.displayImageColor,
-                        count: collection.bookmarks.count,
-                        action: { viewModel.showCollection(collection) }
-                    )
-                }
-
-                NoorListItem(
-                    image: .init(.plusCircle, color: .accentColor),
-                    title: .text(l("bookmarks.collections.new")),
-                    titleColor: .accentColor,
-                    action: .sync { viewModel.presentAddCollection() }
+                HighlightColorsView(
+                    items: highlightColors,
+                    selectColor: { viewModel.showHighlights($0) },
+                    removeAll: { viewModel.requestRemoveAllHighlights($0) }
                 )
-                .deleteDisabled(true)
             }
+
+            collectionsSection
         }
         .refreshable(isEnabled: viewModel.canRefresh) { await viewModel.refresh() }
         .task { await viewModel.start() }
@@ -110,20 +82,100 @@ private struct BookmarkCollectionsContent: View {
             name: $viewModel.readingBookmarkName,
             submit: { await viewModel.renameReadingBookmark(in: $0) }
         )
+        .collectionNameAlert(
+            l("bookmarks.collections.rename"),
+            state: $viewModel.renameAlert,
+            name: $viewModel.renamedCollectionName,
+            submit: { await viewModel.renamePendingCollection() }
+        )
         .collectionDeleteConfirmation(
             item: $viewModel.collectionPendingDeletion,
             delete: { await viewModel.deleteCollection($0) }
+        )
+        .destructiveConfirmation(
+            l("bookmarks.delete-all"),
+            actionTitle: l("bookmarks.delete-all"),
+            item: $viewModel.collectionPendingRemoveAll,
+            message: { DeleteAllConfirmation.message(collectionName: $0.displayName) },
+            action: { await viewModel.removeAllAyahs(from: $0) }
+        )
+        .destructiveConfirmation(
+            l("bookmarks.delete-all"),
+            actionTitle: l("bookmarks.delete-all"),
+            item: $viewModel.highlightColorPendingRemoveAll,
+            message: { DeleteAllConfirmation.message(highlightColor: $0) },
+            action: { await viewModel.removeAllHighlights($0) }
         )
         .errorAlert(error: $viewModel.error)
         .environment(\.editMode, $viewModel.editMode)
     }
 
+    private var collectionsSection: some View {
+        NoorBasicSection(title: l("bookmarks.collections.mine")) {
+            if viewModel.displayedCollections.isEmpty {
+                NoorListEmptyState(
+                    title: l("bookmarks.collections.no-data.title"),
+                    text: l("bookmarks.collections.no-data.text"),
+                    image: .star
+                )
+            }
+
+            NoorListRows(
+                viewModel.displayedCollections,
+                canDelete: { $0.canDelete },
+                onDelete: { collection in
+                    { await viewModel.requestDeleteCollection(collection) }
+                }
+            ) { collection in
+                collectionRow(
+                    title: collection.displayName,
+                    image: collection.displayImage,
+                    imageColor: collection.displayImageColor,
+                    count: collection.bookmarks.count,
+                    action: { viewModel.showCollection(collection) }
+                )
+                .noorItemContextMenu(
+                    isEnabled: viewModel.isItemMenuEnabled,
+                    open: { viewModel.showCollection(collection) },
+                    rename: renameAction(for: collection),
+                    deleteAll: removeAllAction(for: collection)
+                )
+            }
+
+            NoorListItem(
+                image: .init(.plusCircle, color: .accentColor),
+                title: .text(l("bookmarks.collections.new")),
+                titleColor: .accentColor,
+                action: .sync { viewModel.presentAddCollection() }
+            )
+            .deleteDisabled(true)
+        }
+    }
+
     private var highlightColors: [HighlightColorsView.Item] {
         HighlightColor.alphabeticallySortedColors
             .map { color in
-                HighlightColorsView.Item(color: color, count: viewModel.highlights.values.count { $0 == color })
+                HighlightColorsView.Item(
+                    color: color,
+                    count: viewModel.highlights.values.count { $0 == color },
+                    canRemoveAll: viewModel.canRemoveAllHighlights(color)
+                )
             }
             .sorted { $0.count > $1.count }
+    }
+
+    private func renameAction(for collection: AyahBookmarkCollection) -> (@MainActor () -> Void)? {
+        guard collection.canRename else {
+            return nil
+        }
+        return { viewModel.presentRenameCollection(collection) }
+    }
+
+    private func removeAllAction(for collection: AyahBookmarkCollection) -> (@MainActor () -> Void)? {
+        guard viewModel.canRemoveAllAyahs(from: collection) else {
+            return nil
+        }
+        return { viewModel.requestRemoveAllAyahs(from: collection) }
     }
 
     private func deleteReadingBookmark(_ bookmark: PlacedReadingBookmark) async {

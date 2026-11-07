@@ -518,6 +518,12 @@
 "bookmarks.collections" = "To‘plamlar";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.add" = "To‘plam qo‘shish";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "“%@” rang bilan ajratilgan barcha oyatlarni olib tashlamoqchi ekaningizga ishonchingiz komilmi?";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "“%@” ichidagi barcha oyatlarni olib tashlamoqchi ekaningizga ishonchingiz komilmi?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Xatcho‘pni o‘chirish uchun uni suring.";
 // Metadata: Translated by ChatGPT; human review required.

@@ -522,6 +522,12 @@
 "bookmarks.collections" = "收藏集";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.add" = "添加收藏集";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "确定要移除所有“%@”高亮吗？";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "确定要从“%@”中移除所有经文吗？";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "向左轻扫书签即可删除。";
 // Metadata: Translated by ChatGPT; human review required.

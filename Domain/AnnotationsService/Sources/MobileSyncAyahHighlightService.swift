@@ -53,6 +53,11 @@ public struct MobileSyncAyahHighlightService {
         }
     }
 
+    /// Removes every highlight in `color`, in one write; other colors stay.
+    public func removeAllHighlights(_ color: HighlightColor) async throws {
+        try await quranDataService.deleteAyahHighlights(color: color.mobileSyncColor)
+    }
+
     // MARK: Private
 
     private let quranDataService: MobileSyncDataService

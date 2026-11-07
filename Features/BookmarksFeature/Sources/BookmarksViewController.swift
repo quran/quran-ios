@@ -60,43 +60,22 @@ final class BookmarksViewController: UIHostingController<BookmarksView> {
 
     private func updateDeleteAllButton() {
         if viewModel.editMode.isEditing && !viewModel.bookmarks.isEmpty {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(
-                title: l("bookmarks.delete-all"),
-                style: .plain,
-                target: self,
-                action: #selector(confirmDeleteAll(_:))
-            )
-            navigationItem.leftBarButtonItem?.tintColor = .systemRed
+            navigationItem.leftBarButtonItem = NavigationBarButton.deleteAll { [weak self] in
+                self?.confirmDeleteAll($0)
+            }
         } else {
             addCloudSyncInfo()
         }
     }
 
-    @objc
     private func confirmDeleteAll(_ sourceBarButtonItem: UIBarButtonItem) {
-        let alert = Self.makeDeleteAllConfirmation(
+        let alert = DeleteAllConfirmation.make(
+            message: l("bookmarks.delete-all.confirmation"),
             sourceBarButtonItem: sourceBarButtonItem
         ) { [weak self] in
             Task { await self?.viewModel.deleteAll() }
         }
         present(alert, animated: true)
-    }
-
-    static func makeDeleteAllConfirmation(
-        sourceBarButtonItem: UIBarButtonItem,
-        deleteAll: @escaping () -> Void
-    ) -> UIAlertController {
-        let alert = UIAlertController(
-            title: l("bookmarks.delete-all"),
-            message: l("bookmarks.delete-all.confirmation"),
-            preferredStyle: .actionSheet
-        )
-        alert.addAction(UIAlertAction(title: l("bookmarks.delete-all"), style: .destructive) { _ in
-            deleteAll()
-        })
-        alert.addAction(UIAlertAction(title: lAndroid("cancel"), style: .cancel))
-        alert.popoverPresentationController?.barButtonItem = sourceBarButtonItem
-        return alert
     }
 }
 #endif

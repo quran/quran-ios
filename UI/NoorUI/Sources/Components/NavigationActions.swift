@@ -31,6 +31,20 @@ public enum NavigationBarButton {
         button(image: UIImage(systemName: "plus"), tintColor: nil, action: action)
     }
 
+    /// The destructive Delete All shown while editing a list. Its action gets the button, so a confirmation
+    /// can anchor its popover to it.
+    public static func deleteAll(action: @escaping @MainActor (UIBarButtonItem) -> Void) -> UIBarButtonItem {
+        let button = UIBarButtonItem()
+        button.primaryAction = UIAction(title: l("bookmarks.delete-all")) { [weak button] _ in
+            guard let button else {
+                return
+            }
+            action(button)
+        }
+        button.tintColor = .systemRed
+        return button
+    }
+
     /// Pass `glassSymbolScale` for symbols that are both wide and tall, such as `books.vertical`:
     /// Liquid Glass draws each bar button inside a 44pt circle, which they crowd at the default scale.
     public static func secondary(

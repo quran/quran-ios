@@ -6,23 +6,34 @@ import UIx
 @MainActor
 public struct HighlightColorsView: View {
     public struct Item: Identifiable {
-        public init(color: HighlightColor, count: Int) {
+        /// - Parameter canRemoveAll: Whether the tile offers Delete All, such as while one isn't already running.
+        public init(color: HighlightColor, count: Int, canRemoveAll: Bool = true) {
             self.color = color
             self.count = count
+            self.canRemoveAll = canRemoveAll
         }
 
         public let color: HighlightColor
         public let count: Int
+        public let canRemoveAll: Bool
         public var id: HighlightColor { color }
     }
 
-    public init(items: [Item], selectColor: @escaping (HighlightColor) -> Void) {
+    /// - Parameter removeAll: Gives tiles with highlights a long-press menu that removes them all, outside Edit mode.
+    public init(
+        items: [Item],
+        selectColor: @escaping (HighlightColor) -> Void,
+        removeAll: ((HighlightColor) -> Void)? = nil
+    ) {
         self.items = items
         self.selectColor = selectColor
+        self.removeAll = removeAll
     }
 
     private let items: [Item]
     private let selectColor: (HighlightColor) -> Void
+    private let removeAll: ((HighlightColor) -> Void)?
+    @Environment(\.editMode) private var editMode
     @State private var horizontalContentWidth: CGFloat = 0
     @State private var labelWidth: CGFloat = 0
     @ScaledMetric private var spacing = 8
@@ -40,7 +51,7 @@ public struct HighlightColorsView: View {
 
                 return HStack(spacing: spacing) {
                     ForEach(items) { item in
-                        Button { selectColor(item.color) } label: {
+                        tile(item) {
                             Group {
                                 if horizontal {
                                     horizontalContent(item)
@@ -57,7 +68,6 @@ public struct HighlightColorsView: View {
                             .padding(inset)
                             .contentShape(Rectangle())
                         }
-                        .buttonStyle(BackgroundHighlightingStyle())
                         .background(Color(uiColor: .tertiarySystemGroupedBackground))
                         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                         .accessibilityElement(children: .ignore)
@@ -65,6 +75,7 @@ public struct HighlightColorsView: View {
                         .accessibilityLabel(item.color.localizedName)
                         .accessibilityValue(NumberFormatter.shared.format(item.count))
                         .accessibilityIdentifier("collections.color.\(item.color)")
+                        .modifier(DeleteAllAccessibilityAction(deleteAll: removeAllAction(for: item)))
                     }
                 }
                 // Accept a narrower proposal when rotating back from landscape.
@@ -80,6 +91,38 @@ public struct HighlightColorsView: View {
             .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
         }
+    }
+
+    /// A tile that offers Delete All presents its own menu on long-press. The list row holds every tile, so a
+    /// `contextMenu` on each would become one menu for the whole row, lifting all tiles and using the first one's menu.
+    @ViewBuilder
+    private func tile(_ item: Item, @ViewBuilder content: () -> some View) -> some View {
+        if let removeAll = removeAllAction(for: item) {
+            Menu {
+                NoorItemMenuItems(open: { selectColor(item.color) }, deleteAll: removeAll)
+            } label: {
+                content()
+            } primaryAction: {
+                selectColor(item.color)
+            }
+            .modifier(TileMenuStyle())
+            // The tile is one accessibility element, so activating it opens the color, like tapping it.
+            .accessibilityAction { selectColor(item.color) }
+        } else {
+            Button { selectColor(item.color) } label: {
+                content()
+            }
+            .buttonStyle(BackgroundHighlightingStyle())
+        }
+    }
+
+    /// Tiles with highlights offer Delete All outside Edit mode.
+    private func removeAllAction(for item: Item) -> (@MainActor () -> Void)? {
+        // swiftformat:disable:next isEmpty
+        guard let removeAll, item.count > 0, item.canRemoveAll, editMode?.wrappedValue.isEditing != true else {
+            return nil
+        }
+        return { removeAll(item.color) }
     }
 
     private func horizontalContent(_ item: Item) -> some View {
@@ -137,6 +180,32 @@ public struct HighlightColorsView: View {
             }
             .fixedSize()
             .onSizeChange { labelWidth = $0.width }
+        }
+    }
+}
+
+/// Draws a tile's menu like its button, with the same pressed highlight where the system allows it.
+private struct TileMenuStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 16, *) {
+            content
+                .menuStyle(.button)
+                .buttonStyle(BackgroundHighlightingStyle())
+        } else {
+            content.menuStyle(.borderlessButton)
+        }
+    }
+}
+
+/// Lets VoiceOver reach the long-press menu's Delete All.
+private struct DeleteAllAccessibilityAction: ViewModifier {
+    let deleteAll: (@MainActor () -> Void)?
+
+    func body(content: Content) -> some View {
+        if let deleteAll {
+            content.accessibilityAction(named: Text(l("bookmarks.delete-all")), deleteAll)
+        } else {
+            content
         }
     }
 }

@@ -196,6 +196,29 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         XCTAssertTrue(collections.contains { $0.name == "Personal" })
     }
 
+    func test_createPendingCollection_keepsDuplicateNameAndShowsWhichCollectionHasIt() async throws {
+        let collectionService = makeCollectionService()
+        try await collectionService.createCollection(named: "Study")
+        let sut = BookmarkAyahsViewModel(
+            verses: verses,
+            collections: [],
+            analytics: AnalyticsLibrarySpy(),
+            ayahBookmarkCollectionService: collectionService,
+            ayahHighlightService: makeHighlightService()
+        )
+        sut.presentAddCollection()
+        sut.nameAlert = .hidden
+        sut.newCollectionName = "STUDY"
+
+        await sut.createPendingCollection()
+
+        XCTAssertEqual(sut.nameAlert, .rejected(.duplicate(DuplicateCollectionNameError(name: "Study"))))
+        XCTAssertEqual(sut.newCollectionName, "STUDY")
+        XCTAssertNil(sut.error)
+        let collections = try await storedCollections()
+        XCTAssertEqual(collections.count, 2)
+    }
+
     private func makeFixture() async throws -> (
         collectionService: AyahBookmarkCollectionService,
         highlightService: MobileSyncAyahHighlightService,

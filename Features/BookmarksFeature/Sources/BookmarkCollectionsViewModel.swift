@@ -46,7 +46,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
         isSyncBannerDismissed = preferences.isCollectionsSyncBannerDismissed
-        // A sign-in or sign-out elsewhere, such as in Settings, shows or hides the sign-in banner and pull-to-refresh.
+        // Follow sign-in and sign-out elsewhere, such as in Settings.
         authenticationClient.authenticationStateChanges
             .map { $0 == .authenticated }
             .receive(on: DispatchQueue.main)
@@ -73,8 +73,7 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         !isAuthenticated && !isSyncBannerDismissed
     }
 
-    /// Pull-to-refresh syncs, so it's offered only when signed in. It stays while editing: turning it on or off
-    /// rebuilds the list.
+    /// Pull-to-refresh, when signed in. Not tied to edit mode: toggling it rebuilds the list.
     var canRefresh: Bool {
         isAuthenticated
     }
@@ -151,10 +150,8 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         }
     }
 
-    /// Syncs for a pull-to-refresh and returns once the sync is over: it ended, or it failed and waits to retry. The
-    /// lists update from their sequences; Settings › Sync shows any failure, so it's only logged here.
-    ///
-    /// - Returns: How the sync went; `nil` when it didn't sync because no one is signed in, or it stopped waiting.
+    /// Waits for a sync; failures are only logged, as Settings › Sync shows them.
+    /// - Returns: `nil` when signed out or it stopped waiting.
     @discardableResult
     func refresh() async -> MobileSyncNowResult? {
         guard isAuthenticated else {

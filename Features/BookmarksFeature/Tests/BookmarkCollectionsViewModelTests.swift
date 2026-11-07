@@ -309,19 +309,17 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
 
     func test_canRefresh_requiresSignIn_andStaysWhileEditing() {
         let sut = makeSUT()
-        XCTAssertFalse(sut.canRefresh, "signed out, the sign-in banner is offered instead")
+        XCTAssertFalse(sut.canRefresh)
 
         sut.isAuthenticated = true
         XCTAssertTrue(sut.canRefresh)
 
         sut.editMode = .active
-        XCTAssertTrue(sut.canRefresh, "turning it off would rebuild the list")
+        XCTAssertTrue(sut.canRefresh)
     }
 
     func test_refresh_whileSignedOut_doesNotSync() async {
-        let sut = makeSUT()
-
-        let result = await sut.refresh()
+        let result = await makeSUT().refresh()
 
         XCTAssertNil(result)
     }
@@ -330,11 +328,11 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         let sut = makeSUT()
         sut.isAuthenticated = true
 
-        // MobileSync has no session here, so its sync ends at once without contacting a server.
+        // MobileSync has no session here, so its sync ends at once.
         let result = await sut.refresh()
 
         XCTAssertEqual(result, .signedOut)
-        XCTAssertNil(sut.error, "a refresh never shows an alert")
+        XCTAssertNil(sut.error)
     }
 
     func test_signInAndSignOutElsewhere_showAndHidePullToRefresh() async throws {

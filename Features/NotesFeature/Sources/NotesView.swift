@@ -155,8 +155,7 @@ private struct NotesViewUI: View {
         )
     }
 
-    /// ``noData`` in a scroll view the size of the screen, centered as it is outside one, so pull-to-refresh works
-    /// before there are notes too.
+    /// Pull-to-refresh needs a scroll view; this one keeps ``noData`` centered.
     private var pullableNoData: some View {
         GeometryReader { proxy in
             ScrollView {

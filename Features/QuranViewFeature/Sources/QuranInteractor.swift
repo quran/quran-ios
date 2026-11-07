@@ -383,7 +383,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             bookmarkedVerses: bookmarkedVerses,
             readingBookmark: verses.count == 1
                 ? deps.annotationsObserver.latestReadingBookmark(at: [.ayah(verses[0])])
-                : nil
+                : nil,
+            placedReadingBookmarks: deps.annotationsObserver.loadedReadingBookmarks
         )
         #else
         let input = AyahMenuInput(

@@ -24,7 +24,8 @@ public struct AyahMenuInput {
         notes: [QuranAnnotations.Note],
         highlightVerses: [AyahNumber: HighlightColor] = [:],
         bookmarkedVerses: Set<AyahNumber> = [],
-        readingBookmark: PlacedReadingBookmark? = nil
+        readingBookmark: PlacedReadingBookmark? = nil,
+        placedReadingBookmarks: [PlacedReadingBookmark]?
     ) {
         self.sourceView = sourceView
         self.pointInView = pointInView
@@ -33,6 +34,7 @@ public struct AyahMenuInput {
         self.highlightVerses = highlightVerses
         self.bookmarkedVerses = bookmarkedVerses
         self.readingBookmark = readingBookmark
+        self.placedReadingBookmarks = placedReadingBookmarks
     }
     #else
     public init(
@@ -58,6 +60,8 @@ public struct AyahMenuInput {
     let highlightVerses: [AyahNumber: HighlightColor]
     let bookmarkedVerses: Set<AyahNumber>
     let readingBookmark: PlacedReadingBookmark?
+    /// Every placed reading bookmark, in any slot, or nil while they're still loading.
+    let placedReadingBookmarks: [PlacedReadingBookmark]?
     #endif
 }
 
@@ -85,7 +89,8 @@ public struct AyahMenuBuilder {
             notes: input.notes,
             highlightVerses: input.highlightVerses,
             bookmarkedVerses: input.bookmarkedVerses,
-            readingBookmark: input.readingBookmark
+            readingBookmark: input.readingBookmark,
+            placedReadingBookmarks: input.placedReadingBookmarks
         )
         #else
         let deps = AyahMenuViewModel.Deps(

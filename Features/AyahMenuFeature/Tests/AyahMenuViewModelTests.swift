@@ -1,6 +1,7 @@
 #if QURAN_SYNC
 import AnnotationsService
 import Localization
+import NoorUI
 import QuranAnnotations
 import QuranAudioKit
 import QuranKit
@@ -12,6 +13,16 @@ import XCTest
 
 @MainActor
 final class AyahMenuViewModelTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        resetReadingBookmarkNewBadge()
+    }
+
+    override func tearDown() {
+        resetReadingBookmarkNewBadge()
+        super.tearDown()
+    }
+
     func test_bookmark_requestsEditorForCrossSuraSelection() {
         let sut = makeSUT()
         let listener = BookmarkListenerSpy()
@@ -85,12 +96,14 @@ final class AyahMenuViewModelTests: XCTestCase {
         XCTAssertNil(sut.selectedAyah)
     }
 
-    func test_readingBookmarkState_isAvailableWithoutSelectionForSingleAyah() {
+    func test_readingBookmarkState_offersSetHereWithNewBadgeWhenNoBookmarkIsPlaced() {
         let selectedAyah = verses[0]
         let sut = makeSUT(verses: [selectedAyah])
 
-        XCTAssertEqual(sut.readingBookmarkState, .available(bookmark: nil))
-        XCTAssertEqual(sut.selectedAyah, selectedAyah)
+        XCTAssertEqual(
+            sut.readingBookmarkState,
+            .available(bookmark: nil, subtitle: l("bookmarks.reading.set-here"), showsNewBadge: true)
+        )
     }
 
     func test_readingBookmarkState_showsSelectedBookmarkForSingleAyah() {
@@ -98,10 +111,58 @@ final class AyahMenuViewModelTests: XCTestCase {
         let bookmark = readingBookmark(slot: .red, at: selectedAyah)
         let sut = makeSUT(
             verses: [selectedAyah],
-            readingBookmark: bookmark
+            readingBookmark: bookmark,
+            placedReadingBookmarks: [bookmark]
         )
 
-        XCTAssertEqual(sut.readingBookmarkState, .available(bookmark: bookmark))
+        XCTAssertEqual(
+            sut.readingBookmarkState,
+            .available(bookmark: bookmark, subtitle: bookmark.displayName, showsNewBadge: false)
+        )
+    }
+
+    func test_readingBookmarkState_offersMoveHereWhenABookmarkIsPlacedElsewhere() {
+        let elsewhere = readingBookmark(slot: .teal, at: verses[1])
+        let sut = makeSUT(verses: [verses[0]], placedReadingBookmarks: [elsewhere])
+
+        XCTAssertEqual(
+            sut.readingBookmarkState,
+            .available(bookmark: nil, subtitle: l("bookmarks.reading.move-here"), showsNewBadge: false)
+        )
+    }
+
+    func test_readingBookmarkState_hidesNewBadgeAndOffersMoveHereWhileBookmarksAreLoading() {
+        let sut = makeSUT(verses: [verses[0]], placedReadingBookmarks: nil)
+
+        XCTAssertEqual(
+            sut.readingBookmarkState,
+            .available(bookmark: nil, subtitle: l("bookmarks.reading.move-here"), showsNewBadge: false)
+        )
+        XCTAssertEqual(AyahMenuPreferences.shared.readingBookmarkNewBadgeViews, 0)
+        XCTAssertFalse(AyahMenuPreferences.shared.isReadingBookmarkNewBadgeRetired)
+    }
+
+    func test_newBadge_multiAyahMenusDoNotUseUpViews() {
+        for _ in 0 ..< 5 {
+            _ = makeSUT().readingBookmarkState
+        }
+
+        XCTAssertTrue(showsNewBadge(makeSUT(verses: [verses[0]])))
+    }
+
+    func test_newBadge_staysRetiredOnceAnyMenuSeesAPlacedBookmark() {
+        let elsewhere = readingBookmark(slot: .teal, at: verses[1])
+        _ = makeSUT(placedReadingBookmarks: [elsewhere]).readingBookmarkState
+
+        XCTAssertFalse(showsNewBadge(makeSUT(verses: [verses[0]])))
+    }
+
+    func test_newBadge_retiresAfterFiveViews() {
+        for _ in 0 ..< 5 {
+            XCTAssertTrue(showsNewBadge(makeSUT(verses: [verses[0]])))
+        }
+
+        XCTAssertFalse(showsNewBadge(makeSUT(verses: [verses[0]])))
     }
 
     func test_showReadingBookmarkMenu_forwardsSingleSelectedAyah() {
@@ -212,6 +273,7 @@ final class AyahMenuViewModelTests: XCTestCase {
         highlightVerses: [AyahNumber: HighlightColor] = [:],
         bookmarkedVerses: Set<AyahNumber> = [],
         readingBookmark: PlacedReadingBookmark? = nil,
+        placedReadingBookmarks: [PlacedReadingBookmark]? = [],
         textRetriever: ShareableVerseTextRetriever? = nil
     ) -> AyahMenuViewModel {
         AyahMenuViewModel(deps: .init(
@@ -222,8 +284,21 @@ final class AyahMenuViewModelTests: XCTestCase {
             notes: notes,
             highlightVerses: highlightVerses,
             bookmarkedVerses: bookmarkedVerses,
-            readingBookmark: readingBookmark
+            readingBookmark: readingBookmark,
+            placedReadingBookmarks: placedReadingBookmarks
         ))
+    }
+
+    private func showsNewBadge(_ sut: AyahMenuViewModel) -> Bool {
+        guard case .available(_, _, let showsNewBadge) = sut.readingBookmarkState else {
+            return false
+        }
+        return showsNewBadge
+    }
+
+    private func resetReadingBookmarkNewBadge() {
+        AyahMenuPreferences.shared.readingBookmarkNewBadgeViews = 0
+        AyahMenuPreferences.shared.isReadingBookmarkNewBadgeRetired = false
     }
 
     private var unavailableTextRetriever: ShareableVerseTextRetriever {

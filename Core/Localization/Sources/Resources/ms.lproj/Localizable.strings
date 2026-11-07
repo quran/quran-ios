@@ -481,6 +481,9 @@
 "ayah.menu.notes-count" = "Nota (%d)";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Penanda bacaan dialihkan dari %@ ke %@";
+// Badge on the ayah menu's Reading Bookmark row.
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.new" = "Baharu";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved.explanation" = "Anda mengalihkan penanda bacaan dan bukannya menambah yang baharu. Untuk menyimpan ayat, simpan ayat itu dalam koleksi.";
 // Metadata: Translated by ChatGPT; human review required.

@@ -441,6 +441,9 @@
 "ayah.menu.notes-count" = "Notlar (%d)";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Okuma yer imi %@ konumundan %@ konumuna taşındı";
+// Badge on the ayah menu's Reading Bookmark row.
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.new" = "Yeni";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved.explanation" = "Okuma yer imlerini yenilerini eklemek yerine taşırsınız. Ayetleri saklamak için onları bir koleksiyona kaydedin.";
 // Metadata: Translated by ChatGPT; human review required.

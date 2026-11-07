@@ -651,6 +651,7 @@ private func featuresTargets() -> [[Target]] {
             "QuranAudioKit",
             "AnnotationsService",
             "NoorUI",
+            "Preferences",
             "QuranLocalization",
             "Utilities",
         ], testDependencies: [

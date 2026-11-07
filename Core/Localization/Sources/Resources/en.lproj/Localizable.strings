@@ -316,6 +316,8 @@
 /* Subtitle of the toast shown the first time a reading bookmark is moved */
 "ayah.menu.reading-bookmark.moved.explanation" = "Reading bookmarks move rather than add up. To keep ayahs, save them to a collection.";
 "ayah.menu.reading-bookmark.removed" = "Reading bookmark removed from %@";
+// Badge on the ayah menu's Reading Bookmark row.
+"ayah.menu.reading-bookmark.new" = "New";
 /* VoiceOver label for a reading bookmark on an ayah. %1$@ is "ayah.menu.reading-bookmark.title" and %2$@ is the bookmark's color, such as "Teal" */
 "ayah.indicator.reading-bookmark" = "%1$@: %2$@";
 

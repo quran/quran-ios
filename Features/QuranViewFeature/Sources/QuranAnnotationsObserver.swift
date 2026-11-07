@@ -50,6 +50,11 @@ final class QuranAnnotationsObserver {
     #if QURAN_SYNC
     private(set) var collections: [AyahBookmarkCollection] = []
     @Published private(set) var readingBookmarks: [PlacedReadingBookmark] = []
+
+    /// `readingBookmarks` once the first value has arrived, or nil while it's still loading.
+    var loadedReadingBookmarks: [PlacedReadingBookmark]? {
+        hasLoadedReadingBookmarks ? readingBookmarks : nil
+    }
     #endif
 
     func start() {
@@ -131,6 +136,7 @@ final class QuranAnnotationsObserver {
     private var highlightsTask: Task<Void, Never>?
     private var collectionsTask: Task<Void, Never>?
     private var readingBookmarksTask: Task<Void, Never>?
+    private var hasLoadedReadingBookmarks = false
     #else
     private let noteService: NoteService
     private var notesObservation: AnyCancellable?
@@ -189,6 +195,7 @@ final class QuranAnnotationsObserver {
     }
 
     private func updateReadingBookmarks(_ bookmarks: [PlacedReadingBookmark]) {
+        hasLoadedReadingBookmarks = true
         readingBookmarks = bookmarks
         overlayService.overlays.readingBookmarks = bookmarks
     }

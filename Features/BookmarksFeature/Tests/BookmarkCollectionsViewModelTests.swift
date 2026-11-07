@@ -385,6 +385,24 @@ final class BookmarkCollectionsViewModelTests: XCTestCase {
         XCTAssertEqual(collections.count, 1)
     }
 
+    func test_createPendingCollection_keepsDuplicateNameAndShowsWhichCollectionHasIt() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Study")
+        let sut = makeSUT(collectionService: service)
+        sut.presentAddCollection()
+        sut.nameAlert = .hidden
+        sut.newCollectionName = " study "
+
+        await sut.createPendingCollection()
+
+        XCTAssertEqual(sut.nameAlert, .rejected(.duplicate(DuplicateCollectionNameError(name: "Study"))))
+        XCTAssertEqual(sut.nameAlert.error?.localizedMessage, lFormat("bookmarks.collections.name.duplicate", "Study"))
+        XCTAssertEqual(sut.newCollectionName, " study ")
+        XCTAssertNil(sut.error)
+        let collections = try await storedCollections()
+        XCTAssertEqual(collections.count, 2)
+    }
+
     func test_requestDeleteCollection_deletesEmptyCollectionWithoutConfirmation() async throws {
         let service = makeService()
         try await service.createCollection(named: "Personal")

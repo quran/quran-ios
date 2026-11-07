@@ -209,7 +209,7 @@
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>one</key>
-            <string>Your %d highlight now lives in the Bookmarks tab.</string>
+            <string>Your highlight now lives in the Bookmarks tab.</string>
             <key>other</key>
             <string>Your %d highlights now live in the Bookmarks tab.</string>
         </dict>

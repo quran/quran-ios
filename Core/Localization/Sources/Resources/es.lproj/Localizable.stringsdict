@@ -212,7 +212,7 @@
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>one</key>
-            <string>Tu %d resaltado ahora está en la pestaña Favoritos.</string>
+            <string>Tu resaltado ahora está en la pestaña Favoritos.</string>
             <key>other</key>
             <string>Tus %d resaltados ahora están en la pestaña Favoritos.</string>
         </dict>

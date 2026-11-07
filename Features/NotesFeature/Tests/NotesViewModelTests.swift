@@ -294,40 +294,41 @@ final class NotesViewModelTests: XCTestCase {
         await waitUntil { sut.showsHighlightsTip }
     }
 
-    func test_highlightsTip_hiddenWithoutLegacyHighlights() {
+    func test_highlightsTip_appearsWhenAnImportLaterRecordsLegacyHighlights() async throws {
+        try await highlightService.setHighlight(.yellow, for: [ayah(2, 255)])
         let sut = makeSUT()
-
-        sut.highlights = [ayah(2, 255): .yellow]
-
+        let task = await start(sut, untilHighlightCount: 1)
+        defer { task.cancel() }
         XCTAssertFalse(sut.showsHighlightsTip)
-    }
 
-    func test_highlightsTip_hiddenWithoutCurrentHighlights() {
         LegacyImportPreferences.shared.hadHighlights = true
 
-        let sut = makeSUT()
-
-        XCTAssertFalse(sut.showsHighlightsTip)
+        await waitUntil { sut.showsHighlightsTip }
     }
 
-    func test_dismissHighlightsTip_retiresItForLaterLaunches() {
+    func test_dismissHighlightsTip_retiresItForLaterLaunches() async throws {
         LegacyImportPreferences.shared.hadHighlights = true
+        try await highlightService.setHighlight(.yellow, for: [ayah(2, 255)])
         let sut = makeSUT()
-        sut.highlights = [ayah(2, 255): .yellow]
+        let task = await start(sut, untilHighlightCount: 1)
+        defer { task.cancel() }
 
         sut.dismissHighlightsTip()
 
         XCTAssertFalse(sut.showsHighlightsTip)
         let relaunched = makeSUT()
-        relaunched.highlights = [ayah(2, 255): .yellow]
+        let relaunchedTask = await start(relaunched, untilHighlightCount: 1)
+        defer { relaunchedTask.cancel() }
         XCTAssertFalse(relaunched.showsHighlightsTip)
     }
 
-    func test_showHighlights_opensBookmarks_andRetiresTip() {
+    func test_showHighlights_opensBookmarks_andRetiresTip() async throws {
         LegacyImportPreferences.shared.hadHighlights = true
+        try await highlightService.setHighlight(.yellow, for: [ayah(2, 255)])
         var showedHighlights = false
         let sut = makeSUT(showHighlights: { showedHighlights = true })
-        sut.highlights = [ayah(2, 255): .yellow]
+        let task = await start(sut, untilHighlightCount: 1)
+        defer { task.cancel() }
 
         sut.showHighlights()
 
@@ -335,36 +336,40 @@ final class NotesViewModelTests: XCTestCase {
         XCTAssertFalse(sut.showsHighlightsTip)
     }
 
-    func test_highlightsSummary_forUpgrader_countsAyahs_andShowsUpToFourColors() {
+    func test_highlightsSummary_forUpgrader_countsAyahs_andShowsUpToFourColors() async throws {
         LegacyImportPreferences.shared.hadHighlights = true
+        try await highlightService.setHighlight(.purple, for: [ayah(1, 1)])
+        try await highlightService.setHighlight(.pink, for: [ayah(1, 2)])
+        try await highlightService.setHighlight(.blue, for: [ayah(1, 3)])
+        try await highlightService.setHighlight(.green, for: [ayah(1, 4)])
+        try await highlightService.setHighlight(.yellow, for: [ayah(1, 5), ayah(1, 6)])
         let sut = makeSUT()
 
-        sut.highlights = [
-            ayah(1, 1): .purple, ayah(1, 2): .pink, ayah(1, 3): .blue,
-            ayah(1, 4): .green, ayah(1, 5): .yellow, ayah(1, 6): .yellow,
-        ]
+        let task = await start(sut, untilHighlightCount: 6)
+        defer { task.cancel() }
 
         XCTAssertEqual(sut.highlightsSummary, NotesHighlightsSummary(colors: [.yellow, .green, .blue, .pink], upgraderCount: 6))
     }
 
-    func test_highlightsSummary_forOthers_hasNoCount() {
+    func test_highlightsSummary_forOthers_hasNoCount() async throws {
+        try await highlightService.setHighlight(.green, for: [ayah(1, 1)])
         let sut = makeSUT()
 
-        sut.highlights = [ayah(1, 1): .green]
+        let task = await start(sut, untilHighlightCount: 1)
+        defer { task.cancel() }
 
         XCTAssertEqual(sut.highlightsSummary, NotesHighlightsSummary(colors: [.green], upgraderCount: nil))
     }
 
-    func test_highlightsSummary_withoutHighlights_isNil() {
-        LegacyImportPreferences.shared.hadHighlights = true
-
-        let sut = makeSUT()
-
-        XCTAssertNil(sut.highlightsSummary)
-    }
-
     private func ayah(_ sura: Int, _ ayah: Int) -> AyahNumber {
         AyahNumber(quran: .hafsMadani1405, sura: sura, ayah: ayah)!
+    }
+
+    /// Starts observing and waits until the stored highlights arrive.
+    private func start(_ sut: NotesViewModel, untilHighlightCount count: Int) async -> Task<Void, Never> {
+        let task = Task { await sut.start() }
+        await waitUntil { sut.highlights.count == count }
+        return task
     }
 
     private func storedNotes() async throws -> [QuranAnnotations.Note] {

@@ -212,7 +212,7 @@
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>one</key>
-            <string>Je %d markering staat nu op het tabblad Bladwijzers.</string>
+            <string>Je markering staat nu op het tabblad Bladwijzers.</string>
             <key>other</key>
             <string>Je %d markeringen staan nu op het tabblad Bladwijzers.</string>
         </dict>

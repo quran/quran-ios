@@ -113,14 +113,12 @@ private struct NotesViewUI: View {
             if notes.isEmpty {
                 if isSearching {
                     noResults
-                } else if canRefresh {
-                    pullableNoData
                 } else {
-                    noData
+                    scrollableNoData
                 }
             } else {
                 NoorList {
-                    if showsHighlightsTip, !isSearching {
+                    if showsTip {
                         Section {
                             highlightsTip
                                 .listRowInsets(.init(top: 6, leading: 0, bottom: 6, trailing: 0))
@@ -134,6 +132,7 @@ private struct NotesViewUI: View {
                             .listRowSeparator(.hidden)
                     }
                 }
+                .animation(reduceMotion ? nil : NoorAnimation.standard, value: showsTip)
                 .refreshable(isEnabled: canRefresh, action: refresh)
             }
         }
@@ -145,6 +144,8 @@ private struct NotesViewUI: View {
 
     // MARK: Private
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @ScaledMetric private var highlightsSpacing = 12.0
     @ScaledMetric private var highlightsDotSpacing = 6.0
     @ScaledMetric private var highlightsDotSize = 12.0
@@ -153,6 +154,10 @@ private struct NotesViewUI: View {
 
     private var isSearching: Bool {
         !searchTerm.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    private var showsTip: Bool {
+        showsHighlightsTip && !isSearching
     }
 
     private var noData: some View {
@@ -178,8 +183,7 @@ private struct NotesViewUI: View {
             // The yellow is the same in light and dark mode, so the glyph stays dark on it.
             imageColor: .black.opacity(0.75),
             imageBackground: HighlightColor.yellow.color,
-            actionTitle: l("notes.highlights.show"),
-            action: showHighlights,
+            action: TipCard.Action(l("notes.highlights.show"), perform: showHighlights),
             dismiss: dismissHighlightsTip
         )
     }
@@ -188,9 +192,7 @@ private struct NotesViewUI: View {
         VStack(spacing: highlightsSpacing) {
             HStack(spacing: highlightsDotSpacing) {
                 ForEach(summary.colors, id: \.self) { color in
-                    Circle()
-                        .fill(color.color)
-                        .frame(width: highlightsDotSize, height: highlightsDotSize)
+                    ColoredCircle(color: color.color, minLength: highlightsDotSize)
                 }
             }
             .accessibilityHidden(true)
@@ -219,14 +221,14 @@ private struct NotesViewUI: View {
         }
     }
 
-    /// Pull-to-refresh needs a scroll view; this one keeps ``noData`` centered.
-    private var pullableNoData: some View {
+    /// Keeps ``noData`` centered, scrolls it when it doesn't fit, and hosts pull-to-refresh.
+    private var scrollableNoData: some View {
         GeometryReader { proxy in
             ScrollView {
                 noData
                     .frame(minWidth: proxy.size.width, minHeight: proxy.size.height)
             }
-            .refreshable { await refresh() }
+            .refreshable(isEnabled: canRefresh, action: refresh)
         }
     }
 

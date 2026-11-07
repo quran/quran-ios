@@ -24,7 +24,8 @@ public struct NotesBuilder {
 
     // MARK: Public
 
-    /// - Parameter showHighlights: Opens the Bookmarks tab, where highlights are listed.
+    /// - Parameter showHighlights: Opens the Bookmarks tab, where highlights are listed. Used only with
+    ///   `QURAN_SYNC`, where Notes no longer lists highlights.
     public func build(
         withListener listener: QuranNavigator,
         showHighlights: @escaping () -> Void

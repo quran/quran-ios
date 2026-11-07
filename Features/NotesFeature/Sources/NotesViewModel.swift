@@ -93,7 +93,7 @@ final class NotesViewModel: ObservableObject {
     @Published var error: Error? = nil
     #if QURAN_SYNC
     @Published var isAuthenticated = false
-    @Published var highlights: [AyahNumber: HighlightColor] = [:]
+    @Published private(set) var highlights: [AyahNumber: HighlightColor] = [:]
     @Published private(set) var hadLegacyHighlights: Bool
     @Published private(set) var isHighlightsTipDismissed: Bool
     #endif

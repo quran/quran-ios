@@ -212,7 +212,7 @@
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>one</key>
-            <string>Deine %d Hervorhebung ist jetzt im Tab „Lesezeichen“.</string>
+            <string>Deine Hervorhebung ist jetzt im Tab „Lesezeichen“.</string>
             <key>other</key>
             <string>Deine %d Hervorhebungen sind jetzt im Tab „Lesezeichen“.</string>
         </dict>

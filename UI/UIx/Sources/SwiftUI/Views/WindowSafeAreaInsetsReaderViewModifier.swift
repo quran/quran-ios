@@ -106,20 +106,22 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
             }
         }
 
-        private enum VerticalBarEdge {
-            case leading
-            case trailing
+        /// Mirrors UIKit's `UIVerticalBarEdge` raw values (iOS 27.1).
+        private enum VerticalBarEdge: Int {
+            case leading = 1
+            case trailing = 2
         }
 
         private func verticalBarEdge(of window: UIWindow) -> VerticalBarEdge? {
             guard #available(iOS 27.1, *) else {
                 return nil
             }
-            switch window.traitCollection.verticalBarEdge {
-            case .leading: return .leading
-            case .trailing: return .trailing
-            default: return nil
+            // Read `UITraitCollection.verticalBarEdge` by key so this compiles with SDKs older than iOS 27.1,
+            // like the one CI builds with. It's a public UIKit property; `0` means unspecified.
+            guard let rawValue = window.traitCollection.value(forKey: "verticalBarEdge") as? Int else {
+                return nil
             }
+            return VerticalBarEdge(rawValue: rawValue)
         }
 
         private func insets(of window: UIWindow) -> UIEdgeInsets {

@@ -25,14 +25,16 @@ final class AyahMenuViewLayoutTests: XCTestCase {
         XCTAssertEqual(width, preferredWidth(at: .large, offeredWidth: 1000), accuracy: 0.5)
     }
 
-    /// The popover then gives the menu the pixel-rounded width it asked for. No row may move its subtitle under
-    /// its title there, which would make the menu taller.
+    /// The popover then gives the menu the width it asked for, rounded to pixels, so a fraction of a point short.
+    /// No row may move its subtitle under its title there, which would make the menu taller.
     func test_menu_keepsItsOneLineRowsAtTheWidthItAskedFor() {
         guard #available(iOS 17.0, *) else { return }
-        let sizes = preferredSizes(at: .large)
+        let pixelRounded = preferredSizes(at: .large)
+        let halfPointShort = preferredSizes(at: .large, reoffering: { $0 - 0.5 })
 
-        XCTAssertEqual(sizes.atReportedWidth.width, sizes.asked.width, accuracy: 0.5)
-        XCTAssertEqual(sizes.atReportedWidth.height, sizes.asked.height, accuracy: 0.5)
+        for (sizes, offer) in [(pixelRounded, "pixel-rounded"), (halfPointShort, "half a point short")] {
+            XCTAssertEqual(sizes.reoffered.height, sizes.asked.height, accuracy: 0.5, offer)
+        }
     }
 
     #if !QURAN_SYNC
@@ -66,15 +68,17 @@ final class AyahMenuViewLayoutTests: XCTestCase {
     }
 
     /// Hosts the menu like the ayah menu popover does and returns the size it asks the popover for. Then, like the
-    /// popover, gives the menu that width rounded down to pixels, and returns the size it asks for there.
+    /// popover, gives the menu a width derived from that one, rounded down to pixels by default, and returns the
+    /// size it asks for there.
     ///
     /// The row titles come from the test process's localization, so these sizes assume it runs in English, like
     /// the other layout tests.
     @available(iOS 17.0, *)
     private func preferredSizes(
         at size: UIContentSizeCategory,
-        offeredWidth: CGFloat? = nil
-    ) -> (asked: CGSize, atReportedWidth: CGSize) {
+        offeredWidth: CGFloat? = nil,
+        reoffering reofferedWidth: ((CGFloat) -> CGFloat)? = nil
+    ) -> (asked: CGSize, reoffered: CGSize) {
         let container = UIViewController()
         container.traitOverrides.preferredContentSizeCategory = size
         let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 402, height: 874))
@@ -100,7 +104,7 @@ final class AyahMenuViewLayoutTests: XCTestCase {
         let asked = menu.preferredContentSize
 
         let scale = window.screen.scale
-        menu.view.frame.size.width = (asked.width * scale).rounded(.down) / scale
+        menu.view.frame.size.width = reofferedWidth?(asked.width) ?? (asked.width * scale).rounded(.down) / scale
         RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.3))
 
         return (asked, menu.preferredContentSize)

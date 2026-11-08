@@ -350,7 +350,7 @@ private struct Row<Symbol: View, Accessory: View>: View {
     var body: some View {
         AsyncButton(action: action) {
             Group {
-                if dynamicTypeSize.isAccessibilitySize {
+                if dynamicTypeSize.isAccessibilitySize, #available(iOS 16.0, *) {
                     // The symbol goes above the text, so the text gets the row's full width and words don't break.
                     VStack(alignment: .leading) {
                         coloredSymbol

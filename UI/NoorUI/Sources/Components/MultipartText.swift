@@ -395,9 +395,7 @@ extension MultipartText {
         MultipartText(stringLiteral: plain)
     }
 
-    /// The range in the compact format `ClosedRange<AyahNumber>.localizedName` writes as plain text: one sura's
-    /// ayahs as "Al-Baqarah · 2:1–10", ayahs across suras joined with the localized `quran.range` format, and a
-    /// whole sura as its name alone. VoiceOver reads it as `localizedAccessibilityName`.
+    /// The range in `ClosedRange<AyahNumber>.localizedName`'s compact format, such as "Al-Baqarah · 2:1–10".
     static func ayahRange(_ range: ClosedRange<AyahNumber>, language: Language? = nil) -> MultipartText {
         let start = range.lowerBound
         let end = range.upperBound

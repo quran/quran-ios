@@ -17,9 +17,7 @@ extension AyahNumber {
     }
 
     public func localizedCoordinate(locale: Locale = .preferredLanguageLocale) -> String {
-        let formatter = NumberFormatter()
-        formatter.locale = locale.fixedLocaleNumbers()
-        return "\(formatter.format(sura.suraNumber)):\(formatter.format(ayah))"
+        "\(locale.formatNumber(sura.suraNumber)):\(locale.formatNumber(ayah))"
     }
 
     public var localizedName: String {

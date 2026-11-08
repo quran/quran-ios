@@ -22,9 +22,7 @@ extension ClosedRange<AyahNumber> {
     public func localizedCoordinates(locale: Locale = .preferredLanguageLocale) -> String {
         var coordinates = lowerBound.localizedCoordinate(locale: locale)
         if lowerBound != upperBound {
-            let formatter = NumberFormatter()
-            formatter.locale = locale.fixedLocaleNumbers()
-            coordinates += "–\(formatter.format(upperBound.ayah))"
+            coordinates += "–\(locale.formatNumber(upperBound.ayah))"
         }
         return locale.isRightToLeft ? "\u{2066}\(coordinates)\u{2069}" : coordinates
     }
@@ -49,22 +47,32 @@ extension ClosedRange<AyahNumber> {
         if let wholeSura {
             return wholeSura.localizedName(language: language)
         }
-        let start = lowerBound
-        let end = upperBound
-        if start == end {
-            return start.localizedName(language: language)
+        if lowerBound == upperBound {
+            return lowerBound.localizedName(language: language)
         }
-        guard start.sura == end.sura else {
+        guard lowerBound.sura == upperBound.sura else {
             return lFormat(
                 "quran.range.spoken",
                 language: language,
-                start.localizedName(language: language),
-                end.localizedName(language: language)
+                lowerBound.localizedName(language: language),
+                upperBound.localizedName(language: language)
             )
         }
+        let ayahs = lFormat(
+            "quran.ayah.number-range",
+            language: language,
+            locale.formatNumber(lowerBound.ayah),
+            locale.formatNumber(upperBound.ayah)
+        )
+        return lFormat("quran.ayah.name", language: language, lowerBound.sura.localizedName(language: language), ayahs)
+    }
+}
+
+extension Locale {
+    /// The number with the app's digits for this locale.
+    func formatNumber(_ number: Int) -> String {
         let formatter = NumberFormatter()
-        formatter.locale = locale.fixedLocaleNumbers()
-        let ayahs = lFormat("quran.ayah.number-range", language: language, formatter.format(start.ayah), formatter.format(end.ayah))
-        return lFormat("quran.ayah.name", language: language, start.sura.localizedName(language: language), ayahs)
+        formatter.locale = fixedLocaleNumbers()
+        return formatter.format(number)
     }
 }

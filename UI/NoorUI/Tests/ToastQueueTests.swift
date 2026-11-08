@@ -2,21 +2,19 @@ import XCTest
 @testable import NoorUI
 
 final class ToastQueueTests: XCTestCase {
-    func testDismissingAnotherToastLeavesTheShowingToastShowing() {
-        // The audio banner dismisses its own toasts when the reader closes, while another feature's toast shows.
-        let signInNudge = Toast("Collection created")
+    func testRemovingAnotherToastLeavesTheShowingToastShowing() {
+        let otherFeatureToast = Toast("Collection created")
         let bannerToast = Toast("Playing")
         var queue = ToastQueue<String>()
-        queue.append(signInNudge, in: "reader")
+        queue.append(otherFeatureToast, in: "reader")
         _ = queue.showNext()
 
-        let dismissesShowing = queue.removeToast(id: bannerToast.id)
+        queue.removeWaiting(id: bannerToast.id)
 
-        XCTAssertFalse(dismissesShowing)
-        XCTAssertEqual(queue.showing?.toast.id, signInNudge.id)
+        XCTAssertEqual(queue.showing?.toast.id, otherFeatureToast.id)
     }
 
-    func testDismissingAWaitingToastDropsIt() {
+    func testRemovingAWaitingToastDropsIt() {
         let showing = Toast("Collection created")
         let downloading = Toast("Downloading")
         let playing = Toast("Playing")
@@ -26,14 +24,13 @@ final class ToastQueueTests: XCTestCase {
         queue.append(playing, in: "reader")
         _ = queue.showNext()
 
-        let dismissesShowing = queue.removeToast(id: downloading.id)
+        queue.removeWaiting(id: downloading.id)
         queue.removeShowing()
 
-        XCTAssertFalse(dismissesShowing)
         XCTAssertEqual(queue.showNext()?.toast.id, playing.id)
     }
 
-    func testDismissingTheShowingToastShowsTheNextOnceItsGone() {
+    func testTheShowingToastStaysUntilRemovedThenTheNextShows() {
         let playing = Toast("Playing")
         let next = Toast("Collection created")
         var queue = ToastQueue<String>()
@@ -41,22 +38,18 @@ final class ToastQueueTests: XCTestCase {
         queue.append(next, in: "bookmarks")
         _ = queue.showNext()
 
-        let dismissesShowing = queue.removeToast(id: playing.id)
+        queue.removeWaiting(id: playing.id)
 
-        XCTAssertTrue(dismissesShowing)
-        XCTAssertNil(queue.showNext(), "The dismissed toast shows until it animates away.")
+        XCTAssertEqual(queue.showing?.toast.id, playing.id)
+        XCTAssertNil(queue.showNext(), "The showing toast stays until it animates away.")
         queue.removeShowing()
         let shown = queue.showNext()
         XCTAssertEqual(shown?.toast.id, next.id)
         XCTAssertEqual(shown?.scene, "bookmarks")
     }
 
-    func testCopiesPlacedAboveBottomBarsKeepTheToastsID() {
+    func testCopyPlacedAboveBottomBarsKeepsTheToastsID() {
         let toast = Toast("Removed")
-        var queue = ToastQueue<String>()
-        queue.append(toast.clearingBottomBars(height: 83, spacing: 8), in: "bookmarks")
-        _ = queue.showNext()
-
-        XCTAssertTrue(queue.removeToast(id: toast.id))
+        XCTAssertEqual(toast.clearingBottomBars(height: 83, spacing: 8).id, toast.id)
     }
 }

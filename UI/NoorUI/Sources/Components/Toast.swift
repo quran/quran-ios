@@ -23,7 +23,7 @@ public struct ToastAction {
     }
 }
 
-public struct Toast {
+public struct Toast: Identifiable {
     // MARK: Lifecycle
 
     public init(
@@ -48,9 +48,6 @@ public struct Toast {
 
     public static let defaultDuration: TimeInterval = 4
 
-    /// Identifies this toast, and its copies, to `ToastPresenter.dismissToast(withID:)`.
-    public let id = UUID()
-
     public struct Icon {
         // MARK: Lifecycle
 
@@ -67,6 +64,8 @@ public struct Toast {
         let color: Color?
     }
 
+    /// Identifies this toast, and its copies, to `ToastPresenter.dismissToast(withID:)`.
+    public let id = UUID()
     public let message: MultipartText
     public let subtitle: MultipartText?
     public let icon: Icon?
@@ -307,7 +306,8 @@ public class ToastPresenter {
     public func dismissToast(withID id: UUID) {
         // Runs after the `showToast` calls before it have queued their toasts.
         DispatchQueue.main.async {
-            guard self.queue.removeToast(id: id), let presentationID = self.currentToastID else { return }
+            self.queue.removeWaiting(id: id)
+            guard self.queue.showing?.toast.id == id, let presentationID = self.currentToastID else { return }
             self.dismissToast(id: presentationID)
         }
     }

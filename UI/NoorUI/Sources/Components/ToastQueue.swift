@@ -8,10 +8,10 @@
 import Foundation
 
 /// The toasts waiting to show, in order, the showing one first, each with the scene it shows in.
-struct ToastQueue<Scene> {
+struct ToastQueue<WindowScene> {
     struct Entry {
         let toast: Toast
-        let scene: Scene
+        let scene: WindowScene
     }
 
     /// The entry on screen, from when `showNext()` returns it until `removeShowing()`.
@@ -19,7 +19,7 @@ struct ToastQueue<Scene> {
         isShowing ? entries.first : nil
     }
 
-    mutating func append(_ toast: Toast, in scene: Scene) {
+    mutating func append(_ toast: Toast, in scene: WindowScene) {
         entries.append(Entry(toast: toast, scene: scene))
     }
 
@@ -41,12 +41,11 @@ struct ToastQueue<Scene> {
         isShowing = false
     }
 
-    /// Drops the waiting toast with `id`, and returns whether the showing toast has `id` instead.
-    /// The showing toast stays until its presenter dismisses it and calls `removeShowing()`.
-    mutating func removeToast(id: UUID) -> Bool {
+    /// Drops the waiting toasts with `id`. The showing toast stays until its presenter dismisses it
+    /// and calls `removeShowing()`.
+    mutating func removeWaiting(id: UUID) {
         let firstWaiting = isShowing ? 1 : 0
         entries[firstWaiting...].removeAll { $0.toast.id == id }
-        return showing?.toast.id == id
     }
 
     // MARK: Private

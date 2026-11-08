@@ -443,7 +443,7 @@ public final class AudioBannerViewModel: ObservableObject {
             return
         }
         let message = Self.audioMessage("audio.downloading.toast", audioRange: audioRange)
-        show(Toast(message, icon: Toast.Icon(.download)))
+        showToast(Toast(message, icon: Toast.Icon(.download)))
     }
 
     private func updateDownloadProgress() async {
@@ -466,10 +466,10 @@ public final class AudioBannerViewModel: ObservableObject {
         let modify = ToastAction(title: l("audio.playing.action.modify")) { [weak self] in
             self?.showAdvancedAudioOptions()
         }
-        show(Toast(message, icon: Toast.Icon(.play), action: modify))
+        showToast(Toast(message, icon: Toast.Icon(.play), action: modify))
     }
 
-    private func show(_ toast: Toast) {
+    private func showToast(_ toast: Toast) {
         toastIDs.append(toast.id)
         self.toast = toast
     }

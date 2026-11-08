@@ -1,4 +1,5 @@
 #if QURAN_SYNC
+import AnalyticsFake
 import AuthenticationClient
 import AuthenticationClientFake
 import Combine
@@ -272,7 +273,7 @@ final class BookmarkCollectionsViewModelTests: BookmarkCollectionsTestCase {
         let sut = makeSUT()
         sut.newCollectionName = " Personal "
 
-        await sut.createPendingCollection()
+        _ = await sut.createPendingCollection()
 
         let collections = try await storedCollections {
             $0.contains { $0.collection.name == "Personal" }
@@ -283,16 +284,25 @@ final class BookmarkCollectionsViewModelTests: BookmarkCollectionsTestCase {
         XCTAssertNil(sut.error)
     }
 
+    func test_createPendingCollection_showsSignInToastWhenSignedOut() async {
+        let sut = makeSUT()
+        sut.newCollectionName = "Personal"
+
+        let toast = await sut.createPendingCollection()
+
+        XCTAssertEqual(toast?.message.accessibilityText, l("sync.nudge.collection-created"))
+    }
+
     func test_createPendingCollection_hidesAlertAfterRejectedNameIsFixed() async throws {
         let sut = makeSUT()
         sut.presentAddCollection()
         sut.nameAlert = .hidden
         sut.newCollectionName = "system:notes"
-        await sut.createPendingCollection()
+        _ = await sut.createPendingCollection()
         XCTAssertEqual(sut.nameAlert, .rejected(.reserved(ReservedCollectionNameError(name: "system:notes"))))
         sut.newCollectionName = "Personal"
 
-        await sut.createPendingCollection()
+        _ = await sut.createPendingCollection()
 
         XCTAssertEqual(sut.nameAlert, .hidden)
         XCTAssertNil(sut.error)
@@ -309,7 +319,7 @@ final class BookmarkCollectionsViewModelTests: BookmarkCollectionsTestCase {
         sut.nameAlert = .hidden
         sut.newCollectionName = longName
 
-        await sut.createPendingCollection()
+        _ = await sut.createPendingCollection()
 
         XCTAssertEqual(
             sut.nameAlert,
@@ -333,7 +343,7 @@ final class BookmarkCollectionsViewModelTests: BookmarkCollectionsTestCase {
         sut.nameAlert = .hidden
         sut.newCollectionName = "system:notes"
 
-        await sut.createPendingCollection()
+        _ = await sut.createPendingCollection()
 
         XCTAssertEqual(sut.nameAlert, .rejected(.reserved(ReservedCollectionNameError(name: "system:notes"))))
         XCTAssertEqual(
@@ -354,7 +364,7 @@ final class BookmarkCollectionsViewModelTests: BookmarkCollectionsTestCase {
         sut.nameAlert = .hidden
         sut.newCollectionName = " study "
 
-        await sut.createPendingCollection()
+        _ = await sut.createPendingCollection()
 
         XCTAssertEqual(sut.nameAlert, .rejected(.duplicate(DuplicateCollectionNameError(name: "Study"))))
         XCTAssertEqual(sut.nameAlert.error?.localizedMessage, lFormat("bookmarks.collections.name.duplicate", "Study"))

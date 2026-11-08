@@ -19,7 +19,12 @@ public struct AyahNotesBuilder {
 
     // MARK: Public
 
-    public func build(verses: [AyahNumber], presentsNewNote: Bool = false) -> UIViewController {
+    /// `bottomBarsHeight` keeps the toast after saving a new note above the presenter's bottom bars.
+    public func build(
+        verses: [AyahNumber],
+        presentsNewNote: Bool = false,
+        bottomBarsHeight: @escaping @MainActor () -> CGFloat
+    ) -> UIViewController {
         let viewControllerReference = AyahNotesViewControllerReference()
         let viewModel = AyahNotesViewModel(
             verses: verses,
@@ -29,6 +34,7 @@ public struct AyahNotesBuilder {
             viewModel: viewModel,
             noteEditorBuilder: .init(container: container),
             presentsNewNote: presentsNewNote,
+            bottomBarsHeight: bottomBarsHeight,
             addAction: { [viewControllerReference] in
                 viewControllerReference.value?.addNote()
             },

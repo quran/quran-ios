@@ -1,7 +1,11 @@
 import Analytics
 import AnalyticsFake
 #if QURAN_SYNC
+import AuthenticationClientFake
+import FeaturesSupport
+import Localization
 import MobileSyncTestSupport
+import SystemDependenciesFake
 #endif
 import QuranAnnotations
 import QuranKit
@@ -20,11 +24,47 @@ final class NoteEditorViewModelTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         try await database.reset()
+        SyncSignInNudgePreferences.shared.reset()
     }
 
     override func tearDown() async throws {
+        SyncSignInNudgePreferences.shared.reset()
         try await database.reset()
         try await super.tearDown()
+    }
+
+    func test_newNoteSave_showsSignInToastWhenSignedOut() async throws {
+        let sut = makeSyncSUT(mode: .create(verses: [ayah(1)]))
+        let editableNote = try await sut.viewModel.fetchNote()
+        editableNote.note = "A new note"
+
+        await sut.viewModel.commitEditsAndExit(dismissOnSave: true)
+
+        XCTAssertEqual(sut.toasts.shown.map(\.message.accessibilityText), [l("sync.nudge.note-saved")])
+    }
+
+    func test_rejectedNewNote_doesNotShowSignInToastOrUseAShow() async throws {
+        let sut = makeSyncSUT(mode: .create(verses: [ayah(1)]))
+        let editableNote = try await sut.viewModel.fetchNote()
+        editableNote.note = String(repeating: "a", count: 10001)
+
+        await sut.viewModel.commitEditsAndExit(dismissOnSave: true)
+
+        XCTAssertNotNil(sut.viewModel.textLengthLimitError)
+        XCTAssertTrue(sut.toasts.shown.isEmpty)
+        let nextToast = await makeSignInNudge().toast(after: .note)
+        XCTAssertNotNil(nextToast)
+    }
+
+    func test_editedNoteSave_doesNotShowSignInToast() async throws {
+        let note = try await createStoredNote(body: "Stored note")
+        let sut = makeSyncSUT(mode: .edit(note))
+        let editableNote = try await sut.viewModel.fetchNote()
+        editableNote.note = "Updated note"
+
+        await sut.viewModel.commitEditsAndExit(dismissOnSave: true)
+
+        XCTAssertTrue(sut.toasts.shown.isEmpty)
     }
 
     func test_fetchNote_mapsSyncedEditNote() async throws {
@@ -438,18 +478,36 @@ final class NoteEditorViewModelTests: XCTestCase {
     #if QURAN_SYNC
     private func makeSyncSUT(
         mode: NoteEditorMode
-    ) -> (viewModel: NoteEditorViewModel, noteService: MobileSyncNoteService, analytics: AnalyticsLibrarySpy, listener: ListenerSpy) {
+    ) -> (
+        viewModel: NoteEditorViewModel,
+        noteService: MobileSyncNoteService,
+        analytics: AnalyticsLibrarySpy,
+        listener: ListenerSpy,
+        toasts: ToastSpy
+    ) {
         let noteService = MobileSyncNoteService(quranDataService: database.quranDataService)
         let analytics = AnalyticsLibrarySpy()
         let listener = ListenerSpy()
+        let toasts = ToastSpy()
         let viewModel = NoteEditorViewModel(
             noteService: noteService,
             analytics: analytics,
             mode: mode,
-            textService: textService
+            textService: textService,
+            signInNudge: makeSignInNudge(),
+            showToast: { toasts.shown.append($0) }
         )
         viewModel.listener = listener
-        return (viewModel, noteService, analytics, listener)
+        return (viewModel, noteService, analytics, listener, toasts)
+    }
+
+    private func makeSignInNudge() -> SyncSignInNudge {
+        SyncSignInNudge(
+            authenticationClient: AuthenticationClientFake(),
+            analytics: AnalyticsLibrarySpy(),
+            time: SystemTimeFake(),
+            signInViewControllers: { [] }
+        )
     }
 
     private func syncedNote(
@@ -517,6 +575,12 @@ final class NoteEditorViewModelTests: XCTestCase {
         )
     }
 }
+
+#if QURAN_SYNC
+private final class ToastSpy {
+    var shown: [Toast] = []
+}
+#endif
 
 private final class ListenerSpy: NoteEditorListener {
     var didDismiss = false

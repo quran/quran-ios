@@ -303,6 +303,13 @@
         "containerPath" : "container:",
         "identifier" : "AudioBannerFeatureTests",
         "name" : "AudioBannerFeatureTests"
+        }
+      },
+      {
+        "target" : {
+          "containerPath" : "container:",
+          "identifier" : "FeaturesSupportTests",
+          "name" : "FeaturesSupportTests"
       }
     },
     {

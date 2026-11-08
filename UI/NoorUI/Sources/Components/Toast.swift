@@ -11,6 +11,7 @@ import Foundation
 import SwiftUI
 import UIKit
 import UIx
+import VLogging
 
 public struct ToastAction {
     public let title: String
@@ -30,6 +31,7 @@ public struct Toast {
         subtitle: MultipartText? = nil,
         icon: Icon? = nil,
         action: ToastAction? = nil,
+        onUserDismiss: (() -> Void)? = nil,
         duration: TimeInterval = defaultDuration,
         bottomOffset: CGFloat = 40
     ) {
@@ -37,6 +39,7 @@ public struct Toast {
         self.subtitle = subtitle
         self.icon = icon
         self.action = action
+        self.onUserDismiss = onUserDismiss
         self.duration = duration
         self.bottomOffset = bottomOffset
     }
@@ -65,6 +68,8 @@ public struct Toast {
     public let subtitle: MultipartText?
     public let icon: Icon?
     public let action: ToastAction?
+    /// Runs once when the user dismisses the toast with a swipe or VoiceOver's dismiss action, not when it times out or its action runs.
+    public let onUserDismiss: (() -> Void)?
     public let duration: TimeInterval
     public private(set) var bottomOffset: CGFloat
 }
@@ -99,8 +104,8 @@ extension Toast {
 }
 
 private class ToastHostingController: UIHostingController<ToastView> {
-    init(toast: Toast, dismiss: @escaping () -> Void) {
-        super.init(rootView: ToastView(toast: toast, dismiss: dismiss))
+    init(toast: Toast, dismiss: @escaping () -> Void, userDismiss: @escaping () -> Void) {
+        super.init(rootView: ToastView(toast: toast, dismiss: dismiss, userDismiss: userDismiss))
         view.backgroundColor = .clear
     }
 
@@ -114,9 +119,10 @@ private class ToastHostingController: UIHostingController<ToastView> {
 private class ToastContainerViewController: UIViewController {
     // MARK: Lifecycle
 
-    init(toastViewController: UIViewController, bottomOffset: CGFloat) {
+    init(toastViewController: UIViewController, bottomOffset: CGFloat, userDismiss: @escaping () -> Void) {
         self.toastViewController = toastViewController
         self.bottomOffset = bottomOffset
+        self.userDismiss = userDismiss
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
         modalTransitionStyle = .crossDissolve
@@ -207,6 +213,7 @@ private class ToastContainerViewController: UIViewController {
 
     private let toastViewController: UIViewController
     private let bottomOffset: CGFloat
+    private let userDismiss: () -> Void
 
     private var activeConstraint: NSLayoutConstraint? {
         didSet {
@@ -225,7 +232,7 @@ private class ToastContainerViewController: UIViewController {
 
     @objc
     private func handleSwipeDown() {
-        dismissToast()
+        userDismiss()
     }
 
     @objc
@@ -240,7 +247,7 @@ private class ToastContainerViewController: UIViewController {
             }
         case .ended:
             if translation.y > bottomOffset {
-                dismissToast()
+                userDismiss()
             } else {
                 showToast()
             }
@@ -305,6 +312,7 @@ public class ToastPresenter {
     private var currentToastWindow: ToastWindow?
     private var currentContainerVC: ToastContainerViewController?
     private var currentToastID: UUID?
+    private var dismissingToastID: UUID?
 
     private func displayNextToast() {
         guard !isShowing, let nextToast = queue.first else { return }
@@ -316,13 +324,16 @@ public class ToastPresenter {
         let toastID = UUID()
         currentToastID = toastID
 
-        let toastVC = ToastHostingController(toast: toast, dismiss: { [weak self] in
-            self?.dismissToast(id: toastID)
-        })
+        let toastVC = ToastHostingController(
+            toast: toast,
+            dismiss: { [weak self] in self?.dismissToast(id: toastID) },
+            userDismiss: { [weak self] in self?.dismissToast(id: toastID, byUser: true) }
+        )
 
         let containerVC = ToastContainerViewController(
             toastViewController: toastVC,
-            bottomOffset: toast.bottomOffset
+            bottomOffset: toast.bottomOffset,
+            userDismiss: { [weak self] in self?.dismissToast(id: toastID, byUser: true) }
         )
 
         containerVC.dismissCompletion = { [weak self] in
@@ -353,10 +364,47 @@ public class ToastPresenter {
         displayNextToast()
     }
 
-    private func dismissToast(id: UUID) {
+    /// Dismisses the toast once, however many of its swipe, VoiceOver dismiss, action and timeout ask to.
+    private func dismissToast(id: UUID, byUser: Bool = false) {
         DispatchQueue.main.async {
-            guard self.currentToastID == id else { return }
+            guard self.currentToastID == id, self.dismissingToastID != id else { return }
+            self.dismissingToastID = id
+            if byUser {
+                self.queue.first?.toast.onUserDismiss?()
+            }
             self.currentContainerVC?.dismissToast()
         }
+    }
+}
+
+extension ToastPresenter {
+    /// Shows `toast` in `view`'s window, lifted above the bars at the bottom of `view`'s screen, like a tab bar.
+    ///
+    /// - Parameter bottomBarsHeight: How far bars that `view`'s screen can't report through its safe area,
+    ///   like a floating bar beneath a sheet, reach above the window's bottom edge.
+    public func showToast(_ toast: Toast, from view: UIView, bottomBarsHeight: CGFloat = 0) {
+        guard let windowScene = view.window?.windowScene else {
+            logger.error("Failed to obtain windowScene")
+            return
+        }
+        let height = max(view.bottomBarsHeight, bottomBarsHeight)
+        let spacing = UIFontMetrics.default.scaledValue(for: 8, compatibleWith: view.traitCollection)
+        showToast(toast.clearingBottomBars(height: height, spacing: spacing), in: windowScene)
+    }
+}
+
+private extension UIView {
+    /// How far the bars at the bottom of this view's screen, like a tab bar, reach above the window's bottom edge.
+    var bottomBarsHeight: CGFloat {
+        let screenView = sequence(first: self, next: \.superview).first { $0.next is UIViewController }
+        guard let window, let screenView else {
+            return 0
+        }
+        return Toast.bottomBarsHeight(
+            windowHeight: window.bounds.height,
+            windowBottomInset: window.safeAreaInsets.bottom,
+            screenBottom: screenView.convert(screenView.bounds, to: window).maxY,
+            screenBottomInset: screenView.safeAreaInsets.bottom
+        )
     }
 }

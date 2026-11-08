@@ -19,12 +19,14 @@ final class AyahNotesViewController: UIHostingController<AyahNotesView>, NoteEdi
         viewModel: AyahNotesViewModel,
         noteEditorBuilder: NoteEditorBuilder,
         presentsNewNote: Bool,
+        bottomBarsHeight: @escaping @MainActor () -> CGFloat,
         addAction: @escaping @MainActor @Sendable () -> Void,
         editAction: @escaping @MainActor @Sendable (Note) -> Void
     ) {
         self.viewModel = viewModel
         self.noteEditorBuilder = noteEditorBuilder
         shouldPresentNewNote = presentsNewNote
+        self.bottomBarsHeight = bottomBarsHeight
         super.init(rootView: AyahNotesView(
             viewModel: viewModel,
             addAction: addAction,
@@ -70,6 +72,7 @@ final class AyahNotesViewController: UIHostingController<AyahNotesView>, NoteEdi
     private let viewModel: AyahNotesViewModel
     private let noteEditorBuilder: NoteEditorBuilder
     private var shouldPresentNewNote: Bool
+    private let bottomBarsHeight: @MainActor () -> CGFloat
     private var editController: NavigationEditModeController?
 
     private var currentEditMode: EditMode? {
@@ -100,7 +103,11 @@ final class AyahNotesViewController: UIHostingController<AyahNotesView>, NoteEdi
     }
 
     private func presentNoteEditor(mode: NoteEditorMode) {
-        let viewController = noteEditorBuilder.build(withListener: self, mode: mode)
+        let viewController = noteEditorBuilder.build(
+            withListener: self,
+            mode: mode,
+            bottomBarsHeight: bottomBarsHeight
+        )
         present(viewController, animated: true)
     }
 }

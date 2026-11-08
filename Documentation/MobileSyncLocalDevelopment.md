@@ -118,6 +118,7 @@ Optional:
 When `QURAN_SYNC` is enabled:
 
 - Settings shows the Quran.com login/logout action.
+- Saving a new note or creating a collection while signed out shows a sign-in toast, at most twice and a week apart.
 - Page bookmarks are stored through `mobile-sync-spm` instead of Core Data.
 
 When the flag is disabled:

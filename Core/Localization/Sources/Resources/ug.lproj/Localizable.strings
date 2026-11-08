@@ -921,3 +921,11 @@
 // How VoiceOver reads ayahs in one surah: %1$@ is the first and %2$@ is the last localized ayah number, such as "Ayahs 1 to 10" in "Al-Baqarah, Ayahs 1 to 10". Translators may reorder the placeholders.
 // Metadata: Translated by AI; human review required.
 "quran.ayah.number-range" = "%1$@-ئايەتتىن %2$@-ئايەتكىچە";
+// Sign-in reminder toast title after a signed-out user saves a new note.
+"sync.nudge.note-saved" = "ئىزاھات ساقلاندى";
+// Sign-in reminder toast title after a signed-out user creates a collection.
+"sync.nudge.collection-created" = "توپلام قۇرۇلدى";
+// Sign-in reminder toast subtitle under "Note saved" or "Collection created": "it" is the note or collection.
+"sync.nudge.subtitle" = "ئۇنى بارلىق ئۈسكۈنىلىرىڭىزدە ساقلاش ئۈچۈن كىرىڭ.";
+// Sign-in reminder toast button that starts signing in to Quran.com.
+"sync.nudge.sign-in" = "كىرىش";

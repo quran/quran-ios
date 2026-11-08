@@ -6,6 +6,7 @@
 import Analytics
 import AnnotationsService
 import Combine
+import FeaturesSupport
 import Foundation
 import NoorUI
 import QuranAnnotations
@@ -34,13 +35,15 @@ final class BookmarkAyahsViewModel: ObservableObject {
         highlights: [AyahNumber: HighlightColor] = [:],
         analytics: AnalyticsLibrary,
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
-        ayahHighlightService: MobileSyncAyahHighlightService
+        ayahHighlightService: MobileSyncAyahHighlightService,
+        signInNudge: SyncSignInNudge
     ) {
         self.verses = Self.unique(verses)
         self.analytics = analytics
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
         self.ayahHighlightService = ayahHighlightService
         isCollectionsIntroVisible = !preferences.isCollectionsIntroRetired
+        self.signInNudge = signInNudge
         updateCollections(collections)
         highlightSelection = Self.highlightSelection(for: self.verses, in: highlights)
     }
@@ -168,10 +171,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
         nameAlert = .editing
     }
 
-    func createPendingCollection() async {
+    /// - Returns: The sign-in reminder to show after the collection is created.
+    func createPendingCollection() async -> Toast? {
         let name = newCollectionName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty else {
-            return
+            return nil
         }
 
         do {
@@ -179,6 +183,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
             newCollectionName = ""
             nameAlert = .hidden
             retireCollectionsIntro()
+            return await signInNudge.toast(after: .collection)
         } catch {
             if let nameError = CollectionNameError(error) {
                 logger.info("Quran Sync: bookmark collection name rejected. \(nameError.logDescription)")
@@ -187,6 +192,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
                 logger.error("Quran Sync: failed to create bookmark collection: \(error)")
                 self.error = error
             }
+            return nil
         }
     }
 
@@ -195,6 +201,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let ayahHighlightService: MobileSyncAyahHighlightService
     private let analytics: AnalyticsLibrary
+    private let signInNudge: SyncSignInNudge
     private let preferences = BookmarksPreferences.shared
 
     /// Persists only; the intro stays until the sheet closes so rows don't shift under the finger.

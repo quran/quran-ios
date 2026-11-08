@@ -1,11 +1,15 @@
 #if QURAN_SYNC
 import Analytics
 import AnalyticsFake
+import AuthenticationClientFake
+import FeaturesSupport
+import Localization
 import MobileSync
 import MobileSyncTestSupport
 import NoorUI
 import QuranAnnotations
 import QuranKit
+import SystemDependenciesFake
 import XCTest
 @testable import AnnotationsService
 @testable import BookmarksFeature
@@ -24,10 +28,12 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         try await super.setUp()
         try await database.reset()
         BookmarksPreferences.shared.isCollectionsIntroRetired = false
+        SyncSignInNudgePreferences.shared.reset()
     }
 
     override func tearDown() async throws {
         BookmarksPreferences.shared.isCollectionsIntroRetired = false
+        SyncSignInNudgePreferences.shared.reset()
         try await database.reset()
         try await super.tearDown()
     }
@@ -41,7 +47,8 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             highlights: fixture.highlights,
             analytics: analytics,
             ayahBookmarkCollectionService: fixture.collectionService,
-            ayahHighlightService: fixture.highlightService
+            ayahHighlightService: fixture.highlightService,
+            signInNudge: makeSignInNudge()
         )
 
         await sut.selectHighlight(.green)
@@ -61,7 +68,8 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             highlights: fixture.highlights,
             analytics: AnalyticsLibrarySpy(),
             ayahBookmarkCollectionService: fixture.collectionService,
-            ayahHighlightService: fixture.highlightService
+            ayahHighlightService: fixture.highlightService,
+            signInNudge: makeSignInNudge()
         )
         let study = try XCTUnwrap(sut.displayedCollections.first { $0.name == "Study" })
         XCTAssertEqual(sut.collectionSelection(for: study), .mixed)
@@ -82,7 +90,8 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             highlights: fixture.highlights,
             analytics: analytics,
             ayahBookmarkCollectionService: fixture.collectionService,
-            ayahHighlightService: fixture.highlightService
+            ayahHighlightService: fixture.highlightService,
+            signInNudge: makeSignInNudge()
         )
         await sut.selectHighlight(nil)
 
@@ -102,7 +111,8 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             highlights: try await storedHighlights(),
             analytics: AnalyticsLibrarySpy(),
             ayahBookmarkCollectionService: fixture.collectionService,
-            ayahHighlightService: fixture.highlightService
+            ayahHighlightService: fixture.highlightService,
+            signInNudge: makeSignInNudge()
         )
         XCTAssertEqual(sut.highlightSelection, .mixed([.pink]))
         XCTAssertEqual(sut.partiallySelectedHighlightColors, [.pink])
@@ -123,7 +133,8 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             highlights: try await storedHighlights(),
             analytics: AnalyticsLibrarySpy(),
             ayahBookmarkCollectionService: fixture.collectionService,
-            ayahHighlightService: fixture.highlightService
+            ayahHighlightService: fixture.highlightService,
+            signInNudge: makeSignInNudge()
         )
 
         XCTAssertEqual(sut.highlightSelection, .mixed([.pink, .green]))
@@ -168,7 +179,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         sut.presentAddCollection()
         sut.newCollectionName = "Duas"
 
-        await sut.createPendingCollection()
+        _ = await sut.createPendingCollection()
 
         XCTAssertTrue(sut.isCollectionsIntroVisible)
         XCTAssertFalse(makeViewModel(fixture).isCollectionsIntroVisible)
@@ -201,7 +212,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
         sut.nameAlert = .hidden
         sut.newCollectionName = longName
 
-        await sut.createPendingCollection()
+        _ = await sut.createPendingCollection()
 
         XCTAssertEqual(
             sut.nameAlert,
@@ -220,19 +231,20 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             collections: [],
             analytics: AnalyticsLibrarySpy(),
             ayahBookmarkCollectionService: makeCollectionService(),
-            ayahHighlightService: makeHighlightService()
+            ayahHighlightService: makeHighlightService(),
+            signInNudge: makeSignInNudge()
         )
         sut.presentAddCollection()
         sut.nameAlert = .hidden
         sut.newCollectionName = String(repeating: "a", count: 256)
-        await sut.createPendingCollection()
+        _ = await sut.createPendingCollection()
         XCTAssertEqual(
             sut.nameAlert,
             .rejected(.textLength(TextLengthLimitError(field: .collectionName, bound: .tooLong, limit: 255)))
         )
         sut.newCollectionName = "Personal"
 
-        await sut.createPendingCollection()
+        _ = await sut.createPendingCollection()
 
         XCTAssertEqual(sut.nameAlert, .hidden)
         XCTAssertEqual(sut.newCollectionName, "")
@@ -249,19 +261,65 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             collections: [],
             analytics: AnalyticsLibrarySpy(),
             ayahBookmarkCollectionService: collectionService,
-            ayahHighlightService: makeHighlightService()
+            ayahHighlightService: makeHighlightService(),
+            signInNudge: makeSignInNudge()
         )
         sut.presentAddCollection()
         sut.nameAlert = .hidden
         sut.newCollectionName = "STUDY"
 
-        await sut.createPendingCollection()
+        _ = await sut.createPendingCollection()
 
         XCTAssertEqual(sut.nameAlert, .rejected(.duplicate(DuplicateCollectionNameError(name: "Study"))))
         XCTAssertEqual(sut.newCollectionName, "STUDY")
         XCTAssertNil(sut.error)
         let collections = try await storedCollections()
         XCTAssertEqual(collections.count, 2)
+    }
+
+    func test_createPendingCollection_showsSignInToastWhenSignedOut() async {
+        let sut = BookmarkAyahsViewModel(
+            verses: verses,
+            collections: [],
+            analytics: AnalyticsLibrarySpy(),
+            ayahBookmarkCollectionService: makeCollectionService(),
+            ayahHighlightService: makeHighlightService(),
+            signInNudge: makeSignInNudge()
+        )
+        sut.presentAddCollection()
+        sut.newCollectionName = "Personal"
+
+        let toast = await sut.createPendingCollection()
+
+        XCTAssertEqual(toast?.message.accessibilityText, l("sync.nudge.collection-created"))
+    }
+
+    func test_rejectedCollectionName_doesNotShowSignInToastOrUseAShow() async {
+        let sut = BookmarkAyahsViewModel(
+            verses: verses,
+            collections: [],
+            analytics: AnalyticsLibrarySpy(),
+            ayahBookmarkCollectionService: makeCollectionService(),
+            ayahHighlightService: makeHighlightService(),
+            signInNudge: makeSignInNudge()
+        )
+        sut.presentAddCollection()
+        sut.newCollectionName = String(repeating: "a", count: 256)
+
+        let toast = await sut.createPendingCollection()
+
+        XCTAssertNil(toast)
+        let nextToast = await makeSignInNudge().toast(after: .collection)
+        XCTAssertNotNil(nextToast)
+    }
+
+    private func makeSignInNudge() -> SyncSignInNudge {
+        SyncSignInNudge(
+            authenticationClient: UnavailableAuthenticationClient(),
+            analytics: AnalyticsLibrarySpy(),
+            time: SystemTimeFake(),
+            signInViewControllers: { [] }
+        )
     }
 
     private func makeFixture() async throws -> Fixture {
@@ -286,7 +344,8 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
             highlights: fixture.highlights,
             analytics: AnalyticsLibrarySpy(),
             ayahBookmarkCollectionService: fixture.collectionService,
-            ayahHighlightService: fixture.highlightService
+            ayahHighlightService: fixture.highlightService,
+            signInNudge: makeSignInNudge()
         )
     }
 

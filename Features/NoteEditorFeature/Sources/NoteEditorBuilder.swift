@@ -8,6 +8,9 @@
 
 import AnnotationsService
 import AppDependencies
+#if QURAN_SYNC
+import FeaturesSupport
+#endif
 import Foundation
 import NoorUI
 import QuranAnnotations
@@ -26,14 +29,36 @@ public struct NoteEditorBuilder {
     // MARK: Public
 
     #if QURAN_SYNC
-    public func build(withListener listener: NoteEditorListener, mode: NoteEditorMode) -> UIViewController {
+    /// `bottomBarsHeight` keeps the sign-in toast above the bottom bars of the screen under the editor.
+    public func build(
+        withListener listener: NoteEditorListener,
+        mode: NoteEditorMode,
+        bottomBarsHeight: @escaping @MainActor () -> CGFloat
+    ) -> UIViewController {
+        weak var editor: UIViewController?
+        let signInNudge = SyncSignInNudge(
+            authenticationClient: container.authenticationClient,
+            analytics: container.analytics,
+            // The editor closes after saving, so Sign In falls back to the screens under it.
+            signInViewControllers: {
+                editor.map { Array(sequence(first: $0, next: \.presentingViewController)) } ?? []
+            }
+        )
         let viewModel = NoteEditorViewModel(
             noteService: container.mobileSyncNoteService(),
             analytics: container.analytics,
             mode: mode,
-            textService: container.textDataService()
+            textService: container.textDataService(),
+            signInNudge: signInNudge,
+            showToast: { toast in
+                guard let view = editor?.viewIfLoaded else {
+                    return
+                }
+                ToastPresenter.shared.showToast(toast, from: view, bottomBarsHeight: bottomBarsHeight())
+            }
         )
         let viewController = NoteEditorViewController(viewModel: viewModel)
+        editor = viewController
         viewModel.listener = listener
         return viewController
     }

@@ -14,6 +14,8 @@ struct ToastView: View {
 
     let toast: Toast
     let dismiss: () -> Void
+    /// Dismisses for VoiceOver's dismiss actions, which count as the user dismissing the toast.
+    let userDismiss: () -> Void
 
     var body: some View {
         Group {
@@ -66,7 +68,7 @@ struct ToastView: View {
                 }
             }
             .accessibilityElement(children: .combine)
-            .dismissibleWithVoiceOver(dismiss)
+            .dismissibleWithVoiceOver(userDismiss)
 
             Spacer(minLength: 0)
         }
@@ -93,7 +95,7 @@ struct ToastView: View {
                 .background(Color.accentColor, in: Capsule())
         }
         .buttonStyle(.plain)
-        .dismissibleWithVoiceOver(dismiss)
+        .dismissibleWithVoiceOver(userDismiss)
     }
 }
 
@@ -137,14 +139,15 @@ private extension View {
 #Preview {
     VStack(spacing: 16) {
         Spacer()
-        ToastView(toast: Toast("Bookmark removed"), dismiss: {})
+        ToastView(toast: Toast("Bookmark removed"), dismiss: {}, userDismiss: {})
         ToastView(
             toast: Toast(
                 "Moved bookmark to page 42",
                 icon: Toast.Icon(.bookmark, color: .red),
                 action: ToastAction(title: "Undo", handler: {})
             ),
-            dismiss: {}
+            dismiss: {},
+            userDismiss: {}
         )
         ToastView(
             toast: Toast(
@@ -153,7 +156,8 @@ private extension View {
                 icon: Toast.Icon(.play),
                 action: ToastAction(title: "Modify", handler: {})
             ),
-            dismiss: {}
+            dismiss: {},
+            userDismiss: {}
         )
         ToastView(
             toast: Toast(
@@ -161,7 +165,8 @@ private extension View {
                 subtitle: "Your bookmarks and notes stay up to date on every device.",
                 icon: Toast.Icon(.cloud)
             ),
-            dismiss: {}
+            dismiss: {},
+            userDismiss: {}
         )
         Spacer()
     }

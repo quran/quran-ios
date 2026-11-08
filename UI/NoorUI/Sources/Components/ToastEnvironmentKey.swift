@@ -36,7 +36,6 @@ private struct ToastPresenterModifier: ViewModifier {
     let bottomBarsHeight: (@MainActor () -> CGFloat)?
 
     @State private var anchor = ToastAnchor()
-    @ScaledMetric private var bottomBarsSpacing = 8
 
     func body(content: Content) -> some View {
         content
@@ -44,13 +43,11 @@ private struct ToastPresenterModifier: ViewModifier {
                 ToastAnchorReader(anchor: anchor)
             )
             .environment(\.showToast) { toast in
-                guard let view = anchor.view, let windowScene = view.window?.windowScene else {
-                    logger.error("Failed to obtain windowScene")
+                guard let view = anchor.view else {
+                    logger.error("Failed to obtain the toast's presenting view")
                     return
                 }
-                let height = max(view.bottomBarsHeight, bottomBarsHeight?() ?? 0)
-                let placedToast = toast.clearingBottomBars(height: height, spacing: bottomBarsSpacing)
-                ToastPresenter.shared.showToast(placedToast, in: windowScene)
+                ToastPresenter.shared.showToast(toast, from: view, bottomBarsHeight: bottomBarsHeight?() ?? 0)
             }
     }
 }
@@ -73,21 +70,5 @@ private struct ToastAnchorReader: UIViewRepresentable {
 
     func updateUIView(_ uiView: UIView, context: Context) {
         anchor.view = uiView
-    }
-}
-
-private extension UIView {
-    /// How far the bars at the bottom of this view's screen, like a tab bar, reach above the window's bottom edge.
-    var bottomBarsHeight: CGFloat {
-        let screenView = sequence(first: self, next: \.superview).first { $0.next is UIViewController }
-        guard let window, let screenView else {
-            return 0
-        }
-        return Toast.bottomBarsHeight(
-            windowHeight: window.bounds.height,
-            windowBottomInset: window.safeAreaInsets.bottom,
-            screenBottom: screenView.convert(screenView.bounds, to: window).maxY,
-            screenBottomInset: screenView.safeAreaInsets.bottom
-        )
     }
 }

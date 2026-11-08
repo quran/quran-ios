@@ -70,7 +70,7 @@ private struct BookmarkCollectionsContent: View {
             l("bookmarks.collections.add"),
             state: $viewModel.nameAlert,
             name: $viewModel.newCollectionName,
-            submit: { await viewModel.createPendingCollection() }
+            submit: { await createPendingCollection() }
         )
         .readingBookmarkNameAlert(
             slot: $viewModel.renamingReadingBookmark,
@@ -186,6 +186,12 @@ private struct BookmarkCollectionsContent: View {
             return nil
         }
         return { viewModel.requestRemoveAllAyahs(from: collection) }
+    }
+
+    private func createPendingCollection() async {
+        if let toast = await viewModel.createPendingCollection() {
+            showToast?(toast)
+        }
     }
 
     private func deleteReadingBookmark(_ bookmark: PlacedReadingBookmark) async {

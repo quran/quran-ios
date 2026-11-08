@@ -286,7 +286,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             }
             let viewController = deps.ayahNotesBuilder.build(
                 verses: verses,
-                presentsNewNote: addingNewNote
+                presentsNewNote: addingNewNote,
+                bottomBarsHeight: pageSheetBottomBarsHeight
             )
             presenter?.presentAyahNotes(viewController)
         }
@@ -320,7 +321,8 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             let viewController = deps.bookmarkAyahsBuilder.build(
                 verses: verses,
                 collections: deps.annotationsObserver.collections,
-                highlights: deps.overlayService.overlays.colorHighlights
+                highlights: deps.overlayService.overlays.colorHighlights,
+                bottomBarsHeight: pageSheetBottomBarsHeight
             )
             presenter?.presentBookmarkAyahs(viewController)
         }
@@ -529,6 +531,16 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     private var presenterBottomBarsHeight: @MainActor () -> CGFloat {
         { [weak presenter] in presenter?.bottomBarsHeight ?? 0 }
+    }
+
+    /// At compact width a page sheet covers the reader's bottom bars, so its toasts needn't clear them.
+    private var pageSheetBottomBarsHeight: @MainActor () -> CGFloat {
+        { [weak presenter] in
+            guard let presenter, presenter.traitCollection.horizontalSizeClass != .compact else {
+                return 0
+            }
+            return presenter.bottomBarsHeight
+        }
     }
 
     #if !QURAN_SYNC

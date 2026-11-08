@@ -14,7 +14,7 @@ import UIKit
 import VLogging
 
 /// Reminds a signed-out user to sign in after they save a new note or collection:
-/// twice at most, a week apart, and never again once they sign in or tap Sign In or ×.
+/// twice at most, a week apart, and never again once they sign in, tap Sign In, or dismiss it.
 @MainActor
 public final class SyncSignInNudge {
     // MARK: Lifecycle
@@ -77,7 +77,6 @@ public final class SyncSignInNudge {
                     await signIn(after: item, from: presenters)
                 }
             },
-            showsDismissButton: true,
             onUserDismiss: { [self] in
                 preferences.isStopped = true
                 analytics.quranSyncSignInNudgeDismissed(from: item.analyticsSource)

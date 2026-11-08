@@ -29,7 +29,7 @@ public final class SyncSignInNudgePreferences {
 
     @Preference(lastShownDate) var lastShownDate: Date?
 
-    /// Set once the user taps the reminder's Sign In or ×, or signs in, so it never shows again.
+    /// Set once the user taps the reminder's Sign In, dismisses it, or signs in, so it never shows again.
     @Preference(stopped) var isStopped: Bool
 
     // MARK: Private

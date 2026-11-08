@@ -189,11 +189,13 @@ struct QuranReferenceView: View {
     init(
         reference: QuranReference,
         size: MultipartText.FontSize,
-        emphasizesSura: Bool = false
+        emphasizesSura: Bool = false,
+        wrapsWhenNarrow: Bool = false
     ) {
         self.reference = reference
         self.size = size
         self.emphasizesSura = emphasizesSura
+        self.wrapsWhenNarrow = wrapsWhenNarrow
     }
 
     // MARK: Internal
@@ -201,12 +203,51 @@ struct QuranReferenceView: View {
     let reference: QuranReference
     let size: MultipartText.FontSize
     let emphasizesSura: Bool
+    /// Whether a reference wider than the space it gets moves its coordinate under a wrapping name,
+    /// instead of overflowing. Where it fits, it keeps its one-line layout.
+    let wrapsWhenNarrow: Bool
 
     @Environment(\.locale) private var locale
     @ScaledMetric private var spacing = 4
     @ScaledMetric private var glyphTopPadding = 5
 
     var body: some View {
+        if wrapsWhenNarrow, #available(iOS 16.0, *) {
+            ViewThatFits(in: .horizontal) {
+                oneLine
+                stacked
+            }
+        } else {
+            oneLine
+        }
+    }
+
+    // MARK: Private
+
+    private var oneLine: some View {
+        labeled(names)
+            .fixedSize()
+    }
+
+    private var stacked: some View {
+        labeled(
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(alignment: nameAlignment, spacing: spacing) {
+                    suraName
+                }
+                if let coordinate = reference.coordinate(locale: locale) {
+                    coordinateText(coordinate)
+                }
+            }
+        )
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var nameAlignment: VerticalAlignment {
+        reference.arabicName.isIndoPakText ? .firstTextBaseline : .center
+    }
+
+    private func labeled(_ content: some View) -> some View {
         Group {
             if reference.arabicName.isIndoPakText, reference.showsArabicName(locale: locale) {
                 // A hidden Madani glyph sizes and spaces the row, so IndoPak rows match Madani ones
@@ -215,48 +256,52 @@ struct QuranReferenceView: View {
                     decoratedGlyph(reference.decoratedGlyph)
                         .hidden()
                         .frame(width: 0)
-                    names
+                    content
                 }
             } else {
-                names
+                content
             }
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(reference.accessibilityText)
-        .fixedSize()
     }
 
-    // MARK: Private
-
     private var names: some View {
-        let arabicName = reference.arabicName
-        return HStack(alignment: arabicName.isIndoPakText ? .firstTextBaseline : .center, spacing: spacing) {
-            if let localizedName = reference.localizedName(locale: locale) {
-                // A nil weight would drop one set by an enclosing view, like a toast's semibold title.
-                let name = Text(localizedName).font(size.plainFont)
-                emphasizesSura ? name.fontWeight(.heavy) : name
-            }
-
-            if reference.showsArabicName(locale: locale) {
-                switch arabicName {
-                case .decoratedGlyph(let text):
-                    decoratedGlyph(text)
-                case .indoPakText(let text):
-                    // Noorehira's tall line box overflows the row instead of sizing or spacing it.
-                    Text(text)
-                        .font(size.quranFont(.indoPak))
-                        .fixedSize()
-                        .frame(height: 0)
-                        .ignoringSpacing()
-                }
-            }
+        HStack(alignment: nameAlignment, spacing: spacing) {
+            suraName
 
             if let coordinate = reference.coordinate(locale: locale) {
-                Text(coordinate)
-                    .font(size.plainFont)
-                    .environment(\.layoutDirection, .leftToRight)
+                coordinateText(coordinate)
             }
         }
+    }
+
+    @ViewBuilder private var suraName: some View {
+        if let localizedName = reference.localizedName(locale: locale) {
+            // A nil weight would drop one set by an enclosing view, like a toast's semibold title.
+            let name = Text(localizedName).font(size.plainFont)
+            emphasizesSura ? name.fontWeight(.heavy) : name
+        }
+
+        if reference.showsArabicName(locale: locale) {
+            switch reference.arabicName {
+            case .decoratedGlyph(let text):
+                decoratedGlyph(text)
+            case .indoPakText(let text):
+                // Noorehira's tall line box overflows the row instead of sizing or spacing it.
+                Text(text)
+                    .font(size.quranFont(.indoPak))
+                    .fixedSize()
+                    .frame(height: 0)
+                    .ignoringSpacing()
+            }
+        }
+    }
+
+    private func coordinateText(_ coordinate: String) -> some View {
+        Text(coordinate)
+            .font(size.plainFont)
+            .environment(\.layoutDirection, .leftToRight)
     }
 
     private func decoratedGlyph(_ text: String) -> some View {

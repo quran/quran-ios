@@ -583,6 +583,9 @@
 "bookmarks.editor.intro" = "Сохраняйте аяты в Избранное или в свои коллекции, например «Дуа» или «Повторение хифза». Цвета выделения тоже здесь.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Старые закладки страниц";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Сохранены из ваших закладок страниц. Теперь каждая страница — это её первый аят.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

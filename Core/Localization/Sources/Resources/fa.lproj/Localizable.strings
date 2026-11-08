@@ -585,6 +585,9 @@
 "bookmarks.editor.intro" = "آیات را در برگزیده‌ها یا مجموعه‌های خودتان، مانند دعاها یا مرور حفظ، ذخیره کنید. رنگ‌های برجسته‌سازی هم همین‌جا هستند.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "نشانک‌های قدیمی صفحات";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "از نشانک‌های صفحات شما ذخیره شده است. هر صفحه اکنون نخستین آیهٔ آن است.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

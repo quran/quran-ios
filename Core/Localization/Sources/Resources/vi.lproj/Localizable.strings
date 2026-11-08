@@ -495,6 +495,9 @@
 "bookmarks.editor.intro" = "Lưu các ayah vào Yêu thích hoặc bộ sưu tập của riêng bạn, như Dua hay Ôn hifz. Màu tô sáng cũng ở đây.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Dấu trang trang cũ";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Được lưu từ các dấu trang theo trang của bạn. Mỗi trang giờ là ayah đầu tiên của trang đó.";
 
 // Highlight Colors
 // Metadata: Translated by ChatGPT; human review required.

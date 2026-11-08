@@ -498,6 +498,9 @@
 "bookmarks.editor.intro" = "Bewaar ayahs in Favorieten of in je eigen verzamelingen, zoals Dua's of Hifz-herhaling. De markeringskleuren staan hier ook.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Oude paginabladwijzers";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Overgenomen uit je paginabladwijzers. Elke pagina is nu de eerste ayah ervan.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

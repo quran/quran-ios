@@ -27,6 +27,14 @@ extension AyahBookmarkCollection {
         }
     }
 
+    /// Explains where the imported ayahs came from.
+    var ayahsHeader: String? {
+        guard kind == .oldPageBookmarks, !bookmarks.isEmpty else {
+            return nil
+        }
+        return l("bookmarks.old-page-bookmarks.explanation")
+    }
+
     var displayImageColor: Color {
         .secondaryLabel
     }

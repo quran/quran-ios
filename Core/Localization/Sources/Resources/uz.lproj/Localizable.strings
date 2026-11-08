@@ -585,6 +585,9 @@
 "bookmarks.editor.intro" = "Oyatlarni Sevimlilarga yoki Duolar, Hifz takrori kabi o‘z to‘plamlaringizga saqlang. Ajratish ranglari ham shu yerda.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Eski sahifa xatcho‘plari";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Sahifa xatcho‘plaringizdan saqlangan. Endi har bir sahifa uning birinchi oyatiga aylandi.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

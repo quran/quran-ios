@@ -432,6 +432,8 @@
 "new.translation_update.details" = "* Corrected the Russian translation of “mushaf” - thanks to @pulatovpro.";
 
 "bookmarks.old-page-bookmarks" = "Old Page Bookmarks";
+// Header of the Old Page Bookmarks collection.
+"bookmarks.old-page-bookmarks.explanation" = "Saved from your page bookmarks. Each page is now its first ayah.";
 
 "notes.minimum-length.alert.title" = "Note is too short";
 "notes.minimum-length.alert.body" = "Notes must be at least %d characters.";

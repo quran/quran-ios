@@ -567,6 +567,9 @@
 "bookmarks.editor.intro" = "Аяттарды Таңдаулыларға немесе Дұғалар, Хифз қайталау сияқты өз жинақтарыңызға сақтаңыз. Бөлектеу түстері де осында.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Ескі бет бетбелгілері";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Бет бетбелгілеріңізден сақталды. Әр бет енді оның алғашқы аяты болды.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

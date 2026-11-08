@@ -583,6 +583,9 @@
 "bookmarks.editor.intro" = "Enregistrez des ayahs dans les Favoris ou dans vos propres collections, comme Douas ou Révision du hifz. Les couleurs de surlignage sont aussi ici.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Anciens signets de page";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Enregistrées depuis vos signets de page. Chaque page correspond désormais à sa première ayah.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

@@ -589,6 +589,9 @@
 "bookmarks.editor.intro" = "将经文保存到收藏或你自己的收藏集，例如杜阿或背诵复习。高亮颜色也在这里。";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "旧页面书签";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "保存自你的页面书签。每一页现在都对应该页的第一节经文。";
 
 // Highlight Colors
 // Metadata: Translated by ChatGPT; human review required.

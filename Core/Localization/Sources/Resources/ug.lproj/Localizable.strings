@@ -586,6 +586,9 @@
 "bookmarks.editor.intro" = "ئايەتلەرنى ياقتۇرىدىغانلارغا ياكى دۇئالار، يادلاش تەكرارى قاتارلىق ئۆز توپلاملىرىڭىزغا ساقلاڭ. يورۇتۇش رەڭلىرىمۇ مۇشۇ يەردە.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "كونا بەت خەتكۈچلىرى";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "بەت خەتكۈچلىرىڭىزدىن ساقلانغان. ھەر بىر بەت ئەمدى ئۇنىڭ تۇنجى ئايىتى بولدى.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

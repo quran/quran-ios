@@ -584,6 +584,9 @@
 "bookmarks.editor.intro" = "Salve ayahs nos Favoritos ou nas suas próprias coleções, como Duas ou Revisão de hifz. As cores de destaque também estão aqui.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Marcadores de páginas antigos";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Salvas a partir dos seus marcadores de páginas. Cada página agora é a sua primeira ayah.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

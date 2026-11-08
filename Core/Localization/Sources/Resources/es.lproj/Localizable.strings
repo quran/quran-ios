@@ -583,6 +583,9 @@
 "bookmarks.editor.intro" = "Guarda aleyas en Favoritos o en tus propias colecciones, como Duas o Repaso de hifz. Los colores de resaltado también están aquí.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Marcadores de páginas antiguos";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Guardadas de tus marcadores de páginas. Cada página es ahora su primera aleya.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

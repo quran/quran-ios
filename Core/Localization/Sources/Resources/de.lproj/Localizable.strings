@@ -499,9 +499,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Leseposition von %@ nach %@ verschoben";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "Lesepositionen verschiebst du, statt neue hinzuzufügen. Um Ayahs aufzubewahren, speichere sie in einer Sammlung.";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Leseposition bei %@ entfernt";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Leseposition bei %@ gespeichert";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "Verschiebe sie beim Lesen weiter. Du hast drei, eine für jedes Leseprojekt.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Wähle eine einzelne Ayah aus";
 // Metadata: Translated by ChatGPT; human review required.

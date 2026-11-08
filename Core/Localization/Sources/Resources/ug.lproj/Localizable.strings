@@ -502,9 +502,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "ئوقۇش خەتكۈچى %@ دىن %@ غا يۆتكەلدى";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "ئوقۇش خەتكۈچلىرىنى يېڭىسىنى قوشماي، يۆتكەيسىز. ئايەتلەرنى ساقلاش ئۈچۈن ئۇلارنى توپلامغا ساقلاڭ.";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "%@ دىكى ئوقۇش خەتكۈچى ئۆچۈرۈلدى";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "ئوقۇش خەتكۈچى %@ دا ساقلاندى";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "ئوقۇغانسېرى ئۇنى يۆتكەڭ. سىزدە ئۈچ بار، ھەر بىر ئوقۇش ئۈچۈن بىردىن.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "بىر ئايەتنى تاللاڭ";
 // Metadata: Translated by ChatGPT; human review required.

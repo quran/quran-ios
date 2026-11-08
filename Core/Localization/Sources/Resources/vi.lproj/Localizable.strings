@@ -411,9 +411,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Dấu trang đọc đã được chuyển từ %@ đến %@";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "Bạn di chuyển dấu trang đọc thay vì thêm dấu mới. Để giữ các ayah, hãy lưu chúng vào một bộ sưu tập.";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Dấu trang đọc tại %@ đã được xóa";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Dấu trang đọc đã được lưu tại %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "Hãy di chuyển nó khi bạn đọc. Bạn có ba dấu trang, mỗi dấu cho một lần đọc.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Chọn một ayah";
 // Metadata: Translated by ChatGPT; human review required.

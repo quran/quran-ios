@@ -483,9 +483,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Оқу бетбелгісі %@ жерінен %@ жеріне жылжытылды";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "Оқу бетбелгілерін жаңасын қоспай, жылжытасыз. Аяттарды сақтау үшін оларды жинаққа сақтаңыз.";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "%@ жеріндегі оқу бетбелгісі жойылды";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Оқу бетбелгісі %@ жерінде сақталды";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "Оқыған сайын оны жылжытыңыз. Сізде үшеуі бар, әр оқу үшін біреуден.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Бір аятты таңдаңыз";
 // Metadata: Translated by ChatGPT; human review required.

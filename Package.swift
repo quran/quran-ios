@@ -665,6 +665,7 @@ private func featuresTargets() -> [[Target]] {
             "Crashing",
             "Localization",
             "NoorUI",
+            "Preferences",
             "QuranAnnotations",
             "QuranKit",
             "UIx",

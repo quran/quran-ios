@@ -501,9 +501,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "O‘qish xatcho‘pi %@ dan %@ ga ko‘chirildi";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "O‘qish xatcho‘plarini yangisini qo‘shmasdan ko‘chirasiz. Oyatlarni saqlash uchun ularni to‘plamga saqlang.";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "%@ dagi o‘qish xatcho‘pi olib tashlandi";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "O‘qish xatcho‘pi %@ da saqlandi";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "O‘qigan sari uni ko‘chiring. Sizda uchta bor, har bir o‘qish uchun bittadan.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Bitta oyatni tanlang";
 // Metadata: Translated by ChatGPT; human review required.

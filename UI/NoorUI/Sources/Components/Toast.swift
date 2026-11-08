@@ -31,7 +31,7 @@ public struct Toast {
         icon: Icon? = nil,
         action: ToastAction? = nil,
         showsDismissButton: Bool = false,
-        duration: TimeInterval = 4.0,
+        duration: TimeInterval = defaultDuration,
         bottomOffset: CGFloat = 40
     ) {
         self.message = message
@@ -44,6 +44,8 @@ public struct Toast {
     }
 
     // MARK: Public
+
+    public static let defaultDuration: TimeInterval = 4
 
     public struct Icon {
         // MARK: Lifecycle

@@ -499,9 +499,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Закладка чтения перемещена с %@ на %@";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "Закладки чтения вы перемещаете, а не добавляете новые. Чтобы сохранить аяты, добавьте их в коллекцию.";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Закладка чтения на %@ удалена";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Закладка чтения сохранена на %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "Перемещайте её по мере чтения. У вас их три, по одной для каждого чтения.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Выберите один аят";
 // Metadata: Translated by ChatGPT; human review required.

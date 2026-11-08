@@ -501,9 +501,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "نشانک مطالعه از %@ به %@ منتقل شد";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "نشانک‌های مطالعه را به‌جای افزودن نشانک تازه جابه‌جا می‌کنید. برای نگه داشتن آیات، آن‌ها را در یک مجموعه ذخیره کنید.";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "نشانک مطالعه از %@ حذف شد";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "نشانک مطالعه در %@ ذخیره شد";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "هنگام مطالعه آن را جابه‌جا کنید. سه نشانک دارید، یکی برای هر خوانش.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "یک آیه را انتخاب کنید";
 // Metadata: Translated by ChatGPT; human review required.

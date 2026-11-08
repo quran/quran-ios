@@ -499,9 +499,13 @@
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Signet de lecture déplacé de %@ vers %@";
 // Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.moved.explanation" = "Vous déplacez vos signets de lecture au lieu d’en ajouter de nouveaux. Pour garder des ayahs, enregistrez-les dans une collection.";
+// Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Signet de lecture supprimé de %@";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Signet de lecture enregistré à %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "Déplacez-le au fil de votre lecture. Vous en avez trois, un pour chaque lecture.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Sélectionnez une seule ayah";
 // Metadata: Translated by ChatGPT; human review required.

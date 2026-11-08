@@ -85,14 +85,6 @@ private struct AudioPlaybackViewUI: View {
                 )
             }
 
-            NoorBasicSection(footer: l("audio.dim-other-ayahs.description")) {
-                NoorToggleRow(
-                    title: l("audio.dim-other-ayahs.title"),
-                    image: .dimOtherAyahs,
-                    isOn: $dimsOtherAyahs
-                )
-            }
-
             AudioRepeatSection(
                 .eachVerse,
                 runs: $verseRuns,
@@ -108,6 +100,14 @@ private struct AudioPlaybackViewUI: View {
                 delay: $repetitionDelay,
                 delayLabel: \.localizedDescription
             )
+
+            NoorBasicSection(footer: l("audio.dim-other-ayahs.description")) {
+                NoorToggleRow(
+                    title: l("audio.dim-other-ayahs.title"),
+                    image: .dimOtherAyahs,
+                    isOn: $dimsOtherAyahs
+                )
+            }
         }
         .noorListIconColumn()
         .task { await start() }

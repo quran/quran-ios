@@ -106,14 +106,6 @@ struct AdvancedAudioOptionsRootViewUI: View {
                 )
             }
 
-            NoorBasicSection(footer: l("audio.dim-other-ayahs.footer")) {
-                NoorToggleRow(
-                    title: l("audio.dim-other-ayahs.title"),
-                    image: .dimOtherAyahs,
-                    isOn: $dimsOtherAyahs
-                )
-            }
-
             NoorBasicSection(
                 title: l("audio.playback-ayah-range"),
                 footer: l("audio.end-at.description")
@@ -152,6 +144,14 @@ struct AdvancedAudioOptionsRootViewUI: View {
                 delay: $repetitionDelay,
                 delayLabel: \.localizedDescription
             )
+
+            NoorBasicSection(footer: l("audio.dim-other-ayahs.footer")) {
+                NoorToggleRow(
+                    title: l("audio.dim-other-ayahs.title"),
+                    image: .dimOtherAyahs,
+                    isOn: $dimsOtherAyahs
+                )
+            }
         }
         .noorListIconColumn()
         .navigationTitle(l("audio.options"))

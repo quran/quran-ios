@@ -14,17 +14,13 @@ public struct TipCard: View {
         title: String,
         text: String,
         image: NoorSystemImage,
-        imageColor: Color = .accentColor,
-        imageBackground: Color = Color.accentColor.opacity(0.12),
         action: Action? = nil,
         dismiss: @escaping () -> Void
     ) {
         self.init(title: title, text: text, action: action, dismiss: dismiss) {
             image.image
-                .font(.body.weight(.semibold))
-                .foregroundStyle(imageColor)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(imageBackground, in: Circle())
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(Color.accentColor)
         }
     }
 

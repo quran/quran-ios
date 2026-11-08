@@ -47,13 +47,13 @@ struct ToastView: View {
     @ScaledMetric(relativeTo: .subheadline) private var actionHorizontalPadding = 14.0
     @ScaledMetric(relativeTo: .subheadline) private var actionVerticalPadding = 7.0
     @ScaledMetric private var contentSpacing = 12.0
-    @ScaledMetric private var iconTileSize = 36.0
+    @ScaledMetric(relativeTo: .title3) private var iconSlotWidth = 28.0
     @ScaledMetric private var titleSpacing = 2.0
 
     private var iconAndText: some View {
         HStack(spacing: contentSpacing) {
             if let icon = toast.icon {
-                iconTile(icon)
+                iconImage(icon)
             }
 
             VStack(alignment: .leading, spacing: titleSpacing) {
@@ -72,13 +72,11 @@ struct ToastView: View {
         }
     }
 
-    private func iconTile(_ icon: Toast.Icon) -> some View {
-        let color = icon.color ?? .accentColor
-        return icon.systemImage.image
-            .font(.body.weight(.semibold))
-            .foregroundStyle(color)
-            .frame(width: iconTileSize, height: iconTileSize)
-            .background(color.opacity(0.15), in: Circle())
+    private func iconImage(_ icon: Toast.Icon) -> some View {
+        icon.systemImage.image
+            .font(.title3.weight(.semibold))
+            .foregroundStyle(icon.color ?? .accentColor)
+            .frame(width: iconSlotWidth)
             .accessibilityHidden(true)
     }
 

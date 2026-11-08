@@ -349,14 +349,23 @@ private struct Row<Symbol: View, Accessory: View>: View {
 
     var body: some View {
         AsyncButton(action: action) {
-            HStack {
-                ZStack {
-                    HighlightPaletteIcon()
-                        .hidden()
-                    symbol
-                        .foregroundColor(primaryColor)
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    // The symbol goes above the text, so the text gets the row's full width and words don't break.
+                    VStack(alignment: .leading) {
+                        coloredSymbol
+                        stacked
+                    }
+                } else {
+                    HStack {
+                        ZStack {
+                            HighlightPaletteIcon()
+                                .hidden()
+                            coloredSymbol
+                        }
+                        content
+                    }
                 }
-                content
             }
             .padding(.horizontal)
             .padding(.vertical, verticalPadding)
@@ -369,6 +378,13 @@ private struct Row<Symbol: View, Accessory: View>: View {
 
     // MARK: Private
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var coloredSymbol: some View {
+        symbol
+            .foregroundColor(primaryColor)
+    }
+
     private var primaryColor: Color {
         if !isEnabled {
             return .tertiaryLabel
@@ -380,8 +396,7 @@ private struct Row<Symbol: View, Accessory: View>: View {
         isEnabled ? .secondaryLabel : .tertiaryLabel
     }
 
-    /// Where the row doesn't fit on one line, like at accessibility text sizes, the subtitle and accessory
-    /// move under the title and the text wraps.
+    /// Where the row doesn't fit on one line, the subtitle and accessory move under the title and the text wraps.
     @ViewBuilder private var content: some View {
         if #available(iOS 16.0, *) {
             ViewThatFits(in: .horizontal) {
@@ -405,14 +420,7 @@ private struct Row<Symbol: View, Accessory: View>: View {
 
     private var stacked: some View {
         VStack(alignment: .leading) {
-            VStack(alignment: .leading, spacing: 1) {
-                Text(title)
-                    .foregroundColor(primaryColor)
-                if let subtitle {
-                    subtitle.view(ofSize: .footnote)
-                        .foregroundColor(secondaryColor)
-                }
-            }
+            titleOverSubtitle(wraps: true)
             if let accessory {
                 accessory
             }
@@ -435,15 +443,19 @@ private struct Row<Symbol: View, Accessory: View>: View {
                 }
             }
         case .below:
-            VStack(alignment: .leading, spacing: 1) {
-                Text(title)
-                    .foregroundColor(primaryColor)
-                if let subtitle {
-                    subtitle.view(ofSize: .footnote, allowsWrapping: false)
-                        .foregroundColor(secondaryColor)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                }
+            titleOverSubtitle(wraps: false)
+        }
+    }
+
+    private func titleOverSubtitle(wraps: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 1) {
+            Text(title)
+                .foregroundColor(primaryColor)
+            if let subtitle {
+                subtitle.view(ofSize: .footnote, allowsWrapping: wraps)
+                    .foregroundColor(secondaryColor)
+                    .lineLimit(wraps ? nil : 1)
+                    .truncationMode(.tail)
             }
         }
     }
@@ -487,12 +499,21 @@ private struct IdealWidthUpToOfferedLayout: Layout {
     }
 
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        subviews.first?.place(at: bounds.origin, proposal: ProposedViewSize(bounds.size))
+        guard let subview = subviews.first else {
+            return
+        }
+        let width = widthCapped(proposal, subview).width
+        subview.place(at: bounds.origin, proposal: ProposedViewSize(width: width, height: bounds.height))
     }
+
+    /// Below this shortfall, the offered width is the ideal one: the popover rounds the width it gives the menu to
+    /// pixels, and a fraction of a point short would otherwise move a row's subtitle under its title.
+    private let roundingTolerance: CGFloat = 1
 
     private func widthCapped(_ proposal: ProposedViewSize, _ subview: LayoutSubview) -> ProposedViewSize {
         let idealWidth = subview.sizeThatFits(ProposedViewSize(width: nil, height: proposal.height)).width
-        return ProposedViewSize(width: min(idealWidth, proposal.width ?? idealWidth), height: proposal.height)
+        let width = proposal.width.map { $0 + roundingTolerance >= idealWidth ? idealWidth : $0 } ?? idealWidth
+        return ProposedViewSize(width: width, height: proposal.height)
     }
 }
 
@@ -532,8 +553,8 @@ struct NoteCircles: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    /// One row, which widens the popover where the menu was narrower. At accessibility sizes one row is wider
-    /// than the screen, so the circles wrap within the menu's width.
+    /// Below accessibility sizes the circles stay on one row, and the popover widens to fit them if the menu was
+    /// narrower. At accessibility sizes one row is wider than the screen, so the circles wrap to the menu's width.
     @ViewBuilder
     private func row(@ViewBuilder content: () -> some View) -> some View {
         if dynamicTypeSize.isAccessibilitySize, #available(iOS 16.0, *) {

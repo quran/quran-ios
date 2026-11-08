@@ -196,10 +196,10 @@
 // MARK: - Audio
 
 "audio.playing.action.modify" = "Düzenle";
-// Toast when audio starts playing: %@ is the ayah range, such as "Al-Baqarah · 2:1–10", or a surah name when the whole surah plays.
+// Toast when audio starts playing: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name when the whole surah plays.
 // Metadata: Translated by AI; human review required.
 "audio.playing.toast" = "%@ oynatılıyor";
-// Toast when audio starts downloading before it plays: %@ is the ayah range, such as "Al-Baqarah · 2:1–10", or a surah name for a whole surah.
+// Toast when audio starts downloading before it plays: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name for a whole surah.
 // Metadata: Translated by AI; human review required.
 "audio.downloading.toast" = "%@ sesi indiriliyor";
 

@@ -31,7 +31,7 @@ enum QuranReference {
 
     case sura(Sura, nameStyle: SuraNameStyle = .standard)
     case ayah(AyahNumber, nameStyle: SuraNameStyle = .standard)
-    /// Ayahs in one sura, such as "Al-Baqarah · 2:1–10".
+    /// Ayahs in one sura, such as "Al-Baqarah 2:1–10".
     case ayahs(ClosedRange<AyahNumber>, nameStyle: SuraNameStyle = .standard)
 
     // MARK: Internal
@@ -88,7 +88,7 @@ enum QuranReference {
 
         let suraReference = components.joined(separator: " ")
         if let coordinate = coordinate(locale: locale) {
-            return "\(suraReference) · \(coordinate)"
+            return "\(suraReference) \(coordinate)"
         }
         return suraReference
     }
@@ -123,7 +123,7 @@ enum QuranReference {
 
         if let coordinate = coordinate(locale: locale) {
             result.append(NSAttributedString(
-                string: " · \(coordinate)",
+                string: " \(coordinate)",
                 attributes: [.font: size.plainUIFont]
             ))
         }
@@ -252,8 +252,6 @@ struct QuranReferenceView: View {
             }
 
             if let coordinate = reference.coordinate(locale: locale) {
-                Text("·")
-                    .font(size.plainFont)
                 Text(coordinate)
                     .font(size.plainFont)
                     .environment(\.layoutDirection, .leftToRight)

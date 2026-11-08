@@ -17,7 +17,7 @@ final class AudioBannerToastTests: XCTestCase {
             audioRange: (start: baqarah.verses[0], end: baqarah.verses[9])
         )
 
-        XCTAssertEqual(message.rawValue(locale: english), "Downloading audio for Al-Baqarah · 2:1–10")
+        XCTAssertEqual(message.rawValue(locale: english), "Downloading audio for Al-Baqarah 2:1–10")
         XCTAssertEqual(message.accessibilityText, "Downloading audio for Al-Baqarah, Ayahs 1 to 10")
     }
 

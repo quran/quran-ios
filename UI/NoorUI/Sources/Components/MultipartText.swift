@@ -271,7 +271,7 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         }
 
         /// Each range as `ayahRange` writes it, separated by the localized list separator, a semicolon: list items
-        /// can contain commas, and " · " already separates the parts of an ayah reference.
+        /// can contain commas, and " · " already separates sura names.
         public mutating func appendInterpolation(ayahRanges ranges: [ClosedRange<AyahNumber>]) {
             for (index, range) in ranges.enumerated() {
                 if index > 0 {
@@ -408,7 +408,7 @@ extension MultipartText {
         MultipartText(stringLiteral: plain)
     }
 
-    /// The range in `ClosedRange<AyahNumber>.localizedName`'s compact format, such as "Al-Baqarah · 2:1–10".
+    /// The range in `ClosedRange<AyahNumber>.localizedName`'s compact format, such as "Al-Baqarah 2:1–10".
     static func ayahRange(_ range: ClosedRange<AyahNumber>, language: Language? = nil) -> MultipartText {
         let start = range.lowerBound
         let end = range.upperBound

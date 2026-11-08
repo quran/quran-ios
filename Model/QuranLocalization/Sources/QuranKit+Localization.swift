@@ -23,7 +23,11 @@ extension AyahNumber {
     }
 
     public var localizedName: String {
-        lFormat("quran.ayah.name", sura.localizedName(), localizedAyahNumber)
+        localizedName(language: nil)
+    }
+
+    func localizedName(language: Language?) -> String {
+        lFormat("quran.ayah.name", language: language, sura.localizedName(language: language), localizedAyahNumber(language: language))
     }
 }
 

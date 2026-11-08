@@ -31,6 +31,8 @@ enum QuranReference {
 
     case sura(Sura, nameStyle: SuraNameStyle = .standard)
     case ayah(AyahNumber, nameStyle: SuraNameStyle = .standard)
+    /// Ayahs in one sura, such as "Al-Baqarah · 2:1–10".
+    case ayahs(ClosedRange<AyahNumber>, nameStyle: SuraNameStyle = .standard)
 
     // MARK: Internal
 
@@ -40,6 +42,8 @@ enum QuranReference {
             sura.localizedName()
         case .ayah(let ayah, _):
             ayah.localizedName
+        case .ayahs(let ayahs, _):
+            ayahs.localizedAccessibilityName()
         }
     }
 
@@ -68,6 +72,8 @@ enum QuranReference {
             nil
         case .ayah(let ayah, _):
             ayah.localizedCoordinate(locale: locale)
+        case .ayahs(let ayahs, _):
+            ayahs.localizedCoordinates(locale: locale)
         }
     }
 
@@ -128,7 +134,7 @@ enum QuranReference {
         switch self {
         case .sura(_, let nameStyle):
             nameStyle
-        case .ayah(_, let nameStyle):
+        case .ayah(_, let nameStyle), .ayahs(_, let nameStyle):
             nameStyle
         }
     }
@@ -149,6 +155,8 @@ enum QuranReference {
             sura
         case .ayah(let ayah, _):
             ayah.sura
+        case .ayahs(let ayahs, _):
+            ayahs.lowerBound.sura
         }
     }
 

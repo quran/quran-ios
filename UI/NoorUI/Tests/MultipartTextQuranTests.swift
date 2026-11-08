@@ -200,52 +200,58 @@ final class MultipartTextQuranTests: XCTestCase {
         XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) · 2:255")
     }
 
-    func test_sameSuraAyahRange_usesEndCoordinate() {
-        let end = sura.verses[255]
-        let text: MultipartText = "\(ayahRange: ayah ... end)"
+    func test_sameSuraAyahRange_writesTheEndAsItsAyahNumber() {
+        let text: MultipartText = "\(ayahRange: ayah ... sura.verses[259])"
 
-        XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) · 2:255 - 2:256")
-        XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905} · ٢:٢٥٥ - ٢:٢٥٦")
+        XCTAssertEqual(text.rawValue(locale: english), "Al-Baqarah · 2:255–260")
+        XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905} · \u{2066}٢:٢٥٥–٢٦٠\u{2069}")
     }
 
-    func test_crossSuraAyahRange_usesBothReferences() {
-        let start = Quran.hafsMadani1405.suras[0].verses[6]
-        let end = Quran.hafsMadani1405.suras[1].verses[0]
-        let text: MultipartText = "\(ayahRange: start ... end)"
-
-        XCTAssertEqual(
-            text.rawValue(locale: english),
-            "\(start.sura.localizedName()) · 1:7 - \(end.sura.localizedName()) · 2:1"
-        )
-    }
-
-    func test_ayahRange_usesEachLanguagesRangeFormat() {
-        let range = ayah ... sura.verses[255]
+    func test_crossSuraAyahRange_joinsBothReferencesWithEachLanguagesFormat() {
+        let range = fatihahEnd ... baqarahStart
 
         XCTAssertEqual(
             MultipartText.ayahRange(range, language: .english).rawValue(locale: english),
-            "\(sura.localizedName()) · 2:255 - 2:256"
+            "Al-Fātihah · 1:7 – Al-Baqarah · 2:1"
         )
         XCTAssertEqual(
             MultipartText.ayahRange(range, language: .arabic).rawValue(locale: arabic),
-            "\u{E905} · ٢:٢٥٥ - ٢:٢٥٦"
+            "\u{E904} · ١:٧ – \u{E905} · ٢:١"
         )
         XCTAssertEqual(
             MultipartText.ayahRange(range, language: .chinese).rawValue(locale: chinese),
-            "\(sura.localizedName()) · 2:255至2:256"
+            "Al-Fātihah · 1:7至Al-Baqarah · 2:1"
         )
+    }
+
+    func test_wholeSuraAyahRange_namesOnlyTheSura() {
+        let fatihah = Quran.hafsMadani1405.suras[0]
+        let text: MultipartText = "\(ayahRange: fatihah.firstVerse ... fatihah.lastVerse)"
+
+        XCTAssertEqual(text.rawValue(locale: english), "Al-Fātihah")
+        XCTAssertEqual(text.rawValue(locale: arabic), "\u{E904}")
+        XCTAssertEqual(text.accessibilityText, "Al-Fātihah")
+    }
+
+    @MainActor
+    func test_ayahRange_attributedStringMatchesRawValue() {
+        let sameSura: MultipartText = "\(ayahRange: ayah ... sura.verses[259])"
+        let crossSura: MultipartText = "\(ayahRange: fatihahEnd ... baqarahStart)"
+
+        XCTAssertEqual(sameSura.attributedString(ofSize: .body).string, sameSura.rawValue)
+        XCTAssertEqual(crossSura.attributedString(ofSize: .body).string, crossSura.rawValue)
     }
 
     func test_ayahRanges_separatesRangesWithTheListSeparator() {
         let other = Quran.hafsMadani1405.suras[2].verses[17]
         let text: MultipartText = "\(ayahRanges: [ayah ... sura.verses[255], other ... other])"
 
-        XCTAssertEqual(text.rawValue(locale: english), "Al-Baqarah · 2:255 - 2:256; Āli-ʿImrān · 3:18")
+        XCTAssertEqual(text.rawValue(locale: english), "Al-Baqarah · 2:255–256; Āli-ʿImrān · 3:18")
         XCTAssertEqual(
             text.rawValue(locale: arabic),
-            "\u{E905} · ٢:٢٥٥ - ٢:٢٥٦\(l("list.separator"))\u{E906} · ٣:١٨"
+            "\u{E905} · \u{2066}٢:٢٥٥–٢٥٦\u{2069}\(l("list.separator"))\u{E906} · ٣:١٨"
         )
-        XCTAssertEqual(text.accessibilityText, "Al-Baqarah, Ayah 255 - 2:256; Āli-ʿImrān, Ayah 18")
+        XCTAssertEqual(text.accessibilityText, "Al-Baqarah, Ayahs 255 to 256; Āli-ʿImrān, Ayah 18")
     }
 
     // MARK: Page references
@@ -286,11 +292,12 @@ final class MultipartTextQuranTests: XCTestCase {
         }
     }
 
-    func test_ayahRange_usesSemanticAccessibilityText() {
-        let end = sura.verses[255]
-        let text: MultipartText = "\(ayahRange: ayah ... end)"
+    func test_ayahRange_readsAyahNumbersInsteadOfCoordinates() {
+        let sameSura: MultipartText = "\(ayahRange: ayah ... sura.verses[259])"
+        let crossSura: MultipartText = "\(ayahRange: fatihahEnd ... baqarahStart)"
 
-        XCTAssertEqual(text.accessibilityText, "\(ayah.localizedName) - \(end.localizedCoordinate())")
+        XCTAssertEqual(sameSura.accessibilityText, "Al-Baqarah, Ayahs 255 to 260")
+        XCTAssertEqual(crossSura.accessibilityText, "Al-Fātihah, Ayah 7 to Al-Baqarah, Ayah 1")
     }
 
     // MARK: Quran text
@@ -351,6 +358,8 @@ final class MultipartTextQuranTests: XCTestCase {
     private let sura = Quran.hafsMadani1405.suras[1]
     private let ayah = Quran.hafsMadani1405.suras[1].verses[254]
     private let page = Quran.hafsMadani1405.pages[199]
+    private let fatihahEnd = Quran.hafsMadani1405.suras[0].lastVerse
+    private let baqarahStart = Quran.hafsMadani1405.suras[1].firstVerse
     private let english = Locale(identifier: "en-CA")
     private let arabic = Locale(identifier: "ar-SA")
     private let chinese = Locale(identifier: "zh")

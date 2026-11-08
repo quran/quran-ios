@@ -40,11 +40,12 @@ private extension TextPart {
                 }
                 result.append(QuranReference.sura(element.element, nameStyle: nameStyle).attributedString(size: size, locale: locale))
             }
-        case .ayahCoordinate(let ayah):
-            NSAttributedString(
-                string: ayah.localizedCoordinate(locale: locale),
-                attributes: [.font: size.plainUIFont]
-            )
+        case .ayahs(let ayahs, let nameStyle):
+            QuranReference.ayahs(ayahs, nameStyle: nameStyle).attributedString(size: size, locale: locale)
+        case .accessibilityLabeled(let parts, _):
+            parts.reduce(into: NSMutableAttributedString()) { result, part in
+                result.append(part.attributedString(ofSize: size, locale: locale))
+            }
         case .quran(let text, let quranFont, let color, _, let highlighting):
             highlightedQuranAttributedString(
                 text: text,

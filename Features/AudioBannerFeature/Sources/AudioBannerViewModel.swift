@@ -433,7 +433,7 @@ public final class AudioBannerViewModel: ObservableObject {
         guard let audioRange else {
             return
         }
-        let message = audioMessage("audio.downloading.message", audioRange: audioRange)
+        let message = Self.audioMessage("audio.downloading.toast", audioRange: audioRange)
         toast = Toast(message, icon: Toast.Icon(.download))
     }
 
@@ -453,7 +453,7 @@ public final class AudioBannerViewModel: ObservableObject {
             return
         }
 
-        let message = audioMessage("audio.playing.message", audioRange: audioRange)
+        let message = Self.audioMessage("audio.playing.toast", audioRange: audioRange)
         let modify = ToastAction(title: l("audio.playing.action.modify")) { [weak self] in
             self?.showAdvancedAudioOptions()
         }
@@ -466,10 +466,8 @@ public final class AudioBannerViewModel: ObservableObject {
         playbackEnded()
     }
 
-    private func audioMessage(_ format: String, audioRange: AudioRange) -> MultipartText {
-        let start: MultipartText = "\(ayah: audioRange.start)"
-        let end: MultipartText = "\(ayah: audioRange.end)"
-        return MultipartText.localizedFormat(format, start, end)
+    static func audioMessage(_ format: String, audioRange: AudioRange) -> MultipartText {
+        MultipartText.localizedFormat(format, "\(ayahRange: audioRange.start ... max(audioRange.start, audioRange.end))")
     }
 }
 

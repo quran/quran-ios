@@ -17,7 +17,7 @@ final class MultipartTextLocalizationTests: XCTestCase {
         let end: MultipartText = "\(ayah: Quran.hafsMadani1405.suras[1].verses[255])"
 
         let result = MultipartText.localizedFormat(
-            "audio.playing.message",
+            "quran.range",
             language: .english,
             start,
             end
@@ -25,7 +25,7 @@ final class MultipartTextLocalizationTests: XCTestCase {
 
         XCTAssertEqual(
             result.rawValue(locale: Locale(identifier: "en")),
-            "Playing audio from Al-Baqarah · 2:255 to Al-Baqarah · 2:256"
+            "Al-Baqarah · 2:255 – Al-Baqarah · 2:256"
         )
     }
 

@@ -157,9 +157,18 @@ public final class AudioBannerViewModel: ObservableObject {
         audioPlayer.setRate(rate)
     }
 
+    /// Dismisses the banner's toasts, showing or waiting to show, leaving other features' toasts alone.
+    func dismissToasts() {
+        for id in toastIDs {
+            ToastPresenter.shared.dismissToast(withID: id)
+        }
+        toastIDs = []
+    }
+
     // MARK: Private
 
     private var audioRange: AudioRange?
+    private var toastIDs: [UUID] = []
 
     private let analytics: AnalyticsLibrary
     private let reciterRetreiver: ReciterDataRetriever
@@ -434,7 +443,7 @@ public final class AudioBannerViewModel: ObservableObject {
             return
         }
         let message = Self.audioMessage("audio.downloading.toast", audioRange: audioRange)
-        toast = Toast(message, icon: Toast.Icon(.download))
+        show(Toast(message, icon: Toast.Icon(.download)))
     }
 
     private func updateDownloadProgress() async {
@@ -457,7 +466,12 @@ public final class AudioBannerViewModel: ObservableObject {
         let modify = ToastAction(title: l("audio.playing.action.modify")) { [weak self] in
             self?.showAdvancedAudioOptions()
         }
-        toast = Toast(message, icon: Toast.Icon(.play), action: modify)
+        show(Toast(message, icon: Toast.Icon(.play), action: modify))
+    }
+
+    private func show(_ toast: Toast) {
+        toastIDs.append(toast.id)
+        self.toast = toast
     }
 
     private func playbackFailed(_ error: Error) {

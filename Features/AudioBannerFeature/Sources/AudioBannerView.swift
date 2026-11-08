@@ -42,7 +42,7 @@ struct AudioBannerView: View {
             await viewModel.start()
         }
         .onDisappear {
-            ToastPresenter.shared.dismissCurrentToast()
+            viewModel.dismissToasts()
         }
     }
 }

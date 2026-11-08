@@ -30,6 +30,7 @@ struct ReadingBookmarkMenuRow: View {
     let select: AsyncAction
 
     @FocusState private var isNameFocused: Bool
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @ScaledMetric private var verticalPadding = 12.0
     @ScaledMetric private var actionHorizontalPadding = 12.0
@@ -117,19 +118,29 @@ struct ReadingBookmarkMenuRow: View {
         AsyncButton {
             await select()
         } label: {
-            HStack {
-                icon
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(item.displayName)
-                        .fontWeight(.semibold)
-                        .foregroundColor(isEnabled ? .label : .tertiaryLabel)
-                    subtitle.view(ofSize: .footnote)
-                        .foregroundColor(isEnabled ? .secondaryLabel : .tertiaryLabel)
-                        .fixedSize(horizontal: false, vertical: true)
+            Group {
+                if dynamicTypeSize >= .xxLarge {
+                    // The action gets the row's full width under the labels, so neither breaks mid-word.
+                    VStack(alignment: .leading) {
+                        HStack {
+                            icon
+                            labels
+                            Spacer(minLength: 0)
+                        }
+                        actionLabel
+                            .fixedSize(horizontal: false, vertical: true)
+                            .opacity(isEnabled ? 1 : 0.4)
+                    }
+                } else {
+                    HStack {
+                        icon
+                        labels
+                        Spacer(minLength: 0)
+                        actionLabel
+                            .fixedSize()
+                            .opacity(isEnabled ? 1 : 0.4)
+                    }
                 }
-                Spacer(minLength: 0)
-                actionLabel
-                    .opacity(isEnabled ? 1 : 0.4)
             }
             .padding(.horizontal)
             .padding(.vertical, verticalPadding)
@@ -137,6 +148,17 @@ struct ReadingBookmarkMenuRow: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(BackgroundHighlightingStyle())
+    }
+
+    private var labels: some View {
+        VStack(alignment: .leading, spacing: 1) {
+            Text(item.displayName)
+                .fontWeight(.semibold)
+                .foregroundColor(isEnabled ? .label : .tertiaryLabel)
+            subtitle.view(ofSize: .footnote, alignment: .topLeading, wrapsWideReferences: true)
+                .foregroundColor(isEnabled ? .secondaryLabel : .tertiaryLabel)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 
     private var icon: some View {
@@ -158,7 +180,6 @@ struct ReadingBookmarkMenuRow: View {
             }
         }
         .font(.footnote.bold())
-        .fixedSize()
     }
 
     private func capsule(foreground: Color, background: Color) -> some View {

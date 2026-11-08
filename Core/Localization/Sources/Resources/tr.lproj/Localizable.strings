@@ -40,8 +40,9 @@
 "quran.page.name" = "Sayfa %@";
 // A page location: %1$@ is the name of the page's first surah and %2$@ is the localized page, such as "At-Tawbah, Page 200". Translators may reorder the placeholders.
 "quran.page.location" = "%1$@, %2$@";
-// A range of Quran references: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257". Translators may reorder the placeholders.
-"quran.range" = "%1$@ - %2$@";
+// Ayahs across surahs: %1$@ is the start and %2$@ is the end reference, such as "Al-Baqarah 2:286 – Āli-ʿImrān 3:10". Ayahs in one surah are written "Al-Baqarah 2:1–10" without this format. Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.range" = "%1$@ – %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
 "quran.hizb.name" = "Hizb %@";
 // A quarter reference: %1$@ is the fraction (¼, ½ or ¾) and %2$@ is the hizb reference, such as "¼ Hizb 3". Translators may reorder the placeholders.
@@ -195,10 +196,12 @@
 // MARK: - Audio
 
 "audio.playing.action.modify" = "Düzenle";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.playing.message" = "%@ ile %@ arası ses oynatılıyor";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.downloading.message" = "%@ ile %@ arasındaki ses indiriliyor";
+// Toast when audio starts playing: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name when the whole surah plays.
+// Metadata: Translated by AI; human review required.
+"audio.playing.toast" = "%@ oynatılıyor";
+// Toast when audio starts downloading before it plays: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name for a whole surah.
+// Metadata: Translated by AI; human review required.
+"audio.downloading.toast" = "%@ sesi indiriliyor";
 
 "audio.playing-verses.label" = "Okunan ayetler";
 "audio.adjust-end-verse-to-the-end.label" = "Bitişi sonuna ayarla";
@@ -849,3 +852,12 @@
 "sync.sign-out.review" = "İncele";
 // Button on an item that doesn't sync: opens its note editor or renames its collection.
 "sync.held.edit" = "Düzenle";
+
+// MARK: - Ayah ranges
+
+// How VoiceOver reads ayahs across surahs: %1$@ is the start and %2$@ is the end ayah, such as "Al-Baqarah, Ayah 286 to Āli-ʿImrān, Ayah 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.range.spoken" = "%1$@ ile %2$@ arası";
+// How VoiceOver reads ayahs in one surah: %1$@ is the first and %2$@ is the last localized ayah number, such as "Ayahs 1 to 10" in "Al-Baqarah, Ayahs 1 to 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.ayah.number-range" = "%1$@. ile %2$@. âyetler arası";

@@ -13,20 +13,17 @@ import XCTest
 
 final class MultipartTextLocalizationTests: XCTestCase {
     func test_localizedFormat_insertsMultipartTextArguments() {
-        let start: MultipartText = "\(ayah: Quran.hafsMadani1405.suras[1].verses[254])"
-        let end: MultipartText = "\(ayah: Quran.hafsMadani1405.suras[1].verses[255])"
+        let sura: MultipartText = "\(sura: Quran.hafsMadani1405.suras[8])"
+        let page: MultipartText = "Page 200"
 
         let result = MultipartText.localizedFormat(
-            "audio.playing.message",
+            "quran.page.location",
             language: .english,
-            start,
-            end
+            sura,
+            page
         )
 
-        XCTAssertEqual(
-            result.rawValue(locale: Locale(identifier: "en")),
-            "Playing audio from Al-Baqarah · 2:255 to Al-Baqarah · 2:256"
-        )
+        XCTAssertEqual(result.rawValue(locale: Locale(identifier: "en")), "At-Tawbah, Page 200")
     }
 
     func test_format_supportsReorderedAndRepeatedArguments() {

@@ -67,8 +67,6 @@ private struct TextPartView: View {
     let part: TextPart
     let size: MultipartText.FontSize
 
-    @Environment(\.locale) private var locale
-
     var body: some View {
         switch part {
         case .plain(let text):
@@ -88,10 +86,14 @@ private struct TextPartView: View {
             )
         case .suras(let suras, let nameStyle):
             SuraNamesView(suras: suras, nameStyle: nameStyle, size: size)
-        case .ayahCoordinate(let ayah):
-            Text(ayah.localizedCoordinate(locale: locale))
-                .font(size.plainFont)
-                .environment(\.layoutDirection, .leftToRight)
+        case .ayahs(let ayahs, let nameStyle):
+            QuranReferenceView(reference: .ayahs(ayahs, nameStyle: nameStyle), size: size)
+        case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
+            HStack(spacing: 0) {
+                ForEach(0 ..< parts.count, id: \.self) { i in
+                    TextPartView(part: parts[i], size: size)
+                }
+            }
         case .quran(let text, let quranFont, let color, let lineLimit, let highlighting):
             QuranTextView(
                 text,
@@ -146,7 +148,11 @@ enum TextPart {
     case sura(Sura, emphasizesSura: Bool, nameStyle: SuraNameStyle = .standard)
     case ayah(AyahNumber, emphasizesSura: Bool, nameStyle: SuraNameStyle = .standard)
     case suras([Sura], nameStyle: SuraNameStyle)
-    case ayahCoordinate(AyahNumber)
+    case ayahs(ClosedRange<AyahNumber>, nameStyle: SuraNameStyle = .standard)
+    /// Parts that VoiceOver reads as `accessibilityText` instead of as their own text.
+    case accessibilityLabeled([TextPart], accessibilityText: String)
+    /// Parts a wrapping layout keeps on one line.
+    case unbreakable([TextPart])
     case quran(
         text: QuranText,
         font: QuranFont,
@@ -168,16 +174,31 @@ enum TextPart {
         case .suras(let suras, let nameStyle):
             suras.map { QuranReference.sura($0, nameStyle: nameStyle).rawValue(locale: locale) }
                 .joined(separator: SuraNamesView.separator)
-        case .ayahCoordinate(let ayah):
-            ayah.localizedCoordinate(locale: locale)
+        case .ayahs(let ayahs, let nameStyle):
+            QuranReference.ayahs(ayahs, nameStyle: nameStyle).rawValue(locale: locale)
+        case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
+            parts.map { $0.rawValue(locale: locale) }.joined()
         case .quran(let text, _, _, _, _):
             text.text
         }
     }
 
     /// Splits `.suras` into one fixed-size reference per sura with separators between them, so a
-    /// wrapping layout breaks lines only between suras, never inside a name.
+    /// wrapping layout breaks lines only between suras, never inside a name. `.accessibilityLabeled` parts wrap
+    /// as their own parts, with the text between them kept on the line of the part before it, so a wrapped range
+    /// never starts a line with its " – ". The view reads the whole text's `accessibilityText`, so they keep their label.
     var wrappingParts: [TextPart] {
+        if case .accessibilityLabeled(let parts, _) = self {
+            var lines: [[TextPart]] = []
+            for part in parts.flatMap(\.wrappingParts) {
+                if case .plain = part, !lines.isEmpty {
+                    lines[lines.count - 1].append(part)
+                } else {
+                    lines.append([part])
+                }
+            }
+            return lines.map { $0.count == 1 ? $0[0] : .unbreakable($0) }
+        }
         guard case .suras(let suras, let nameStyle) = self else {
             return [self]
         }
@@ -197,8 +218,12 @@ enum TextPart {
             QuranReference.ayah(ayah).accessibilityText
         case .suras(let suras, _):
             suras.map { QuranReference.sura($0).accessibilityText }.joined(separator: l("list.separator.comma"))
-        case .ayahCoordinate(let ayah):
-            ayah.localizedCoordinate()
+        case .ayahs(let ayahs, _):
+            QuranReference.ayahs(ayahs).accessibilityText
+        case .accessibilityLabeled(_, let accessibilityText):
+            accessibilityText
+        case .unbreakable(let parts):
+            parts.map(\.accessibilityText).joined()
         case .quran(let text, _, _, _, _):
             text.text
         }
@@ -246,7 +271,7 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         }
 
         /// Each range as `ayahRange` writes it, separated by the localized list separator, a semicolon: list items
-        /// can contain commas, and " · " already separates the parts of an ayah reference.
+        /// can contain commas, and " · " already separates sura names.
         public mutating func appendInterpolation(ayahRanges ranges: [ClosedRange<AyahNumber>]) {
             for (index, range) in ranges.enumerated() {
                 if index > 0 {
@@ -383,19 +408,30 @@ extension MultipartText {
         MultipartText(stringLiteral: plain)
     }
 
-    /// Joins the start and the end with the localized `quran.range` format.
-    /// The end is a bare coordinate when it is in the same sura as the start.
+    /// The range in `ClosedRange<AyahNumber>.localizedName`'s compact format, such as "Al-Baqarah 2:1–10".
     static func ayahRange(_ range: ClosedRange<AyahNumber>, language: Language? = nil) -> MultipartText {
         let start = range.lowerBound
         let end = range.upperBound
-        let startText = MultipartText(parts: [.ayah(start, emphasizesSura: false)])
-        guard start != end else {
-            return startText
+        let parts: [TextPart] = if let sura = range.wholeSura {
+            [.sura(sura, emphasizesSura: false)]
+        } else if start == end {
+            [.ayah(start, emphasizesSura: false)]
+        } else if start.sura == end.sura {
+            [.ayahs(range)]
+        } else {
+            // On screen, a no-break space keeps the dash on the first reference's line; copied text keeps the
+            // localized format's plain space.
+            format(
+                l("quran.range", language: language).replacingOccurrences(of: " –", with: "\u{00A0}–"),
+                arguments: [
+                    MultipartText(parts: [.ayah(start, emphasizesSura: false)]),
+                    MultipartText(parts: [.ayah(end, emphasizesSura: false)]),
+                ]
+            ).parts
         }
-        let endText = MultipartText(parts: [
-            start.sura == end.sura ? .ayahCoordinate(end) : .ayah(end, emphasizesSura: false),
+        return MultipartText(parts: [
+            .accessibilityLabeled(parts, accessibilityText: range.localizedAccessibilityName(language: language)),
         ])
-        return localizedFormat("quran.range", language: language, startText, endText)
     }
 
     private init(parts: [TextPart]) {

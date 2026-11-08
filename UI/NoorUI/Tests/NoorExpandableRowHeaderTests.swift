@@ -24,7 +24,7 @@ final class NoorExpandableRowHeaderTests: XCTestCase {
             accessibilityValue: accessibilityValue,
             action: {}
         ) {
-            Text("Al-Baqarah · 2:255")
+            Text("Al-Baqarah 2:255")
         }
     }
 }

@@ -103,6 +103,12 @@ final class AnalyticsUserPropertiesReporterTests: XCTestCase {
         }
     }
 
+    func test_dimOtherAyahsChange_updatesIt() async {
+        await assertChange(of: .dimOtherAyahs, from: "on", to: "off") {
+            QuranContentStatePreferences.shared.dimsOtherAyahs = false
+        }
+    }
+
     func test_reciterChange_updatesIt() async {
         await assertChange(of: .reciter, from: "afasy_gapless", to: "reciter1") {
             ReciterPreferences.shared.lastSelectedReciterId = Reciter.gappedReciter.id
@@ -289,6 +295,7 @@ final class AnalyticsUserPropertiesReporterTests: XCTestCase {
             .versePause: "0.5",
             .rangePause: "2.0",
             .audioStreaming: "on",
+            .dimOtherAyahs: "on",
             .reciter: "afasy_gapless",
             .mushaf: "tajweed",
             .quranMode: "translation",
@@ -329,6 +336,7 @@ final class AnalyticsUserPropertiesReporterTests: XCTestCase {
         content.quranMode = .translation
         content.twoPagesEnabled = false
         content.showArabicInTranslation = true
+        content.dimsOtherAyahs = true
         #if QURAN_SYNC
         content.ayahIndicatorVisibility = .all
         #endif

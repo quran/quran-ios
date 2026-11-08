@@ -90,9 +90,9 @@ public final class ContentViewModel: ObservableObject {
             set: { contentStatePreferences.quranMode = $0 }
         )
 
-        overlays.focusModeEnabled = contentStatePreferences.focusModeEnabled
-        contentStatePreferences.$focusModeEnabled
-            .sink { [weak self] in self?.overlays.focusModeEnabled = $0 }
+        overlays.dimsOtherAyahs = contentStatePreferences.dimsOtherAyahs
+        contentStatePreferences.$dimsOtherAyahs
+            .sink { [weak self] in self?.overlays.dimsOtherAyahs = $0 }
             .store(in: &cancellables)
 
         $overlays

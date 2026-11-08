@@ -120,8 +120,8 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                 }
             }
             .overlay {
-                if let focusedLineRects = layout.focusedLineRects {
-                    QuranFocusDim(cutouts: focusedLineRects)
+                if let undimmedLineRects = layout.undimmedLineRects {
+                    QuranAyahDim(cutouts: undimmedLineRects)
                 }
             }
             .onGlobalFrameChanged { frame in

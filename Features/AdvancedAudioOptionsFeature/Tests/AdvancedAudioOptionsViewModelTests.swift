@@ -20,16 +20,14 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         try await super.setUp()
         originalAudioEnd = AudioPreferences.shared.audioEnd
         AudioPreferences.shared.audioEnd = .juz
-        originalFocusModeEnabled = QuranContentStatePreferences.shared.focusModeEnabled
+        originalDimsOtherAyahs = QuranContentStatePreferences.shared.dimsOtherAyahs
     }
 
     override func tearDown() async throws {
         if let originalAudioEnd {
             AudioPreferences.shared.audioEnd = originalAudioEnd
         }
-        if let originalFocusModeEnabled {
-            QuranContentStatePreferences.shared.focusModeEnabled = originalFocusModeEnabled
-        }
+        QuranContentStatePreferences.shared.dimsOtherAyahs = originalDimsOtherAyahs
         try await super.tearDown()
     }
 
@@ -537,75 +535,53 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(AudioPreferences.shared.playbackRate, 1.25)
     }
 
-    // MARK: - Focus mode
+    // MARK: - Dim Other Ayahs
 
-    func test_init_seedsFocusMode_fromPreference_whenEnabled() {
-        QuranContentStatePreferences.shared.focusModeEnabled = true
+    func test_init_seedsDimOtherAyahsFromThePreference() {
+        QuranContentStatePreferences.shared.dimsOtherAyahs = true
 
         let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
 
-        XCTAssertTrue(sut.focusModeEnabled)
+        XCTAssertTrue(sut.dimsOtherAyahs)
     }
 
-    func test_init_seedsFocusMode_fromPreference_whenDisabled() {
-        QuranContentStatePreferences.shared.focusModeEnabled = false
-
+    func test_dimOtherAyahs_savesThePreferenceRightAway() {
+        QuranContentStatePreferences.shared.dimsOtherAyahs = false
         let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
 
-        XCTAssertFalse(sut.focusModeEnabled)
+        sut.dimsOtherAyahs = true
+
+        XCTAssertTrue(QuranContentStatePreferences.shared.dimsOtherAyahs)
     }
 
-    func test_focusMode_savesThePreference_rightAway() {
-        QuranContentStatePreferences.shared.focusModeEnabled = false
+    func test_dismiss_keepsDimOtherAyahsChange() {
+        QuranContentStatePreferences.shared.dimsOtherAyahs = false
         let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
 
-        sut.focusModeEnabled = true
-        XCTAssertTrue(QuranContentStatePreferences.shared.focusModeEnabled)
-
-        sut.focusModeEnabled = false
-        XCTAssertFalse(QuranContentStatePreferences.shared.focusModeEnabled)
-    }
-
-    func test_dismiss_keepsFocusModeChange() {
-        QuranContentStatePreferences.shared.focusModeEnabled = false
-        let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
-
-        sut.focusModeEnabled = true
+        sut.dimsOtherAyahs = true
         sut.dismiss()
 
-        XCTAssertTrue(QuranContentStatePreferences.shared.focusModeEnabled)
+        XCTAssertTrue(QuranContentStatePreferences.shared.dimsOtherAyahs)
     }
 
-    func test_play_keepsFocusModeAsSet_whenTurnedOn() {
-        QuranContentStatePreferences.shared.focusModeEnabled = false
+    func test_play_keepsDimOtherAyahsChange() {
+        QuranContentStatePreferences.shared.dimsOtherAyahs = false
         let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
 
-        sut.focusModeEnabled = true
+        sut.dimsOtherAyahs = true
         sut.play()
 
-        XCTAssertTrue(sut.focusModeEnabled)
-        XCTAssertTrue(QuranContentStatePreferences.shared.focusModeEnabled)
+        XCTAssertTrue(QuranContentStatePreferences.shared.dimsOtherAyahs)
     }
 
-    func test_play_keepsFocusModeAsSet_whenTurnedOff() {
-        QuranContentStatePreferences.shared.focusModeEnabled = true
+    func test_play_withoutTouchingDimOtherAyahs_keepsThePreference() {
+        QuranContentStatePreferences.shared.dimsOtherAyahs = false
         let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
-
-        sut.focusModeEnabled = false
-        sut.play()
-
-        XCTAssertFalse(sut.focusModeEnabled)
-        XCTAssertFalse(QuranContentStatePreferences.shared.focusModeEnabled)
-    }
-
-    func test_play_withoutTouchingFocusMode_keepsThePreference() {
-        QuranContentStatePreferences.shared.focusModeEnabled = false
-        let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
-        QuranContentStatePreferences.shared.focusModeEnabled = true
+        QuranContentStatePreferences.shared.dimsOtherAyahs = true
 
         sut.play()
 
-        XCTAssertTrue(QuranContentStatePreferences.shared.focusModeEnabled)
+        XCTAssertTrue(QuranContentStatePreferences.shared.dimsOtherAyahs)
     }
 
     // MARK: - RepetitionDelay
@@ -652,7 +628,7 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
 
     private let quran = Quran.hafsMadani1405
     private var originalAudioEnd: AudioEnd?
-    private var originalFocusModeEnabled: Bool?
+    private var originalDimsOtherAyahs = false
 
     private func ayah(_ sura: Int, _ ayah: Int) -> AyahNumber {
         AyahNumber(quran: quran, sura: sura, ayah: ayah)!

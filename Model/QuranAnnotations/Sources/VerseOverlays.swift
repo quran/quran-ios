@@ -22,7 +22,7 @@ public struct VerseOverlays: Equatable {
     public var navigationHighlight: AyahNumber?
     public var colorHighlights: [AyahNumber: HighlightColor] = [:]
     public var notedVerses: Set<AyahNumber> = []
-    public var focusModeEnabled = false
+    public var dimsOtherAyahs = false
     #if QURAN_SYNC
     public var collectionVerses: Set<AyahNumber> = []
     public var readingBookmarks: [PlacedReadingBookmark] = []
@@ -30,27 +30,38 @@ public struct VerseOverlays: Equatable {
 
     public var pointedWord: Word?
 
-    public var focusedVerses: Set<AyahNumber>? {
-        guard focusModeEnabled else {
+    /// The playing, selected, navigation-highlighted and word-pointed verses. `nil` when the option is off or no audio plays.
+    public var undimmedVerses: Set<AyahNumber>? {
+        guard dimsOtherAyahs, playsAudio else {
             return nil
         }
-        if let restrictedFocusedVerses {
-            return restrictedFocusedVerses
+        var verses = Set(playingVerses).union(selectedVerses)
+        if let navigationHighlight {
+            verses.insert(navigationHighlight)
         }
-        return playingVerses.isEmpty ? nil : Set(playingVerses)
+        if let pointedWord {
+            verses.insert(pointedWord.verse)
+        }
+        return verses
     }
 
     // MARK: Private
 
-    private var restrictedFocusedVerses: Set<AyahNumber>?
+    /// Set by `restricted(to:)` when audio plays on another page, which still dims this one.
+    /// Only set while dimming, so other pages stay equal when audio starts or stops elsewhere.
+    private var playsAudioOnAnotherPage = false
+
+    private var playsAudio: Bool {
+        !playingVerses.isEmpty || playsAudioOnAnotherPage
+    }
 }
 
 extension VerseOverlays {
     /// Filters overlays for rendering one page.
     public func restricted(to page: Page) -> Self {
         var overlays = self
-        overlays.restrictedFocusedVerses = focusedVerses.map { verses in verses.filter { $0.page == page } }
         overlays.playingVerses = playingVerses.filter { $0.page == page }
+        overlays.playsAudioOnAnotherPage = dimsOtherAyahs && playsAudio && overlays.playingVerses.isEmpty
         overlays.selectedVerses = selectedVerses.filter { $0.page == page }
         overlays.navigationTarget = navigationTarget.flatMap { $0.page == page ? $0 : nil }
         overlays.navigationHighlight = navigationHighlight.flatMap { $0.page == page ? $0 : nil }

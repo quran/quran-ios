@@ -230,72 +230,56 @@ final class ContentTranslationViewModelTests: XCTestCase {
         XCTAssertEqual(Set(sut.highlights.keys), [verse])
     }
 
-    func testFocusedVersesAreNilWhileFocusModeIsOff() {
+    func testUndimmedVersesAreThePlayingVerseOnThisPage() {
         let verses = Quran.hafsMadani1405.pages[0].verses
         let service = VerseOverlayService()
         let sut = makeSUT(overlayService: service)
         sut.verses = verses
 
+        service.overlays.dimsOtherAyahs = true
         service.overlays.playingVerses = [verses[1]]
 
-        XCTAssertNil(sut.focusedVerses)
+        XCTAssertEqual(sut.undimmedVerses, [verses[1]])
     }
 
-    func testFocusedVersesAreNilWhenNothingIsPlaying() {
+    func testUndimmedVersesBecomeNilWhenDimOtherAyahsTurnsOff() {
         let verses = Quran.hafsMadani1405.pages[0].verses
         let service = VerseOverlayService()
-        let sut = makeSUT(overlayService: service)
-        sut.verses = verses
-
-        service.overlays.focusModeEnabled = true
-        service.overlays.selectedVerses = [verses[1]]
-
-        XCTAssertNil(sut.focusedVerses)
-    }
-
-    func testFocusedVersesFollowThePlayingVerseOnThisPage() {
-        let verses = Quran.hafsMadani1405.pages[0].verses
-        let service = VerseOverlayService()
-        let sut = makeSUT(overlayService: service)
-        sut.verses = verses
-
-        service.overlays.focusModeEnabled = true
+        service.overlays.dimsOtherAyahs = true
         service.overlays.playingVerses = [verses[1]]
-        XCTAssertEqual(sut.focusedVerses, [verses[1]])
+        let sut = makeSUT(overlayService: service)
+        sut.verses = verses
 
-        service.overlays.playingVerses = [verses[2]]
-        XCTAssertEqual(sut.focusedVerses, [verses[2]])
+        service.overlays.dimsOtherAyahs = false
 
-        service.overlays.focusModeEnabled = false
-        XCTAssertNil(sut.focusedVerses)
+        XCTAssertNil(sut.undimmedVerses)
     }
 
-    func testFocusedVersesAreEmptyWhenTheRecitedVerseIsOnAnotherPage() {
+    func testUndimmedVersesAreEmptyWhenTheRecitedVerseIsOnAnotherPage() {
         let verses = Quran.hafsMadani1405.pages[0].verses
         let recited = Quran.hafsMadani1405.pages[1].firstVerse
         let service = VerseOverlayService()
         let sut = makeSUT(overlayService: service)
         sut.verses = verses
 
-        service.overlays.focusModeEnabled = true
+        service.overlays.dimsOtherAyahs = true
         service.overlays.playingVerses = [recited]
 
-        XCTAssertEqual(sut.focusedVerses, [])
+        XCTAssertEqual(sut.undimmedVerses, [])
     }
 
-    func testFocusedVersesFollowChangesToDisplayedVerses() {
+    func testUndimmedVersesFollowChangesToDisplayedVerses() {
         let first = Quran.hafsMadani1405.pages[0].verses
         let second = Quran.hafsMadani1405.pages[1].verses
         let service = VerseOverlayService()
-        service.overlays.focusModeEnabled = true
+        service.overlays.dimsOtherAyahs = true
         service.overlays.playingVerses = [second[0]]
         let sut = makeSUT(overlayService: service)
-
         sut.verses = first
-        XCTAssertEqual(sut.focusedVerses, [])
 
         sut.verses = second
-        XCTAssertEqual(sut.focusedVerses, [second[0]])
+
+        XCTAssertEqual(sut.undimmedVerses, [second[0]])
     }
 
     func testReadingUpdatesFromPreferences() {

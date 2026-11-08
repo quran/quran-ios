@@ -405,7 +405,14 @@
 "audio.repetition-delay.description" = "Stelt in hoe lang wordt gepauzeerd voordat de volgende herhaling begint.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Audio streamen";
-"audio.focus-mode.title" = "Andere ayahs dimmen tijdens de recitatie";
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "Andere ayahs dimmen";
+// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "Wordt meteen toegepast.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "Dimt tijdens het afspelen alle ayahs behalve de ayah die wordt gereciteerd.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Audioweergave";
 // Metadata: Translated by AI; human review required.

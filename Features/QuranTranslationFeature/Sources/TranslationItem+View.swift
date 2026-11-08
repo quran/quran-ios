@@ -103,32 +103,30 @@ extension TranslatorText: View {
 }
 
 extension TranslationItemId {
-    func isDimmed(by focusedVerses: Set<AyahNumber>?) -> Bool {
-        guard let focusedVerses, let ayah else {
+    func isDimmed(undimmedVerses: Set<AyahNumber>?) -> Bool {
+        guard let undimmedVerses, let ayah else {
             return false
         }
-        return !focusedVerses.contains(ayah)
+        return !undimmedVerses.contains(ayah)
     }
 }
 
 extension TranslationItem {
     #if QURAN_SYNC
     func view(
-        focusedVerses: Set<AyahNumber>? = nil,
+        undimmedVerses: Set<AyahNumber>?,
         onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?
     ) -> some View {
-        content(focusedVerses: focusedVerses) { $0.view(onAyahNumberTapped: onAyahNumberTapped) }
+        content(undimmedVerses: undimmedVerses) { $0.view(onAyahNumberTapped: onAyahNumberTapped) }
     }
     #else
-    func view(focusedVerses: Set<AyahNumber>? = nil) -> some View {
-        content(focusedVerses: focusedVerses) { $0.view() }
+    func view(undimmedVerses: Set<AyahNumber>?) -> some View {
+        content(undimmedVerses: undimmedVerses) { $0.view() }
     }
     #endif
 
-    private static let dimmedOpacity = 0.25
-
     private func content(
-        focusedVerses: Set<AyahNumber>?,
+        undimmedVerses: Set<AyahNumber>?,
         @ViewBuilder verseNumberView: (TranslationVerseNumber) -> some View
     ) -> some View {
         VStack {
@@ -158,7 +156,7 @@ extension TranslationItem {
         .listRowInsets(.zero)
         .listRowBackground(Color.clear)
         .background(color)
-        .opacity(id.isDimmed(by: focusedVerses) ? Self.dimmedOpacity : 1)
+        .dimmedAyah(id.isDimmed(undimmedVerses: undimmedVerses))
         .trackingTarget(item: id)
     }
 }
@@ -198,9 +196,9 @@ private struct ContentTranslationPreview: View {
 
     private func itemView(_ item: TranslationItem) -> some View {
         #if QURAN_SYNC
-        item.view(onAyahNumberTapped: nil)
+        item.view(undimmedVerses: nil, onAyahNumberTapped: nil)
         #else
-        item.view()
+        item.view(undimmedVerses: nil)
         #endif
     }
 

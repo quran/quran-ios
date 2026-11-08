@@ -185,7 +185,11 @@
 "audio.select-end-verse" = "حدد نهاية التشغيل الصوتي";
 
 "audio.streaming.title" = "تشغيل الصوت عبر الإنترنت";
-"audio.focus-mode.title" = "تعتيم بقية الآيات أثناء التلاوة";
+"audio.dim-other-ayahs.title" = "تعتيم الآيات الأخرى";
+// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+"audio.dim-other-ayahs.footer" = "يُطبَّق فورًا.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+"audio.dim-other-ayahs.description" = "أثناء تشغيل الصوت، يُعتِّم كل الآيات عدا الآية التي تُتلى.";
 "audio.playback.title" = "تشغيل الصوتيات";
 "audio.playback.footer.page" = "يستمر التشغيل حتى نهاية الصفحة الحالية. إذا كان «تشغيل الصوت عبر الإنترنت» مُعطّلًا، تُنزَّل تلك الآيات أولًا؛ التشغيل عبر الإنترنت يوفر المساحة لكنه يتطلب اتصالًا بالإنترنت.";
 "audio.playback.footer.quarter" = "يستمر التشغيل حتى نهاية ربع الحزب الحالي. إذا كان «تشغيل الصوت عبر الإنترنت» مُعطّلًا، تُنزَّل تلك الآيات أولًا؛ التشغيل عبر الإنترنت يوفر المساحة لكنه يتطلب اتصالًا بالإنترنت.";

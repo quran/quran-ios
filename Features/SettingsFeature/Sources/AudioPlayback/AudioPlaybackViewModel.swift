@@ -37,7 +37,7 @@ final class AudioPlaybackViewModel: ObservableObject {
         playbackRate = audioPreferences.playbackRate
         audioEnd = audioPreferences.audioEnd
         streamingEnabled = audioPreferences.streamingEnabled
-        focusModeEnabled = contentStatePreferences.focusModeEnabled
+        dimsOtherAyahs = contentStatePreferences.dimsOtherAyahs
         verseRuns = audioPreferences.verseRuns
         verseDelay = audioPreferences.verseDelay
         listRuns = audioPreferences.listRuns
@@ -47,7 +47,7 @@ final class AudioPlaybackViewModel: ObservableObject {
         audioPreferences.$playbackRate.assign(to: &$playbackRate)
         audioPreferences.$audioEnd.assign(to: &$audioEnd)
         audioPreferences.$streamingEnabled.assign(to: &$streamingEnabled)
-        contentStatePreferences.$focusModeEnabled.assign(to: &$focusModeEnabled)
+        contentStatePreferences.$dimsOtherAyahs.assign(to: &$dimsOtherAyahs)
         audioPreferences.$verseRuns.assign(to: &$verseRuns)
         audioPreferences.$verseDelay.assign(to: &$verseDelay)
         audioPreferences.$listRuns.assign(to: &$listRuns)
@@ -71,8 +71,8 @@ final class AudioPlaybackViewModel: ObservableObject {
         didSet { save(streamingEnabled, to: \.streamingEnabled) }
     }
 
-    @Published var focusModeEnabled: Bool {
-        didSet { saveFocusMode() }
+    @Published var dimsOtherAyahs: Bool {
+        didSet { saveDimsOtherAyahs() }
     }
 
     @Published var verseRuns: Runs {
@@ -135,9 +135,9 @@ final class AudioPlaybackViewModel: ObservableObject {
         audioPreferences[keyPath: keyPath] = value
     }
 
-    private func saveFocusMode() {
-        guard contentStatePreferences.focusModeEnabled != focusModeEnabled else { return }
-        contentStatePreferences.focusModeEnabled = focusModeEnabled
+    private func saveDimsOtherAyahs() {
+        guard contentStatePreferences.dimsOtherAyahs != dimsOtherAyahs else { return }
+        contentStatePreferences.dimsOtherAyahs = dimsOtherAyahs
     }
 }
 

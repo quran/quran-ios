@@ -493,7 +493,14 @@
 "audio.repetition-delay.description" = "设置下一次重复开始前的暂停时长。";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "流式播放音频";
-"audio.focus-mode.title" = "诵读时淡化其他经文";
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "淡化其他经文";
+// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "立即生效。";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "播放音频时，淡化正在诵读的经文以外的所有经文。";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "音频播放";
 // Metadata: Translated by AI; human review required.

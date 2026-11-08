@@ -431,7 +431,14 @@
 "audio.repetition-delay.description" = "Bir sonraki tekrar başlamadan önce ne kadar duraklanacağını belirler.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Sesi çevrimiçi oynat";
-"audio.focus-mode.title" = "Okuma sırasında diğer ayetleri soluklaştır";
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "Diğer ayetleri soluklaştır";
+// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "Hemen uygulanır.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "Ses çalarken okunan ayet dışındaki tüm ayetleri soluklaştırır.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Ses oynatma";
 // Metadata: Translated by AI; human review required.

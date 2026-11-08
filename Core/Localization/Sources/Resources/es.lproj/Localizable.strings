@@ -488,7 +488,14 @@
 "audio.repetition-delay.description" = "Define cuánto tiempo pausar antes de que comience la siguiente repetición.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Transmitir audio";
-"audio.focus-mode.title" = "Atenuar las demás aleyas durante la recitación";
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "Atenuar otras aleyas";
+// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "Se aplica de inmediato.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "Mientras se reproduce el audio, atenúa todas las aleyas excepto la que se está recitando.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Reproducción de audio";
 // Metadata: Translated by AI; human review required.

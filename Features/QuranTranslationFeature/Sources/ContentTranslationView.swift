@@ -38,7 +38,7 @@ public struct ContentTranslationView: View {
             arabicFontSize: viewModel.arabicFontSize,
             translationFontSize: viewModel.translationFontSize,
             highlights: viewModel.highlights,
-            focusedVerses: viewModel.focusedVerses,
+            undimmedVerses: viewModel.undimmedVerses,
             scrollToItem: viewModel.scrollToItem,
             onReaderScroll: { viewModel.onReaderScroll() },
             tracker: viewModel.tracker,
@@ -52,7 +52,7 @@ public struct ContentTranslationView: View {
             arabicFontSize: viewModel.arabicFontSize,
             translationFontSize: viewModel.translationFontSize,
             highlights: viewModel.highlights,
-            focusedVerses: viewModel.focusedVerses,
+            undimmedVerses: viewModel.undimmedVerses,
             scrollToItem: viewModel.scrollToItem,
             onReaderScroll: { viewModel.onReaderScroll() },
             tracker: viewModel.tracker,
@@ -85,7 +85,7 @@ private struct ContentTranslationViewBody: View {
     let arabicFontSize: FontSize
     let translationFontSize: FontSize
     let highlights: [AyahNumber: Color]
-    let focusedVerses: Set<AyahNumber>?
+    let undimmedVerses: Set<AyahNumber>?
     let scrollToItem: TranslationItemId?
     let onReaderScroll: () -> Void
     let tracker: CollectionTracker<TranslationItemId>
@@ -101,9 +101,9 @@ private struct ContentTranslationViewBody: View {
         List {
             ForEach(items) { item in
                 #if QURAN_SYNC
-                item.view(focusedVerses: focusedVerses, onAyahNumberTapped: onAyahNumberTapped)
+                item.view(undimmedVerses: undimmedVerses, onAyahNumberTapped: onAyahNumberTapped)
                 #else
-                item.view(focusedVerses: focusedVerses)
+                item.view(undimmedVerses: undimmedVerses)
                 #endif
             }
         }

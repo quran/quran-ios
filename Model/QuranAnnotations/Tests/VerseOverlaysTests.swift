@@ -91,84 +91,139 @@ final class VerseOverlaysTests: XCTestCase {
         XCTAssertEqual(updated.verseToScrollTo(comparingTo: original), verses[3])
     }
 
-    func test_focusedVerses_areThePlayingVersesWhileFocusModeIsOn() {
+    // MARK: Dim Other Ayahs
+
+    func test_undimmedVerses_areThePlayingVersesWhileDimmingOtherAyahs() {
         let verses = Quran.hafsMadani1405.pages[0].verses
         var overlays = VerseOverlays()
-        overlays.focusModeEnabled = true
+        overlays.dimsOtherAyahs = true
         overlays.playingVerses = [verses[1], verses[2]]
 
-        XCTAssertEqual(overlays.focusedVerses, [verses[1], verses[2]])
+        XCTAssertEqual(overlays.undimmedVerses, [verses[1], verses[2]])
     }
 
-    func test_focusedVerses_areNilWhileFocusModeIsOff() {
+    func test_undimmedVerses_areNilWhileNotDimmingOtherAyahs() {
         let verses = Quran.hafsMadani1405.pages[0].verses
         var overlays = VerseOverlays()
         overlays.playingVerses = [verses[1]]
 
-        XCTAssertFalse(overlays.focusModeEnabled)
-        XCTAssertNil(overlays.focusedVerses)
+        XCTAssertNil(overlays.undimmedVerses)
     }
 
-    func test_focusedVerses_areNilWhenNothingIsPlaying() {
+    func test_undimmedVerses_areNilWhenNothingIsPlaying() {
         let verses = Quran.hafsMadani1405.pages[0].verses
         var overlays = VerseOverlays()
-        overlays.focusModeEnabled = true
+        overlays.dimsOtherAyahs = true
         overlays.selectedVerses = [verses[1]]
-        overlays.navigationTarget = verses[2]
+        overlays.navigationHighlight = verses[2]
 
-        XCTAssertNil(overlays.focusedVerses)
+        XCTAssertNil(overlays.undimmedVerses)
     }
 
-    func test_restricted_keepsFocusOnThePlayingVersesPage() {
+    func test_undimmedVerses_includeTheSelectionDuringPlayback() {
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        var overlays = VerseOverlays()
+        overlays.dimsOtherAyahs = true
+        overlays.playingVerses = [verses[1]]
+        overlays.selectedVerses = [verses[3], verses[4]]
+
+        XCTAssertEqual(overlays.undimmedVerses, [verses[1], verses[3], verses[4]])
+    }
+
+    func test_undimmedVerses_includeTheNavigationHighlightDuringPlayback() {
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        var overlays = VerseOverlays()
+        overlays.dimsOtherAyahs = true
+        overlays.playingVerses = [verses[1]]
+        overlays.navigationHighlight = verses[5]
+
+        XCTAssertEqual(overlays.undimmedVerses, [verses[1], verses[5]])
+    }
+
+    func test_undimmedVerses_includeTheWordPointersVerseDuringPlayback() {
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        var overlays = VerseOverlays()
+        overlays.dimsOtherAyahs = true
+        overlays.playingVerses = [verses[1]]
+        overlays.pointedWord = Word(verse: verses[4], wordNumber: 2)
+
+        XCTAssertEqual(overlays.undimmedVerses, [verses[1], verses[4]])
+    }
+
+    func test_undimmedVerses_leaveOutTheNavigationTarget() {
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        var overlays = VerseOverlays()
+        overlays.dimsOtherAyahs = true
+        overlays.playingVerses = [verses[1]]
+        overlays.navigationTarget = verses[5]
+
+        XCTAssertEqual(overlays.undimmedVerses, [verses[1]])
+    }
+
+    func test_restricted_keepsThePlayingVerseOnItsPageUndimmed() {
         let page = Quran.hafsMadani1405.pages[1]
         let recited = page.verses[1]
         var overlays = VerseOverlays()
-        overlays.focusModeEnabled = true
+        overlays.dimsOtherAyahs = true
         overlays.playingVerses = [recited]
 
         let restricted = overlays.restricted(to: page)
 
-        XCTAssertTrue(restricted.focusModeEnabled)
-        XCTAssertEqual(restricted.focusedVerses, [recited])
+        XCTAssertEqual(restricted.undimmedVerses, [recited])
     }
 
     func test_restricted_dimsEveryVerseOfAPageWhileAudioPlaysOnAnotherPage() {
         let page = Quran.hafsMadani1405.pages[0]
         let recited = Quran.hafsMadani1405.pages[1].firstVerse
         var overlays = VerseOverlays()
-        overlays.focusModeEnabled = true
+        overlays.dimsOtherAyahs = true
         overlays.playingVerses = [recited]
 
         let restricted = overlays.restricted(to: page)
 
-        XCTAssertTrue(restricted.playingVerses.isEmpty)
-        XCTAssertEqual(restricted.focusedVerses, [])
+        XCTAssertEqual(restricted.undimmedVerses, [])
     }
 
-    func test_restricted_dimsNothingWhenFocusModeIsOffOrNothingPlays() {
+    func test_restricted_keepsTheSelectionUndimmedWhileAudioPlaysOnAnotherPage() {
         let page = Quran.hafsMadani1405.pages[0]
-        let recited = Quran.hafsMadani1405.pages[1].firstVerse
-        var unfocused = VerseOverlays()
-        unfocused.playingVerses = [recited]
-        var silent = VerseOverlays()
-        silent.focusModeEnabled = true
+        let selected = page.verses[2]
+        var overlays = VerseOverlays()
+        overlays.dimsOtherAyahs = true
+        overlays.playingVerses = [Quran.hafsMadani1405.pages[1].firstVerse]
+        overlays.selectedVerses = [selected]
 
-        let restrictedUnfocused = unfocused.restricted(to: page)
-        let restrictedSilent = silent.restricted(to: page)
+        let restricted = overlays.restricted(to: page)
 
-        XCTAssertNil(restrictedUnfocused.focusedVerses)
-        XCTAssertTrue(restrictedSilent.focusModeEnabled)
-        XCTAssertNil(restrictedSilent.focusedVerses)
+        XCTAssertEqual(restricted.undimmedVerses, [selected])
     }
 
-    func test_focusModeChange_changesEqualityWithoutRequestingScrolling() {
+    func test_restricted_isUnaffectedByAudioOnAnotherPageWhileNotDimmingOtherAyahs() {
+        let page = Quran.hafsMadani1405.pages[0]
+        var overlays = VerseOverlays()
+        overlays.playingVerses = [Quran.hafsMadani1405.pages[1].firstVerse]
+
+        let restricted = overlays.restricted(to: page)
+
+        XCTAssertEqual(restricted, VerseOverlays())
+    }
+
+    func test_restricted_dimsNothingWhenNothingIsPlaying() {
+        let page = Quran.hafsMadani1405.pages[0]
+        var overlays = VerseOverlays()
+        overlays.dimsOtherAyahs = true
+
+        let restricted = overlays.restricted(to: page)
+
+        XCTAssertNil(restricted.undimmedVerses)
+    }
+
+    func test_dimsOtherAyahsChange_doesNotRequestScrolling() {
         var original = VerseOverlays()
         original.playingVerses = [Quran.hafsMadani1405.firstVerse]
-        var focused = original
-        focused.focusModeEnabled = true
+        var dimming = original
+        dimming.dimsOtherAyahs = true
 
-        XCTAssertNotEqual(original, focused)
-        XCTAssertFalse(focused.needsScrolling(comparingTo: original))
-        XCTAssertNil(focused.verseToScrollTo(comparingTo: original))
+        XCTAssertFalse(dimming.needsScrolling(comparingTo: original))
+        XCTAssertNil(dimming.verseToScrollTo(comparingTo: original))
     }
 }

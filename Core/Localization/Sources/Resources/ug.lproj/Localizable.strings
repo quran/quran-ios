@@ -491,7 +491,14 @@
 "audio.repetition-delay.description" = "كېيىنكى تەكرار باشلىنىشتىن بۇرۇن قانچىلىك توختاشنى بەلگىلەيدۇ.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "ئاۋازنى تور ئارقىلىق قويۇش";
-"audio.focus-mode.title" = "ئوقۇغان ۋاقىتتا باشقا ئايەتلەرنى سۇسلاشتۇرۇش";
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "باشقا ئايەتلەرنى سۇسلاشتۇرۇش";
+// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "دەرھال قوللىنىلىدۇ.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "ئاۋاز قويۇلۇۋاتقاندا، ئوقۇلۇۋاتقان ئايەتتىن باشقا ھەممە ئايەتلەرنى سۇسلاشتۇرىدۇ.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "ئاۋاز قويۇش";
 // Metadata: Translated by AI; human review required.

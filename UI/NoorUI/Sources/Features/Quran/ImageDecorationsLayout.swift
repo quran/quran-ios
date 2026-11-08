@@ -11,7 +11,7 @@ import SwiftUI
 struct ImageDecorationsLayout {
     let verseHighlights: [VerseHighlightPlacement]
     let wordHighlight: WordHighlightPlacement?
-    let focusedLineRects: [CGRect]?
+    let undimmedLineRects: [CGRect]?
     let suraHeaders: [SuraHeaderPlacement]
     let ayahMarkers: [AyahMarkerPlacement]
 
@@ -35,8 +35,8 @@ struct ImageDecorationsLayout {
                 let lineRects = Self.lineRects(of: decorations.wordFrames.wordFramesForVerse(verse), scale: scale)
                 return lineRects.isEmpty ? nil : VerseHighlightPlacement(id: verse, lineRects: lineRects, color: color)
             }
-        focusedLineRects = decorations.focusedVerses.map { focusedVerses in
-            focusedVerses.sorted().flatMap {
+        undimmedLineRects = decorations.undimmedVerses.map { undimmedVerses in
+            undimmedVerses.sorted().flatMap {
                 Self.lineRects(of: decorations.wordFrames.wordFramesForVerse($0), scale: scale)
             }
         }

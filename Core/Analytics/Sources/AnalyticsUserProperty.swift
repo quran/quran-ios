@@ -17,6 +17,7 @@ public enum AnalyticsUserProperty: String, CaseIterable, Sendable {
     /// The pause before the range repeats, in seconds: `0.0` … `10.0`.
     case rangePause = "range_pause"
     case audioStreaming = "audio_streaming"
+    case dimOtherAyahs = "dim_other_ayahs"
     case reciter
 
     // MARK: Reading

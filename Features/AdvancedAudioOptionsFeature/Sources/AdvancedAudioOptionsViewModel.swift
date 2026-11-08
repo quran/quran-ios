@@ -41,7 +41,7 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
         verseDelay = options.verseDelay
         repetitionDelay = options.repetitionDelay
         playbackRate = AudioPreferences.shared.playbackRate
-        focusModeEnabled = QuranContentStatePreferences.shared.focusModeEnabled
+        dimsOtherAyahs = QuranContentStatePreferences.shared.dimsOtherAyahs
         endAt = Self.deduceEndAt(
             from: options.start,
             to: normalizedEnd,
@@ -61,8 +61,9 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     @Published var endAt: EndAtChoice
     @Published var playbackRate: Float
 
-    @Published var focusModeEnabled: Bool {
-        didSet { saveFocusMode() }
+    /// Saved right away, unlike the other options, which apply on Play.
+    @Published var dimsOtherAyahs: Bool {
+        didSet { saveDimsOtherAyahs() }
     }
 
     @Published var repetitionDelay: RepetitionDelay
@@ -162,9 +163,9 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
             || end == AudioEndLastAyahFinder(audioEnd: audioEnd).findLastAyah(startAyah: start)
     }
 
-    private func saveFocusMode() {
-        guard QuranContentStatePreferences.shared.focusModeEnabled != focusModeEnabled else { return }
-        QuranContentStatePreferences.shared.focusModeEnabled = focusModeEnabled
+    private func saveDimsOtherAyahs() {
+        guard QuranContentStatePreferences.shared.dimsOtherAyahs != dimsOtherAyahs else { return }
+        QuranContentStatePreferences.shared.dimsOtherAyahs = dimsOtherAyahs
     }
 
     private func applyEndAt() {

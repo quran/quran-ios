@@ -488,7 +488,14 @@
 "audio.repetition-delay.description" = "Legt fest, wie lange vor Beginn der nächsten Wiederholung pausiert wird.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Audio streamen";
-"audio.focus-mode.title" = "Andere Ayat während der Rezitation abdunkeln";
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "Andere Ayahs abdunkeln";
+// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "Wird sofort übernommen.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "Dunkelt während der Wiedergabe alle Ayahs außer der gerade rezitierten ab.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Audiowiedergabe";
 // Metadata: Translated by AI; human review required.

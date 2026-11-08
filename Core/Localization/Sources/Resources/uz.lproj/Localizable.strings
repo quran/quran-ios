@@ -490,7 +490,14 @@
 "audio.repetition-delay.description" = "Keyingi takror boshlanishidan oldingi tanaffus davomiyligini belgilaydi.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Audioni internet orqali ijro etish";
-"audio.focus-mode.title" = "Tilovat paytida boshqa oyatlarni xiralashtirish";
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "Boshqa oyatlarni xiralashtirish";
+// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "Darhol qo‘llaniladi.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "Audio ijro etilayotganda, tilovat qilinayotgan oyatdan boshqa barcha oyatlarni xiralashtiradi.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Audio ijrosi";
 // Metadata: Translated by AI; human review required.

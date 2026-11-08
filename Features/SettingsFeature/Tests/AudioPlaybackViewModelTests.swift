@@ -96,33 +96,13 @@ final class AudioPlaybackViewModelTests: XCTestCase {
         XCTAssertEqual(audioPreferences.repetitionDelay, .fiveSeconds)
     }
 
-    func test_focusMode_savesThePreference() {
-        contentStatePreferences.focusModeEnabled = false
+    func test_dimOtherAyahs_savesThePreference() {
+        contentStatePreferences.dimsOtherAyahs = false
         let sut = makeSUT()
 
-        sut.focusModeEnabled = true
-        XCTAssertTrue(contentStatePreferences.focusModeEnabled)
+        sut.dimsOtherAyahs = true
 
-        sut.focusModeEnabled = false
-        XCTAssertFalse(contentStatePreferences.focusModeEnabled)
-    }
-
-    // MARK: Seeding
-
-    func test_focusMode_isSeededFromThePreference_whenEnabled() {
-        contentStatePreferences.focusModeEnabled = true
-
-        let sut = makeSUT()
-
-        XCTAssertTrue(sut.focusModeEnabled)
-    }
-
-    func test_focusMode_isSeededFromThePreference_whenDisabled() {
-        contentStatePreferences.focusModeEnabled = false
-
-        let sut = makeSUT()
-
-        XCTAssertFalse(sut.focusModeEnabled)
+        XCTAssertTrue(contentStatePreferences.dimsOtherAyahs)
     }
 
     // MARK: Footer
@@ -174,15 +154,21 @@ final class AudioPlaybackViewModelTests: XCTestCase {
         XCTAssertEqual(sut.repetitionDelay, .tenSeconds)
     }
 
-    func test_focusMode_followsPreferenceChangesMadeElsewhere() {
-        contentStatePreferences.focusModeEnabled = false
+    func test_dimOtherAyahs_isSeededFromThePreference() {
+        contentStatePreferences.dimsOtherAyahs = true
+
         let sut = makeSUT()
 
-        contentStatePreferences.focusModeEnabled = true
-        XCTAssertTrue(sut.focusModeEnabled)
+        XCTAssertTrue(sut.dimsOtherAyahs)
+    }
 
-        contentStatePreferences.focusModeEnabled = false
-        XCTAssertFalse(sut.focusModeEnabled)
+    func test_dimOtherAyahs_followsPreferenceChangesMadeElsewhere() {
+        contentStatePreferences.dimsOtherAyahs = false
+        let sut = makeSUT()
+
+        contentStatePreferences.dimsOtherAyahs = true
+
+        XCTAssertTrue(sut.dimsOtherAyahs)
     }
 
     // MARK: Reciter
@@ -241,7 +227,7 @@ final class AudioPlaybackViewModelTests: XCTestCase {
     }
 }
 
-/// The audio and focus mode preferences live in the shared user defaults; tests put them back.
+/// The audio and Dim Other Ayahs preferences live in the shared user defaults; tests put them back.
 @MainActor
 private struct SavedPreferences {
     // MARK: Lifecycle
@@ -255,7 +241,7 @@ private struct SavedPreferences {
         verseDelay = audio.verseDelay
         listRuns = audio.listRuns
         repetitionDelay = audio.repetitionDelay
-        focusModeEnabled = QuranContentStatePreferences.shared.focusModeEnabled
+        dimsOtherAyahs = QuranContentStatePreferences.shared.dimsOtherAyahs
         lastSelectedReciterId = ReciterPreferences.shared.lastSelectedReciterId
         let recentReciterIds = ReciterPreferences.shared.recentReciterIds
         restoreRecentReciters = { ReciterPreferences.shared.recentReciterIds = recentReciterIds }
@@ -272,7 +258,7 @@ private struct SavedPreferences {
         audio.verseDelay = verseDelay
         audio.listRuns = listRuns
         audio.repetitionDelay = repetitionDelay
-        QuranContentStatePreferences.shared.focusModeEnabled = focusModeEnabled
+        QuranContentStatePreferences.shared.dimsOtherAyahs = dimsOtherAyahs
         ReciterPreferences.shared.lastSelectedReciterId = lastSelectedReciterId
         restoreRecentReciters()
     }
@@ -286,7 +272,7 @@ private struct SavedPreferences {
     private let verseDelay: VerseDelay
     private let listRuns: Runs
     private let repetitionDelay: RepetitionDelay
-    private let focusModeEnabled: Bool
+    private let dimsOtherAyahs: Bool
     private let lastSelectedReciterId: Int
     private let restoreRecentReciters: () -> Void
 }

@@ -65,7 +65,7 @@ class ContentImageViewModel: ObservableObject {
             wordFrames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
             verseHighlights: overlays.versesByHighlights().mapValues { Color($0) },
             wordHighlight: overlays.pointedWord,
-            focusedVerses: overlays.focusedVerses
+            undimmedVerses: overlays.undimmedVerses
         )
     }
 

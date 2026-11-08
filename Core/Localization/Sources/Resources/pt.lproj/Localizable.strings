@@ -489,7 +489,14 @@
 "audio.repetition-delay.description" = "Define por quanto tempo pausar antes do início da próxima repetição.";
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Transmitir áudio";
-"audio.focus-mode.title" = "Escurecer as outras ayahs durante a recitação";
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "Esmaecer outras ayahs";
+// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "Aplica-se imediatamente.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "Durante a reprodução do áudio, esmaece todas as ayahs, exceto a que está sendo recitada.";
 // Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Reprodução de áudio";
 // Metadata: Translated by AI; human review required.

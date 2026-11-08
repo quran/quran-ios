@@ -3,45 +3,39 @@ import XCTest
 @testable import QuranTranslationFeature
 
 final class TranslationItemDimmingTests: XCTestCase {
-    func testNothingIsDimmedWithoutFocus() {
+    func testNothingIsDimmedWhileDimOtherAyahsIsOff() {
         for id in rowIds(for: recited) + chromeIds {
-            XCTAssertFalse(id.isDimmed(by: nil), "\(id)")
+            XCTAssertFalse(id.isDimmed(undimmedVerses: nil), "\(id)")
         }
     }
 
     func testPageHeaderAndFooterAreNeverDimmed() {
         for id in chromeIds {
-            XCTAssertFalse(id.isDimmed(by: [recited]), "\(id)")
-            XCTAssertFalse(id.isDimmed(by: []), "\(id)")
+            XCTAssertFalse(id.isDimmed(undimmedVerses: []), "\(id)")
         }
     }
 
-    func testSuraNameFollowsTheSurasFirstVerse() {
+    func testSuraNameIsUndimmedWithTheSurasFirstVerse() {
         let sura = Quran.hafsMadani1405.suras[1]
 
-        XCTAssertFalse(TranslationItemId.suraName(sura).isDimmed(by: [sura.firstVerse]))
-        XCTAssertTrue(TranslationItemId.suraName(sura).isDimmed(by: [sura.verses[1]]))
+        XCTAssertFalse(TranslationItemId.suraName(sura).isDimmed(undimmedVerses: [sura.firstVerse]))
     }
 
-    func testVerseRowsAreDimmedUnlessTheirVerseIsFocused() {
+    func testSuraNameIsDimmedWithTheSurasOtherVerses() {
+        let sura = Quran.hafsMadani1405.suras[1]
+
+        XCTAssertTrue(TranslationItemId.suraName(sura).isDimmed(undimmedVerses: [sura.verses[1]]))
+    }
+
+    func testRowsOfAnUndimmedVerseAreNotDimmed() {
         for id in rowIds(for: recited) {
-            XCTAssertFalse(id.isDimmed(by: [recited]), "\(id)")
+            XCTAssertFalse(id.isDimmed(undimmedVerses: [recited]), "\(id)")
         }
+    }
+
+    func testRowsOfOtherVersesAreDimmed() {
         for id in rowIds(for: other) {
-            XCTAssertTrue(id.isDimmed(by: [recited]), "\(id)")
-        }
-    }
-
-    func testSeparatorFollowsItsVerse() {
-        XCTAssertFalse(TranslationItemId.separator(recited).isDimmed(by: [recited]))
-        XCTAssertTrue(TranslationItemId.separator(other).isDimmed(by: [recited]))
-    }
-
-    func testEmptyFocusDimsEveryVerseRow() {
-        let sura = Quran.hafsMadani1405.suras[1]
-
-        for id in rowIds(for: recited) + rowIds(for: other) + [.suraName(sura)] {
-            XCTAssertTrue(id.isDimmed(by: []), "\(id)")
+            XCTAssertTrue(id.isDimmed(undimmedVerses: [recited]), "\(id)")
         }
     }
 

@@ -32,7 +32,7 @@ struct ContentLineView: View {
             onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
-            focusedVerses: viewModel.focusedVerses,
+            undimmedVerses: viewModel.undimmedVerses,
             ayahReadingBookmarks: viewModel.ayahReadingBookmarks,
             pageReadingBookmarks: viewModel.pageReadingBookmarks,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
@@ -52,7 +52,7 @@ struct ContentLineView: View {
             onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
             highlightColorsByVerse: viewModel.highlightColorsByVerse,
-            focusedVerses: viewModel.focusedVerses,
+            undimmedVerses: viewModel.undimmedVerses,
             drawsAyahNumbersAndSuraHeaders: viewModel.drawsAyahNumbersAndSuraHeaders,
             chromeStyle: viewModel.chromeStyle,
             imageRenderingMode: viewModel.imageRenderingMode,
@@ -86,7 +86,7 @@ private struct ContentLineViewBody: View {
     let onReaderScroll: () -> Void
     let wordFrames: WordFrameCollection
     let highlightColorsByVerse: [AyahNumber: Color]
-    let focusedVerses: Set<AyahNumber>?
+    let undimmedVerses: Set<AyahNumber>?
     #if QURAN_SYNC
     let ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]]
     let pageReadingBookmarks: [ReadingBookmarkSlot]
@@ -160,7 +160,7 @@ private struct ContentLineViewBody: View {
                 suraHeaders(layout)
                 highlights(layout)
                 ayahMarkers(layout)
-                focusDim(layout)
+                ayahDim(layout)
             }
         }
         .frame(
@@ -213,12 +213,13 @@ private struct ContentLineViewBody: View {
         }
     }
 
+    /// Line pages have no word pointer, so every undimmed verse is highlighted and has highlight rects.
     @ViewBuilder
-    private func focusDim(_ layout: LinePageLayout) -> some View {
-        if let focusedVerses {
-            QuranFocusDim(
+    private func ayahDim(_ layout: LinePageLayout) -> some View {
+        if let undimmedVerses {
+            QuranAyahDim(
                 cutouts: layout.highlightRects
-                    .filter { focusedVerses.contains($0.ayah) }
+                    .filter { undimmedVerses.contains($0.ayah) }
                     .map(\.rect)
             )
         }

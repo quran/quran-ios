@@ -48,7 +48,7 @@ struct ReadingBookmarkMenuView: View {
 }
 
 @MainActor
-private struct ReadingBookmarkMenuContent: View {
+struct ReadingBookmarkMenuContent: View {
     @Binding var error: Error?
     @Binding var draftNames: [ReadingBookmarkSlot: String]
     @Binding var editMode: EditMode
@@ -61,7 +61,7 @@ private struct ReadingBookmarkMenuContent: View {
     let saveNames: ([ReadingBookmarkSlot]) async -> Bool
     let select: AsyncItemAction<ReadingBookmarkSlot>
 
-    @ScaledMetric private var minimumWidth = 320.0
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         PreferredContentSizeMatchesScrollView {
@@ -89,19 +89,27 @@ private struct ReadingBookmarkMenuContent: View {
                         }
                     }
                 }
-                .frame(minWidth: minimumWidth)
             }
         }
-        .fixedSize(horizontal: true, vertical: false)
         .task {
             await start()
         }
         .errorAlert(error: $error)
     }
 
+    /// Puts the Edit button under the title at accessibility sizes, so neither breaks mid-word.
+    @ViewBuilder
+    private func titleStack(@ViewBuilder content: () -> some View) -> some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, content: content)
+        } else {
+            HStack(content: content)
+        }
+    }
+
     private var header: some View {
         VStack(alignment: .leading, spacing: 4) {
-            HStack {
+            titleStack {
                 Text(l("bookmarks.reading.title"))
                     .font(.headline.bold())
                     .foregroundStyle(Color.label)
@@ -127,8 +135,6 @@ private struct ReadingBookmarkMenuContent: View {
                             .accessibilityAddTraits(.isHeader)
                         description(l("bookmarks.reading.description"))
                     }
-                    // A zero ideal width lets the rows set the popover's width; the copy wraps within it.
-                    .frame(idealWidth: 0, maxWidth: .infinity, alignment: .leading)
                 } else {
                     description(l("bookmarks.reading.description"))
                 }

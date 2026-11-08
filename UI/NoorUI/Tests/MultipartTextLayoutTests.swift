@@ -115,13 +115,95 @@ final class MultipartTextLayoutTests: XCTestCase {
         XCTAssertGreaterThan(sizes.wrapped.height, sizes.line.height * 3)
     }
 
+    func test_view_wideReference_wrapsWithinTheLineWhenOptedIn() async {
+        guard #available(iOS 17.0, *) else { return }
+
+        let width: CGFloat = 250
+        let size = await MainActor.run {
+            fittingSize(
+                pinned(atLongReference.view(ofSize: .footnote, wrapsWideReferences: true), .accessibility5),
+                width: width
+            )
+        }
+
+        XCTAssertLessThanOrEqual(size.width, width)
+    }
+
+    /// Containers like the Quran page header size around rigid references, so wrapping them is opt-in.
+    func test_view_wideReference_keepsItsOneLineWidthByDefault() async {
+        guard #available(iOS 17.0, *) else { return }
+
+        let widths = await MainActor.run {
+            let reference: MultipartText = "\(ayah: longAyah, nameStyle: .text)"
+            return (
+                text: fittingSize(pinned(atLongReference.view(ofSize: .footnote), .accessibility5), width: 250).width,
+                reference: fittingSize(
+                    pinned(reference.view(ofSize: .footnote), .accessibility5),
+                    width: .greatestFiniteMagnitude
+                ).width
+            )
+        }
+
+        XCTAssertEqual(widths.text, widths.reference, accuracy: 0.5)
+    }
+
+    func test_view_referenceThatFitsTheLine_keepsItsOneLineLayout() async {
+        guard #available(iOS 17.0, *) else { return }
+
+        let sizes = await MainActor.run {
+            [
+                fittingSize(pinned(atLongReference.view(ofSize: .footnote, wrapsWideReferences: true)), width: 320),
+                fittingSize(pinned(atLongReference.view(ofSize: .footnote, allowsWrapping: false)), width: 320),
+            ]
+        }
+
+        XCTAssertEqual(sizes[0].width, sizes[1].width, accuracy: 0.5)
+        XCTAssertEqual(sizes[0].height, sizes[1].height, accuracy: 0.5)
+    }
+
+    /// A reference that fits a line on its own moves to the next line whole, instead of stacking beside "at".
+    func test_view_referenceThatFitsOnlyItsOwnLine_movesToTheNextLineWhole() async {
+        guard #available(iOS 17.0, *) else { return }
+
+        let sizes = await MainActor.run {
+            let reference: MultipartText = "\(ayah: longAyah, nameStyle: .text)"
+            let referenceSize = fittingSize(
+                pinned(reference.view(ofSize: .footnote, wrapsWideReferences: true)),
+                width: .greatestFiniteMagnitude
+            )
+            // Wide enough for the reference, too narrow for "at " before it.
+            let text = fittingSize(
+                pinned(atLongReference.view(ofSize: .footnote, wrapsWideReferences: true)),
+                width: referenceSize.width + 1
+            )
+            return (reference: referenceSize, text: text)
+        }
+
+        XCTAssertEqual(sizes.text.width, sizes.reference.width, accuracy: 0.5)
+        XCTAssertGreaterThan(sizes.text.height, sizes.reference.height * 1.5)
+        XCTAssertLessThan(sizes.text.height, sizes.reference.height * 2.5)
+    }
+
     private let english = Locale(identifier: "en-CA")
 
-    /// Fixes the locale and text size, so the widths that need an extra row don't move with simulator settings.
-    private func pinned(_ content: some View) -> some View {
-        content
+    private let longAyah = Quran.hafsMadani1405.suras[59].verses[12]
+
+    private var atLongReference: MultipartText {
+        "at \(ayah: longAyah, nameStyle: .text)"
+    }
+
+    /// Fixes the locale, typesetting language, and text size, so the widths that need an extra row don't move
+    /// with simulator settings.
+    @ViewBuilder
+    private func pinned(_ content: some View, _ dynamicTypeSize: DynamicTypeSize = .large) -> some View {
+        let pinned = content
             .environment(\.locale, english)
-            .dynamicTypeSize(.large)
+            .dynamicTypeSize(dynamicTypeSize)
+        if #available(iOS 17.0, *) {
+            pinned.typesettingLanguage(Locale.Language(identifier: "en"))
+        } else {
+            pinned
+        }
     }
 
     /// Mirrors `"bookmarks.reading.location" = "عند %@"`, so the plain part ends with a space.
@@ -161,6 +243,12 @@ final class MultipartTextLayoutTests: XCTestCase {
                 .dynamicTypeSize(.large)
         )
         return controller.sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude))
+    }
+
+    @MainActor
+    private func fittingSize(_ content: some View, width: CGFloat) -> CGSize {
+        UIHostingController(rootView: content)
+            .sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude))
     }
 
     @MainActor

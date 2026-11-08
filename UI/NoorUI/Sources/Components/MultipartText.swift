@@ -66,6 +66,8 @@ private struct TextPartView: View {
 
     let part: TextPart
     let size: MultipartText.FontSize
+    /// Off inside unbreakable groups, which keep their parts on one line.
+    var wrapsReferences = false
 
     var body: some View {
         switch part {
@@ -77,17 +79,27 @@ private struct TextPartView: View {
                 .optionalLineLimit(lineLimit)
                 .font(size.plainFont)
         case .sura(let sura, let emphasizesSura, let nameStyle):
-            QuranReferenceView(reference: .sura(sura, nameStyle: nameStyle), size: size, emphasizesSura: emphasizesSura)
+            QuranReferenceView(
+                reference: .sura(sura, nameStyle: nameStyle),
+                size: size,
+                emphasizesSura: emphasizesSura,
+                wrapsWhenNarrow: wrapsReferences
+            )
         case .ayah(let ayah, let emphasizesSura, let nameStyle):
             QuranReferenceView(
                 reference: .ayah(ayah, nameStyle: nameStyle),
                 size: size,
-                emphasizesSura: emphasizesSura
+                emphasizesSura: emphasizesSura,
+                wrapsWhenNarrow: wrapsReferences
             )
         case .suras(let suras, let nameStyle):
             SuraNamesView(suras: suras, nameStyle: nameStyle, size: size)
         case .ayahs(let ayahs, let nameStyle):
-            QuranReferenceView(reference: .ayahs(ayahs, nameStyle: nameStyle), size: size)
+            QuranReferenceView(
+                reference: .ayahs(ayahs, nameStyle: nameStyle),
+                size: size,
+                wrapsWhenNarrow: wrapsReferences
+            )
         case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
             HStack(spacing: 0) {
                 ForEach(0 ..< parts.count, id: \.self) { i in
@@ -376,12 +388,23 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         parts.append(contentsOf: other.parts)
     }
 
+    /// - Parameter wrapsWideReferences: Whether a sura or ayah reference wider than the whole line wraps,
+    ///   coordinate under name, instead of overflowing. It needs `allowsWrapping`. A reference that fits keeps
+    ///   its one-line layout either way. Off by default, so containers that size around rigid references,
+    ///   like the Quran page header, keep their layout.
     public func view(
         ofSize size: FontSize,
         alignment: Alignment = .leading,
-        allowsWrapping: Bool = true
+        allowsWrapping: Bool = true,
+        wrapsWideReferences: Bool = false
     ) -> some View {
-        MultiPartTextView(text: self, size: size, alignment: alignment, allowsWrapping: allowsWrapping)
+        MultiPartTextView(
+            text: self,
+            size: size,
+            alignment: alignment,
+            allowsWrapping: allowsWrapping,
+            wrapsWideReferences: wrapsWideReferences
+        )
     }
 
     // MARK: Public
@@ -446,12 +469,13 @@ private struct MultiPartTextView: View {
     let size: MultipartText.FontSize
     let alignment: Alignment
     let allowsWrapping: Bool
+    let wrapsWideReferences: Bool
 
     var body: some View {
         let parts = allowsWrapping ? text.parts.flatMap(\.wrappingParts) : text.parts
         wrap {
             ForEach(0 ..< parts.count, id: \.self) { i in
-                TextPartView(part: parts[i], size: size)
+                TextPartView(part: parts[i], size: size, wrapsReferences: allowsWrapping && wrapsWideReferences)
             }
         }
         .accessibilityElement(children: .ignore)

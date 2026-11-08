@@ -30,7 +30,6 @@ public struct Toast {
         subtitle: MultipartText? = nil,
         icon: Icon? = nil,
         action: ToastAction? = nil,
-        showsDismissButton: Bool = false,
         duration: TimeInterval = defaultDuration,
         bottomOffset: CGFloat = 40
     ) {
@@ -38,7 +37,6 @@ public struct Toast {
         self.subtitle = subtitle
         self.icon = icon
         self.action = action
-        self.showsDismissButton = showsDismissButton
         self.duration = duration
         self.bottomOffset = bottomOffset
     }
@@ -66,7 +64,6 @@ public struct Toast {
     public let subtitle: MultipartText?
     public let icon: Icon?
     public let action: ToastAction?
-    public let showsDismissButton: Bool
     public let duration: TimeInterval
     public private(set) var bottomOffset: CGFloat
 }

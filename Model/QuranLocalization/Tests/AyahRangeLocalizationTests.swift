@@ -61,9 +61,10 @@ final class AyahRangeLocalizationTests: XCTestCase {
         let range = baqarah.verses[0] ... baqarah.verses[9]
         let baqarahName = baqarah.localizedName(language: .arabic)
 
+        // VoiceOver text has no isolates of its own; String(format:) may add FSI…PDI around each argument.
         let name = range.localizedAccessibilityName(language: .arabic, locale: arabic)
-        XCTAssertTrue(name.contains(baqarahName), name)
-        XCTAssertTrue(name.contains("الآيات من ١ إلى ١٠"), name)
+            .filter { $0 != "\u{2068}" && $0 != "\u{2069}" }
+        XCTAssertEqual(name, "\(baqarahName)، الآيات من ١ إلى ١٠")
     }
 
     // MARK: Private

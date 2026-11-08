@@ -10,6 +10,7 @@ import Combine
 #else
 import AuthenticationClient
 import Combine
+import LegacyDataMigration
 import MobileSync
 #endif
 import AnnotationsService
@@ -36,14 +37,20 @@ final class NotesViewModel: ObservableObject {
         authenticationClient: any AuthenticationClient,
         quranDataService: MobileSyncDataService,
         noteService: MobileSyncNoteService,
+        ayahHighlightService: MobileSyncAyahHighlightService,
         textService: QuranTextDataService,
         textRetriever: ShareableVerseTextRetriever,
         navigateTo: @escaping (AyahNumber) -> Void,
-        editNote: @escaping (Note) -> Void
+        editNote: @escaping (Note) -> Void,
+        showHighlights: @escaping () -> Void
     ) {
         self.authenticationClient = authenticationClient
         self.quranDataService = quranDataService
         self.noteService = noteService
+        self.ayahHighlightService = ayahHighlightService
+        showHighlightsAction = showHighlights
+        hadLegacyHighlights = legacyImportPreferences.hadHighlights
+        isHighlightsTipDismissed = notesPreferences.isHighlightsTipDismissed
         self.textService = textService
         self.textRetriever = textRetriever
         reading = ReadingPreferences.shared.reading
@@ -56,6 +63,10 @@ final class NotesViewModel: ObservableObject {
             .map { $0 == .authenticated }
             .receive(on: DispatchQueue.main)
             .assign(to: &$isAuthenticated)
+        // A late CloudKit arrival can bring 3.0 highlights after Notes appears.
+        legacyImportPreferences.$hadHighlights
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$hadLegacyHighlights)
     }
     #else
     init(
@@ -82,6 +93,9 @@ final class NotesViewModel: ObservableObject {
     @Published var error: Error? = nil
     #if QURAN_SYNC
     @Published var isAuthenticated = false
+    @Published private(set) var highlights: [AyahNumber: HighlightColor] = [:]
+    @Published private(set) var hadLegacyHighlights: Bool
+    @Published private(set) var isHighlightsTipDismissed: Bool
     #endif
     @Published var notes: [NoteItem] = []
     @Published var searchTerm: String = ""
@@ -91,6 +105,23 @@ final class NotesViewModel: ObservableObject {
     /// Pull-to-refresh, when signed in. Not tied to edit mode: toggling it rebuilds the list.
     var canRefresh: Bool {
         isAuthenticated
+    }
+
+    /// The "Highlights now live in Bookmarks" card, for upgraders whose 3.0 notes held highlights
+    /// that they still have.
+    var showsHighlightsTip: Bool {
+        hadLegacyHighlights && !highlights.isEmpty && !isHighlightsTipDismissed
+    }
+
+    /// Where the user's highlights went, for the empty state.
+    var highlightsSummary: NotesHighlightsSummary? {
+        guard !highlights.isEmpty else {
+            return nil
+        }
+        let colors = Set(highlights.values)
+        return NotesHighlightsSummary(
+            colors: Array(HighlightColor.sortedColors.filter(colors.contains).prefix(4))
+        )
     }
     #endif
 
@@ -112,19 +143,9 @@ final class NotesViewModel: ObservableObject {
         #if QURAN_SYNC
         isAuthenticated = await authenticationClient.safelyRestoreState() == .authenticated
         logger.info("Quran Sync: restored authentication from Notes. Authenticated: \(isAuthenticated)")
-        let notesSequence = readingPreferences.readings().flatMapLatest { [noteService] reading in
-            noteService.notesSequence(quran: reading.quran)
-        }
-        do {
-            for try await notes in notesSequence {
-                self.notes = await noteItems(with: notes)
-                    .filter { !pendingDeletionIDs.contains($0.id) }
-            }
-        } catch {
-            guard !Task.isCancelled else { return }
-            logger.error("Quran Sync: failed to observe notes: \(error)")
-            self.error = error
-        }
+        async let observingNotes: Void = observeNotes()
+        async let observingHighlights: Void = observeHighlights()
+        _ = await (observingNotes, observingHighlights)
         #else
         let notesSequence = $reading
             .map { [noteService] reading in
@@ -160,6 +181,18 @@ final class NotesViewModel: ObservableObject {
             logger.error("Quran Sync: refresh from Notes failed: \(error)")
         }
         return nil
+    }
+
+    /// Opens the Bookmarks tab, which lists highlights by color, and retires the card.
+    func showHighlights() {
+        logger.info("Notes: show highlights in Bookmarks")
+        dismissHighlightsTip()
+        showHighlightsAction()
+    }
+
+    func dismissHighlightsTip() {
+        notesPreferences.isHighlightsTipDismissed = true
+        isHighlightsTipDismissed = true
     }
     #endif
 
@@ -246,6 +279,10 @@ final class NotesViewModel: ObservableObject {
     private let authenticationClient: any AuthenticationClient
     private let quranDataService: MobileSyncDataService
     private let noteService: MobileSyncNoteService
+    private let ayahHighlightService: MobileSyncAyahHighlightService
+    private let showHighlightsAction: () -> Void
+    private let legacyImportPreferences = LegacyImportPreferences.shared
+    private let notesPreferences = NotesPreferences.shared
     #else
     private let noteService: NoteService
     #endif
@@ -255,6 +292,38 @@ final class NotesViewModel: ObservableObject {
     private let editNoteAction: (Note) -> Void
     private let readingPreferences = ReadingPreferences.shared
     private var pendingDeletionIDs: Set<NoteItem.ID> = []
+
+    #if QURAN_SYNC
+    private func observeNotes() async {
+        let notesSequence = readingPreferences.readings().flatMapLatest { [noteService] reading in
+            noteService.notesSequence(quran: reading.quran)
+        }
+        do {
+            for try await notes in notesSequence {
+                self.notes = await noteItems(with: notes)
+                    .filter { !pendingDeletionIDs.contains($0.id) }
+            }
+        } catch {
+            guard !Task.isCancelled else { return }
+            logger.error("Quran Sync: failed to observe notes: \(error)")
+            self.error = error
+        }
+    }
+
+    private func observeHighlights() async {
+        let highlightsSequence = readingPreferences.readings().flatMapLatest { [ayahHighlightService] reading in
+            ayahHighlightService.highlightsSequence(quran: reading.quran)
+        }
+        do {
+            for try await highlights in highlightsSequence {
+                self.highlights = highlights
+            }
+        } catch {
+            guard !Task.isCancelled else { return }
+            logger.error("Quran Sync: failed to observe highlights in Notes: \(error)")
+        }
+    }
+    #endif
 
     private func restore(_ item: NoteItem, at index: Int) {
         notes.removeAll { $0.id == item.id }
@@ -296,4 +365,10 @@ final class NotesViewModel: ObservableObject {
             return NoteItem(note: note, quranText: nil)
         }
     }
+}
+
+/// The user's highlights, for the Notes empty state.
+struct NotesHighlightsSummary: Equatable {
+    /// Up to four of the colors the user highlighted with.
+    let colors: [HighlightColor]
 }

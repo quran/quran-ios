@@ -18,12 +18,19 @@ struct NoteCircle: View {
     }
 }
 
-struct ColoredCircle: View {
-    let color: Color
-    let selected: Bool
-    let minLength: CGFloat
+/// A color swatch with a faint outline, so light colors stay visible.
+public struct ColoredCircle: View {
+    // MARK: Lifecycle
 
-    var body: some View {
+    public init(color: Color, selected: Bool = false, minLength: CGFloat) {
+        self.color = color
+        self.selected = selected
+        self.minLength = minLength
+    }
+
+    // MARK: Public
+
+    public var body: some View {
         ZStack {
             Circle()
                 .fill(color)
@@ -36,4 +43,10 @@ struct ColoredCircle: View {
         }
         .frame(width: minLength, height: minLength)
     }
+
+    // MARK: Private
+
+    private let color: Color
+    private let selected: Bool
+    private let minLength: CGFloat
 }

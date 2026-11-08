@@ -277,6 +277,18 @@
 "notes.search.no-results.title" = "\"%@\" ga mos keluvchi eslatma yo'q";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Saqlangan eslatmadan boshqa so'z yoki sura nomini sinab ko'ring.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Ajratilganlar endi Xatchoʻplarda";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "Eslatmalarda faqat siz yozgan narsalar qoladi. Ajratgan oyatlaringiz rang boʻyicha Xatchoʻplar boʻlimida.";
+// Opens the Bookmarks tab from the Notes card and empty state.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Ajratilganlarni koʻrsatish";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Ajratilganlaringiz Xatchoʻplar boʻlimida.";
 
 // MARK: - Ayah Menu
 

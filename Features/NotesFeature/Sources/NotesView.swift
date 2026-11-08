@@ -27,10 +27,14 @@ struct NotesView: View {
             notes: viewModel.filteredNotes,
             searchTerm: viewModel.searchTerm,
             quranFont: viewModel.reading.quranFont,
+            showsHighlightsTip: showsHighlightsTip,
+            highlightsSummary: highlightsSummary,
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
             editAction: { viewModel.editNote($0) },
-            deleteAction: { viewModel.deleteItem($0) }
+            deleteAction: { viewModel.deleteItem($0) },
+            showHighlights: { showHighlights() },
+            dismissHighlightsTip: { dismissHighlightsTip() }
         )
     }
 
@@ -42,9 +46,37 @@ struct NotesView: View {
         #endif
     }
 
+    private var showsHighlightsTip: Bool {
+        #if QURAN_SYNC
+        viewModel.showsHighlightsTip
+        #else
+        false
+        #endif
+    }
+
+    private var highlightsSummary: NotesHighlightsSummary? {
+        #if QURAN_SYNC
+        viewModel.highlightsSummary
+        #else
+        nil
+        #endif
+    }
+
     private func refresh() async {
         #if QURAN_SYNC
         await viewModel.refresh()
+        #endif
+    }
+
+    private func showHighlights() {
+        #if QURAN_SYNC
+        viewModel.showHighlights()
+        #endif
+    }
+
+    private func dismissHighlightsTip() {
+        #if QURAN_SYNC
+        viewModel.dismissHighlightsTip()
         #endif
     }
 }
@@ -61,11 +93,15 @@ private struct NotesViewUI: View {
     let notes: [NoteItem]
     let searchTerm: String
     let quranFont: QuranFont
+    let showsHighlightsTip: Bool
+    let highlightsSummary: NotesHighlightsSummary?
 
     let start: AsyncAction
     let selectAction: ItemAction<NoteItem>
     let editAction: ItemAction<NoteItem>
     let deleteAction: ItemDeletionAction<NoteItem>
+    let showHighlights: () -> Void
+    let dismissHighlightsTip: () -> Void
 
     var body: some View {
         content
@@ -77,13 +113,17 @@ private struct NotesViewUI: View {
             if notes.isEmpty {
                 if isSearching {
                     noResults
-                } else if canRefresh {
-                    pullableNoData
                 } else {
-                    noData
+                    scrollableNoData
                 }
             } else {
                 NoorList {
+                    if showsTip {
+                        Section {
+                            highlightsTip
+                                .tipCardListRow()
+                        }
+                    }
                     NoorSection(notes, onDelete: deleteAction) { note in
                         listItem(note)
                             .listRowInsets(.init(top: 6, leading: 0, bottom: 6, trailing: 0))
@@ -91,6 +131,7 @@ private struct NotesViewUI: View {
                             .listRowSeparator(.hidden)
                     }
                 }
+                .animation(reduceMotion ? nil : NoorAnimation.standard, value: showsTip)
                 .refreshable(isEnabled: canRefresh, action: refresh)
             }
         }
@@ -102,27 +143,79 @@ private struct NotesViewUI: View {
 
     // MARK: Private
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    @ScaledMetric private var highlightsSpacing = 12.0
+    // Scaled with Dynamic Type inside ``HighlightPaletteIcon``.
+    private let highlightsTipIconSize = 24.0
+    private let highlightsMovedIconSize = 28.0
+    @ScaledMetric private var highlightsCornerRadius = 20.0
+    @ScaledMetric private var highlightsMaxWidth = 320.0
+
     private var isSearching: Bool {
         !searchTerm.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
-    private var noData: some View {
-        NoorListEmptyState(
-            title: noDataTitle,
-            text: noDataText,
-            image: .note,
-            style: .prominent(imageColor: .accentColor)
-        )
+    private var showsTip: Bool {
+        showsHighlightsTip && !isSearching
     }
 
-    /// Pull-to-refresh needs a scroll view; this one keeps ``noData`` centered.
-    private var pullableNoData: some View {
+    private var noData: some View {
+        VStack {
+            NoorListEmptyState(
+                title: noDataTitle,
+                text: noDataText,
+                image: .note,
+                style: .prominent(imageColor: .accentColor)
+            )
+
+            if let highlightsSummary {
+                highlightsMoved(highlightsSummary)
+            }
+        }
+    }
+
+    private var highlightsTip: some View {
+        TipCard(
+            title: l("notes.highlights-tip.title"),
+            text: l("notes.highlights-tip.text"),
+            action: TipCard.Action(l("notes.highlights.show"), perform: showHighlights),
+            dismiss: dismissHighlightsTip
+        ) {
+            // The palette upgraders remember from the 3.0 ayah menu, not their own colors.
+            HighlightPaletteIcon(size: highlightsTipIconSize)
+        }
+    }
+
+    private func highlightsMoved(_ summary: NotesHighlightsSummary) -> some View {
+        VStack(spacing: highlightsSpacing) {
+            HighlightPaletteIcon(colors: summary.colors, size: highlightsMovedIconSize)
+                .accessibilityHidden(true)
+
+            Text(l("notes.no-data.highlights.text"))
+                .font(.subheadline)
+                .foregroundStyle(Color.secondaryLabel)
+                .multilineTextAlignment(.center)
+
+            AccentCapsuleButton(l("notes.highlights.show"), action: showHighlights)
+        }
+        .padding()
+        .frame(maxWidth: highlightsMaxWidth)
+        .background(
+            Color.secondarySystemGroupedBackground,
+            in: RoundedRectangle(cornerRadius: highlightsCornerRadius, style: .continuous)
+        )
+        .padding(.horizontal)
+    }
+
+    /// Keeps ``noData`` centered, scrolls it when it doesn't fit, and hosts pull-to-refresh.
+    private var scrollableNoData: some View {
         GeometryReader { proxy in
             ScrollView {
                 noData
                     .frame(minWidth: proxy.size.width, minHeight: proxy.size.height)
             }
-            .refreshable { await refresh() }
+            .refreshable(isEnabled: canRefresh, action: refresh)
         }
     }
 
@@ -244,6 +337,7 @@ struct NotesView_Previews: PreviewProvider {
         @State var editMode: EditMode = .inactive
         @State var error: Error? = nil
         @State var searchTerm: String = ""
+        @State var showsHighlightsTip = true
 
         var body: some View {
             NavigationView {
@@ -255,13 +349,17 @@ struct NotesView_Previews: PreviewProvider {
                     notes: items,
                     searchTerm: searchTerm,
                     quranFont: .uthmanicHafs,
+                    showsHighlightsTip: showsHighlightsTip,
+                    highlightsSummary: nil,
                     start: {},
                     selectAction: { _ in },
                     editAction: { _ in },
                     deleteAction: { item in
                         items = items.filter { $0 != item }
                         return {}
-                    }
+                    },
+                    showHighlights: { showsHighlightsTip = false },
+                    dismissHighlightsTip: { showsHighlightsTip = false }
                 )
                 .navigationTitle("Notes")
                 .toolbar {
@@ -295,6 +393,8 @@ private struct NotesEmptyPreview: View {
     @State private var editMode: EditMode = .inactive
     @State private var error: Error?
 
+    var highlightsSummary: NotesHighlightsSummary?
+
     var body: some View {
         NavigationView {
             NotesViewUI(
@@ -305,10 +405,14 @@ private struct NotesEmptyPreview: View {
                 notes: [],
                 searchTerm: "",
                 quranFont: .uthmanicHafs,
+                showsHighlightsTip: false,
+                highlightsSummary: highlightsSummary,
                 start: {},
                 selectAction: { _ in },
                 editAction: { _ in },
-                deleteAction: { _ in nil }
+                deleteAction: { _ in nil },
+                showHighlights: {},
+                dismissHighlightsTip: {}
             )
             .navigationTitle(l("tab.notes"))
         }
@@ -317,4 +421,8 @@ private struct NotesEmptyPreview: View {
 
 #Preview("Empty") {
     NotesEmptyPreview()
+}
+
+#Preview("Empty with highlights") {
+    NotesEmptyPreview(highlightsSummary: NotesHighlightsSummary(colors: [.yellow, .green, .blue]))
 }

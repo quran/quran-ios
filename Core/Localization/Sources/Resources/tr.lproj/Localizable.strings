@@ -229,6 +229,18 @@
 "notes.search.no-results.title" = "\"%@\" ile eşleşen not yok";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Kaydettiğiniz bir nottan başka bir kelime veya sure adı deneyin.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Vurgular artık Sayfa işaretleri'nde";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "Notlar yalnızca yazdıklarınızı tutar. Vurguladığınız ayetler, renklerine göre Sayfa işaretleri sekmesinde.";
+// Opens the Bookmarks tab from the Notes card and empty state.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Vurguları göster";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Vurgularınız Sayfa işaretleri sekmesinde.";
 
 // MARK: - Ayah Menu
 

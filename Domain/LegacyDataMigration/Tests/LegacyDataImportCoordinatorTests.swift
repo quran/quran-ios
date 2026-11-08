@@ -73,6 +73,33 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
         XCTAssertEqual(highlights.map { "\($0.sura):\($0.ayah) \($0.color)" }.sorted(), ["2:1 blue", "2:3 blue", "3:1 yellow"])
     }
 
+    func test_importNow_withHighlights_recordsThemAcrossLaterEmptyScans() async throws {
+        try stack.write { context in
+            context.note(" ", color: 3, verses: [(3, 1)], modifiedOn: 10)
+        }
+        try await sut.importNow()
+        XCTAssertTrue(LegacyImportPreferences.shared.hadHighlights)
+
+        try stack.write { context in
+            for note in try context.allNotes() {
+                context.delete(note)
+            }
+        }
+        try await sut.importNow()
+
+        XCTAssertTrue(LegacyImportPreferences.shared.hadHighlights)
+    }
+
+    func test_importNow_withoutHighlights_recordsNone() async throws {
+        try stack.write { context in
+            _ = context.newPageBookmark(page: 2, mushafID: 0, modifiedOn: 10)
+        }
+
+        try await sut.importNow()
+
+        XCTAssertFalse(LegacyImportPreferences.shared.hadHighlights)
+    }
+
     func test_repeatedImport_doesNotRecreateDeletedNote() async throws {
         try stack.write { context in
             context.note("Delete me", color: 0, verses: [(1, 1)], modifiedOn: 10)

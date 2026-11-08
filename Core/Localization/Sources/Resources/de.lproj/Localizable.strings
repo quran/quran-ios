@@ -277,6 +277,18 @@
 "notes.search.no-results.title" = "Keine Notizen passen zu \"%@\"";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Versuchen Sie ein anderes Wort aus einer gespeicherten Notiz oder einen Surennamen.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Hervorhebungen sind jetzt unter Lesezeichen";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "Notizen enthält nur noch, was du schreibst. Deine hervorgehobenen Ayahs findest du nach Farbe im Tab „Lesezeichen“.";
+// Opens the Bookmarks tab from the Notes card and empty state.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Hervorhebungen anzeigen";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Deine Hervorhebungen findest du im Tab „Lesezeichen“.";
 
 // MARK: - Ayah Menu
 

@@ -277,6 +277,18 @@
 "notes.search.no-results.title" = "Aucune note ne correspond à \"%@\"";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Essayez un autre mot tiré d'une note enregistrée ou un nom de sourate.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Les surlignages sont maintenant dans Favoris";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "Notes ne garde que ce que vous écrivez. Vos ayahs surlignées sont dans l'onglet Favoris, par couleur.";
+// Opens the Bookmarks tab from the Notes card and empty state.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Afficher les surlignages";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Vos surlignages sont dans l'onglet Favoris.";
 
 // MARK: - Ayah Menu
 

@@ -94,6 +94,9 @@ public actor LegacyDataImportCoordinator {
                 return .success(())
             }
             let result = try await quranDataService.importData(data, deleteExisting: false, trackHistory: true)
+            if !data.highlights.isEmpty {
+                preferences.hadHighlights = true
+            }
             logger.notice("""
             Legacy import: completed in \(milliseconds(since: start))ms changed=\(result.changed) \
             matched=\(result.matched) keptExisting=\(result.keptExisting) alreadyProcessed=\(result.alreadyProcessed)
@@ -152,26 +155,35 @@ struct LegacyImportFailure: CustomNSError {
     }
 }
 
-/// Whether legacy data may still be imported. It stays enabled after the upgrade migration so late
-/// CloudKit arrivals import, and logout disables it permanently.
-struct LegacyImportPreferences {
+/// Whether legacy data may still be imported, and what earlier imports found. Import stays enabled
+/// after the upgrade migration so late CloudKit arrivals import, and logout disables it permanently.
+public struct LegacyImportPreferences {
     // MARK: Lifecycle
 
     private init() {}
 
-    // MARK: Internal
+    // MARK: Public
 
-    static let shared = LegacyImportPreferences()
+    public static let shared = LegacyImportPreferences()
+
+    /// Whether an import brought in 3.0 highlights, which 3.0 listed with notes. It is never cleared,
+    /// so a later scan of an emptied store keeps it.
+    @Preference(hadHighlightsKey)
+    public internal(set) var hadHighlights: Bool
+
+    // MARK: Internal
 
     @Preference(enabled)
     var isEnabled: Bool
 
     static func reset() {
         Preferences.shared.removeValueForKey(enabled)
+        Preferences.shared.removeValueForKey(hadHighlightsKey)
     }
 
     // MARK: Private
 
     private static let enabled = PreferenceKey<Bool>(key: "com.quran.legacy-import.enabled", defaultValue: true)
+    private static let hadHighlightsKey = PreferenceKey<Bool>(key: "com.quran.legacy-import.had-highlights", defaultValue: false)
 }
 #endif

@@ -222,6 +222,18 @@
 "notes.search.no-results.title" = "Geen notities komen overeen met \"%@\"";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Probeer een ander woord uit een opgeslagen notitie of een soeranaam.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Markeringen staan nu bij Bladwijzers";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "Notities bewaart alleen wat je schrijft. Je gemarkeerde ayahs staan per kleur op het tabblad Bladwijzers.";
+// Opens the Bookmarks tab from the Notes card and empty state.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Markeringen tonen";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Je markeringen staan op het tabblad Bladwijzers.";
 
 // MARK: - Ayah Menu
 

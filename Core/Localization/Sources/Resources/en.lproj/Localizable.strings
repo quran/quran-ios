@@ -288,6 +288,14 @@
 "notes.search.placeholder.text" = "Search your notes";
 "notes.search.no-results.title" = "No notes match \"%@\"";
 "notes.search.no-results.text" = "Try a different word from a note you saved or a sura name.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+"notes.highlights-tip.title" = "Highlights now live in Bookmarks";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+"notes.highlights-tip.text" = "Notes keeps only what you write. Your highlighted ayahs are in the Bookmarks tab, by color.";
+// Opens the Bookmarks tab from the Notes card and empty state.
+"notes.highlights.show" = "Show Highlights";
+// Notes empty state line when the user has highlights.
+"notes.no-data.highlights.text" = "Your highlights are in the Bookmarks tab.";
 
 // MARK: - Ayah Menu
 

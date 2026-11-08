@@ -254,8 +254,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "ئىزاھاتلىرىڭىزنى ماسقەدەملەش";
-"notes.sync.body" = "ئىزاھاتلىرىڭىزنى بارلىق ئۈسكۈنىلەردە ساقلاش ئۈچۈن Quran.com غا كىرىڭ.";
 "notes.sync.no-data.title" = "تېخى ئىزاھات يوق";
 "notes.sync.no-data.text" = "ئوقۇۋاتقاندا بىر ئايەتنى بېسىپ تۇرۇڭ، ئاندىن تۇنجى ئىزاھاتىڭىزنى يېزىش ئۈچۈن «قەيتىملىك قوشۇش» نى بېسىڭ.";
 
@@ -578,12 +576,6 @@
 "bookmarks.editor.error.highlight-unavailable" = "يورۇتۇش رەڭلىرى تېخى يۈكلىنىۋاتىدۇ. قايتا سىناڭ.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "كونا بەت خەتكۈچلىرى";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "كىرىش";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "توپلاملىرىڭىزنى بارلىق ئۈسكۈنىلەردە ساقلاش ئۈچۈن Quran.com غا كىرىڭ.";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "توپلاملىرىڭىزنى ماسقەدەملەش";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

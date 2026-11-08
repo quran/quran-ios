@@ -118,17 +118,16 @@ Optional:
 When `QURAN_SYNC` is enabled:
 
 - Settings shows the Quran.com login/logout action.
-- Bookmarks shows the sync sign-in banner while the user is signed out.
 - Page bookmarks are stored through `mobile-sync-spm` instead of Core Data.
 
 When the flag is disabled:
 
 - the app falls back to the existing Core Data page bookmarks
-- Settings and Bookmarks show Quran.com sign-in as unavailable
+- Settings shows Quran.com sign-in as unavailable
 
 ## Manual verification
 
-1. Sign in from Settings or Bookmarks.
+1. Sign in from Settings.
 2. Add a page bookmark.
 3. Restart the app and confirm the bookmark still appears.
 4. Remove the bookmark and confirm it disappears locally.

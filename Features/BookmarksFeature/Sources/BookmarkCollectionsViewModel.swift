@@ -3,11 +3,9 @@
 //  BookmarkCollectionsViewModel.swift
 //
 
-import Analytics
 import AnnotationsService
 import AuthenticationClient
 import Combine
-import FeaturesSupport
 import Foundation
 import MobileSync
 import NoorUI
@@ -24,7 +22,6 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     // MARK: Lifecycle
 
     init(
-        analytics: AnalyticsLibrary,
         authenticationClient: any AuthenticationClient,
         quranDataService: MobileSyncDataService,
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
@@ -35,7 +32,6 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         navigateToPage: @escaping (Page) -> Void,
         navigateToAyah: @escaping (AyahNumber) -> Void
     ) {
-        self.analytics = analytics
         self.authenticationClient = authenticationClient
         self.quranDataService = quranDataService
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
@@ -45,7 +41,6 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         self.navigationController = navigationController
         self.navigateToPage = navigateToPage
         self.navigateToAyah = navigateToAyah
-        isSyncBannerDismissed = preferences.isCollectionsSyncBannerDismissed
         // Follow sign-in and sign-out elsewhere, such as in Settings.
         authenticationClient.authenticationStateChanges
             .map { $0 == .authenticated }
@@ -65,7 +60,6 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     @Published var editMode: EditMode = .inactive
     @Published var error: Error?
     @Published var isAuthenticated = false
-    @Published var isSyncBannerDismissed: Bool
     @Published var nameAlert: CollectionNameAlert = .hidden
     @Published var newCollectionName = ""
     @Published var renameAlert: CollectionNameAlert = .hidden
@@ -77,10 +71,6 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     /// The collections and colors whose Delete All is running, so it can't start twice.
     @Published private(set) var collectionIDsRemovingAllAyahs: Set<String> = []
     @Published private(set) var colorsRemovingAllHighlights: Set<HighlightColor> = []
-
-    var shouldShowSyncBanner: Bool {
-        !isAuthenticated && !isSyncBannerDismissed
-    }
 
     /// Pull-to-refresh, when signed in. Not tied to edit mode: toggling it rebuilds the list.
     var canRefresh: Bool {
@@ -153,26 +143,6 @@ final class BookmarkCollectionsViewModel: ObservableObject {
         _ = await (observeCollections, observeHighlights, observeReadingBookmark)
     }
 
-    func loginToQuranCom() async {
-        guard let navigationController else {
-            return
-        }
-
-        analytics.quranSyncSignIn(from: .bookmarks)
-        logger.info("Quran Sync: starting sign in from Bookmarks")
-        do {
-            try await authenticationClient.login(on: navigationController)
-            isAuthenticated = await authenticationClient.authenticationState == .authenticated
-            logger.info("Quran Sync: sign in completed from Bookmarks. Authenticated: \(isAuthenticated)")
-        } catch AuthenticationClientError.cancelled {
-            logger.info("Quran Sync: sign in cancelled from Bookmarks")
-            return
-        } catch {
-            logger.error("Failed to login to Quran.com from bookmarks: \(error)")
-            self.error = error
-        }
-    }
-
     /// Waits for a sync; failures are only logged, as Settings › Sync shows them.
     /// - Returns: `nil` when signed out or it stopped waiting.
     @discardableResult
@@ -191,13 +161,6 @@ final class BookmarkCollectionsViewModel: ObservableObject {
             logger.error("Quran Sync: refresh from Bookmarks failed: \(error)")
         }
         return nil
-    }
-
-    func dismissSyncBanner() {
-        analytics.quranSyncSignInBannerDismissed(from: .bookmarks)
-        logger.info("Quran Sync: sign-in banner dismissed from Bookmarks")
-        isSyncBannerDismissed = true
-        preferences.isCollectionsSyncBannerDismissed = true
     }
 
     func presentAddCollection() {
@@ -395,7 +358,6 @@ final class BookmarkCollectionsViewModel: ObservableObject {
 
     // MARK: Private
 
-    private let analytics: AnalyticsLibrary
     private let authenticationClient: any AuthenticationClient
     private let quranDataService: MobileSyncDataService
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
@@ -404,7 +366,6 @@ final class BookmarkCollectionsViewModel: ObservableObject {
     private let ayahSetBuilder: AyahSetBuilder
     private let navigateToPage: (Page) -> Void
     private let navigateToAyah: (AyahNumber) -> Void
-    private let preferences = AuthenticationPreferences.shared
     private let readingPreferences = ReadingPreferences.shared
     private weak var navigationController: UINavigationController?
     /// The collection the rename alert is for.

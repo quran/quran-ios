@@ -206,8 +206,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "Je notities synchroniseren";
-"notes.sync.body" = "Log in bij Quran.com om je notities op al je apparaten beschikbaar te houden.";
 "notes.sync.no-data.title" = "Nog geen notities";
 "notes.sync.no-data.text" = "Houd tijdens het lezen een ayah ingedrukt en tik daarna op ‘Voeg Notitie Toe’ om je eerste notitie te schrijven.";
 
@@ -490,12 +488,6 @@
 "bookmarks.editor.error.highlight-unavailable" = "De markeringskleuren worden nog geladen. Probeer het opnieuw.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Oude paginabladwijzers";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "Inloggen";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Log in bij Quran.com om je collecties op al je apparaten beschikbaar te houden.";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Je collecties synchroniseren";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

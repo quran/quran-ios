@@ -6,13 +6,10 @@
 //
 
 #if !QURAN_SYNC
-import Analytics
 import Combine
 #else
-import Analytics
 import AuthenticationClient
 import Combine
-import FeaturesSupport
 import MobileSync
 #endif
 import AnnotationsService
@@ -26,7 +23,6 @@ import QuranLocalization
 import QuranTextKit
 import ReadingService
 import SwiftUI
-import UIKit
 import UIx
 import Utilities
 import VLogging
@@ -37,27 +33,22 @@ final class NotesViewModel: ObservableObject {
 
     #if QURAN_SYNC
     init(
-        analytics: AnalyticsLibrary,
         authenticationClient: any AuthenticationClient,
         quranDataService: MobileSyncDataService,
-        navigationController: UINavigationController,
         noteService: MobileSyncNoteService,
         textService: QuranTextDataService,
         textRetriever: ShareableVerseTextRetriever,
         navigateTo: @escaping (AyahNumber) -> Void,
         editNote: @escaping (Note) -> Void
     ) {
-        self.analytics = analytics
         self.authenticationClient = authenticationClient
         self.quranDataService = quranDataService
-        self.navigationController = navigationController
         self.noteService = noteService
         self.textService = textService
         self.textRetriever = textRetriever
         reading = ReadingPreferences.shared.reading
         self.navigateTo = navigateTo
         editNoteAction = editNote
-        isSyncBannerDismissed = preferences.isNotesSyncBannerDismissed
         readingPreferences.$reading
             .assign(to: &$reading)
         // Follow sign-in and sign-out elsewhere, such as in Settings.
@@ -68,14 +59,12 @@ final class NotesViewModel: ObservableObject {
     }
     #else
     init(
-        analytics: AnalyticsLibrary,
         noteService: NoteService,
         textRetriever: ShareableVerseTextRetriever,
         textService: QuranTextDataService,
         navigateTo: @escaping (AyahNumber) -> Void,
         editNote: @escaping (Note) -> Void
     ) {
-        self.analytics = analytics
         self.noteService = noteService
         self.textRetriever = textRetriever
         self.textService = textService
@@ -93,17 +82,12 @@ final class NotesViewModel: ObservableObject {
     @Published var error: Error? = nil
     #if QURAN_SYNC
     @Published var isAuthenticated = false
-    @Published var isSyncBannerDismissed: Bool
     #endif
     @Published var notes: [NoteItem] = []
     @Published var searchTerm: String = ""
     @Published var reading: Reading
 
     #if QURAN_SYNC
-    var shouldShowSyncBanner: Bool {
-        !isAuthenticated && !isSyncBannerDismissed
-    }
-
     /// Pull-to-refresh, when signed in. Not tied to edit mode: toggling it rebuilds the list.
     var canRefresh: Bool {
         isAuthenticated
@@ -158,26 +142,6 @@ final class NotesViewModel: ObservableObject {
     }
 
     #if QURAN_SYNC
-    func loginToQuranCom() async {
-        guard let navigationController else {
-            return
-        }
-
-        analytics.quranSyncSignIn(from: .notes)
-        logger.info("Quran Sync: starting sign in from Notes")
-        do {
-            try await authenticationClient.login(on: navigationController)
-            isAuthenticated = await authenticationClient.authenticationState == .authenticated
-            logger.info("Quran Sync: sign in completed from Notes. Authenticated: \(isAuthenticated)")
-        } catch AuthenticationClientError.cancelled {
-            logger.info("Quran Sync: sign in cancelled from Notes")
-            return
-        } catch {
-            logger.error("Failed to login to Quran.com from notes: \(error)")
-            self.error = error
-        }
-    }
-
     /// Waits for a sync; failures are only logged, as Settings › Sync shows them.
     /// - Returns: `nil` when signed out or it stopped waiting.
     @discardableResult
@@ -196,13 +160,6 @@ final class NotesViewModel: ObservableObject {
             logger.error("Quran Sync: refresh from Notes failed: \(error)")
         }
         return nil
-    }
-
-    func dismissSyncBanner() {
-        analytics.quranSyncSignInBannerDismissed(from: .notes)
-        logger.info("Quran Sync: sign-in banner dismissed from Notes")
-        isSyncBannerDismissed = true
-        preferences.isNotesSyncBannerDismissed = true
     }
     #endif
 
@@ -285,13 +242,10 @@ final class NotesViewModel: ObservableObject {
 
     // MARK: Private
 
-    private let analytics: AnalyticsLibrary
     #if QURAN_SYNC
     private let authenticationClient: any AuthenticationClient
     private let quranDataService: MobileSyncDataService
     private let noteService: MobileSyncNoteService
-    private weak var navigationController: UINavigationController?
-    private let preferences = AuthenticationPreferences.shared
     #else
     private let noteService: NoteService
     #endif

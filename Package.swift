@@ -387,7 +387,6 @@ private func dataTargets() -> [[Target]] {
         // MARK: - Quran.com OAuth
 
         target(type, name: "AuthenticationClient", dependencies: [
-            "Preferences",
             "Utilities",
             "VLogging",
         ] + mobileSyncTargetDependencies, testDependencies: [
@@ -850,7 +849,6 @@ private func featuresTargets() -> [[Target]] {
         ]),
 
         target(type, name: "NotesFeature", dependencies: [
-            "Analytics",
             "AnnotationsService",
             "AuthenticationClient",
             "QuranTextKit",
@@ -861,7 +859,6 @@ private func featuresTargets() -> [[Target]] {
             "QuranLocalization",
             "NoteEditorFeature",
         ] + mobileSyncTargetDependencies, testDependencies: [
-            "AnalyticsFake",
             "AuthenticationClientFake",
             "QuranResources",
         ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),

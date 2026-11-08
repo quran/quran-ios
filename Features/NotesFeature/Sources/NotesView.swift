@@ -22,9 +22,6 @@ struct NotesView: View {
         NotesViewUI(
             editMode: $viewModel.editMode,
             error: $viewModel.error,
-            shouldShowSyncBanner: shouldShowSyncBanner,
-            dismissSyncBanner: { dismissSyncBanner() },
-            signInAction: { await signIn() },
             canRefresh: canRefresh,
             refresh: { await refresh() },
             notes: viewModel.filteredNotes,
@@ -37,14 +34,6 @@ struct NotesView: View {
         )
     }
 
-    private var shouldShowSyncBanner: Bool {
-        #if QURAN_SYNC
-        viewModel.shouldShowSyncBanner
-        #else
-        false
-        #endif
-    }
-
     private var canRefresh: Bool {
         #if QURAN_SYNC
         viewModel.canRefresh
@@ -53,21 +42,9 @@ struct NotesView: View {
         #endif
     }
 
-    private func dismissSyncBanner() {
-        #if QURAN_SYNC
-        viewModel.dismissSyncBanner()
-        #endif
-    }
-
     private func refresh() async {
         #if QURAN_SYNC
         await viewModel.refresh()
-        #endif
-    }
-
-    private func signIn() async {
-        #if QURAN_SYNC
-        await viewModel.loginToQuranCom()
         #endif
     }
 }
@@ -79,9 +56,6 @@ private struct NotesViewUI: View {
     @Binding var editMode: EditMode
     @Binding var error: Error?
 
-    let shouldShowSyncBanner: Bool
-    let dismissSyncBanner: @MainActor @Sendable () -> Void
-    let signInAction: AsyncAction
     let canRefresh: Bool
     let refresh: AsyncAction
     let notes: [NoteItem]
@@ -94,22 +68,8 @@ private struct NotesViewUI: View {
     let deleteAction: ItemDeletionAction<NoteItem>
 
     var body: some View {
-        VStack(spacing: 0) {
-            if shouldShowSyncBanner, !isSearching {
-                SyncSignInCard(
-                    title: l("notes.sync.title"),
-                    subtitle: l("notes.sync.body"),
-                    actionLabel: l("bookmarks.sync.action"),
-                    dismiss: dismissSyncBanner,
-                    signInAction: signInAction
-                )
-                .padding()
-            }
-
-            content
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.systemGroupedBackground)
+        content
+            .background(Color.systemGroupedBackground)
     }
 
     private var content: some View {
@@ -290,9 +250,6 @@ struct NotesView_Previews: PreviewProvider {
                 NotesViewUI(
                     editMode: $editMode,
                     error: $error,
-                    shouldShowSyncBanner: false,
-                    dismissSyncBanner: {},
-                    signInAction: {},
                     canRefresh: false,
                     refresh: {},
                     notes: items,
@@ -338,16 +295,11 @@ private struct NotesEmptyPreview: View {
     @State private var editMode: EditMode = .inactive
     @State private var error: Error?
 
-    let showsSignInCard: Bool
-
     var body: some View {
         NavigationView {
             NotesViewUI(
                 editMode: $editMode,
                 error: $error,
-                shouldShowSyncBanner: showsSignInCard,
-                dismissSyncBanner: {},
-                signInAction: {},
                 canRefresh: false,
                 refresh: {},
                 notes: [],
@@ -363,10 +315,6 @@ private struct NotesEmptyPreview: View {
     }
 }
 
-#Preview("Empty — Sign In") {
-    NotesEmptyPreview(showsSignInCard: true)
-}
-
-#Preview("Empty — Dismissed") {
-    NotesEmptyPreview(showsSignInCard: false)
+#Preview("Empty") {
+    NotesEmptyPreview()
 }

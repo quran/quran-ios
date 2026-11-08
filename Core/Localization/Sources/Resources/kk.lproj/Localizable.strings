@@ -240,8 +240,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "Жазбаларыңызды синхрондау";
-"notes.sync.body" = "Жазбаларыңыз барлық құрылғыларда қолжетімді болуы үшін Quran.com сайтына кіріңіз.";
 "notes.sync.no-data.title" = "Әзірге ескертпелер жоқ";
 "notes.sync.no-data.text" = "Оқу кезінде аятты басып тұрыңыз, содан кейін алғашқы ескертпеңізді жазу үшін «Ескертпе қосу» түймесін түртіңіз.";
 
@@ -559,12 +557,6 @@
 "bookmarks.editor.error.highlight-unavailable" = "Белгілеу түстері әлі жүктелуде. Қайталап көріңіз.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Ескі бет бетбелгілері";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "Кіру";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Жинақтарыңыз барлық құрылғыларда қолжетімді болуы үшін Quran.com сайтына кіріңіз.";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Жинақтарыңызды синхрондау";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

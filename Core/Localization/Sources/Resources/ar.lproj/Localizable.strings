@@ -421,7 +421,7 @@
 "audio.playback-speed" = "سرعة التشغيل";
 
 // Reading bookmark
-"ayah.menu.reading-bookmark.moved" = "تم نقل علامة موضع القراءة من %@ إلى %@";
+"ayah.menu.reading-bookmark.moved-to" = "تم نقل علامة موضع القراءة إلى %@";
 "ayah.menu.reading-bookmark.moved.explanation" = "علامات القراءة تتنقّل ولا تتراكم. للاحتفاظ بالآيات، أضفها إلى مجموعة.";
 // Badge on the ayah menu's Reading Bookmark row.
 "ayah.menu.reading-bookmark.new" = "جديد";

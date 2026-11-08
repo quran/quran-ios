@@ -324,7 +324,7 @@
 "ayah.menu.reading-bookmark.saved" = "Reading bookmark saved at %@";
 /* Subtitle of the toast shown the first time a reading bookmark is saved */
 "ayah.menu.reading-bookmark.saved.explanation" = "Move it as you read. You have three, one for each reading.";
-"ayah.menu.reading-bookmark.moved" = "Reading bookmark moved from %@ to %@";
+"ayah.menu.reading-bookmark.moved-to" = "Reading bookmark moved to %@";
 /* Subtitle of the toast shown the first time a reading bookmark is moved */
 "ayah.menu.reading-bookmark.moved.explanation" = "Reading bookmarks move rather than add up. To keep ayahs, save them to a collection.";
 "ayah.menu.reading-bookmark.removed" = "Reading bookmark removed from %@";

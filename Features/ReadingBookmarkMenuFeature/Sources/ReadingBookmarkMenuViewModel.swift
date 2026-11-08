@@ -176,11 +176,7 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
             if let previousBookmark {
                 let showsExplanation = !explanationPreferences.hasExplainedMove
                 explanationPreferences.hasExplainedMove = true
-                return ReadingBookmarkUndoToast.moved(
-                    from: previousBookmark,
-                    to: bookmark,
-                    showsExplanation: showsExplanation
-                ) {
+                return ReadingBookmarkUndoToast.moved(to: bookmark, showsExplanation: showsExplanation) {
                     Task { @MainActor in
                         await self.restore(previousBookmark)
                     }

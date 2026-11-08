@@ -513,8 +513,8 @@
 // Ayah menu
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "یادداشت‌ها (%d)";
-// Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.moved" = "نشانک مطالعه از %@ به %@ منتقل شد";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.moved-to" = "نشانک مطالعه به %@ منتقل شد";
 // Badge on the ayah menu's Reading Bookmark row.
 // Metadata: Translated by AI; human review required.
 "ayah.menu.reading-bookmark.new" = "جدید";

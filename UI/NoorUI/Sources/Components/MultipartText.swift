@@ -88,7 +88,7 @@ private struct TextPartView: View {
             SuraNamesView(suras: suras, nameStyle: nameStyle, size: size)
         case .ayahs(let ayahs, let nameStyle):
             QuranReferenceView(reference: .ayahs(ayahs, nameStyle: nameStyle), size: size)
-        case .accessibilityLabeled(let parts, _):
+        case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
             HStack(spacing: 0) {
                 ForEach(0 ..< parts.count, id: \.self) { i in
                     TextPartView(part: parts[i], size: size)
@@ -151,6 +151,8 @@ enum TextPart {
     case ayahs(ClosedRange<AyahNumber>, nameStyle: SuraNameStyle = .standard)
     /// Parts that VoiceOver reads as `accessibilityText` instead of as their own text.
     case accessibilityLabeled([TextPart], accessibilityText: String)
+    /// Parts a wrapping layout keeps on one line.
+    case unbreakable([TextPart])
     case quran(
         text: QuranText,
         font: QuranFont,
@@ -174,7 +176,7 @@ enum TextPart {
                 .joined(separator: SuraNamesView.separator)
         case .ayahs(let ayahs, let nameStyle):
             QuranReference.ayahs(ayahs, nameStyle: nameStyle).rawValue(locale: locale)
-        case .accessibilityLabeled(let parts, _):
+        case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
             parts.map { $0.rawValue(locale: locale) }.joined()
         case .quran(let text, _, _, _, _):
             text.text
@@ -183,10 +185,19 @@ enum TextPart {
 
     /// Splits `.suras` into one fixed-size reference per sura with separators between them, so a
     /// wrapping layout breaks lines only between suras, never inside a name. `.accessibilityLabeled` parts wrap
-    /// as their own parts; the view reads the whole text's `accessibilityText`, so they keep their label.
+    /// as their own parts, with the text between them kept on the line of the part before it, so a wrapped range
+    /// never starts a line with its " – ". The view reads the whole text's `accessibilityText`, so they keep their label.
     var wrappingParts: [TextPart] {
         if case .accessibilityLabeled(let parts, _) = self {
-            return parts.flatMap(\.wrappingParts)
+            var lines: [[TextPart]] = []
+            for part in parts.flatMap(\.wrappingParts) {
+                if case .plain = part, !lines.isEmpty {
+                    lines[lines.count - 1].append(part)
+                } else {
+                    lines.append([part])
+                }
+            }
+            return lines.map { $0.count == 1 ? $0[0] : .unbreakable($0) }
         }
         guard case .suras(let suras, let nameStyle) = self else {
             return [self]
@@ -211,6 +222,8 @@ enum TextPart {
             QuranReference.ayahs(ayahs).accessibilityText
         case .accessibilityLabeled(_, let accessibilityText):
             accessibilityText
+        case .unbreakable(let parts):
+            parts.map(\.accessibilityText).joined()
         case .quran(let text, _, _, _, _):
             text.text
         }
@@ -406,11 +419,14 @@ extension MultipartText {
         } else if start.sura == end.sura {
             [.ayahs(range)]
         } else {
-            localizedFormat(
-                "quran.range",
-                language: language,
-                MultipartText(parts: [.ayah(start, emphasizesSura: false)]),
-                MultipartText(parts: [.ayah(end, emphasizesSura: false)])
+            // On screen, a no-break space keeps the dash on the first reference's line; copied text keeps the
+            // localized format's plain space.
+            format(
+                l("quran.range", language: language).replacingOccurrences(of: " –", with: "\u{00A0}–"),
+                arguments: [
+                    MultipartText(parts: [.ayah(start, emphasizesSura: false)]),
+                    MultipartText(parts: [.ayah(end, emphasizesSura: false)]),
+                ]
             ).parts
         }
         return MultipartText(parts: [

@@ -42,7 +42,7 @@ private extension TextPart {
             }
         case .ayahs(let ayahs, let nameStyle):
             QuranReference.ayahs(ayahs, nameStyle: nameStyle).attributedString(size: size, locale: locale)
-        case .accessibilityLabeled(let parts, _):
+        case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
             parts.reduce(into: NSMutableAttributedString()) { result, part in
                 result.append(part.attributedString(ofSize: size, locale: locale))
             }

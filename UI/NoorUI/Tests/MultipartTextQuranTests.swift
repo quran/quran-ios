@@ -212,12 +212,20 @@ final class MultipartTextQuranTests: XCTestCase {
 
         XCTAssertEqual(
             MultipartText.ayahRange(range, language: .english).rawValue(locale: english),
-            "Al-Fātihah · 1:7 – Al-Baqarah · 2:1"
+            "Al-Fātihah · 1:7\u{00A0}– Al-Baqarah · 2:1"
         )
         XCTAssertEqual(
             MultipartText.ayahRange(range, language: .arabic).rawValue(locale: arabic),
-            "\u{E904} · ١:٧ – \u{E905} · ٢:١"
+            "\u{E904} · ١:٧\u{00A0}– \u{E905} · ٢:١"
         )
+    }
+
+    func test_crossSuraAyahRange_wrapsOnlyAfterTheDash() {
+        let text: MultipartText = "Playing \(ayahRange: fatihahEnd ... baqarahStart)"
+
+        let lines = text.parts.flatMap(\.wrappingParts).map { $0.rawValue(locale: english) }
+
+        XCTAssertEqual(lines, ["Playing ", "", "Al-Fātihah · 1:7\u{00A0}– ", "Al-Baqarah · 2:1", ""])
     }
 
     func test_wholeSuraAyahRange_namesOnlyTheSura() {
@@ -242,10 +250,10 @@ final class MultipartTextQuranTests: XCTestCase {
         let nisaStart = Quran.hafsMadani1405.suras[3].firstVerse
         let text: MultipartText = "\(ayahRanges: [ayah ... sura.verses[255], imranEnd ... nisaStart])"
 
-        XCTAssertEqual(text.rawValue(locale: english), "Al-Baqarah · 2:255–256; Āli-ʿImrān · 3:200 – An-Nisāʾ · 4:1")
+        XCTAssertEqual(text.rawValue(locale: english), "Al-Baqarah · 2:255–256; Āli-ʿImrān · 3:200\u{00A0}– An-Nisāʾ · 4:1")
         XCTAssertEqual(
             text.rawValue(locale: arabic),
-            "\u{E905} · \u{2066}٢:٢٥٥–٢٥٦\u{2069}\(l("list.separator"))\u{E906} · ٣:٢٠٠ – \u{E907} · ٤:١"
+            "\u{E905} · \u{2066}٢:٢٥٥–٢٥٦\u{2069}\(l("list.separator"))\u{E906} · ٣:٢٠٠\u{00A0}– \u{E907} · ٤:١"
         )
         XCTAssertEqual(
             text.accessibilityText,

@@ -97,6 +97,9 @@ public actor LegacyDataImportCoordinator {
             if !data.highlights.isEmpty {
                 preferences.hadHighlights = true
             }
+            if !data.collectionBookmarks.isEmpty {
+                preferences.hadPageBookmarks = true
+            }
             logger.notice("""
             Legacy import: completed in \(milliseconds(since: start))ms changed=\(result.changed) \
             matched=\(result.matched) keptExisting=\(result.keptExisting) alreadyProcessed=\(result.alreadyProcessed)
@@ -171,6 +174,10 @@ public struct LegacyImportPreferences {
     @Preference(hadHighlightsKey)
     public internal(set) var hadHighlights: Bool
 
+    /// Whether an import brought in 3.0 page bookmarks. Never cleared.
+    @Preference(hadPageBookmarksKey)
+    public internal(set) var hadPageBookmarks: Bool
+
     // MARK: Internal
 
     @Preference(enabled)
@@ -179,11 +186,16 @@ public struct LegacyImportPreferences {
     static func reset() {
         Preferences.shared.removeValueForKey(enabled)
         Preferences.shared.removeValueForKey(hadHighlightsKey)
+        Preferences.shared.removeValueForKey(hadPageBookmarksKey)
     }
 
     // MARK: Private
 
     private static let enabled = PreferenceKey<Bool>(key: "com.quran.legacy-import.enabled", defaultValue: true)
     private static let hadHighlightsKey = PreferenceKey<Bool>(key: "com.quran.legacy-import.had-highlights", defaultValue: false)
+    private static let hadPageBookmarksKey = PreferenceKey<Bool>(
+        key: "com.quran.legacy-import.had-page-bookmarks",
+        defaultValue: false
+    )
 }
 #endif

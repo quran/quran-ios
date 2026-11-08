@@ -100,6 +100,21 @@ final class LegacyDataImportCoordinatorTests: XCTestCase {
         XCTAssertFalse(LegacyImportPreferences.shared.hadHighlights)
     }
 
+    func test_importNow_recordsPageBookmarksOnlyOnceTheStoreHasSome() async throws {
+        try stack.write { context in
+            context.note("Legacy note", color: 0, verses: [(1, 1)], modifiedOn: 10)
+        }
+        try await sut.importNow()
+        XCTAssertFalse(LegacyImportPreferences.shared.hadPageBookmarks)
+
+        try stack.write { context in
+            _ = context.newPageBookmark(page: 2, mushafID: 0, modifiedOn: 20)
+        }
+        try await sut.importNow()
+
+        XCTAssertTrue(LegacyImportPreferences.shared.hadPageBookmarks)
+    }
+
     func test_repeatedImport_doesNotRecreateDeletedNote() async throws {
         try stack.write { context in
             context.note("Delete me", color: 0, verses: [(1, 1)], modifiedOn: 10)

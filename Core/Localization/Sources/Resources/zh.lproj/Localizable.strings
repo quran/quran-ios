@@ -604,6 +604,15 @@
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
 "bookmarks.old-page-bookmarks.explanation" = "保存自你的页面书签。每一页现在都对应该页的第一节经文。";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.title" = "您的页面书签在这里";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.text" = "您在 %@ 版中加入书签的每一页，现在都以该页第一节经文的形式保存在“旧页面书签”中。要在阅读时记住位置，请使用阅读书签。";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.open" = "打开旧页面书签";
 
 // Highlight Colors
 // Metadata: Translated by ChatGPT; human review required.

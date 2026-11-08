@@ -582,6 +582,15 @@
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
 "bookmarks.old-page-bookmarks.explanation" = "Бет бетбелгілеріңізден сақталды. Әр бет енді оның алғашқы аяты болды.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.title" = "Бет бетбелгілеріңіз осында";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.text" = "%@ нұсқасында бетбелгі қойған әр бет енді «Ескі бет бетбелгілері» ішінде сол беттің алғашқы аяты ретінде тұр. Оқу кезінде орныңызды сақтау үшін оқу бетбелгілерін пайдаланыңыз.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.open" = "Ескі бет бетбелгілерін ашу";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

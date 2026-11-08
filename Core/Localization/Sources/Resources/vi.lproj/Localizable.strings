@@ -510,6 +510,15 @@
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
 "bookmarks.old-page-bookmarks.explanation" = "Được lưu từ các dấu trang theo trang của bạn. Mỗi trang giờ là ayah đầu tiên của trang đó.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.title" = "Các trang bạn đã đánh dấu ở đây";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.text" = "Mỗi trang bạn đánh dấu trong phiên bản %@ giờ là ayah đầu tiên của trang đó, trong Dấu trang trang cũ. Để giữ vị trí khi đọc, hãy dùng dấu trang đọc.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.open" = "Mở Dấu trang trang cũ";
 
 // Highlight Colors
 // Metadata: Translated by ChatGPT; human review required.

@@ -120,7 +120,7 @@ final class NotesViewModel: ObservableObject {
         }
         let colors = Set(highlights.values)
         return NotesHighlightsSummary(
-            colors: Array(HighlightColor.sortedColors.filter(colors.contains).prefix(4))
+            colors: Array(HighlightColor.sortedByUsage(in: highlights.values).filter(colors.contains).prefix(4))
         )
     }
     #endif
@@ -369,6 +369,6 @@ final class NotesViewModel: ObservableObject {
 
 /// The user's highlights, for the Notes empty state.
 struct NotesHighlightsSummary: Equatable {
-    /// Up to four of the colors the user highlighted with.
+    /// Up to four of the colors the user highlighted with, the most used first, as Bookmarks orders them.
     let colors: [HighlightColor]
 }

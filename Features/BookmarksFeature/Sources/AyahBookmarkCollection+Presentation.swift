@@ -44,12 +44,4 @@ extension AyahBookmarkCollection {
         isReadOnly && !bookmarks.isEmpty
     }
 }
-
-extension HighlightColor {
-    static var alphabeticallySortedColors: [Self] {
-        allCases.sorted {
-            $0.localizedName.localizedCaseInsensitiveCompare($1.localizedName) == .orderedAscending
-        }
-    }
-}
 #endif

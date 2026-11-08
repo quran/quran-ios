@@ -60,18 +60,6 @@ final class BookmarkCollectionsViewModelTests: BookmarkCollectionsTestCase {
         ])
     }
 
-    func test_alphabeticallySortedColors_sortsLocalizedNames() {
-        let colors = HighlightColor.alphabeticallySortedColors
-
-        XCTAssertEqual(Set(colors), Set(HighlightColor.allCases))
-        XCTAssertEqual(
-            colors.map(\.localizedName),
-            HighlightColor.allCases.map(\.localizedName).sorted {
-                $0.localizedCaseInsensitiveCompare($1) == .orderedAscending
-            }
-        )
-    }
-
     func test_collectionKind_classifiesCollectionNamesCaseInsensitively() {
         XCTAssertEqual(
             collection(name: oldPageBookmarksCollectionName.uppercased()).kind,

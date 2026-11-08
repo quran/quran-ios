@@ -241,8 +241,15 @@ final class MultipartTextQuranTests: XCTestCase {
         let sameSura = MultipartText.ayahRange(ayah ... sura.verses[259], language: .english)
         let crossSura = MultipartText.ayahRange(fatihahEnd ... baqarahStart, language: .english)
 
-        XCTAssertEqual(sameSura.attributedString(ofSize: .body).string, sameSura.rawValue)
-        XCTAssertEqual(crossSura.attributedString(ofSize: .body).string, crossSura.rawValue)
+        XCTAssertEqual(sameSura.attributedString(ofSize: .body, locale: english).string, sameSura.rawValue(locale: english))
+        XCTAssertEqual(crossSura.attributedString(ofSize: .body, locale: english).string, crossSura.rawValue(locale: english))
+    }
+
+    @MainActor
+    func test_arabicAyahRange_attributedStringStartsRightToLeft() {
+        let text = MultipartText.ayahRange(ayah ... sura.verses[259], language: .arabic)
+
+        XCTAssertEqual(text.attributedString(ofSize: .body, locale: arabic).string, "\u{200F}\u{E905} \u{2066}٢:٢٥٥–٢٦٠\u{2069}")
     }
 
     func test_ayahRanges_separatesRangesWithTheListSeparator() {

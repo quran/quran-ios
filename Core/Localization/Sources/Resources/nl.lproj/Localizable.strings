@@ -605,9 +605,6 @@
 // Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.first-run.title" = "Bewaar je plek in maximaal drie lezingen";
-// Reading bookmarks menu explanation below its title, shown while no reading bookmark is placed.
-// Metadata: Translated by AI; human review required.
-"bookmarks.reading.first-run.description" = "Kies er een voor elke lezing, zoals je khatmah of hifz. Verplaats hem terwijl je leest, zodat je er nooit meer dan drie nodig hebt.";
 // Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.first-run.suggested" = "Aanbevolen voor je eerste lezing";

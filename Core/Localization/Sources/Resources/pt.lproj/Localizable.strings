@@ -691,9 +691,6 @@
 // Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.first-run.title" = "Guarde seu lugar em até três leituras";
-// Reading bookmarks menu explanation below its title, shown while no reading bookmark is placed.
-// Metadata: Translated by AI; human review required.
-"bookmarks.reading.first-run.description" = "Escolha um para cada leitura, como sua khatmah ou hifz. Mova-o conforme lê, assim você nunca precisará de mais de três.";
 // Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.first-run.suggested" = "Sugerido para sua primeira leitura";

@@ -125,7 +125,7 @@ private struct ReadingBookmarkMenuContent: View {
                             .multilineTextAlignment(.leading)
                             .fixedSize(horizontal: false, vertical: true)
                             .accessibilityAddTraits(.isHeader)
-                        description(l("bookmarks.reading.first-run.description"))
+                        description(l("bookmarks.reading.description"))
                     }
                     // A zero ideal width lets the rows set the popover's width; the copy wraps within it.
                     .frame(idealWidth: 0, maxWidth: .infinity, alignment: .leading)

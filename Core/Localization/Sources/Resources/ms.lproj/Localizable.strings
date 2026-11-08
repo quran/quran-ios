@@ -673,9 +673,6 @@
 // Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.first-run.title" = "Simpan tempat anda dalam sehingga tiga bacaan";
-// Reading bookmarks menu explanation below its title, shown while no reading bookmark is placed.
-// Metadata: Translated by AI; human review required.
-"bookmarks.reading.first-run.description" = "Pilih satu untuk setiap bacaan, seperti khatam atau hafazan anda. Alihkannya semasa anda membaca, jadi anda tidak akan memerlukan lebih daripada tiga.";
 // Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.first-run.suggested" = "Dicadangkan untuk bacaan pertama anda";

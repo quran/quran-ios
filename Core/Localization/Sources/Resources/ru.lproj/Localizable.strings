@@ -690,9 +690,6 @@
 // Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.first-run.title" = "Сохраняйте место в чтении — до трёх одновременно";
-// Reading bookmarks menu explanation below its title, shown while no reading bookmark is placed.
-// Metadata: Translated by AI; human review required.
-"bookmarks.reading.first-run.description" = "Выберите по одной для каждого чтения, например для хатма или хифза. Переносите её по мере чтения, и вам никогда не понадобится больше трёх.";
 // Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.first-run.suggested" = "Рекомендуется для первого чтения";

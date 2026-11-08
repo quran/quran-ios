@@ -449,11 +449,9 @@
 // Reading bookmarks menu explanation below its title.
 "bookmarks.reading.description" = "استخدم علامة لكل قراءة، مثل ختمتك أو حفظك.";
 // Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
-"bookmarks.reading.first-run.title" = "احتفظ بموضعك فيما يصل إلى ثلاث قراءات";
-// Reading bookmarks menu explanation below its title, shown while no reading bookmark is placed.
-"bookmarks.reading.first-run.description" = "اختر علامة لكل قراءة، مثل ختمتك أو حفظك. انقلها وأنت تقرأ، فلا تحتاج أبدًا إلى ما يزيد على ثلاث.";
+"bookmarks.reading.first-run.title" = "علامة لكل قراءة، حتى ثلاث قراءات";
 // Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
-"bookmarks.reading.first-run.suggested" = "مقترحة لقراءتك الأولى";
+"bookmarks.reading.first-run.suggested" = "اقتراحنا لقراءتك الأولى";
 // Reading bookmark row subtitle when the bookmark is at the current ayah or page.
 "bookmarks.reading.saved-here" = "محفوظ هنا";
 // Reading bookmark row subtitle when the bookmark has no position.

@@ -692,9 +692,6 @@
 // Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.first-run.title" = "جای خود را در حداکثر سه خوانش نگه دارید";
-// Reading bookmarks menu explanation below its title, shown while no reading bookmark is placed.
-// Metadata: Translated by AI; human review required.
-"bookmarks.reading.first-run.description" = "برای هر خوانش یکی را انتخاب کنید، مثل ختم قرآن یا حفظ. هنگام خواندن آن را جابه‌جا کنید تا هرگز به بیش از سه نشانک نیاز نداشته باشید.";
 // Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.first-run.suggested" = "پیشنهادی برای نخستین خوانش شما";

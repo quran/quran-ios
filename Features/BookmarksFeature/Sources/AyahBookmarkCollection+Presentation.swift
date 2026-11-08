@@ -27,7 +27,7 @@ extension AyahBookmarkCollection {
         }
     }
 
-    /// The collection is read-only, so it explains where its ayahs came from and where new ones go.
+    /// Explains where the imported ayahs came from.
     var ayahsHeader: String? {
         guard kind == .oldPageBookmarks, !bookmarks.isEmpty else {
             return nil

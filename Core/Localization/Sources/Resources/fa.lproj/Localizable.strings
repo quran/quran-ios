@@ -580,6 +580,9 @@
 "bookmarks.editor.collection.unselected" = "انتخاب نشده";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "رنگ‌های برجسته‌سازی هنوز در حال بارگیری هستند. دوباره تلاش کنید.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "آیات را در برگزیده‌ها یا مجموعه‌های خودتان، مانند دعاها یا مرور حفظ، ذخیره کنید. رنگ‌های برجسته‌سازی هم همین‌جا هستند.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "نشانک‌های قدیمی صفحات";
 

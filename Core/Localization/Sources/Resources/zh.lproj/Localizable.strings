@@ -584,6 +584,9 @@
 "bookmarks.editor.collection.unselected" = "未选中";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "高亮颜色仍在加载，请重试。";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "将经文保存到收藏或你自己的收藏集，例如杜阿或背诵复习。高亮颜色也在这里。";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "旧页面书签";
 

@@ -579,6 +579,9 @@
 "bookmarks.editor.collection.unselected" = "Não selecionado";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "As cores de destaque ainda estão sendo carregadas. Tente novamente.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "Salve ayahs nos Favoritos ou nas suas próprias coleções, como Duas ou Revisão de hifz. As cores de destaque também estão aqui.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Marcadores de páginas antigos";
 

@@ -562,6 +562,9 @@
 "bookmarks.editor.collection.unselected" = "Таңдалмады";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "Белгілеу түстері әлі жүктелуде. Қайталап көріңіз.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "Аяттарды Таңдаулыларға немесе Дұғалар, Хифз қайталау сияқты өз жинақтарыңызға сақтаңыз. Бөлектеу түстері де осында.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Ескі бет бетбелгілері";
 

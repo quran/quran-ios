@@ -16,6 +16,22 @@ struct BookmarkAyahsView: View {
 
     var body: some View {
         NoorList {
+            if viewModel.isCollectionsIntroVisible {
+                NoorBasicSection {
+                    IntroTipCard(
+                        image: .starFilled,
+                        text: l("bookmarks.editor.intro"),
+                        dismiss: {
+                            withAnimation(NoorAnimation.standard) {
+                                viewModel.dismissCollectionsIntro()
+                            }
+                        }
+                    )
+                    .listRowInsets(.zero)
+                    .listRowBackground(Color.clear)
+                }
+            }
+
             NoorBasicSection(title: l("ayah.menu.highlight")) {
                 HighlightColorPicker(
                     selectedColor: viewModel.selectedHighlightColor,

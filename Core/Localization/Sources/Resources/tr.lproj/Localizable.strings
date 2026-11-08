@@ -521,6 +521,9 @@
 "bookmarks.editor.collection.unselected" = "Seçili değil";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "Vurgu renkleri hâlâ yükleniyor. Lütfen tekrar deneyin.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "Ayetleri Favorilere ya da Dualar, Hıfz tekrarı gibi kendi koleksiyonlarınıza kaydedin. Vurgu renkleri de burada.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Eski sayfa yer imleri";
 

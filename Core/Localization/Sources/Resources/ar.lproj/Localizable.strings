@@ -239,6 +239,8 @@
 "bookmarks.editor.collection.mixed" = "محددة جزئيًا";
 "bookmarks.editor.collection.selected" = "محددة";
 "bookmarks.editor.error.highlight-unavailable" = "لا تزال ألوان التمييز قيد التحميل. حاول مرة أخرى.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+"bookmarks.editor.intro" = "أضف الآيات إلى المفضلة أو إلى مجموعاتك الخاصة، مثل الأدعية أو مراجعة الحفظ. وألوان التحديد هنا أيضًا.";
 
 // MARK: - Notes
 

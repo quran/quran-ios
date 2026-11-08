@@ -490,6 +490,9 @@
 "bookmarks.editor.collection.unselected" = "Chưa chọn";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "Màu tô sáng vẫn đang tải. Vui lòng thử lại.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "Lưu các ayah vào Yêu thích hoặc bộ sưu tập của riêng bạn, như Dua hay Ôn hifz. Màu tô sáng cũng ở đây.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Dấu trang trang cũ";
 

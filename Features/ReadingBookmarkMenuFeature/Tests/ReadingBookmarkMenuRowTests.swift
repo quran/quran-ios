@@ -46,7 +46,7 @@ final class ReadingBookmarkMenuRowTests: XCTestCase {
         let row = makeRow(placement: .ayah(ayah(3)), target: .ayah(ayah(2)))
 
         XCTAssertEqual(row.action, .moveHere)
-        XCTAssertEqual(row.actionStyle, .plain)
+        XCTAssertEqual(row.actionStyle, .prominent)
         XCTAssertEqual(
             row.subtitle.accessibilityText,
             lFormat("bookmarks.reading.location", "Al-Fātihah, Ayah 3")

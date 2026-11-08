@@ -50,8 +50,10 @@ struct ReadingBookmarkMenuRow: View {
         switch action {
         case .remove:
             .destructive
-        case .moveHere, .setHere:
-            // Only the first run's suggested slot gets the filled capsule, so it reads as the default choice.
+        case .moveHere:
+            .prominent
+        case .setHere:
+            // Only the first run's suggested slot fills its Set here, so it reads as the default choice.
             isFirstRun && isSuggested ? .prominent : .plain
         }
     }

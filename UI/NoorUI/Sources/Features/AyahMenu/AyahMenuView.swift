@@ -256,12 +256,15 @@ private struct AyahMenuViewList: View {
             ) {
                 Image(uiImage: ReadingBookmarkIcon.image(style: .outline, badge: .ellipsis))
             }
-        case .available(let bookmark):
+        case let .available(bookmark, subtitle, showsNewBadge):
             Row(
                 title: l("ayah.menu.reading-bookmark.title"),
-                subtitle: .text(bookmark?.displayName ?? l("bookmarks.reading.move-here")),
+                subtitle: .text(subtitle),
                 subtitlePlacement: .below,
-                action: dataObject.actions.showReadingBookmarkMenu
+                action: dataObject.actions.showReadingBookmarkMenu,
+                accessory: showsNewBadge
+                    ? NoorTagView(NoorTag(title: l("ayah.menu.reading-bookmark.new"), tone: .accent), style: .filled)
+                    : nil
             ) {
                 Image(uiImage: ReadingBookmarkIcon.image(
                     style: bookmark == nil ? .outline : .filled,
@@ -304,14 +307,13 @@ private struct Row<Symbol: View, Accessory: View>: View {
         @ViewBuilder symbol: () -> Symbol
     ) where Accessory == EmptyView {
         self.symbol = symbol()
-        accessory = EmptyView()
+        accessory = nil
         self.title = title
         self.subtitle = subtitle
         self.subtitlePlacement = subtitlePlacement
         self.isEnabled = isEnabled
         self.isDestructive = isDestructive
         self.action = action
-        hasAccessory = false
     }
 
     init(
@@ -320,31 +322,29 @@ private struct Row<Symbol: View, Accessory: View>: View {
         subtitlePlacement: SubtitlePlacement = .inline,
         isEnabled: Bool = true,
         action: @Sendable @escaping () async -> Void,
-        @ViewBuilder symbol: () -> Symbol,
-        @ViewBuilder accessory: () -> Accessory
+        accessory: Accessory?,
+        @ViewBuilder symbol: () -> Symbol
     ) {
         self.symbol = symbol()
-        self.accessory = accessory()
+        self.accessory = accessory
         self.title = title
         self.subtitle = subtitle
         self.subtitlePlacement = subtitlePlacement
         self.isEnabled = isEnabled
         isDestructive = false
         self.action = action
-        hasAccessory = true
     }
 
     // MARK: Internal
 
     let symbol: Symbol
-    let accessory: Accessory
+    let accessory: Accessory?
     let title: String
     let subtitle: MultipartText?
     let subtitlePlacement: SubtitlePlacement
     let isEnabled: Bool
     let isDestructive: Bool
     let action: @Sendable () async -> Void
-    let hasAccessory: Bool
     @ScaledMetric var verticalPadding = 12
 
     var body: some View {
@@ -357,7 +357,7 @@ private struct Row<Symbol: View, Accessory: View>: View {
                         .foregroundColor(primaryColor)
                 }
                 label
-                if hasAccessory {
+                if let accessory {
                     Spacer(minLength: 12)
                     accessory
                 }
@@ -564,7 +564,7 @@ private func previewDataObject(
         repeatSubtitle: "selected verses",
         actions: previewActions,
         isTranslationView: isTranslationView,
-        readingBookmarkState: .available(bookmark: nil)
+        readingBookmarkState: .available(bookmark: nil, subtitle: "Set here", showsNewBadge: true)
     )
     #else
     return AyahMenuUI.DataObject(

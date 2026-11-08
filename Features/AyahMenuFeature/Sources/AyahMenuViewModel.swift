@@ -56,6 +56,7 @@ final class AyahMenuViewModel {
         let highlightVerses: [AyahNumber: HighlightColor]
         let bookmarkedVerses: Set<AyahNumber>
         let readingBookmark: PlacedReadingBookmark?
+        let placedReadingBookmarks: [PlacedReadingBookmark]?
         #else
         let noteService: NoteService
         #endif
@@ -125,12 +126,8 @@ final class AyahMenuViewModel {
         return .highlighted(color)
     }
 
-    var readingBookmarkState: AyahMenuUI.ReadingBookmarkState {
-        guard selectedAyah != nil else {
-            return .disabled(message: l("ayah.menu.reading-bookmark.single-ayah-only"))
-        }
-        return .available(bookmark: deps.readingBookmark)
-    }
+    /// Built on first read, when the menu is presented, so each presentation counts one view of the New badge.
+    private(set) lazy var readingBookmarkState = makeReadingBookmarkState()
     #endif
 
     var repeatSubtitle: String {
@@ -273,11 +270,54 @@ final class AyahMenuViewModel {
 
     // MARK: Private
 
+    #if QURAN_SYNC
+    private static let readingBookmarkNewBadgeMaxViews = 5
+    #endif
+
     private let audioPreferences = AudioPreferences.shared
 
     private let deps: Deps
+    #if QURAN_SYNC
+    private let ayahMenuPreferences = AyahMenuPreferences.shared
+    #endif
 
     // MARK: - Helper
+
+    #if QURAN_SYNC
+    private func makeReadingBookmarkState() -> AyahMenuUI.ReadingBookmarkState {
+        let showsNewBadge = recordReadingBookmarkNewBadgeView()
+        guard selectedAyah != nil else {
+            return .disabled(message: l("ayah.menu.reading-bookmark.single-ayah-only"))
+        }
+        let subtitle = if let bookmark = deps.readingBookmark {
+            bookmark.displayName
+        } else if deps.placedReadingBookmarks?.isEmpty == true {
+            l("bookmarks.reading.set-here")
+        } else {
+            l("bookmarks.reading.move-here")
+        }
+        return .available(bookmark: deps.readingBookmark, subtitle: subtitle, showsNewBadge: showsNewBadge)
+    }
+
+    private func recordReadingBookmarkNewBadgeView() -> Bool {
+        // Unknown until the bookmarks load: neither show, count, nor retire.
+        guard let placedReadingBookmarks = deps.placedReadingBookmarks else {
+            return false
+        }
+        // Retire for good once a bookmark exists, so removing every bookmark later doesn't bring it back.
+        if !placedReadingBookmarks.isEmpty {
+            ayahMenuPreferences.isReadingBookmarkNewBadgeRetired = true
+        }
+        guard selectedAyah != nil,
+              !ayahMenuPreferences.isReadingBookmarkNewBadgeRetired,
+              ayahMenuPreferences.readingBookmarkNewBadgeViews < Self.readingBookmarkNewBadgeMaxViews
+        else {
+            return false
+        }
+        ayahMenuPreferences.readingBookmarkNewBadgeViews += 1
+        return true
+    }
+    #endif
 
     #if !QURAN_SYNC
     private func containsText(_ notes: [QuranAnnotations.Note]) -> Bool {

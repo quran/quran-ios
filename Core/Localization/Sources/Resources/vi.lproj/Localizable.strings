@@ -410,6 +410,9 @@
 "ayah.menu.notes-count" = "Ghi chú (%d)";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Dấu trang đọc đã được chuyển từ %@ đến %@";
+// Badge on the ayah menu's Reading Bookmark row.
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.new" = "Mới";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved.explanation" = "Bạn di chuyển dấu trang đọc thay vì thêm dấu mới. Để giữ các ayah, hãy lưu chúng vào một bộ sưu tập.";
 // Metadata: Translated by ChatGPT; human review required.

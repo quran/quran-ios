@@ -22,29 +22,44 @@ public struct NoorTag: Hashable {
 }
 
 public struct NoorTagView: View {
+    public enum Style {
+        /// A dot and tinted text on a faint tint of the tone.
+        case tinted
+        /// Text on a solid fill of the tone, without a dot.
+        case filled
+    }
+
     @ScaledMetric private var dotSize = 6.0
 
     private let tag: NoorTag
+    private let style: Style
 
-    public init(_ tag: NoorTag) {
+    public init(_ tag: NoorTag, style: Style = .tinted) {
         self.tag = tag
+        self.style = style
     }
 
     public var body: some View {
         HStack(spacing: 6) {
-            Circle()
-                .frame(width: dotSize, height: dotSize)
-                .accessibilityHidden(true)
+            if style == .tinted {
+                Circle()
+                    .frame(width: dotSize, height: dotSize)
+                    .accessibilityHidden(true)
+            }
 
             Text(tag.title)
                 .font(.caption2.bold())
                 .textCase(.uppercase)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .foregroundStyle(foregroundColor)
+        .foregroundStyle(style == .filled ? filledForegroundColor : foregroundColor)
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
-        .background(Capsule().fill(backgroundColor))
+        .background(Capsule().fill(style == .filled ? foregroundColor : backgroundColor))
+    }
+
+    private var filledForegroundColor: Color {
+        tag.tone == .accent ? .onAccent : .white
     }
 
     private var foregroundColor: Color {
@@ -80,6 +95,7 @@ public struct NoorTagView: View {
         NoorTagView(NoorTag(title: "Informational", tone: .neutral))
         NoorTagView(NoorTag(title: "Attention", tone: .yellow))
         NoorTagView(NoorTag(title: "Experimental", tone: .red))
+        NoorTagView(NoorTag(title: "New", tone: .accent), style: .filled)
     }
     .padding()
 }

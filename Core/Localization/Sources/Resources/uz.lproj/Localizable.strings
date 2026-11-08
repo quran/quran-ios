@@ -500,6 +500,9 @@
 "ayah.menu.notes-count" = "Eslatmalar (%d)";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "O‘qish xatcho‘pi %@ dan %@ ga ko‘chirildi";
+// Badge on the ayah menu's Reading Bookmark row.
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.new" = "Yangi";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved.explanation" = "O‘qish xatcho‘plarini yangisini qo‘shmasdan ko‘chirasiz. Oyatlarni saqlash uchun ularni to‘plamga saqlang.";
 // Metadata: Translated by ChatGPT; human review required.

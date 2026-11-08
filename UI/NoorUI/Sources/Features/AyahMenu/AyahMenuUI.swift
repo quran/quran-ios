@@ -159,7 +159,7 @@ public enum AyahMenuUI {
 
     public enum ReadingBookmarkState: Equatable {
         case disabled(message: String)
-        case available(bookmark: PlacedReadingBookmark?)
+        case available(bookmark: PlacedReadingBookmark?, subtitle: String, showsNewBadge: Bool)
     }
     #endif
 }

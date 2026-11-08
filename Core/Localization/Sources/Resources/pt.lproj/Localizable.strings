@@ -499,6 +499,9 @@
 "ayah.menu.notes-count" = "Notas (%d)";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved" = "Marcador de leitura movido de %@ para %@";
+// Badge on the ayah menu's Reading Bookmark row.
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.new" = "Novo";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.moved.explanation" = "Você move os marcadores de leitura em vez de adicionar novos. Para guardar ayahs, salve-as em uma coleção.";
 // Metadata: Translated by ChatGPT; human review required.

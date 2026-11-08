@@ -146,8 +146,9 @@ private struct NotesViewUI: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @ScaledMetric private var highlightsSpacing = 12.0
-    /// Scaled with Dynamic Type inside ``HighlightPaletteIcon``.
-    private let highlightsIconSize = 24.0
+    // Scaled with Dynamic Type inside ``HighlightPaletteIcon``.
+    private let highlightsTipIconSize = 24.0
+    private let highlightsMovedIconSize = 28.0
     @ScaledMetric private var highlightsCornerRadius = 20.0
     @ScaledMetric private var highlightsMaxWidth = 320.0
 
@@ -182,13 +183,13 @@ private struct NotesViewUI: View {
             dismiss: dismissHighlightsTip
         ) {
             // The palette upgraders remember from the 3.0 ayah menu, not their own colors.
-            HighlightPaletteIcon(size: highlightsIconSize)
+            HighlightPaletteIcon(size: highlightsTipIconSize)
         }
     }
 
     private func highlightsMoved(_ summary: NotesHighlightsSummary) -> some View {
         VStack(spacing: highlightsSpacing) {
-            HighlightPaletteIcon(colors: summary.colors, size: highlightsIconSize)
+            HighlightPaletteIcon(colors: summary.colors, size: highlightsMovedIconSize)
                 .accessibilityHidden(true)
 
             Text(highlightsMovedText(summary))

@@ -21,8 +21,7 @@ public struct HighlightPaletteIcon: View {
     // MARK: Public
 
     public var body: some View {
-        // Negative spacing overlaps the circles while keeping their full width in the layout,
-        // so the icon centers and mirrors in right-to-left layouts.
+        // Negative spacing keeps the full width in layout, so it centers and mirrors in RTL.
         HStack(spacing: size * Self.peekRatio - size) {
             ForEach(Array(colors.enumerated()), id: \.offset) { index, color in
                 ColoredCircle(color: color.color, selected: false, minLength: size)

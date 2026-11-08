@@ -24,7 +24,7 @@ public struct TipCard: View {
         }
     }
 
-    /// Shows a custom `icon` in the same slot as the system image, so the text lines up with other tip cards.
+    /// Shows a custom icon in the system image's slot.
     public init(
         title: String,
         text: String,

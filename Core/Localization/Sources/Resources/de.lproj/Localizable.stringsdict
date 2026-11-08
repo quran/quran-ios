@@ -200,22 +200,5 @@
             <string>%2$d weitere warten so lange.</string>
         </dict>
     </dict>
-    <!-- Notes empty state for 3.0 upgraders: how many ayahs are highlighted. -->
-    <key>notes.no-data.highlights.count</key>
-    <dict>
-        <key>NSStringLocalizedFormatKey</key>
-        <string>%#@highlights@</string>
-        <key>highlights</key>
-        <dict>
-            <key>NSStringFormatSpecTypeKey</key>
-            <string>NSStringPluralRuleType</string>
-            <key>NSStringFormatValueTypeKey</key>
-            <string>d</string>
-            <key>one</key>
-            <string>Deine Hervorhebung ist jetzt im Tab „Lesezeichen“.</string>
-            <key>other</key>
-            <string>Deine %d Hervorhebungen sind jetzt im Tab „Lesezeichen“.</string>
-        </dict>
-    </dict>
 </dict>
 </plist>

@@ -176,20 +176,5 @@
             <string>%2$d lagi perlu menunggu sehingga itu.</string>
         </dict>
     </dict>
-    <!-- Notes empty state for 3.0 upgraders: how many ayahs are highlighted. -->
-    <key>notes.no-data.highlights.count</key>
-    <dict>
-        <key>NSStringLocalizedFormatKey</key>
-        <string>%#@highlights@</string>
-        <key>highlights</key>
-        <dict>
-            <key>NSStringFormatSpecTypeKey</key>
-            <string>NSStringPluralRuleType</string>
-            <key>NSStringFormatValueTypeKey</key>
-            <string>d</string>
-            <key>other</key>
-            <string>%d sorotan anda kini berada dalam tab Penanda.</string>
-        </dict>
-    </dict>
 </dict>
 </plist>

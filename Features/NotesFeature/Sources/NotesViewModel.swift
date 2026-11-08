@@ -120,8 +120,7 @@ final class NotesViewModel: ObservableObject {
         }
         let colors = Set(highlights.values)
         return NotesHighlightsSummary(
-            colors: Array(HighlightColor.sortedColors.filter(colors.contains).prefix(4)),
-            upgraderCount: hadLegacyHighlights ? highlights.count : nil
+            colors: Array(HighlightColor.sortedColors.filter(colors.contains).prefix(4))
         )
     }
     #endif
@@ -372,6 +371,4 @@ final class NotesViewModel: ObservableObject {
 struct NotesHighlightsSummary: Equatable {
     /// Up to four of the colors the user highlighted with.
     let colors: [HighlightColor]
-    /// How many ayahs are highlighted, only for upgraders whose 3.0 notes held highlights.
-    let upgraderCount: Int?
 }

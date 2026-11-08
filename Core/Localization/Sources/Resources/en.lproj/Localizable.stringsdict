@@ -197,22 +197,5 @@
             <string>%2$d more can't sync until then.</string>
         </dict>
     </dict>
-    <!-- Notes empty state for 3.0 upgraders: how many ayahs are highlighted. -->
-    <key>notes.no-data.highlights.count</key>
-    <dict>
-        <key>NSStringLocalizedFormatKey</key>
-        <string>%#@highlights@</string>
-        <key>highlights</key>
-        <dict>
-            <key>NSStringFormatSpecTypeKey</key>
-            <string>NSStringPluralRuleType</string>
-            <key>NSStringFormatValueTypeKey</key>
-            <string>d</string>
-            <key>one</key>
-            <string>Your highlight now lives in the Bookmarks tab.</string>
-            <key>other</key>
-            <string>Your %d highlights now live in the Bookmarks tab.</string>
-        </dict>
-    </dict>
 </dict>
 </plist>

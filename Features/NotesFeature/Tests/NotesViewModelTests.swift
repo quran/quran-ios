@@ -336,8 +336,7 @@ final class NotesViewModelTests: XCTestCase {
         XCTAssertFalse(sut.showsHighlightsTip)
     }
 
-    func test_highlightsSummary_forUpgrader_countsAyahs_andShowsUpToFourColors() async throws {
-        LegacyImportPreferences.shared.hadHighlights = true
+    func test_highlightsSummary_showsUpToFourColors() async throws {
         try await highlightService.setHighlight(.purple, for: [ayah(1, 1)])
         try await highlightService.setHighlight(.pink, for: [ayah(1, 2)])
         try await highlightService.setHighlight(.blue, for: [ayah(1, 3)])
@@ -348,17 +347,7 @@ final class NotesViewModelTests: XCTestCase {
         let task = await start(sut, untilHighlightCount: 6)
         defer { task.cancel() }
 
-        XCTAssertEqual(sut.highlightsSummary, NotesHighlightsSummary(colors: [.yellow, .green, .blue, .pink], upgraderCount: 6))
-    }
-
-    func test_highlightsSummary_forOthers_hasNoCount() async throws {
-        try await highlightService.setHighlight(.green, for: [ayah(1, 1)])
-        let sut = makeSUT()
-
-        let task = await start(sut, untilHighlightCount: 1)
-        defer { task.cancel() }
-
-        XCTAssertEqual(sut.highlightsSummary, NotesHighlightsSummary(colors: [.green], upgraderCount: nil))
+        XCTAssertEqual(sut.highlightsSummary, NotesHighlightsSummary(colors: [.yellow, .green, .blue, .pink]))
     }
 
     private func ayah(_ sura: Int, _ ayah: Int) -> AyahNumber {

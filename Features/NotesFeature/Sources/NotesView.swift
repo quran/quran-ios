@@ -192,7 +192,7 @@ private struct NotesViewUI: View {
             HighlightPaletteIcon(colors: summary.colors, size: highlightsMovedIconSize)
                 .accessibilityHidden(true)
 
-            Text(highlightsMovedText(summary))
+            Text(l("notes.no-data.highlights.text"))
                 .font(.subheadline)
                 .foregroundStyle(Color.secondaryLabel)
                 .multilineTextAlignment(.center)
@@ -206,14 +206,6 @@ private struct NotesViewUI: View {
             in: RoundedRectangle(cornerRadius: highlightsCornerRadius, style: .continuous)
         )
         .padding(.horizontal)
-    }
-
-    private func highlightsMovedText(_ summary: NotesHighlightsSummary) -> String {
-        if let count = summary.upgraderCount {
-            lFormat("notes.no-data.highlights.count", count)
-        } else {
-            l("notes.no-data.highlights.text")
-        }
     }
 
     /// Keeps ``noData`` centered, scrolls it when it doesn't fit, and hosts pull-to-refresh.
@@ -432,5 +424,5 @@ private struct NotesEmptyPreview: View {
 }
 
 #Preview("Empty with highlights") {
-    NotesEmptyPreview(highlightsSummary: NotesHighlightsSummary(colors: [.yellow, .green, .blue], upgraderCount: 12))
+    NotesEmptyPreview(highlightsSummary: NotesHighlightsSummary(colors: [.yellow, .green, .blue]))
 }

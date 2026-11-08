@@ -200,22 +200,5 @@
             <string>%2$d элемент сол уақытқа дейін күтеді.</string>
         </dict>
     </dict>
-    <!-- Notes empty state for 3.0 upgraders: how many ayahs are highlighted. -->
-    <key>notes.no-data.highlights.count</key>
-    <dict>
-        <key>NSStringLocalizedFormatKey</key>
-        <string>%#@highlights@</string>
-        <key>highlights</key>
-        <dict>
-            <key>NSStringFormatSpecTypeKey</key>
-            <string>NSStringPluralRuleType</string>
-            <key>NSStringFormatValueTypeKey</key>
-            <string>d</string>
-            <key>one</key>
-            <string>%d бөлектеуіңіз енді Бетбелгілер қойындысында.</string>
-            <key>other</key>
-            <string>%d бөлектеуіңіз енді Бетбелгілер қойындысында.</string>
-        </dict>
-    </dict>
 </dict>
 </plist>

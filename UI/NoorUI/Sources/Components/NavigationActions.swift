@@ -123,16 +123,19 @@ public enum NavigationBarButton {
 
 @MainActor
 public final class NavigationEditModeController {
+    /// `listItems` show only alongside the Edit button, while there is a list to edit.
     public init(
         navigationItem: UINavigationItem,
         reload: AnyPublisher<Void, Never>,
         editMode: Binding<EditMode?>,
+        listItems: [UIBarButtonItem] = [],
         customItems: [UIBarButtonItem] = []
     ) {
         controller = EditController(
             navigationItem: navigationItem,
             reload: reload,
             editMode: editMode,
+            listItems: listItems,
             customItems: customItems,
             buttonProvider: { editMode, action in
                 if editMode.isEditing {

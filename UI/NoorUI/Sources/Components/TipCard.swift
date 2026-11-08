@@ -19,11 +19,26 @@ public struct TipCard: View {
         action: Action? = nil,
         dismiss: @escaping () -> Void
     ) {
+        self.init(title: title, text: text, action: action, dismiss: dismiss) {
+            image.image
+                .font(.body.weight(.semibold))
+                .foregroundStyle(imageColor)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(imageBackground, in: Circle())
+        }
+    }
+
+    /// Shows a custom `icon` in the same slot as the system image, so the text lines up with other tip cards.
+    public init(
+        title: String,
+        text: String,
+        action: Action? = nil,
+        dismiss: @escaping () -> Void,
+        @ViewBuilder icon: () -> some View
+    ) {
         self.title = title
         self.text = text
-        self.image = image
-        self.imageColor = imageColor
-        self.imageBackground = imageBackground
+        self.icon = AnyView(icon())
         self.action = action
         self.dismiss = dismiss
     }
@@ -49,7 +64,7 @@ public struct TipCard: View {
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading) {
                     HStack(alignment: .top) {
-                        icon
+                        iconSlot
                         Spacer(minLength: 0)
                         dismissButton
                     }
@@ -57,7 +72,7 @@ public struct TipCard: View {
                 }
             } else {
                 HStack(alignment: .top) {
-                    icon
+                    iconSlot
                     content
                     dismissButton
                 }
@@ -80,18 +95,13 @@ public struct TipCard: View {
 
     private let title: String
     private let text: String
-    private let image: NoorSystemImage
-    private let imageColor: Color
-    private let imageBackground: Color
+    private let icon: AnyView
     private let action: Action?
     private let dismiss: () -> Void
 
-    private var icon: some View {
-        image.image
-            .font(.body.weight(.semibold))
-            .foregroundStyle(imageColor)
+    private var iconSlot: some View {
+        icon
             .frame(width: imageSize, height: imageSize)
-            .background(imageBackground, in: Circle())
             .accessibilityHidden(true)
     }
 
@@ -145,6 +155,13 @@ public struct TipCard: View {
             image: .bookmark,
             dismiss: {}
         )
+        TipCard(
+            title: "A tip with a custom icon",
+            text: "The icon takes the same slot, so the text lines up.",
+            dismiss: {}
+        ) {
+            HighlightPaletteIcon(size: 24)
+        }
     }
     .padding()
     .frame(maxHeight: .infinity)

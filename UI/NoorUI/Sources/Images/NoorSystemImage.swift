@@ -42,7 +42,6 @@ public enum NoorSystemImage: String {
     case pause = "pause.fill"
     case audioOptions = "slider.horizontal.3"
     case edit = "pencil"
-    case highlighter
     case backward = "backward.fill"
     case forward = "forward.fill"
     case cancel = "xmark"

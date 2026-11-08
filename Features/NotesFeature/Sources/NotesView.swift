@@ -146,8 +146,8 @@ private struct NotesViewUI: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @ScaledMetric private var highlightsSpacing = 12.0
-    @ScaledMetric private var highlightsDotSpacing = 6.0
-    @ScaledMetric private var highlightsDotSize = 12.0
+    /// Scaled with Dynamic Type inside ``HighlightPaletteIcon``.
+    private let highlightsIconSize = 24.0
     @ScaledMetric private var highlightsCornerRadius = 20.0
     @ScaledMetric private var highlightsMaxWidth = 320.0
 
@@ -178,23 +178,18 @@ private struct NotesViewUI: View {
         TipCard(
             title: l("notes.highlights-tip.title"),
             text: l("notes.highlights-tip.text"),
-            image: .highlighter,
-            // The yellow is the same in light and dark mode, so the glyph stays dark on it.
-            imageColor: .black.opacity(0.75),
-            imageBackground: HighlightColor.yellow.color,
             action: TipCard.Action(l("notes.highlights.show"), perform: showHighlights),
             dismiss: dismissHighlightsTip
-        )
+        ) {
+            // The palette upgraders remember from the 3.0 ayah menu, not their own colors.
+            HighlightPaletteIcon(size: highlightsIconSize)
+        }
     }
 
     private func highlightsMoved(_ summary: NotesHighlightsSummary) -> some View {
         VStack(spacing: highlightsSpacing) {
-            HStack(spacing: highlightsDotSpacing) {
-                ForEach(summary.colors, id: \.self) { color in
-                    ColoredCircle(color: color.color, minLength: highlightsDotSize)
-                }
-            }
-            .accessibilityHidden(true)
+            HighlightPaletteIcon(colors: summary.colors, size: highlightsIconSize)
+                .accessibilityHidden(true)
 
             Text(highlightsMovedText(summary))
                 .font(.subheadline)

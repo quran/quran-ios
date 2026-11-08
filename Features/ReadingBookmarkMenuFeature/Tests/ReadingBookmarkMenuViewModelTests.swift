@@ -37,6 +37,50 @@ final class ReadingBookmarkMenuViewModelTests: XCTestCase {
         XCTAssertFalse(sut.isMutating)
     }
 
+    func test_isFirstRun_whenEverySlotIsUnplacedAndUnnamed() async {
+        let sut = makeSUT(target: .ayah(ayah(1)))
+        let startTask = await start(sut)
+        defer { startTask.cancel() }
+
+        XCTAssertTrue(sut.isFirstRun)
+    }
+
+    func test_isFirstRun_offBeforeBookmarksLoad() {
+        let sut = makeSUT(target: .ayah(ayah(1)))
+
+        XCTAssertFalse(sut.isFirstRun)
+    }
+
+    func test_isFirstRun_offOnceASlotIsPlaced() async {
+        let sut = makeSUT(target: .ayah(ayah(1)))
+        let startTask = await start(sut)
+        defer { startTask.cancel() }
+
+        _ = await sut.select(.orange)
+
+        XCTAssertFalse(sut.isFirstRun)
+    }
+
+    func test_isFirstRun_offWhenAnUnplacedSlotHasACustomName() async throws {
+        try await service.renameReadingBookmark(in: .teal, name: "Daily reading", quran: .hafsMadani1405)
+        let sut = makeSUT(target: .ayah(ayah(1)))
+        let startTask = await start(sut)
+        defer { startTask.cancel() }
+
+        XCTAssertEqual(sut.items.first { $0.slot == .teal }?.placement, .unplaced)
+        XCTAssertFalse(sut.isFirstRun)
+    }
+
+    func test_isFirstRun_offWhileEditing() async {
+        let sut = makeSUT(target: .ayah(ayah(1)))
+        let startTask = await start(sut)
+        defer { startTask.cancel() }
+
+        sut.beginEditing()
+
+        XCTAssertFalse(sut.isFirstRun)
+    }
+
     func test_start_exposesStoredPlacementsAndTarget() async throws {
         let selectedAyah = ayah(2)
         try await service.addReadingBookmark(at: .ayah(selectedAyah), slot: .teal)

@@ -13,7 +13,26 @@ final class ReadingBookmarkMenuRowTests: XCTestCase {
         let row = makeRow(placement: .unplaced, target: .ayah(ayah(2)))
 
         XCTAssertEqual(row.action, .setHere)
+        XCTAssertEqual(row.actionStyle, .plain)
         XCTAssertEqual(row.subtitle.accessibilityText, l("bookmarks.reading.not-placed"))
+    }
+
+    func test_firstRun_suggestsTealWithProminentSetHere() {
+        let row = makeRow(slot: .teal, placement: .unplaced, target: .ayah(ayah(2)), isFirstRun: true)
+
+        XCTAssertEqual(row.action, .setHere)
+        XCTAssertEqual(row.actionStyle, .prominent)
+        XCTAssertEqual(row.subtitle.accessibilityText, l("bookmarks.reading.first-run.suggested"))
+    }
+
+    func test_firstRun_otherSlotsStayNotPlacedWithPlainSetHere() {
+        for slot in [ReadingBookmarkSlot.orange, .red] {
+            let row = makeRow(slot: slot, placement: .unplaced, target: .ayah(ayah(2)), isFirstRun: true)
+
+            XCTAssertEqual(row.action, .setHere, "\(slot)")
+            XCTAssertEqual(row.actionStyle, .plain, "\(slot)")
+            XCTAssertEqual(row.subtitle.accessibilityText, l("bookmarks.reading.not-placed"), "\(slot)")
+        }
     }
 
     func test_bookmarkAtCurrentAyah_offersRemove() {
@@ -27,6 +46,7 @@ final class ReadingBookmarkMenuRowTests: XCTestCase {
         let row = makeRow(placement: .ayah(ayah(3)), target: .ayah(ayah(2)))
 
         XCTAssertEqual(row.action, .moveHere)
+        XCTAssertEqual(row.actionStyle, .prominent)
         XCTAssertEqual(
             row.subtitle.accessibilityText,
             lFormat("bookmarks.reading.location", "Al-Fātihah, Ayah 3")
@@ -53,12 +73,15 @@ final class ReadingBookmarkMenuRowTests: XCTestCase {
     }
 
     private func makeRow(
+        slot: ReadingBookmarkSlot = .teal,
         placement: ReadingBookmark.Placement,
-        target: PlacedReadingBookmark.Placement
+        target: PlacedReadingBookmark.Placement,
+        isFirstRun: Bool = false
     ) -> ReadingBookmarkMenuRow {
         ReadingBookmarkMenuRow(
-            item: .init(slot: .teal, name: nil, placement: placement),
+            item: .init(slot: slot, name: nil, placement: placement),
             target: target,
+            isFirstRun: isFirstRun,
             name: .constant(""),
             isEnabled: true,
             editMode: .inactive,

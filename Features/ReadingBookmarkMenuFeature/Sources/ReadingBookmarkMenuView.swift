@@ -25,6 +25,7 @@ struct ReadingBookmarkMenuView: View {
             editMode: viewModel.editModeBinding,
             items: viewModel.items,
             target: viewModel.target.placement,
+            isFirstRun: viewModel.isFirstRun,
             isEnabled: !viewModel.isMutating,
             start: { await viewModel.start() },
             saveNames: { await viewModel.saveNames(in: $0) },
@@ -54,6 +55,7 @@ private struct ReadingBookmarkMenuContent: View {
 
     let items: [ReadingBookmarkMenuViewModel.Item]
     let target: PlacedReadingBookmark.Placement
+    let isFirstRun: Bool
     let isEnabled: Bool
     let start: AsyncAction
     let saveNames: ([ReadingBookmarkSlot]) async -> Bool
@@ -71,6 +73,7 @@ private struct ReadingBookmarkMenuContent: View {
                         ReadingBookmarkMenuRow(
                             item: item,
                             target: target,
+                            isFirstRun: isFirstRun,
                             name: Binding(
                                 get: { draftNames[item.slot] ?? item.name ?? "" },
                                 set: { draftNames[item.slot] = $0 }
@@ -104,19 +107,42 @@ private struct ReadingBookmarkMenuContent: View {
                     .foregroundStyle(Color.label)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityAddTraits(.isHeader)
-                EditModeButton(editMode: $editMode)
-                    .buttonStyle(.plain)
-                    .disabled(items.isEmpty || !isEnabled)
+                if !isFirstRun {
+                    EditModeButton(editMode: $editMode)
+                        .buttonStyle(.plain)
+                        .disabled(items.isEmpty || !isEnabled)
+                }
             }
             .font(.subheadline.weight(.semibold))
             Divider()
-            Text(l("bookmarks.reading.description"))
-                .font(.footnote)
-                .foregroundStyle(Color.secondaryLabel)
-                .multilineTextAlignment(.leading)
-                .fixedSize(horizontal: false, vertical: true)
+            // Waits for the bookmarks so the explanation doesn't switch to the first-run copy after it appears.
+            if !items.isEmpty {
+                if isFirstRun {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(l("bookmarks.reading.first-run.title"))
+                            .font(.subheadline.bold())
+                            .foregroundStyle(Color.label)
+                            .multilineTextAlignment(.leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityAddTraits(.isHeader)
+                        description(l("bookmarks.reading.description"))
+                    }
+                    // A zero ideal width lets the rows set the popover's width; the copy wraps within it.
+                    .frame(idealWidth: 0, maxWidth: .infinity, alignment: .leading)
+                } else {
+                    description(l("bookmarks.reading.description"))
+                }
+            }
         }
         .padding()
+    }
+
+    private func description(_ text: String) -> some View {
+        Text(text)
+            .font(.footnote)
+            .foregroundStyle(Color.secondaryLabel)
+            .multilineTextAlignment(.leading)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }
 
@@ -143,6 +169,22 @@ private struct ReadingBookmarkMenuContent: View {
             ),
         ],
         target: .page(Quran.hafsMadani1405.pages[0]),
+        isFirstRun: false,
+        isEnabled: true,
+        start: {},
+        saveNames: { _ in true },
+        select: { _ in }
+    )
+}
+
+#Preview("First run") {
+    ReadingBookmarkMenuContent(
+        error: .constant(nil),
+        draftNames: .constant([:]),
+        editMode: .constant(.inactive),
+        items: ReadingBookmarkSlot.allCases.map { .init(slot: $0, name: nil, placement: .unplaced) },
+        target: .page(Quran.hafsMadani1405.pages[0]),
+        isFirstRun: true,
         isEnabled: true,
         start: {},
         saveNames: { _ in true },

@@ -494,7 +494,7 @@
 "bookmarks.old-page-bookmarks" = "Oude paginabladwijzers";
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
-"bookmarks.old-page-bookmarks.explanation" = "Overgenomen uit je paginabladwijzers. Elke pagina is nu de eerste ayah ervan. Je kunt hier ayahs verwijderen, maar nieuwe komen in je eigen verzamelingen.";
+"bookmarks.old-page-bookmarks.explanation" = "Overgenomen uit je paginabladwijzers. Elke pagina is nu de eerste ayah ervan.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

@@ -579,7 +579,7 @@
 "bookmarks.old-page-bookmarks" = "Marcadores de páginas antiguos";
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
-"bookmarks.old-page-bookmarks.explanation" = "Guardadas de tus marcadores de páginas. Cada página es ahora su primera aleya. Puedes quitar aleyas aquí, pero las nuevas van a tus propias colecciones.";
+"bookmarks.old-page-bookmarks.explanation" = "Guardadas de tus marcadores de páginas. Cada página es ahora su primera aleya.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

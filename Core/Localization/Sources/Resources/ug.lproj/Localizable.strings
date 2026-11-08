@@ -582,7 +582,7 @@
 "bookmarks.old-page-bookmarks" = "كونا بەت خەتكۈچلىرى";
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
-"bookmarks.old-page-bookmarks.explanation" = "بەت خەتكۈچلىرىڭىزدىن ساقلانغان. ھەر بىر بەت ئەمدى ئۇنىڭ تۇنجى ئايىتى بولدى. بۇ يەردە ئايەتلەرنى چىقىرىۋېتەلەيسىز، ئەمما يېڭى ئايەتلەر ئۆزىڭىزنىڭ توپلاملىرىغا قوشۇلىدۇ.";
+"bookmarks.old-page-bookmarks.explanation" = "بەت خەتكۈچلىرىڭىزدىن ساقلانغان. ھەر بىر بەت ئەمدى ئۇنىڭ تۇنجى ئايىتى بولدى.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

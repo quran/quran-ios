@@ -581,7 +581,7 @@
 "bookmarks.old-page-bookmarks" = "نشانک‌های قدیمی صفحات";
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
-"bookmarks.old-page-bookmarks.explanation" = "از نشانک‌های صفحات شما ذخیره شده است. هر صفحه اکنون نخستین آیهٔ آن است. می‌توانید آیات را اینجا حذف کنید، اما آیات جدید به مجموعه‌های خودتان افزوده می‌شوند.";
+"bookmarks.old-page-bookmarks.explanation" = "از نشانک‌های صفحات شما ذخیره شده است. هر صفحه اکنون نخستین آیهٔ آن است.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

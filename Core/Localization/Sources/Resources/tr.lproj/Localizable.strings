@@ -522,7 +522,7 @@
 "bookmarks.old-page-bookmarks" = "Eski sayfa yer imleri";
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
-"bookmarks.old-page-bookmarks.explanation" = "Sayfa yer imlerinizden kaydedildi. Her sayfa artık o sayfanın ilk ayeti oldu. Ayetleri buradan kaldırabilirsiniz, ancak yenileri kendi koleksiyonlarınıza eklenir.";
+"bookmarks.old-page-bookmarks.explanation" = "Sayfa yer imlerinizden kaydedildi. Her sayfa artık o sayfanın ilk ayeti oldu.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

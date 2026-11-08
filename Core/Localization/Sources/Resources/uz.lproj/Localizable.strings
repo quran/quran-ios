@@ -581,7 +581,7 @@
 "bookmarks.old-page-bookmarks" = "Eski sahifa xatcho‘plari";
 // Header of the Old Page Bookmarks collection.
 // Metadata: Translated by AI; human review required.
-"bookmarks.old-page-bookmarks.explanation" = "Sahifa xatcho‘plaringizdan saqlangan. Endi har bir sahifa uning birinchi oyatiga aylandi. Bu yerda oyatlarni olib tashlashingiz mumkin, lekin yangilari o‘z to‘plamlaringizga qo‘shiladi.";
+"bookmarks.old-page-bookmarks.explanation" = "Sahifa xatcho‘plaringizdan saqlangan. Endi har bir sahifa uning birinchi oyatiga aylandi.";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.

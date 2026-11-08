@@ -20,10 +20,7 @@ struct ToastView: View {
             if dynamicTypeSize.isAccessibilitySize {
                 // The text gets the full width; the action moves under it.
                 VStack(alignment: .trailing, spacing: contentSpacing) {
-                    HStack(alignment: .top, spacing: contentSpacing) {
-                        iconAndText
-                        dismissButtonIfShown
-                    }
+                    iconAndText
                     if let action = toast.action {
                         actionButton(action)
                     }
@@ -35,7 +32,6 @@ struct ToastView: View {
                         actionButton(action)
                             .fixedSize()
                     }
-                    dismissButtonIfShown
                 }
             }
         }
@@ -51,8 +47,6 @@ struct ToastView: View {
     @ScaledMetric(relativeTo: .subheadline) private var actionHorizontalPadding = 14.0
     @ScaledMetric(relativeTo: .subheadline) private var actionVerticalPadding = 7.0
     @ScaledMetric private var contentSpacing = 12.0
-    @ScaledMetric private var dismissButtonSize = 28.0
-    @ScaledMetric private var dismissHitTargetSize = 44.0
     @ScaledMetric private var iconTileSize = 36.0
     @ScaledMetric private var titleSpacing = 2.0
 
@@ -72,24 +66,9 @@ struct ToastView: View {
                 }
             }
             .accessibilityElement(children: .combine)
+            .dismissibleWithVoiceOver(dismiss)
 
             Spacer(minLength: 0)
-        }
-    }
-
-    @ViewBuilder private var dismissButtonIfShown: some View {
-        if toast.showsDismissButton {
-            Button(action: dismiss) {
-                NoorSystemImage.cancel.image
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(Color.secondaryLabel)
-                    .frame(width: dismissButtonSize, height: dismissButtonSize)
-                    .background(Color.systemGray5, in: Circle())
-                    .frame(minWidth: dismissHitTargetSize, minHeight: dismissHitTargetSize)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(l("button.close"))
         }
     }
 
@@ -116,6 +95,7 @@ struct ToastView: View {
                 .background(Color.accentColor, in: Capsule())
         }
         .buttonStyle(.plain)
+        .dismissibleWithVoiceOver(dismiss)
     }
 }
 
@@ -129,6 +109,12 @@ private extension View {
         } else {
             self
         }
+    }
+
+    /// VoiceOver can't swipe the toast down, so its escape gesture and a Close action dismiss it.
+    func dismissibleWithVoiceOver(_ dismiss: @escaping () -> Void) -> some View {
+        accessibilityAction(.escape, dismiss)
+            .accessibilityAction(named: l("button.close"), dismiss)
     }
 
     @ViewBuilder
@@ -175,8 +161,7 @@ private extension View {
             toast: Toast(
                 "Sync is on",
                 subtitle: "Your bookmarks and notes stay up to date on every device.",
-                icon: Toast.Icon(.cloud),
-                showsDismissButton: true
+                icon: Toast.Icon(.cloud)
             ),
             dismiss: {}
         )

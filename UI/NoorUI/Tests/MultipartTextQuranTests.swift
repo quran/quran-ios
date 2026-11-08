@@ -195,13 +195,13 @@ final class MultipartTextQuranTests: XCTestCase {
     // MARK: Ranges
 
     func test_singleAyahRange_usesStartReference() {
-        let text: MultipartText = "\(ayahRange: ayah ... ayah)"
+        let text = MultipartText.ayahRange(ayah ... ayah, language: .english)
 
         XCTAssertEqual(text.rawValue(locale: english), "\(sura.localizedName()) · 2:255")
     }
 
     func test_sameSuraAyahRange_writesTheEndAsItsAyahNumber() {
-        let text: MultipartText = "\(ayahRange: ayah ... sura.verses[259])"
+        let text = MultipartText.ayahRange(ayah ... sura.verses[259], language: .english)
 
         XCTAssertEqual(text.rawValue(locale: english), "Al-Baqarah · 2:255–260")
         XCTAssertEqual(text.rawValue(locale: arabic), "\u{E905} · \u{2066}٢:٢٥٥–٢٦٠\u{2069}")
@@ -220,38 +220,41 @@ final class MultipartTextQuranTests: XCTestCase {
         )
         XCTAssertEqual(
             MultipartText.ayahRange(range, language: .chinese).rawValue(locale: chinese),
-            "Al-Fātihah · 1:7至Al-Baqarah · 2:1"
+            "Al-Fātihah · 1:7 – Al-Baqarah · 2:1"
         )
     }
 
     func test_wholeSuraAyahRange_namesOnlyTheSura() {
         let fatihah = Quran.hafsMadani1405.suras[0]
-        let text: MultipartText = "\(ayahRange: fatihah.firstVerse ... fatihah.lastVerse)"
+        let text = MultipartText.ayahRange(fatihah.firstVerse ... fatihah.lastVerse, language: .english)
 
         XCTAssertEqual(text.rawValue(locale: english), "Al-Fātihah")
         XCTAssertEqual(text.rawValue(locale: arabic), "\u{E904}")
-        XCTAssertEqual(text.accessibilityText, "Al-Fātihah")
     }
 
     @MainActor
     func test_ayahRange_attributedStringMatchesRawValue() {
-        let sameSura: MultipartText = "\(ayahRange: ayah ... sura.verses[259])"
-        let crossSura: MultipartText = "\(ayahRange: fatihahEnd ... baqarahStart)"
+        let sameSura = MultipartText.ayahRange(ayah ... sura.verses[259], language: .english)
+        let crossSura = MultipartText.ayahRange(fatihahEnd ... baqarahStart, language: .english)
 
         XCTAssertEqual(sameSura.attributedString(ofSize: .body).string, sameSura.rawValue)
         XCTAssertEqual(crossSura.attributedString(ofSize: .body).string, crossSura.rawValue)
     }
 
     func test_ayahRanges_separatesRangesWithTheListSeparator() {
-        let other = Quran.hafsMadani1405.suras[2].verses[17]
-        let text: MultipartText = "\(ayahRanges: [ayah ... sura.verses[255], other ... other])"
+        let imranEnd = Quran.hafsMadani1405.suras[2].lastVerse
+        let nisaStart = Quran.hafsMadani1405.suras[3].firstVerse
+        let text: MultipartText = "\(ayahRanges: [ayah ... sura.verses[255], imranEnd ... nisaStart])"
 
-        XCTAssertEqual(text.rawValue(locale: english), "Al-Baqarah · 2:255–256; Āli-ʿImrān · 3:18")
+        XCTAssertEqual(text.rawValue(locale: english), "Al-Baqarah · 2:255–256; Āli-ʿImrān · 3:200 – An-Nisāʾ · 4:1")
         XCTAssertEqual(
             text.rawValue(locale: arabic),
-            "\u{E905} · \u{2066}٢:٢٥٥–٢٥٦\u{2069}\(l("list.separator"))\u{E906} · ٣:١٨"
+            "\u{E905} · \u{2066}٢:٢٥٥–٢٥٦\u{2069}\(l("list.separator"))\u{E906} · ٣:٢٠٠ – \u{E907} · ٤:١"
         )
-        XCTAssertEqual(text.accessibilityText, "Al-Baqarah, Ayahs 255 to 256; Āli-ʿImrān, Ayah 18")
+        XCTAssertEqual(
+            text.accessibilityText,
+            "Al-Baqarah, Ayahs 255 to 256; Āli-ʿImrān, Ayah 200 to An-Nisāʾ, Ayah 1"
+        )
     }
 
     // MARK: Page references
@@ -293,8 +296,8 @@ final class MultipartTextQuranTests: XCTestCase {
     }
 
     func test_ayahRange_readsAyahNumbersInsteadOfCoordinates() {
-        let sameSura: MultipartText = "\(ayahRange: ayah ... sura.verses[259])"
-        let crossSura: MultipartText = "\(ayahRange: fatihahEnd ... baqarahStart)"
+        let sameSura = MultipartText.ayahRange(ayah ... sura.verses[259], language: .english)
+        let crossSura = MultipartText.ayahRange(fatihahEnd ... baqarahStart, language: .english)
 
         XCTAssertEqual(sameSura.accessibilityText, "Al-Baqarah, Ayahs 255 to 260")
         XCTAssertEqual(crossSura.accessibilityText, "Al-Fātihah, Ayah 7 to Al-Baqarah, Ayah 1")

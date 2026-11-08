@@ -47,7 +47,7 @@
 "quran.page.location" = "%1$@，%2$@";
 // Ayahs across surahs: %1$@ is the start and %2$@ is the end reference, such as "Al-Baqarah 2:286 – Āli-ʿImrān 3:10". Ayahs in one surah are written "Al-Baqarah 2:1–10" without this format. Translators may reorder the placeholders.
 // Metadata: Translated by AI; human review required.
-"quran.range" = "%1$@至%2$@";
+"quran.range" = "%1$@ – %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
 // Metadata: Translated by AI; human review required.
 "quran.hizb.name" = "第%@段";
@@ -235,10 +235,10 @@
 
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playing.action.modify" = "修改";
-// Toast when audio starts playing: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name when the whole surah plays.
+// Toast when audio starts playing: %@ is the ayah range, such as "Al-Baqarah · 2:1–10", or a surah name when the whole surah plays.
 // Metadata: Translated by AI; human review required.
 "audio.playing.toast" = "正在播放 %@";
-// Toast when audio starts downloading before it plays: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name for a whole surah.
+// Toast when audio starts downloading before it plays: %@ is the ayah range, such as "Al-Baqarah · 2:1–10", or a surah name for a whole surah.
 // Metadata: Translated by AI; human review required.
 "audio.downloading.toast" = "正在下载 %@ 的音频";
 
@@ -920,6 +920,6 @@
 // How VoiceOver reads ayahs across surahs: %1$@ is the start and %2$@ is the end ayah, such as "Al-Baqarah, Ayah 286 to Āli-ʿImrān, Ayah 10". Translators may reorder the placeholders.
 // Metadata: Translated by AI; human review required.
 "quran.range.spoken" = "%1$@至%2$@";
-// How VoiceOver reads ayahs in one surah: %1$d is the first and %2$d is the last ayah number, such as "Ayahs 1 to 10" in "Al-Baqarah, Ayahs 1 to 10". Translators may reorder the placeholders.
+// How VoiceOver reads ayahs in one surah: %1$@ is the first and %2$@ is the last localized ayah number, such as "Ayahs 1 to 10" in "Al-Baqarah, Ayahs 1 to 10". Translators may reorder the placeholders.
 // Metadata: Translated by AI; human review required.
-"quran.ayah.number-range" = "第%1$d至%2$d节";
+"quran.ayah.number-range" = "第%1$@至%2$@节";

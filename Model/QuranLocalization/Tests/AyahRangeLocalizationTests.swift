@@ -51,10 +51,19 @@ final class AyahRangeLocalizationTests: XCTestCase {
             sameSura.localizedName(language: .arabic, locale: arabic),
             "\(baqarahName) \u{2066}٢:١–١٠\u{2069}"
         )
-        // Foundation's format also isolates each right-to-left reference (FSI…PDI).
         XCTAssertEqual(
-            crossSura.localizedName(language: .arabic, locale: arabic),
-            "\u{2068}\(baqarahName) \u{2066}٢:٢٨٦\u{2069}\u{2069} – \u{2068}\(imranName) \u{2066}٣:١٠\u{2069}\u{2069}"
+            withoutFormatIsolates(crossSura.localizedName(language: .arabic, locale: arabic)),
+            "\(baqarahName) \u{2066}٢:٢٨٦\u{2069} – \(imranName) \u{2066}٣:١٠\u{2069}"
+        )
+    }
+
+    func test_arabicAccessibilityName_readsAyahNumbersWithArabicDigits() {
+        let range = baqarah.verses[0] ... baqarah.verses[9]
+        let baqarahName = baqarah.localizedName(language: .arabic)
+
+        XCTAssertEqual(
+            withoutFormatIsolates(range.localizedAccessibilityName(language: .arabic, locale: arabic)),
+            "\(baqarahName)، الآيات من ١ إلى ١٠"
         )
     }
 
@@ -64,4 +73,27 @@ final class AyahRangeLocalizationTests: XCTestCase {
     private let imran = Quran.hafsMadani1405.suras[2]
     private let english = Locale(identifier: "en-CA")
     private let arabic = Locale(identifier: "ar-SA")
+
+    /// Drops the first-strong isolates (FSI…PDI) `String(format:)` may wrap around right-to-left arguments,
+    /// keeping the left-to-right isolates (LRI…PDI) the range format adds itself.
+    private func withoutFormatIsolates(_ text: String) -> String {
+        var openers: [Character] = []
+        var result = ""
+        for character in text {
+            switch character {
+            case "\u{2066}", "\u{2067}", "\u{2068}":
+                openers.append(character)
+                if character != "\u{2068}" {
+                    result.append(character)
+                }
+            case "\u{2069}":
+                if openers.popLast() != "\u{2068}" {
+                    result.append(character)
+                }
+            default:
+                result.append(character)
+            }
+        }
+        return result
+    }
 }

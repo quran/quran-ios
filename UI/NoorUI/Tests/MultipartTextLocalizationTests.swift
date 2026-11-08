@@ -13,8 +13,8 @@ import XCTest
 
 final class MultipartTextLocalizationTests: XCTestCase {
     func test_localizedFormat_insertsMultipartTextArguments() {
-        let start: MultipartText = "\(ayah: Quran.hafsMadani1405.suras[1].verses[254])"
-        let end: MultipartText = "\(ayah: Quran.hafsMadani1405.suras[1].verses[255])"
+        let start: MultipartText = "\(ayah: Quran.hafsMadani1405.suras[0].lastVerse)"
+        let end: MultipartText = "\(ayah: Quran.hafsMadani1405.suras[1].firstVerse)"
 
         let result = MultipartText.localizedFormat(
             "quran.range",
@@ -25,7 +25,7 @@ final class MultipartTextLocalizationTests: XCTestCase {
 
         XCTAssertEqual(
             result.rawValue(locale: Locale(identifier: "en")),
-            "Al-Baqarah · 2:255 – Al-Baqarah · 2:256"
+            "Al-Fātihah · 1:7 – Al-Baqarah · 2:1"
         )
     }
 

@@ -401,23 +401,22 @@ extension MultipartText {
     static func ayahRange(_ range: ClosedRange<AyahNumber>, language: Language? = nil) -> MultipartText {
         let start = range.lowerBound
         let end = range.upperBound
-        if let sura = range.wholeSura {
-            return MultipartText(parts: [.sura(sura, emphasizesSura: false)])
+        let parts: [TextPart] = if let sura = range.wholeSura {
+            [.sura(sura, emphasizesSura: false)]
+        } else if start == end {
+            [.ayah(start, emphasizesSura: false)]
+        } else if start.sura == end.sura {
+            [.ayahs(range)]
+        } else {
+            localizedFormat(
+                "quran.range",
+                language: language,
+                MultipartText(parts: [.ayah(start, emphasizesSura: false)]),
+                MultipartText(parts: [.ayah(end, emphasizesSura: false)])
+            ).parts
         }
-        if start == end {
-            return MultipartText(parts: [.ayah(start, emphasizesSura: false)])
-        }
-        if start.sura == end.sura {
-            return MultipartText(parts: [.ayahs(range)])
-        }
-        let references = localizedFormat(
-            "quran.range",
-            language: language,
-            MultipartText(parts: [.ayah(start, emphasizesSura: false)]),
-            MultipartText(parts: [.ayah(end, emphasizesSura: false)])
-        )
         return MultipartText(parts: [
-            .accessibilityLabeled(references.parts, accessibilityText: range.localizedAccessibilityName(language: language)),
+            .accessibilityLabeled(parts, accessibilityText: range.localizedAccessibilityName(language: language)),
         ])
     }
 

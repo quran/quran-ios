@@ -22,6 +22,11 @@ public extension Locale {
     var isArabicLanguage: Bool {
         languageCode == "ar"
     }
+
+    /// Whether the locale's language writes right to left, such as Arabic, Persian, or Uyghur.
+    var isRightToLeft: Bool {
+        Locale.characterDirection(forLanguage: languageCode ?? "") == .rightToLeft
+    }
 }
 
 extension Locale {

@@ -6,7 +6,7 @@ import Foundation
 import Localization
 import QuranKit
 
-/// One compact format for ayah ranges: "Al-Baqarah 2:1–10" in one sura, "Al-Baqarah 2:286 – Āl ʿImrān 3:10"
+/// One compact format for ayah ranges: "Al-Baqarah 2:1–10" in one sura, "Al-Baqarah 2:286 – Āli-ʿImrān 3:10"
 /// across suras, "Al-Baqarah 2:255" for one ayah, and "Al-Baqarah" for a whole sura.
 extension ClosedRange<AyahNumber> {
     // MARK: Public
@@ -17,24 +17,19 @@ extension ClosedRange<AyahNumber> {
         return lowerBound == sura.firstVerse && upperBound == sura.lastVerse ? sura : nil
     }
 
-    /// The coordinates as one left-to-right run with the app's digits, such as "2:1–10", "2:255" for one ayah, or
-    /// "1:7–2:1" across suras. Right-to-left languages isolate the run, so it never reads as "10–2:1".
+    /// The coordinates of ayahs in one sura as one left-to-right run with the app's digits, such as "2:1–10", or
+    /// "2:255" for one ayah. Right-to-left languages isolate the run, so it never reads as "10–2:1".
     public func localizedCoordinates(locale: Locale = .preferredLanguageLocale) -> String {
-        let formatter = NumberFormatter()
-        formatter.locale = locale.fixedLocaleNumbers()
-        func coordinate(_ ayah: AyahNumber) -> String {
-            "\(formatter.format(ayah.sura.suraNumber)):\(formatter.format(ayah.ayah))"
-        }
-
-        var coordinates = coordinate(lowerBound)
+        var coordinates = lowerBound.localizedCoordinate(locale: locale)
         if lowerBound != upperBound {
-            let end = lowerBound.sura == upperBound.sura ? formatter.format(upperBound.ayah) : coordinate(upperBound)
-            coordinates += "–\(end)"
+            let formatter = NumberFormatter()
+            formatter.locale = locale.fixedLocaleNumbers()
+            coordinates += "–\(formatter.format(upperBound.ayah))"
         }
         return locale.isRightToLeft ? "\u{2066}\(coordinates)\u{2069}" : coordinates
     }
 
-    /// The range as plain text, such as "Al-Baqarah 2:1–10" or "Al-Baqarah 2:286 – Āl ʿImrān 3:10".
+    /// The range as plain text, such as "Al-Baqarah 2:1–10" or "Al-Baqarah 2:286 – Āli-ʿImrān 3:10".
     public func localizedName(language: Language? = nil, locale: Locale = .preferredLanguageLocale) -> String {
         if let wholeSura {
             return wholeSura.localizedName(language: language)
@@ -49,8 +44,8 @@ extension ClosedRange<AyahNumber> {
     }
 
     /// The range as VoiceOver reads it, such as "Al-Baqarah, Ayahs 1 to 10" or
-    /// "Al-Baqarah, Ayah 286 to Āl ʿImrān, Ayah 10".
-    public func localizedAccessibilityName(language: Language? = nil) -> String {
+    /// "Al-Baqarah, Ayah 286 to Āli-ʿImrān, Ayah 10".
+    public func localizedAccessibilityName(language: Language? = nil, locale: Locale = .preferredLanguageLocale) -> String {
         if let wholeSura {
             return wholeSura.localizedName(language: language)
         }
@@ -67,13 +62,9 @@ extension ClosedRange<AyahNumber> {
                 end.localizedName(language: language)
             )
         }
-        let ayahs = lFormat("quran.ayah.number-range", language: language, start.ayah, end.ayah)
+        let formatter = NumberFormatter()
+        formatter.locale = locale.fixedLocaleNumbers()
+        let ayahs = lFormat("quran.ayah.number-range", language: language, formatter.format(start.ayah), formatter.format(end.ayah))
         return lFormat("quran.ayah.name", language: language, start.sura.localizedName(language: language), ayahs)
-    }
-}
-
-extension Locale {
-    var isRightToLeft: Bool {
-        Locale.characterDirection(forLanguage: languageCode ?? "") == .rightToLeft
     }
 }

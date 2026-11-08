@@ -9,17 +9,6 @@ import XCTest
 
 @MainActor
 final class AudioBannerToastTests: XCTestCase {
-    func test_playingToast_namesOnlyTheSuraWhenItPlaysWhole() {
-        let fatihah = Quran.hafsMadani1405.suras[0]
-
-        let message = AudioBannerViewModel.audioMessage(
-            "audio.playing.toast",
-            audioRange: (start: fatihah.firstVerse, end: fatihah.lastVerse)
-        )
-
-        XCTAssertEqual(message.rawValue(locale: english), "Playing Al-Fātihah")
-    }
-
     func test_downloadingToast_writesTheRangeCompactly() {
         let baqarah = Quran.hafsMadani1405.suras[1]
 

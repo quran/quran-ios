@@ -47,7 +47,7 @@ struct ToastView: View {
     @ScaledMetric(relativeTo: .subheadline) private var actionHorizontalPadding = 14.0
     @ScaledMetric(relativeTo: .subheadline) private var actionVerticalPadding = 7.0
     @ScaledMetric private var contentSpacing = 12.0
-    @ScaledMetric(relativeTo: .title3) private var iconSlotWidth = 28.0
+    @ScaledMetric(relativeTo: .title3) private var iconSlotWidth = 30.0
     @ScaledMetric private var titleSpacing = 2.0
 
     private var iconAndText: some View {

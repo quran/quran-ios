@@ -69,7 +69,7 @@ public final class SyncSignInNudge {
         return Toast(
             .text(l(item.titleKey)),
             subtitle: .text(l("sync.nudge.subtitle")),
-            icon: Toast.Icon(.checkmark, color: .green),
+            icon: Toast.Icon(.checkmark),
             // The toast keeps the reminder alive, as its screen can close before the user taps.
             action: ToastAction(title: l("sync.nudge.sign-in")) { [self] in
                 preferences.isStopped = true

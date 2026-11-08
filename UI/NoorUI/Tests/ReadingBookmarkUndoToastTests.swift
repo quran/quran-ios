@@ -27,6 +27,8 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
         XCTAssertEqual(toast.message.accessibilityText, lFormat("ayah.menu.reading-bookmark.moved-to", ayah.localizedName))
     }
 
+    // MARK: Private
+
     private let ayah = Quran.hafsMadani1405.suras[1].verses[254]
 
     private func bookmark(slot: ReadingBookmarkSlot) -> PlacedReadingBookmark {

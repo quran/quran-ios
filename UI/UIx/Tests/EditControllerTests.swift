@@ -24,7 +24,9 @@ final class EditControllerTests: XCTestCase {
         state.editMode = .inactive
         reload.send()
         await drainMainQueue()
-        XCTAssertEqual(navigationItem.rightBarButtonItems?.dropFirst(), [share, search])
+        let items = navigationItem.rightBarButtonItems ?? []
+        XCTAssertEqual(items.count, 3, "Edit, then the list and custom items")
+        XCTAssertEqual(items.dropFirst(), [share, search])
 
         state.editMode = nil
         reload.send()

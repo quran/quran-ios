@@ -101,7 +101,6 @@ final class NotesViewController: UIHostingController<NotesView>, UISearchBarDele
                 get: { [weak self] in self?.currentEditMode },
                 set: { [weak self] value in self?.viewModel.editMode = value ?? .inactive }
             ),
-            // Like Edit, Share hides while there are no notes to share.
             listItems: [
                 UIBarButtonItem(
                     image: UIImage(systemName: "square.and.arrow.up"),

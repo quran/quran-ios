@@ -13,7 +13,7 @@ final class ReadingBookmarkMenuRowTests: XCTestCase {
         let row = makeRow(placement: .unplaced, target: .ayah(ayah(2)))
 
         XCTAssertEqual(row.action, .setHere)
-        XCTAssertEqual(row.actionStyle, .prominent)
+        XCTAssertEqual(row.actionStyle, .plain)
         XCTAssertEqual(row.subtitle.accessibilityText, l("bookmarks.reading.not-placed"))
     }
 
@@ -25,12 +25,12 @@ final class ReadingBookmarkMenuRowTests: XCTestCase {
         XCTAssertEqual(row.subtitle.accessibilityText, l("bookmarks.reading.first-run.suggested"))
     }
 
-    func test_firstRun_otherSlotsStayNotPlacedWithTintedSetHere() {
+    func test_firstRun_otherSlotsStayNotPlacedWithPlainSetHere() {
         for slot in [ReadingBookmarkSlot.orange, .red] {
             let row = makeRow(slot: slot, placement: .unplaced, target: .ayah(ayah(2)), isFirstRun: true)
 
             XCTAssertEqual(row.action, .setHere, "\(slot)")
-            XCTAssertEqual(row.actionStyle, .tinted, "\(slot)")
+            XCTAssertEqual(row.actionStyle, .plain, "\(slot)")
             XCTAssertEqual(row.subtitle.accessibilityText, l("bookmarks.reading.not-placed"), "\(slot)")
         }
     }
@@ -46,6 +46,7 @@ final class ReadingBookmarkMenuRowTests: XCTestCase {
         let row = makeRow(placement: .ayah(ayah(3)), target: .ayah(ayah(2)))
 
         XCTAssertEqual(row.action, .moveHere)
+        XCTAssertEqual(row.actionStyle, .plain)
         XCTAssertEqual(
             row.subtitle.accessibilityText,
             lFormat("bookmarks.reading.location", "Al-Fātihah, Ayah 3")

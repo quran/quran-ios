@@ -17,7 +17,7 @@ struct ReadingBookmarkMenuRow: View {
     enum ActionStyle {
         case destructive
         case prominent
-        case tinted
+        case plain
     }
 
     let item: ReadingBookmarkMenuViewModel.Item
@@ -51,8 +51,8 @@ struct ReadingBookmarkMenuRow: View {
         case .remove:
             .destructive
         case .moveHere, .setHere:
-            // On first run, only the suggested slot keeps the filled capsule so it reads as the default choice.
-            isFirstRun && !isSuggested ? .tinted : .prominent
+            // Only the first run's suggested slot gets the filled capsule, so it reads as the default choice.
+            isFirstRun && isSuggested ? .prominent : .plain
         }
     }
 
@@ -151,8 +151,8 @@ struct ReadingBookmarkMenuRow: View {
                     .foregroundStyle(Color.systemRed)
             case .prominent:
                 capsule(foreground: Color.onAccent, background: Color.accentColor)
-            case .tinted:
-                capsule(foreground: Color.accentColor, background: Color.accentColor.opacity(0.12))
+            case .plain:
+                capsule(foreground: Color.accentColor, background: .clear)
             }
         }
         .font(.footnote.bold())

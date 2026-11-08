@@ -48,7 +48,8 @@ public struct Toast {
     public struct Icon {
         // MARK: Lifecycle
 
-        /// - Parameter color: The symbol color; `nil` uses the app tint.
+        /// - Parameter color: The symbol color; `nil` uses the label color. Pass one only when it carries meaning,
+        ///   like a reading bookmark slot.
         public init(_ systemImage: NoorSystemImage, color: Color? = nil) {
             self.systemImage = systemImage
             self.color = color

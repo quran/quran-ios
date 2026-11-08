@@ -75,7 +75,7 @@ struct ToastView: View {
     private func iconImage(_ icon: Toast.Icon) -> some View {
         icon.systemImage.image
             .font(.title3.weight(.semibold))
-            .foregroundStyle(icon.color ?? .accentColor)
+            .foregroundStyle(icon.color ?? Color.label)
             .frame(width: iconSlotWidth)
             .accessibilityHidden(true)
     }

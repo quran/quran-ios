@@ -43,18 +43,12 @@
 // Ayahs across surahs: %1$@ is the start and %2$@ is the end reference, such as "Al-Baqarah 2:286 – Āli-ʿImrān 3:10". Ayahs in one surah are written "Al-Baqarah 2:1–10" without this format. Translators may reorder the placeholders.
 // Metadata: Translated by AI; human review required.
 "quran.range" = "%1$@ – %2$@";
-// How VoiceOver reads ayahs across surahs: %1$@ is the start and %2$@ is the end ayah, such as "Al-Baqarah, Ayah 286 to Āli-ʿImrān, Ayah 10". Translators may reorder the placeholders.
-// Metadata: Translated by AI; human review required.
-"quran.range.spoken" = "từ %1$@ đến %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
 "quran.hizb.name" = "Hizb %@";
 // A quarter reference: %1$@ is the fraction (¼, ½ or ¾) and %2$@ is the hizb reference, such as "¼ Hizb 3". Translators may reorder the placeholders.
 "quran.quarter.name" = "%1$@ %2$@";
 // A verse number: %1$d is the ayah number, such as "Ayah 255". Translators may move the number.
 "quran.ayah.number" = "Ayah %1$d";
-// How VoiceOver reads ayahs in one surah: %1$d is the first and %2$d is the last ayah number, such as "Ayahs 1 to 10" in "Al-Baqarah, Ayahs 1 to 10". Translators may reorder the placeholders.
-// Metadata: Translated by AI; human review required.
-"quran.ayah.number-range" = "Ayah %1$d đến %2$d";
 // The page subtitle when two pages show side by side: %1$@ and %2$@ are the first and last localized page numbers and %3$@ is the localized juz number, such as "Pages 2–3, Juz' 1". Translators may reorder the placeholders.
 "quran.pages.description" = "Trang %1$@–%2$@, Juz' %3$@";
 
@@ -829,3 +823,12 @@
 "sync.sign-out.review" = "Xem lại";
 // Button on an item that doesn't sync: opens its note editor or renames its collection.
 "sync.held.edit" = "Sửa";
+
+// MARK: - Ayah ranges
+
+// How VoiceOver reads ayahs across surahs: %1$@ is the start and %2$@ is the end ayah, such as "Al-Baqarah, Ayah 286 to Āli-ʿImrān, Ayah 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.range.spoken" = "từ %1$@ đến %2$@";
+// How VoiceOver reads ayahs in one surah: %1$d is the first and %2$d is the last ayah number, such as "Ayahs 1 to 10" in "Al-Baqarah, Ayahs 1 to 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.ayah.number-range" = "Ayah %1$d đến %2$d";

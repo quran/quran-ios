@@ -194,10 +194,7 @@ final class BookmarkAyahsViewModelTests: XCTestCase {
     func test_titleShowsAyahRange() {
         let title = BookmarkAyahsViewController.title(for: verses)
 
-        XCTAssertEqual(
-            title?.accessibilityText,
-            "\(verses[0].localizedName) - \(verses[1].localizedName)"
-        )
+        XCTAssertEqual(title?.accessibilityText, "Al-Fātihah, Ayah 7 to Al-Baqarah, Ayah 1")
     }
 
     private var verses: [AyahNumber] {

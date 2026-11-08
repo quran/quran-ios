@@ -67,12 +67,7 @@ public struct ShareableVerseTextRetriever {
     /// the localized list separator as the note editor's title separates them.
     private func versesSummary(_ verses: [AyahNumber]) -> String {
         verses.consecutiveRanges()
-            .map { range in
-                if range.lowerBound == range.upperBound {
-                    return range.lowerBound.localizedName
-                }
-                return lFormat("quran.range", range.lowerBound.localizedName, range.upperBound.localizedName)
-            }
+            .map { $0.localizedName() }
             .joined(separator: l("list.separator"))
     }
 

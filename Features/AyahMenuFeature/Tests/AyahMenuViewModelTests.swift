@@ -233,7 +233,7 @@ final class AyahMenuViewModelTests: XCTestCase {
         let sharedText = try XCTUnwrap(listener.sharedLines?.first)
         XCTAssertEqual(listener.sharedLines?.count, 1)
         XCTAssertTrue(sharedText.contains("﴿ ١ ﴾"))
-        XCTAssertTrue(sharedText.hasSuffix("\n\nAl-Fātihah, Ayah 1"))
+        XCTAssertTrue(sharedText.hasSuffix("\n\nAl-Fātihah 1:1"))
         XCTAssertTrue(listener.shownErrors.isEmpty)
     }
 

@@ -10,9 +10,19 @@ import UIKit
 
 extension MultipartText {
     public func attributedString(ofSize size: FontSize) -> NSAttributedString {
+        attributedString(ofSize: size, locale: .preferredLanguageLocale)
+    }
+
+    func attributedString(ofSize size: FontSize, locale: Locale) -> NSAttributedString {
         let result = NSMutableAttributedString()
+        // A decorated sura name is a private-use character, which reads left to right, and the coordinates are
+        // isolated left to right, so a label would lay the text out left to right. A leading right-to-left mark
+        // keeps the paragraph right to left without overriding a label's alignment, as a paragraph style would.
+        if locale.isRightToLeft {
+            result.append(NSAttributedString(string: "\u{200F}", attributes: [.font: size.plainUIFont]))
+        }
         for part in parts {
-            result.append(part.attributedString(ofSize: size, locale: .preferredLanguageLocale))
+            result.append(part.attributedString(ofSize: size, locale: locale))
         }
         return result
     }
@@ -40,11 +50,12 @@ private extension TextPart {
                 }
                 result.append(QuranReference.sura(element.element, nameStyle: nameStyle).attributedString(size: size, locale: locale))
             }
-        case .ayahCoordinate(let ayah):
-            NSAttributedString(
-                string: ayah.localizedCoordinate(locale: locale),
-                attributes: [.font: size.plainUIFont]
-            )
+        case .ayahs(let ayahs, let nameStyle):
+            QuranReference.ayahs(ayahs, nameStyle: nameStyle).attributedString(size: size, locale: locale)
+        case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
+            parts.reduce(into: NSMutableAttributedString()) { result, part in
+                result.append(part.attributedString(ofSize: size, locale: locale))
+            }
         case .quran(let text, let quranFont, let color, _, let highlighting):
             highlightedQuranAttributedString(
                 text: text,

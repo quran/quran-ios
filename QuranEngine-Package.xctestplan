@@ -301,8 +301,15 @@
     {
       "target" : {
         "containerPath" : "container:",
-        "identifier" : "FeaturesSupportTests",
-        "name" : "FeaturesSupportTests"
+        "identifier" : "AudioBannerFeatureTests",
+        "name" : "AudioBannerFeatureTests"
+        }
+      },
+      {
+        "target" : {
+          "containerPath" : "container:",
+          "identifier" : "FeaturesSupportTests",
+          "name" : "FeaturesSupportTests"
       }
     },
     {

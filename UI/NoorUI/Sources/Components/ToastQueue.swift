@@ -7,11 +7,11 @@
 
 import Foundation
 
-/// The toasts waiting to show, in order, the showing one first, each with the scene it shows in.
-struct ToastQueue<WindowScene> {
+/// The toasts waiting to show, in order, the showing one first, each with where it shows, like its window scene.
+struct ToastQueue<Target> {
     struct Entry {
         let toast: Toast
-        let scene: WindowScene
+        let target: Target
     }
 
     /// The entry on screen, from when `showNext()` returns it until `removeShowing()`.
@@ -19,8 +19,8 @@ struct ToastQueue<WindowScene> {
         isShowing ? entries.first : nil
     }
 
-    mutating func append(_ toast: Toast, in scene: WindowScene) {
-        entries.append(Entry(toast: toast, scene: scene))
+    mutating func append(_ toast: Toast, to target: Target) {
+        entries.append(Entry(toast: toast, target: target))
     }
 
     /// The entry to show next, now showing, or `nil` while one shows or none waits.

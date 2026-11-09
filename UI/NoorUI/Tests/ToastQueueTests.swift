@@ -6,7 +6,7 @@ final class ToastQueueTests: XCTestCase {
         let otherFeatureToast = Toast("Collection created")
         let bannerToast = Toast("Playing")
         var queue = ToastQueue<String>()
-        queue.append(otherFeatureToast, in: "reader")
+        queue.append(otherFeatureToast, to: "reader")
         _ = queue.showNext()
 
         queue.removeWaiting(id: bannerToast.id)
@@ -19,9 +19,9 @@ final class ToastQueueTests: XCTestCase {
         let downloading = Toast("Downloading")
         let playing = Toast("Playing")
         var queue = ToastQueue<String>()
-        queue.append(showing, in: "reader")
-        queue.append(downloading, in: "reader")
-        queue.append(playing, in: "reader")
+        queue.append(showing, to: "reader")
+        queue.append(downloading, to: "reader")
+        queue.append(playing, to: "reader")
         _ = queue.showNext()
 
         queue.removeWaiting(id: downloading.id)
@@ -34,8 +34,8 @@ final class ToastQueueTests: XCTestCase {
         let playing = Toast("Playing")
         let next = Toast("Collection created")
         var queue = ToastQueue<String>()
-        queue.append(playing, in: "reader")
-        queue.append(next, in: "bookmarks")
+        queue.append(playing, to: "reader")
+        queue.append(next, to: "bookmarks")
         _ = queue.showNext()
 
         queue.removeWaiting(id: playing.id)
@@ -45,6 +45,6 @@ final class ToastQueueTests: XCTestCase {
         queue.removeShowing()
         let shown = queue.showNext()
         XCTAssertEqual(shown?.toast.id, next.id)
-        XCTAssertEqual(shown?.scene, "bookmarks")
+        XCTAssertEqual(shown?.target, "bookmarks")
     }
 }

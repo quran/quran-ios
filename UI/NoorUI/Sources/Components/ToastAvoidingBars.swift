@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import UIx
 
 extension UIView {
     /// Keeps toasts above this view while it shows, like a floating bar at the bottom of the screen.
@@ -53,27 +54,64 @@ extension View {
 enum ToastAvoidingBars {
     // MARK: Internal
 
-    /// The bars in `window`'s scene, with their frames and the screens presented above them in `window`'s coordinates.
-    static func placementBars(in window: UIWindow) -> [ToastPlacement.Bar] {
-        trackers.allObjects.compactMap { tracker in
+    /// The bars in a window's scene, and the screens a showing toast follows to move when they change.
+    struct Snapshot {
+        /// The bars, with their frames and the screens presented above them in the window's coordinates.
+        var bars: [ToastPlacement.Bar] = []
+        /// The screens the bars are in.
+        var barScreens: [UIViewController] = []
+        /// The screens presented above the bars, including those still presenting or dismissing.
+        /// UIKit doesn't tell the bars when a screen above them slides in or out, changes detent, or closes.
+        var screensAbove: [UIViewController] = []
+    }
+
+    /// The bars in `window`'s scene, in `window`'s coordinates.
+    static func snapshot(in window: UIWindow) -> Snapshot {
+        var snapshot = Snapshot()
+        for tracker in trackers.allObjects {
             guard let bar = tracker.superview,
                   let barWindow = bar.window,
                   !(barWindow is ToastWindow),
                   barWindow.windowScene === window.windowScene
             else {
-                return nil
+                continue
             }
-            return ToastPlacement.Bar(
+            let owner = bar.nearestViewController
+            let presented = owner?.presentedScreens ?? []
+            // A screen being dismissed is closing, along with the screens above it.
+            let showing = presented.prefix { !$0.isBeingDismissed }
+            snapshot.bars.append(ToastPlacement.Bar(
                 frame: frame(of: bar, in: window),
-                isVisible: bar.showsOnScreen && !bar.isInScreenBeingDismissed,
-                screensAbove: bar.screensPresentedAbove.map { frame(of: $0, in: window) }
-            )
+                isVisible: bar.showsOnScreen && !(owner?.isBeingDismissedWithParents ?? false),
+                screensAbove: showing.compactMap(\.viewIfLoaded)
+                    .filter { $0.window != nil }
+                    .map { frame(of: $0, in: window) }
+            ))
+            snapshot.barScreens += owner.map { [$0] } ?? []
+            snapshot.screensAbove += presented
         }
+        return snapshot
     }
 
     /// Asks the showing toast, if any, to move to clear the bars.
     static func barsDidChange() {
         ToastPresenter.shared.setNeedsPlacementUpdate()
+    }
+
+    /// Reports a change to a bar's layer, or a screen's, from key-value observing, which runs on the thread
+    /// that changed the layer.
+    nonisolated static func layerDidChange() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                MainActor.assumeIsolated {
+                    barsDidChange()
+                }
+            }
+            return
+        }
+        MainActor.assumeIsolated {
+            barsDidChange()
+        }
     }
 
     // MARK: Fileprivate
@@ -125,6 +163,13 @@ private final class ToastAvoidingBarTracker: UIView {
         ToastAvoidingBars.barsDidChange()
     }
 
+    /// UIKit dims the tint of the screens under a sheet, and restores it when the sheet closes, the only
+    /// sign the bar gets that a screen was presented above it.
+    override func tintColorDidChange() {
+        super.tintColorDidChange()
+        ToastAvoidingBars.barsDidChange()
+    }
+
     // MARK: Private
 
     private var observations: [NSKeyValueObservation] = []
@@ -142,10 +187,7 @@ private final class ToastAvoidingBarTracker: UIView {
     }
 
     private nonisolated static func barLayerDidChange() {
-        // UIKit changes the layer, and calls its observers, on the main thread.
-        MainActor.assumeIsolated {
-            ToastAvoidingBars.barsDidChange()
-        }
+        ToastAvoidingBars.layerDidChange()
     }
 }
 
@@ -171,35 +213,23 @@ private extension UIView {
     var showsOnScreen: Bool {
         sequence(first: self, next: \.superview).allSatisfy { !$0.isHidden && $0.alpha > 0.01 }
     }
+}
 
-    /// The screen this view is in, like a `UIHostingController` or the screen it's a child of.
-    var owningViewController: UIViewController? {
-        sequence(first: self as UIResponder, next: \.next).lazy.compactMap { $0 as? UIViewController }.first
+private extension UIViewController {
+    /// Whether this screen, or the screen it's in, is closing.
+    var isBeingDismissedWithParents: Bool {
+        sequence(first: self, next: \.parent).contains { $0.isBeingDismissed }
     }
 
-    /// Whether the screen this view is in is closing.
-    var isInScreenBeingDismissed: Bool {
-        guard let owningViewController else {
-            return false
-        }
-        return sequence(first: owningViewController, next: \.parent).contains { $0.isBeingDismissed }
-    }
-
-    /// The views of the screens presented above this view's screen that show, closest first.
-    /// A screen being dismissed is closing, along with the screens above it.
-    var screensPresentedAbove: [UIView] {
-        guard let owningViewController else {
-            return []
-        }
-        let presenter = sequence(first: owningViewController, next: \.parent).first { $0.presentedViewController != nil }
-        var views: [UIView] = []
+    /// The screens presented above this one, closest first.
+    var presentedScreens: [UIViewController] {
+        let presenter = sequence(first: self, next: \.parent).first { $0.presentedViewController != nil }
+        var screens: [UIViewController] = []
         var presented = presenter?.presentedViewController
-        while let screen = presented, !screen.isBeingDismissed {
-            if let view = screen.viewIfLoaded, view.window != nil {
-                views.append(view)
-            }
+        while let screen = presented {
+            screens.append(screen)
             presented = screen.presentedViewController
         }
-        return views
+        return screens
     }
 }

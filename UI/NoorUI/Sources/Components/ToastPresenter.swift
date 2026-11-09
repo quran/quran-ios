@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UIx
 import VLogging
 
 @MainActor
@@ -69,6 +70,7 @@ public class ToastPresenter {
     private var currentToastWindow: ToastWindow?
     private var currentContainerVC: ToastContainerViewController?
     private var isPlacementUpdateScheduled = false
+    private let screenFollower = ToastScreenFollower()
     /// Identifies the showing presentation rather than its `Toast.id`, so a toast shown again
     /// can't be dismissed by its earlier presentation's timeout.
     private var currentToastID: UUID?
@@ -76,14 +78,14 @@ public class ToastPresenter {
 
     private func showToast(_ toast: Toast, in target: ToastTarget) {
         DispatchQueue.main.async {
-            self.queue.append(toast, in: target)
+            self.queue.append(toast, to: target)
             self.displayNextToast()
         }
     }
 
     private func displayNextToast() {
         guard let next = queue.showNext() else { return }
-        present(toast: next.toast, in: next.scene)
+        present(toast: next.toast, in: next.target)
     }
 
     private func present(toast: Toast, in target: ToastTarget) {
@@ -98,7 +100,10 @@ public class ToastPresenter {
 
         let containerVC = ToastContainerViewController(
             toastViewController: toastVC,
-            bottomOffset: { [weak self] in self?.bottomOffset(for: toast, from: target) ?? toast.bottomOffset },
+            bottomOffset: toast.bottomOffset,
+            placement: { [weak self] window in
+                self?.bottomOffset(for: toast, from: target, in: window) ?? toast.bottomOffset
+            },
             userDismiss: { [weak self] in self?.dismissToast(id: toastID, byUser: true) }
         )
 
@@ -108,10 +113,10 @@ public class ToastPresenter {
 
         let toastWindow = ToastWindow(windowScene: target.windowScene)
         toastWindow.rootViewController = containerVC
-        // Set before the window shows: the toast reads its window to place itself when it appears.
+        toastWindow.makeKeyAndVisible()
+
         currentToastWindow = toastWindow
         currentContainerVC = containerVC
-        toastWindow.makeKeyAndVisible()
 
         // Schedule automatic dismissal
         DispatchQueue.main.asyncAfter(deadline: .now() + toast.duration) { [weak self] in
@@ -121,15 +126,17 @@ public class ToastPresenter {
 
     /// Where `toast` sits above its window's bottom edge to clear the bars at the bottom: `target`'s screen's
     /// bars, like a tab bar, and the bars that keep toasts above them, like the reader's audio bar.
-    private func bottomOffset(for toast: Toast, from target: ToastTarget) -> CGFloat {
-        guard let window = currentToastWindow else {
-            return toast.bottomOffset
-        }
+    private func bottomOffset(for toast: Toast, from target: ToastTarget, in window: UIWindow) -> CGFloat {
+        let snapshot = ToastAvoidingBars.snapshot(in: window)
+        // The screen showing the toast can be sliding in or out, like an editor closing after saving.
+        let shownFrom = target.view?.nearestViewController.map { [$0] } ?? []
+        screenFollower.followTransitions(of: snapshot.barScreens + snapshot.screensAbove + shownFrom)
+        screenFollower.followViews(of: snapshot.screensAbove + shownFrom)
         let placement = ToastPlacement(
             windowSize: window.bounds.size,
-            windowBottomInset: window.safeAreaInsets.bottom,
+            windowSafeAreaInsets: window.safeAreaInsets,
             screenBarsHeight: target.currentScreenBarsHeight,
-            bars: ToastAvoidingBars.placementBars(in: window)
+            bars: snapshot.bars
         )
         let spacing = UIFontMetrics.default.scaledValue(for: 8, compatibleWith: window.traitCollection)
         return placement.bottomOffset(toastOffset: toast.bottomOffset, spacing: spacing)
@@ -139,6 +146,7 @@ public class ToastPresenter {
         guard currentToastID == id else { return }
         currentToastWindow?.isHidden = true
         currentToastWindow = nil
+        screenFollower.stop()
         currentContainerVC = nil
         currentToastID = nil
         queue.removeShowing()
@@ -178,7 +186,7 @@ private extension UIView {
         guard let window, let screenView else {
             return 0
         }
-        return Toast.bottomBarsHeight(
+        return ToastPlacement.screenBarsHeight(
             windowHeight: window.bounds.height,
             windowBottomInset: window.safeAreaInsets.bottom,
             screenBottom: screenView.convert(screenView.bounds, to: window).maxY,

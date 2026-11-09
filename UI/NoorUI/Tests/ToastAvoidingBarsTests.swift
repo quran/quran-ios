@@ -66,6 +66,22 @@ final class ToastAvoidingBarsTests: XCTestCase {
         let context = makeBar()
 
         XCTAssertEqual(bars(in: context.window).map(\.screensAbove), [[]])
+        XCTAssertTrue(ToastAvoidingBars.snapshot(in: context.window).screensAbove.isEmpty)
+    }
+
+    func testSnapshotReportsTheBarsScreen() {
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 402, height: 874))
+        window.isHidden = false
+        let screen = UIViewController()
+        window.rootViewController = screen
+        let bar = UIView(frame: CGRect(x: 0, y: 710, width: 402, height: 164))
+        bar.keepsToastsAbove = true
+        screen.view.addSubview(bar)
+
+        let snapshot = ToastAvoidingBars.snapshot(in: window)
+
+        XCTAssertEqual(snapshot.barScreens.count, 1)
+        XCTAssertIdentical(snapshot.barScreens.first, screen)
     }
 
     // MARK: Private
@@ -89,6 +105,6 @@ final class ToastAvoidingBarsTests: XCTestCase {
     }
 
     private func bars(in window: UIWindow) -> [ToastPlacement.Bar] {
-        ToastAvoidingBars.placementBars(in: window)
+        ToastAvoidingBars.snapshot(in: window).bars
     }
 }

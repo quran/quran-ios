@@ -76,25 +76,6 @@ public struct Toast: Identifiable {
     public let bottomOffset: CGFloat
 }
 
-extension Toast {
-    /// How far a screen's bottom bars, like a tab bar, reach above the window's bottom edge.
-    /// Only a screen that reaches the window's bottom edge has bars, and only when its bottom inset
-    /// is taller than the home indicator's; a popover, even one with a down arrow, has none.
-    /// A screen that stops above an opaque tab bar isn't detected. Bars a screen can't report through its
-    /// safe area, like the reader's audio bar, keep toasts above them with `keepsToastsAbove`.
-    static func bottomBarsHeight(
-        windowHeight: CGFloat,
-        windowBottomInset: CGFloat,
-        screenBottom: CGFloat,
-        screenBottomInset: CGFloat
-    ) -> CGFloat {
-        guard screenBottom >= windowHeight - 0.5, screenBottomInset > windowBottomInset else {
-            return 0
-        }
-        return screenBottomInset
-    }
-}
-
 final class ToastHostingController: UIHostingController<ToastView> {
     init(toast: Toast, dismiss: @escaping () -> Void, userDismiss: @escaping () -> Void) {
         super.init(rootView: ToastView(toast: toast, dismiss: dismiss, userDismiss: userDismiss))
@@ -111,15 +92,19 @@ final class ToastHostingController: UIHostingController<ToastView> {
 final class ToastContainerViewController: UIViewController {
     // MARK: Lifecycle
 
-    /// - Parameter bottomOffset: Where the toast sits above the window's bottom edge, read when it shows
-    ///   and whenever the bars it clears change.
+    /// - Parameters:
+    ///   - bottomOffset: Where the toast sits above the window's bottom edge before it's placed in a window.
+    ///   - placement: Where the toast sits above the bottom edge of the window it's in, read when it shows
+    ///     and whenever the bars it clears change.
     init(
         toastViewController: UIViewController,
-        bottomOffset: @escaping () -> CGFloat,
+        bottomOffset: CGFloat,
+        placement: @escaping (UIWindow) -> CGFloat,
         userDismiss: @escaping () -> Void
     ) {
         self.toastViewController = toastViewController
-        resolveBottomOffset = bottomOffset
+        self.bottomOffset = bottomOffset
+        self.placement = placement
         self.userDismiss = userDismiss
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
@@ -181,7 +166,9 @@ final class ToastContainerViewController: UIViewController {
     }
 
     func showToast() {
-        bottomOffset = resolveBottomOffset()
+        if let window = view.window {
+            bottomOffset = placement(window)
+        }
         isShown = true
         toastViewController.view.layoutIfNeeded()
         setUpShowToastConstraints()
@@ -194,22 +181,15 @@ final class ToastContainerViewController: UIViewController {
 
     /// Moves the shown toast to clear the bars at the bottom as they move, show or hide.
     func updatePlacement() {
-        guard isShown else {
+        guard isShown, let window = view.window else {
             return
         }
-        let offset = resolveBottomOffset()
+        let offset = placement(window)
         guard abs(offset - bottomOffset) > 0.5 else {
             return
         }
         bottomOffset = offset
-        // A drag moves the toast from the new offset when it next changes.
-        guard !isDragging else {
-            return
-        }
-        activeConstraint?.constant = offset
-        NoorAnimation.animate {
-            self.view.layoutIfNeeded()
-        }
+        moveToBottomOffset()
     }
 
     func dismissToast(completion: (() -> Void)? = nil) {
@@ -233,12 +213,13 @@ final class ToastContainerViewController: UIViewController {
     // MARK: Private
 
     private let toastViewController: UIViewController
-    private let resolveBottomOffset: () -> CGFloat
+    private let placement: (UIWindow) -> CGFloat
     private let userDismiss: () -> Void
-    private var bottomOffset: CGFloat = 0
+    private var bottomOffset: CGFloat
     /// Whether the toast is on screen, from when it starts showing until it starts dismissing.
     private var isShown = false
     private var isDragging = false
+    private var isMoving = false
 
     private var activeConstraint: NSLayoutConstraint? {
         didSet {
@@ -253,6 +234,26 @@ final class ToastContainerViewController: UIViewController {
 
     private func setUpHideToastConstraints() {
         activeConstraint = view.bottomAnchor.constraint(equalTo: toastViewController.view.topAnchor)
+    }
+
+    /// Animates the shown toast to `bottomOffset`. A bar that moves every frame, like one in a sheet being
+    /// dragged between detents, doesn't restart the move: the toast catches up when the move ends.
+    private func moveToBottomOffset() {
+        // A drag moves the toast from the new offset when it next changes.
+        guard isShown, !isDragging, !isMoving else {
+            return
+        }
+        guard let constraint = activeConstraint, abs(constraint.constant - bottomOffset) > 0.5 else {
+            return
+        }
+        constraint.constant = bottomOffset
+        isMoving = true
+        NoorAnimation.animate {
+            self.view.layoutIfNeeded()
+        } completion: {
+            self.isMoving = false
+            self.moveToBottomOffset()
+        }
     }
 
     @objc
@@ -273,6 +274,9 @@ final class ToastContainerViewController: UIViewController {
             }
         case .ended:
             isDragging = false
+            guard isShown else {
+                return
+            }
             if translation.y > bottomOffset {
                 userDismiss()
             } else {

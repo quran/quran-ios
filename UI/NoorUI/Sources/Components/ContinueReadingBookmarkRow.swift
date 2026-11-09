@@ -8,12 +8,15 @@ import UIx
 
 @MainActor
 public struct ContinueReadingBookmarkRow: View {
-    public init(bookmark: PlacedReadingBookmark, action: @escaping () -> Void) {
+    /// `showsPageNumber` replaces the chevron with the bookmark's page number, like other page lists.
+    public init(bookmark: PlacedReadingBookmark, showsPageNumber: Bool = false, action: @escaping () -> Void) {
         self.bookmark = bookmark
+        self.showsPageNumber = showsPageNumber
         self.action = action
     }
 
     private let bookmark: PlacedReadingBookmark
+    private let showsPageNumber: Bool
     private let action: () -> Void
 
     public var body: some View {
@@ -23,7 +26,7 @@ public struct ContinueReadingBookmarkRow: View {
                 title: title,
                 titleAllowsWrapping: false,
                 subtitle: .init(text: subtitle, location: .bottom),
-                accessory: .disclosureIndicator
+                accessory: accessory
             )
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
@@ -42,21 +45,28 @@ public struct ContinueReadingBookmarkRow: View {
         return placementText
     }
 
+    var accessory: NoorListItem.Accessory {
+        guard showsPageNumber else {
+            return .disclosureIndicator
+        }
+        let page = bookmark.page
+        return .text(page.localizedNumber, accessibilityLabel: page.localizedName)
+    }
+
     /// Keeps the page number out of the title so long sura names never truncate it.
+    /// A trailing page number already shows the page, so the subtitle leaves it out.
     var subtitle: MultipartText {
         let timeAgo = bookmark.modifiedOn.timeAgo()
-        switch bookmark.placement {
-        case .ayah:
-            if bookmark.name == nil {
-                return .text(timeAgo)
-            }
-            return "\(placementText) · \(timeAgo)"
-        case .page(let page):
+        if case .page(let page) = bookmark.placement, !showsPageNumber {
             if bookmark.name == nil {
                 return "\(page.localizedName) · \(timeAgo)"
             }
             return "\(placementText) · \(page.localizedName) · \(timeAgo)"
         }
+        if bookmark.name == nil {
+            return .text(timeAgo)
+        }
+        return "\(placementText) · \(timeAgo)"
     }
 
     private var placementText: MultipartText {

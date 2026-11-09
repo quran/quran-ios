@@ -41,11 +41,53 @@ final class ContinueReadingBookmarkRowTests: XCTestCase {
         XCTAssertEqual(text(row.subtitle), text("\(ayah: ayah) · \(Date.distantPast.timeAgo())"))
     }
 
-    private func makeRow(placement: PlacedReadingBookmark.Placement, name: String? = nil) -> ContinueReadingBookmarkRow {
+    func test_defaultRow_showsADisclosureIndicator() {
+        let row = makeRow(placement: .ayah(ayah))
+
+        guard case .disclosureIndicator = row.accessory else {
+            return XCTFail("Expected a disclosure indicator, got \(row.accessory)")
+        }
+    }
+
+    func test_pageNumberRow_ayahBookmarkShowsThePageHoldingTheAyah() {
+        let row = makeRow(placement: .ayah(ayah), showsPageNumber: true)
+
+        XCTAssertEqual(accessoryText(row), [ayah.page.localizedNumber, ayah.page.localizedName])
+        XCTAssertEqual(text(row.subtitle), Date.distantPast.timeAgo())
+    }
+
+    func test_pageNumberRow_unnamedPageBookmarkShowsThePageOnlyOnce() {
+        let row = makeRow(placement: .page(page), showsPageNumber: true)
+
+        XCTAssertEqual(accessoryText(row), [page.localizedNumber, page.localizedName])
+        XCTAssertEqual(text(row.subtitle), Date.distantPast.timeAgo())
+    }
+
+    func test_pageNumberRow_namedPageBookmarkKeepsSurasInTheSubtitle() {
+        let row = makeRow(placement: .page(page), name: "Khatmah", showsPageNumber: true)
+
+        XCTAssertEqual(text(row.title), "Khatmah")
+        XCTAssertEqual(text(row.subtitle), text("\(suras: page.suras) · \(Date.distantPast.timeAgo())"))
+    }
+
+    private func makeRow(
+        placement: PlacedReadingBookmark.Placement,
+        name: String? = nil,
+        showsPageNumber: Bool = false
+    ) -> ContinueReadingBookmarkRow {
         ContinueReadingBookmarkRow(
             bookmark: PlacedReadingBookmark(id: "row", slot: .teal, placement: placement, modifiedOn: .distantPast, name: name),
+            showsPageNumber: showsPageNumber,
             action: {}
         )
+    }
+
+    private func accessoryText(_ row: ContinueReadingBookmarkRow) -> [String?] {
+        guard case .text(let text, let accessibilityLabel) = row.accessory else {
+            XCTFail("Expected a page number, got \(row.accessory)")
+            return []
+        }
+        return [text, accessibilityLabel]
     }
 
     private func text(_ text: MultipartText) -> String {

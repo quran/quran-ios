@@ -15,7 +15,8 @@ public struct ContinueReadingSection: View {
         selectReadingBookmark: @escaping (PlacedReadingBookmark) -> Void,
         selectLastPage: @escaping (LastPage) -> Void,
         deleteReadingBookmark: ItemDeletionAction<PlacedReadingBookmark>? = nil,
-        renameReadingBookmark: ((PlacedReadingBookmark) -> Void)? = nil
+        renameReadingBookmark: ((PlacedReadingBookmark) -> Void)? = nil,
+        showsReadingBookmarkPageNumbers: Bool = false
     ) {
         self.title = title
         self.readingBookmarks = readingBookmarks
@@ -24,6 +25,7 @@ public struct ContinueReadingSection: View {
         self.selectLastPage = selectLastPage
         self.deleteReadingBookmark = deleteReadingBookmark
         self.renameReadingBookmark = renameReadingBookmark
+        self.showsReadingBookmarkPageNumbers = showsReadingBookmarkPageNumbers
     }
     #else
     public init(title: String, lastPages: [LastPage], selectLastPage: @escaping (LastPage) -> Void) {
@@ -42,6 +44,7 @@ public struct ContinueReadingSection: View {
     private let selectReadingBookmark: (PlacedReadingBookmark) -> Void
     private let deleteReadingBookmark: ItemDeletionAction<PlacedReadingBookmark>?
     private let renameReadingBookmark: ((PlacedReadingBookmark) -> Void)?
+    private let showsReadingBookmarkPageNumbers: Bool
     @Environment(\.editMode) private var editMode
     #endif
     private let selectLastPage: (LastPage) -> Void
@@ -109,7 +112,7 @@ public struct ContinueReadingSection: View {
     @ViewBuilder
     private var bookmarks: some View {
         NoorListRows(visibleBookmarks, onDelete: deleteVisibleBookmark) { item in
-            ContinueReadingBookmarkRow(bookmark: item.bookmark) {
+            ContinueReadingBookmarkRow(bookmark: item.bookmark, showsPageNumber: showsReadingBookmarkPageNumbers) {
                 selectReadingBookmark(item.bookmark)
             }
             .noorItemContextMenu(

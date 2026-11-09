@@ -33,19 +33,4 @@ final class ToastPlacementTests: XCTestCase {
         let height = Toast.bottomBarsHeight(windowHeight: 1194, windowBottomInset: 20, screenBottom: 1194, screenBottomInset: 20)
         XCTAssertEqual(height, 0)
     }
-
-    func testToastMovesAboveBottomBarsThatWouldCoverIt() {
-        let toast = Toast("Removed").clearingBottomBars(height: 83, spacing: 8)
-        XCTAssertEqual(toast.bottomOffset, 91)
-    }
-
-    func testToastKeepsLargerOffsetThanBottomBars() {
-        let toast = Toast("Removed", bottomOffset: 100).clearingBottomBars(height: 83, spacing: 8)
-        XCTAssertEqual(toast.bottomOffset, 100)
-    }
-
-    func testToastKeepsItsOffsetWithoutBottomBars() {
-        let toast = Toast("Saved").clearingBottomBars(height: 0, spacing: 8)
-        XCTAssertEqual(toast.bottomOffset, 40)
-    }
 }

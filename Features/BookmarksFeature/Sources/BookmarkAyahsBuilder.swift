@@ -21,12 +21,10 @@ public struct BookmarkAyahsBuilder {
 
     // MARK: Public
 
-    /// `bottomBarsHeight` keeps the sheet's toasts above the presenter's bottom bars.
     public func build(
         verses: [AyahNumber],
         collections: [AyahBookmarkCollection],
-        highlights: [AyahNumber: HighlightColor] = [:],
-        bottomBarsHeight: @escaping @MainActor () -> CGFloat
+        highlights: [AyahNumber: HighlightColor] = [:]
     ) -> UIViewController {
         weak var sheet: UIViewController?
         let viewModel = BookmarkAyahsViewModel(
@@ -45,7 +43,7 @@ public struct BookmarkAyahsBuilder {
                 }
             )
         )
-        let navigationController = navigationController(viewModel: viewModel, bottomBarsHeight: bottomBarsHeight)
+        let navigationController = navigationController(viewModel: viewModel)
         sheet = navigationController
         return navigationController
     }
@@ -54,11 +52,8 @@ public struct BookmarkAyahsBuilder {
 
     private let container: AppDependencies
 
-    private func navigationController(
-        viewModel: BookmarkAyahsViewModel,
-        bottomBarsHeight: @escaping @MainActor () -> CGFloat
-    ) -> UIViewController {
-        let viewController = BookmarkAyahsViewController(viewModel: viewModel, bottomBarsHeight: bottomBarsHeight)
+    private func navigationController(viewModel: BookmarkAyahsViewModel) -> UIViewController {
+        let viewController = BookmarkAyahsViewController(viewModel: viewModel)
         let navigationController = BaseNavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .pageSheet
         return navigationController

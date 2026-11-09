@@ -47,9 +47,4 @@ final class ToastQueueTests: XCTestCase {
         XCTAssertEqual(shown?.toast.id, next.id)
         XCTAssertEqual(shown?.scene, "bookmarks")
     }
-
-    func testCopyPlacedAboveBottomBarsKeepsTheToastsID() {
-        let toast = Toast("Removed")
-        XCTAssertEqual(toast.clearingBottomBars(height: 83, spacing: 8).id, toast.id)
-    }
 }

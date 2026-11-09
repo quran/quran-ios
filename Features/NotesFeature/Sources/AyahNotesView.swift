@@ -69,6 +69,8 @@ private struct AyahNotesContent: View {
             }
             .padding()
             .background(Color.systemGroupedBackground)
+            // The toast after saving a new note stays above the button.
+            .keepsToastsAbove()
         }
         .background(Color.systemGroupedBackground)
         .environment(\.editMode, $editMode)

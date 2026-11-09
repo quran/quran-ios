@@ -18,15 +18,17 @@ public struct ContinueReadingBookmarkRow: View {
     private let bookmark: PlacedReadingBookmark
     private let showsPageNumber: Bool
     private let action: () -> Void
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     public var body: some View {
+        let isAccessibilitySize = dynamicTypeSize.isAccessibilitySize
         Button(action: action) {
             NoorListItem(
                 image: .init(.bookmark, color: bookmark.slot.swiftUIColor),
                 title: title,
                 titleAllowsWrapping: false,
-                subtitle: .init(text: subtitle, location: .bottom),
-                accessory: accessory
+                subtitle: .init(text: subtitle(isAccessibilitySize: isAccessibilitySize), location: .bottom),
+                accessory: accessory(isAccessibilitySize: isAccessibilitySize)
             )
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
@@ -45,27 +47,41 @@ public struct ContinueReadingBookmarkRow: View {
         return placementText
     }
 
-    var accessory: NoorListItem.Accessory {
+    /// At accessibility sizes the page number moves to the subtitle, leaving the title the full width.
+    func accessory(isAccessibilitySize: Bool) -> NoorListItem.Accessory? {
         guard showsPageNumber else {
             return .disclosureIndicator
+        }
+        if isAccessibilitySize {
+            return nil
         }
         let page = bookmark.page
         return .text(page.localizedNumber, accessibilityLabel: page.localizedName)
     }
 
-    /// Shows the page in the subtitle, so long sura names never truncate it, unless the page number is the accessory.
-    var subtitle: MultipartText {
+    /// Keeps the page out of the title, so long sura names never truncate it.
+    func subtitle(isAccessibilitySize: Bool) -> MultipartText {
         let timeAgo = bookmark.modifiedOn.timeAgo()
-        if case .page(let page) = bookmark.placement, !showsPageNumber {
-            if bookmark.name == nil {
-                return "\(page.localizedName) · \(timeAgo)"
-            }
-            return "\(placementText) · \(page.localizedName) · \(timeAgo)"
-        }
-        if bookmark.name == nil {
+        switch (bookmark.name, showsPageInSubtitle(isAccessibilitySize: isAccessibilitySize)) {
+        case (nil, false):
             return .text(timeAgo)
+        case (nil, true):
+            return "\(bookmark.page.localizedName) · \(timeAgo)"
+        case (_, false):
+            return "\(placementText) · \(timeAgo)"
+        case (_, true):
+            return "\(placementText) · \(bookmark.page.localizedName) · \(timeAgo)"
         }
-        return "\(placementText) · \(timeAgo)"
+    }
+
+    private func showsPageInSubtitle(isAccessibilitySize: Bool) -> Bool {
+        if showsPageNumber {
+            return isAccessibilitySize
+        }
+        if case .page = bookmark.placement {
+            return true
+        }
+        return false
     }
 
     private var placementText: MultipartText {

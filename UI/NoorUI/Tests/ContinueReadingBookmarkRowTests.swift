@@ -14,7 +14,7 @@ final class ContinueReadingBookmarkRowTests: XCTestCase {
         let row = makeRow(placement: .page(page))
 
         XCTAssertEqual(text(row.title), text("\(suras: page.suras)"))
-        XCTAssertEqual(text(row.subtitle), "\(page.localizedName) · \(Date.distantPast.timeAgo())")
+        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: false)), "\(page.localizedName) · \(Date.distantPast.timeAgo())")
     }
 
     func test_namedPageBookmark_showsNameAndMovesSurasToTheSubtitle() {
@@ -22,7 +22,7 @@ final class ContinueReadingBookmarkRowTests: XCTestCase {
 
         XCTAssertEqual(text(row.title), "Khatmah")
         XCTAssertEqual(
-            text(row.subtitle),
+            text(row.subtitle(isAccessibilitySize: false)),
             text("\(suras: page.suras) · \(page.localizedName) · \(Date.distantPast.timeAgo())")
         )
     }
@@ -31,21 +31,21 @@ final class ContinueReadingBookmarkRowTests: XCTestCase {
         let row = makeRow(placement: .ayah(ayah))
 
         XCTAssertEqual(text(row.title), text("\(ayah: ayah)"))
-        XCTAssertEqual(text(row.subtitle), Date.distantPast.timeAgo())
+        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: false)), Date.distantPast.timeAgo())
     }
 
     func test_namedAyahBookmark_showsNameAndMovesAyahToTheSubtitle() {
         let row = makeRow(placement: .ayah(ayah), name: "Hifz")
 
         XCTAssertEqual(text(row.title), "Hifz")
-        XCTAssertEqual(text(row.subtitle), text("\(ayah: ayah) · \(Date.distantPast.timeAgo())"))
+        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: false)), text("\(ayah: ayah) · \(Date.distantPast.timeAgo())"))
     }
 
     func test_defaultRow_showsADisclosureIndicator() {
         let row = makeRow(placement: .ayah(ayah))
 
-        guard case .disclosureIndicator = row.accessory else {
-            return XCTFail("Expected a disclosure indicator, got \(row.accessory)")
+        guard case .disclosureIndicator = row.accessory(isAccessibilitySize: false) else {
+            return XCTFail("Expected a disclosure indicator, got \(String(describing: row.accessory(isAccessibilitySize: false)))")
         }
     }
 
@@ -53,21 +53,46 @@ final class ContinueReadingBookmarkRowTests: XCTestCase {
         let row = makeRow(placement: .ayah(ayah), showsPageNumber: true)
 
         XCTAssertEqual(accessoryText(row), [ayah.page.localizedNumber, ayah.page.localizedName])
-        XCTAssertEqual(text(row.subtitle), Date.distantPast.timeAgo())
+        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: false)), Date.distantPast.timeAgo())
     }
 
     func test_pageNumberRow_unnamedPageBookmarkShowsThePageOnlyOnce() {
         let row = makeRow(placement: .page(page), showsPageNumber: true)
 
         XCTAssertEqual(accessoryText(row), [page.localizedNumber, page.localizedName])
-        XCTAssertEqual(text(row.subtitle), Date.distantPast.timeAgo())
+        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: false)), Date.distantPast.timeAgo())
     }
 
     func test_pageNumberRow_namedPageBookmarkKeepsSurasInTheSubtitle() {
         let row = makeRow(placement: .page(page), name: "Khatmah", showsPageNumber: true)
 
         XCTAssertEqual(text(row.title), "Khatmah")
-        XCTAssertEqual(text(row.subtitle), text("\(suras: page.suras) · \(Date.distantPast.timeAgo())"))
+        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: false)), text("\(suras: page.suras) · \(Date.distantPast.timeAgo())"))
+    }
+
+    func test_pageNumberRow_atAccessibilitySizes_movesThePageToTheSubtitle() {
+        let row = makeRow(placement: .ayah(ayah), showsPageNumber: true)
+
+        XCTAssertNil(row.accessory(isAccessibilitySize: true))
+        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: true)), "\(ayah.page.localizedName) · \(Date.distantPast.timeAgo())")
+    }
+
+    func test_pageNumberRow_atAccessibilitySizes_namedBookmarkKeepsItsPlacementBeforeThePage() {
+        let row = makeRow(placement: .ayah(ayah), name: "Hifz", showsPageNumber: true)
+
+        XCTAssertEqual(
+            text(row.subtitle(isAccessibilitySize: true)),
+            text("\(ayah: ayah) · \(ayah.page.localizedName) · \(Date.distantPast.timeAgo())")
+        )
+    }
+
+    func test_defaultRow_atAccessibilitySizes_keepsTheChevron() {
+        let row = makeRow(placement: .page(page))
+
+        guard case .disclosureIndicator = row.accessory(isAccessibilitySize: true) else {
+            return XCTFail("Expected a disclosure indicator")
+        }
+        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: true)), "\(page.localizedName) · \(Date.distantPast.timeAgo())")
     }
 
     private func makeRow(
@@ -83,8 +108,8 @@ final class ContinueReadingBookmarkRowTests: XCTestCase {
     }
 
     private func accessoryText(_ row: ContinueReadingBookmarkRow) -> [String?] {
-        guard case .text(let text, let accessibilityLabel) = row.accessory else {
-            XCTFail("Expected a page number, got \(row.accessory)")
+        guard case .text(let text, let accessibilityLabel) = row.accessory(isAccessibilitySize: false) else {
+            XCTFail("Expected a page number, got \(String(describing: row.accessory(isAccessibilitySize: false)))")
             return []
         }
         return [text, accessibilityLabel]

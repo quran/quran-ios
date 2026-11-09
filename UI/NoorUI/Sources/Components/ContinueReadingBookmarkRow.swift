@@ -8,27 +8,22 @@ import UIx
 
 @MainActor
 public struct ContinueReadingBookmarkRow: View {
-    /// `showsPageNumber` replaces the chevron with the bookmark's page number, like other page lists.
-    public init(bookmark: PlacedReadingBookmark, showsPageNumber: Bool, action: @escaping () -> Void) {
+    public init(bookmark: PlacedReadingBookmark, action: @escaping () -> Void) {
         self.bookmark = bookmark
-        self.showsPageNumber = showsPageNumber
         self.action = action
     }
 
     private let bookmark: PlacedReadingBookmark
-    private let showsPageNumber: Bool
     private let action: () -> Void
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     public var body: some View {
-        let isAccessibilitySize = dynamicTypeSize.isAccessibilitySize
         Button(action: action) {
             NoorListItem(
                 image: .init(.bookmark, color: bookmark.slot.swiftUIColor),
                 title: title,
                 titleAllowsWrapping: false,
-                subtitle: .init(text: subtitle(isAccessibilitySize: isAccessibilitySize), location: .bottom),
-                accessory: accessory(isAccessibilitySize: isAccessibilitySize)
+                subtitle: .init(text: subtitle, location: .bottom),
+                accessory: .disclosureIndicator
             )
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
@@ -47,56 +42,28 @@ public struct ContinueReadingBookmarkRow: View {
         return placementText
     }
 
-    /// At accessibility sizes the page number moves to the subtitle, leaving the title the full width.
-    func accessory(isAccessibilitySize: Bool) -> NoorListItem.Accessory? {
-        guard showsPageNumber else {
-            return .disclosureIndicator
-        }
-        if isAccessibilitySize {
-            return nil
-        }
-        let page = bookmark.page
-        return .text(page.localizedNumber, accessibilityLabel: page.localizedName)
-    }
-
-    /// Keeps the page out of the title, so long sura names never truncate it.
-    func subtitle(isAccessibilitySize: Bool) -> MultipartText {
+    /// Every bookmark shows its page once: a page bookmark's location already names it.
+    var subtitle: MultipartText {
         let timeAgo = bookmark.modifiedOn.timeAgo()
-        switch (bookmark.name, showsPageInSubtitle(isAccessibilitySize: isAccessibilitySize)) {
-        case (nil, false):
+        switch (bookmark.placement, bookmark.name) {
+        case (.page, nil):
             return .text(timeAgo)
-        case (nil, true):
-            return "\(bookmark.page.localizedName) · \(timeAgo)"
-        case (_, false):
+        case (.page, _):
             return "\(placementText) · \(timeAgo)"
-        case (_, true):
-            return "\(placementText) · \(bookmark.page.localizedName) · \(timeAgo)"
+        case (.ayah(let ayah), nil):
+            return "\(ayah.page.localizedName) · \(timeAgo)"
+        case (.ayah(let ayah), _):
+            return "\(placementText) · \(ayah.page.localizedName) · \(timeAgo)"
         }
     }
 
-    private func showsPageInSubtitle(isAccessibilitySize: Bool) -> Bool {
-        if showsPageNumber {
-            return isAccessibilitySize
-        }
-        if case .page = bookmark.placement {
-            return true
-        }
-        return false
-    }
-
+    /// The page's first sura keeps pages with several suras on one line, like the reader's page header.
     private var placementText: MultipartText {
         switch bookmark.placement {
         case .ayah(let ayah):
             "\(ayah: ayah)"
         case .page(let page):
-            "\(suras: page.suras)"
-        }
-    }
-
-    private var location: String {
-        switch bookmark.placement {
-        case .ayah(let ayah): ayah.page.localizedName
-        case .page(let page): page.startJuz.localizedName
+            "\(page: page)"
         }
     }
 }
@@ -105,13 +72,7 @@ public struct ContinueReadingBookmarkRow: View {
 
 @MainActor
 private struct ContinueReadingBookmarkRowPreview: View {
-    init(
-        placement: PlacedReadingBookmark.Placement,
-        slot: ReadingBookmarkSlot = .orange,
-        name: String? = nil,
-        showsPageNumber: Bool = false
-    ) {
-        self.showsPageNumber = showsPageNumber
+    init(placement: PlacedReadingBookmark.Placement, slot: ReadingBookmarkSlot = .orange, name: String? = nil) {
         bookmark = PlacedReadingBookmark(
             id: "preview", slot: slot, placement: placement,
             modifiedOn: Date(timeIntervalSinceNow: -36000), name: name
@@ -122,11 +83,10 @@ private struct ContinueReadingBookmarkRowPreview: View {
     }
 
     private let bookmark: PlacedReadingBookmark
-    private let showsPageNumber: Bool
 
     var body: some View {
         Section {
-            ContinueReadingBookmarkRow(bookmark: bookmark, showsPageNumber: showsPageNumber, action: {})
+            ContinueReadingBookmarkRow(bookmark: bookmark, action: {})
         }
     }
 }
@@ -152,36 +112,16 @@ private struct ContinueReadingBookmarkRowPreview: View {
             .environment(\.locale, Locale(identifier: "ar"))
             .environment(\.layoutDirection, .rightToLeft)
 
+        ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[22]), slot: .teal)
+            .environment(\.locale, Locale(identifier: "ar"))
+            .environment(\.layoutDirection, .rightToLeft)
+
         ContinueReadingBookmarkRowPreview(placement: .ayah(Quran.hafsMadani1405.suras[62].verses[0]))
             .environment(\.locale, Locale(identifier: "en"))
             .environment(\.dynamicTypeSize, .accessibility3)
-    }
-}
 
-#Preview("Page numbers") {
-    List {
-        ContinueReadingBookmarkRowPreview(placement: .ayah(Quran.hafsMadani1405.suras[66].verses[17]), showsPageNumber: true)
+        ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[22]), slot: .teal)
             .environment(\.locale, Locale(identifier: "en"))
-
-        ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[22]), slot: .teal, showsPageNumber: true)
-            .environment(\.locale, Locale(identifier: "en"))
-
-        ContinueReadingBookmarkRowPreview(
-            placement: .page(Quran.hafsMadani1405.pages[2]), slot: .red, name: "Khatmah", showsPageNumber: true
-        )
-        .environment(\.locale, Locale(identifier: "en"))
-
-        ContinueReadingBookmarkRowPreview(placement: .ayah(Quran.hafsMadani1405.suras[1].verses[254]), showsPageNumber: true)
-            .environment(\.locale, Locale(identifier: "ar"))
-            .environment(\.layoutDirection, .rightToLeft)
-
-        ContinueReadingBookmarkRowPreview(placement: .ayah(Quran.hafsMadani1405.suras[1].verses[254]), showsPageNumber: true)
-            .environment(\.locale, Locale(identifier: "en"))
-            .environment(\.dynamicTypeSize, .accessibility3)
-
-        ContinueReadingBookmarkRowPreview(placement: .ayah(Quran.hafsMadani1405.suras[1].verses[254]), showsPageNumber: true)
-            .environment(\.locale, Locale(identifier: "ar"))
-            .environment(\.layoutDirection, .rightToLeft)
             .environment(\.dynamicTypeSize, .accessibility3)
     }
 }

@@ -65,16 +65,6 @@ public struct PlacedReadingBookmark: Hashable, Sendable {
         }
     }
 
-    /// The bookmarked page, or the page that holds the bookmarked ayah.
-    public var page: Page {
-        switch placement {
-        case .ayah(let ayah):
-            ayah.page
-        case .page(let page):
-            page
-        }
-    }
-
     public func isAt(_ ayah: AyahNumber) -> Bool {
         switch placement {
         case .ayah(let bookmarkedAyah):

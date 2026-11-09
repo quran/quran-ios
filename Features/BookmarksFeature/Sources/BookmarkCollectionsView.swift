@@ -50,8 +50,7 @@ private struct BookmarkCollectionsContent: View {
                 deleteReadingBookmark: { bookmark in
                     { await deleteReadingBookmark(bookmark) }
                 },
-                renameReadingBookmark: { viewModel.presentRenameReadingBookmark($0) },
-                showsReadingBookmarkPageNumbers: true
+                renameReadingBookmark: { viewModel.presentRenameReadingBookmark($0) }
             )
 
             NoorBasicSection(title: l("bookmarks.highlights")) {

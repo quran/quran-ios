@@ -15,8 +15,7 @@ public struct ContinueReadingSection: View {
         selectReadingBookmark: @escaping (PlacedReadingBookmark) -> Void,
         selectLastPage: @escaping (LastPage) -> Void,
         deleteReadingBookmark: ItemDeletionAction<PlacedReadingBookmark>? = nil,
-        renameReadingBookmark: ((PlacedReadingBookmark) -> Void)? = nil,
-        showsReadingBookmarkPageNumbers: Bool = false
+        renameReadingBookmark: ((PlacedReadingBookmark) -> Void)? = nil
     ) {
         self.title = title
         self.readingBookmarks = readingBookmarks
@@ -25,7 +24,6 @@ public struct ContinueReadingSection: View {
         self.selectLastPage = selectLastPage
         self.deleteReadingBookmark = deleteReadingBookmark
         self.renameReadingBookmark = renameReadingBookmark
-        self.showsReadingBookmarkPageNumbers = showsReadingBookmarkPageNumbers
     }
     #else
     public init(title: String, lastPages: [LastPage], selectLastPage: @escaping (LastPage) -> Void) {
@@ -44,7 +42,6 @@ public struct ContinueReadingSection: View {
     private let selectReadingBookmark: (PlacedReadingBookmark) -> Void
     private let deleteReadingBookmark: ItemDeletionAction<PlacedReadingBookmark>?
     private let renameReadingBookmark: ((PlacedReadingBookmark) -> Void)?
-    private let showsReadingBookmarkPageNumbers: Bool
     @Environment(\.editMode) private var editMode
     #endif
     private let selectLastPage: (LastPage) -> Void
@@ -112,7 +109,7 @@ public struct ContinueReadingSection: View {
     @ViewBuilder
     private var bookmarks: some View {
         NoorListRows(visibleBookmarks, onDelete: deleteVisibleBookmark) { item in
-            ContinueReadingBookmarkRow(bookmark: item.bookmark, showsPageNumber: showsReadingBookmarkPageNumbers) {
+            ContinueReadingBookmarkRow(bookmark: item.bookmark) {
                 selectReadingBookmark(item.bookmark)
             }
             .noorItemContextMenu(
@@ -206,7 +203,6 @@ private struct ContinueReadingSectionPreview: View {
     let title: String
     var bookmarkCount = 3
     var showsRecentPages = true
-    var showsPageNumbers = false
 
     var body: some View {
         #if QURAN_SYNC
@@ -215,8 +211,7 @@ private struct ContinueReadingSectionPreview: View {
             readingBookmarks: Array(Self.bookmarks.prefix(bookmarkCount)),
             lastPages: showsRecentPages ? Self.lastPages : [],
             selectReadingBookmark: { _ in },
-            selectLastPage: { _ in },
-            showsReadingBookmarkPageNumbers: showsPageNumbers
+            selectLastPage: { _ in }
         )
         #else
         ContinueReadingSection(
@@ -267,8 +262,6 @@ private struct ContinueReadingSectionPreview: View {
         ContinueReadingSectionPreview(title: "Single reading bookmark", bookmarkCount: 1)
 
         ContinueReadingSectionPreview(title: "No recent pages", showsRecentPages: false)
-
-        ContinueReadingSectionPreview(title: "Page numbers", showsRecentPages: false, showsPageNumbers: true)
         #endif
 
         ContinueReadingSectionPreview(title: "No reading bookmarks", bookmarkCount: 0)

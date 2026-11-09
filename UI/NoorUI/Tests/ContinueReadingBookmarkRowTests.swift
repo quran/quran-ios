@@ -7,112 +7,60 @@ import XCTest
 @MainActor
 final class ContinueReadingBookmarkRowTests: XCTestCase {
     private let locale = Locale(identifier: "en")
-    private let page = Quran.hafsMadani1405.pages[2]
-    private let ayah = Quran.hafsMadani1405.suras[1].verses[4]
+    private let quran = Quran.hafsMadani1405
+    private var timeAgo: String { Date.distantPast.timeAgo() }
 
-    func test_unnamedPageBookmark_showsSurasAndKeepsThePageInTheSubtitle() {
+    func test_unnamedPageBookmark_showsFirstSuraAndPageWithOnlyTheTimeInTheSubtitle() {
+        let page = quran.pages[22]
         let row = makeRow(placement: .page(page))
 
-        XCTAssertEqual(text(row.title), text("\(suras: page.suras)"))
-        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: false)), "\(page.localizedName) · \(Date.distantPast.timeAgo())")
+        XCTAssertEqual(text(row.title), "Al-Baqarah, Page 23")
+        XCTAssertEqual(text(row.subtitle), timeAgo)
     }
 
-    func test_namedPageBookmark_showsNameAndMovesSurasToTheSubtitle() {
-        let row = makeRow(placement: .page(page), name: "Khatmah")
+    func test_pageBookmark_onAPageWithSeveralSuras_namesOnlyTheFirstSura() {
+        let page = quran.pages[603]
+        XCTAssertGreaterThan(page.suras.count, 1)
+
+        let row = makeRow(placement: .page(page))
+
+        XCTAssertEqual(text(row.title), text("\(page: page)"))
+        XCTAssertEqual(text(row.title), "\(page.startSura.localizedName()), Page 604")
+    }
+
+    func test_namedPageBookmark_movesSuraAndPageToTheSubtitle() {
+        let row = makeRow(placement: .page(quran.pages[22]), name: "Khatmah")
 
         XCTAssertEqual(text(row.title), "Khatmah")
-        XCTAssertEqual(
-            text(row.subtitle(isAccessibilitySize: false)),
-            text("\(suras: page.suras) · \(page.localizedName) · \(Date.distantPast.timeAgo())")
-        )
+        XCTAssertEqual(text(row.subtitle), "Al-Baqarah, Page 23 · \(timeAgo)")
     }
 
-    func test_unnamedAyahBookmark_showsAyahAndOnlyTheTimeInTheSubtitle() {
+    func test_unnamedAyahBookmark_showsAyahAndPutsThePageHoldingItInTheSubtitle() {
+        let ayah = quran.suras[66].verses[17]
         let row = makeRow(placement: .ayah(ayah))
 
         XCTAssertEqual(text(row.title), text("\(ayah: ayah)"))
-        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: false)), Date.distantPast.timeAgo())
+        XCTAssertEqual(text(row.subtitle), "Page 563 · \(timeAgo)")
     }
 
-    func test_namedAyahBookmark_showsNameAndMovesAyahToTheSubtitle() {
+    func test_ayahBookmark_usesThePageThatOpensWithTheAyah() {
+        XCTAssertEqual(text(makeRow(placement: .ayah(quran.suras[66].verses[12])).subtitle), "Page 563 · \(timeAgo)")
+        XCTAssertEqual(text(makeRow(placement: .ayah(quran.suras[66].verses[11])).subtitle), "Page 562 · \(timeAgo)")
+    }
+
+    func test_namedAyahBookmark_movesAyahToTheSubtitleBeforeThePage() {
+        let ayah = quran.suras[66].verses[17]
         let row = makeRow(placement: .ayah(ayah), name: "Hifz")
 
         XCTAssertEqual(text(row.title), "Hifz")
-        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: false)), text("\(ayah: ayah) · \(Date.distantPast.timeAgo())"))
+        XCTAssertEqual(text(row.subtitle), text("\(ayah: ayah) · Page 563 · \(timeAgo)"))
     }
 
-    func test_defaultRow_showsADisclosureIndicator() {
-        let row = makeRow(placement: .ayah(ayah))
-
-        guard case .disclosureIndicator = row.accessory(isAccessibilitySize: false) else {
-            return XCTFail("Expected a disclosure indicator, got \(String(describing: row.accessory(isAccessibilitySize: false)))")
-        }
-    }
-
-    func test_pageNumberRow_ayahBookmarkShowsThePageHoldingTheAyah() {
-        let row = makeRow(placement: .ayah(ayah), showsPageNumber: true)
-
-        XCTAssertEqual(accessoryText(row), [ayah.page.localizedNumber, ayah.page.localizedName])
-        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: false)), Date.distantPast.timeAgo())
-    }
-
-    func test_pageNumberRow_unnamedPageBookmarkShowsThePageOnlyOnce() {
-        let row = makeRow(placement: .page(page), showsPageNumber: true)
-
-        XCTAssertEqual(accessoryText(row), [page.localizedNumber, page.localizedName])
-        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: false)), Date.distantPast.timeAgo())
-    }
-
-    func test_pageNumberRow_namedPageBookmarkKeepsSurasInTheSubtitle() {
-        let row = makeRow(placement: .page(page), name: "Khatmah", showsPageNumber: true)
-
-        XCTAssertEqual(text(row.title), "Khatmah")
-        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: false)), text("\(suras: page.suras) · \(Date.distantPast.timeAgo())"))
-    }
-
-    func test_pageNumberRow_atAccessibilitySizes_movesThePageToTheSubtitle() {
-        let row = makeRow(placement: .ayah(ayah), showsPageNumber: true)
-
-        XCTAssertNil(row.accessory(isAccessibilitySize: true))
-        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: true)), "\(ayah.page.localizedName) · \(Date.distantPast.timeAgo())")
-    }
-
-    func test_pageNumberRow_atAccessibilitySizes_namedBookmarkKeepsItsPlacementBeforeThePage() {
-        let row = makeRow(placement: .ayah(ayah), name: "Hifz", showsPageNumber: true)
-
-        XCTAssertEqual(
-            text(row.subtitle(isAccessibilitySize: true)),
-            text("\(ayah: ayah) · \(ayah.page.localizedName) · \(Date.distantPast.timeAgo())")
-        )
-    }
-
-    func test_defaultRow_atAccessibilitySizes_keepsTheChevron() {
-        let row = makeRow(placement: .page(page))
-
-        guard case .disclosureIndicator = row.accessory(isAccessibilitySize: true) else {
-            return XCTFail("Expected a disclosure indicator")
-        }
-        XCTAssertEqual(text(row.subtitle(isAccessibilitySize: true)), "\(page.localizedName) · \(Date.distantPast.timeAgo())")
-    }
-
-    private func makeRow(
-        placement: PlacedReadingBookmark.Placement,
-        name: String? = nil,
-        showsPageNumber: Bool = false
-    ) -> ContinueReadingBookmarkRow {
+    private func makeRow(placement: PlacedReadingBookmark.Placement, name: String? = nil) -> ContinueReadingBookmarkRow {
         ContinueReadingBookmarkRow(
             bookmark: PlacedReadingBookmark(id: "row", slot: .teal, placement: placement, modifiedOn: .distantPast, name: name),
-            showsPageNumber: showsPageNumber,
             action: {}
         )
-    }
-
-    private func accessoryText(_ row: ContinueReadingBookmarkRow) -> [String?] {
-        guard case .text(let text, let accessibilityLabel) = row.accessory(isAccessibilitySize: false) else {
-            XCTFail("Expected a page number, got \(String(describing: row.accessory(isAccessibilitySize: false)))")
-            return []
-        }
-        return [text, accessibilityLabel]
     }
 
     private func text(_ text: MultipartText) -> String {

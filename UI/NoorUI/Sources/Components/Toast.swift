@@ -23,7 +23,7 @@ public struct ToastAction {
     }
 }
 
-public struct Toast {
+public struct Toast: Identifiable {
     // MARK: Lifecycle
 
     public init(
@@ -64,6 +64,8 @@ public struct Toast {
         let color: Color?
     }
 
+    /// Identifies this toast, and its copies, to `ToastPresenter.dismissToast(withID:)`.
+    public let id = UUID()
     public let message: MultipartText
     public let subtitle: MultipartText?
     public let icon: Icon?
@@ -295,29 +297,34 @@ public class ToastPresenter {
 
     public func showToast(_ toast: Toast, in windowScene: UIWindowScene) {
         DispatchQueue.main.async {
-            self.queue.append((toast: toast, windowScene: windowScene))
+            self.queue.append(toast, in: windowScene)
             self.displayNextToast()
         }
     }
 
-    public func dismissCurrentToast() {
-        guard let id = currentToastID else { return }
-        dismissToast(id: id)
+    /// Dismisses the toast with `id` if it's showing, or drops it if it's waiting to show.
+    public func dismissToast(withID id: UUID) {
+        // Runs after the `showToast` calls before it have queued their toasts.
+        DispatchQueue.main.async {
+            self.queue.removeWaiting(id: id)
+            guard self.queue.showing?.toast.id == id, let presentationID = self.currentToastID else { return }
+            self.dismissToast(id: presentationID)
+        }
     }
 
     // MARK: Private
 
-    private var queue: [(toast: Toast, windowScene: UIWindowScene)] = []
-    private var isShowing = false
+    private var queue = ToastQueue<UIWindowScene>()
     private var currentToastWindow: ToastWindow?
     private var currentContainerVC: ToastContainerViewController?
+    /// Identifies the showing presentation rather than its `Toast.id`, so a toast shown again
+    /// can't be dismissed by its earlier presentation's timeout.
     private var currentToastID: UUID?
     private var dismissingToastID: UUID?
 
     private func displayNextToast() {
-        guard !isShowing, let nextToast = queue.first else { return }
-        isShowing = true
-        present(toast: nextToast.toast, in: nextToast.windowScene)
+        guard let next = queue.showNext() else { return }
+        present(toast: next.toast, in: next.scene)
     }
 
     private func present(toast: Toast, in windowScene: UIWindowScene) {
@@ -359,8 +366,7 @@ public class ToastPresenter {
         currentToastWindow = nil
         currentContainerVC = nil
         currentToastID = nil
-        isShowing = false
-        queue.removeFirst()
+        queue.removeShowing()
         displayNextToast()
     }
 
@@ -370,7 +376,7 @@ public class ToastPresenter {
             guard self.currentToastID == id, self.dismissingToastID != id else { return }
             self.dismissingToastID = id
             if byUser {
-                self.queue.first?.toast.onUserDismiss?()
+                self.queue.showing?.toast.onUserDismiss?()
             }
             self.currentContainerVC?.dismissToast()
         }

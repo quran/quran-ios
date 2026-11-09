@@ -24,8 +24,7 @@ final class ContinueReadingBookmarkRowTests: XCTestCase {
 
         let row = makeRow(placement: .page(page))
 
-        XCTAssertEqual(text(row.title), text("\(page: page)"))
-        XCTAssertEqual(text(row.title), "\(page.startSura.localizedName()), Page 604")
+        XCTAssertEqual(text(row.title), "Al-Ikhlāṣ, Page 604")
     }
 
     func test_namedPageBookmark_movesSuraAndPageToTheSubtitle() {

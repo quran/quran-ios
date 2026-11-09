@@ -21,7 +21,6 @@ public struct ContinueReadingBookmarkRow: View {
             NoorListItem(
                 image: .init(.bookmark, color: bookmark.slot.swiftUIColor),
                 title: title,
-                titleAllowsWrapping: false,
                 subtitle: .init(text: subtitle, location: .bottom),
                 accessory: .disclosureIndicator
             )
@@ -57,7 +56,7 @@ public struct ContinueReadingBookmarkRow: View {
         }
     }
 
-    /// The page's first sura keeps pages with several suras on one line, like the reader's page header.
+    /// Names only the page's first sura, like the reader's page header and the Juz' list.
     private var placementText: MultipartText {
         switch bookmark.placement {
         case .ayah(let ayah):
@@ -120,7 +119,7 @@ private struct ContinueReadingBookmarkRowPreview: View {
             .environment(\.locale, Locale(identifier: "en"))
             .environment(\.dynamicTypeSize, .accessibility3)
 
-        ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[22]), slot: .teal)
+        ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[548]), slot: .teal)
             .environment(\.locale, Locale(identifier: "en"))
             .environment(\.dynamicTypeSize, .accessibility3)
     }

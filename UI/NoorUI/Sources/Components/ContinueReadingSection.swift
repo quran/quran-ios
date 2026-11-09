@@ -206,6 +206,7 @@ private struct ContinueReadingSectionPreview: View {
     let title: String
     var bookmarkCount = 3
     var showsRecentPages = true
+    var showsPageNumbers = false
 
     var body: some View {
         #if QURAN_SYNC
@@ -214,7 +215,8 @@ private struct ContinueReadingSectionPreview: View {
             readingBookmarks: Array(Self.bookmarks.prefix(bookmarkCount)),
             lastPages: showsRecentPages ? Self.lastPages : [],
             selectReadingBookmark: { _ in },
-            selectLastPage: { _ in }
+            selectLastPage: { _ in },
+            showsReadingBookmarkPageNumbers: showsPageNumbers
         )
         #else
         ContinueReadingSection(
@@ -265,6 +267,8 @@ private struct ContinueReadingSectionPreview: View {
         ContinueReadingSectionPreview(title: "Single reading bookmark", bookmarkCount: 1)
 
         ContinueReadingSectionPreview(title: "No recent pages", showsRecentPages: false)
+
+        ContinueReadingSectionPreview(title: "Page numbers", showsRecentPages: false, showsPageNumbers: true)
         #endif
 
         ContinueReadingSectionPreview(title: "No reading bookmarks", bookmarkCount: 0)

@@ -17,6 +17,18 @@ final class PlacedReadingBookmarkPageTests: XCTestCase {
         XCTAssertEqual(bookmark(at: .ayah(ayah)).page.pageNumber, 563)
     }
 
+    func test_page_ayahThatOpensAPageUsesThatPage() {
+        let ayah = Quran.hafsMadani1405.suras[66].verses[12]
+
+        XCTAssertEqual(bookmark(at: .ayah(ayah)).page.pageNumber, 563)
+    }
+
+    func test_page_lastAyahOnAPageUsesThatPage() {
+        let ayah = Quran.hafsMadani1405.suras[66].verses[11]
+
+        XCTAssertEqual(bookmark(at: .ayah(ayah)).page.pageNumber, 562)
+    }
+
     private func bookmark(at placement: PlacedReadingBookmark.Placement) -> PlacedReadingBookmark {
         PlacedReadingBookmark(id: "bookmark", slot: .orange, placement: placement, modifiedOn: Date(timeIntervalSince1970: 0))
     }

@@ -907,6 +907,6 @@
 // Sign-in reminder toast title after a signed-out user creates a collection.
 "sync.nudge.collection-created" = "Жинақ жасалды";
 // Sign-in reminder toast subtitle under "Note saved" or "Collection created": "it" is the note or collection.
-"sync.nudge.subtitle" = "Оны барлық құрылғыларыңызда сақтау үшін кіріңіз.";
+"sync.nudge.subtitle" = "Оны Quran.com сайтында және барлық құрылғыларыңызда көру үшін кіріңіз.";
 // Sign-in reminder toast button that starts signing in to Quran.com.
 "sync.nudge.sign-in" = "Кіру";

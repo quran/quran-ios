@@ -18,13 +18,10 @@ extension EnvironmentValues {
 
 extension View {
     /// Lets this view and its descendants show toasts through `showToast`, lifted above the bars
-    /// at the bottom of the presenting view's screen, like a tab bar.
-    ///
-    /// - Parameter bottomBarsHeight: How far bars that the presenting view's screen can't report
-    ///   through its safe area, like a floating bar beneath a popover, reach above the window's
-    ///   bottom edge. Read when a toast shows.
-    public func enableToastPresenter(bottomBarsHeight: (@MainActor () -> CGFloat)? = nil) -> some View {
-        modifier(ToastPresenterModifier(bottomBarsHeight: bottomBarsHeight))
+    /// at the bottom of the presenting view's screen, like a tab bar, and the bars that keep toasts
+    /// above them, like the reader's audio bar.
+    public func enableToastPresenter() -> some View {
+        modifier(ToastPresenterModifier())
     }
 }
 
@@ -33,8 +30,6 @@ private struct ToastPresenterKey: EnvironmentKey {
 }
 
 private struct ToastPresenterModifier: ViewModifier {
-    let bottomBarsHeight: (@MainActor () -> CGFloat)?
-
     @State private var anchor = ToastAnchor()
 
     func body(content: Content) -> some View {
@@ -47,7 +42,7 @@ private struct ToastPresenterModifier: ViewModifier {
                     logger.error("Failed to obtain the toast's presenting view")
                     return
                 }
-                ToastPresenter.shared.showToast(toast, from: view, bottomBarsHeight: bottomBarsHeight?() ?? 0)
+                ToastPresenter.shared.showToast(toast, from: view)
             }
     }
 }
@@ -62,7 +57,7 @@ private struct ToastAnchorReader: UIViewRepresentable {
     let anchor: ToastAnchor
 
     func makeUIView(context: Context) -> UIView {
-        let view = UIView()
+        let view = ToastAnchorView()
         view.isUserInteractionEnabled = false
         anchor.view = view
         return view
@@ -70,5 +65,19 @@ private struct ToastAnchorReader: UIViewRepresentable {
 
     func updateUIView(_ uiView: UIView, context: Context) {
         anchor.view = uiView
+    }
+}
+
+/// Moves the showing toast when the presenting screen resizes, like on rotation, or closes,
+/// which can uncover the bars under it.
+private final class ToastAnchorView: UIView {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        ToastPresenter.shared.setNeedsPlacementUpdate()
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        ToastPresenter.shared.setNeedsPlacementUpdate()
     }
 }

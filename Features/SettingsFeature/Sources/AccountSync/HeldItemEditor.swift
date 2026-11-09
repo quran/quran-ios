@@ -124,7 +124,7 @@ final class HeldItemEditor: ObservableObject, NoteEditorListener {
                 error = ItemNotFoundError()
                 return
             }
-            let viewController = noteEditorBuilder.build(withListener: self, mode: .edit(note), bottomBarsHeight: { 0 })
+            let viewController = noteEditorBuilder.build(withListener: self, mode: .edit(note))
             navigationController?.present(viewController, animated: true)
         } catch is CancellationError {
             return

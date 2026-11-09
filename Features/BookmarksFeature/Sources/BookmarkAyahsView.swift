@@ -13,11 +13,10 @@ import UIx
 @MainActor
 struct BookmarkAyahsView: View {
     @ObservedObject var viewModel: BookmarkAyahsViewModel
-    let bottomBarsHeight: @MainActor () -> CGFloat
 
     var body: some View {
         BookmarkAyahsContent(viewModel: viewModel)
-            .enableToastPresenter(bottomBarsHeight: bottomBarsHeight)
+            .enableToastPresenter()
     }
 }
 

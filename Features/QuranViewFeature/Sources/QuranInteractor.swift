@@ -48,9 +48,6 @@ protocol QuranPresentable: UIViewController {
     func hideBars()
     func refreshBarScrollEdgeInteractions()
 
-    /// How far the reader's bars at the bottom, like the audio bar, reach above the window's bottom edge.
-    var bottomBarsHeight: CGFloat { get }
-
     func setVisiblePages(_ pages: [Page])
     #if QURAN_SYNC
     func updateReadingBookmark(_ bookmark: PlacedReadingBookmark?)
@@ -286,8 +283,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             }
             let viewController = deps.ayahNotesBuilder.build(
                 verses: verses,
-                presentsNewNote: addingNewNote,
-                bottomBarsHeight: pageSheetBottomBarsHeight
+                presentsNewNote: addingNewNote
             )
             presenter?.presentAyahNotes(viewController)
         }
@@ -321,8 +317,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
             let viewController = deps.bookmarkAyahsBuilder.build(
                 verses: verses,
                 collections: deps.annotationsObserver.collections,
-                highlights: deps.overlayService.overlays.colorHighlights,
-                bottomBarsHeight: pageSheetBottomBarsHeight
+                highlights: deps.overlayService.overlays.colorHighlights
             )
             presenter?.presentBookmarkAyahs(viewController)
         }
@@ -333,10 +328,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         in sourceView: UIView,
         at point: CGPoint
     ) {
-        let viewController = deps.readingBookmarkMenuBuilder.build(
-            ayah: ayah,
-            bottomBarsHeight: presenterBottomBarsHeight
-        )
+        let viewController = deps.readingBookmarkMenuBuilder.build(ayah: ayah)
         contentViewModel?.removeAyahMenuHighlight()
         presenter?.dismissPresentedViewController { [weak self] in
             self?.presenter?.presentAyahMenu(viewController, in: sourceView, at: point)
@@ -449,8 +441,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
         let viewController = deps.readingBookmarkMenuBuilder.build(
             page: firstPage,
-            pages: visiblePages,
-            bottomBarsHeight: presenterBottomBarsHeight
+            pages: visiblePages
         )
         presenter?.presentReadingBookmarkMenu(viewController)
     }
@@ -459,8 +450,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         logger.info("Quran: present reading bookmarks from page \(page.pageNumber) ribbon")
         let viewController = deps.readingBookmarkMenuBuilder.build(
             page: page,
-            pages: visiblePages,
-            bottomBarsHeight: presenterBottomBarsHeight
+            pages: visiblePages
         )
         presenter?.presentReadingBookmarkMenu(viewController, in: sourceView, at: rect)
     }
@@ -529,20 +519,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         }
     }
 
-    private var presenterBottomBarsHeight: @MainActor () -> CGFloat {
-        { [weak presenter] in presenter?.bottomBarsHeight ?? 0 }
-    }
-
-    /// At compact width a page sheet covers the reader's bottom bars, so its toasts needn't clear them.
-    private var pageSheetBottomBarsHeight: @MainActor () -> CGFloat {
-        { [weak presenter] in
-            guard let presenter, presenter.traitCollection.horizontalSizeClass != .compact else {
-                return 0
-            }
-            return presenter.bottomBarsHeight
-        }
-    }
-
     #if !QURAN_SYNC
     private var isBookmarkMutationInFlight = false
     private var pageBookmarks: [PageBookmark] = [] {
@@ -559,10 +535,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     }
 
     private func loadContent() {
-        let (viewController, viewModel) = deps.audioBannerBuilder.build(
-            withListener: self,
-            bottomBarsHeight: presenterBottomBarsHeight
-        )
+        let (viewController, viewModel) = deps.audioBannerBuilder.build(withListener: self)
         audioBanner = viewModel
         presenter?.presentAudioBanner(viewController)
 

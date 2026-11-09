@@ -29,12 +29,7 @@ public struct NoteEditorBuilder {
     // MARK: Public
 
     #if QURAN_SYNC
-    /// `bottomBarsHeight` keeps the sign-in toast above the bottom bars of the screen under the editor.
-    public func build(
-        withListener listener: NoteEditorListener,
-        mode: NoteEditorMode,
-        bottomBarsHeight: @escaping @MainActor () -> CGFloat
-    ) -> UIViewController {
+    public func build(withListener listener: NoteEditorListener, mode: NoteEditorMode) -> UIViewController {
         weak var editor: UIViewController?
         let signInNudge = SyncSignInNudge(
             authenticationClient: container.authenticationClient,
@@ -54,7 +49,7 @@ public struct NoteEditorBuilder {
                 guard let view = editor?.viewIfLoaded else {
                     return
                 }
-                ToastPresenter.shared.showToast(toast, from: view, bottomBarsHeight: bottomBarsHeight())
+                ToastPresenter.shared.showToast(toast, from: view)
             }
         )
         let viewController = NoteEditorViewController(viewModel: viewModel)

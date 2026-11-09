@@ -16,36 +16,25 @@ public struct ReadingBookmarkMenuBuilder {
 
     // MARK: Public
 
-    public func build(
-        page: Page,
-        pages: [Page],
-        bottomBarsHeight: @escaping @MainActor () -> CGFloat
-    ) -> UIViewController {
-        build(target: .pages(page, pages), bottomBarsHeight: bottomBarsHeight)
+    public func build(page: Page, pages: [Page]) -> UIViewController {
+        build(target: .pages(page, pages))
     }
 
-    public func build(
-        ayah: AyahNumber,
-        bottomBarsHeight: @escaping @MainActor () -> CGFloat
-    ) -> UIViewController {
-        build(target: .ayah(ayah), bottomBarsHeight: bottomBarsHeight)
+    public func build(ayah: AyahNumber) -> UIViewController {
+        build(target: .ayah(ayah))
     }
 
     // MARK: Private
 
     private let container: AppDependencies
 
-    /// `bottomBarsHeight` keeps toasts above the presenter's bottom bars, like the reader's audio bar.
-    private func build(
-        target: ReadingBookmarkMenuViewModel.Target,
-        bottomBarsHeight: @escaping @MainActor () -> CGFloat
-    ) -> UIViewController {
+    private func build(target: ReadingBookmarkMenuViewModel.Target) -> UIViewController {
         let viewModel = ReadingBookmarkMenuViewModel(
             service: container.readingBookmarkService(),
             target: target
         )
         let view = ReadingBookmarkMenuView(viewModel: viewModel)
-            .enableToastPresenter(bottomBarsHeight: bottomBarsHeight)
+            .enableToastPresenter()
         return AutoUpdatingPreferredContentSizeHostingController(rootView: view)
     }
 }

@@ -1,3 +1,4 @@
+import NoorUI
 import UIKit
 import XCTest
 @testable import QuranViewFeature
@@ -183,32 +184,13 @@ final class QuranViewTests: XCTestCase {
         XCTAssertFalse(audioView.isUserInteractionEnabled)
     }
 
-    func test_bottomBarsHeightIsHowFarTheAudioBarReachesAboveTheWindowBottom() {
-        let context = makeReader(height: 800, audioBarHeight: 120)
+    func test_audioBarKeepsToastsAbove() {
+        let sut = QuranView()
+        let audioView = UIView()
 
-        XCTAssertEqual(context.sut.bottomBarsHeight, 164)
-    }
+        sut.addAudioBannerView(audioView)
 
-    func test_bottomBarsHeightIsZeroWhileBarsAreHidden() {
-        let context = makeReader(audioBarHeight: 120)
-
-        context.sut.setBarsHidden(true)
-
-        XCTAssertEqual(context.sut.bottomBarsHeight, 0)
-    }
-
-    func test_bottomBarsHeightIsZeroWhileAudioBarIsHidden() {
-        let context = makeReader(audioBarHeight: 120)
-
-        context.sut.setAudioBarHidden(true)
-
-        XCTAssertEqual(context.sut.bottomBarsHeight, 0)
-    }
-
-    func test_bottomBarsHeightIsZeroWithoutAudioBar() {
-        let context = makeReader(audioBarHeight: nil)
-
-        XCTAssertEqual(context.sut.bottomBarsHeight, 0)
+        XCTAssertTrue(audioView.keepsToastsAbove)
     }
 
     private struct TestContext {
@@ -217,11 +199,6 @@ final class QuranViewTests: XCTestCase {
         let pageViewController: UIPageViewController
         let contentScrollView: UIScrollView
         let audioView: UIView
-    }
-
-    private struct ReaderContext {
-        let retainedWindow: UIWindow
-        let sut: QuranView
     }
 
     private func makeSut() -> TestContext {
@@ -265,22 +242,6 @@ final class QuranViewTests: XCTestCase {
             contentScrollView: contentScrollView,
             audioView: audioView
         )
-    }
-
-    /// A reader filling an 844pt-tall window from the top down to `height`, with an audio bar
-    /// `audioBarHeight` tall pinned to its bottom when given.
-    private func makeReader(height: CGFloat = 844, audioBarHeight: CGFloat?) -> ReaderContext {
-        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
-        let sut = QuranView()
-        sut.frame = CGRect(x: 0, y: 0, width: window.bounds.width, height: height)
-        window.addSubview(sut)
-        if let audioBarHeight {
-            let audioView = UIView()
-            audioView.heightAnchor.constraint(equalToConstant: audioBarHeight).isActive = true
-            sut.addAudioBannerView(audioView)
-        }
-        window.layoutIfNeeded()
-        return ReaderContext(retainedWindow: window, sut: sut)
     }
 
     @available(iOS 26.0, *)

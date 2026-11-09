@@ -12,8 +12,8 @@ import UIKit
 final class BookmarkAyahsViewController: UIHostingController<BookmarkAyahsView> {
     // MARK: Lifecycle
 
-    init(viewModel: BookmarkAyahsViewModel, bottomBarsHeight: @escaping @MainActor () -> CGFloat) {
-        super.init(rootView: BookmarkAyahsView(viewModel: viewModel, bottomBarsHeight: bottomBarsHeight))
+    init(viewModel: BookmarkAyahsViewModel) {
+        super.init(rootView: BookmarkAyahsView(viewModel: viewModel))
         configureTitle(for: viewModel.verses)
         navigationItem.largeTitleDisplayMode = .never
         configureDoneButton()

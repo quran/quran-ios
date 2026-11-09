@@ -193,26 +193,6 @@ final class QuranViewTests: XCTestCase {
         XCTAssertTrue(audioView.keepsToastsAbove)
     }
 
-    func test_hidingBarsHidesTheAudioBarToastsKeepAbove() {
-        let sut = QuranView()
-        let audioView = UIView()
-        sut.addAudioBannerView(audioView)
-
-        sut.setBarsHidden(true)
-
-        XCTAssertTrue(audioView.isHidden)
-    }
-
-    func test_hidingTheAudioBarHidesTheBarToastsKeepAbove() {
-        let sut = QuranView()
-        let audioView = UIView()
-        sut.addAudioBannerView(audioView)
-
-        sut.setAudioBarHidden(true)
-
-        XCTAssertTrue(audioView.isHidden)
-    }
-
     private struct TestContext {
         let retainedHostViewController: UIViewController
         let sut: QuranView

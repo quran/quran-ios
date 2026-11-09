@@ -1,6 +1,8 @@
 #if QURAN_SYNC
+import Localization
 import QuranAnnotations
 import QuranKit
+import QuranLocalization
 import XCTest
 @testable import NoorUI
 
@@ -19,9 +21,18 @@ final class ReadingBookmarkUndoToastTests: XCTestCase {
         XCTAssertEqual(toast.icon?.color, ReadingBookmarkSlot.teal.swiftUIColor)
     }
 
+    func test_moved_namesOnlyTheDestination() {
+        let toast = ReadingBookmarkUndoToast.moved(to: bookmark(slot: .orange), showsExplanation: false) {}
+
+        XCTAssertEqual(toast.message.accessibilityText, lFormat("ayah.menu.reading-bookmark.moved-to", ayah.localizedName))
+    }
+
+    // MARK: Private
+
+    private let ayah = Quran.hafsMadani1405.suras[1].verses[254]
+
     private func bookmark(slot: ReadingBookmarkSlot) -> PlacedReadingBookmark {
-        let ayah = Quran.hafsMadani1405.suras[1].verses[254]
-        return PlacedReadingBookmark(id: "bookmark", slot: slot, placement: .ayah(ayah), modifiedOn: .distantPast)
+        PlacedReadingBookmark(id: "bookmark", slot: slot, placement: .ayah(ayah), modifiedOn: .distantPast)
     }
 }
 #endif

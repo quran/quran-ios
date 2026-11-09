@@ -18,10 +18,13 @@ public final class EditController {
 
     // MARK: Lifecycle
 
+    /// A `nil` edit mode hides the Edit button, and `listItems` with it, such as a Share that needs a list
+    /// to act on. `customItems` always show.
     public init(
         navigationItem: UINavigationItem,
         reload: AnyPublisher<Void, Never>,
         editMode: Binding<EditMode?>,
+        listItems: [UIBarButtonItem] = [],
         customItems: [UIBarButtonItem] = [],
         buttonProvider: @escaping ButtonProvider = { editMode, action in
             UIBarButtonItem(
@@ -31,6 +34,7 @@ public final class EditController {
         }
     ) {
         self.navigationItem = navigationItem
+        self.listItems = listItems
         self.customItems = customItems
         self.buttonProvider = buttonProvider
         _editMode = editMode
@@ -49,6 +53,7 @@ public final class EditController {
     // MARK: Private
 
     private let navigationItem: UINavigationItem
+    private let listItems: [UIBarButtonItem]
     private var customItems: [UIBarButtonItem]
     private let buttonProvider: ButtonProvider
     @Binding private var editMode: EditMode?
@@ -81,7 +86,7 @@ public final class EditController {
 
     private func updateEditButton() {
         if let editButton {
-            navigationItem.setRightBarButtonItems([editButton] + customItems, animated: true)
+            navigationItem.setRightBarButtonItems([editButton] + listItems + customItems, animated: true)
         } else {
             navigationItem.setRightBarButtonItems(customItems, animated: true)
         }

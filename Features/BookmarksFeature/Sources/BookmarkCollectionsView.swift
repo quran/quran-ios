@@ -163,15 +163,13 @@ private struct BookmarkCollectionsContent: View {
     }
 
     private var highlightColors: [HighlightColorsView.Item] {
-        HighlightColor.alphabeticallySortedColors
-            .map { color in
-                HighlightColorsView.Item(
-                    color: color,
-                    count: viewModel.highlights.values.count { $0 == color },
-                    canRemoveAll: viewModel.canRemoveAllHighlights(color)
-                )
-            }
-            .sorted { $0.count > $1.count }
+        HighlightColor.sortedByUsage(in: viewModel.highlights.values).map { color in
+            HighlightColorsView.Item(
+                color: color,
+                count: viewModel.highlights.values.count { $0 == color },
+                canRemoveAll: viewModel.canRemoveAllHighlights(color)
+            )
+        }
     }
 
     private func renameAction(for collection: AyahBookmarkCollection) -> (@MainActor () -> Void)? {

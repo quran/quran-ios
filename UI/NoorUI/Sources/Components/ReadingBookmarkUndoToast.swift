@@ -15,19 +15,14 @@ public enum ReadingBookmarkUndoToast {
     }
 
     public static func moved(
-        from previousBookmark: PlacedReadingBookmark,
-        to currentBookmark: PlacedReadingBookmark,
+        to bookmark: PlacedReadingBookmark,
         showsExplanation: Bool,
         undo: @escaping () -> Void
     ) -> Toast {
         makeToast(
-            MultipartText.localizedFormat(
-                "ayah.menu.reading-bookmark.moved",
-                locationTitle(previousBookmark.placement),
-                locationTitle(currentBookmark.placement)
-            ),
+            MultipartText.localizedFormat("ayah.menu.reading-bookmark.moved-to", locationTitle(bookmark.placement)),
             subtitle: showsExplanation ? .text(l("ayah.menu.reading-bookmark.moved.explanation")) : nil,
-            icon: icon(currentBookmark, style: .filled),
+            icon: icon(bookmark, style: .filled),
             duration: showsExplanation ? explanationDuration : Toast.defaultDuration,
             undo: undo
         )

@@ -511,8 +511,8 @@
 // Ayah menu
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "Заметки (%d)";
-// Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.moved" = "Закладка чтения перемещена с %@ на %@";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.moved-to" = "Закладка чтения перемещена на %@";
 // Badge on the ayah menu's Reading Bookmark row.
 // Metadata: Translated by AI; human review required.
 "ayah.menu.reading-bookmark.new" = "Новая";

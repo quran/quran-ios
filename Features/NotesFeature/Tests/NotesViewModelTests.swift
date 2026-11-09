@@ -336,18 +336,18 @@ final class NotesViewModelTests: XCTestCase {
         XCTAssertFalse(sut.showsHighlightsTip)
     }
 
-    func test_highlightsSummary_showsUpToFourColors() async throws {
-        try await highlightService.setHighlight(.purple, for: [ayah(1, 1)])
-        try await highlightService.setHighlight(.pink, for: [ayah(1, 2)])
-        try await highlightService.setHighlight(.blue, for: [ayah(1, 3)])
-        try await highlightService.setHighlight(.green, for: [ayah(1, 4)])
-        try await highlightService.setHighlight(.yellow, for: [ayah(1, 5), ayah(1, 6)])
+    func test_highlightsSummary_showsTheFourMostUsedColors() async throws {
+        try await highlightService.setHighlight(.purple, for: (1 ... 5).map { ayah(2, $0) })
+        try await highlightService.setHighlight(.pink, for: (6 ... 9).map { ayah(2, $0) })
+        try await highlightService.setHighlight(.blue, for: (10 ... 12).map { ayah(2, $0) })
+        try await highlightService.setHighlight(.green, for: (13 ... 14).map { ayah(2, $0) })
+        try await highlightService.setHighlight(.yellow, for: [ayah(2, 15)])
         let sut = makeSUT()
 
-        let task = await start(sut, untilHighlightCount: 6)
+        let task = await start(sut, untilHighlightCount: 15)
         defer { task.cancel() }
 
-        XCTAssertEqual(sut.highlightsSummary, NotesHighlightsSummary(colors: [.yellow, .green, .blue, .pink]))
+        XCTAssertEqual(sut.highlightsSummary, NotesHighlightsSummary(colors: [.purple, .pink, .blue, .green]))
     }
 
     private func ayah(_ sura: Int, _ ayah: Int) -> AyahNumber {

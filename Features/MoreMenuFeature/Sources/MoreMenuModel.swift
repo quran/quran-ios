@@ -8,15 +8,18 @@
 public struct MoreMenuModel {
     // MARK: Lifecycle
 
-    public init(isWordPointerActive: Bool, state: MoreMenuControlsState) {
+    public init(isWordPointerActive: Bool, state: MoreMenuControlsState, twoPagesEnabledByDefault: Bool = false) {
         self.isWordPointerActive = isWordPointerActive
         self.state = state
+        self.twoPagesEnabledByDefault = twoPagesEnabledByDefault
     }
 
     // MARK: Public
 
     public var isWordPointerActive: Bool
     public var state: MoreMenuControlsState
+    /// The two pages toggle's value for people who never chose, which depends on the reader's window.
+    public var twoPagesEnabledByDefault: Bool
 }
 
 public enum ConfigState {

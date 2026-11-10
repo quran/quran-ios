@@ -27,7 +27,7 @@ struct ContentLineView: View {
         #if QURAN_SYNC
         let content = ContentLineViewBody(
             page: viewModel.page,
-            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false) },
+            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false, usesDenseLines: $1) },
             scrollToVerse: viewModel.scrollToVerse,
             onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
@@ -46,7 +46,7 @@ struct ContentLineView: View {
         #else
         let content = ContentLineViewBody(
             page: viewModel.page,
-            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false) },
+            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false, usesDenseLines: $1) },
             scrollToVerse: viewModel.scrollToVerse,
             onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
@@ -79,7 +79,8 @@ private struct ContentLineViewBody: View {
     // MARK: Internal
 
     let page: Page
-    let layoutForSize: (CGSize) -> LinePageLayout?
+    /// The layout for an available size, and whether lines may sit closer together.
+    let layoutForSize: (CGSize, Bool) -> LinePageLayout?
     let scrollToVerse: AyahNumber?
     let onReaderScroll: () -> Void
     let wordFrames: WordFrameCollection
@@ -100,18 +101,24 @@ private struct ContentLineViewBody: View {
     let onGlobalFrameChange: (CGRect) -> Void
 
     var body: some View {
-        AdaptiveQuranScrollView {
-            QuranPageHeader(
-                quarterName: page.localizedQuarterName,
-                suras: page.suras
-            )
-            #if QURAN_SYNC
-            .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks, onTap: onPageReadingBookmarkTap)
-            #endif
-        } footer: {
-            QuranPageFooter(page: page.localizedNumber)
-        } content: { availableContentSize in
-            lineCanvas(layoutForSize(availableContentSize))
+        GeometryReader { geometry in
+            AdaptiveQuranScrollView {
+                QuranPageHeader(
+                    quarterName: page.localizedQuarterName,
+                    suras: page.suras
+                )
+                #if QURAN_SYNC
+                .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks, onTap: onPageReadingBookmarkTap)
+                #endif
+            } footer: {
+                QuranPageFooter(page: page.localizedNumber)
+            } content: { availableContentSize in
+                // Denser lines only on iPhone Duo, so iPhone and iPad keep their page layout.
+                VerticalBarReader { windowHasVerticalBar in
+                    lineCanvas(layoutForSize(availableContentSize, windowHasVerticalBar))
+                }
+            }
+            .compactsPageChromeOnVerticalBarDisplays(isLimitedByHeight: isLimitedByHeight(geometry.size))
         }
         .font(.footnote)
         .populateReadableInsets()
@@ -128,6 +135,12 @@ private struct ContentLineViewBody: View {
 
     private var chromePalette: LinePageChromePalette {
         chromeStyle.palette(for: themeColorScheme)
+    }
+
+    /// Whether the page's height limits its size, so the header and page number use tighter spacing.
+    /// Line pages are at least 1.6 times as tall as they're wide.
+    private func isLimitedByHeight(_ size: CGSize) -> Bool {
+        size.height > 0 && size.width <= size.height && size.width / size.height > 1 / 1.6
     }
 
     private func lineCanvas(_ layout: LinePageLayout?) -> some View {

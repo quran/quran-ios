@@ -192,7 +192,7 @@ final class AnalyticsUserPropertiesReporter {
             AnalyticsUserPropertyValue.quranMode(content.quranMode)
         }
         observe(.twoPages, changes: content.$twoPagesEnabled) {
-            AnalyticsUserPropertyValue.onOff(content.twoPagesEnabled)
+            AnalyticsUserPropertyValue.onOff(content.twoPagesEnabled ?? TwoPagesUtils.settingDefaultValue)
         }
         observe(.arabicInTranslation, changes: content.$showArabicInTranslation) {
             AnalyticsUserPropertyValue.onOff(content.showArabicInTranslation)

@@ -162,7 +162,9 @@ final class ContentLineViewModel: ObservableObject {
         }
     }
 
-    func layout(for availableSize: CGSize, showHeaderFooter: Bool) -> LinePageLayout? {
+    /// - Parameter usesDenseLines: Whether lines may sit closer together. It only changes pages whose height
+    ///   limits their size, like each page of a two-page spread on iPhone Duo.
+    func layout(for availableSize: CGSize, showHeaderFooter: Bool, usesDenseLines: Bool = false) -> LinePageLayout? {
         guard let assets else {
             currentLayout = nil
             return nil
@@ -183,6 +185,7 @@ final class ContentLineViewModel: ObservableObject {
                 showHeaderFooter: showHeaderFooter,
                 showSidelines: showSidelines,
                 showLineDividers: showLineDividers,
+                usesDenseLines: usesDenseLines,
                 highlightedVerses: Set(highlightColorsByVerse.keys)
             )
         )

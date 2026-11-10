@@ -25,34 +25,33 @@ class ReadingSelectorViewModel: ObservableObject {
     @Published var selectedReading: Reading?
     @Published var progress: Double?
     @Published var error: Error?
+    /// The readings this app can load, or `nil` until they're known.
+    @Published var availableReadings: Set<Reading>?
 
     var readingGroups: [ReadingGroup<Reading>] {
         [
             ReadingGroup(
                 id: "uthmani",
                 title: l("reading.selector.group.uthmani"),
-                readings: [
-                    .hafs_1405,
-                    .hafs_1441,
-                    .hafs_1440,
-                    .hafs_1439,
-                    .hafs_1421,
-                ].map(ReadingInfo.init)
+                readings: readingInfos([.hafs_1405, .hafs_1441, .hafs_1440, .hafs_1439, .hafs_1421])
             ),
             ReadingGroup(
                 id: "tajweed",
                 title: l("reading.selector.group.tajweed"),
-                readings: [Reading.tajweed].map(ReadingInfo.init)
+                readings: readingInfos([.tajweed])
             ),
             ReadingGroup(
                 id: "indopak",
                 title: l("reading.selector.group.indopak"),
-                readings: [Reading.indoPak].map(ReadingInfo.init)
+                readings: readingInfos([.indoPak])
             ),
         ]
+        .filter { !$0.readings.isEmpty }
     }
 
     func start() async {
+        // Offer only readings this app can load, so picking one never leaves the reader without resources.
+        availableReadings = await resources.availableReadings()
         async let reading: () = listenToReadingChanges()
         async let resources: () = listenToResourcesEvents()
         _ = await (reading, resources)
@@ -70,6 +69,12 @@ class ReadingSelectorViewModel: ObservableObject {
 
     private let preferences = ReadingPreferences.shared
     private let resources: ReadingResourcesService
+
+    private func readingInfos(_ readings: [Reading]) -> [ReadingInfo<Reading>] {
+        readings
+            .filter { availableReadings?.contains($0) ?? true }
+            .map(ReadingInfo.init)
+    }
 
     private func listenToReadingChanges() async {
         let readingsSequence = preferences.$reading

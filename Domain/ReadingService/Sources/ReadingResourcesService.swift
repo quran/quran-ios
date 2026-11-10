@@ -18,8 +18,10 @@ import VLogging
 public actor ReadingResourcesService {
     // MARK: Lifecycle
 
-    /// - Parameter removeOtherReadings: Whether loading a reading deletes other readings' downloaded resources.
-    ///   Integration tests pass `false` to retain resources while checking multiple mushafs.
+    /// - Parameters:
+    ///   - removeOtherReadings: Whether loading a reading deletes other readings' downloaded resources.
+    ///     Integration tests pass `false` to retain resources while checking multiple mushafs.
+    ///   - bundledReadings: The readings the app bundles. Defaults to the readings found in the main bundle.
     public init(
         fileManager: FileSystem = DefaultFileSystem(),
         zipper: Zipper = DefaultZipper(),
@@ -29,8 +31,12 @@ public actor ReadingResourcesService {
         preferenceLoadingCompleted: EventObserver? = nil,
         downloader: DownloadManager,
         remoteResources: ReadingRemoteResources?,
-        removeOtherReadings: Bool = true
+        removeOtherReadings: Bool = true,
+        bundledReadings: Set<Reading>? = nil
     ) {
+        self.bundledReadings = bundledReadings ?? Set(Reading.allReadings.filter {
+            Bundle.main.url(forResource: $0.localPath, withExtension: nil) != nil
+        })
         self.zipper = zipper
         self.fileManager = fileManager
         self.preferencesObservingStarted = preferencesObservingStarted
@@ -88,6 +94,11 @@ public actor ReadingResourcesService {
         loadResourceInAsyncTask(preferences.reading)
     }
 
+    /// The readings this app can load: the ones it downloads and the ones it bundles.
+    public func availableReadings() -> Set<Reading> {
+        Set(Reading.allReadings.filter(isAvailable))
+    }
+
     // MARK: Internal
 
     let preferenceLoadingCompleted: EventObserver?
@@ -108,6 +119,11 @@ public actor ReadingResourcesService {
     private let downloader: ReadingResourceDownloader
     private let remoteResources: ReadingRemoteResources?
     private let removeOtherReadings: Bool
+    private let bundledReadings: Set<Reading>
+
+    private func isAvailable(_ reading: Reading) -> Bool {
+        remoteResources?.resource(for: reading) != nil || bundledReadings.contains(reading)
+    }
 
     private func loadResourceInAsyncTask(_ reading: Reading) {
         readingTask = Task {
@@ -127,6 +143,15 @@ public actor ReadingResourcesService {
 
         logger.info("Resources: Start loading reading resources of: \(reading)")
         guard let remoteResource = remoteResources?.resource(for: reading) else {
+            if !bundledReadings.contains(reading), let bundledReading = Reading.allReadings.first(where: bundledReadings.contains) {
+                // A reading this app can't load, like one picked in a build without remote resources.
+                // Switching back loads the bundled reading instead of rendering pages without resources.
+                logger.error("Resources: Reading \(reading) is neither downloadable nor bundled. Switching to \(bundledReading)")
+                // Change the preference on the main actor, like the UI does: its observers update
+                // view models, and doing that from this actor's thread deadlocks with the main thread.
+                await MainActor.run { preferences.reading = bundledReading }
+                return .ready
+            }
             logger.info("Resources: Reading \(reading) is bundled with the app.")
             return .ready
         }

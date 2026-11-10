@@ -86,9 +86,11 @@ public final class WordPointerViewController: UIViewController {
         }
 
         if pointerParentSize != container.bounds.size {
-            setPointerTop(pointer.frame.minY * container.bounds.height / pointerParentSize.height)
-            // using container.bounds.height because it has been rotated but pointer.frame.minX has not
-            if pointer.frame.minX > container.bounds.height / 2 {
+            let previousSize = pointerParentSize
+            setPointerTop(pointer.frame.minY * container.bounds.height / previousSize.height)
+            // pointer.frame still has the previous layout, so compare it with the previous width.
+            // A size change may be a rotation or, on iPhone Duo, a fold that keeps the orientation.
+            if pointer.frame.minX > previousSize.width / 2 {
                 setPointerLeft(maxX - pointer.bounds.width)
             } else {
                 setPointerLeft(minX)

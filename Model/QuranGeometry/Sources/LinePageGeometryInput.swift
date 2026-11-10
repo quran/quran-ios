@@ -20,16 +20,21 @@ public struct LinePageDisplaySettings: Sendable {
     public init(
         showHeaderFooter: Bool = true,
         showSidelines: Bool = false,
-        showLineDividers: Bool = false
+        showLineDividers: Bool = false,
+        usesDenseLines: Bool = false
     ) {
         self.showHeaderFooter = showHeaderFooter
         self.showSidelines = showSidelines
         self.showLineDividers = showLineDividers
+        self.usesDenseLines = usesDenseLines
     }
 
     public let showHeaderFooter: Bool
     public let showSidelines: Bool
     public let showLineDividers: Bool
+    /// Whether overlapping lines may sit closer together, so a page that its height limits gets wider
+    /// and its text bigger, like each page of a two-page spread on iPhone Duo.
+    public let usesDenseLines: Bool
 }
 
 public struct LinePageHighlightState: Sendable {

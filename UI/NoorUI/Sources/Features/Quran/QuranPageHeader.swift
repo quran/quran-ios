@@ -24,17 +24,31 @@ public struct QuranPageHeader: View {
     // MARK: Public
 
     public var body: some View {
+        if compactsPageChrome, readableInsetEdges.contains(.top) {
+            content
+                .readableInsetsPadding(readableInsetEdges.subtracting(.top))
+                .padding(.top, ContentDimension.CompactPageChrome.headerTop(safeAreaTop: windowSafeAreaInsets.top))
+                .padding(.bottom, ContentDimension.CompactPageChrome.spacing)
+        } else {
+            content
+                .readableInsetsPadding(readableInsetEdges)
+                .padding(.bottom, ContentDimension.interSpacing)
+        }
+    }
+
+    // MARK: Private
+
+    @Environment(\.compactsPageChrome) private var compactsPageChrome
+    @Environment(\.windowSafeAreaInsets) private var windowSafeAreaInsets
+
+    private var content: some View {
         HStack {
             Text(quarterName)
             Spacer()
             // TODO: Should get footnote from environment.
             QuranPageHeaderSuraNames(suras: suras, size: .footnote)
         }
-        .readableInsetsPadding(readableInsetEdges)
-        .padding(.bottom, ContentDimension.interSpacing)
     }
-
-    // MARK: Private
 
     private let quarterName: String
     private let suras: [Sura]

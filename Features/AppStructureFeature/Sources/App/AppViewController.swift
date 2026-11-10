@@ -102,9 +102,13 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         let targetMask = tabBarController.supportedInterfaceOrientations
         if let currentMask = tabBarController.view.window?.windowScene?.interfaceOrientation.asMask {
             if !targetMask.contains(currentMask) {
-                if let interface = targetMask.asOrientation {
-                    UIDevice.current.setValue(interface.rawValue, forKey: "orientation")
-                }
+                tabBarController.requestInterfaceOrientations(targetMask)
+            } else if let deviceMask = UIDevice.current.orientation.asInterfaceMask,
+                      deviceMask != currentMask, targetMask.contains(deviceMask)
+            {
+                // Leaving a portrait-only tab, like Search, while the device is in landscape:
+                // rotate back to match the device.
+                tabBarController.requestInterfaceOrientations(deviceMask)
             }
         }
     }
@@ -155,6 +159,20 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     }
 }
 
+private extension UIDeviceOrientation {
+    /// The interface orientation that matches this device orientation. Landscape is mirrored:
+    /// a device rotated to its left shows the interface in landscape right.
+    var asInterfaceMask: UIInterfaceOrientationMask? {
+        switch self {
+        case .portrait: return .portrait
+        case .portraitUpsideDown: return .portraitUpsideDown
+        case .landscapeLeft: return .landscapeRight
+        case .landscapeRight: return .landscapeLeft
+        default: return nil
+        }
+    }
+}
+
 private extension UIInterfaceOrientation {
     var asMask: UIInterfaceOrientationMask? {
         switch self {
@@ -163,22 +181,6 @@ private extension UIInterfaceOrientation {
         case .landscapeLeft: return .landscapeLeft
         case .landscapeRight: return .landscapeRight
         default: return nil
-        }
-    }
-}
-
-private extension UIInterfaceOrientationMask {
-    var asOrientation: UIInterfaceOrientation? {
-        if contains(.portrait) {
-            return .portrait
-        } else if contains(.landscapeLeft) {
-            return .landscapeLeft
-        } else if contains(.landscapeRight) {
-            return .landscapeRight
-        } else if contains(.portraitUpsideDown) {
-            return .portraitUpsideDown
-        } else {
-            return nil
         }
     }
 }

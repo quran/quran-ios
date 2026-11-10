@@ -20,8 +20,10 @@ public struct QuranContentStatePreferences {
     @TransformedPreference(showQuranTranslationView, transformer: quranModeTransfomer)
     public var quranMode: QuranMode
 
+    /// Whether the reader shows two pages side by side, or `nil` if the person never chose.
+    /// Resolve it with `TwoPagesUtils.isEnabled(preference:isRegularWidthAndHeight:)`.
     @Preference(twoPagesEnabled)
-    public var twoPagesEnabled: Bool
+    public var twoPagesEnabled: Bool?
 
     @Preference(verticalScrollingEnabled)
     public var verticalScrollingEnabled: Bool
@@ -43,7 +45,7 @@ public struct QuranContentStatePreferences {
     // MARK: Private
 
     private static let showQuranTranslationView = PreferenceKey<Bool>(key: "showQuranTranslationView", defaultValue: false)
-    private static let twoPagesEnabled = PreferenceKey<Bool>(key: "twoPagesEnabled", defaultValue: TwoPagesUtils.settingDefaultValue)
+    private static let twoPagesEnabled = PreferenceKey<Bool?>(key: "twoPagesEnabled", defaultValue: nil)
     private static let verticalScrollingEnabled = PreferenceKey<Bool>(key: "verticalScrollingEnabled", defaultValue: false)
     private static let showLinePageDividers = PreferenceKey<Bool>(key: "showLinePageDividers", defaultValue: true)
     private static let showLinePageSidelines = PreferenceKey<Bool>(key: "showLinePageSidelines", defaultValue: true)

@@ -14,7 +14,6 @@ final class ReciterListViewController: UIHostingController<ReciterListView>, Sta
     init(viewModel: ReciterListViewModel) {
         self.viewModel = viewModel
         super.init(rootView: ReciterListView(viewModel: viewModel))
-        rotateToPortraitIfPhone()
     }
 
     @available(*, unavailable)
@@ -26,6 +25,12 @@ final class ReciterListViewController: UIHostingController<ReciterListView>, Sta
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         traitCollection.userInterfaceIdiom == .pad ? .all : .portrait
+    }
+
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        // Rotating needs the window, which the controller only has once it appears.
+        rotateToPortraitIfPhone()
     }
 
     // MARK: Private

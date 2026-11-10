@@ -195,6 +195,52 @@ final class ContentTranslationViewModelTests: XCTestCase {
         XCTAssertTrue(sut.items(quranFont: .uthmanicHafs).contains { $0.id == .verseNumber(verse) })
     }
 
+    func testFootnotesFollowTheirTranslationTextBeforeTheTranslatorName() throws {
+        let verse = Quran.hafsMadani1405.firstVerse
+        let sut = makeSUT()
+        let footnoted = try footnotedString("Guide us[1] to the Straight Way.[2]", footnotes: ["[[Lit., lead us.]]", "[[i.e., Islam.]]"])
+        let plain = try footnotedString("Guide us to the Straight Path.", footnotes: [])
+        commit(translations: [footnoted, plain], of: verse, to: sut)
+
+        let ids = sut.items(quranFont: .uthmanicHafs).map(\.id)
+        let firstChunk = try XCTUnwrap(ids.firstIndex(of: .translationTextChunk(verse, translationId: 1, chunkIndex: 0)))
+
+        XCTAssertEqual(Array(ids[firstChunk...].prefix(6)), [
+            .translationTextChunk(verse, translationId: 1, chunkIndex: 0),
+            .translationFootnote(verse, translationId: 1, footnoteIndex: 0),
+            .translationFootnote(verse, translationId: 1, footnoteIndex: 1),
+            .translator(verse, translationId: 1),
+            .translationTextChunk(verse, translationId: 2, chunkIndex: 0),
+            .translator(verse, translationId: 2),
+        ])
+    }
+
+    func testFootnoteShowsItsMarkerAndTextWithoutTheBrackets() throws {
+        let verse = Quran.hafsMadani1405.firstVerse
+        let sut = makeSUT()
+        let string = try footnotedString("Guide us[1] to the Straight Way.", footnotes: ["[[ Lit., lead us.\n]]"])
+        commit(translations: [string], of: verse, to: sut)
+
+        let footnote = try XCTUnwrap(footnotes(in: sut).first)
+
+        XCTAssertEqual(footnote.marker, "[1]")
+        XCTAssertEqual(footnote.text, "Lit., lead us.")
+    }
+
+    func testTruncatedTranslationShowsTheFootnotesOfItsShownTextUntilExpanded() throws {
+        let verse = Quran.hafsMadani1405.firstVerse
+        let sut = makeSUT()
+        let text = "Guide us[1] " + String(repeating: "to the Straight Way ", count: 50) + "and beyond.[2]"
+        let string = try footnotedString(text, footnotes: ["[[Lit., lead us.]]", "[[i.e., the Hereafter.]]"])
+        commit(translations: [string], of: verse, to: sut)
+
+        XCTAssertEqual(footnotes(in: sut).map(\.footnoteIndex), [0])
+
+        sut.openURL(.readMore(translationId: 1, sura: verse.sura.suraNumber, ayah: verse.ayah))
+
+        XCTAssertEqual(footnotes(in: sut).map(\.footnoteIndex), [0, 1])
+    }
+
     func testHighlightsFollowChangesToDisplayedVerses() {
         let first = Quran.hafsMadani1405.pages[0].firstVerse
         let second = Quran.hafsMadani1405.pages[1].firstVerse
@@ -419,6 +465,35 @@ final class ContentTranslationViewModelTests: XCTestCase {
             guard case .suraName(let suraName, _) = item else { return nil }
             return suraName
         }.first)
+    }
+
+    private func footnotes(in viewModel: ContentTranslationViewModel) -> [TranslationFootnote] {
+        viewModel.items(quranFont: .uthmanicHafs).compactMap { item in
+            guard case .translationFootnote(let footnote, _) = item else { return nil }
+            return footnote
+        }
+    }
+
+    /// A translation string as `QuranTextDataService` builds it: each `[[…]]` footnote is replaced by a numbered marker.
+    private func footnotedString(_ text: String, footnotes: [Substring]) throws -> TranslationString {
+        let markerRanges = try footnotes.indices.map { index in
+            try XCTUnwrap(text.range(of: "[\(index + 1)]"))
+        }
+        return TranslationString(text: text, quranRanges: [], footnoteRanges: markerRanges, footnotes: footnotes)
+    }
+
+    /// Shows `verse` with one translation per string.
+    private func commit(translations strings: [TranslationString], of verse: AyahNumber, to viewModel: ContentTranslationViewModel) {
+        viewModel.commitLoadedContent(
+            verses: [verse],
+            translations: strings.indices.map { makeTranslation(id: $0 + 1) },
+            verseTexts: [verse: VerseText(
+                arabicText: "Arabic",
+                translations: strings.map { .string($0) },
+                arabicPrefix: [],
+                arabicSuffix: []
+            )]
+        )
     }
 
     private final class ScrollRecorder {

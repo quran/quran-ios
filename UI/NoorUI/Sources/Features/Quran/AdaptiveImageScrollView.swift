@@ -63,7 +63,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
 
     public var body: some View {
         AdaptiveQuranScrollView {
-            header
+            headerAlignedWithText
         } footer: {
             footer
         } content: { availableContentSize in
@@ -75,6 +75,8 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                 }
             }
             .frame(height: imageHeight(for: availableContentSize))
+            .frame(maxWidth: .infinity)
+            .onSizeChange { contentWidth = $0.width }
         }
     }
 
@@ -86,6 +88,8 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     private let renderingMode: QuranThemedImage.RenderingMode
     private let decorations: ImageDecorations
     @State private var imageViewSize: CGSize = .zero
+    @State private var contentWidth: CGFloat = 0
+    @Environment(\.layoutDirection) private var layoutDirection
     #if QURAN_SYNC
     private let ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]]
     private let onAyahReadingBookmarkTap: (AyahNumber, CGPoint) -> Void
@@ -97,6 +101,29 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     private struct SizeInfo: Equatable {
         let imageSize: CGSize
         let viewSize: CGSize
+    }
+
+    /// The header, inset to line up with the page's text when it still fits.
+    @ViewBuilder private var headerAlignedWithText: some View {
+        if #available(iOS 16.0, *), let textInsets {
+            ViewThatFits(in: .horizontal) {
+                header.padding(textInsets)
+                header
+            }
+        } else {
+            header
+        }
+    }
+
+    private var textInsets: EdgeInsets? {
+        image.flatMap {
+            decorations.wordFrames.textInsets(
+                imageSize: $0.size,
+                imageViewSize: imageViewSize,
+                contentWidth: contentWidth,
+                layoutDirection: layoutDirection
+            )
+        }
     }
 
     private func imageContent(_ image: UIImage) -> some View {

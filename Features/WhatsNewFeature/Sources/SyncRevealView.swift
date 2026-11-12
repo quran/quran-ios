@@ -44,8 +44,6 @@ struct SyncRevealView: View {
 
     private typealias Palette = NightfallPalette
 
-    private static let contentMaxWidth: CGFloat = 440
-
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @Environment(\.layoutDirection) private var layoutDirection
@@ -57,6 +55,9 @@ struct SyncRevealView: View {
     @ScaledMetric(relativeTo: .footnote) private var chipCornerRadius = 14.0
     @ScaledMetric(relativeTo: .body) private var actionsSpacing = 2.0
     @ScaledMetric(relativeTo: .body) private var notNowVerticalPadding = 7.0
+    @ScaledMetric(relativeTo: .subheadline) private var checkSpacing = 6.0
+    /// A comfortable line length on iPad that widens with the text.
+    @ScaledMetric(relativeTo: .body) private var contentMaxWidth = 440.0
 
     /// The design height; the button grows beyond it with its text.
     private let notNowMinHeight: CGFloat = 44
@@ -84,7 +85,7 @@ struct SyncRevealView: View {
                         }
                     }
                     .padding()
-                    .frame(maxWidth: Self.contentMaxWidth)
+                    .frame(maxWidth: contentMaxWidth)
                     .frame(maxWidth: .infinity, minHeight: viewport.size.height)
                 }
                 .modifier(NightfallScrollBehavior(flashesIndicators: scrollsActions))
@@ -94,7 +95,7 @@ struct SyncRevealView: View {
                 actions
                     .padding(.horizontal)
                     .padding(.bottom)
-                    .frame(maxWidth: Self.contentMaxWidth)
+                    .frame(maxWidth: contentMaxWidth)
             }
         }
     }
@@ -115,7 +116,7 @@ struct SyncRevealView: View {
                 }
                 .modifier(NightfallScrollBehavior(flashesIndicators: true))
             }
-            .frame(maxWidth: Self.contentMaxWidth)
+            .frame(maxWidth: contentMaxWidth)
         }
     }
 
@@ -143,12 +144,15 @@ struct SyncRevealView: View {
                 .font(.callout)
                 .foregroundStyle(Color.white.opacity(0.8))
 
-            (Text(Image(systemName: "checkmark")).foregroundColor(Palette.gold)
-                + Text(verbatim: " ")
-                + Text(l("new.sync_reveal.still_here")))
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(Color.white)
-                .accessibilityLabel(l("new.sync_reveal.still_here"))
+            HStack(alignment: .firstTextBaseline, spacing: checkSpacing) {
+                Image(systemName: "checkmark")
+                    .foregroundStyle(Palette.gold)
+                    .accessibilityHidden(true)
+                Text(l("new.sync_reveal.still_here"))
+                    .foregroundStyle(Color.white)
+            }
+            .font(.subheadline.weight(.semibold))
+            .accessibilityElement(children: .combine)
         }
         .multilineTextAlignment(.center)
         .fixedSize(horizontal: false, vertical: true)
@@ -160,23 +164,20 @@ struct SyncRevealView: View {
         // instead of joining the Latin "iCloud" and "Quran.com" in right-to-left text.
         let mark = layoutDirection == .rightToLeft ? "\u{200F}" : "\u{200E}"
         let shape = RoundedRectangle(cornerRadius: chipCornerRadius, style: .continuous)
-        return (
-            Text(Image(systemName: "icloud"))
-                + Text(verbatim: " ")
-                + Text(l("new.sync_reveal.chip.from_icloud"))
-                + Text(verbatim: "\(mark) ")
-                // A forward arrow points from iCloud to Quran.com in either reading direction.
-                + Text(Image(systemName: "arrow.forward"))
-                + Text(verbatim: " \(mark)Quran.com")
-        )
-        .font(.footnote.weight(.semibold))
-        .foregroundStyle(Palette.gold)
-        .padding(.horizontal, chipHorizontalPadding)
-        .padding(.vertical, chipVerticalPadding)
-        .background(shape.fill(Palette.gold.opacity(0.14)))
-        .overlay(shape.strokeBorder(Palette.gold.opacity(0.5), lineWidth: 0.5))
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(l("new.sync_reveal.chip.accessibility"))
+        let cloud = Image(systemName: "icloud")
+        let phrase = l("new.sync_reveal.chip.from_icloud")
+        // A forward arrow points from iCloud to Quran.com in either reading direction.
+        let arrow = Image(systemName: "arrow.forward")
+        // One text, so the chip wraps like a sentence at large sizes.
+        return Text("\(cloud) \(phrase)\(mark) \(arrow) \(mark)\("Quran.com")")
+            .font(.footnote.weight(.semibold))
+            .foregroundStyle(Palette.gold)
+            .padding(.horizontal, chipHorizontalPadding)
+            .padding(.vertical, chipVerticalPadding)
+            .background(shape.fill(Palette.gold.opacity(0.14)))
+            .overlay(shape.strokeBorder(Palette.gold.opacity(0.5), lineWidth: 0.5))
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(l("new.sync_reveal.chip.accessibility"))
     }
 
     // MARK: Actions

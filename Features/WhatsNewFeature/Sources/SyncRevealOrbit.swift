@@ -96,6 +96,9 @@ struct SyncRevealOrbit: View {
                 .foregroundStyle(Color.white.opacity(0.7))
                 .lineLimit(1)
                 .fixedSize()
+                // Hides the ring behind the label.
+                .padding(.horizontal, 4)
+                .background(Capsule().fill(Palette.night))
                 // Grows with the text size, short of crowding the ring.
                 .dynamicTypeSize(...DynamicTypeSize.xLarge)
         }

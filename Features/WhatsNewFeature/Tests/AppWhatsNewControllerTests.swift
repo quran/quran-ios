@@ -29,20 +29,20 @@ final class AppWhatsNewControllerTests: XCTestCase {
 
     // MARK: Show rules
 
-    func test_firstLaunch_recordsLatestVersionWithoutPresenting() {
+    func test_firstLaunch_recordsLatestVersionWithoutPresenting() async {
         let sut = makeSUT(launchVersion: .firstLaunch(version: "2.7.0"))
 
-        let versions = sut.versionsToPresent(in: whatsNew)
+        let versions = await sut.versionsToPresent(in: whatsNew)
 
         XCTAssertEqual(versions.map(\.version), [])
         XCTAssertEqual(store.lastSeenVersion, "2.7.0")
     }
 
-    func test_updateFromOlderVersion_presentsRevealWithoutMarkingItSeen() {
+    func test_updateFromOlderVersion_presentsRevealWithoutMarkingItSeen() async {
         store.lastSeenVersion = "2.6.2"
         let sut = makeSUT(launchVersion: .update(from: "2.6.8", to: "2.7.0"))
 
-        let versions = sut.versionsToPresent(in: whatsNew)
+        let versions = await sut.versionsToPresent(in: whatsNew)
 
         XCTAssertEqual(versions.map(\.version), ["2.7.0"])
         XCTAssertEqual(versions.map(\.reveal), [.appIcon])
@@ -51,22 +51,22 @@ final class AppWhatsNewControllerTests: XCTestCase {
         XCTAssertEqual(store.lastSeenVersion, "2.6.2")
     }
 
-    func test_sameVersion_presentsNothing() {
+    func test_sameVersion_presentsNothing() async {
         store.lastSeenVersion = "2.7.0"
         let sut = makeSUT(launchVersion: .sameVersion(version: "2.7.0"))
 
-        let versions = sut.versionsToPresent(in: whatsNew)
+        let versions = await sut.versionsToPresent(in: whatsNew)
 
         XCTAssertEqual(versions.map(\.version), [])
         XCTAssertEqual(store.lastSeenVersion, "2.7.0")
     }
 
-    func test_seenVersionOverride_presentsEveryVersionOnFirstLaunch() {
+    func test_seenVersionOverride_presentsEveryVersionOnFirstLaunch() async {
         // Same as launching with `-whats-new.seen-version 0`.
         store.lastSeenVersion = "0"
         let sut = makeSUT(launchVersion: .firstLaunch(version: "2.7.0"))
 
-        let versions = sut.versionsToPresent(in: whatsNew)
+        let versions = await sut.versionsToPresent(in: whatsNew)
 
         XCTAssertEqual(versions.map(\.version), ["2.7.0", "2.6.2"])
         XCTAssertEqual(versions.map(\.reveal), [.appIcon, nil])
@@ -78,10 +78,25 @@ final class AppWhatsNewControllerTests: XCTestCase {
         let sut = makeSUT(launchVersion: .update(from: "2.6.8", to: "3.0.1"))
 
         let versions = await sut.versionsToPresent(in: AppWhatsNewController.bundledWhatsNew())
+            .filter { $0.reveal != .sync }
 
         XCTAssertEqual(versions.map(\.version), ["3.0.1"])
         XCTAssertEqual(versions.map(\.reveal), [.appIcon])
         XCTAssertEqual(versions.flatMap(\.items).count, 0)
+    }
+
+    func test_bundledWhatsNew_showsSyncRevealOnlyInSyncBuilds() async {
+        store.lastSeenVersion = "3.0.1"
+        let sut = makeSUT(launchVersion: .update(from: "3.0.2", to: "3.1"))
+
+        let versions = await sut.versionsToPresent(in: AppWhatsNewController.bundledWhatsNew())
+
+        #if QURAN_SYNC
+        XCTAssertEqual(versions.map(\.version), ["3.1"])
+        XCTAssertEqual(versions.map(\.reveal), [.sync])
+        #else
+        XCTAssertEqual(versions.map(\.version), [])
+        #endif
     }
 
     // MARK: Reveal actions
@@ -189,40 +204,10 @@ final class AppWhatsNewControllerTests: XCTestCase {
         analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
         launchVersion: LaunchVersionUpdate
     ) -> AppWhatsNewController {
-        AppWhatsNewController(analytics: analytics, launchVersion: launchVersion, appIconCatalog: appIconCatalog)
+        WhatsNewControllerFactory.make(analytics: analytics, launchVersion: launchVersion)
     }
-
-    private let appIconCatalog = AppIconCatalog(sections: [
-        .init(id: "all", title: "All", previewSize: .large, options: [
-            AppIconOption(
-                id: "primary",
-                alternateIconName: nil,
-                name: "Primary",
-                previewImageName: "app-icon-primary",
-                accent: AppIconAccent(light: .systemIndigo, dark: .systemYellow, onDark: .black)
-            ),
-        ]),
-    ])
 
     private func presentedReveal(by presenter: PresenterFake) throws -> AppIconRevealViewController {
         try XCTUnwrap(presenter.presentedController as? AppIconRevealViewController)
-    }
-}
-
-/// Presents and dismisses without UIKit transitions, which never finish in unit tests.
-/// Dismissal completes right away, like a finished transition.
-private final class PresenterFake: UIViewController {
-    private(set) var presentedController: UIViewController?
-    private(set) var dismissCount = 0
-
-    override func present(_ viewController: UIViewController, animated _: Bool, completion: (() -> Void)? = nil) {
-        presentedController = viewController
-        completion?()
-    }
-
-    override func dismiss(animated _: Bool, completion: (() -> Void)? = nil) {
-        dismissCount += 1
-        presentedController = nil
-        completion?()
     }
 }

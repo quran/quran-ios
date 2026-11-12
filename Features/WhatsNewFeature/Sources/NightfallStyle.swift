@@ -24,10 +24,6 @@ enum NightfallPalette {
     static let tileMiddle = color(0x000C52)
     static let tileBottom = color(0x00153F)
     static let continueText = color(0x000A3D)
-    /// The sync reveal's flat night sky.
-    static let night = color(0x0A0A36)
-    /// Fills the sync reveal's device nodes, a step lighter than the night.
-    static let node = color(0x14144A)
 
     // MARK: Private
 

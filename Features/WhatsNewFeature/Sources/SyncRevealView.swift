@@ -25,8 +25,13 @@ struct SyncRevealView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                Palette.night
-                    .ignoresSafeArea()
+                // The night the app icon reveal ends on.
+                LinearGradient(
+                    colors: [Palette.nightTop, Palette.nightMiddle, Palette.nightBottom],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
                 NightfallStars()
                     .ignoresSafeArea()
 

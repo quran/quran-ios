@@ -88,7 +88,7 @@ struct SyncRevealOrbit: View {
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(Palette.gold)
                 .frame(width: Self.nodeLength, height: Self.nodeLength)
-                .background(Circle().fill(Palette.node))
+                .background(Circle().fill(Palette.tileMiddle))
                 .overlay(Circle().strokeBorder(Palette.gold.opacity(0.6), lineWidth: 1))
 
             Text(verbatim: label)
@@ -98,7 +98,7 @@ struct SyncRevealOrbit: View {
                 .fixedSize()
                 // Hides the ring behind the label.
                 .padding(.horizontal, 4)
-                .background(Capsule().fill(Palette.night))
+                .background(Capsule().fill(Palette.nightMiddle))
                 // Grows with the text size, short of crowding the ring.
                 .dynamicTypeSize(...DynamicTypeSize.xLarge)
         }
@@ -117,5 +117,5 @@ struct SyncRevealOrbit: View {
 #Preview {
     SyncRevealOrbit(icon: Image(systemName: "app.fill"))
         .padding()
-        .background(NightfallPalette.night)
+        .background(NightfallPalette.nightMiddle)
 }

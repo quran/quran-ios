@@ -83,6 +83,14 @@ public final class AudioBannerViewModel: ObservableObject {
 
     // MARK: Public
 
+    /// Whether a recitation is playing or paused, as opposed to stopped or still downloading.
+    public var canTogglePlayPause: Bool {
+        switch playingState {
+        case .playing, .paused: true
+        case .stopped, .downloading: false
+        }
+    }
+
     public func play(from: AyahNumber, to: AyahNumber?, repeatVerses: Bool) {
         logger.info("AudioBanner: playing from \(from) to \(String(describing: to))")
         analytics.playFrom(menu: true)
@@ -95,6 +103,12 @@ public final class AudioBannerViewModel: ObservableObject {
             verseDelay: AudioPreferences.shared.verseDelay,
             repetitionDelay: AudioPreferences.shared.repetitionDelay
         )
+    }
+
+    /// Pauses a playing recitation or resumes a paused one, from the reader's space bar shortcut.
+    public func togglePlayPauseFromKeyboard() {
+        logger.info("AudioBanner: play/pause key pressed. State: \(playingState)")
+        togglePlayPause()
     }
 
     // MARK: Internal

@@ -11,7 +11,6 @@ import AppMigrator
 #if QURAN_SYNC
 import AuthenticationClient
 import FeaturesSupport
-import SystemDependencies
 #endif
 import NoorUI
 import UIKit
@@ -26,22 +25,16 @@ public class AppWhatsNewController {
     ///   - launchVersion: How this launch relates to the previous one,
     ///     captured before the launch commits the current app version.
     ///   - appIconCatalog: The app's icons. The reveals show its default icon.
-    ///   - bundle: Reads the build number, which TestFlight builds remember with the seen sync reveal.
-    ///   - appDistribution: Tells TestFlight builds apart.
     ///   - authenticationClient: Signed-in users skip the sync reveal; its Sign In signs in with it.
     public init(
         analytics: AnalyticsLibrary,
         launchVersion: LaunchVersionUpdate,
         appIconCatalog: AppIconCatalog,
-        bundle: SystemBundle,
-        appDistribution: AppDistribution,
         authenticationClient: any AuthenticationClient
     ) {
         self.analytics = analytics
         self.launchVersion = launchVersion
         self.appIconCatalog = appIconCatalog
-        self.bundle = bundle
-        self.appDistribution = appDistribution
         self.authenticationClient = authenticationClient
     }
     #else
@@ -79,28 +72,17 @@ public class AppWhatsNewController {
     /// A fresh install records every version as seen and presents nothing.
     /// Versions whose reveal this build can't show are left out, and signed-in users skip the sync reveal.
     func versionsToPresent(in whatsNew: AppWhatsNew) async -> [WhatsNewVersion] {
-        let available = AppWhatsNew(versions: whatsNew.versions.filter { $0.reveal?.isAvailable ?? true })
-        #if QURAN_SYNC
-        // Only a TestFlight build can show the seen sync reveal again, so only then ask for the channel.
-        if canPresentAgainOnTestFlight(available) {
-            await resolveTestFlightBuild()
-        }
         let plan = AppWhatsNewPlan(
-            whatsNew: available,
+            whatsNew: AppWhatsNew(versions: whatsNew.versions.filter { $0.reveal?.isAvailable ?? true }),
             lastSeenVersion: store.lastSeenVersion,
-            lastSeenBuild: store.lastSeenBuild,
-            launchVersion: launchVersion,
-            testFlightBuild: testFlightBuild
+            launchVersion: launchVersion
         )
-        #else
-        let plan = AppWhatsNewPlan(whatsNew: available, lastSeenVersion: store.lastSeenVersion, launchVersion: launchVersion)
-        #endif
         switch plan {
         case .none:
             return []
         case .markSeen(let version):
             logger.info("WhatsNew: first launch, marking \(version) as seen")
-            markSeen(version)
+            store.lastSeenVersion = version
             return []
         case .present(let versions):
             #if QURAN_SYNC
@@ -160,82 +142,16 @@ public class AppWhatsNewController {
     private let store = AppWhatsNewVersionStore()
 
     #if QURAN_SYNC
-    /// How long to wait for the App Store to say whether this is TestFlight before assuming it isn't.
-    private static let distributionTimeout: TimeInterval = 2
-
-    private let bundle: SystemBundle
-    private let appDistribution: AppDistribution
     private let authenticationClient: any AuthenticationClient
 
-    /// The build this TestFlight launch runs, or `nil` outside TestFlight or until a rule needs it.
-    private var testFlightBuild: String?
-    private var hasResolvedTestFlightBuild = false
-    #endif
-
-    /// Records `version` as seen. Sync builds also record the TestFlight build it was seen on,
-    /// and never move back to an older version, such as an older reveal after the sync reveal is skipped.
-    private func markSeen(_ version: String) {
-        #if QURAN_SYNC
-        if let lastSeenVersion = store.lastSeenVersion,
-           lastSeenVersion.compare(version, options: .numeric) == .orderedDescending
-        {
-            return
-        }
-        store.lastSeenVersion = version
-        store.lastSeenBuild = testFlightBuild
-        #else
-        store.lastSeenVersion = version
-        #endif
-    }
-
-    #if QURAN_SYNC
-    /// Whether the sync reveal of the running version was seen, so a new TestFlight build could show it again.
-    private func canPresentAgainOnTestFlight(_ whatsNew: AppWhatsNew) -> Bool {
-        guard let lastSeenVersion = store.lastSeenVersion else {
-            return false
-        }
-        return whatsNew.versions.contains { version in
-            version.reveal == .sync
-                && version.version.compare(lastSeenVersion, options: .numeric) == .orderedSame
-                && version.version.isSameVersion(as: launchVersion.currentVersion)
-        }
-    }
-
-    /// Reads the TestFlight build once. A slow or offline App Store lookup counts as not TestFlight.
-    private func resolveTestFlightBuild() async {
-        guard !hasResolvedTestFlightBuild else {
-            return
-        }
-        hasResolvedTestFlightBuild = true
-        let channel = await Self.channel(of: appDistribution, timeout: Self.distributionTimeout)
-        testFlightBuild = channel == .testFlight ? bundle.infoValue(forKey: "CFBundleVersion") as? String : nil
-    }
-
-    private static func channel(of distribution: AppDistribution, timeout: TimeInterval) async -> AppDistributionChannel {
-        await withCheckedContinuation { continuation in
-            let resume = ResumeOnce(continuation)
-            Task { @MainActor in
-                resume(await distribution.channel)
-            }
-            Task { @MainActor in
-                try? await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))
-                resume(.appStore)
-            }
-        }
-    }
-
+    /// Signed-in users skip the sync reveal; older versions still present.
     private func skippingSyncRevealIfSignedIn(_ versions: [WhatsNewVersion]) async -> [WhatsNewVersion] {
-        guard let syncVersion = versions.filter({ $0.reveal == .sync }).latestVersion else {
-            return versions
-        }
-        // Seeing or skipping the reveal records the TestFlight build it was seen on.
-        await resolveTestFlightBuild()
-        guard await isSignedIn() else {
+        guard let syncVersion = versions.filter({ $0.reveal == .sync }).latestVersion, await isSignedIn() else {
             return versions
         }
         logger.info("WhatsNew: signed in to Quran.com, skipping the sync reveal of \(syncVersion)")
         analytics.skipSyncReveal(version: syncVersion)
-        markSeen(syncVersion)
+        store.lastSeenVersion = syncVersion
         return versions.filter { $0.reveal != .sync }
     }
 
@@ -273,7 +189,7 @@ public class AppWhatsNewController {
             isDismissing = true
             logger.info("WhatsNew: app icon reveal \(action.rawValue) tapped")
             analytics.appIconReveal(action, version: version)
-            markSeen(version)
+            store.lastSeenVersion = version
             parent?.dismiss(animated: true, completion: completion)
         }
 
@@ -309,7 +225,7 @@ public class AppWhatsNewController {
             isDismissing = true
             logger.info("WhatsNew: sync reveal \(action.rawValue) tapped")
             analytics.syncReveal(action, version: version)
-            markSeen(version)
+            store.lastSeenVersion = version
             parent?.dismiss(animated: true) { [weak parent] in
                 guard let parent else { return }
                 completion(parent)
@@ -361,7 +277,7 @@ public class AppWhatsNewController {
             }
         )
         let viewController = AppWhatsNewViewController(rootView: view)
-        markSeen(version)
+        store.lastSeenVersion = version
 
         navigationController.setViewControllers([viewController], animated: false)
         navigationController.modalPresentationStyle = .pageSheet
@@ -376,29 +292,6 @@ private enum AppIconRevealAction: String {
     case `continue`
     case chooseAnotherIcon = "choose another icon"
 }
-
-#if QURAN_SYNC
-/// Resumes a continuation with the first value it gets and ignores the rest.
-@MainActor
-private final class ResumeOnce<Value> {
-    // MARK: Lifecycle
-
-    init(_ continuation: CheckedContinuation<Value, Never>) {
-        self.continuation = continuation
-    }
-
-    // MARK: Internal
-
-    func callAsFunction(_ value: Value) {
-        continuation?.resume(returning: value)
-        continuation = nil
-    }
-
-    // MARK: Private
-
-    private var continuation: CheckedContinuation<Value, Never>?
-}
-#endif
 
 private enum SyncRevealAction: String {
     case signIn = "sign in"

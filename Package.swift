@@ -689,7 +689,6 @@ private func featuresTargets() -> [[Target]] {
             "AuthenticationClient",
             "FeaturesSupport",
             "Localization",
-            "SystemDependencies",
             "UIx",
             "VLogging",
         ], resources: [
@@ -699,7 +698,6 @@ private func featuresTargets() -> [[Target]] {
             "AnalyticsFake",
             "AppMigrator",
             "AuthenticationClientFake",
-            "SystemDependenciesFake",
         ]),
 
         target(type, name: "WordPointerFeature", dependencies: [
@@ -1033,7 +1031,6 @@ private func featuresTargets() -> [[Target]] {
             "QuranTextKit",
             "ReadingService",
             "ReciterService",
-            "SystemDependencies",
             "TranslationService",
             "WordTextService",
             "HomeFeature",

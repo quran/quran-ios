@@ -11,8 +11,6 @@ import AppMigrator
 #if QURAN_SYNC
 import AuthenticationClient
 import AuthenticationClientFake
-import SystemDependencies
-import SystemDependenciesFake
 #endif
 import NoorUI
 import UIKit
@@ -26,19 +24,13 @@ enum WhatsNewControllerFactory {
     #if QURAN_SYNC
     static func make(
         analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
-        channel: AppDistributionChannel = .appStore,
-        build: String = "1",
         authenticationClient: any AuthenticationClient = AuthenticationClientFake(),
         launchVersion: LaunchVersionUpdate
     ) -> AppWhatsNewController {
-        let bundle = SystemBundleFake()
-        bundle.info["CFBundleVersion"] = build
-        return AppWhatsNewController(
+        AppWhatsNewController(
             analytics: analytics,
             launchVersion: launchVersion,
             appIconCatalog: appIconCatalog,
-            bundle: bundle,
-            appDistribution: AppDistributionFake(channel: channel),
             authenticationClient: authenticationClient
         )
     }

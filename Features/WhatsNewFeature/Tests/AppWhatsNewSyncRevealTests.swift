@@ -11,13 +11,12 @@ import AppMigrator
 #if QURAN_SYNC
 import AuthenticationClient
 import AuthenticationClientFake
-import SystemDependencies
 #endif
 import UIKit
 import XCTest
 @testable import WhatsNewFeature
 
-/// The 3.1 sync reveal's show rules, TestFlight builds included, and its actions.
+/// The 3.1 sync reveal's show rules and its actions.
 @MainActor
 final class AppWhatsNewSyncRevealTests: XCTestCase {
     // MARK: Internal
@@ -74,109 +73,32 @@ final class AppWhatsNewSyncRevealTests: XCTestCase {
         #endif
     }
 
-    #if !QURAN_SYNC
-    func test_nonSyncBuild_neverRecordsSeenBuild() async throws {
-        store.lastSeenVersion = "2.6.2"
-        let presenter = PresenterFake()
-        let sut = makeSUT(launchVersion: .update(from: "2.6.8", to: "3.1"))
-
-        let versions = await sut.versionsToPresent(in: syncWhatsNew)
-        sut.present(versions, from: presenter, onChooseAnotherIcon: nil)
-        try XCTUnwrap(presenter.presentedController as? AppIconRevealViewController).rootView.onContinue()
-
-        XCTAssertEqual(store.lastSeenVersion, "3.0.1")
-        XCTAssertNil(store.lastSeenBuild)
-    }
-    #endif
-
     #if QURAN_SYNC
 
-    // MARK: TestFlight
+    // MARK: Version bumps
 
-    func test_testFlight_newBuildOfSeenVersion_presentsAgain() async {
+    func test_seenSyncReveal_presentsNothing() async {
         store.lastSeenVersion = "3.1"
-        store.lastSeenBuild = "412"
-        let sut = makeSUT(channel: .testFlight, build: "413", launchVersion: .sameVersion(version: "3.1"))
+        let sut = makeSUT(launchVersion: .sameVersion(version: "3.1"))
 
         let versions = await sut.versionsToPresent(in: syncWhatsNew)
 
-        XCTAssertEqual(versions.map(\.version), ["3.1"])
+        XCTAssertEqual(versions.map(\.version), [])
+    }
+
+    func test_bumpedSyncRevealVersion_presentsAgain() async {
+        // Each TestFlight build bumps the sync reveal's version in whats-new.plist by hand.
+        store.lastSeenVersion = "3.1"
+        let sut = makeSUT(launchVersion: .sameVersion(version: "3.1"))
+        let bumped = AppWhatsNew(versions: [
+            WhatsNewVersion(version: "3.1.1", items: [], reveal: .sync),
+            appIconVersion,
+        ])
+
+        let versions = await sut.versionsToPresent(in: bumped)
+
+        XCTAssertEqual(versions.map(\.version), ["3.1.1"])
         XCTAssertEqual(versions.map(\.reveal), [.sync])
-    }
-
-    func test_testFlight_sameBuild_presentsNothing() async {
-        store.lastSeenVersion = "3.1"
-        store.lastSeenBuild = "413"
-        let sut = makeSUT(channel: .testFlight, build: "413", launchVersion: .sameVersion(version: "3.1"))
-
-        let versions = await sut.versionsToPresent(in: syncWhatsNew)
-
-        XCTAssertEqual(versions.map(\.version), [])
-    }
-
-    func test_testFlight_newBuild_matchesVersionIgnoringTrailingZeros() async {
-        store.lastSeenVersion = "3.1"
-        store.lastSeenBuild = "412"
-        let sut = makeSUT(channel: .testFlight, build: "413", launchVersion: .sameVersion(version: "3.1.0"))
-
-        let versions = await sut.versionsToPresent(in: syncWhatsNew)
-
-        XCTAssertEqual(versions.map(\.version), ["3.1"])
-    }
-
-    func test_testFlight_newBuild_doesNotPresentSyncRevealOfOlderVersion() async {
-        store.lastSeenVersion = "3.1"
-        store.lastSeenBuild = "412"
-        let sut = makeSUT(channel: .testFlight, build: "500", launchVersion: .update(from: "3.1", to: "3.2"))
-
-        let versions = await sut.versionsToPresent(in: syncWhatsNew)
-
-        XCTAssertEqual(versions.map(\.version), [])
-    }
-
-    func test_testFlight_newBuild_neverPresentsAppIconRevealAgain() async {
-        store.lastSeenVersion = "3.0.1"
-        store.lastSeenBuild = "300"
-        let sut = makeSUT(channel: .testFlight, build: "301", launchVersion: .sameVersion(version: "3.0.1"))
-
-        let versions = await sut.versionsToPresent(in: AppWhatsNew(versions: [appIconVersion]))
-
-        XCTAssertEqual(versions.map(\.version), [])
-    }
-
-    func test_appStore_newBuildOfSeenVersion_presentsNothing() async {
-        store.lastSeenVersion = "3.1"
-        let sut = makeSUT(channel: .appStore, build: "413", launchVersion: .sameVersion(version: "3.1"))
-
-        let versions = await sut.versionsToPresent(in: syncWhatsNew)
-
-        XCTAssertEqual(versions.map(\.version), [])
-    }
-
-    func test_appStoreThenTestFlight_sameVersion_presentsAgain() async {
-        // Seen on the App Store, which records no build.
-        store.lastSeenVersion = "3.1"
-        let sut = makeSUT(channel: .testFlight, build: "413", launchVersion: .sameVersion(version: "3.1"))
-
-        let versions = await sut.versionsToPresent(in: syncWhatsNew)
-
-        XCTAssertEqual(versions.map(\.version), ["3.1"])
-    }
-
-    func test_testFlight_seeingTheRevealRemembersTheBuild() async throws {
-        store.lastSeenVersion = "3.1"
-        store.lastSeenBuild = "412"
-        let presenter = PresenterFake()
-        let sut = makeSUT(channel: .testFlight, build: "413", launchVersion: .sameVersion(version: "3.1"))
-
-        let versions = await sut.versionsToPresent(in: syncWhatsNew)
-        sut.present(versions, from: presenter, onChooseAnotherIcon: nil)
-        try presentedSyncReveal(by: presenter).rootView.onNotNow()
-
-        XCTAssertEqual(store.lastSeenBuild, "413")
-        let nextLaunch = await makeSUT(channel: .testFlight, build: "413", launchVersion: .sameVersion(version: "3.1"))
-            .versionsToPresent(in: syncWhatsNew)
-        XCTAssertEqual(nextLaunch.map(\.version), [])
     }
 
     // MARK: Signed in
@@ -218,20 +140,15 @@ final class AppWhatsNewSyncRevealTests: XCTestCase {
         XCTAssertEqual(store.lastSeenVersion, "3.1")
     }
 
-    func test_signedIn_skipsOnlySyncReveal() async throws {
+    func test_signedIn_skipsOnlySyncReveal() async {
         store.lastSeenVersion = "2.6.2"
         let authenticationClient = AuthenticationClientFake()
         authenticationClient.authenticationStateValue = .authenticated
-        let presenter = PresenterFake()
         let sut = makeSUT(authenticationClient: authenticationClient, launchVersion: .update(from: "2.6.8", to: "3.1"))
 
         let versions = await sut.versionsToPresent(in: syncWhatsNew)
-        sut.present(versions, from: presenter, onChooseAnotherIcon: nil)
-        try XCTUnwrap(presenter.presentedController as? AppIconRevealViewController).rootView.onContinue()
 
         XCTAssertEqual(versions.map(\.version), ["3.0.1"])
-        // The older reveal never moves the seen version back.
-        XCTAssertEqual(store.lastSeenVersion, "3.1")
     }
 
     func test_signedOut_presentsSyncReveal() async {
@@ -327,15 +244,11 @@ final class AppWhatsNewSyncRevealTests: XCTestCase {
     #if QURAN_SYNC
     private func makeSUT(
         analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
-        channel: AppDistributionChannel = .appStore,
-        build: String = "1",
         authenticationClient: any AuthenticationClient = AuthenticationClientFake(),
         launchVersion: LaunchVersionUpdate
     ) -> AppWhatsNewController {
         WhatsNewControllerFactory.make(
             analytics: analytics,
-            channel: channel,
-            build: build,
             authenticationClient: authenticationClient,
             launchVersion: launchVersion
         )

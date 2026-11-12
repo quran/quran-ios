@@ -8,9 +8,6 @@
 
 import AppDependencies
 import AppMigrator
-#if QURAN_SYNC
-import SystemDependencies
-#endif
 import UIKit
 import WhatsNewFeature
 
@@ -54,8 +51,6 @@ struct AppBuilder {
             analytics: container.analytics,
             launchVersion: launchVersion,
             appIconCatalog: container.appIconCatalog,
-            bundle: DefaultSystemBundle(),
-            appDistribution: DefaultAppDistribution(),
             authenticationClient: container.authenticationClient
         )
         #else

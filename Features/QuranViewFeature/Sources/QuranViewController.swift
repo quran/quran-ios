@@ -59,8 +59,6 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     var pagesView: UIView { quranView!.contentView! }
 
-    var bottomBarsHeight: CGFloat { quranView?.bottomBarsHeight ?? 0 }
-
     // MARK: - View hierarchy
 
     var navigationBarHidden: Bool { true }

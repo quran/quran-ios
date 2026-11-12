@@ -34,7 +34,7 @@ struct AudioBannerView: View {
         )
         .onReceive(viewModel.$toast.compactMap { $0 }) { toast in
             viewModel.toast = nil
-            showToast?(Toast(toast.message, action: toast.action))
+            showToast?(toast)
         }
         .serializedModalPresentation(request: $viewModel.modalRequest)
         .errorAlert(error: $viewModel.error)
@@ -42,7 +42,7 @@ struct AudioBannerView: View {
             await viewModel.start()
         }
         .onDisappear {
-            ToastPresenter.shared.dismissCurrentToast()
+            viewModel.dismissToasts()
         }
     }
 }

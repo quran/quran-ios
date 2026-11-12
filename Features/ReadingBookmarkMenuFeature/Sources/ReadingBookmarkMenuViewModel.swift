@@ -68,6 +68,13 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
         }
     }
 
+    var isFirstRun: Bool {
+        // Not while editing, so a slot cleared elsewhere can't hide the Done button mid-edit.
+        // A named slot means the user has set these up before, so they keep the Edit button.
+        let items = items
+        return !editMode.isEditing && !items.isEmpty && items.allSatisfy { $0.placement == .unplaced && $0.name == nil }
+    }
+
     var editModeBinding: Binding<EditMode> {
         Binding(
             get: { self.editMode },
@@ -167,16 +174,17 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
             storedBookmarks.append(ReadingBookmark(bookmark))
 
             if let previousBookmark {
-                return ReadingBookmarkUndoToast.moved(
-                    from: previousBookmark,
-                    to: bookmark
-                ) {
+                let showsExplanation = !explanationPreferences.hasExplainedMove
+                explanationPreferences.hasExplainedMove = true
+                return ReadingBookmarkUndoToast.moved(to: bookmark, showsExplanation: showsExplanation) {
                     Task { @MainActor in
                         await self.restore(previousBookmark)
                     }
                 }
             }
-            return ReadingBookmarkUndoToast.saved(bookmark)
+            let showsExplanation = !explanationPreferences.hasExplainedSave
+            explanationPreferences.hasExplainedSave = true
+            return ReadingBookmarkUndoToast.saved(bookmark, showsExplanation: showsExplanation)
         } catch is CancellationError {
             return nil
         } catch {
@@ -188,6 +196,7 @@ final class ReadingBookmarkMenuViewModel: ObservableObject {
     // MARK: Private
 
     private let service: MobileSyncReadingBookmarkService
+    private let explanationPreferences = ReadingBookmarkExplanationPreferences.shared
     @Published private var storedBookmarks: [ReadingBookmark] = []
     @Published private var isLoading = true
     @Published private(set) var isMutating = false

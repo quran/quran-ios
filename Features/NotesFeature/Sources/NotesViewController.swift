@@ -101,14 +101,15 @@ final class NotesViewController: UIHostingController<NotesView>, UISearchBarDele
                 get: { [weak self] in self?.currentEditMode },
                 set: { [weak self] value in self?.viewModel.editMode = value ?? .inactive }
             ),
-            customItems: [
+            listItems: [
                 UIBarButtonItem(
                     image: UIImage(systemName: "square.and.arrow.up"),
                     style: .plain,
                     target: self,
                     action: #selector(shareAllNotes)
                 ),
-            ] + [search.barButtonItem].compactMap { $0 }
+            ],
+            customItems: [search.barButtonItem].compactMap { $0 }
         )
     }
 

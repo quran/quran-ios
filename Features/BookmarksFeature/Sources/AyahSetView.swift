@@ -59,6 +59,18 @@ private struct AyahSetContentView: View {
                 ) { item in
                     ayahRow(item.value)
                 }
+            } header: {
+                if let header = viewModel.content.header {
+                    Label {
+                        Text(header.text)
+                    } icon: {
+                        header.image.image
+                    }
+                    .font(.footnote.weight(.regular))
+                    .foregroundStyle(Color.secondaryLabel)
+                    .textCase(nil)
+                    .accessibilityRemoveTraits(.isHeader)
+                }
             } footer: {
                 Text(l("bookmarks.collections.ayahs.delete-hint"))
                     .font(.body)

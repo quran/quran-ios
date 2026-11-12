@@ -24,9 +24,10 @@ public struct NotesBuilder {
 
     // MARK: Public
 
+    /// - Parameter showHighlights: Opens the Bookmarks tab. Unused without QURAN_SYNC.
     public func build(
         withListener listener: QuranNavigator,
-        navigationController: UINavigationController
+        showHighlights: @escaping () -> Void
     ) -> UIViewController {
         let viewControllerReference = NotesViewControllerReference()
         let editNote: (Note) -> Void = { [viewControllerReference] note in
@@ -40,20 +41,20 @@ public struct NotesBuilder {
         #if QURAN_SYNC
         let noteService = container.mobileSyncNoteService()
         let viewModel = NotesViewModel(
-            analytics: container.analytics,
             authenticationClient: container.authenticationClient,
-            navigationController: navigationController,
+            quranDataService: container.quranDataService,
             noteService: noteService,
+            ayahHighlightService: container.ayahHighlightService(),
             textService: textService,
             textRetriever: textRetriever,
             navigateTo: { [weak listener] verse in
                 listener?.navigateTo(ayah: verse, lastPage: nil)
             },
-            editNote: editNote
+            editNote: editNote,
+            showHighlights: showHighlights
         )
         #else
         let viewModel = NotesViewModel(
-            analytics: container.analytics,
             noteService: container.noteService(),
             textRetriever: textRetriever,
             textService: textService,

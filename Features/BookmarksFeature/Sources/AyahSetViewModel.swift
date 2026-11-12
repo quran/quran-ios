@@ -35,6 +35,7 @@ final class AyahSetViewModel: ObservableObject {
     @Published private(set) var ayahTexts: [AyahNumber: QuranText] = [:]
     @Published private(set) var reading: Reading
     @Published var editMode: EditMode = .inactive
+    @Published private(set) var isRemovingAllAyahs = false
     @Published var error: Error?
     @Published var isPresentingDeleteConfirmation = false
     @Published var nameAlert: CollectionNameAlert = .hidden
@@ -61,7 +62,23 @@ final class AyahSetViewModel: ObservableObject {
 
     func removeAyah(_ ayah: AyahNumber) async {
         do {
-            try await dataSource.removeAyah(ayah)
+            try await dataSource.removeAyahs([ayah])
+        } catch {
+            self.error = error
+        }
+    }
+
+    /// Removes every ayah but keeps the collection, then leaves Edit mode.
+    func removeAllAyahs() async {
+        guard !isRemovingAllAyahs else {
+            return
+        }
+        logger.info("Bookmarks: remove all ayah set entries")
+        isRemovingAllAyahs = true
+        defer { isRemovingAllAyahs = false }
+        do {
+            try await dataSource.removeAllAyahs()
+            editMode = .inactive
         } catch {
             self.error = error
         }
@@ -83,6 +100,12 @@ final class AyahSetViewModel: ObservableObject {
         }
         let name = pendingName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty else {
+            return
+        }
+        // The field starts with the displayed name, which is localized for Old Page Bookmarks: writing it back
+        // unchanged would turn that collection into a user collection.
+        guard name != content.title else {
+            nameAlert = .hidden
             return
         }
 

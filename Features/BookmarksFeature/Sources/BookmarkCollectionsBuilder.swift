@@ -28,12 +28,17 @@ struct BookmarkCollectionsBuilder {
             }
         )
         let viewModel = BookmarkCollectionsViewModel(
-            analytics: container.analytics,
             authenticationClient: container.authenticationClient,
+            quranDataService: container.quranDataService,
             ayahBookmarkCollectionService: collectionService,
             ayahHighlightService: highlightService,
             readingBookmarkService: container.readingBookmarkService(),
             ayahSetBuilder: ayahSetBuilder,
+            signInNudge: SyncSignInNudge(
+                authenticationClient: container.authenticationClient,
+                analytics: container.analytics,
+                signInViewControllers: { [weak navigationController] in navigationController.map { [$0] } ?? [] }
+            ),
             navigationController: navigationController,
             navigateToPage: { [weak listener] page in
                 listener?.navigateTo(page: page, lastPage: nil)

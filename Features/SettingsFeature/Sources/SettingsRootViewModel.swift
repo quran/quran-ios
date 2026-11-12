@@ -266,6 +266,9 @@ final class SettingsRootViewModel: ObservableObject {
             try await authenticationClient.login(on: viewController)
             let state = await authenticationClient.authenticationState
             logger.info("Quran Sync: sign in completed from Settings. State: \(state)")
+            if state == .authenticated {
+                SyncSignInNudge.stopAfterSignIn()
+            }
             // While observing, the updates show the card signed in together with the user.
             if runningAuthenticationObservations == 0 {
                 accountState = state == .authenticated ? .signedIn(loggedInUser) : .signedOut

@@ -1,12 +1,19 @@
 #if QURAN_SYNC
 import AnnotationsService
+import NoorUI
 import QuranAnnotations
 import QuranKit
 import ReadingService
 import Utilities
 
+struct AyahSetHeader: Equatable {
+    let text: String
+    let image: NoorSystemImage
+}
+
 struct AyahSetContent {
     let title: String
+    let header: AyahSetHeader?
     let ayahs: [AyahNumber]
     let highlightColor: HighlightColor?
     let canRename: Bool
@@ -18,7 +25,9 @@ protocol AyahSetDataSource {
     var initialContent: AyahSetContent { get }
 
     func contentSequence() -> AnyAsyncSequence<AyahSetContent>
-    func removeAyah(_ ayah: AyahNumber) async throws
+    func removeAyahs(_ ayahs: [AyahNumber]) async throws
+    /// Removes every ayah, including any added since the content was read.
+    func removeAllAyahs() async throws
 }
 
 @MainActor
@@ -53,8 +62,12 @@ struct BookmarkCollectionAyahSetDataSource: ManageableAyahSetDataSource {
         )
     }
 
-    func removeAyah(_ ayah: AyahNumber) async throws {
-        try await service.removeAyahs([ayah], fromCollectionWithID: collectionID)
+    func removeAyahs(_ ayahs: [AyahNumber]) async throws {
+        try await service.removeAyahs(ayahs, fromCollectionWithID: collectionID)
+    }
+
+    func removeAllAyahs() async throws {
+        try await service.removeAllAyahs(fromCollectionWithID: collectionID)
     }
 
     func rename(to name: String) async throws {
@@ -72,6 +85,7 @@ struct BookmarkCollectionAyahSetDataSource: ManageableAyahSetDataSource {
     private nonisolated static func content(_ collection: AyahBookmarkCollection) -> AyahSetContent {
         AyahSetContent(
             title: collection.displayName,
+            header: collection.ayahsHeader.map { AyahSetHeader(text: $0, image: collection.displayImage) },
             ayahs: collection.bookmarks.map(\.ayah),
             highlightColor: nil,
             canRename: collection.canRename,
@@ -109,8 +123,12 @@ struct HighlightAyahSetDataSource: AyahSetDataSource {
         )
     }
 
-    func removeAyah(_ ayah: AyahNumber) async throws {
-        try await service.removeHighlight(for: [ayah])
+    func removeAyahs(_ ayahs: [AyahNumber]) async throws {
+        try await service.removeHighlight(for: ayahs)
+    }
+
+    func removeAllAyahs() async throws {
+        try await service.removeAllHighlights(color)
     }
 
     private let color: HighlightColor
@@ -120,6 +138,7 @@ struct HighlightAyahSetDataSource: AyahSetDataSource {
     private nonisolated static func content(color: HighlightColor, ayahs: [AyahNumber]) -> AyahSetContent {
         AyahSetContent(
             title: color.localizedName,
+            header: nil,
             ayahs: ayahs.sorted(),
             highlightColor: color,
             canRename: false,

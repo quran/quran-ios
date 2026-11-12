@@ -17,13 +17,15 @@ extension AyahNumber {
     }
 
     public func localizedCoordinate(locale: Locale = .preferredLanguageLocale) -> String {
-        let formatter = NumberFormatter()
-        formatter.locale = locale.fixedLocaleNumbers()
-        return "\(formatter.format(sura.suraNumber)):\(formatter.format(ayah))"
+        "\(locale.formatNumber(sura.suraNumber)):\(locale.formatNumber(ayah))"
     }
 
     public var localizedName: String {
-        lFormat("quran.ayah.name", sura.localizedName(), localizedAyahNumber)
+        localizedName(language: nil)
+    }
+
+    func localizedName(language: Language?) -> String {
+        lFormat("quran.ayah.name", language: language, sura.localizedName(language: language), localizedAyahNumber(language: language))
     }
 }
 

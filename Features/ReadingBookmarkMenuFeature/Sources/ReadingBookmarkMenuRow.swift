@@ -14,8 +14,15 @@ struct ReadingBookmarkMenuRow: View {
         case setHere
     }
 
+    enum ActionStyle {
+        case destructive
+        case prominent
+        case plain
+    }
+
     let item: ReadingBookmarkMenuViewModel.Item
     let target: PlacedReadingBookmark.Placement
+    let isFirstRun: Bool
     @Binding var name: String
     let isEnabled: Bool
     let editMode: EditMode
@@ -23,6 +30,7 @@ struct ReadingBookmarkMenuRow: View {
     let select: AsyncAction
 
     @FocusState private var isNameFocused: Bool
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @ScaledMetric private var verticalPadding = 12.0
     @ScaledMetric private var actionHorizontalPadding = 12.0
@@ -39,12 +47,24 @@ struct ReadingBookmarkMenuRow: View {
         }
     }
 
+    var actionStyle: ActionStyle {
+        switch action {
+        case .remove:
+            .destructive
+        case .moveHere:
+            .prominent
+        case .setHere:
+            // Only the first run's suggested slot fills its Set here, so it reads as the default choice.
+            isFirstRun && isSuggested ? .prominent : .plain
+        }
+    }
+
     var subtitle: MultipartText {
         switch action {
         case .remove:
             return .text(l("bookmarks.reading.saved-here"))
         case .setHere:
-            return .text(l("bookmarks.reading.not-placed"))
+            return .text(l(isSuggested ? "bookmarks.reading.first-run.suggested" : "bookmarks.reading.not-placed"))
         case .moveHere:
             switch item.placement {
             case .ayah(let ayah):
@@ -66,6 +86,10 @@ struct ReadingBookmarkMenuRow: View {
             }
         }
         .disabled(!isEnabled)
+    }
+
+    private var isSuggested: Bool {
+        isFirstRun && item.slot == .teal
     }
 
     private var editingRow: some View {
@@ -94,19 +118,29 @@ struct ReadingBookmarkMenuRow: View {
         AsyncButton {
             await select()
         } label: {
-            HStack {
-                icon
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(item.displayName)
-                        .fontWeight(.semibold)
-                        .foregroundColor(isEnabled ? .label : .tertiaryLabel)
-                    subtitle.view(ofSize: .footnote)
-                        .foregroundColor(isEnabled ? .secondaryLabel : .tertiaryLabel)
-                        .fixedSize(horizontal: false, vertical: true)
+            Group {
+                if dynamicTypeSize >= .xxLarge {
+                    // The action gets the row's full width under the labels, so neither breaks mid-word.
+                    VStack(alignment: .leading) {
+                        HStack {
+                            icon
+                            labels
+                            Spacer(minLength: 0)
+                        }
+                        actionLabel
+                            .fixedSize(horizontal: false, vertical: true)
+                            .opacity(isEnabled ? 1 : 0.4)
+                    }
+                } else {
+                    HStack {
+                        icon
+                        labels
+                        Spacer(minLength: 0)
+                        actionLabel
+                            .fixedSize()
+                            .opacity(isEnabled ? 1 : 0.4)
+                    }
                 }
-                Spacer(minLength: 0)
-                actionLabel
-                    .opacity(isEnabled ? 1 : 0.4)
             }
             .padding(.horizontal)
             .padding(.vertical, verticalPadding)
@@ -114,6 +148,17 @@ struct ReadingBookmarkMenuRow: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(BackgroundHighlightingStyle())
+    }
+
+    private var labels: some View {
+        VStack(alignment: .leading, spacing: 1) {
+            Text(item.displayName)
+                .fontWeight(.semibold)
+                .foregroundColor(isEnabled ? .label : .tertiaryLabel)
+            subtitle.view(ofSize: .footnote, alignment: .topLeading, wrapsWideReferences: true)
+                .foregroundColor(isEnabled ? .secondaryLabel : .tertiaryLabel)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 
     private var icon: some View {
@@ -124,20 +169,25 @@ struct ReadingBookmarkMenuRow: View {
 
     private var actionLabel: some View {
         Group {
-            switch action {
-            case .remove:
+            switch actionStyle {
+            case .destructive:
                 Text(action.title)
                     .foregroundStyle(Color.systemRed)
-            case .moveHere, .setHere:
-                Text(action.title)
-                    .foregroundStyle(Color.onAccent)
-                    .padding(.horizontal, actionHorizontalPadding)
-                    .padding(.vertical, actionVerticalPadding)
-                    .background(Color.accentColor, in: Capsule())
+            case .prominent:
+                capsule(foreground: Color.onAccent, background: Color.accentColor)
+            case .plain:
+                capsule(foreground: Color.accentColor, background: .clear)
             }
         }
         .font(.footnote.bold())
-        .fixedSize()
+    }
+
+    private func capsule(foreground: Color, background: Color) -> some View {
+        Text(action.title)
+            .foregroundStyle(foreground)
+            .padding(.horizontal, actionHorizontalPadding)
+            .padding(.vertical, actionVerticalPadding)
+            .background(background, in: Capsule())
     }
 }
 
@@ -149,6 +199,7 @@ struct ReadingBookmarkMenuRow: View {
             placement: .page(Quran.hafsMadani1405.pages[0])
         ),
         target: .page(Quran.hafsMadani1405.pages[0]),
+        isFirstRun: false,
         name: .constant(""),
         isEnabled: true,
         editMode: .active,

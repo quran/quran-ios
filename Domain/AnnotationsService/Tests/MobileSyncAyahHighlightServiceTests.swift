@@ -39,6 +39,16 @@ final class MobileSyncAyahHighlightServiceTests: XCTestCase {
         XCTAssertTrue(highlights.isEmpty)
     }
 
+    func test_removeAllHighlights_removesOnlyThatColor() async throws {
+        try await service.setHighlight(.pink, for: [ayah(1), ayah(2)])
+        try await service.setHighlight(.green, for: [ayah(3)])
+
+        try await service.removeAllHighlights(.pink)
+
+        let highlights = try await storedHighlights(where: { $0.count == 1 })
+        XCTAssertEqual(highlights, [ayah(3): .green])
+    }
+
     func test_setHighlight_roundTripsEverySupportedColor() async throws {
         for color in HighlightColor.sortedColors {
             try await service.setHighlight(color, for: [ayah(1)])

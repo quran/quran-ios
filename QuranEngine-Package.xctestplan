@@ -301,6 +301,20 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "AudioBannerFeatureTests",
+        "name" : "AudioBannerFeatureTests"
+        }
+      },
+      {
+        "target" : {
+          "containerPath" : "container:",
+          "identifier" : "FeaturesSupportTests",
+          "name" : "FeaturesSupportTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "NoteEditorFeatureTests",
         "name" : "NoteEditorFeatureTests"
       }

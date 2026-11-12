@@ -29,4 +29,17 @@ extension HighlightColor {
         case .purple: return l("highlight.color.purple")
         }
     }
+
+    /// Every color, the one used by the most `highlights` first. Ties go alphabetically by localized name.
+    public static func sortedByUsage(in highlights: some Sequence<HighlightColor>) -> [Self] {
+        let counts = Dictionary(highlights.map { ($0, 1) }, uniquingKeysWith: +)
+        return allCases.sorted { lhs, rhs in
+            let lhsCount = counts[lhs, default: 0]
+            let rhsCount = counts[rhs, default: 0]
+            if lhsCount != rhsCount {
+                return lhsCount > rhsCount
+            }
+            return lhs.localizedName.localizedCaseInsensitiveCompare(rhs.localizedName) == .orderedAscending
+        }
+    }
 }

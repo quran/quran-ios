@@ -9,7 +9,6 @@
 import AuthenticationClient
 import Foundation
 import MobileSync
-import SafariServices
 import UIKit
 import VLogging
 
@@ -25,6 +24,7 @@ final class AccountSyncViewModel: ObservableObject {
         syncActivityBuilder: SyncActivityBuilder,
         editor: HeldItemEditor,
         signOut: @escaping @MainActor () async throws -> Void,
+        openWebPage: @escaping @MainActor (URL, UIWindow, @escaping @MainActor (_ wasShown: Bool) -> Void) -> Void,
         navigationController: UINavigationController?
     ) {
         self.user = user
@@ -34,6 +34,7 @@ final class AccountSyncViewModel: ObservableObject {
         self.syncActivityBuilder = syncActivityBuilder
         self.editor = editor
         self.signOut = signOut
+        self.openWebPage = openWebPage
         self.navigationController = navigationController
     }
 
@@ -55,7 +56,7 @@ final class AccountSyncViewModel: ObservableObject {
     @Published var scrollsToHeldItems = false
     @Published var error: Error?
 
-    /// The profile fetch the Manage account sheet's closing started, if any.
+    /// The profile fetch the Manage account page's closing started, if any.
     private(set) var profileRefresh: Task<Void, Never>?
 
     var status: SyncStatusSummary {
@@ -98,10 +99,23 @@ final class AccountSyncViewModel: ObservableObject {
     }
 
     func openQuranComProfile() {
+        // A double tap would open a second page over the first.
+        guard !isQuranComProfileOpen else {
+            return
+        }
+        guard let window = navigationController?.view.window else {
+            logger.error("Account & Sync: can't open the Quran.com profile without a window")
+            return
+        }
         logger.info("Account & Sync: Open Quran.com profile.")
-        let viewController = SFSafariViewController(url: quranProfileURL)
-        viewController.delegate = quranComProfileDelegate
-        navigationController?.present(viewController, animated: true)
+        isQuranComProfileOpen = true
+        openWebPage(quranProfileURL, window) { [weak self] wasShown in
+            self?.isQuranComProfileOpen = false
+            // The user may have changed their name or photo there.
+            if wasShown {
+                self?.refreshProfile()
+            }
+        }
     }
 
     /// Asks the user to confirm, warning about the changes that haven't synced, which sign-out deletes.
@@ -144,12 +158,10 @@ final class AccountSyncViewModel: ObservableObject {
     private let quranProfileURL: URL
     private let syncActivityBuilder: SyncActivityBuilder
     private let signOut: @MainActor () async throws -> Void
+    /// Opens a page over a window, signed in to Quran.com, and calls back once it closes, saying whether it was shown.
+    private let openWebPage: @MainActor (URL, UIWindow, @escaping @MainActor (_ wasShown: Bool) -> Void) -> Void
     private weak var navigationController: UINavigationController?
-    /// The Manage account sheet's delegate; the sheet holds it weakly.
-    private lazy var quranComProfileDelegate = SafariSheetDelegate { [weak self] in
-        // The user may have changed their name or photo there.
-        self?.refreshProfile()
-    }
+    private var isQuranComProfileOpen = false
 
     private func observeUser() async {
         do {

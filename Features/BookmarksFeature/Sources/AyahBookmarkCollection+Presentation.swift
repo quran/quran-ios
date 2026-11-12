@@ -27,16 +27,21 @@ extension AyahBookmarkCollection {
         }
     }
 
+    /// Explains where the imported ayahs came from.
+    var ayahsHeader: String? {
+        guard kind == .oldPageBookmarks, !bookmarks.isEmpty else {
+            return nil
+        }
+        return l("bookmarks.old-page-bookmarks.explanation")
+    }
+
     var displayImageColor: Color {
         .secondaryLabel
     }
-}
 
-extension HighlightColor {
-    static var alphabeticallySortedColors: [Self] {
-        allCases.sorted {
-            $0.localizedName.localizedCaseInsensitiveCompare($1.localizedName) == .orderedAscending
-        }
+    /// Read-only collections can't be deleted, so they offer to remove their ayahs instead.
+    var canRemoveAllAyahs: Bool {
+        isReadOnly && !bookmarks.isEmpty
     }
 }
 #endif

@@ -116,7 +116,7 @@ public final class AudioBannerViewModel: ObservableObject {
     weak var listener: AudioBannerListener?
 
     @Published var error: Error?
-    @Published var toast: (message: MultipartText, action: ToastAction?)?
+    @Published var toast: Toast?
     @Published var modalRequest: ModalPresentationRequest?
     @Published var playbackRate: Float
 
@@ -171,9 +171,18 @@ public final class AudioBannerViewModel: ObservableObject {
         audioPlayer.setRate(rate)
     }
 
+    /// Dismisses the banner's toasts, showing or waiting to show, leaving other features' toasts alone.
+    func dismissToasts() {
+        for id in toastIDs {
+            ToastPresenter.shared.dismissToast(withID: id)
+        }
+        toastIDs = []
+    }
+
     // MARK: Private
 
     private var audioRange: AudioRange?
+    private var toastIDs: [UUID] = []
 
     private let analytics: AnalyticsLibrary
     private let reciterRetreiver: ReciterDataRetriever
@@ -447,8 +456,8 @@ public final class AudioBannerViewModel: ObservableObject {
         guard let audioRange else {
             return
         }
-        let message = audioMessage("audio.downloading.message", audioRange: audioRange)
-        toast = (message, action: nil)
+        let message = Self.audioMessage("audio.downloading.toast", audioRange: audioRange)
+        showToast(Toast(message, icon: Toast.Icon(.download)))
     }
 
     private func updateDownloadProgress() async {
@@ -467,10 +476,16 @@ public final class AudioBannerViewModel: ObservableObject {
             return
         }
 
-        let message = audioMessage("audio.playing.message", audioRange: audioRange)
-        toast = (message, action: ToastAction(title: l("audio.playing.action.modify")) { [weak self] in
+        let message = Self.audioMessage("audio.playing.toast", audioRange: audioRange)
+        let modify = ToastAction(title: l("audio.playing.action.modify")) { [weak self] in
             self?.showAdvancedAudioOptions()
-        })
+        }
+        showToast(Toast(message, icon: Toast.Icon(.play), action: modify))
+    }
+
+    private func showToast(_ toast: Toast) {
+        toastIDs.append(toast.id)
+        self.toast = toast
     }
 
     private func playbackFailed(_ error: Error) {
@@ -479,10 +494,8 @@ public final class AudioBannerViewModel: ObservableObject {
         playbackEnded()
     }
 
-    private func audioMessage(_ format: String, audioRange: AudioRange) -> MultipartText {
-        let start: MultipartText = "\(ayah: audioRange.start)"
-        let end: MultipartText = "\(ayah: audioRange.end)"
-        return MultipartText.localizedFormat(format, start, end)
+    static func audioMessage(_ format: String, audioRange: AudioRange) -> MultipartText {
+        MultipartText.localizedFormat(format, "\(ayahRange: audioRange.start ... max(audioRange.start, audioRange.end))")
     }
 }
 

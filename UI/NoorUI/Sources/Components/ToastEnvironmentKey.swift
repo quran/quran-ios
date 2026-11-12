@@ -18,13 +18,10 @@ extension EnvironmentValues {
 
 extension View {
     /// Lets this view and its descendants show toasts through `showToast`, lifted above the bars
-    /// at the bottom of the presenting view's screen, like a tab bar.
-    ///
-    /// - Parameter bottomBarsHeight: How far bars that the presenting view's screen can't report
-    ///   through its safe area, like a floating bar beneath a popover, reach above the window's
-    ///   bottom edge. Read when a toast shows.
-    public func enableToastPresenter(bottomBarsHeight: (@MainActor () -> CGFloat)? = nil) -> some View {
-        modifier(ToastPresenterModifier(bottomBarsHeight: bottomBarsHeight))
+    /// at the bottom of the presenting view's screen, like a tab bar, and the bars that keep toasts
+    /// above them, like the reader's audio bar.
+    public func enableToastPresenter() -> some View {
+        modifier(ToastPresenterModifier())
     }
 }
 
@@ -33,10 +30,7 @@ private struct ToastPresenterKey: EnvironmentKey {
 }
 
 private struct ToastPresenterModifier: ViewModifier {
-    let bottomBarsHeight: (@MainActor () -> CGFloat)?
-
     @State private var anchor = ToastAnchor()
-    @ScaledMetric private var bottomBarsSpacing = 8
 
     func body(content: Content) -> some View {
         content
@@ -44,13 +38,11 @@ private struct ToastPresenterModifier: ViewModifier {
                 ToastAnchorReader(anchor: anchor)
             )
             .environment(\.showToast) { toast in
-                guard let view = anchor.view, let windowScene = view.window?.windowScene else {
-                    logger.error("Failed to obtain windowScene")
+                guard let view = anchor.view else {
+                    logger.error("Failed to obtain the toast's presenting view")
                     return
                 }
-                let height = max(view.bottomBarsHeight, bottomBarsHeight?() ?? 0)
-                let placedToast = toast.clearingBottomBars(height: height, spacing: bottomBarsSpacing)
-                ToastPresenter.shared.showToast(placedToast, in: windowScene)
+                ToastPresenter.shared.showToast(toast, from: view)
             }
     }
 }
@@ -65,7 +57,7 @@ private struct ToastAnchorReader: UIViewRepresentable {
     let anchor: ToastAnchor
 
     func makeUIView(context: Context) -> UIView {
-        let view = UIView()
+        let view = ToastAnchorView()
         view.isUserInteractionEnabled = false
         anchor.view = view
         return view
@@ -76,18 +68,16 @@ private struct ToastAnchorReader: UIViewRepresentable {
     }
 }
 
-private extension UIView {
-    /// How far the bars at the bottom of this view's screen, like a tab bar, reach above the window's bottom edge.
-    var bottomBarsHeight: CGFloat {
-        let screenView = sequence(first: self, next: \.superview).first { $0.next is UIViewController }
-        guard let window, let screenView else {
-            return 0
-        }
-        return Toast.bottomBarsHeight(
-            windowHeight: window.bounds.height,
-            windowBottomInset: window.safeAreaInsets.bottom,
-            screenBottom: screenView.convert(screenView.bounds, to: window).maxY,
-            screenBottomInset: screenView.safeAreaInsets.bottom
-        )
+/// Moves the showing toast when the presenting screen resizes, like on rotation, or closes,
+/// which can uncover the bars under it.
+private final class ToastAnchorView: UIView {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        ToastPresenter.shared.setNeedsPlacementUpdate()
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        ToastPresenter.shared.setNeedsPlacementUpdate()
     }
 }

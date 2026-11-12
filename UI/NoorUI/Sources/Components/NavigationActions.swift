@@ -31,6 +31,20 @@ public enum NavigationBarButton {
         button(image: UIImage(systemName: "plus"), tintColor: nil, action: action)
     }
 
+    /// The destructive Delete All shown while editing a list. Its action gets the button, so a confirmation
+    /// can anchor its popover to it.
+    public static func deleteAll(action: @escaping @MainActor (UIBarButtonItem) -> Void) -> UIBarButtonItem {
+        let button = UIBarButtonItem()
+        button.primaryAction = UIAction(title: l("bookmarks.delete-all")) { [weak button] _ in
+            guard let button else {
+                return
+            }
+            action(button)
+        }
+        button.tintColor = .systemRed
+        return button
+    }
+
     /// Pass `glassSymbolScale` for symbols that are both wide and tall, such as `books.vertical`:
     /// Liquid Glass draws each bar button inside a 44pt circle, which they crowd at the default scale.
     public static func secondary(
@@ -109,16 +123,19 @@ public enum NavigationBarButton {
 
 @MainActor
 public final class NavigationEditModeController {
+    /// `listItems` show only alongside the Edit button, while there is a list to edit.
     public init(
         navigationItem: UINavigationItem,
         reload: AnyPublisher<Void, Never>,
         editMode: Binding<EditMode?>,
+        listItems: [UIBarButtonItem] = [],
         customItems: [UIBarButtonItem] = []
     ) {
         controller = EditController(
             navigationItem: navigationItem,
             reload: reload,
             editMode: editMode,
+            listItems: listItems,
             customItems: customItems,
             buttonProvider: { editMode, action in
                 if editMode.isEditing {

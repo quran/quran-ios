@@ -31,8 +31,8 @@
 "quran.page.name" = "الصفحة %@";
 // A page location: %1$@ is the name of the page's first surah and %2$@ is the localized page, such as "At-Tawbah, Page 200". Translators may reorder the placeholders.
 "quran.page.location" = "%1$@، %2$@";
-// A range of Quran references: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257". Translators may reorder the placeholders.
-"quran.range" = "%1$@ - %2$@";
+// Ayahs across surahs: %1$@ is the start and %2$@ is the end reference, such as "Al-Baqarah 2:286 – Āli-ʿImrān 3:10". Ayahs in one surah are written "Al-Baqarah 2:1–10" without this format. Translators may reorder the placeholders.
+"quran.range" = "%1$@ – %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
 "quran.hizb.name" = "الحزب %@";
 // A quarter reference: %1$@ is the fraction (¼, ½ or ¾) and %2$@ is the hizb reference, such as "¼ Hizb 3". Translators may reorder the placeholders.
@@ -171,8 +171,10 @@
 // MARK: - Audio
 
 "audio.playing.action.modify" = "تغير";
-"audio.playing.message" = "تشغيل الصوت من %@ إلى %@";
-"audio.downloading.message" = "تنزيل الصوت من %@ إلى %@";
+// Toast when audio starts playing: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name when the whole surah plays.
+"audio.playing.toast" = "تشغيل %@";
+// Toast when audio starts downloading before it plays: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name for a whole surah.
+"audio.downloading.toast" = "تنزيل صوت %@";
 
 "audio.playing-verses.label" = "سماع آيات";
 "audio.adjust-end-verse-to-the-end.label" = "ضبط نهاية الآية لنهاية";
@@ -226,24 +228,32 @@
 "bookmarks.collections.no-data.title" = "لا توجد مجموعات حتى الآن";
 "bookmarks.collections.no-data.text" = "أنشئ مجموعة لتنظيم الآيات حسب الموضوع أو الدعاء أو خطة الحفظ.";
 "bookmarks.collections.ayahs.delete-hint" = "اسحب الإشارة المرجعية لحذفها.";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "هل أنت متأكد من رغبتك في إزالة جميع الآيات من “%@”؟";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "هل أنت متأكد من رغبتك في إزالة جميع التظليلات باللون “%@”؟";
 "bookmarks.collections.ayahs.open-hint" = "يفتح هذه الآية في القرآن.";
 "bookmarks.collections.ayahs.no-data.text" = "ستظهر هنا الآيات التي تضيف لها إشارة مرجعية أثناء القراءة.";
 "bookmarks.collections.ayahs.no-data.colored.text" = "ستظهر هنا الآيات التي تميّزها باللون %@ أثناء القراءة.";
 "bookmarks.old-page-bookmarks" = "إشارات الصفحات المرجعية القديمة";
-
-"bookmarks.sync.title" = "زامن مجموعاتك";
-"bookmarks.sync.body" = "سجّل الدخول إلى Quran.com للاحتفاظ بمجموعاتك متاحة عبر أجهزتك.";
-"bookmarks.sync.action" = "تسجيل الدخول";
+// Header of the Old Page Bookmarks collection.
+"bookmarks.old-page-bookmarks.explanation" = "حُفظت من إشارات الصفحات المرجعية. أصبحت كل صفحة الآن أول آية فيها.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+"bookmarks.old-page-bookmarks-tip.title" = "إشارات صفحاتك المرجعية هنا";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+"bookmarks.old-page-bookmarks-tip.text" = "أصبحت كل صفحة أضفت لها إشارة مرجعية في الإصدار %@ أولَ آية فيها، ضمن «إشارات الصفحات المرجعية القديمة». لتحتفظ بموضعك أثناء القراءة، استخدم علامات موضع القراءة.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+"bookmarks.old-page-bookmarks.open" = "فتح إشارات الصفحات المرجعية القديمة";
 
 "bookmarks.editor.collection.unselected" = "غير محددة";
 "bookmarks.editor.collection.mixed" = "محددة جزئيًا";
 "bookmarks.editor.collection.selected" = "محددة";
 "bookmarks.editor.error.highlight-unavailable" = "لا تزال ألوان التمييز قيد التحميل. حاول مرة أخرى.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+"bookmarks.editor.intro" = "أضف الآيات إلى المفضلة أو إلى مجموعاتك الخاصة، مثل الأدعية أو مراجعة الحفظ. وألوان التحديد هنا أيضًا.";
 
 // MARK: - Notes
 
-"notes.sync.title" = "زامن ملاحظاتك";
-"notes.sync.body" = "سجّل الدخول إلى Quran.com للاحتفاظ بملاحظاتك متاحة عبر أجهزتك.";
 "notes.sync.no-data.title" = "لا توجد ملاحظات بعد";
 "notes.sync.no-data.text" = "اضغط مطولًا على آية أثناء القراءة، ثم اضغط على «اضف ملاحظة» لكتابة ملاحظتك الأولى.";
 
@@ -263,6 +273,14 @@
 "notes.search.placeholder.text" = "ابحث في ملاحظاتك";
 "notes.search.no-results.title" = "لا توجد ملاحظات تطابق \"%@\"";
 "notes.search.no-results.text" = "جرب كلمة مختلفة من ملاحظة قمت بحفظها أو اسم سورة.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+"notes.highlights-tip.title" = "التحديدات أصبحت في المرجعيات";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+"notes.highlights-tip.text" = "تحتفظ الملاحظات بما تكتبه فقط. الآيات التي حدّدتها موجودة في تبويب المرجعيات، مرتبة حسب اللون.";
+// Opens the Bookmarks tab from the Notes card and empty state.
+"notes.highlights.show" = "عرض التحديدات";
+// Notes empty state line when the user has highlights.
+"notes.no-data.highlights.text" = "تحديداتك موجودة في تبويب المرجعيات.";
 
 // MARK: - Ayah Menu
 
@@ -403,9 +421,13 @@
 "audio.playback-speed" = "سرعة التشغيل";
 
 // Reading bookmark
-"ayah.menu.reading-bookmark.moved" = "تم نقل علامة موضع القراءة من %@ إلى %@";
+"ayah.menu.reading-bookmark.moved-to" = "تم نقل علامة موضع القراءة إلى %@";
+"ayah.menu.reading-bookmark.moved.explanation" = "علامات القراءة تتنقّل ولا تتراكم. للاحتفاظ بالآيات، أضفها إلى مجموعة.";
+// Badge on the ayah menu's Reading Bookmark row.
+"ayah.menu.reading-bookmark.new" = "جديد";
 "ayah.menu.reading-bookmark.removed" = "تمت إزالة علامة موضع القراءة من %@";
 "ayah.menu.reading-bookmark.saved" = "تم حفظ علامة موضع القراءة عند %@";
+"ayah.menu.reading-bookmark.saved.explanation" = "انقلها كلما تقدّمت في القراءة. لديك ثلاث علامات، واحدة لكل ختمة أو حفظ.";
 "ayah.menu.reading-bookmark.single-ayah-only" = "حدد آية واحدة";
 "ayah.menu.reading-bookmark.title" = "علامة موضع القراءة";
 /* VoiceOver label for a reading bookmark on an ayah. %1$@ is "ayah.menu.reading-bookmark.title" and %2$@ is the bookmark's color, such as "Teal" */
@@ -444,6 +466,10 @@
 "bookmarks.reading.show-less" = "عرض أقل";
 // Reading bookmarks menu explanation below its title.
 "bookmarks.reading.description" = "استخدم علامة لكل قراءة، مثل ختمتك أو حفظك.";
+// Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
+"bookmarks.reading.first-run.title" = "علامة لكل قراءة، حتى ثلاث قراءات";
+// Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
+"bookmarks.reading.first-run.suggested" = "اقتراحنا لقراءتك الأولى";
 // Reading bookmark row subtitle when the bookmark is at the current ayah or page.
 "bookmarks.reading.saved-here" = "محفوظ هنا";
 // Reading bookmark row subtitle when the bookmark has no position.
@@ -617,3 +643,18 @@
 "sync.sign-out.review" = "مراجعة";
 // Button on an item that doesn't sync: opens its note editor or renames its collection.
 "sync.held.edit" = "تعديل";
+
+// MARK: - Ayah ranges
+
+// How VoiceOver reads ayahs across surahs: %1$@ is the start and %2$@ is the end ayah, such as "Al-Baqarah, Ayah 286 to Āli-ʿImrān, Ayah 10". Translators may reorder the placeholders.
+"quran.range.spoken" = "من %1$@ إلى %2$@";
+// How VoiceOver reads ayahs in one surah: %1$@ is the first and %2$@ is the last localized ayah number, such as "Ayahs 1 to 10" in "Al-Baqarah, Ayahs 1 to 10". Translators may reorder the placeholders.
+"quran.ayah.number-range" = "الآيات من %1$@ إلى %2$@";
+// Sign-in reminder toast title after a signed-out user saves a new note.
+"sync.nudge.note-saved" = "تم حفظ الملاحظة";
+// Sign-in reminder toast title after a signed-out user creates a collection.
+"sync.nudge.collection-created" = "تم إنشاء المجموعة";
+// Sign-in reminder toast subtitle under "Note saved" or "Collection created": "it" is the note or collection.
+"sync.nudge.subtitle" = "سجّل الدخول لتجدها على Quran.com وجميع أجهزتك.";
+// Sign-in reminder toast button that starts signing in to Quran.com.
+"sync.nudge.sign-in" = "تسجيل الدخول";

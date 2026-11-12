@@ -27,7 +27,9 @@ final class DiagnosticsServiceTests: XCTestCase {
 
     func test_buildDiagnosticsZip_archivesLogsAndDatabasesUnderLogsFolder() throws {
         try Data("log line".utf8).write(to: logsDirectory.appendingPathComponent("app.log"))
-        try Data("database".utf8).write(to: databasesDirectory.appendingPathComponent("user_data.db"))
+        // Documents/databases holds files like translations.db. MobileSync's user_data.db lives
+        // in Application Support/databases and is not part of the diagnostics archive.
+        try Data("database".utf8).write(to: databasesDirectory.appendingPathComponent("translations.db"))
         let sut = DiagnosticsService(logsDirectory: logsDirectory, databasesDirectory: databasesDirectory)
 
         let diagnostics = try sut.buildDiagnosticsZip()
@@ -35,7 +37,7 @@ final class DiagnosticsServiceTests: XCTestCase {
 
         let archive = try Archive(url: diagnostics.url, accessMode: .read)
         XCTAssertEqual(try contents(of: "logs/app.log", in: archive), "log line")
-        XCTAssertEqual(try contents(of: "logs/extras/user_data.db", in: archive), "database")
+        XCTAssertEqual(try contents(of: "logs/extras/translations.db", in: archive), "database")
         XCTAssertNotNil(archive["logs/extras/UserDefaultsData.json"])
     }
 

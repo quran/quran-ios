@@ -45,9 +45,9 @@
 "quran.page.name" = "第%@页";
 // A page location: %1$@ is the name of the page's first surah and %2$@ is the localized page, such as "At-Tawbah, Page 200". Translators may reorder the placeholders.
 "quran.page.location" = "%1$@，%2$@";
-// A range of Quran references: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257". Translators may reorder the placeholders.
+// Ayahs across surahs: %1$@ is the start and %2$@ is the end reference, such as "Al-Baqarah 2:286 – Āli-ʿImrān 3:10". Ayahs in one surah are written "Al-Baqarah 2:1–10" without this format. Translators may reorder the placeholders.
 // Metadata: Translated by AI; human review required.
-"quran.range" = "%1$@至%2$@";
+"quran.range" = "%1$@ – %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
 // Metadata: Translated by AI; human review required.
 "quran.hizb.name" = "第%@段";
@@ -235,10 +235,12 @@
 
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playing.action.modify" = "修改";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.playing.message" = "正在播放 %@ 至 %@ 的音频";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.downloading.message" = "正在下载 %@ 至 %@ 的音频";
+// Toast when audio starts playing: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name when the whole surah plays.
+// Metadata: Translated by AI; human review required.
+"audio.playing.toast" = "正在播放 %@";
+// Toast when audio starts downloading before it plays: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name for a whole surah.
+// Metadata: Translated by AI; human review required.
+"audio.downloading.toast" = "正在下载 %@ 的音频";
 
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playing-verses.label" = "播放经文";
@@ -259,8 +261,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "同步您的笔记";
-"notes.sync.body" = "登录 Quran.com，让您的笔记可在所有设备上使用。";
 "notes.sync.no-data.title" = "还没有笔记";
 "notes.sync.no-data.text" = "阅读时长按一节经文，然后轻点“添加笔记”来写下您的第一条笔记。";
 
@@ -284,6 +284,18 @@
 "notes.search.no-results.title" = "没有笔记与 \"%@\" 匹配";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "请尝试您保存的笔记中的其他词或章节名称。";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "高亮现已移至收藏";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "笔记只保留您写下的内容。您高亮的经文按颜色列在“收藏”标签页中。";
+// Opens the Bookmarks tab from the Notes card and empty state.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "显示高亮";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "您的高亮在“收藏”标签页中。";
 
 // MARK: - Ayah Menu
 
@@ -504,12 +516,19 @@
 // Ayah Menu
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "笔记（%d）";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.moved-to" = "阅读书签已移至 %@";
+// Badge on the ayah menu's Reading Bookmark row.
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.new" = "新";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.moved" = "阅读书签已从 %@ 移至 %@";
+"ayah.menu.reading-bookmark.moved.explanation" = "阅读书签由你移动，而不是新增。若要保留经文，请将其保存到收藏集。";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "已移除 %@ 的阅读书签";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "阅读书签已保存至 %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "随着阅读移动它。你有三个，每段阅读进度各用一个。";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "请选择一节经文";
 // Metadata: Translated by ChatGPT; human review required.
@@ -522,6 +541,12 @@
 "bookmarks.collections" = "收藏集";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.add" = "添加收藏集";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "确定要移除所有“%@”高亮吗？";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "确定要从“%@”中移除所有经文吗？";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "向左轻扫书签即可删除。";
 // Metadata: Translated by ChatGPT; human review required.
@@ -573,14 +598,23 @@
 "bookmarks.editor.collection.unselected" = "未选中";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "高亮颜色仍在加载，请重试。";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "将经文保存到收藏或你自己的收藏集，例如杜阿或背诵复习。高亮颜色也在这里。";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "旧页面书签";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "登录";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "登录 Quran.com，让您的收藏集可在所有设备上使用。";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "同步您的收藏集";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "保存自你的页面书签。每一页现在都对应该页的第一节经文。";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.title" = "您的页面书签在这里";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.text" = "您在 %@ 版中加入书签的每一页，现在都以该页第一节经文的形式保存在“旧页面书签”中。要在阅读时记住位置，请使用阅读书签。";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.open" = "打开旧页面书签";
 
 // Highlight Colors
 // Metadata: Translated by ChatGPT; human review required.
@@ -687,6 +721,12 @@
 // Reading bookmarks menu explanation below its title.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.description" = "每项阅读各用一个，例如通读全经或背诵。";
+// Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.title" = "最多可在三项阅读中记住位置";
+// Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.suggested" = "建议用于你的第一项阅读";
 // Reading bookmark row subtitle when the bookmark is at the current ayah or page.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.saved-here" = "已保存在这里";
@@ -874,3 +914,20 @@
 "sync.sign-out.review" = "查看";
 // Button on an item that doesn't sync: opens its note editor or renames its collection.
 "sync.held.edit" = "编辑";
+
+// MARK: - Ayah ranges
+
+// How VoiceOver reads ayahs across surahs: %1$@ is the start and %2$@ is the end ayah, such as "Al-Baqarah, Ayah 286 to Āli-ʿImrān, Ayah 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.range.spoken" = "%1$@至%2$@";
+// How VoiceOver reads ayahs in one surah: %1$@ is the first and %2$@ is the last localized ayah number, such as "Ayahs 1 to 10" in "Al-Baqarah, Ayahs 1 to 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.ayah.number-range" = "第%1$@至%2$@节";
+// Sign-in reminder toast title after a signed-out user saves a new note.
+"sync.nudge.note-saved" = "笔记已保存";
+// Sign-in reminder toast title after a signed-out user creates a collection.
+"sync.nudge.collection-created" = "收藏集已创建";
+// Sign-in reminder toast subtitle under "Note saved" or "Collection created": "it" is the note or collection.
+"sync.nudge.subtitle" = "登录即可在 Quran.com 和您的所有设备上查看它。";
+// Sign-in reminder toast button that starts signing in to Quran.com.
+"sync.nudge.sign-in" = "登录";

@@ -1,3 +1,4 @@
+import Localization
 import UIKit
 import XCTest
 @testable import NoorUI
@@ -33,6 +34,14 @@ final class NavigationActionsTests: XCTestCase {
         let button = NavigationBarButton.add { }
 
         XCTAssertNil(button.tintColor)
+        XCTAssertNotNil(button.primaryAction)
+    }
+
+    func test_deleteAllButton_isRedAndTitled() {
+        let button = NavigationBarButton.deleteAll { _ in }
+
+        XCTAssertEqual(button.title, l("bookmarks.delete-all"))
+        XCTAssertEqual(button.tintColor, .systemRed)
         XCTAssertNotNil(button.primaryAction)
     }
 

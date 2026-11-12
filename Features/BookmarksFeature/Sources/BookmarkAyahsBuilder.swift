@@ -5,6 +5,7 @@
 
 import AnnotationsService
 import AppDependencies
+import FeaturesSupport
 import NoorUI
 import QuranAnnotations
 import QuranKit
@@ -25,15 +26,26 @@ public struct BookmarkAyahsBuilder {
         collections: [AyahBookmarkCollection],
         highlights: [AyahNumber: HighlightColor] = [:]
     ) -> UIViewController {
+        weak var sheet: UIViewController?
         let viewModel = BookmarkAyahsViewModel(
             verses: verses,
             collections: collections,
             highlights: highlights,
             analytics: container.analytics,
             ayahBookmarkCollectionService: container.ayahBookmarkCollectionService(),
-            ayahHighlightService: container.ayahHighlightService()
+            ayahHighlightService: container.ayahHighlightService(),
+            signInNudge: SyncSignInNudge(
+                authenticationClient: container.authenticationClient,
+                analytics: container.analytics,
+                // The sheet can close before Sign In, so fall back to the screens under it.
+                signInViewControllers: {
+                    sheet.map { Array(sequence(first: $0, next: \.presentingViewController)) } ?? []
+                }
+            )
         )
-        return navigationController(viewModel: viewModel)
+        let navigationController = navigationController(viewModel: viewModel)
+        sheet = navigationController
+        return navigationController
     }
 
     // MARK: Private

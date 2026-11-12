@@ -22,36 +22,61 @@ struct NotesView: View {
         NotesViewUI(
             editMode: $viewModel.editMode,
             error: $viewModel.error,
-            shouldShowSyncBanner: shouldShowSyncBanner,
-            dismissSyncBanner: { dismissSyncBanner() },
-            signInAction: { await signIn() },
+            canRefresh: canRefresh,
+            refresh: { await refresh() },
             notes: viewModel.filteredNotes,
             searchTerm: viewModel.searchTerm,
             quranFont: viewModel.reading.quranFont,
+            showsHighlightsTip: showsHighlightsTip,
+            highlightsSummary: highlightsSummary,
             start: { await viewModel.start() },
             selectAction: { viewModel.navigateTo($0) },
             editAction: { viewModel.editNote($0) },
-            deleteAction: { viewModel.deleteItem($0) }
+            deleteAction: { viewModel.deleteItem($0) },
+            showHighlights: { showHighlights() },
+            dismissHighlightsTip: { dismissHighlightsTip() }
         )
     }
 
-    private var shouldShowSyncBanner: Bool {
+    private var canRefresh: Bool {
         #if QURAN_SYNC
-        viewModel.shouldShowSyncBanner
+        viewModel.canRefresh
         #else
         false
         #endif
     }
 
-    private func dismissSyncBanner() {
+    private var showsHighlightsTip: Bool {
         #if QURAN_SYNC
-        viewModel.dismissSyncBanner()
+        viewModel.showsHighlightsTip
+        #else
+        false
         #endif
     }
 
-    private func signIn() async {
+    private var highlightsSummary: NotesHighlightsSummary? {
         #if QURAN_SYNC
-        await viewModel.loginToQuranCom()
+        viewModel.highlightsSummary
+        #else
+        nil
+        #endif
+    }
+
+    private func refresh() async {
+        #if QURAN_SYNC
+        await viewModel.refresh()
+        #endif
+    }
+
+    private func showHighlights() {
+        #if QURAN_SYNC
+        viewModel.showHighlights()
+        #endif
+    }
+
+    private func dismissHighlightsTip() {
+        #if QURAN_SYNC
+        viewModel.dismissHighlightsTip()
         #endif
     }
 }
@@ -63,35 +88,24 @@ private struct NotesViewUI: View {
     @Binding var editMode: EditMode
     @Binding var error: Error?
 
-    let shouldShowSyncBanner: Bool
-    let dismissSyncBanner: @MainActor @Sendable () -> Void
-    let signInAction: AsyncAction
+    let canRefresh: Bool
+    let refresh: AsyncAction
     let notes: [NoteItem]
     let searchTerm: String
     let quranFont: QuranFont
+    let showsHighlightsTip: Bool
+    let highlightsSummary: NotesHighlightsSummary?
 
     let start: AsyncAction
     let selectAction: ItemAction<NoteItem>
     let editAction: ItemAction<NoteItem>
     let deleteAction: ItemDeletionAction<NoteItem>
+    let showHighlights: () -> Void
+    let dismissHighlightsTip: () -> Void
 
     var body: some View {
-        VStack(spacing: 0) {
-            if shouldShowSyncBanner, !isSearching {
-                SyncSignInCard(
-                    title: l("notes.sync.title"),
-                    subtitle: l("notes.sync.body"),
-                    actionLabel: l("bookmarks.sync.action"),
-                    dismiss: dismissSyncBanner,
-                    signInAction: signInAction
-                )
-                .padding()
-            }
-
-            content
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.systemGroupedBackground)
+        content
+            .background(Color.systemGroupedBackground)
     }
 
     private var content: some View {
@@ -100,10 +114,16 @@ private struct NotesViewUI: View {
                 if isSearching {
                     noResults
                 } else {
-                    noData
+                    scrollableNoData
                 }
             } else {
                 NoorList {
+                    if showsTip {
+                        Section {
+                            highlightsTip
+                                .tipCardListRow()
+                        }
+                    }
                     NoorSection(notes, onDelete: deleteAction) { note in
                         listItem(note)
                             .listRowInsets(.init(top: 6, leading: 0, bottom: 6, trailing: 0))
@@ -111,6 +131,8 @@ private struct NotesViewUI: View {
                             .listRowSeparator(.hidden)
                     }
                 }
+                .animation(reduceMotion ? nil : NoorAnimation.standard, value: showsTip)
+                .refreshable(isEnabled: canRefresh, action: refresh)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -121,17 +143,80 @@ private struct NotesViewUI: View {
 
     // MARK: Private
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    @ScaledMetric private var highlightsSpacing = 12.0
+    // Scaled with Dynamic Type inside ``HighlightPaletteIcon``.
+    private let highlightsTipIconSize = 24.0
+    private let highlightsMovedIconSize = 28.0
+    @ScaledMetric private var highlightsCornerRadius = 20.0
+    @ScaledMetric private var highlightsMaxWidth = 320.0
+
     private var isSearching: Bool {
         !searchTerm.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
+    private var showsTip: Bool {
+        showsHighlightsTip && !isSearching
+    }
+
     private var noData: some View {
-        NoorListEmptyState(
-            title: noDataTitle,
-            text: noDataText,
-            image: .note,
-            style: .prominent(imageColor: .accentColor)
+        VStack {
+            NoorListEmptyState(
+                title: noDataTitle,
+                text: noDataText,
+                image: .note,
+                style: .prominent(imageColor: .accentColor)
+            )
+
+            if let highlightsSummary {
+                highlightsMoved(highlightsSummary)
+            }
+        }
+    }
+
+    private var highlightsTip: some View {
+        TipCard(
+            title: l("notes.highlights-tip.title"),
+            text: l("notes.highlights-tip.text"),
+            action: TipCard.Action(l("notes.highlights.show"), perform: showHighlights),
+            dismiss: dismissHighlightsTip
+        ) {
+            // The palette upgraders remember from the 3.0 ayah menu, not their own colors.
+            HighlightPaletteIcon(size: highlightsTipIconSize)
+        }
+    }
+
+    private func highlightsMoved(_ summary: NotesHighlightsSummary) -> some View {
+        VStack(spacing: highlightsSpacing) {
+            HighlightPaletteIcon(colors: summary.colors, size: highlightsMovedIconSize)
+                .accessibilityHidden(true)
+
+            Text(l("notes.no-data.highlights.text"))
+                .font(.subheadline)
+                .foregroundStyle(Color.secondaryLabel)
+                .multilineTextAlignment(.center)
+
+            AccentCapsuleButton(l("notes.highlights.show"), action: showHighlights)
+        }
+        .padding()
+        .frame(maxWidth: highlightsMaxWidth)
+        .background(
+            Color.secondarySystemGroupedBackground,
+            in: RoundedRectangle(cornerRadius: highlightsCornerRadius, style: .continuous)
         )
+        .padding(.horizontal)
+    }
+
+    /// Keeps ``noData`` centered, scrolls it when it doesn't fit, and hosts pull-to-refresh.
+    private var scrollableNoData: some View {
+        GeometryReader { proxy in
+            ScrollView {
+                noData
+                    .frame(minWidth: proxy.size.width, minHeight: proxy.size.height)
+            }
+            .refreshable(isEnabled: canRefresh, action: refresh)
+        }
     }
 
     private var noDataTitle: String {
@@ -252,25 +337,29 @@ struct NotesView_Previews: PreviewProvider {
         @State var editMode: EditMode = .inactive
         @State var error: Error? = nil
         @State var searchTerm: String = ""
+        @State var showsHighlightsTip = true
 
         var body: some View {
             NavigationView {
                 NotesViewUI(
                     editMode: $editMode,
                     error: $error,
-                    shouldShowSyncBanner: false,
-                    dismissSyncBanner: {},
-                    signInAction: {},
+                    canRefresh: false,
+                    refresh: {},
                     notes: items,
                     searchTerm: searchTerm,
                     quranFont: .uthmanicHafs,
+                    showsHighlightsTip: showsHighlightsTip,
+                    highlightsSummary: nil,
                     start: {},
                     selectAction: { _ in },
                     editAction: { _ in },
                     deleteAction: { item in
                         items = items.filter { $0 != item }
                         return {}
-                    }
+                    },
+                    showHighlights: { showsHighlightsTip = false },
+                    dismissHighlightsTip: { showsHighlightsTip = false }
                 )
                 .navigationTitle("Notes")
                 .toolbar {
@@ -304,33 +393,36 @@ private struct NotesEmptyPreview: View {
     @State private var editMode: EditMode = .inactive
     @State private var error: Error?
 
-    let showsSignInCard: Bool
+    var highlightsSummary: NotesHighlightsSummary?
 
     var body: some View {
         NavigationView {
             NotesViewUI(
                 editMode: $editMode,
                 error: $error,
-                shouldShowSyncBanner: showsSignInCard,
-                dismissSyncBanner: {},
-                signInAction: {},
+                canRefresh: false,
+                refresh: {},
                 notes: [],
                 searchTerm: "",
                 quranFont: .uthmanicHafs,
+                showsHighlightsTip: false,
+                highlightsSummary: highlightsSummary,
                 start: {},
                 selectAction: { _ in },
                 editAction: { _ in },
-                deleteAction: { _ in nil }
+                deleteAction: { _ in nil },
+                showHighlights: {},
+                dismissHighlightsTip: {}
             )
             .navigationTitle(l("tab.notes"))
         }
     }
 }
 
-#Preview("Empty — Sign In") {
-    NotesEmptyPreview(showsSignInCard: true)
+#Preview("Empty") {
+    NotesEmptyPreview()
 }
 
-#Preview("Empty — Dismissed") {
-    NotesEmptyPreview(showsSignInCard: false)
+#Preview("Empty with highlights") {
+    NotesEmptyPreview(highlightsSummary: NotesHighlightsSummary(colors: [.yellow, .green, .blue]))
 }

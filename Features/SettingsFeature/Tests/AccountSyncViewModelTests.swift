@@ -8,7 +8,6 @@ import Foundation
 import Localization
 import MobileSync
 import MobileSyncTestSupport
-import SafariServices
 import UIKit
 import XCTest
 @testable import SettingsFeature
@@ -105,20 +104,68 @@ final class AccountSyncViewModelTests: XCTestCase {
 
     /// The test database has no signed-in session, so MobileSync fetches nothing; the refresh still runs to its end.
     func test_closingManageAccount_refreshesTheProfile() async throws {
-        let navigationController = UINavigationController(rootViewController: UIViewController())
-        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
-        window.rootViewController = navigationController
-        window.makeKeyAndVisible()
-        let sut = makeSUT(client: signedInClient(email: "user@example.com"), navigationController: navigationController)
+        let webPages = WebPagesFake()
+        let sut = makeSUT(
+            client: signedInClient(email: "user@example.com"),
+            openWebPage: webPages.open,
+            navigationController: navigationControllerInWindow()
+        )
         sut.openQuranComProfile()
-        let sheet = try XCTUnwrap(navigationController.presentedViewController as? SFSafariViewController)
-        XCTAssertNil(sut.profileRefresh, "opening the sheet fetches nothing")
+        XCTAssertEqual(webPages.openedURLs, [profileURL])
+        XCTAssertNil(sut.profileRefresh, "opening the page fetches nothing")
 
-        sheet.delegate?.safariViewControllerDidFinish?(sheet)
+        webPages.closeAll()
 
-        let refresh = try XCTUnwrap(sut.profileRefresh, "closing the sheet refreshes the profile")
+        let refresh = try XCTUnwrap(sut.profileRefresh, "closing the page refreshes the profile")
         await refresh.value
-        window.isHidden = true
+    }
+
+    func test_openingManageAccountTwice_opensOnePage_untilItCloses() async {
+        let webPages = WebPagesFake()
+        let sut = makeSUT(
+            client: signedInClient(email: "user@example.com"),
+            openWebPage: webPages.open,
+            navigationController: navigationControllerInWindow()
+        )
+
+        sut.openQuranComProfile()
+        sut.openQuranComProfile()
+        XCTAssertEqual(webPages.openedURLs, [profileURL])
+
+        webPages.closeAll()
+        await sut.profileRefresh?.value
+        sut.openQuranComProfile()
+        XCTAssertEqual(webPages.openedURLs, [profileURL, profileURL])
+    }
+
+    func test_manageAccountThatFailsToShow_refreshesNothing_andCanOpenAgain() {
+        let webPages = WebPagesFake()
+        let sut = makeSUT(
+            client: signedInClient(email: "user@example.com"),
+            openWebPage: webPages.open,
+            navigationController: navigationControllerInWindow()
+        )
+        sut.openQuranComProfile()
+
+        webPages.closeAll(wasShown: false)
+
+        XCTAssertNil(sut.profileRefresh, "a page that wasn't shown can't have changed the profile")
+        sut.openQuranComProfile()
+        XCTAssertEqual(webPages.openedURLs, [profileURL, profileURL])
+    }
+
+    func test_openingManageAccount_opensNothing_outsideAWindow() {
+        let webPages = WebPagesFake()
+        let sut = makeSUT(
+            client: signedInClient(email: "user@example.com"),
+            openWebPage: webPages.open,
+            navigationController: UINavigationController(rootViewController: UIViewController())
+        )
+
+        sut.openQuranComProfile()
+
+        XCTAssertEqual(webPages.openedURLs, [])
+        XCTAssertNil(sut.profileRefresh)
     }
 
     func test_requestSignOut_saysEverythingSynced_withNothingUnsynced() async {
@@ -281,6 +328,7 @@ final class AccountSyncViewModelTests: XCTestCase {
     // MARK: Private
 
     private let database = MobileSyncTestDatabase.shared
+    private let profileURL = URL(string: "https://quran.com/profile")!
 
     private func english(_ key: String, _ arguments: CVarArg...) -> String {
         String(format: l(key, language: .english), locale: Locale(identifier: "en"), arguments: arguments)
@@ -300,6 +348,7 @@ final class AccountSyncViewModelTests: XCTestCase {
     private func makeSUT(
         client: AuthenticationClientFake,
         signOut: @escaping @MainActor () async throws -> Void = {},
+        openWebPage: @escaping @MainActor (URL, UIWindow, @escaping @MainActor (_ wasShown: Bool) -> Void) -> Void = { _, _, _ in },
         navigationController: UINavigationController? = nil
     ) -> AccountSyncViewModel {
         let container = AppDependenciesFake()
@@ -307,12 +356,25 @@ final class AccountSyncViewModelTests: XCTestCase {
             user: nil,
             authenticationClient: client,
             quranDataService: database.quranDataService,
-            quranProfileURL: URL(string: "https://quran.com/profile")!,
+            quranProfileURL: profileURL,
             syncActivityBuilder: SyncActivityBuilder(container: container),
             editor: SyncActivityBuilder(container: container).heldItemEditor(navigationController: navigationController),
             signOut: signOut,
+            openWebPage: openWebPage,
             navigationController: navigationController
         )
+    }
+
+    /// The window is the anchor the Manage account page needs; it's hidden when the test ends.
+    private func navigationControllerInWindow() -> UINavigationController {
+        let navigationController = UINavigationController(rootViewController: UIViewController())
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
+        addTeardownBlock { @MainActor in
+            window.isHidden = true
+        }
+        return navigationController
     }
 
     private func waitUntil<Value>(
@@ -324,6 +386,31 @@ final class AccountSyncViewModelTests: XCTestCase {
         await fulfillment(of: [satisfied], timeout: 5)
         observation.cancel()
     }
+}
+
+/// Stands in for the web authentication session, which shows system UI; the test closes its pages.
+@MainActor
+private final class WebPagesFake {
+    // MARK: Internal
+
+    /// Every page opened, in order.
+    private(set) var openedURLs: [URL] = []
+
+    func open(_ url: URL, over window: UIWindow, onClose: @escaping @MainActor (_ wasShown: Bool) -> Void) {
+        openedURLs.append(url)
+        closers.append(onClose)
+    }
+
+    /// Closes every open page, as tapping Cancel does; `wasShown: false` stands for a session that failed to start.
+    func closeAll(wasShown: Bool = true) {
+        let closing = closers
+        closers = []
+        closing.forEach { $0(wasShown) }
+    }
+
+    // MARK: Private
+
+    private var closers: [@MainActor (_ wasShown: Bool) -> Void] = []
 }
 
 #endif

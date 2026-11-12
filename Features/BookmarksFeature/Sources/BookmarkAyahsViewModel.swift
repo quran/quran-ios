@@ -6,6 +6,7 @@
 import Analytics
 import AnnotationsService
 import Combine
+import FeaturesSupport
 import Foundation
 import NoorUI
 import QuranAnnotations
@@ -34,12 +35,15 @@ final class BookmarkAyahsViewModel: ObservableObject {
         highlights: [AyahNumber: HighlightColor] = [:],
         analytics: AnalyticsLibrary,
         ayahBookmarkCollectionService: AyahBookmarkCollectionService,
-        ayahHighlightService: MobileSyncAyahHighlightService
+        ayahHighlightService: MobileSyncAyahHighlightService,
+        signInNudge: SyncSignInNudge
     ) {
         self.verses = Self.unique(verses)
         self.analytics = analytics
         self.ayahBookmarkCollectionService = ayahBookmarkCollectionService
         self.ayahHighlightService = ayahHighlightService
+        isCollectionsIntroVisible = !preferences.isCollectionsIntroRetired
+        self.signInNudge = signInNudge
         updateCollections(collections)
         highlightSelection = Self.highlightSelection(for: self.verses, in: highlights)
     }
@@ -51,6 +55,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
     @Published private(set) var highlightSelection: HighlightSelection = .none
     @Published private(set) var isUpdatingHighlight = false
     @Published private(set) var updatingCollectionIDs: Set<String> = []
+    @Published private(set) var isCollectionsIntroVisible: Bool
     @Published var error: Error?
     @Published var nameAlert: CollectionNameAlert = .hidden
     @Published var newCollectionName = ""
@@ -81,6 +86,11 @@ final class BookmarkAyahsViewModel: ObservableObject {
         _ = await (observeCollections, observeHighlights)
     }
 
+    func dismissCollectionsIntro() {
+        isCollectionsIntroVisible = false
+        retireCollectionsIntro()
+    }
+
     func selectHighlight(_ color: HighlightColor?) async {
         let selection = color.map(HighlightSelection.color) ?? .none
         guard selection != highlightSelection, !isUpdatingHighlight else {
@@ -101,6 +111,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
                 try await ayahHighlightService.removeHighlight(for: verses)
                 analytics.unhighlight(verses: verses)
             }
+            retireCollectionsIntro()
         } catch is CancellationError {
             highlightSelection = previousSelection
         } catch {
@@ -141,6 +152,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
                 try await ayahBookmarkCollectionService.removeAyahs(verses, fromCollectionWithID: id)
             }
             logger.info("Quran Sync: updated bookmark collection membership for \(verses.count) ayah(s)")
+            retireCollectionsIntro()
         } catch is CancellationError {
             collectionSelections[id] = previousSelection
         } catch {
@@ -159,16 +171,19 @@ final class BookmarkAyahsViewModel: ObservableObject {
         nameAlert = .editing
     }
 
-    func createPendingCollection() async {
+    /// - Returns: The sign-in reminder to show after the collection is created.
+    func createPendingCollection() async -> Toast? {
         let name = newCollectionName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty else {
-            return
+            return nil
         }
 
         do {
             try await ayahBookmarkCollectionService.createCollection(named: name)
             newCollectionName = ""
             nameAlert = .hidden
+            retireCollectionsIntro()
+            return await signInNudge.toast(after: .collection)
         } catch {
             if let nameError = CollectionNameError(error) {
                 logger.info("Quran Sync: bookmark collection name rejected. \(nameError.logDescription)")
@@ -177,6 +192,7 @@ final class BookmarkAyahsViewModel: ObservableObject {
                 logger.error("Quran Sync: failed to create bookmark collection: \(error)")
                 self.error = error
             }
+            return nil
         }
     }
 
@@ -185,6 +201,14 @@ final class BookmarkAyahsViewModel: ObservableObject {
     private let ayahBookmarkCollectionService: AyahBookmarkCollectionService
     private let ayahHighlightService: MobileSyncAyahHighlightService
     private let analytics: AnalyticsLibrary
+    private let signInNudge: SyncSignInNudge
+    private let preferences = BookmarksPreferences.shared
+
+    /// Persists only; the intro stays until the sheet closes so rows don't shift under the finger.
+    private func retireCollectionsIntro() {
+        guard !preferences.isCollectionsIntroRetired else { return }
+        preferences.isCollectionsIntroRetired = true
+    }
 
     private func updateCollections(_ collections: [AyahBookmarkCollection]) {
         let collections = BookmarkCollectionsViewModel.sorted(collections)

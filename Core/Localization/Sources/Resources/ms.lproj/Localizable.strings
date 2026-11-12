@@ -43,8 +43,9 @@
 "quran.page.name" = "Halaman %@";
 // A page location: %1$@ is the name of the page's first surah and %2$@ is the localized page, such as "At-Tawbah, Page 200". Translators may reorder the placeholders.
 "quran.page.location" = "%1$@, %2$@";
-// A range of Quran references: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257". Translators may reorder the placeholders.
-"quran.range" = "%1$@ - %2$@";
+// Ayahs across surahs: %1$@ is the start and %2$@ is the end reference, such as "Al-Baqarah 2:286 – Āli-ʿImrān 3:10". Ayahs in one surah are written "Al-Baqarah 2:1–10" without this format. Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.range" = "%1$@ – %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
 "quran.hizb.name" = "Hizb %@";
 // A quarter reference: %1$@ is the fraction (¼, ½ or ¾) and %2$@ is the hizb reference, such as "¼ Hizb 3". Translators may reorder the placeholders.
@@ -213,10 +214,12 @@
 
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playing.action.modify" = "Ubah";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.playing.message" = "Memainkan audio dari %@ hingga %@";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.downloading.message" = "Memuat turun audio dari %@ ke %@";
+// Toast when audio starts playing: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name when the whole surah plays.
+// Metadata: Translated by AI; human review required.
+"audio.playing.toast" = "Memainkan %@";
+// Toast when audio starts downloading before it plays: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name for a whole surah.
+// Metadata: Translated by AI; human review required.
+"audio.downloading.toast" = "Memuat turun audio untuk %@";
 
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playing-verses.label" = "Memainkan ayat-ayat";
@@ -237,8 +240,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "Segerakkan nota anda";
-"notes.sync.body" = "Log masuk ke Quran.com untuk memastikan nota anda tersedia pada semua peranti.";
 "notes.sync.no-data.title" = "Belum ada nota";
 "notes.sync.no-data.text" = "Tekan dan tahan pada Ayah semasa membaca, kemudian tekan “Tambah nota” untuk menulis nota pertama anda.";
 
@@ -262,6 +263,18 @@
 "notes.search.no-results.title" = "Tiada nota yang sepadan dengan \"%@\"";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Cuba perkataan lain daripada nota yang anda simpan atau nama surah.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Sorotan kini berada dalam Penanda";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "Nota hanya menyimpan apa yang anda tulis. Ayat yang anda serlahkan berada dalam tab Penanda, mengikut warna.";
+// Opens the Bookmarks tab from the Notes card and empty state.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Tunjukkan Sorotan";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Sorotan anda berada dalam tab Penanda.";
 
 // MARK: - Ayah Menu
 
@@ -481,12 +494,19 @@
 // Ayah menu
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "Nota (%d)";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.moved-to" = "Penanda bacaan dialihkan ke %@";
+// Badge on the ayah menu's Reading Bookmark row.
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.new" = "Baharu";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.moved" = "Penanda bacaan dialihkan dari %@ ke %@";
+"ayah.menu.reading-bookmark.moved.explanation" = "Anda mengalihkan penanda bacaan dan bukannya menambah yang baharu. Untuk menyimpan ayat, simpan ayat itu dalam koleksi.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Penanda bacaan pada %@ telah dialih keluar";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Penanda bacaan disimpan pada %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "Alihkannya semasa anda membaca. Anda ada tiga, satu untuk setiap bacaan.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Pilih satu ayat sahaja";
 // Metadata: Translated by ChatGPT; human review required.
@@ -499,6 +519,12 @@
 "bookmarks.collections" = "Koleksi";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.add" = "Tambah koleksi";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "Adakah anda pasti mahu mengalih keluar semua serlahan warna “%@”?";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "Adakah anda pasti mahu mengalih keluar semua ayat daripada “%@”?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Leret penanda halaman untuk memadamkannya.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -550,14 +576,23 @@
 "bookmarks.editor.collection.unselected" = "Tidak dipilih";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "Warna serlahan masih dimuatkan. Sila cuba lagi.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "Simpan ayat dalam Kegemaran atau koleksi anda sendiri, seperti Doa atau Ulangan Hafazan. Warna serlahan juga ada di sini.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Penanda halaman lama";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "Log masuk";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Log masuk ke Quran.com untuk memastikan koleksi anda tersedia pada semua peranti.";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Segerakkan koleksi anda";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Disimpan daripada penanda halaman anda. Setiap halaman kini menjadi ayat pertamanya.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.title" = "Penanda halaman anda ada di sini";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.text" = "Setiap halaman yang anda tandai dalam versi %@ kini menjadi ayat pertamanya, dalam Penanda halaman lama. Untuk menyimpan tempat anda semasa membaca, gunakan penanda bacaan.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.open" = "Buka Penanda halaman lama";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.
@@ -664,6 +699,12 @@
 // Reading bookmarks menu explanation below its title.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.description" = "Gunakan satu untuk setiap bacaan, seperti khatam atau hafazan anda.";
+// Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.title" = "Simpan tempat anda dalam sehingga tiga bacaan";
+// Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.suggested" = "Dicadangkan untuk bacaan pertama anda";
 // Reading bookmark row subtitle when the bookmark is at the current ayah or page.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.saved-here" = "Disimpan di sini";
@@ -851,3 +892,20 @@
 "sync.sign-out.review" = "Semak";
 // Button on an item that doesn't sync: opens its note editor or renames its collection.
 "sync.held.edit" = "Edit";
+
+// MARK: - Ayah ranges
+
+// How VoiceOver reads ayahs across surahs: %1$@ is the start and %2$@ is the end ayah, such as "Al-Baqarah, Ayah 286 to Āli-ʿImrān, Ayah 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.range.spoken" = "%1$@ hingga %2$@";
+// How VoiceOver reads ayahs in one surah: %1$@ is the first and %2$@ is the last localized ayah number, such as "Ayahs 1 to 10" in "Al-Baqarah, Ayahs 1 to 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.ayah.number-range" = "Ayat %1$@ hingga %2$@";
+// Sign-in reminder toast title after a signed-out user saves a new note.
+"sync.nudge.note-saved" = "Nota disimpan";
+// Sign-in reminder toast title after a signed-out user creates a collection.
+"sync.nudge.collection-created" = "Koleksi dicipta";
+// Sign-in reminder toast subtitle under "Note saved" or "Collection created": "it" is the note or collection.
+"sync.nudge.subtitle" = "Log masuk untuk melihatnya di Quran.com dan semua peranti anda.";
+// Sign-in reminder toast button that starts signing in to Quran.com.
+"sync.nudge.sign-in" = "Log masuk";

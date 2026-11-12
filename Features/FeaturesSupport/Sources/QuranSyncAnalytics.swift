@@ -2,10 +2,10 @@
 import Analytics
 
 public enum QuranSyncAuthenticationSource: String, Sendable {
-    case bookmarks
-    case notes
     case settings
     case accountSync = "account_sync"
+    case noteSavedToast = "note_saved_toast"
+    case collectionCreatedToast = "collection_created_toast"
 }
 
 public extension AnalyticsLibrary {
@@ -17,8 +17,12 @@ public extension AnalyticsLibrary {
         logEvent("QuranSyncSignOut", value: source.rawValue)
     }
 
-    func quranSyncSignInBannerDismissed(from source: QuranSyncAuthenticationSource) {
-        logEvent("QuranSyncSignInBannerDismissed", value: source.rawValue)
+    func quranSyncSignInNudgeShown(from source: QuranSyncAuthenticationSource) {
+        logEvent("QuranSyncSignInNudgeShown", value: source.rawValue)
+    }
+
+    func quranSyncSignInNudgeDismissed(from source: QuranSyncAuthenticationSource) {
+        logEvent("QuranSyncSignInNudgeDismissed", value: source.rawValue)
     }
 }
 #endif

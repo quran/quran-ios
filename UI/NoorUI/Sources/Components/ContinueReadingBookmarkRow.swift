@@ -21,7 +21,6 @@ public struct ContinueReadingBookmarkRow: View {
             NoorListItem(
                 image: .init(.bookmark, color: bookmark.slot.swiftUIColor),
                 title: title,
-                titleAllowsWrapping: false,
                 subtitle: .init(text: subtitle, location: .bottom),
                 accessory: .disclosureIndicator
             )
@@ -42,36 +41,28 @@ public struct ContinueReadingBookmarkRow: View {
         return placementText
     }
 
-    /// Keeps the page number out of the title so long sura names never truncate it.
+    /// Every bookmark shows its page once: a page bookmark's location already names it.
     var subtitle: MultipartText {
         let timeAgo = bookmark.modifiedOn.timeAgo()
-        switch bookmark.placement {
-        case .ayah:
-            if bookmark.name == nil {
-                return .text(timeAgo)
-            }
+        switch (bookmark.placement, bookmark.name) {
+        case (.page, nil):
+            return .text(timeAgo)
+        case (.page, _):
             return "\(placementText) · \(timeAgo)"
-        case .page(let page):
-            if bookmark.name == nil {
-                return "\(page.localizedName) · \(timeAgo)"
-            }
-            return "\(placementText) · \(page.localizedName) · \(timeAgo)"
+        case (.ayah(let ayah), nil):
+            return "\(ayah.page.localizedName) · \(timeAgo)"
+        case (.ayah(let ayah), _):
+            return "\(placementText) · \(ayah.page.localizedName) · \(timeAgo)"
         }
     }
 
+    /// Names only the page's first sura, like the reader's page header and the Juz' list.
     private var placementText: MultipartText {
         switch bookmark.placement {
         case .ayah(let ayah):
             "\(ayah: ayah)"
         case .page(let page):
-            "\(suras: page.suras)"
-        }
-    }
-
-    private var location: String {
-        switch bookmark.placement {
-        case .ayah(let ayah): ayah.page.localizedName
-        case .page(let page): page.startJuz.localizedName
+            "\(page: page)"
         }
     }
 }
@@ -120,7 +111,15 @@ private struct ContinueReadingBookmarkRowPreview: View {
             .environment(\.locale, Locale(identifier: "ar"))
             .environment(\.layoutDirection, .rightToLeft)
 
+        ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[22]), slot: .teal)
+            .environment(\.locale, Locale(identifier: "ar"))
+            .environment(\.layoutDirection, .rightToLeft)
+
         ContinueReadingBookmarkRowPreview(placement: .ayah(Quran.hafsMadani1405.suras[62].verses[0]))
+            .environment(\.locale, Locale(identifier: "en"))
+            .environment(\.dynamicTypeSize, .accessibility3)
+
+        ContinueReadingBookmarkRowPreview(placement: .page(Quran.hafsMadani1405.pages[548]), slot: .teal)
             .environment(\.locale, Locale(identifier: "en"))
             .environment(\.dynamicTypeSize, .accessibility3)
     }

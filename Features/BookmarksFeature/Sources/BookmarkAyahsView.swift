@@ -15,7 +15,35 @@ struct BookmarkAyahsView: View {
     @ObservedObject var viewModel: BookmarkAyahsViewModel
 
     var body: some View {
+        BookmarkAyahsContent(viewModel: viewModel)
+            .enableToastPresenter()
+    }
+}
+
+@MainActor
+private struct BookmarkAyahsContent: View {
+    @ObservedObject var viewModel: BookmarkAyahsViewModel
+
+    @Environment(\.showToast) private var showToast
+
+    var body: some View {
         NoorList {
+            if viewModel.isCollectionsIntroVisible {
+                NoorBasicSection {
+                    IntroTipCard(
+                        image: .starFilled,
+                        text: l("bookmarks.editor.intro"),
+                        dismiss: {
+                            withAnimation(NoorAnimation.standard) {
+                                viewModel.dismissCollectionsIntro()
+                            }
+                        }
+                    )
+                    .listRowInsets(.zero)
+                    .listRowBackground(Color.clear)
+                }
+            }
+
             NoorBasicSection(title: l("ayah.menu.highlight")) {
                 HighlightColorPicker(
                     selectedColor: viewModel.selectedHighlightColor,
@@ -46,7 +74,11 @@ struct BookmarkAyahsView: View {
             l("bookmarks.collections.add"),
             state: $viewModel.nameAlert,
             name: $viewModel.newCollectionName,
-            submit: { await viewModel.createPendingCollection() }
+            submit: {
+                if let toast = await viewModel.createPendingCollection() {
+                    showToast?(toast)
+                }
+            }
         )
         .errorAlert(error: $viewModel.error)
     }

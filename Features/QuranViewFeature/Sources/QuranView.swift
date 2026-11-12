@@ -52,15 +52,6 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     let navigationBar = UINavigationBar()
     let navigationItem = UINavigationItem()
 
-    /// How far the audio bar reaches above the window's bottom edge, or 0 while it's hidden.
-    var bottomBarsHeight: CGFloat {
-        guard let audioView, !audioBarHidden, let window else {
-            return 0
-        }
-        let audioBarTop = audioView.convert(audioView.bounds, to: window).minY
-        return max(0, window.bounds.height - audioBarTop)
-    }
-
     /// Space pauses and resumes the recitation from a hardware keyboard, as on a Mac. It takes priority over the system,
     /// which would otherwise activate the focused verse, and is left alone while text in the reader is being edited.
     /// Editors presented over the reader aren't in its responder chain, so they keep space for typing.
@@ -99,6 +90,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
 
     func addAudioBannerView(_ audioBannerView: UIView) {
         audioView = audioBannerView
+        // Toasts, the banner's own included, stay above the audio bar while it shows.
+        audioBannerView.keepsToastsAbove = true
         addAutoLayoutSubview(audioBannerView)
         audioBannerView.vc
             .horizontalEdges()

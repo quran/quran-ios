@@ -41,8 +41,9 @@
 "quran.page.name" = "%@-бет";
 // A page location: %1$@ is the name of the page's first surah and %2$@ is the localized page, such as "At-Tawbah, Page 200". Translators may reorder the placeholders.
 "quran.page.location" = "%1$@, %2$@";
-// A range of Quran references: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257". Translators may reorder the placeholders.
-"quran.range" = "%1$@ - %2$@";
+// Ayahs across surahs: %1$@ is the start and %2$@ is the end reference, such as "Al-Baqarah 2:286 – Āli-ʿImrān 3:10". Ayahs in one surah are written "Al-Baqarah 2:1–10" without this format. Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.range" = "%1$@ – %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
 "quran.hizb.name" = "Хизб %@";
 // A quarter reference: %1$@ is the fraction (¼, ½ or ¾) and %2$@ is the hizb reference, such as "¼ Hizb 3". Translators may reorder the placeholders.
@@ -216,10 +217,12 @@
 
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playing.action.modify" = "Өзгерту";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.playing.message" = "%@-дан %@-ға дейінгі аудио ойнатылуда";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.downloading.message" = "%@-дан %@-ға дейінгі аудио жүктелуде";
+// Toast when audio starts playing: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name when the whole surah plays.
+// Metadata: Translated by AI; human review required.
+"audio.playing.toast" = "%@ ойнатылуда";
+// Toast when audio starts downloading before it plays: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name for a whole surah.
+// Metadata: Translated by AI; human review required.
+"audio.downloading.toast" = "%@ аудиосы жүктелуде";
 
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playing-verses.label" = "Аяттарды ойнату";
@@ -240,8 +243,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "Жазбаларыңызды синхрондау";
-"notes.sync.body" = "Жазбаларыңыз барлық құрылғыларда қолжетімді болуы үшін Quran.com сайтына кіріңіз.";
 "notes.sync.no-data.title" = "Әзірге ескертпелер жоқ";
 "notes.sync.no-data.text" = "Оқу кезінде аятты басып тұрыңыз, содан кейін алғашқы ескертпеңізді жазу үшін «Ескертпе қосу» түймесін түртіңіз.";
 
@@ -265,6 +266,18 @@
 "notes.search.no-results.title" = "\"%@\" сәйкес келетін жазба жоқ";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Сақтаған жазбадан басқа сөзді немесе сүре атауын қолданып көріңіз.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Бөлектеулер енді Бетбелгілер бөлімінде";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "Жазбалар тек өзіңіз жазғанды сақтайды. Бөлектеген аяттарыңыз Бетбелгілер қойындысында түсі бойынша тұр.";
+// Opens the Bookmarks tab from the Notes card and empty state.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Бөлектеулерді көрсету";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Бөлектеулеріңіз Бетбелгілер қойындысында.";
 
 // MARK: - Ayah Menu
 
@@ -482,12 +495,19 @@
 // Ayah menu
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "Жазбалар (%d)";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.moved-to" = "Оқу бетбелгісі %@ жеріне жылжытылды";
+// Badge on the ayah menu's Reading Bookmark row.
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.new" = "Жаңа";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.moved" = "Оқу бетбелгісі %@ жерінен %@ жеріне жылжытылды";
+"ayah.menu.reading-bookmark.moved.explanation" = "Оқу бетбелгілерін жаңасын қоспай, жылжытасыз. Аяттарды сақтау үшін оларды жинаққа сақтаңыз.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "%@ жеріндегі оқу бетбелгісі жойылды";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Оқу бетбелгісі %@ жерінде сақталды";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "Оқыған сайын оны жылжытыңыз. Сізде үшеуі бар, әр оқу үшін біреуден.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Бір аятты таңдаңыз";
 // Metadata: Translated by ChatGPT; human review required.
@@ -500,6 +520,12 @@
 "bookmarks.collections" = "Жинақтар";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.add" = "Жинақ қосу";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "«%@» түспен бөлектелген барлық аяттарды алып тастағыңыз келетініне сенімдісіз бе?";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "«%@» ішіндегі барлық аяттарды алып тастағыңыз келетініне сенімдісіз бе?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Бетбелгіні жою үшін оны сырғытыңыз.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -551,14 +577,23 @@
 "bookmarks.editor.collection.unselected" = "Таңдалмады";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "Белгілеу түстері әлі жүктелуде. Қайталап көріңіз.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "Аяттарды Таңдаулыларға немесе Дұғалар, Хифз қайталау сияқты өз жинақтарыңызға сақтаңыз. Бөлектеу түстері де осында.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Ескі бет бетбелгілері";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "Кіру";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Жинақтарыңыз барлық құрылғыларда қолжетімді болуы үшін Quran.com сайтына кіріңіз.";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Жинақтарыңызды синхрондау";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Бет бетбелгілеріңізден сақталды. Әр бет енді оның алғашқы аяты болды.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.title" = "Бет бетбелгілеріңіз осында";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.text" = "%@ нұсқасында бетбелгі қойған әр бет енді «Ескі бет бетбелгілері» ішінде сол беттің алғашқы аяты ретінде тұр. Оқу кезінде орныңызды сақтау үшін оқу бетбелгілерін пайдаланыңыз.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.open" = "Ескі бет бетбелгілерін ашу";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.
@@ -665,6 +700,12 @@
 // Reading bookmarks menu explanation below its title.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.description" = "Әр оқу үшін біреуін пайдаланыңыз, мысалы, хатым немесе жаттау үшін.";
+// Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.title" = "Үш оқуға дейін орныңызды сақтаңыз";
+// Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.suggested" = "Алғашқы оқуыңызға ұсынылады";
 // Reading bookmark row subtitle when the bookmark is at the current ayah or page.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.saved-here" = "Осында сақталды";
@@ -852,3 +893,20 @@
 "sync.sign-out.review" = "Қарап шығу";
 // Button on an item that doesn't sync: opens its note editor or renames its collection.
 "sync.held.edit" = "Өңдеу";
+
+// MARK: - Ayah ranges
+
+// How VoiceOver reads ayahs across surahs: %1$@ is the start and %2$@ is the end ayah, such as "Al-Baqarah, Ayah 286 to Āli-ʿImrān, Ayah 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.range.spoken" = "%1$@тан %2$@қа дейін";
+// How VoiceOver reads ayahs in one surah: %1$@ is the first and %2$@ is the last localized ayah number, such as "Ayahs 1 to 10" in "Al-Baqarah, Ayahs 1 to 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.ayah.number-range" = "%1$@-аяттан %2$@-аятқа дейін";
+// Sign-in reminder toast title after a signed-out user saves a new note.
+"sync.nudge.note-saved" = "Жазба сақталды";
+// Sign-in reminder toast title after a signed-out user creates a collection.
+"sync.nudge.collection-created" = "Жинақ жасалды";
+// Sign-in reminder toast subtitle under "Note saved" or "Collection created": "it" is the note or collection.
+"sync.nudge.subtitle" = "Оны Quran.com сайтында және барлық құрылғыларыңызда көру үшін кіріңіз.";
+// Sign-in reminder toast button that starts signing in to Quran.com.
+"sync.nudge.sign-in" = "Кіру";

@@ -222,7 +222,7 @@ private struct AyahMenuViewList: View {
                 }
             }
         }
-        .fixedSize(horizontal: true, vertical: false)
+        .idealWidthUpToOffered()
     }
 
     // MARK: Private
@@ -256,12 +256,15 @@ private struct AyahMenuViewList: View {
             ) {
                 Image(uiImage: ReadingBookmarkIcon.image(style: .outline, badge: .ellipsis))
             }
-        case .available(let bookmark):
+        case let .available(bookmark, subtitle, showsNewBadge):
             Row(
                 title: l("ayah.menu.reading-bookmark.title"),
-                subtitle: .text(bookmark?.displayName ?? l("bookmarks.reading.move-here")),
+                subtitle: .text(subtitle),
                 subtitlePlacement: .below,
-                action: dataObject.actions.showReadingBookmarkMenu
+                action: dataObject.actions.showReadingBookmarkMenu,
+                accessory: showsNewBadge
+                    ? NoorTagView(NoorTag(title: l("ayah.menu.reading-bookmark.new"), tone: .accent), style: .filled)
+                    : nil
             ) {
                 Image(uiImage: ReadingBookmarkIcon.image(
                     style: bookmark == nil ? .outline : .filled,
@@ -304,14 +307,13 @@ private struct Row<Symbol: View, Accessory: View>: View {
         @ViewBuilder symbol: () -> Symbol
     ) where Accessory == EmptyView {
         self.symbol = symbol()
-        accessory = EmptyView()
+        accessory = nil
         self.title = title
         self.subtitle = subtitle
         self.subtitlePlacement = subtitlePlacement
         self.isEnabled = isEnabled
         self.isDestructive = isDestructive
         self.action = action
-        hasAccessory = false
     }
 
     init(
@@ -320,46 +322,49 @@ private struct Row<Symbol: View, Accessory: View>: View {
         subtitlePlacement: SubtitlePlacement = .inline,
         isEnabled: Bool = true,
         action: @Sendable @escaping () async -> Void,
-        @ViewBuilder symbol: () -> Symbol,
-        @ViewBuilder accessory: () -> Accessory
+        accessory: Accessory?,
+        @ViewBuilder symbol: () -> Symbol
     ) {
         self.symbol = symbol()
-        self.accessory = accessory()
+        self.accessory = accessory
         self.title = title
         self.subtitle = subtitle
         self.subtitlePlacement = subtitlePlacement
         self.isEnabled = isEnabled
         isDestructive = false
         self.action = action
-        hasAccessory = true
     }
 
     // MARK: Internal
 
     let symbol: Symbol
-    let accessory: Accessory
+    let accessory: Accessory?
     let title: String
     let subtitle: MultipartText?
     let subtitlePlacement: SubtitlePlacement
     let isEnabled: Bool
     let isDestructive: Bool
     let action: @Sendable () async -> Void
-    let hasAccessory: Bool
     @ScaledMetric var verticalPadding = 12
 
     var body: some View {
         AsyncButton(action: action) {
-            HStack {
-                ZStack {
-                    HighlightPaletteIcon()
-                        .hidden()
-                    symbol
-                        .foregroundColor(primaryColor)
-                }
-                label
-                if hasAccessory {
-                    Spacer(minLength: 12)
-                    accessory
+            Group {
+                if dynamicTypeSize.isAccessibilitySize, #available(iOS 16.0, *) {
+                    // The symbol goes above the text, so the text gets the row's full width and words don't break.
+                    VStack(alignment: .leading) {
+                        coloredSymbol
+                        stacked
+                    }
+                } else {
+                    HStack {
+                        ZStack {
+                            HighlightPaletteIcon()
+                                .hidden()
+                            coloredSymbol
+                        }
+                        content
+                    }
                 }
             }
             .padding(.horizontal)
@@ -373,6 +378,13 @@ private struct Row<Symbol: View, Accessory: View>: View {
 
     // MARK: Private
 
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private var coloredSymbol: some View {
+        symbol
+            .foregroundColor(primaryColor)
+    }
+
     private var primaryColor: Color {
         if !isEnabled {
             return .tertiaryLabel
@@ -382,6 +394,38 @@ private struct Row<Symbol: View, Accessory: View>: View {
 
     private var secondaryColor: Color {
         isEnabled ? .secondaryLabel : .tertiaryLabel
+    }
+
+    /// Where the row doesn't fit on one line, the subtitle and accessory move under the title and the text wraps.
+    @ViewBuilder private var content: some View {
+        if #available(iOS 16.0, *) {
+            ViewThatFits(in: .horizontal) {
+                oneLine
+                stacked
+            }
+        } else {
+            oneLine
+        }
+    }
+
+    private var oneLine: some View {
+        HStack {
+            label
+            if let accessory {
+                Spacer(minLength: 12)
+                accessory
+            }
+        }
+    }
+
+    private var stacked: some View {
+        VStack(alignment: .leading) {
+            titleOverSubtitle(wraps: true)
+            if let accessory {
+                accessory
+            }
+        }
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     @ViewBuilder private var label: some View {
@@ -399,15 +443,19 @@ private struct Row<Symbol: View, Accessory: View>: View {
                 }
             }
         case .below:
-            VStack(alignment: .leading, spacing: 1) {
-                Text(title)
-                    .foregroundColor(primaryColor)
-                if let subtitle {
-                    subtitle.view(ofSize: .footnote, allowsWrapping: false)
-                        .foregroundColor(secondaryColor)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                }
+            titleOverSubtitle(wraps: false)
+        }
+    }
+
+    private func titleOverSubtitle(wraps: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 1) {
+            Text(title)
+                .foregroundColor(primaryColor)
+            if let subtitle {
+                subtitle.view(ofSize: .footnote, allowsWrapping: wraps)
+                    .foregroundColor(secondaryColor)
+                    .lineLimit(wraps ? nil : 1)
+                    .truncationMode(.tail)
             }
         }
     }
@@ -426,6 +474,49 @@ private struct MenuGroup<Content: View>: View {
     }
 }
 
+private extension View {
+    /// Takes the content's one-line width, so the popover hugs it, but no more than the width offered, so at
+    /// large text sizes the popover keeps to the screen and the text wraps.
+    @ViewBuilder
+    func idealWidthUpToOffered() -> some View {
+        if #available(iOS 16.0, *) {
+            IdealWidthUpToOfferedLayout {
+                self
+            }
+        } else {
+            fixedSize(horizontal: true, vertical: false)
+        }
+    }
+}
+
+@available(iOS 16.0, *)
+private struct IdealWidthUpToOfferedLayout: Layout {
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        guard let subview = subviews.first else {
+            return .zero
+        }
+        return subview.sizeThatFits(widthCapped(proposal, subview))
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        guard let subview = subviews.first else {
+            return
+        }
+        let width = widthCapped(proposal, subview).width
+        subview.place(at: bounds.origin, proposal: ProposedViewSize(width: width, height: bounds.height))
+    }
+
+    /// Below this shortfall, the offered width is the ideal one: the popover rounds the width it gives the menu to
+    /// pixels, and a fraction of a point short would otherwise move a row's subtitle under its title.
+    private let roundingTolerance: CGFloat = 1
+
+    private func widthCapped(_ proposal: ProposedViewSize, _ subview: LayoutSubview) -> ProposedViewSize {
+        let idealWidth = subview.sizeThatFits(ProposedViewSize(width: nil, height: proposal.height)).width
+        let width = proposal.width.map { $0 + roundingTolerance >= idealWidth ? idealWidth : $0 } ?? idealWidth
+        return ProposedViewSize(width: width, height: proposal.height)
+    }
+}
+
 private struct IconCircle: View {
     @ScaledMetric private var minLength = 20.0
 
@@ -437,12 +528,14 @@ private struct IconCircle: View {
 }
 
 #if !QURAN_SYNC
-private struct NoteCircles: View {
+struct NoteCircles: View {
+    // MARK: Internal
+
     let selectedColor: HighlightColor?
     let tapped: @Sendable (HighlightColor) async -> Void
 
     var body: some View {
-        HStack {
+        row {
             ForEach(HighlightColor.sortedColors, id: \.self) { color in
                 AsyncButton(
                     action: { await tapped(color) },
@@ -454,6 +547,23 @@ private struct NoteCircles: View {
             }
         }
         .padding()
+    }
+
+    // MARK: Private
+
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    /// Below accessibility sizes the circles stay on one row, and the popover widens to fit them if the menu was
+    /// narrower. At accessibility sizes one row is wider than the screen, so the circles wrap to the menu's width.
+    @ViewBuilder
+    private func row(@ViewBuilder content: () -> some View) -> some View {
+        if dynamicTypeSize.isAccessibilitySize, #available(iOS 16.0, *) {
+            WrappingHStack(fitContentWidth: true) {
+                content()
+            }
+        } else {
+            HStack(content: content)
+        }
     }
 }
 #endif
@@ -564,7 +674,7 @@ private func previewDataObject(
         repeatSubtitle: "selected verses",
         actions: previewActions,
         isTranslationView: isTranslationView,
-        readingBookmarkState: .available(bookmark: nil)
+        readingBookmarkState: .available(bookmark: nil, subtitle: "Set here", showsNewBadge: true)
     )
     #else
     return AyahMenuUI.DataObject(

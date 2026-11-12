@@ -83,7 +83,7 @@ public struct ReadingBookmarkIcon: View {
 }
 
 extension ReadingBookmarkIcon.Style {
-    fileprivate var systemImage: NoorSystemImage {
+    var systemImage: NoorSystemImage {
         switch self {
         case .outline: .bookmarkOutline
         case .filled: .bookmark

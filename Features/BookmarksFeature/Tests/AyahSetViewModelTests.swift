@@ -79,7 +79,22 @@ final class AyahSetViewModelTests: XCTestCase {
         observation.cancel()
     }
 
-    func test_deleteBookmark_removesOldPageBookmarkFromMobileSyncDatabase() async throws {
+    func test_content_userCollectionHasNoHeader() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Duas")
+        let created = try await firstCollection()
+        try await service.addAyahBookmarkToCollection(
+            collectionId: created.id,
+            ayah: XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: 255))
+        )
+        let collection = try await storedCollection(id: created.id, bookmarkCount: 1)
+
+        let sut = makeSUT(collection: collection, service: service)
+
+        XCTAssertNil(sut.content.header)
+    }
+
+    func test_deleteBookmark_removesOldPageBookmarkFromMobileSyncDatabaseAndItsHeader() async throws {
         let service = makeService()
         try await service.createCollection(named: oldPageBookmarksCollectionName)
         var stored = try await storedCollections()
@@ -100,6 +115,20 @@ final class AyahSetViewModelTests: XCTestCase {
         )
         let bookmark = try XCTUnwrap(collection.bookmarks.first)
         let sut = makeSUT(collection: collection, service: service)
+        XCTAssertEqual(
+            sut.content.header,
+            AyahSetHeader(text: l("bookmarks.old-page-bookmarks.explanation"), image: .book)
+        )
+        let headerRemoved = expectation(description: "Header removed with the last ayah")
+        let observation = sut.$content
+            .filter { $0.ayahs.isEmpty && $0.header == nil }
+            .prefix(1)
+            .sink { _ in headerRemoved.fulfill() }
+        let task = Task { await sut.start() }
+        defer {
+            task.cancel()
+            observation.cancel()
+        }
 
         await sut.removeAyah(bookmark.ayah)
 
@@ -110,6 +139,7 @@ final class AyahSetViewModelTests: XCTestCase {
             stored.first { $0.collection.name == oldPageBookmarksCollectionName }
         )
         XCTAssertTrue(updatedCollection.bookmarks.isEmpty)
+        await fulfillment(of: [headerRemoved], timeout: 2)
         XCTAssertNil(sut.error)
     }
 
@@ -125,6 +155,26 @@ final class AyahSetViewModelTests: XCTestCase {
         let renamedCollection = try await firstCollection()
         XCTAssertEqual(renamedCollection.name, "Duas")
         XCTAssertNil(sut.error)
+    }
+
+    func test_renamePending_unchangedOldPageBookmarksNameDoesNotWrite() async throws {
+        let service = makeService()
+        try await service.createCollection(named: oldPageBookmarksCollectionName)
+        let collection = try await collection(named: oldPageBookmarksCollectionName)
+        let before = try await storedCollections()
+        let lastUpdated = try XCTUnwrap(before.first { $0.collection.id == collection.id }).collection.lastUpdated
+        let sut = makeSUT(collection: collection, service: service)
+        sut.presentRename()
+        XCTAssertEqual(sut.pendingName, l("bookmarks.old-page-bookmarks"))
+
+        await sut.renamePending()
+
+        XCTAssertEqual(sut.nameAlert, .hidden)
+        XCTAssertNil(sut.error)
+        let after = try await storedCollections()
+        let stored = try XCTUnwrap(after.first { $0.collection.id == collection.id })
+        XCTAssertEqual(stored.collection.name, oldPageBookmarksCollectionName)
+        XCTAssertEqual(stored.collection.lastUpdated, lastUpdated)
     }
 
     func test_renamePending_hidesAlertAfterRejectedNameIsFixed() async throws {
@@ -361,6 +411,76 @@ final class AyahSetViewModelTests: XCTestCase {
         await assertContentAyahs(of: sut, are: [madaniAyah], thenAfterSwitchingTo: .indoPak, are: [indoPakAyah])
     }
 
+    func test_removeAllAyahs_emptiesUserCollectionAndKeepsIt() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Personal")
+        let personal = try await collection(named: "Personal")
+        try await service.addAyahs(try ayahs([(1, 1), (2, 255)]), toCollectionWithID: personal.id)
+        let collection = try await storedCollection(id: personal.id, bookmarkCount: 2)
+        let sut = makeSUT(collection: collection, service: service)
+
+        await sut.removeAllAyahs()
+
+        let stored = try await storedCollections {
+            $0.first { $0.collection.id == personal.id }?.bookmarks.isEmpty == true
+        }
+        let emptied = try XCTUnwrap(stored.first { $0.collection.id == personal.id })
+        XCTAssertEqual(emptied.collection.name, "Personal")
+        XCTAssertTrue(emptied.bookmarks.isEmpty)
+        XCTAssertNil(sut.error)
+    }
+
+    func test_removeAllAyahs_emptiesReadOnlyFavorites() async throws {
+        let service = makeService()
+        let stored = try await storedCollections { $0.contains { $0.collection.isDefault } }
+        let favorites = try XCTUnwrap(stored.first { $0.collection.isDefault }?.collection)
+        XCTAssertTrue(favorites.isReadOnly)
+        try await service.addAyahs(try ayahs([(1, 1), (2, 255)]), toCollectionWithID: favorites.id)
+        let collection = try await storedCollection(id: favorites.id, bookmarkCount: 2)
+        let sut = makeSUT(collection: collection, service: service)
+
+        await sut.removeAllAyahs()
+
+        let emptied = try await storedCollections {
+            $0.first { $0.collection.id == favorites.id }?.bookmarks.isEmpty == true
+        }
+        XCTAssertTrue(try XCTUnwrap(emptied.first { $0.collection.id == favorites.id }).bookmarks.isEmpty)
+        XCTAssertNil(sut.error)
+    }
+
+    func test_removeAllAyahs_removesOnlySelectedHighlightColor() async throws {
+        let service = makeHighlightService()
+        let pinkAyahs = try ayahs([(1, 1), (1, 2)])
+        let greenAyah = try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: 1, ayah: 3))
+        try await service.setHighlight(.pink, for: pinkAyahs)
+        try await service.setHighlight(.green, for: [greenAyah])
+        let sut = makeHighlightSUT(color: .pink, initialAyahs: pinkAyahs, service: service)
+
+        await sut.removeAllAyahs()
+
+        let highlights = try await storedHighlights(using: service) {
+            !$0.values.contains(.pink) && $0[greenAyah] == .green
+        }
+        XCTAssertEqual(highlights, [greenAyah: .green])
+        XCTAssertNil(sut.error)
+    }
+
+    func test_removeAllAyahs_exitsEditMode() async throws {
+        let service = makeService()
+        try await service.createCollection(named: "Personal")
+        let personal = try await collection(named: "Personal")
+        try await service.addAyahs(try ayahs([(1, 1)]), toCollectionWithID: personal.id)
+        let collection = try await storedCollection(id: personal.id, bookmarkCount: 1)
+        let sut = makeSUT(collection: collection, service: service)
+        sut.editMode = .active
+
+        await sut.removeAllAyahs()
+
+        XCTAssertEqual(sut.editMode, .inactive)
+        XCTAssertFalse(sut.isRemovingAllAyahs)
+        XCTAssertNil(sut.error)
+    }
+
     private func assertContentAyahs(
         of sut: AyahSetViewModel,
         are initialAyahs: [AyahNumber],
@@ -416,6 +536,7 @@ final class AyahSetViewModelTests: XCTestCase {
 
     private func makeHighlightSUT(
         color: HighlightColor,
+        initialAyahs: [AyahNumber] = [],
         service: MobileSyncAyahHighlightService? = nil,
         navigateToAyah: @escaping (AyahNumber) -> Void = { _ in }
     ) -> AyahSetViewModel {
@@ -423,7 +544,7 @@ final class AyahSetViewModelTests: XCTestCase {
         return AyahSetViewModel(
             dataSource: HighlightAyahSetDataSource(
                 color: color,
-                initialAyahs: [],
+                initialAyahs: initialAyahs,
                 service: service
             ),
             quranTextDataService: makeQuranTextDataService(),
@@ -463,6 +584,20 @@ final class AyahSetViewModelTests: XCTestCase {
             AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
                 .first { $0.name == name }
         )
+    }
+
+    private func storedCollection(id: String, bookmarkCount: Int) async throws -> AyahBookmarkCollection {
+        let stored = try await storedCollections {
+            $0.first { $0.collection.id == id }?.bookmarks.count == bookmarkCount
+        }
+        return try XCTUnwrap(
+            AyahBookmarkCollectionService.collections(from: stored, quran: .hafsMadani1405)
+                .first { $0.id == id }
+        )
+    }
+
+    private func ayahs(_ verses: [(sura: Int, ayah: Int)]) throws -> [AyahNumber] {
+        try verses.map { try XCTUnwrap(AyahNumber(quran: .hafsMadani1405, sura: $0.sura, ayah: $0.ayah)) }
     }
 
     private func firstCollection() async throws -> AyahBookmarkCollection {

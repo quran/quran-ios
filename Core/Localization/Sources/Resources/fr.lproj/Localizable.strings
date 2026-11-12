@@ -45,8 +45,9 @@
 "quran.page.name" = "Page %@";
 // A page location: %1$@ is the name of the page's first surah and %2$@ is the localized page, such as "At-Tawbah, Page 200". Translators may reorder the placeholders.
 "quran.page.location" = "%1$@, %2$@";
-// A range of Quran references: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257". Translators may reorder the placeholders.
-"quran.range" = "%1$@ - %2$@";
+// Ayahs across surahs: %1$@ is the start and %2$@ is the end reference, such as "Al-Baqarah 2:286 – Āli-ʿImrān 3:10". Ayahs in one surah are written "Al-Baqarah 2:1–10" without this format. Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.range" = "%1$@ – %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
 "quran.hizb.name" = "Hizb %@";
 // A quarter reference: %1$@ is the fraction (¼, ½ or ¾) and %2$@ is the hizb reference, such as "¼ Hizb 3". Translators may reorder the placeholders.
@@ -230,10 +231,12 @@
 
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playing.action.modify" = "Modifier";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.playing.message" = "Lecture audio de %@ à %@";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.downloading.message" = "Téléchargement de l'audio de %@ à %@";
+// Toast when audio starts playing: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name when the whole surah plays.
+// Metadata: Translated by AI; human review required.
+"audio.playing.toast" = "Lecture : %@";
+// Toast when audio starts downloading before it plays: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name for a whole surah.
+// Metadata: Translated by AI; human review required.
+"audio.downloading.toast" = "Téléchargement de l’audio : %@";
 
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playing-verses.label" = "Lecture des versets";
@@ -254,8 +257,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "Synchroniser vos notes";
-"notes.sync.body" = "Connectez-vous à Quran.com pour garder vos notes disponibles sur tous vos appareils.";
 "notes.sync.no-data.title" = "Pas encore de notes";
 "notes.sync.no-data.text" = "Pendant la lecture, appuyez longuement sur une ayah, puis touchez « Ajouter une note » pour rédiger votre première note.";
 
@@ -279,6 +280,18 @@
 "notes.search.no-results.title" = "Aucune note ne correspond à \"%@\"";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Essayez un autre mot tiré d'une note enregistrée ou un nom de sourate.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Les surlignages sont maintenant dans Favoris";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "Notes ne garde que ce que vous écrivez. Vos ayahs surlignées sont dans l'onglet Favoris, par couleur.";
+// Opens the Bookmarks tab from the Notes card and empty state.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Afficher les surlignages";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Vos surlignages sont dans l'onglet Favoris.";
 
 // MARK: - Ayah Menu
 
@@ -498,12 +511,19 @@
 // Ayah menu
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "Notes (%d)";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.moved-to" = "Signet de lecture déplacé vers %@";
+// Badge on the ayah menu's Reading Bookmark row.
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.new" = "Nouveau";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.moved" = "Signet de lecture déplacé de %@ vers %@";
+"ayah.menu.reading-bookmark.moved.explanation" = "Vous déplacez vos signets de lecture au lieu d’en ajouter de nouveaux. Pour garder des ayahs, enregistrez-les dans une collection.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "Signet de lecture supprimé de %@";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "Signet de lecture enregistré à %@";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "Déplacez-le au fil de votre lecture. Vous en avez trois, un pour chaque lecture.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Sélectionnez une seule ayah";
 // Metadata: Translated by ChatGPT; human review required.
@@ -516,6 +536,12 @@
 "bookmarks.collections" = "Collections";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.add" = "Ajouter une collection";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "Voulez-vous vraiment retirer tous les surlignages de couleur « %@ » ?";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "Voulez-vous vraiment retirer toutes les ayahs de « %@ » ?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Balayez un signet pour le supprimer.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -567,14 +593,23 @@
 "bookmarks.editor.collection.unselected" = "Non sélectionné";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "Les couleurs de surlignage sont encore en cours de chargement. Veuillez réessayer.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "Enregistrez des ayahs dans les Favoris ou dans vos propres collections, comme Douas ou Révision du hifz. Les couleurs de surlignage sont aussi ici.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Anciens signets de page";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "Se connecter";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "Connectez-vous à Quran.com pour garder vos collections disponibles sur tous vos appareils.";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "Synchroniser vos collections";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Enregistrées depuis vos signets de page. Chaque page correspond désormais à sa première ayah.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.title" = "Vos signets de page sont ici";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.text" = "Chaque page que vous aviez mise en signet dans la version %@ est désormais sa première ayah, dans Anciens signets de page. Pour garder votre place pendant la lecture, utilisez les marque-pages de lecture.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.open" = "Ouvrir Anciens signets de page";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.
@@ -681,6 +716,12 @@
 // Reading bookmarks menu explanation below its title.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.description" = "Utilisez-en un pour chaque lecture, comme votre khatma ou votre mémorisation.";
+// Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.title" = "Gardez votre place dans jusqu'à trois lectures";
+// Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.suggested" = "Suggéré pour votre première lecture";
 // Reading bookmark row subtitle when the bookmark is at the current ayah or page.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.saved-here" = "Enregistré ici";
@@ -868,3 +909,20 @@
 "sync.sign-out.review" = "Vérifier";
 // Button on an item that doesn't sync: opens its note editor or renames its collection.
 "sync.held.edit" = "Modifier";
+
+// MARK: - Ayah ranges
+
+// How VoiceOver reads ayahs across surahs: %1$@ is the start and %2$@ is the end ayah, such as "Al-Baqarah, Ayah 286 to Āli-ʿImrān, Ayah 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.range.spoken" = "de %1$@ à %2$@";
+// How VoiceOver reads ayahs in one surah: %1$@ is the first and %2$@ is the last localized ayah number, such as "Ayahs 1 to 10" in "Al-Baqarah, Ayahs 1 to 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.ayah.number-range" = "Ayas %1$@ à %2$@";
+// Sign-in reminder toast title after a signed-out user saves a new note.
+"sync.nudge.note-saved" = "Note enregistrée";
+// Sign-in reminder toast title after a signed-out user creates a collection.
+"sync.nudge.collection-created" = "Collection créée";
+// Sign-in reminder toast subtitle under "Note saved" or "Collection created": "it" is the note or collection.
+"sync.nudge.subtitle" = "Connectez-vous pour la retrouver sur Quran.com et tous vos appareils.";
+// Sign-in reminder toast button that starts signing in to Quran.com.
+"sync.nudge.sign-in" = "Se connecter";

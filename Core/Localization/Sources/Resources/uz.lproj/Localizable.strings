@@ -45,8 +45,9 @@
 "quran.page.name" = "%@-bet";
 // A page location: %1$@ is the name of the page's first surah and %2$@ is the localized page, such as "At-Tawbah, Page 200". Translators may reorder the placeholders.
 "quran.page.location" = "%1$@, %2$@";
-// A range of Quran references: %1$@ is the start and %2$@ is the end, such as "Al-Baqarah, Ayah 255 - Al-Baqarah, Ayah 257". Translators may reorder the placeholders.
-"quran.range" = "%1$@ - %2$@";
+// Ayahs across surahs: %1$@ is the start and %2$@ is the end reference, such as "Al-Baqarah 2:286 – Āli-ʿImrān 3:10". Ayahs in one surah are written "Al-Baqarah 2:1–10" without this format. Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.range" = "%1$@ – %2$@";
 // A hizb reference: %@ is the localized hizb number, such as "Hizb 3".
 "quran.hizb.name" = "Hizb %@";
 // A quarter reference: %1$@ is the fraction (¼, ½ or ¾) and %2$@ is the hizb reference, such as "¼ Hizb 3". Translators may reorder the placeholders.
@@ -230,10 +231,12 @@
 
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playing.action.modify" = "O'zgartirish";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.playing.message" = "%@ dan %@ gacha audio o'ynatilmoqda";
-// Metadata: Translated by ChatGPT; human review required.
-"audio.downloading.message" = "%@ dan %@ gacha audio yuklanmoqda";
+// Toast when audio starts playing: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name when the whole surah plays.
+// Metadata: Translated by AI; human review required.
+"audio.playing.toast" = "%@ o'ynatilmoqda";
+// Toast when audio starts downloading before it plays: %@ is the ayah range, such as "Al-Baqarah 2:1–10", or a surah name for a whole surah.
+// Metadata: Translated by AI; human review required.
+"audio.downloading.toast" = "%@ audiosi yuklanmoqda";
 
 // Metadata: Translated by ChatGPT; human review required.
 "audio.playing-verses.label" = "Oyatlar o'ynatilmoqda";
@@ -254,8 +257,6 @@
 
 // MARK: - Notes
 
-"notes.sync.title" = "Qaydlaringizni sinxronlash";
-"notes.sync.body" = "Qaydlaringiz barcha qurilmalarda mavjud bo‘lishi uchun Quran.com saytiga kiring.";
 "notes.sync.no-data.title" = "Hali eslatmalar yo‘q";
 "notes.sync.no-data.text" = "O‘qish paytida oyat ustiga bosib turing, so‘ng birinchi eslatmangizni yozish uchun “Eslatma qo‘shish”ni bosing.";
 
@@ -279,6 +280,18 @@
 "notes.search.no-results.title" = "\"%@\" ga mos keluvchi eslatma yo'q";
 // Metadata: Translated by ChatGPT; human review required.
 "notes.search.no-results.text" = "Saqlangan eslatmadan boshqa so'z yoki sura nomini sinab ko'ring.";
+// Title of the Notes card telling upgraders that their highlights moved to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.title" = "Ajratilganlar endi Xatchoʻplarda";
+// Body of the Notes card about highlights moving to the Bookmarks tab.
+// Metadata: Translated by AI; human review required.
+"notes.highlights-tip.text" = "Eslatmalarda faqat siz yozgan narsalar qoladi. Ajratgan oyatlaringiz rang boʻyicha Xatchoʻplar boʻlimida.";
+// Opens the Bookmarks tab from the Notes card and empty state.
+// Metadata: Translated by AI; human review required.
+"notes.highlights.show" = "Ajratilganlarni koʻrsatish";
+// Notes empty state line when the user has highlights.
+// Metadata: Translated by AI; human review required.
+"notes.no-data.highlights.text" = "Ajratilganlaringiz Xatchoʻplar boʻlimida.";
 
 // MARK: - Ayah Menu
 
@@ -500,12 +513,19 @@
 // Ayah menu
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.notes-count" = "Eslatmalar (%d)";
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.moved-to" = "O‘qish xatcho‘pi %@ ga ko‘chirildi";
+// Badge on the ayah menu's Reading Bookmark row.
+// Metadata: Translated by AI; human review required.
+"ayah.menu.reading-bookmark.new" = "Yangi";
 // Metadata: Translated by ChatGPT; human review required.
-"ayah.menu.reading-bookmark.moved" = "O‘qish xatcho‘pi %@ dan %@ ga ko‘chirildi";
+"ayah.menu.reading-bookmark.moved.explanation" = "O‘qish xatcho‘plarini yangisini qo‘shmasdan ko‘chirasiz. Oyatlarni saqlash uchun ularni to‘plamga saqlang.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.removed" = "%@ dagi o‘qish xatcho‘pi olib tashlandi";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.saved" = "O‘qish xatcho‘pi %@ da saqlandi";
+// Metadata: Translated by ChatGPT; human review required.
+"ayah.menu.reading-bookmark.saved.explanation" = "O‘qigan sari uni ko‘chiring. Sizda uchta bor, har bir o‘qish uchun bittadan.";
 // Metadata: Translated by ChatGPT; human review required.
 "ayah.menu.reading-bookmark.single-ayah-only" = "Bitta oyatni tanlang";
 // Metadata: Translated by ChatGPT; human review required.
@@ -518,6 +538,12 @@
 "bookmarks.collections" = "To‘plamlar";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.add" = "To‘plam qo‘shish";
+// Delete All confirmation on a highlight color's page. %@ is the color's name as shown on the page, such as Green.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.colored.confirmation" = "“%@” rang bilan ajratilgan barcha oyatlarni olib tashlamoqchi ekaningizga ishonchingiz komilmi?";
+// Delete All confirmation on a collection's page. %@ is the collection's name.
+// Metadata: Translated by AI; human review required.
+"bookmarks.collections.ayahs.delete-all.confirmation" = "“%@” ichidagi barcha oyatlarni olib tashlamoqchi ekaningizga ishonchingiz komilmi?";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.collections.ayahs.delete-hint" = "Xatcho‘pni o‘chirish uchun uni suring.";
 // Metadata: Translated by ChatGPT; human review required.
@@ -569,14 +595,23 @@
 "bookmarks.editor.collection.unselected" = "Tanlanmagan";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.editor.error.highlight-unavailable" = "Ajratish ranglari hali yuklanmoqda. Qayta urinib ko‘ring.";
+// One-time intro at the top of the Save Ayah sheet that explains collections.
+// Metadata: Translated by AI; human review required.
+"bookmarks.editor.intro" = "Oyatlarni Sevimlilarga yoki Duolar, Hifz takrori kabi o‘z to‘plamlaringizga saqlang. Ajratish ranglari ham shu yerda.";
 // Metadata: Translated by ChatGPT; human review required.
 "bookmarks.old-page-bookmarks" = "Eski sahifa xatcho‘plari";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.action" = "Kirish";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.body" = "To‘plamlaringiz barcha qurilmalarda mavjud bo‘lishi uchun Quran.com saytiga kiring.";
-// Metadata: Translated by ChatGPT; human review required.
-"bookmarks.sync.title" = "To‘plamlaringizni sinxronlash";
+// Header of the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.explanation" = "Sahifa xatcho‘plaringizdan saqlangan. Endi har bir sahifa uning birinchi oyatiga aylandi.";
+// Title of the Bookmarks card telling upgraders where their 3.0 page bookmarks went.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.title" = "Sahifa xatchoʻplaringiz shu yerda";
+// Body of the Bookmarks card about 3.0 page bookmarks. %@ is the app version, such as 3.0.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks-tip.text" = "%@ versiyasida xatchoʻp qoʻygan har bir sahifangiz endi Eski sahifa xatcho‘plari ichida oʻsha sahifaning birinchi oyati sifatida turibdi. Oʻqish paytida joyingizni saqlash uchun oʻqish xatchoʻplaridan foydalaning.";
+// Button on the Bookmarks card that opens the Old Page Bookmarks collection.
+// Metadata: Translated by AI; human review required.
+"bookmarks.old-page-bookmarks.open" = "Eski sahifa xatcho‘plarini ochish";
 
 // Highlight colors
 // Metadata: Translated by ChatGPT; human review required.
@@ -683,6 +718,12 @@
 // Reading bookmarks menu explanation below its title.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.description" = "Har bir o‘qish uchun bittasini ishlating, masalan, xatm yoki yodlash uchun.";
+// Reading bookmarks menu heading above the explanation, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.title" = "Uchtagacha o‘qishda joyingizni saqlang";
+// Subtitle of the suggested reading bookmark row, shown while no reading bookmark is placed.
+// Metadata: Translated by AI; human review required.
+"bookmarks.reading.first-run.suggested" = "Birinchi o‘qishingiz uchun tavsiya etiladi";
 // Reading bookmark row subtitle when the bookmark is at the current ayah or page.
 // Metadata: Translated by AI; human review required.
 "bookmarks.reading.saved-here" = "Shu yerda saqlangan";
@@ -870,3 +911,20 @@
 "sync.sign-out.review" = "Ko‘rib chiqish";
 // Button on an item that doesn't sync: opens its note editor or renames its collection.
 "sync.held.edit" = "Tahrirlash";
+
+// MARK: - Ayah ranges
+
+// How VoiceOver reads ayahs across surahs: %1$@ is the start and %2$@ is the end ayah, such as "Al-Baqarah, Ayah 286 to Āli-ʿImrān, Ayah 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.range.spoken" = "%1$@dan %2$@gacha";
+// How VoiceOver reads ayahs in one surah: %1$@ is the first and %2$@ is the last localized ayah number, such as "Ayahs 1 to 10" in "Al-Baqarah, Ayahs 1 to 10". Translators may reorder the placeholders.
+// Metadata: Translated by AI; human review required.
+"quran.ayah.number-range" = "%1$@-oyatdan %2$@-oyatgacha";
+// Sign-in reminder toast title after a signed-out user saves a new note.
+"sync.nudge.note-saved" = "Qayd saqlandi";
+// Sign-in reminder toast title after a signed-out user creates a collection.
+"sync.nudge.collection-created" = "To‘plam yaratildi";
+// Sign-in reminder toast subtitle under "Note saved" or "Collection created": "it" is the note or collection.
+"sync.nudge.subtitle" = "Uni Quran.com va barcha qurilmalaringizda ko‘rish uchun tizimga kiring.";
+// Sign-in reminder toast button that starts signing in to Quran.com.
+"sync.nudge.sign-in" = "Kirish";

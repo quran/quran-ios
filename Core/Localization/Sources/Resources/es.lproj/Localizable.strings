@@ -927,9 +927,9 @@
 // Sign-in reminder toast button that starts signing in to Quran.com.
 "sync.nudge.sign-in" = "Iniciar sesión";
 // What's New sync reveal chip, before an arrow and "Quran.com": sync is moving from iCloud to Quran.com. Keep "iCloud" in English.
-"new.sync_reveal.chip.from_icloud" = "Pasamos de iCloud";
+"new.sync_reveal.chip.from_icloud" = "Migramos desde iCloud";
 // How VoiceOver reads the What's New sync reveal chip. Keep "iCloud" and "Quran.com" in English.
-"new.sync_reveal.chip.accessibility" = "Pasamos de iCloud a Quran.com";
+"new.sync_reveal.chip.accessibility" = "Migramos desde iCloud a Quran.com";
 // What's New sync reveal title.
 "new.sync_reveal.title" = "Tu Corán, dondequiera que leas";
 // What's New sync reveal body. Keep "iCloud" and "Quran.com" in English.

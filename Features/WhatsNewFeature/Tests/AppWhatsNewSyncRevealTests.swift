@@ -11,6 +11,7 @@ import AppMigrator
 #if QURAN_SYNC
 import AuthenticationClient
 import AuthenticationClientFake
+import MobileSync
 #endif
 import UIKit
 import XCTest
@@ -33,7 +34,7 @@ final class AppWhatsNewSyncRevealTests: XCTestCase {
 
     // MARK: Every build
 
-    func test_syncRevealIsLeftOutOfNonSyncBuilds() async {
+    func test_syncRevealShowsOnlyInSyncBuilds() async {
         store.lastSeenVersion = "0"
         let sut = makeSUT(launchVersion: .update(from: "3.0.2", to: "3.1"))
 
@@ -149,6 +150,48 @@ final class AppWhatsNewSyncRevealTests: XCTestCase {
         let versions = await sut.versionsToPresent(in: syncWhatsNew)
 
         XCTAssertEqual(versions.map(\.version), ["3.0.1"])
+    }
+
+    func test_signedIn_olderRevealKeepsTheSkippedSyncRevealSeen() async throws {
+        store.lastSeenVersion = "2.6.2"
+        let authenticationClient = AuthenticationClientFake()
+        authenticationClient.authenticationStateValue = .authenticated
+        let presenter = PresenterFake()
+        let sut = makeSUT(authenticationClient: authenticationClient, launchVersion: .update(from: "2.6.8", to: "3.1"))
+
+        let versions = await sut.versionsToPresent(in: syncWhatsNew)
+        sut.present(versions, from: presenter, onChooseAnotherIcon: nil)
+        try XCTUnwrap(presenter.presentedController as? AppIconRevealViewController).rootView.onContinue()
+
+        XCTAssertEqual(store.lastSeenVersion, "3.1")
+    }
+
+    func test_signedInWithProfile_skipsSyncReveal() async {
+        store.lastSeenVersion = "3.0.1"
+        let authenticationClient = AuthenticationClientFake(restoringSession: true)
+        authenticationClient.authenticationStateValue = .authenticated
+        authenticationClient.loggedInUserValue = MobileSyncUser(id: "1", email: "user@example.com")
+        let sut = makeSUT(authenticationClient: authenticationClient, launchVersion: .update(from: "3.0.2", to: "3.1"))
+
+        let versions = await sut.versionsToPresent(in: syncWhatsNew)
+
+        XCTAssertEqual(versions.map(\.version), [])
+        XCTAssertEqual(store.lastSeenVersion, "3.1")
+    }
+
+    func test_signedIn_fallsBackToRestoredState_whenUserUpdatesFail() async {
+        store.lastSeenVersion = "3.0.1"
+        let authenticationClient = AuthenticationClientFake(restoringSession: true)
+        authenticationClient.failLoggedInUserUpdates(with: NSError(domain: "test", code: 1))
+        // MobileSync reports signed out while it reads the stored session; the restore waits for it.
+        authenticationClient.authenticationStateValue = .notAuthenticated
+        authenticationClient.restoreStateResult = .success(.authenticated)
+        let sut = makeSUT(authenticationClient: authenticationClient, launchVersion: .update(from: "3.0.2", to: "3.1"))
+
+        let versions = await sut.versionsToPresent(in: syncWhatsNew)
+
+        XCTAssertEqual(versions.map(\.version), [])
+        XCTAssertTrue(authenticationClient.events.contains(.restoreState))
     }
 
     func test_signedOut_presentsSyncReveal() async {

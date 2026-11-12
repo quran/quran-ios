@@ -698,7 +698,7 @@ private func featuresTargets() -> [[Target]] {
             "AnalyticsFake",
             "AppMigrator",
             "AuthenticationClientFake",
-        ]),
+        ] + mobileSyncTargetDependencies),
 
         target(type, name: "WordPointerFeature", dependencies: [
             "AppDependencies",

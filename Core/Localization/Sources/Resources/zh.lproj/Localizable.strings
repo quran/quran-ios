@@ -931,3 +931,23 @@
 "sync.nudge.subtitle" = "登录即可在 Quran.com 和您的所有设备上查看它。";
 // Sign-in reminder toast button that starts signing in to Quran.com.
 "sync.nudge.sign-in" = "登录";
+// What's New sync reveal chip, before an arrow and "Quran.com": sync is moving from iCloud to Quran.com. Keep "iCloud" in English.
+"new.sync_reveal.chip.from_icloud" = "从 iCloud 迁移";
+// How VoiceOver reads the What's New sync reveal chip. Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.chip.accessibility" = "从 iCloud 迁移到 Quran.com";
+// What's New sync reveal title.
+"new.sync_reveal.title" = "你的古兰经，随处可读";
+// What's New sync reveal body. Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.body" = "同步现在通过 Quran.com 进行，不再使用 iCloud。在每台设备上登录，让你的书签、笔记和阅读进度始终保持一致。";
+// What's New sync reveal reassurance, after a checkmark: nothing the user saved before the update was lost.
+"new.sync_reveal.still_here" = "你保存的所有内容都还在。";
+// What's New sync reveal button that starts signing in to Quran.com.
+"new.sync_reveal.sign_in" = "登录 Quran.com";
+// What's New sync reveal button that closes it without signing in.
+"new.sync_reveal.not_now" = "以后再说";
+// What's New sync reveal footnote on iPhone.
+"new.sync_reveal.footnote.iphone" = "如果不登录，你的书签只会保留在这台 iPhone 上。";
+// What's New sync reveal footnote on iPad.
+"new.sync_reveal.footnote.ipad" = "如果不登录，你的书签只会保留在这台 iPad 上。";
+// What's New sync reveal footnote on Mac.
+"new.sync_reveal.footnote.mac" = "如果不登录，你的书签只会保留在这台 Mac 上。";

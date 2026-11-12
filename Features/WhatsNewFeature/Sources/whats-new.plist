@@ -5,7 +5,8 @@
 	<key>versions</key>
 	<array>
 		<!-- Sync reveal: bump this version by hand for each TestFlight build (3.1, 3.1.1, 3.1.2, ...)
-		     so testers see it again. Reset it to 3.1 before submitting to the App Store. -->
+		     so testers see it again. Reset it to 3.1 before submitting to the App Store.
+		     Signed-in testers skip the reveal; they must sign out to see it again. -->
 		<dict>
 			<key>version</key>
 			<string>3.1</string>

@@ -124,15 +124,14 @@ public final class SyncSignInNudge {
             logger.error("Quran Sync: no screen to sign in from the sign-in toast")
             return
         }
-        analytics.quranSyncSignIn(from: item.analyticsSource)
-        logger.info("Quran Sync: starting sign in from the sign-in toast")
         do {
-            try await authenticationClient.login(on: viewController)
-            logger.info("Quran Sync: sign in completed from the sign-in toast")
-        } catch AuthenticationClientError.cancelled {
-            logger.info("Quran Sync: sign in cancelled from the sign-in toast")
+            try await QuranSyncSignIn.signIn(
+                on: viewController,
+                authenticationClient: authenticationClient,
+                analytics: analytics,
+                source: item.analyticsSource
+            )
         } catch {
-            logger.error("Quran Sync: failed to sign in from the sign-in toast: \(error)")
             // The screen the sign-in started from can close meanwhile.
             Self.presenter(among: presenters)?.showErrorAlert(error: error)
         }

@@ -260,24 +260,20 @@ final class SettingsRootViewModel: ObservableObject {
             return
         }
 
-        analytics.quranSyncSignIn(from: .settings)
-        logger.info("Quran Sync: starting sign in from Settings")
         do {
-            try await authenticationClient.login(on: viewController)
-            let state = await authenticationClient.authenticationState
-            logger.info("Quran Sync: sign in completed from Settings. State: \(state)")
-            if state == .authenticated {
-                SyncSignInNudge.stopAfterSignIn()
+            guard let state = try await QuranSyncSignIn.signIn(
+                on: viewController,
+                authenticationClient: authenticationClient,
+                analytics: analytics,
+                source: .settings
+            ) else {
+                return
             }
             // While observing, the updates show the card signed in together with the user.
             if runningAuthenticationObservations == 0 {
                 accountState = state == .authenticated ? .signedIn(loggedInUser) : .signedOut
             }
-        } catch AuthenticationClientError.cancelled {
-            logger.info("Quran Sync: sign in cancelled from Settings")
-            return
         } catch {
-            logger.error("Failed to login to Quran.com: \(error)")
             self.error = error
         }
     }

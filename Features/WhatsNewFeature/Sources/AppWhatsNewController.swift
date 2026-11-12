@@ -141,6 +141,19 @@ public class AppWhatsNewController {
     private let appIconCatalog: AppIconCatalog
     private let store = AppWhatsNewVersionStore()
 
+    /// Records `version` as seen. In sync builds it never moves back, such as when an older reveal
+    /// is dismissed after a signed-in user skipped the newer sync reveal.
+    private func markSeen(_ version: String) {
+        #if QURAN_SYNC
+        if let lastSeenVersion = store.lastSeenVersion,
+           lastSeenVersion.compare(version, options: .numeric) == .orderedDescending
+        {
+            return
+        }
+        #endif
+        store.lastSeenVersion = version
+    }
+
     #if QURAN_SYNC
     private let authenticationClient: any AuthenticationClient
 
@@ -189,7 +202,7 @@ public class AppWhatsNewController {
             isDismissing = true
             logger.info("WhatsNew: app icon reveal \(action.rawValue) tapped")
             analytics.appIconReveal(action, version: version)
-            store.lastSeenVersion = version
+            markSeen(version)
             parent?.dismiss(animated: true, completion: completion)
         }
 
@@ -277,7 +290,7 @@ public class AppWhatsNewController {
             }
         )
         let viewController = AppWhatsNewViewController(rootView: view)
-        store.lastSeenVersion = version
+        markSeen(version)
 
         navigationController.setViewControllers([viewController], animated: false)
         navigationController.modalPresentationStyle = .pageSheet

@@ -160,16 +160,19 @@ struct SyncRevealView: View {
 
     /// "Moving from iCloud → Quran.com", read by VoiceOver as one sentence.
     private var chip: some View {
-        // Marks in the reading direction keep the arrow between the phrase and "Quran.com",
-        // instead of joining the Latin "iCloud" and "Quran.com" in right-to-left text.
-        let mark = layoutDirection == .rightToLeft ? "\u{200F}" : "\u{200E}"
         let shape = RoundedRectangle(cornerRadius: chipCornerRadius, style: .continuous)
         let cloud = Image(systemName: "icloud")
         let phrase = l("new.sync_reveal.chip.from_icloud")
         // A forward arrow points from iCloud to Quran.com in either reading direction.
         let arrow = Image(systemName: "arrow.forward")
-        // One text, so the chip wraps like a sentence at large sizes.
-        return Text("\(cloud) \(phrase)\(mark) \(arrow) \(mark)\("Quran.com")")
+        let destination = "Quran.com"
+        // One text, so the chip wraps like a sentence at large sizes. Interpolated values are isolated,
+        // so the direction marks are part of the literal: they set the reading direction and keep the
+        // arrow between the phrase and "Quran.com" instead of joining "iCloud" and "Quran.com".
+        let text = layoutDirection == .rightToLeft
+            ? Text("\u{200F}\(cloud) \(phrase)\u{200F} \(arrow) \u{200F}\(destination)")
+            : Text("\u{200E}\(cloud) \(phrase)\u{200E} \(arrow) \u{200E}\(destination)")
+        return text
             .font(.footnote.weight(.semibold))
             .foregroundStyle(Palette.gold)
             .padding(.horizontal, chipHorizontalPadding)

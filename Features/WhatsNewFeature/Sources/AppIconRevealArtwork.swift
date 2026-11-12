@@ -40,7 +40,7 @@ struct AppIconRevealNight: View {
 
     // MARK: Private
 
-    private typealias Palette = AppIconRevealPalette
+    private typealias Palette = NightfallPalette
 
     /// The soft transparent top edge.
     private let edgeHeight: CGFloat = 160
@@ -123,7 +123,7 @@ struct AppIconRevealIcon: View {
 
     // MARK: Private
 
-    private typealias Palette = AppIconRevealPalette
+    private typealias Palette = NightfallPalette
 
     private let length = AppIconRevealLayout.iconLength
     private let penSize = CGSize(width: 40, height: 104)

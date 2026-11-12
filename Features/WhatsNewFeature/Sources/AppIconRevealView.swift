@@ -69,7 +69,7 @@ struct AppIconRevealView: View {
         case crossfade
     }
 
-    private typealias Palette = AppIconRevealPalette
+    private typealias Palette = NightfallPalette
     private typealias Timeline = AppIconRevealTimeline
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -85,8 +85,7 @@ struct AppIconRevealView: View {
     @ScaledMetric(relativeTo: .body) private var actionsBottomPadding = 20.0
     @ScaledMetric(relativeTo: .body) private var scrollFadeHeight = 20.0
 
-    /// Design heights; the buttons grow beyond them with their text.
-    private let continueMinHeight: CGFloat = 52
+    /// The design height; the button grows beyond it with its text.
     private let secondaryActionMinHeight: CGFloat = 44
 
     /// Chosen once when the reveal starts, so turning on Reduce Motion or VoiceOver
@@ -161,7 +160,7 @@ struct AppIconRevealView: View {
             // Content coordinates match the screen, so the icon starts where the previous one was.
             .ignoresSafeArea()
             .mask(scrollFade(layout))
-            .modifier(RevealScrollBehavior(flashesIndicators: layout.scrollsActions && areActionsEnabled))
+            .modifier(NightfallScrollBehavior(flashesIndicators: layout.scrollsActions && areActionsEnabled))
 
             if !layout.scrollsActions {
                 actions
@@ -237,16 +236,7 @@ struct AppIconRevealView: View {
 
     private var actions: some View {
         VStack(spacing: actionsSpacing) {
-            Button(action: onContinue) {
-                Text(l("new.action"))
-                    .font(.headline)
-                    .foregroundStyle(Palette.continueText)
-                    .padding(.horizontal)
-                    .padding(.vertical, actionVerticalPadding)
-                    .frame(maxWidth: .infinity, minHeight: continueMinHeight)
-                    .background(Palette.gold, in: Capsule())
-            }
-            .buttonStyle(.plain)
+            NightfallPrimaryButton(title: l("new.action"), action: onContinue)
 
             if let onChooseAnotherIcon {
                 Button(action: onChooseAnotherIcon) {
@@ -468,24 +458,6 @@ struct AppIconRevealView: View {
             }
             elapsed = time
             effect()
-        }
-    }
-}
-
-/// Keeps the reveal still when it fits, and flashes the scroll indicators when the actions scroll
-/// off-screen, where the system supports it.
-private struct RevealScrollBehavior: ViewModifier {
-    let flashesIndicators: Bool
-
-    func body(content: Content) -> some View {
-        if #available(iOS 17.0, *) {
-            content
-                .scrollBounceBehavior(.basedOnSize)
-                .scrollIndicatorsFlash(trigger: flashesIndicators)
-        } else if #available(iOS 16.4, *) {
-            content.scrollBounceBehavior(.basedOnSize)
-        } else {
-            content
         }
     }
 }

@@ -687,6 +687,7 @@ private func featuresTargets() -> [[Target]] {
             "Analytics",
             "AppMigrator",
             "AuthenticationClient",
+            "FeaturesSupport",
             "Localization",
             "SystemDependencies",
             "UIx",

@@ -11,10 +11,10 @@ import AppMigrator
 #if QURAN_SYNC
 import AuthenticationClient
 import AuthenticationClientFake
-#endif
-import NoorUI
 import SystemDependencies
 import SystemDependenciesFake
+#endif
+import NoorUI
 import UIKit
 @testable import WhatsNewFeature
 
@@ -29,33 +29,25 @@ enum WhatsNewControllerFactory {
         channel: AppDistributionChannel = .appStore,
         build: String = "1",
         authenticationClient: any AuthenticationClient = AuthenticationClientFake(),
-        launchVersion: LaunchVersionUpdate,
-        signIn: @escaping @MainActor (UIViewController) -> Void = { _ in }
+        launchVersion: LaunchVersionUpdate
     ) -> AppWhatsNewController {
-        AppWhatsNewController(
+        let bundle = SystemBundleFake()
+        bundle.info["CFBundleVersion"] = build
+        return AppWhatsNewController(
             analytics: analytics,
             launchVersion: launchVersion,
             appIconCatalog: appIconCatalog,
-            bundle: bundle(build: build),
+            bundle: bundle,
             appDistribution: AppDistributionFake(channel: channel),
-            authenticationClient: authenticationClient,
-            signIn: signIn
+            authenticationClient: authenticationClient
         )
     }
     #else
     static func make(
         analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
-        channel: AppDistributionChannel = .appStore,
-        build: String = "1",
         launchVersion: LaunchVersionUpdate
     ) -> AppWhatsNewController {
-        AppWhatsNewController(
-            analytics: analytics,
-            launchVersion: launchVersion,
-            appIconCatalog: appIconCatalog,
-            bundle: bundle(build: build),
-            appDistribution: AppDistributionFake(channel: channel)
-        )
+        AppWhatsNewController(analytics: analytics, launchVersion: launchVersion, appIconCatalog: appIconCatalog)
     }
     #endif
 
@@ -72,12 +64,6 @@ enum WhatsNewControllerFactory {
             ),
         ]),
     ])
-
-    private static func bundle(build: String) -> SystemBundle {
-        let bundle = SystemBundleFake()
-        bundle.info["CFBundleVersion"] = build
-        return bundle
-    }
 }
 
 /// Presents and dismisses without UIKit transitions, which never finish in unit tests.

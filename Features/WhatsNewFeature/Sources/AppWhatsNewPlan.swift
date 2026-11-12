@@ -26,8 +26,8 @@ enum AppWhatsNewPlan {
     ///   - launchVersion: How this launch relates to the previous one, captured before
     ///     the launch commits the current app version.
     ///   - testFlightBuild: The build this TestFlight launch runs, or `nil` outside TestFlight.
-    ///     Each new TestFlight build presents the current version again, even when an earlier
-    ///     build of it was seen.
+    ///     Each new TestFlight build presents the current version's sync reveal again, even when
+    ///     an earlier build of it was seen.
     init(
         whatsNew: AppWhatsNew,
         lastSeenVersion: String?,
@@ -48,8 +48,8 @@ enum AppWhatsNewPlan {
             case .orderedDescending:
                 return true
             case .orderedSame:
-                // Seen on an earlier TestFlight build of the version this launch runs.
-                guard let testFlightBuild else {
+                // The sync reveal, seen on an earlier TestFlight build of the version this launch runs.
+                guard let testFlightBuild, version.reveal == .sync else {
                     return false
                 }
                 return lastSeenBuild != testFlightBuild

@@ -8,6 +8,10 @@
 
 import Analytics
 import AppMigrator
+#if QURAN_SYNC
+import AuthenticationClient
+import FeaturesSupport
+#endif
 import NoorUI
 import UIKit
 import VLogging
@@ -16,6 +20,24 @@ import VLogging
 public class AppWhatsNewController {
     // MARK: Lifecycle
 
+    #if QURAN_SYNC
+    /// - Parameters:
+    ///   - launchVersion: How this launch relates to the previous one,
+    ///     captured before the launch commits the current app version.
+    ///   - appIconCatalog: The app's icons. The reveals show its default icon.
+    ///   - authenticationClient: Signed-in users skip the sync reveal; its Sign In signs in with it.
+    public init(
+        analytics: AnalyticsLibrary,
+        launchVersion: LaunchVersionUpdate,
+        appIconCatalog: AppIconCatalog,
+        authenticationClient: any AuthenticationClient
+    ) {
+        self.analytics = analytics
+        self.launchVersion = launchVersion
+        self.appIconCatalog = appIconCatalog
+        self.authenticationClient = authenticationClient
+    }
+    #else
     /// - Parameters:
     ///   - launchVersion: How this launch relates to the previous one,
     ///     captured before the launch commits the current app version.
@@ -25,6 +47,7 @@ public class AppWhatsNewController {
         self.launchVersion = launchVersion
         self.appIconCatalog = appIconCatalog
     }
+    #endif
 
     // MARK: Public
 
@@ -34,7 +57,7 @@ public class AppWhatsNewController {
     public func presentWhatsNewIfNeeded(from parent: UIViewController, onChooseAnotherIcon: (() -> Void)?) {
         Task { [weak parent] in
             let whatsNew = await Self.bundledWhatsNew()
-            let versions = versionsToPresent(in: whatsNew)
+            let versions = await versionsToPresent(in: whatsNew)
             guard let parent, !versions.isEmpty else {
                 logger.info("Ignoring whats new")
                 return
@@ -47,9 +70,10 @@ public class AppWhatsNewController {
 
     /// Applies the show rules and returns the versions to present.
     /// A fresh install records every version as seen and presents nothing.
-    func versionsToPresent(in whatsNew: AppWhatsNew) -> [WhatsNewVersion] {
+    /// Versions whose reveal this build can't show are left out, and signed-in users skip the sync reveal.
+    func versionsToPresent(in whatsNew: AppWhatsNew) async -> [WhatsNewVersion] {
         let plan = AppWhatsNewPlan(
-            whatsNew: whatsNew,
+            whatsNew: AppWhatsNew(versions: whatsNew.versions.filter { $0.reveal?.isAvailable ?? true }),
             lastSeenVersion: store.lastSeenVersion,
             launchVersion: launchVersion
         )
@@ -61,7 +85,11 @@ public class AppWhatsNewController {
             store.lastSeenVersion = version
             return []
         case .present(let versions):
+            #if QURAN_SYNC
+            return await skippingSyncRevealIfSignedIn(versions)
+            #else
             return versions
+            #endif
         }
     }
 
@@ -76,7 +104,7 @@ public class AppWhatsNewController {
         return appWhatsNew
     }
 
-    /// Presents the app icon reveal when a version has one, otherwise the feature list.
+    /// Presents the sync or app icon reveal when a version has one, otherwise the feature list.
     func present(
         _ versions: [WhatsNewVersion],
         from parent: UIViewController,
@@ -88,6 +116,12 @@ public class AppWhatsNewController {
         analytics.presentWhatsNew(versions: versions.map(\.version))
 
         let items = versions.flatMap(\.items)
+        #if QURAN_SYNC
+        if versions.contains(where: { $0.reveal == .sync }) {
+            presentSyncReveal(version: latestVersion, items: items, from: parent)
+            return
+        }
+        #endif
         if versions.contains(where: { $0.reveal == .appIcon }) {
             presentAppIconReveal(
                 version: latestVersion,
@@ -107,6 +141,51 @@ public class AppWhatsNewController {
     private let appIconCatalog: AppIconCatalog
     private let store = AppWhatsNewVersionStore()
 
+    /// Records `version` as seen. In sync builds it never moves back, such as when an older reveal
+    /// is dismissed after a signed-in user skipped the newer sync reveal.
+    private func markSeen(_ version: String) {
+        #if QURAN_SYNC
+        if let lastSeenVersion = store.lastSeenVersion,
+           lastSeenVersion.compare(version, options: .numeric) == .orderedDescending
+        {
+            return
+        }
+        #endif
+        store.lastSeenVersion = version
+    }
+
+    #if QURAN_SYNC
+    private let authenticationClient: any AuthenticationClient
+
+    /// Signed-in users skip the sync reveal; older versions still present.
+    private func skippingSyncRevealIfSignedIn(_ versions: [WhatsNewVersion]) async -> [WhatsNewVersion] {
+        guard let syncVersion = versions.filter({ $0.reveal == .sync }).latestVersion, await isSignedIn() else {
+            return versions
+        }
+        logger.info("WhatsNew: signed in to Quran.com, skipping the sync reveal of \(syncVersion)")
+        analytics.skipSyncReveal(version: syncVersion)
+        store.lastSeenVersion = syncVersion
+        return versions.filter { $0.reveal != .sync }
+    }
+
+    /// Whether the user is signed in, once MobileSync has read the stored session.
+    ///
+    /// At launch `authenticationState` reads signed out until the session is read, so this waits for the
+    /// first signed-in user update, which comes once it is read, without a network refresh.
+    private func isSignedIn() async -> Bool {
+        do {
+            for try await user in authenticationClient.loggedInUserUpdates {
+                // A nil user can also be a signed-in session whose profile isn't known yet.
+                return user != nil ? true : await authenticationClient.authenticationState == .authenticated
+            }
+        } catch {
+            logger.error("WhatsNew: failed to read the signed-in user: \(error)")
+        }
+        // The updates ended before the first one; the restore waits for the stored session.
+        return await authenticationClient.safelyRestoreState() == .authenticated
+    }
+    #endif
+
     private func presentAppIconReveal(
         version: String,
         items: [WhatsNewItem],
@@ -123,7 +202,7 @@ public class AppWhatsNewController {
             isDismissing = true
             logger.info("WhatsNew: app icon reveal \(action.rawValue) tapped")
             analytics.appIconReveal(action, version: version)
-            store.lastSeenVersion = version
+            markSeen(version)
             parent?.dismiss(animated: true, completion: completion)
         }
 
@@ -147,6 +226,60 @@ public class AppWhatsNewController {
         parent.present(viewController, animated: true)
     }
 
+    #if QURAN_SYNC
+    /// The sync reveal replaces older reveals; "Not now" still shows older feature items.
+    private func presentSyncReveal(version: String, items: [WhatsNewItem], from parent: UIViewController) {
+        analytics.presentSyncReveal(version: version)
+
+        // Either action dismisses the reveal, so only the first tap counts.
+        var isDismissing = false
+        let dismiss = { [weak self, weak parent] (action: SyncRevealAction, completion: @escaping (UIViewController) -> Void) in
+            guard let self, !isDismissing else { return }
+            isDismissing = true
+            logger.info("WhatsNew: sync reveal \(action.rawValue) tapped")
+            analytics.syncReveal(action, version: version)
+            store.lastSeenVersion = version
+            parent?.dismiss(animated: true) { [weak parent] in
+                guard let parent else { return }
+                completion(parent)
+            }
+        }
+
+        let viewController = SyncRevealViewController(
+            icon: appIconCatalog.defaultOption.previewImage,
+            onSignIn: { [weak self] in
+                dismiss(.signIn) { parent in
+                    self?.signIn(from: parent)
+                }
+            },
+            onNotNow: { [weak self] in
+                dismiss(.notNow) { parent in
+                    // Older unseen versions keep their feature list.
+                    guard !items.isEmpty else { return }
+                    self?.presentFeatureList(items, version: version, from: parent)
+                }
+            }
+        )
+        parent.present(viewController, animated: true)
+    }
+
+    /// Starts the Quran.com sign-in once the reveal is gone.
+    private func signIn(from viewController: UIViewController) {
+        Task { [authenticationClient, analytics] in
+            do {
+                try await QuranSyncSignIn.signIn(
+                    on: viewController,
+                    authenticationClient: authenticationClient,
+                    analytics: analytics,
+                    source: .whatsNew
+                )
+            } catch {
+                viewController.showErrorAlert(error: error)
+            }
+        }
+    }
+    #endif
+
     private func presentFeatureList(_ items: [WhatsNewItem], version: String, from parent: UIViewController) {
         let navigationController = UINavigationController()
         let view = AppWhatsNewView(
@@ -157,7 +290,7 @@ public class AppWhatsNewController {
             }
         )
         let viewController = AppWhatsNewViewController(rootView: view)
-        store.lastSeenVersion = version
+        markSeen(version)
 
         navigationController.setViewControllers([viewController], animated: false)
         navigationController.modalPresentationStyle = .pageSheet
@@ -171,6 +304,11 @@ public class AppWhatsNewController {
 private enum AppIconRevealAction: String {
     case `continue`
     case chooseAnotherIcon = "choose another icon"
+}
+
+private enum SyncRevealAction: String {
+    case signIn = "sign in"
+    case notNow = "not now"
 }
 
 private extension AnalyticsLibrary {
@@ -192,6 +330,23 @@ private extension AnalyticsLibrary {
             logEvent("AppIconRevealContinue", value: version)
         case .chooseAnotherIcon:
             logEvent("AppIconRevealChooseAnotherIcon", value: version)
+        }
+    }
+
+    func presentSyncReveal(version: String) {
+        logEvent("PresentingSyncReveal", value: version)
+    }
+
+    func skipSyncReveal(version: String) {
+        logEvent("SyncRevealSkippedSignedIn", value: version)
+    }
+
+    func syncReveal(_ action: SyncRevealAction, version: String) {
+        switch action {
+        case .signIn:
+            logEvent("SyncRevealSignIn", value: version)
+        case .notNow:
+            logEvent("SyncRevealNotNow", value: version)
         }
     }
 }

@@ -869,3 +869,23 @@
 "sync.nudge.subtitle" = "Quran.com'da ve tüm cihazlarınızda görmek için oturum açın.";
 // Sign-in reminder toast button that starts signing in to Quran.com.
 "sync.nudge.sign-in" = "Giriş yap";
+// What's New sync reveal chip, before an arrow and "Quran.com": sync is moving from iCloud to Quran.com. Keep "iCloud" in English.
+"new.sync_reveal.chip.from_icloud" = "iCloud'dan geçiş";
+// How VoiceOver reads the What's New sync reveal chip. Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.chip.accessibility" = "iCloud'dan Quran.com'a geçiş";
+// What's New sync reveal title.
+"new.sync_reveal.title" = "Kur'an'ınız, nerede okursanız okuyun";
+// What's New sync reveal body. Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.body" = "Eşitleme artık iCloud yerine Quran.com üzerinden yapılıyor. Yer imlerinizi, notlarınızı ve okuma ilerlemenizi bir arada tutmak için her cihazda oturum açın.";
+// What's New sync reveal reassurance, after a checkmark: nothing the user saved before the update was lost.
+"new.sync_reveal.still_here" = "Kaydettiğiniz her şey hâlâ burada.";
+// What's New sync reveal button that starts signing in to Quran.com.
+"new.sync_reveal.sign_in" = "Quran.com'da oturum açın";
+// What's New sync reveal button that closes it without signing in.
+"new.sync_reveal.not_now" = "Şimdi değil";
+// What's New sync reveal footnote on iPhone.
+"new.sync_reveal.footnote.iphone" = "Oturum açmazsanız yer imleriniz bu iPhone'da kalır.";
+// What's New sync reveal footnote on iPad.
+"new.sync_reveal.footnote.ipad" = "Oturum açmazsanız yer imleriniz bu iPad'de kalır.";
+// What's New sync reveal footnote on Mac.
+"new.sync_reveal.footnote.mac" = "Oturum açmazsanız yer imleriniz bu Mac'te kalır.";

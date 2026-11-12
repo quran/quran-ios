@@ -929,3 +929,23 @@
 "sync.nudge.subtitle" = "ئۇنى Quran.com ۋە بارلىق ئۈسكۈنىلىرىڭىزدە كۆرۈش ئۈچۈن كىرىڭ.";
 // Sign-in reminder toast button that starts signing in to Quran.com.
 "sync.nudge.sign-in" = "كىرىش";
+// What's New sync reveal chip, before an arrow and "Quran.com": sync is moving from iCloud to Quran.com. Keep "iCloud" in English.
+"new.sync_reveal.chip.from_icloud" = "iCloud دىن يۆتكىلىش";
+// How VoiceOver reads the What's New sync reveal chip. Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.chip.accessibility" = "iCloud دىن Quran.com غا يۆتكىلىش";
+// What's New sync reveal title.
+"new.sync_reveal.title" = "قايسى يەردە ئوقۇسىڭىز، قۇرئانىڭىز شۇ يەردە";
+// What's New sync reveal body. Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.body" = "ماسقەدەملەش ئەمدى iCloud نىڭ ئورنىغا Quran.com ئارقىلىق ئېلىپ بېرىلىدۇ. خەتكۈچ، خاتىرە ۋە ئوقۇش ئىلگىرىلىشىڭىزنى بىر يەردە ساقلاش ئۈچۈن ھەر بىر ئۈسكۈنىدە كىرىڭ.";
+// What's New sync reveal reassurance, after a checkmark: nothing the user saved before the update was lost.
+"new.sync_reveal.still_here" = "ساقلىغانلىرىڭىزنىڭ ھەممىسى يەنىلا بۇ يەردە.";
+// What's New sync reveal button that starts signing in to Quran.com.
+"new.sync_reveal.sign_in" = "Quran.com غا كىرىش";
+// What's New sync reveal button that closes it without signing in.
+"new.sync_reveal.not_now" = "ھازىر ئەمەس";
+// What's New sync reveal footnote on iPhone.
+"new.sync_reveal.footnote.iphone" = "كىرمىسىڭىز، خەتكۈچلىرىڭىز مۇشۇ iPhone دا قالىدۇ.";
+// What's New sync reveal footnote on iPad.
+"new.sync_reveal.footnote.ipad" = "كىرمىسىڭىز، خەتكۈچلىرىڭىز مۇشۇ iPad تا قالىدۇ.";
+// What's New sync reveal footnote on Mac.
+"new.sync_reveal.footnote.mac" = "كىرمىسىڭىز، خەتكۈچلىرىڭىز مۇشۇ Mac تا قالىدۇ.";

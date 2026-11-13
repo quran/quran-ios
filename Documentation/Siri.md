@@ -61,6 +61,7 @@ On a physical device, verify:
 - Completing the final verse prevents an automatic wrap or replay and prompts the user to choose a new starting point.
 - Requests near the Quran's end stop there without wrapping; alternate mushaf pagination remains correct.
 - Cold, background, and locked-device requests behave correctly; inaccessible protected data produces an actionable error.
+- With saved downloads pending, launch through Siri while protected data is unavailable, then unlock. Confirm download startup waits for unlock, saved batches reappear, and a subsequent listening request succeeds without restarting the app. Also verify that a background download completion received while locked is handled after unlock.
 - Missing downloads, offline operation, interruptions, and another app's audio produce understandable results.
 - Continue Reading opens the correct location from both a cold and warm app state.
 

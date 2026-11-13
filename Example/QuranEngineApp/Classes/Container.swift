@@ -60,7 +60,7 @@ class Container: AppDependencies {
         let playbackGeneration = storedPlaybackService?.commandGeneration ?? 0
         try await launchPreparation.prepare()
         try Task.checkCancellation()
-        await startDownloads()
+        try await startDownloads()
         let quran = ReadingPreferences.shared.reading.quran
         var fallback = quran.firstVerse
         for try await pages in lastPageService().lastPages(quran: quran) {
@@ -75,8 +75,11 @@ class Container: AppDependencies {
     }
 
     @MainActor
-    func startDownloads() async {
+    func startDownloads() async throws {
         if downloadsStartupTask == nil {
+            guard UIApplication.shared.isProtectedDataAvailable else {
+                throw LaunchPreparationError.protectedDataUnavailable
+            }
             let manager = downloadManager
             downloadsStartupTask = Task { await manager.start() }
         }

@@ -42,11 +42,15 @@ final class PlayerTests: XCTestCase {
         XCTAssertFalse(providesPreciseTiming)
     }
 
-    func test_duration_ofUnreadableFileLoadsAsZero() async {
+    func test_unreadableFileReportsFailureInsteadOfAPlayableDuration() async {
         let player = Player(asset: PlayerAsset(url: audioFiles.directory.appendingPathComponent("missing.mp3")))
+        let failed = expectation(description: "Unreadable audio failed")
+        failed.assertForOverFulfill = false
+        player.onFailed = { _ in failed.fulfill() }
+        player.onDurationLoaded = { _ in XCTFail("Unreadable audio must not report a playable duration") }
 
-        await waitForDuration(of: player)
-        XCTAssertEqual(player.duration, 0)
+        await fulfillment(of: [failed], timeout: 5)
+        XCTAssertNil(player.duration)
     }
 
     func test_releasingAPlayerOfASharedRemoteAsset_keepsTheOtherPlayersLoadGoing() async throws {
@@ -55,9 +59,12 @@ final class PlayerTests: XCTestCase {
         let current = try Player(asset: XCTUnwrap(replaced).asset)
         await fulfillment(of: [loader.requested], timeout: 5)
 
-        // Cancelling the shared asset's load would report a zero duration to `current`.
+        let failed = expectation(description: "Shared load remains pending")
+        failed.isInverted = true
+        current.onFailed = { _ in failed.fulfill() }
+        // Releasing one player must not fail the other player's shared asset load.
         replaced = nil
-        try await Task.sleep(nanoseconds: 300_000_000)
+        await fulfillment(of: [failed], timeout: 0.3)
 
         XCTAssertNil(current.duration)
     }

@@ -11,15 +11,22 @@ import Timing
 
 /// Waits out a between-verse delay of the given wall-clock seconds.
 typealias VerseDelaySleep = @Sendable @MainActor (TimeInterval) async -> Void
+typealias PlayerReadinessWait = @Sendable @MainActor (Player) async throws -> Void
 
 @MainActor
 class AudioPlayer {
     // MARK: Lifecycle
 
-    init(request: AudioRequest, rate: Float, sleep: @escaping VerseDelaySleep) {
+    init(
+        request: AudioRequest,
+        rate: Float,
+        sleep: @escaping VerseDelaySleep,
+        waitForReadiness: @escaping PlayerReadinessWait = { try await $0.waitUntilReady() }
+    ) {
         self.request = request
         playbackRate = rate
         self.sleep = sleep
+        self.waitForReadiness = waitForReadiness
         audioPlaying = AudioPlaying(request: request, fileIndex: 0, frameIndex: 0)
         interruptionMonitor.onAudioInterruption = { [weak self] in
             self?.onAudioInterruption(type: $0)
@@ -47,10 +54,28 @@ class AudioPlayer {
     }
 
     func waitUntilReady() async throws {
-        try await player.waitUntilReady()
+        while !hasEnded {
+            try Task.checkCancellation()
+            let waitingPlayer = player!
+            do {
+                try await waitForReadiness(waitingPlayer)
+            } catch {
+                try Task.checkCancellation()
+                guard !hasEnded else { throw error }
+                // Stepping replaces the item while preparation is suspended. Only the
+                // current item's readiness can finish or fail the request.
+                if waitingPlayer !== player { continue }
+                throw error
+            }
+            try Task.checkCancellation()
+            guard !hasEnded else { throw CancellationError() }
+            if waitingPlayer === player { return }
+        }
+        throw CancellationError()
     }
 
     func resume() {
+        guard !hasEnded else { return }
         isPaused = false
         // Keep the player paused through the rest of the delay; the next frame plays after it.
         if isDelaying {
@@ -97,7 +122,7 @@ class AudioPlayer {
         cancelVerseDelay()
         isWaitingForDuration = false
         timer = nil
-        player.stop()
+        player.stop(error: error)
         actions?.playbackFailed(error)
     }
 
@@ -137,6 +162,7 @@ class AudioPlayer {
     private let interruptionMonitor = AudioInterruptionMonitor()
     private let request: AudioRequest
     private let sleep: VerseDelaySleep
+    private let waitForReadiness: PlayerReadinessWait
     private var audioPlaying: AudioPlaying
     private var playbackRate: Float
     private var hasEnded = false
@@ -162,8 +188,12 @@ class AudioPlayer {
     // remote load stops with the last player using it.
     private weak var currentAsset: PlayerAsset?
 
-    // `startPlaying()` replaces it before anything reads it, so the initial value is never built.
-    private lazy var player = makePlayer(fileIndex: 0)
+    // `startPlaying()` installs the first item before playback controls can use it.
+    // A readiness wait may retain a replaced item, so releasing our reference alone
+    // no longer stops its audio or its pending preparation.
+    private var player: Player! {
+        didSet { oldValue?.stop() }
+    }
 
     private var timer: Timing.Timer? {
         didSet { oldValue?.cancel() }
@@ -178,8 +208,9 @@ class AudioPlayer {
         let asset = currentAsset.flatMap { $0.url == url ? $0 : nil } ?? PlayerAsset(url: url)
         currentAsset = asset
         let player = Player(asset: asset, knownDuration: loadedDurations[fileIndex])
-        player.onRateChanged = { [weak self] in
-            self?.rateChanged(to: $0)
+        player.onRateChanged = { [weak self, weak player] rate in
+            guard let self, let player, player === self.player else { return }
+            rateChanged(to: rate)
         }
         player.onDurationLoaded = { [weak self, weak player] duration in
             // A replaced player can stay alive briefly, e.g. while its pending rate callback runs.

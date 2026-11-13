@@ -129,7 +129,10 @@ final class Player {
 
     func waitUntilReady() async throws {
         try Task.checkCancellation()
+        guard !isStopped else { throw CancellationError() }
         let (stream, continuation) = AsyncThrowingStream<Void, Error>.makeStream()
+        let waiterID = UUID()
+        readinessWaiters[waiterID] = continuation
         let observation = playerItem.observe(\.status, options: [.initial, .new]) { item, _ in
             switch item.status {
             case .readyToPlay:
@@ -148,6 +151,7 @@ final class Player {
             continuation.finish(throwing: PlaybackError.readinessTimedOut)
         }
         defer {
+            readinessWaiters.removeValue(forKey: waiterID)
             observation.invalidate()
             timeout.cancel()
         }
@@ -166,8 +170,13 @@ final class Player {
         player.pause()
     }
 
-    func stop() {
+    func stop(error: Error = CancellationError()) {
+        isStopped = true
         player.pause()
+        for continuation in readinessWaiters.values {
+            continuation.finish(throwing: error)
+        }
+        readinessWaiters.removeAll()
     }
 
     func setRate(_ rate: Float) {
@@ -183,6 +192,8 @@ final class Player {
     // MARK: Private
 
     private let player: AVPlayer
+    private var isStopped = false
+    private var readinessWaiters: [UUID: AsyncThrowingStream<Void, Error>.Continuation] = [:]
 
     private var rateObservation: NSKeyValueObservation? {
         didSet { oldValue?.invalidate() }

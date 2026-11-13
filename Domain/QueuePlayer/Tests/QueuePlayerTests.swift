@@ -75,6 +75,69 @@ final class QueuePlayerTests: XCTestCase {
         }
     }
 
+    func test_readinessFollowsTheNewItemAfterSteppingAndIgnoresTheOldFailure() async throws {
+        let readiness = PlayerReadinessFake()
+        let audioPlayer = AudioPlayer(
+            request: try makeGappedRequest(durations: [10, 10]),
+            rate: 1,
+            sleep: { _ in },
+            waitForReadiness: { try await readiness.wait($0) }
+        )
+        audioPlayer.actions = actions.makeActions()
+        audioPlayer.startPlaying()
+        let firstWait = expectation(description: "Waiting for first item")
+        readiness.onNextWait = { firstWait.fulfill() }
+        let pending = Task { try await audioPlayer.waitUntilReady() }
+        await fulfillment(of: [firstWait], timeout: 2)
+        let oldPlayer = try XCTUnwrap(readiness.players.first)
+
+        audioPlayer.stepForward()
+
+        XCTAssertFalse(oldPlayer.isPlaying, "A pending readiness wait must not keep replaced audio playing")
+        var staleRateWasForwarded = false
+        actions.onRateChanged = { _ in staleRateWasForwarded = true }
+        oldPlayer.onRateChanged?(0)
+        XCTAssertFalse(staleRateWasForwarded)
+        actions.onRateChanged = nil
+
+        let secondWait = expectation(description: "Waiting for replacement item")
+        readiness.onNextWait = { secondWait.fulfill() }
+        readiness.finishNext(.failure(URLError(.timedOut)))
+        await fulfillment(of: [secondWait], timeout: 2)
+        XCTAssertEqual(readiness.players.count, 2)
+        XCTAssertFalse(readiness.players[0] === readiness.players[1])
+        readiness.finishNext(.success(()))
+        try await pending.value
+        audioPlayer.stop()
+    }
+
+    func test_stoppingDuringReadinessCannotBeResumedByAnInterruption() async throws {
+        let readiness = PlayerReadinessFake()
+        let audioPlayer = AudioPlayer(
+            request: try makeGappedRequest(durations: [10]),
+            rate: 1,
+            sleep: { _ in },
+            waitForReadiness: { try await readiness.wait($0) }
+        )
+        audioPlayer.startPlaying()
+        let waiting = expectation(description: "Waiting for readiness")
+        readiness.onNextWait = { waiting.fulfill() }
+        let pending = Task { try await audioPlayer.waitUntilReady() }
+        await fulfillment(of: [waiting], timeout: 2)
+        let stoppedPlayer = try XCTUnwrap(readiness.players.first)
+
+        audioPlayer.stop()
+        audioPlayer.onAudioInterruption(type: .endedShouldResume)
+        readiness.finishNext(.success(()))
+
+        do {
+            try await pending.value
+            XCTFail("A stopped request cannot become ready")
+        } catch is CancellationError {
+            XCTAssertFalse(stoppedPlayer.isPlaying)
+        }
+    }
+
     func test_pause_beforeDurationLoadsHoldsTheFrameUntilResumed() async throws {
         let request = try makeGappedRequest()
 
@@ -441,6 +504,29 @@ private final class VerseDelayClockFake {
 
     private var pending: [CheckedContinuation<Void, Never>] = []
     private var elapsesImmediately = false
+}
+
+/// Holds readiness at the AVPlayer boundary while real player instances are replaced.
+@MainActor
+private final class PlayerReadinessFake {
+    private(set) var players: [Player] = []
+    var onNextWait: (() -> Void)?
+
+    func wait(_ player: Player) async throws {
+        players.append(player)
+        try await withCheckedThrowingContinuation { continuation in
+            continuations.append(continuation)
+            let callback = onNextWait
+            onNextWait = nil
+            callback?()
+        }
+    }
+
+    func finishNext(_ result: Result<Void, Error>) {
+        continuations.removeFirst().resume(with: result)
+    }
+
+    private var continuations: [CheckedContinuation<Void, Error>] = []
 }
 
 @MainActor

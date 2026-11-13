@@ -6,6 +6,7 @@
 //
 
 import Locking
+import QueuePlayer
 import QuranKit
 @testable import QuranAudioKit
 
@@ -29,6 +30,8 @@ class QuranAudioPlayerDelegateClosures {
     var onPlaybackResumedBlock: (() -> Void)?
     var onPlayingBlock: (() -> Void)?
     var onPlaybackEndedBlock: (() -> Void)?
+    var endReasons: [PlaybackEndReason] = []
+    var playbackErrors: [Error] = []
 
     var eventsDiffSinceLastCalled: [Event] {
         events.sync { value in
@@ -41,10 +44,14 @@ class QuranAudioPlayerDelegateClosures {
 
     func makeActions() -> QuranAudioPlayerActions {
         QuranAudioPlayerActions(
-            playbackEnded: { [weak self] in self?.onPlaybackEnded() },
+            playbackEnded: { [weak self] reason in
+                self?.endReasons.append(reason)
+                self?.onPlaybackEnded()
+            },
             playbackPaused: { [weak self] in self?.onPlaybackPaused() },
             playbackResumed: { [weak self] in self?.onPlaybackResumed() },
-            playing: { [weak self] in self?.onPlaying(ayah: $0) }
+            playing: { [weak self] in self?.onPlaying(ayah: $0) },
+            playbackFailed: { [weak self] in self?.playbackErrors.append($0) }
         )
     }
 

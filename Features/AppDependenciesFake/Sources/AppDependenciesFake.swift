@@ -16,6 +16,7 @@ import LastPagePersistence
 import NoorUI
 import NotePersistence
 import PageBookmarkPersistence
+import QuranAudioKit
 import ReadingService
 #if QURAN_SYNC
 import AuthenticationClient
@@ -73,6 +74,7 @@ public final class AppDependenciesFake: AppDependencies {
     public var isDebugLoggingAlwaysEnabled: Bool { false }
     public var databasesDirectory: URL { URL(fileURLWithPath: "/tmp") }
     public var supportsCloudKit: Bool { false }
+    @MainActor public var playbackService: QuranPlaybackService { fatalError("Unused in tests") }
     public var downloadManager: DownloadManager { fatalError("Unused in tests") }
     public var analytics: AnalyticsLibrary { AnalyticsLibrarySpy() }
     public var readingResources: ReadingResourcesService { fatalError("Unused in tests") }

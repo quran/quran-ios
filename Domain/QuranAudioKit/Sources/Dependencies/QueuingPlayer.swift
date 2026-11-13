@@ -12,6 +12,7 @@ protocol QueuingPlayer: AnyObject {
     var actions: QueuePlayerActions? { get set }
 
     func play(request: AudioRequest, rate: Float)
+    func waitUntilReady() async throws
     func pause()
     func resume()
     func stop()

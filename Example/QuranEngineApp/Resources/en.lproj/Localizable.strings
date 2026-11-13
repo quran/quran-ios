@@ -1,0 +1,6 @@
+/* Errors returned by the shared launch and playback services to Siri. */
+"Unlock your device to continue with Quran." = "Unlock your device to continue with Quran.";
+"Free up space on your device, then try Quran again." = "Free up space on your device, then try Quran again.";
+"Open Quran to finish setting up your reading data, then try again." = "Open Quran to finish setting up your reading data, then try again.";
+"You have reached the end of the Quran. Choose a new starting point in the app." = "You have reached the end of the Quran. Choose a new starting point in the app.";
+"Choose a reciter in the app before continuing listening." = "Choose a reciter in the app before continuing listening.";

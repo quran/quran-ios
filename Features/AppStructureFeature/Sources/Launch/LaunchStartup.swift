@@ -24,21 +24,15 @@ public final class LaunchStartup {
 
     init(
         appBuilder: AppBuilder,
-        launchStores: LaunchStores,
-        downloadBackupMigrator: DownloadBackupMigrator,
+        preparation: LaunchPreparation,
         audioUpdater: AudioUpdater,
-        fileSystemMigrator: FileSystemMigrator,
-        recitersPathMigrator: RecitersPathMigrator,
         reviewService: ReviewService,
         appIconService: AppIconService,
         analyticsUserPropertiesReporterBuilder: AnalyticsUserPropertiesReporterBuilder
     ) {
         self.appBuilder = appBuilder
-        self.launchStores = launchStores
-        self.downloadBackupMigrator = downloadBackupMigrator
+        self.preparation = preparation
         self.audioUpdater = audioUpdater
-        self.fileSystemMigrator = fileSystemMigrator
-        self.recitersPathMigrator = recitersPathMigrator
         self.reviewService = reviewService
         self.appIconService = appIconService
         self.analyticsUserPropertiesReporterBuilder = analyticsUserPropertiesReporterBuilder
@@ -86,11 +80,8 @@ public final class LaunchStartup {
 
     // MARK: Private
 
-    private let fileSystemMigrator: FileSystemMigrator
-    private let recitersPathMigrator: RecitersPathMigrator
     private let appBuilder: AppBuilder
-    private let launchStores: LaunchStores
-    private let downloadBackupMigrator: DownloadBackupMigrator
+    private let preparation: LaunchPreparation
     private let audioUpdater: AudioUpdater
     private let reviewService: ReviewService
     private let appIconService: AppIconService
@@ -99,7 +90,6 @@ public final class LaunchStartup {
     private let crashApplicationObserver = CrashApplicationObserver()
     private let notificationCenter = NotificationCenter.default
 
-    private let appMigrator = AppMigrator()
     private var appViewController: AppViewController?
     private var pendingDeepLink: QuranDeepLink?
     private var protectedDataObserver: NSObjectProtocol?
@@ -159,7 +149,7 @@ public final class LaunchStartup {
     private func openStores(window: UIWindow) {
         crashContext.setStartupPhase("opening_stores")
         logger.info("Crash context: startup phase opening_stores")
-        switch launchStores.open() {
+        switch preparation.openStores() {
         case .success:
             handleStoreOpen(storeOpenStartupState.storesOpened(), window: window)
         case let .failure(.storageFull(store, error)):
@@ -237,10 +227,9 @@ public final class LaunchStartup {
     }
 
     private func upgradeIfNeeded(window: UIWindow) {
-        registerMigrators()
         // Read before `migrationStatus()` or `migrate()` commits the current version.
-        let launchVersion = appMigrator.launchVersion
-        switch appMigrator.migrationStatus() {
+        let launchVersion = preparation.launchVersion
+        switch preparation.migrationStatus() {
         case .noMigration:
             showApp(window: window, launchVersion: launchVersion)
         case let .migrate(blocksUI, titles):
@@ -254,7 +243,7 @@ public final class LaunchStartup {
                 window.makeKeyAndVisible()
             }
             Task {
-                await appMigrator.migrate()
+                await preparation.migrate()
                 showApp(window: window, launchVersion: launchVersion)
             }
         }
@@ -297,19 +286,6 @@ public final class LaunchStartup {
             return
         }
         appViewController.navigate(to: deepLink)
-    }
-
-    private func registerMigrators() {
-        appMigrator.register(migrator: fileSystemMigrator, for: "1.16.0")
-        appMigrator.register(migrator: recitersPathMigrator, for: "1.19.1")
-        appMigrator.register(migrator: downloadBackupMigrator, for: "2.6.9")
-        #if QURAN_SYNC
-        // Upgrades import legacy data once before showing the UI.
-        appMigrator.register(
-            migrator: LegacyDataMigrator(coordinator: appBuilder.container.legacyDataImportCoordinator),
-            for: "3.1.0"
-        )
-        #endif
     }
 
     /// Preferences read while protected data is unavailable return their defaults.

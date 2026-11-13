@@ -19,6 +19,7 @@ import MobileSync
 import NoorUI
 import NotePersistence
 import PageBookmarkPersistence
+import QuranAudioKit
 import QuranResources
 import QuranTextKit
 import ReadingService
@@ -37,6 +38,7 @@ public protocol AppDependencies {
 
     var supportsCloudKit: Bool { get }
 
+    @MainActor var playbackService: QuranPlaybackService { get }
     var downloadManager: DownloadManager { get }
     var analytics: AnalyticsLibrary { get }
     var readingResources: ReadingResourcesService { get }

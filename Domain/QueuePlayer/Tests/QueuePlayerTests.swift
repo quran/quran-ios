@@ -36,6 +36,106 @@ final class QueuePlayerTests: XCTestCase {
 
         await fulfillment(of: [actions.playbackEnded], timeout: 5)
         XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(1, 0), .playbackEnded])
+        XCTAssertEqual(actions.endReasons, [.completed])
+    }
+
+    func test_manualStopDoesNotCompleteTheRange() throws {
+        player.play(request: try makeGappedRequest(), rate: 1)
+        player.stop()
+        player.stop()
+        XCTAssertEqual(actions.endReasons, [.stopped])
+    }
+
+    func test_steppingPastTheRangeDoesNotCompleteIt() throws {
+        player.play(request: try makeGappedRequest(durations: [1]), rate: 1)
+        player.stepForward()
+        XCTAssertEqual(actions.endReasons, [.stopped])
+    }
+
+    func test_failedPlaybackDoesNotCompleteTheRange() throws {
+        player.play(request: try makeGappedRequest(durations: [1]), rate: 1)
+        let item = try XCTUnwrap(actions.playerItems.first)
+        NotificationCenter.default.post(
+            name: AVPlayerItem.failedToPlayToEndTimeNotification,
+            object: item,
+            userInfo: [AVPlayerItemFailedToPlayToEndTimeErrorKey: NSError(domain: "test", code: 1)]
+        )
+        XCTAssertTrue(actions.endReasons.isEmpty)
+        XCTAssertEqual(actions.errors.count, 1)
+    }
+
+    func test_waitUntilReadyPropagatesInvalidFileFailure() async throws {
+        let missing = audioFiles.directory.appendingPathComponent("missing.mp3")
+        player.play(request: try makeGappedRequest(firstFile: missing), rate: 1)
+        do {
+            try await player.waitUntilReady()
+            XCTFail("Expected invalid audio to fail")
+        } catch {
+            XCTAssertTrue(actions.endReasons.isEmpty)
+        }
+    }
+
+    func test_readinessFollowsTheNewItemAfterSteppingAndIgnoresTheOldFailure() async throws {
+        let readiness = PlayerReadinessFake()
+        let audioPlayer = AudioPlayer(
+            request: try makeGappedRequest(durations: [10, 10]),
+            rate: 1,
+            sleep: { _ in },
+            waitForReadiness: { try await readiness.wait($0) }
+        )
+        audioPlayer.actions = actions.makeActions()
+        audioPlayer.startPlaying()
+        let firstWait = expectation(description: "Waiting for first item")
+        readiness.onNextWait = { firstWait.fulfill() }
+        let pending = Task { try await audioPlayer.waitUntilReady() }
+        await fulfillment(of: [firstWait], timeout: 2)
+        let oldPlayer = try XCTUnwrap(readiness.players.first)
+
+        audioPlayer.stepForward()
+
+        XCTAssertFalse(oldPlayer.isPlaying, "A pending readiness wait must not keep replaced audio playing")
+        var staleRateWasForwarded = false
+        actions.onRateChanged = { _ in staleRateWasForwarded = true }
+        oldPlayer.onRateChanged?(0)
+        XCTAssertFalse(staleRateWasForwarded)
+        actions.onRateChanged = nil
+
+        let secondWait = expectation(description: "Waiting for replacement item")
+        readiness.onNextWait = { secondWait.fulfill() }
+        readiness.finishNext(.failure(URLError(.timedOut)))
+        await fulfillment(of: [secondWait], timeout: 2)
+        XCTAssertEqual(readiness.players.count, 2)
+        XCTAssertFalse(readiness.players[0] === readiness.players[1])
+        readiness.finishNext(.success(()))
+        try await pending.value
+        audioPlayer.stop()
+    }
+
+    func test_stoppingDuringReadinessCannotBeResumedByAnInterruption() async throws {
+        let readiness = PlayerReadinessFake()
+        let audioPlayer = AudioPlayer(
+            request: try makeGappedRequest(durations: [10]),
+            rate: 1,
+            sleep: { _ in },
+            waitForReadiness: { try await readiness.wait($0) }
+        )
+        audioPlayer.startPlaying()
+        let waiting = expectation(description: "Waiting for readiness")
+        readiness.onNextWait = { waiting.fulfill() }
+        let pending = Task { try await audioPlayer.waitUntilReady() }
+        await fulfillment(of: [waiting], timeout: 2)
+        let stoppedPlayer = try XCTUnwrap(readiness.players.first)
+
+        audioPlayer.stop()
+        audioPlayer.onAudioInterruption(type: .endedShouldResume)
+        readiness.finishNext(.success(()))
+
+        do {
+            try await pending.value
+            XCTFail("A stopped request cannot become ready")
+        } catch is CancellationError {
+            XCTAssertFalse(stoppedPlayer.isPlaying)
+        }
     }
 
     func test_pause_beforeDurationLoadsHoldsTheFrameUntilResumed() async throws {
@@ -406,6 +506,29 @@ private final class VerseDelayClockFake {
     private var elapsesImmediately = false
 }
 
+/// Holds readiness at the AVPlayer boundary while real player instances are replaced.
+@MainActor
+private final class PlayerReadinessFake {
+    private(set) var players: [Player] = []
+    var onNextWait: (() -> Void)?
+
+    func wait(_ player: Player) async throws {
+        players.append(player)
+        try await withCheckedThrowingContinuation { continuation in
+            continuations.append(continuation)
+            let callback = onNextWait
+            onNextWait = nil
+            callback?()
+        }
+    }
+
+    func finishNext(_ result: Result<Void, Error>) {
+        continuations.removeFirst().resume(with: result)
+    }
+
+    private var continuations: [CheckedContinuation<Void, Error>] = []
+}
+
 @MainActor
 private final class QueuePlayerActionsSpy {
     enum Event: Equatable {
@@ -421,11 +544,14 @@ private final class QueuePlayerActionsSpy {
     private(set) var frameDurations: [TimeInterval?] = []
     /// The player item each `audioFrameChanged` carried, in order.
     private(set) var playerItems: [AVPlayerItem] = []
+    private(set) var endReasons: [PlaybackEndReason] = []
+    private(set) var errors: [Error] = []
     var onRateChanged: ((Float) -> Void)?
 
     func makeActions() -> QueuePlayerActions {
         QueuePlayerActions(
-            playbackEnded: { [weak self] in
+            playbackEnded: { [weak self] reason in
+                self?.endReasons.append(reason)
                 self?.events.append(.playbackEnded)
                 self?.playbackEnded.fulfill()
             },
@@ -442,6 +568,9 @@ private final class QueuePlayerActionsSpy {
                 if self?.durationsLoaded.count == 1 {
                     self?.firstDurationLoaded.fulfill()
                 }
+            },
+            playbackFailed: { [weak self] in
+                self?.errors.append($0)
             }
         )
     }

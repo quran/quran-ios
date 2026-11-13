@@ -458,6 +458,7 @@ private func domainTargets() -> [[Target]] {
         ]),
 
         target(type, name: "QuranAudioKit", dependencies: [
+            "Preferences",
             "QuranAudio",
             "BatchDownloader",
             "AudioTimingService",
@@ -601,6 +602,7 @@ private func featuresTargets() -> [[Target]] {
     let type = TargetType.features
     return [
         target(type, name: "AppDependencies", hasTests: false, dependencies: [
+            "QuranAudioKit",
             "CoreDataPersistence",
             "NotePersistence",
             "QuranTextKit",
@@ -617,6 +619,7 @@ private func featuresTargets() -> [[Target]] {
         ] + mobileSyncTargetDependencies),
 
         target(type, name: "AppDependenciesFake", hasTests: false, dependencies: [
+            "QuranAudioKit",
             "Analytics",
             "AnalyticsFake",
             "AppDependencies",
@@ -732,6 +735,7 @@ private func featuresTargets() -> [[Target]] {
         ]),
 
         target(type, name: "AudioBannerFeature", dependencies: [
+            "QuranAudioKit",
             "QuranAudio",
             "Caching",
             "AppDependencies",
@@ -1012,6 +1016,8 @@ private func featuresTargets() -> [[Target]] {
         ] + mobileSyncTargetDependencies + mobileSyncTestSupportDependencies),
 
         target(type, name: "AppStructureFeature", dependencies: [
+            "AnnotationsService",
+            "QuranAnnotations",
             "Analytics",
             "AppIconFeature",
             "AppMigrator",
@@ -1042,6 +1048,8 @@ private func featuresTargets() -> [[Target]] {
             "SyncLogging",
             "Utilities",
         ] + mobileSyncTargetDependencies, testDependencies: [
+            "CoreDataPersistenceTestSupport",
+            "LastPagePersistence",
             "AnalyticsFake",
             "AuthenticationClientFake",
             "CoreDataModel",

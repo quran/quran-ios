@@ -9,6 +9,7 @@ import Foundation
 import QuranKit
 
 enum QuranDeepLink: Equatable {
+    case continueReading
     case sura(Sura)
     case ayah(AyahNumber)
 }
@@ -22,6 +23,12 @@ extension QuranDeepLink {
     init?(url: URL, quran: Quran) {
         guard let scheme = url.scheme?.lowercased(), Self.supportedSchemes.contains(scheme) else {
             return nil
+        }
+
+        if url.host?.lowercased() == "continue-reading" {
+            guard url.pathComponents.allSatisfy({ $0 == "/" }) else { return nil }
+            self = .continueReading
+            return
         }
 
         let numbers = Self.segments(of: url).compactMap { Int($0) }

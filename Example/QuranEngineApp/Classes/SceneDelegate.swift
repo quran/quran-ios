@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.overrideUserInterfaceStyle = ThemeService.shared.userInterfaceStyle
         self.window = window
 
-        launchBuilder = LaunchBuilder(container: container)
+        launchBuilder = LaunchBuilder(container: container, preparation: container.launchPreparation)
         let launchStartup = launchBuilder?.launchStartup()
         launchStartup?.launch(from: window)
 

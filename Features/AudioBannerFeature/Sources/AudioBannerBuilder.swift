@@ -28,13 +28,7 @@ public struct AudioBannerBuilder {
     public func build(withListener listener: AudioBannerListener) -> (UIViewController, AudioBannerViewModel) {
         let viewModel = AudioBannerViewModel(
             analytics: container.analytics,
-            reciterRetreiver: ReciterDataRetriever(),
-            recentRecitersService: RecentRecitersService(),
-            audioPlayer: QuranAudioPlayer(),
-            downloader: QuranAudioDownloader(
-                baseURL: container.filesAppHost,
-                downloader: container.downloadManager
-            ),
+            playback: container.playbackService,
             reciterListBuilder: ReciterListBuilder(),
             advancedAudioOptionsBuilder: AdvancedAudioOptionsBuilder()
         )

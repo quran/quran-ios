@@ -1,0 +1,7 @@
+/* Keep applicationName and amount tokens unchanged in translated phrases. */
+"Continue listening in ${applicationName}" = "Continue listening in ${applicationName}";
+"Continue listening in ${applicationName} for ${amount}" = "Continue listening in ${applicationName} for ${amount}";
+"Listen to the next ${amount} in ${applicationName}" = "Listen to the next ${amount} in ${applicationName}";
+"Choose how many pages to hear in ${applicationName}" = "Choose how many pages to hear in ${applicationName}";
+"Continue reading in ${applicationName}" = "Continue reading in ${applicationName}";
+"Continue listening to ${applicationName} next ${amount}" = "Continue listening to ${applicationName} next ${amount}";

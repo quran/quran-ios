@@ -50,10 +50,15 @@ class QueuePlayerFake: QueuingPlayer {
 
     var state: PlayingState = .stopped
     var location = 0
+    var readinessError: Error?
 
     func play(request: AudioRequest, rate: Float) {
         state = .playing(request)
         location = 0
+    }
+
+    func waitUntilReady() async throws {
+        if let readinessError { throw readinessError }
     }
 
     func pause() {

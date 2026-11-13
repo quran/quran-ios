@@ -18,9 +18,12 @@
 //  GNU General Public License for more details.
 //
 
+import AnnotationsService
 import Crashing
 import FeaturesSupport
+import NoorUI
 import QuranKit
+import ReadingService
 import UIKit
 import VLogging
 import WhatsNewFeature
@@ -31,13 +34,23 @@ protocol AppPresenter: UITabBarController {
 class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPresenter {
     // MARK: Lifecycle
 
-    init(interactor: AppInteractor, whatsNewController: AppWhatsNewController, isAppIconAvailable: Bool) {
+    init(
+        interactor: AppInteractor,
+        lastPageService: any LastPageService,
+        whatsNewController: AppWhatsNewController,
+        isAppIconAvailable: Bool
+    ) {
         self.interactor = interactor
+        self.lastPageService = lastPageService
         self.whatsNewController = whatsNewController
         self.isAppIconAvailable = isAppIconAvailable
         super.init(nibName: nil, bundle: nil)
         interactor.presenter = self
         interactor.start()
+    }
+
+    deinit {
+        continueReadingTask?.cancel()
     }
 
     @available(*, unavailable)
@@ -66,6 +79,8 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     /// Opens the Quran on the deep linked sura or ayah, replacing whatever the home tab
     /// currently shows so links never stack Quran screens on top of each other.
     func navigate(to deepLink: QuranDeepLink) {
+        continueReadingTask?.cancel()
+        continueReadingTask = nil
         guard let homeTab = viewControllers?.first as? TabViewController else {
             logger.error("Deep link: home tab is unavailable")
             return
@@ -75,6 +90,19 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         homeTab.popToRootViewController(animated: false)
 
         switch deepLink {
+        case .continueReading:
+            let service = lastPageService
+            let quran = ReadingPreferences.shared.reading.quran
+            continueReadingTask = Task { [weak self, weak homeTab] in
+                do {
+                    let continuation = try await ReadingContinuation.resolve(quran: quran, service: service)
+                    homeTab?.quranNavigator.navigateTo(page: continuation.page, lastPage: continuation.lastPage)
+                } catch is CancellationError {
+                    return
+                } catch {
+                    self?.showErrorAlert(error: error)
+                }
+            }
         case .sura(let sura):
             homeTab.quranNavigator.navigateTo(page: sura.page, lastPage: nil)
         case .ayah(let ayah):
@@ -124,6 +152,8 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     // MARK: Private
 
     private let interactor: AppInteractor
+    private let lastPageService: any LastPageService
+    private var continueReadingTask: Task<Void, Never>?
     private let whatsNewController: AppWhatsNewController
     private let isAppIconAvailable: Bool
     private var hasStartedPostLaunchPresentation = false

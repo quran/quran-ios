@@ -207,11 +207,11 @@ class QuranAudioPlayerTests: XCTestCase {
             XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaying(AyahNumber(quran: quran, sura: 1, ayah: 3)!)])
 
             // end playback
-            queuePlayer.actions?.playbackEnded()
+            queuePlayer.actions?.playbackEnded(.completed)
             XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [.onPlaybackEnded])
 
             // cannot end playback again or change frame
-            queuePlayer.actions?.playbackEnded()
+            queuePlayer.actions?.playbackEnded(.completed)
             XCTAssertEqual(delegate.eventsDiffSinceLastCalled, [])
         }
     }
@@ -234,6 +234,36 @@ class QuranAudioPlayerTests: XCTestCase {
 
         queuePlayer.actions?.durationLoaded(4)
         XCTAssertEqual(nowPlayingDuration, 4)
+    }
+
+    @MainActor
+    func test_playbackEndPreservesWhetherTheRangeCompleted() async throws {
+        for reason in [PlaybackEndReason.stopped, .completed] {
+            try await runDownloadedTestCase(gapless: false)
+            queuePlayer.actions?.playbackEnded(reason)
+        }
+        XCTAssertEqual(delegate.endReasons, [.stopped, .completed])
+    }
+
+    @MainActor
+    func test_playbackFailureDoesNotReportCompletion() async throws {
+        try await runDownloadedTestCase(gapless: false)
+        queuePlayer.actions?.playbackFailed(CancellationError())
+
+        XCTAssertEqual(delegate.playbackErrors.count, 1)
+        XCTAssertTrue(delegate.endReasons.isEmpty)
+        XCTAssertNil(MPNowPlayingInfoCenter.default().nowPlayingInfo)
+    }
+
+    @MainActor
+    func test_playThrowsWhenThePlayerCannotBecomeReady() async throws {
+        queuePlayer.readinessError = CancellationError()
+        do {
+            try await runDownloadedTestCase(gapless: false)
+            XCTFail("Expected the playback readiness error")
+        } catch is CancellationError {
+            XCTAssertTrue(queuePlayer.state.isStopped)
+        }
     }
 
     // MARK: Private

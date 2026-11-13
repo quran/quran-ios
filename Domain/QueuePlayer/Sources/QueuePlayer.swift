@@ -12,24 +12,27 @@ public struct QueuePlayerActions: Sendable {
     // MARK: Lifecycle
 
     public init(
-        playbackEnded: @Sendable @MainActor @escaping () -> Void,
+        playbackEnded: @Sendable @MainActor @escaping (PlaybackEndReason) -> Void,
         playbackRateChanged: @Sendable @MainActor @escaping (Float) -> Void,
         audioFrameChanged: @Sendable @MainActor @escaping (Int, Int, AVPlayerItem, TimeInterval?) -> Void,
-        durationLoaded: @Sendable @MainActor @escaping (TimeInterval) -> Void
+        durationLoaded: @Sendable @MainActor @escaping (TimeInterval) -> Void,
+        playbackFailed: @Sendable @MainActor @escaping (Error) -> Void = { _ in }
     ) {
         self.playbackEnded = playbackEnded
         self.playbackRateChanged = playbackRateChanged
         self.audioFrameChanged = audioFrameChanged
         self.durationLoaded = durationLoaded
+        self.playbackFailed = playbackFailed
     }
 
     // MARK: Internal
 
-    let playbackEnded: @Sendable @MainActor () -> Void
+    let playbackEnded: @Sendable @MainActor (PlaybackEndReason) -> Void
+    let playbackFailed: @Sendable @MainActor (Error) -> Void
     let playbackRateChanged: @Sendable @MainActor (Float) -> Void
     /// File index, frame index, the playing item, and its file's duration (`nil` while it loads).
     let audioFrameChanged: @Sendable @MainActor (Int, Int, AVPlayerItem, TimeInterval?) -> Void
-    /// The playing file's duration finished loading; zero when it couldn't be read.
+    /// The playing file's duration finished loading successfully.
     let durationLoaded: @Sendable @MainActor (TimeInterval) -> Void
 }
 
@@ -57,6 +60,13 @@ public class QueuePlayer {
     // MARK: Public
 
     public var actions: QueuePlayerActions?
+
+    /// Waits for the current request's first item to be ready, including failures and cancellation.
+    public func waitUntilReady() async throws {
+        guard let player else { throw PlaybackError.unavailable }
+        try await player.waitUntilReady()
+        guard self.player === player else { throw CancellationError() }
+    }
 
     public func pause() {
         player?.pause()
@@ -92,15 +102,20 @@ public class QueuePlayer {
         }
     }
 
-    private func playbackEnded() {
+    private func playbackEnded(_ reason: PlaybackEndReason) {
         player = nil
-        actions?.playbackEnded()
+        actions?.playbackEnded(reason)
+    }
+
+    private func playbackFailed(_ error: Error) {
+        player = nil
+        actions?.playbackFailed(error)
     }
 
     private func newPlayerActions() -> QueuePlayerActions {
         QueuePlayerActions(
             playbackEnded: { [weak self] in
-                self?.playbackEnded()
+                self?.playbackEnded($0)
             },
             playbackRateChanged: { [weak self] in
                 self?.actions?.playbackRateChanged($0)
@@ -110,6 +125,9 @@ public class QueuePlayer {
             },
             durationLoaded: { [weak self] in
                 self?.actions?.durationLoaded($0)
+            },
+            playbackFailed: { [weak self] in
+                self?.playbackFailed($0)
             }
         )
     }

@@ -1,0 +1,19 @@
+/* Siri and Shortcuts action metadata, parameter choices, and dialogs. */
+"Listening Amount" = "Listening Amount";
+"one page" = "one page";
+"two pages" = "two pages";
+"five pages" = "five pages";
+"ten pages" = "ten pages";
+"twenty pages" = "twenty pages";
+"Continue Listening" = "Continue Listening";
+"Resume Quran recitation from your listening position for the selected number of pages." = "Resume Quran recitation from your listening position for the selected number of pages.";
+"Amount" = "Amount";
+"Continue Listening to Pages" = "Continue Listening to Pages";
+"Choose how many Quran pages to hear from your saved listening position. Playback stops at the end of the Quran if fewer pages remain." = "Choose how many Quran pages to hear from your saved listening position. Playback stops at the end of the Quran if fewer pages remain.";
+"Number of Pages" = "Number of Pages";
+"How many pages would you like to hear?" = "How many pages would you like to hear?";
+"Choose at least one page. How many pages would you like to hear?" = "Choose at least one page. How many pages would you like to hear?";
+"Listen to Pages" = "Listen to Pages";
+"Continue Reading" = "Continue Reading";
+"Open the Quran at your last reading position." = "Open the Quran at your last reading position.";
+"The reading position could not be opened. Please open the app and try again." = "The reading position could not be opened. Please open the app and try again.";

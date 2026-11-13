@@ -21,6 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         print("Documents directory: ", FileManager.documentsURL)
 
+        if #available(iOS 17.2, *) {
+            QuranAppShortcuts.updateAppShortcutParameters()
+        }
         FontName.registerFonts()
         LoggingSystem.bootstrap { label in
             var handler = StreamLogHandler.standardError(label: label)
@@ -33,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         Task {
             // Eagerly load download manager to handle any background downloads.
-            await container.downloadManager.start()
+            await container.startDownloads()
 
             // Begin fetching resources immediately after download manager is initialized.
             await container.readingResources.startLoadingResources()

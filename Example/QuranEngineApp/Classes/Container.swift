@@ -7,6 +7,7 @@
 
 import Analytics
 import AppDependencies
+import AppStructureFeature
 import BatchDownloader
 import CoreDataModel
 import CoreDataPersistence
@@ -21,6 +22,8 @@ import MobileSync
 import NoorUI
 import NotePersistence
 import PageBookmarkPersistence
+import QuranAudioKit
+import QuranKit
 import ReadingService
 import UIKit
 import VLogging
@@ -34,6 +37,53 @@ class Container: AppDependencies {
     // MARK: Internal
 
     static let shared = Container()
+
+    @MainActor private(set) lazy var launchPreparation = LaunchPreparation(container: self)
+    @MainActor var playbackService: QuranPlaybackService {
+        if let storedPlaybackService { return storedPlaybackService }
+        let service = QuranPlaybackService(
+            downloader: QuranAudioDownloader(baseURL: filesAppHost, downloader: downloadManager)
+        )
+        storedPlaybackService = service
+        return service
+    }
+
+    @MainActor private var storedPlaybackService: QuranPlaybackService?
+    @MainActor private var siriRequestGeneration: UInt = 0
+
+    @MainActor
+    func continueListening(pageCount: Int) async throws {
+        try Task.checkCancellation()
+        siriRequestGeneration &+= 1
+        let request = siriRequestGeneration
+        // Do not construct the player or its stores before protected-data preparation.
+        let playbackGeneration = storedPlaybackService?.commandGeneration ?? 0
+        try await launchPreparation.prepare()
+        try Task.checkCancellation()
+        await startDownloads()
+        let quran = ReadingPreferences.shared.reading.quran
+        var fallback = quran.firstVerse
+        for try await pages in lastPageService().lastPages(quran: quran) {
+            fallback = pages.first?.page.firstVerse ?? quran.firstVerse
+            break
+        }
+        try Task.checkCancellation()
+        guard request == siriRequestGeneration,
+              playbackService.commandGeneration == playbackGeneration
+        else { throw CancellationError() }
+        try await playbackService.continueListening(quran: quran, fallback: fallback, pageCount: pageCount)
+    }
+
+    @MainActor
+    func startDownloads() async {
+        if downloadsStartupTask == nil {
+            let manager = downloadManager
+            downloadsStartupTask = Task { await manager.start() }
+        }
+        await downloadsStartupTask?.value
+    }
+
+    @MainActor private var downloadsStartupTask: Task<Void, Never>?
 
     let remoteResources: ReadingRemoteResources? = nil
     private(set) lazy var readingResources = ReadingResourcesService(downloader: downloadManager, remoteResources: remoteResources)

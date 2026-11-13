@@ -36,6 +36,43 @@ final class QueuePlayerTests: XCTestCase {
 
         await fulfillment(of: [actions.playbackEnded], timeout: 5)
         XCTAssertEqual(actions.events, [.frameChanged(0, 0), .frameChanged(1, 0), .playbackEnded])
+        XCTAssertEqual(actions.endReasons, [.completed])
+    }
+
+    func test_manualStopDoesNotCompleteTheRange() throws {
+        player.play(request: try makeGappedRequest(), rate: 1)
+        player.stop()
+        player.stop()
+        XCTAssertEqual(actions.endReasons, [.stopped])
+    }
+
+    func test_steppingPastTheRangeDoesNotCompleteIt() throws {
+        player.play(request: try makeGappedRequest(durations: [1]), rate: 1)
+        player.stepForward()
+        XCTAssertEqual(actions.endReasons, [.stopped])
+    }
+
+    func test_failedPlaybackDoesNotCompleteTheRange() throws {
+        player.play(request: try makeGappedRequest(durations: [1]), rate: 1)
+        let item = try XCTUnwrap(actions.playerItems.first)
+        NotificationCenter.default.post(
+            name: AVPlayerItem.failedToPlayToEndTimeNotification,
+            object: item,
+            userInfo: [AVPlayerItemFailedToPlayToEndTimeErrorKey: NSError(domain: "test", code: 1)]
+        )
+        XCTAssertTrue(actions.endReasons.isEmpty)
+        XCTAssertEqual(actions.errors.count, 1)
+    }
+
+    func test_waitUntilReadyPropagatesInvalidFileFailure() async throws {
+        let missing = audioFiles.directory.appendingPathComponent("missing.mp3")
+        player.play(request: try makeGappedRequest(firstFile: missing), rate: 1)
+        do {
+            try await player.waitUntilReady()
+            XCTFail("Expected invalid audio to fail")
+        } catch {
+            XCTAssertTrue(actions.endReasons.isEmpty)
+        }
     }
 
     func test_pause_beforeDurationLoadsHoldsTheFrameUntilResumed() async throws {
@@ -421,11 +458,14 @@ private final class QueuePlayerActionsSpy {
     private(set) var frameDurations: [TimeInterval?] = []
     /// The player item each `audioFrameChanged` carried, in order.
     private(set) var playerItems: [AVPlayerItem] = []
+    private(set) var endReasons: [PlaybackEndReason] = []
+    private(set) var errors: [Error] = []
     var onRateChanged: ((Float) -> Void)?
 
     func makeActions() -> QueuePlayerActions {
         QueuePlayerActions(
-            playbackEnded: { [weak self] in
+            playbackEnded: { [weak self] reason in
+                self?.endReasons.append(reason)
                 self?.events.append(.playbackEnded)
                 self?.playbackEnded.fulfill()
             },
@@ -442,6 +482,9 @@ private final class QueuePlayerActionsSpy {
                 if self?.durationsLoaded.count == 1 {
                     self?.firstDurationLoaded.fulfill()
                 }
+            },
+            playbackFailed: { [weak self] in
+                self?.errors.append($0)
             }
         )
     }

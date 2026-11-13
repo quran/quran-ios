@@ -17,25 +17,19 @@ import UIKit
 public struct LaunchBuilder {
     // MARK: Lifecycle
 
-    public init(container: AppDependencies) {
+    public init(container: AppDependencies, preparation: LaunchPreparation? = nil) {
         self.container = container
+        self.preparation = preparation ?? LaunchPreparation(container: container)
     }
 
     // MARK: Public
 
     public func launchStartup() -> LaunchStartup {
         let audioUpdater = AudioUpdater(baseURL: container.appHost)
-        let fileSystemMigrator = FileSystemMigrator(
-            databasesURL: container.databasesURL,
-            recitersRetreiver: ReciterDataRetriever()
-        )
         return LaunchStartup(
             appBuilder: AppBuilder(container: container),
-            launchStores: LaunchStores(coreDataStack: container.coreDataStack),
-            downloadBackupMigrator: DownloadBackupMigrator(),
+            preparation: preparation,
             audioUpdater: audioUpdater,
-            fileSystemMigrator: fileSystemMigrator,
-            recitersPathMigrator: RecitersPathMigrator(),
             reviewService: ReviewService(analytics: container.analytics),
             appIconService: container.appIconService(),
             analyticsUserPropertiesReporterBuilder: AnalyticsUserPropertiesReporterBuilder(container: container)
@@ -45,4 +39,5 @@ public struct LaunchBuilder {
     // MARK: Internal
 
     let container: AppDependencies
+    private let preparation: LaunchPreparation
 }

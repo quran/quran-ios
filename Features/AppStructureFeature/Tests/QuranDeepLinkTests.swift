@@ -12,6 +12,17 @@ import XCTest
 final class QuranDeepLinkTests: XCTestCase {
     // MARK: Internal
 
+    func testContinueReadingLink() {
+        XCTAssertEqual(deepLink("quran://continue-reading"), .continueReading)
+        XCTAssertEqual(deepLink("quran-ios://continue-reading/"), .continueReading)
+        XCTAssertEqual(deepLink("QURAN://CONTINUE-READING"), .continueReading)
+    }
+
+    func testContinueReadingLinkRejectsExtraPath() {
+        XCTAssertNil(deepLink("quran://continue-reading/2"))
+        XCTAssertNil(deepLink("https://continue-reading"))
+    }
+
     func testSuraOnlyLink() {
         XCTAssertEqual(deepLink("quran://2"), .sura(sura(2)))
     }

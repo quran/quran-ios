@@ -17,20 +17,23 @@ public struct QuranAudioPlayerActions: Sendable {
     // MARK: Lifecycle
 
     public init(
-        playbackEnded: @Sendable @MainActor @escaping () -> Void,
+        playbackEnded: @Sendable @MainActor @escaping (PlaybackEndReason) -> Void,
         playbackPaused: @Sendable @MainActor @escaping () -> Void,
         playbackResumed: @Sendable @MainActor @escaping () -> Void,
-        playing: @Sendable @MainActor @escaping (AyahNumber) -> Void
+        playing: @Sendable @MainActor @escaping (AyahNumber) -> Void,
+        playbackFailed: @Sendable @MainActor @escaping (Error) -> Void = { _ in }
     ) {
         self.playbackEnded = playbackEnded
         self.playbackPaused = playbackPaused
         self.playbackResumed = playbackResumed
         self.playing = playing
+        self.playbackFailed = playbackFailed
     }
 
     // MARK: Internal
 
-    let playbackEnded: @Sendable @MainActor () -> Void
+    let playbackEnded: @Sendable @MainActor (PlaybackEndReason) -> Void
+    let playbackFailed: @Sendable @MainActor (Error) -> Void
     let playbackPaused: @Sendable @MainActor () -> Void
     let playbackResumed: @Sendable @MainActor () -> Void
     let playing: @Sendable @MainActor (AyahNumber) -> Void
@@ -68,6 +71,7 @@ public class QuranAudioPlayer {
     }
 
     public func stopAudio() {
+        generation &+= 1
         player.stop()
     }
 
@@ -96,6 +100,8 @@ public class QuranAudioPlayer {
         repetitionDelay: RepetitionDelay = .none,
         streaming: Bool = false
     ) async throws {
+        generation &+= 1
+        let requestGeneration = generation
         let details: [String: Any] = [
             "startAyah": start,
             "to": end,
@@ -114,10 +120,20 @@ public class QuranAudioPlayer {
         audioRequest = audioRequest.withVerseDelay(verseDelay)
         audioRequest = audioRequest.withRepetitionDelay(repetitionDelay)
         let request = audioRequest.getRequest()
+        try Task.checkCancellation()
+        guard requestGeneration == generation else { throw CancellationError() }
         willPlay(request)
         self.audioRequest = audioRequest
         player.actions = newPlayerActions()
         player.play(request: request, rate: rate)
+        do {
+            try await player.waitUntilReady()
+        } catch {
+            if requestGeneration == generation {
+                player.stop()
+            }
+            throw error
+        }
     }
 
     // MARK: Private
@@ -129,15 +145,23 @@ public class QuranAudioPlayer {
     private let gappedAudioRequestBuilder: QuranAudioRequestBuilder = GappedAudioRequestBuilder()
     private let gaplessAudioRequestBuilder: QuranAudioRequestBuilder = GaplessAudioRequestBuilder()
     private var audioRequest: QuranAudioRequest?
+    private var generation: UInt = 0
 
     // MARK: - AudioPlayerActions
 
-    private func playbackEnded() {
+    private func playbackEnded(_ reason: PlaybackEndReason) {
         nowPlaying.clear()
-        actions?.playbackEnded()
+        actions?.playbackEnded(reason)
         // not interested to get more notifications
         player.actions = nil
         audioRequest = nil
+    }
+
+    private func playbackFailed(_ error: Error) {
+        nowPlaying.clear()
+        player.actions = nil
+        audioRequest = nil
+        actions?.playbackFailed(error)
     }
 
     private func playbackRateChanged(rate: Float) {
@@ -187,7 +211,7 @@ public class QuranAudioPlayer {
     private func newPlayerActions() -> QueuePlayerActions {
         QueuePlayerActions(
             playbackEnded: { [weak self] in
-                self?.playbackEnded()
+                self?.playbackEnded($0)
             },
             playbackRateChanged: { [weak self] rate in
                 self?.playbackRateChanged(rate: rate)
@@ -197,6 +221,9 @@ public class QuranAudioPlayer {
             },
             durationLoaded: { [weak self] in
                 self?.durationLoaded($0)
+            },
+            playbackFailed: { [weak self] in
+                self?.playbackFailed($0)
             }
         )
     }

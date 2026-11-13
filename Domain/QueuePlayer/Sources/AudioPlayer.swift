@@ -46,6 +46,10 @@ class AudioPlayer {
         play(fileIndex: 0, frameIndex: 0, forceSeek: true)
     }
 
+    func waitUntilReady() async throws {
+        try await player.waitUntilReady()
+    }
+
     func resume() {
         isPaused = false
         // Keep the player paused through the rest of the delay; the next frame plays after it.
@@ -74,11 +78,27 @@ class AudioPlayer {
     }
 
     func stop() {
+        finish(reason: .stopped)
+    }
+
+    private func finish(reason: PlaybackEndReason) {
+        guard !hasEnded else { return }
+        hasEnded = true
         cancelVerseDelay()
         isWaitingForDuration = false
         timer = nil
         player.stop()
-        actions?.playbackEnded()
+        actions?.playbackEnded(reason)
+    }
+
+    private func playbackFailed(_ error: Error) {
+        guard !hasEnded else { return }
+        hasEnded = true
+        cancelVerseDelay()
+        isWaitingForDuration = false
+        timer = nil
+        player.stop()
+        actions?.playbackFailed(error)
     }
 
     func setRate(_ rate: Float) {
@@ -119,6 +139,7 @@ class AudioPlayer {
     private let sleep: VerseDelaySleep
     private var audioPlaying: AudioPlaying
     private var playbackRate: Float
+    private var hasEnded = false
 
     // Set while waiting out a between-verse delay (player paused, no frame playing).
     private var verseDelayWait: VerseDelayWait?
@@ -176,12 +197,17 @@ class AudioPlayer {
             }
             playedToEnd()
         }
+        player.onFailed = { [weak self, weak player] error in
+            guard let self, let player, player === self.player else { return }
+            playbackFailed(error)
+        }
         return player
     }
 
     // MARK: - Repeat Logic
 
     private func play(fileIndex: Int, frameIndex: Int, forceSeek: Bool) {
+        guard !hasEnded else { return }
         // Playing a frame, such as after stepping, supersedes a pending delay's advance.
         cancelVerseDelay()
 
@@ -260,7 +286,7 @@ class AudioPlayer {
             } else { // last frame
                 if audioPlaying.isLastRun() {
                     // stop
-                    stop()
+                    finish(reason: .completed)
                 } else {
                     // start a new run
                     audioPlaying.incrementRequestPlays()
@@ -382,6 +408,7 @@ class AudioPlayer {
     }
 
     private func durationLoaded(_ duration: TimeInterval) {
+        guard !hasEnded else { return }
         actions?.durationLoaded(duration)
         guard isWaitingForDuration, let mediaDelta = getDurationToFrameEnd() else {
             return
@@ -395,7 +422,7 @@ class AudioPlayer {
 
     private func rateChanged(to rate: Float) {
         // Ignore the pause/resume we trigger ourselves while waiting out a delay.
-        guard !isDelaying else {
+        guard !isDelaying, !hasEnded else {
             return
         }
         actions?.playbackRateChanged(rate)

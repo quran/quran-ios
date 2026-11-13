@@ -36,6 +36,7 @@ struct AppBuilder {
         )
         let appViewController = AppViewController(
             interactor: interactor,
+            lastPageService: container.lastPageService(),
             whatsNewController: AppWhatsNewController(
                 analytics: container.analytics,
                 launchVersion: launchVersion,

@@ -20,6 +20,13 @@
 		D975EDEA2A4799A2009DE942 /* reciters.plist in Resources */ = {isa = PBXBuildFile; fileRef = D975EDE92A4799A2009DE942 /* reciters.plist */; };
 		D98543D32A47C88700F477A2 /* hafs_1405 in Resources */ = {isa = PBXBuildFile; fileRef = D98543D22A47C88700F477A2 /* hafs_1405 */; };
 		D98543DD2A49095800F477A2 /* words.db in Resources */ = {isa = PBXBuildFile; fileRef = D98543DC2A49095800F477A2 /* words.db */; };
+		D9A1C0DE2F00000100000065 /* ListeningPageAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A1C0DE2F00000100000001 /* ListeningPageAmount.swift */; };
+		D9A1C0DE2F00000100000066 /* ContinueListeningIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A1C0DE2F00000100000002 /* ContinueListeningIntent.swift */; };
+		D9A1C0DE2F00000100000067 /* ContinueReadingIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A1C0DE2F00000100000003 /* ContinueReadingIntent.swift */; };
+		D9A1C0DE2F00000100000068 /* QuranAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A1C0DE2F00000100000004 /* QuranAppShortcuts.swift */; };
+		D9A1C0DE2F0000010000012D /* AppIntents.strings in Resources */ = {isa = PBXBuildFile; fileRef = D9A1C0DE2F00000100000191 /* AppIntents.strings */; };
+		D9A1C0DE2F0000010000012E /* AppShortcuts.strings in Resources */ = {isa = PBXBuildFile; fileRef = D9A1C0DE2F00000100000192 /* AppShortcuts.strings */; };
+		D9A1C0DE2F0000010000012F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D9A1C0DE2F00000100000193 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +46,13 @@
 		D98543D42A47E14200F477A2 /* QuranEngineApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QuranEngineApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		D98543DC2A49095800F477A2 /* words.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = words.db; sourceTree = "<group>"; };
 		D9A1C0DE2E8F000100000001 /* AppIconCatalog+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppIconCatalog+Example.swift"; sourceTree = "<group>"; };
+		D9A1C0DE2F00000100000001 /* ListeningPageAmount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListeningPageAmount.swift; sourceTree = "<group>"; };
+		D9A1C0DE2F00000100000002 /* ContinueListeningIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinueListeningIntent.swift; sourceTree = "<group>"; };
+		D9A1C0DE2F00000100000003 /* ContinueReadingIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinueReadingIntent.swift; sourceTree = "<group>"; };
+		D9A1C0DE2F00000100000004 /* QuranAppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranAppShortcuts.swift; sourceTree = "<group>"; };
+		D9A1C0DE2F000001000000C9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppIntents.strings; sourceTree = "<group>"; };
+		D9A1C0DE2F000001000000CA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppShortcuts.strings; sourceTree = "<group>"; };
+		D9A1C0DE2F000001000000CB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +97,10 @@
 		D975EDD92A4791FE009DE942 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D9A1C0DE2F00000100000001 /* ListeningPageAmount.swift */,
+				D9A1C0DE2F00000100000002 /* ContinueListeningIntent.swift */,
+				D9A1C0DE2F00000100000003 /* ContinueReadingIntent.swift */,
+				D9A1C0DE2F00000100000004 /* QuranAppShortcuts.swift */,
 				D975EDC52A4791D6009DE942 /* AppDelegate.swift */,
 				D975EDC72A4791D6009DE942 /* SceneDelegate.swift */,
 				D975EDE42A47960D009DE942 /* Container.swift */,
@@ -98,6 +116,9 @@
 			children = (
 				D9A1C0DE2E8F000100000011 /* AppIcon.icon */,
 				D9A1C0DE2E8F000100000012 /* AppIcon-Graphite.icon */,
+				D9A1C0DE2F00000100000191 /* AppIntents.strings */,
+				D9A1C0DE2F00000100000192 /* AppShortcuts.strings */,
+				D9A1C0DE2F00000100000193 /* Localizable.strings */,
 				D975EDCE2A4791D7009DE942 /* Assets.xcassets */,
 				D98543D22A47C88700F477A2 /* hafs_1405 */,
 				D975EDD02A4791D7009DE942 /* LaunchScreen.storyboard */,
@@ -184,6 +205,9 @@
 				D98543D32A47C88700F477A2 /* hafs_1405 in Resources */,
 				D975EDD22A4791D7009DE942 /* LaunchScreen.storyboard in Resources */,
 				D98543DD2A49095800F477A2 /* words.db in Resources */,
+				D9A1C0DE2F0000010000012D /* AppIntents.strings in Resources */,
+				D9A1C0DE2F0000010000012E /* AppShortcuts.strings in Resources */,
+				D9A1C0DE2F0000010000012F /* Localizable.strings in Resources */,
 				D975EDCF2A4791D7009DE942 /* Assets.xcassets in Resources */,
 				D9A1C0DE2E8F000100000021 /* AppIcon.icon in Resources */,
 				D9A1C0DE2E8F000100000022 /* AppIcon-Graphite.icon in Resources */,
@@ -198,6 +222,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9A1C0DE2F00000100000065 /* ListeningPageAmount.swift in Sources */,
+				D9A1C0DE2F00000100000066 /* ContinueListeningIntent.swift in Sources */,
+				D9A1C0DE2F00000100000067 /* ContinueReadingIntent.swift in Sources */,
+				D9A1C0DE2F00000100000068 /* QuranAppShortcuts.swift in Sources */,
 				D975EDC62A4791D6009DE942 /* AppDelegate.swift in Sources */,
 				D975EDE52A47960D009DE942 /* Container.swift in Sources */,
 				D9A1C0DE2E8F000100000002 /* AppIconCatalog+Example.swift in Sources */,
@@ -215,6 +243,30 @@
 				D975EDD12A4791D7009DE942 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		D9A1C0DE2F00000100000191 /* AppIntents.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D9A1C0DE2F000001000000C9 /* en */,
+			);
+			name = AppIntents.strings;
+			sourceTree = "<group>";
+		};
+		D9A1C0DE2F00000100000192 /* AppShortcuts.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D9A1C0DE2F000001000000CA /* en */,
+			);
+			name = AppShortcuts.strings;
+			sourceTree = "<group>";
+		};
+		D9A1C0DE2F00000100000193 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D9A1C0DE2F000001000000CB /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

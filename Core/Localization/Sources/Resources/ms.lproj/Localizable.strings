@@ -93,6 +93,8 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.donate" = "Sumbang";
 "setting.share_app" = "Kongi aplikasi ini...";
+// Settings row that opens the Quran.com privacy policy.
+"setting.privacy_policy" = "Dasar Privasi";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.app_version" = "Versi aplikasi";
 

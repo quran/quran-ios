@@ -105,6 +105,8 @@
 "setting.donate" = "Xayriya qilish";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.share_app" = "Ilovani ulashing...";
+// Settings row that opens the Quran.com privacy policy.
+"setting.privacy_policy" = "Maxfiylik siyosati";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.app_version" = "Ilova versiyasi";
 

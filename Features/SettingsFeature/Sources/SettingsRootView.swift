@@ -29,6 +29,7 @@ struct SettingsRootView: View {
             shareApp: { viewModel.shareApp() },
             writeReview: { viewModel.writeReview() },
             contactUs: { viewModel.contactUs() },
+            openPrivacyPolicy: { viewModel.openPrivacyPolicy() },
             navigateToDiagnotics: { viewModel.navigateToDiagnotics() },
             accountState: viewModel.accountState,
             syncActivity: viewModel.syncActivity,
@@ -52,6 +53,7 @@ struct SettingsRootView: View {
             shareApp: { viewModel.shareApp() },
             writeReview: { viewModel.writeReview() },
             contactUs: { viewModel.contactUs() },
+            openPrivacyPolicy: { viewModel.openPrivacyPolicy() },
             navigateToDiagnotics: { viewModel.navigateToDiagnotics() }
         )
         #endif
@@ -82,6 +84,7 @@ private struct SettingsRootViewUI: View {
     let shareApp: Action
     let writeReview: Action
     let contactUs: Action
+    let openPrivacyPolicy: Action
     let navigateToDiagnotics: Action
 
     #if QURAN_SYNC
@@ -189,6 +192,13 @@ private struct SettingsRootViewUI: View {
                     accessory: .disclosureIndicator,
                     action: .sync { contactUs() }
                 )
+
+                NoorListItem(
+                    image: .init(.privacy),
+                    title: .text(l("setting.privacy_policy")),
+                    accessory: .disclosureIndicator,
+                    action: .sync { openPrivacyPolicy() }
+                )
             }
 
             NoorBasicSection {
@@ -232,6 +242,7 @@ private struct SettingsRootViewUI: View {
                 shareApp: {},
                 writeReview: {},
                 contactUs: {},
+                openPrivacyPolicy: {},
                 navigateToDiagnotics: {},
                 accountState: .signedOut,
                 syncActivity: SyncActivity(),
@@ -255,6 +266,7 @@ private struct SettingsRootViewUI: View {
                 shareApp: {},
                 writeReview: {},
                 contactUs: {},
+                openPrivacyPolicy: {},
                 navigateToDiagnotics: {}
             )
             #endif

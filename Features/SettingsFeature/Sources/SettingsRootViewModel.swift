@@ -194,6 +194,13 @@ final class SettingsRootViewModel: ObservableObject {
         navigationController?.present(viewController, animated: true)
     }
 
+    func openPrivacyPolicy() {
+        logger.info("Settings: Open privacy policy.")
+        let url = URL(validURL: "https://quran.com/privacy")
+        let viewController = SFSafariViewController(url: url)
+        navigationController?.present(viewController, animated: true)
+    }
+
     #if QURAN_SYNC
     var loggedInUser: MobileSyncUser? {
         if case .signedIn(let user) = accountState {

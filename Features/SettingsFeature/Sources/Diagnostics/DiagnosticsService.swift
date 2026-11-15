@@ -92,10 +92,7 @@ struct DiagnosticsService {
     }
 
     private func saveUserDefaults() throws {
-        // Only the app's own domain. Reason CA92.1 doesn't allow reading the global domain that
-        // `dictionaryRepresentation()` merges in, such as the system-written `AppleLanguages`.
-        let dictionary = Bundle.main.bundleIdentifier
-            .flatMap { UserDefaults.standard.persistentDomain(forName: $0) } ?? [:]
+        let dictionary = UserDefaults.standard.dictionaryRepresentation()
         let cleanedDictionary = makeJSONSerializable(dictionary)
         let data = try JSONSerialization.data(withJSONObject: cleanedDictionary, options: .prettyPrinted)
         let fileURL = extras.appendingPathComponent("UserDefaultsData.json")

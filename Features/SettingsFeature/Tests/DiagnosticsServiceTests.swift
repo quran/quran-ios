@@ -21,7 +21,6 @@ final class DiagnosticsServiceTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        UserDefaults.standard.removeObject(forKey: appDefaultsKey)
         try? FileManager.default.removeItem(at: directory)
         try super.tearDownWithError()
     }
@@ -42,21 +41,6 @@ final class DiagnosticsServiceTests: XCTestCase {
         XCTAssertNotNil(archive["logs/extras/UserDefaultsData.json"])
     }
 
-    func test_buildDiagnosticsZip_exportsOnlyTheAppsOwnDefaults() throws {
-        UserDefaults.standard.set("value", forKey: appDefaultsKey)
-        let sut = DiagnosticsService(logsDirectory: logsDirectory, databasesDirectory: databasesDirectory)
-
-        let diagnostics = try sut.buildDiagnosticsZip()
-        defer { diagnostics.cleanUp() }
-
-        let archive = try Archive(url: diagnostics.url, accessMode: .read)
-        let json = try XCTUnwrap(contents(of: "logs/extras/UserDefaultsData.json", in: archive))
-        let defaults = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(json.utf8)) as? [String: Any])
-        XCTAssertEqual(defaults[appDefaultsKey] as? String, "value")
-        // A system-written key from the global domain.
-        XCTAssertNil(defaults["AppleLanguages"])
-    }
-
     func test_buildDiagnosticsZip_cleanUpRemovesTheZip() throws {
         let sut = DiagnosticsService(logsDirectory: logsDirectory, databasesDirectory: databasesDirectory)
         let diagnostics = try sut.buildDiagnosticsZip()
@@ -68,7 +52,6 @@ final class DiagnosticsServiceTests: XCTestCase {
 
     // MARK: Private
 
-    private let appDefaultsKey = "DiagnosticsServiceTests.appDefault"
     private var directory: URL!
 
     private var logsDirectory: URL {

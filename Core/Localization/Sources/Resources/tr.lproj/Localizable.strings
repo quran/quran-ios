@@ -873,14 +873,18 @@
 "new.sync_reveal.chip.from_icloud" = "iCloud'dan geçiş";
 // How VoiceOver reads the What's New sync reveal chip. Keep "iCloud" and "Quran.com" in English.
 "new.sync_reveal.chip.accessibility" = "iCloud'dan Quran.com'a geçiş";
-// What's New sync reveal title.
-"new.sync_reveal.title" = "Kur'an'ınız, nerede okursanız okuyun";
-// What's New sync reveal body. Keep "iCloud" and "Quran.com" in English.
-"new.sync_reveal.body" = "Eşitleme artık iCloud yerine Quran.com üzerinden yapılıyor. Yer imlerinizi, notlarınızı ve okuma ilerlemenizi bir arada tutmak için her cihazda oturum açın.";
-// What's New sync reveal reassurance, after a checkmark: nothing the user saved before the update was lost.
-"new.sync_reveal.still_here" = "Kaydettiğiniz her şey hâlâ burada.";
-// What's New sync reveal button that starts signing in to Quran.com.
-"new.sync_reveal.sign_in" = "Quran.com'da oturum açın";
+// What's New sync reveal title: the user's Quran reading is now connected across their devices and Quran.com.
+"new.sync_reveal.title" = "Kur'an'ınız, hep bağlantıda";
+// What's New sync reveal benefit title, after a sync icon: the user's reading place follows them on every device.
+"new.sync_reveal.every_device.title" = "Her cihazda kaldığınız yer";
+// What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud", "Quran.com" and "Quran ID" in English.
+"new.sync_reveal.every_device.subtitle" = "Yer imleri, notlar ve okuma ilerlemesi ücretsiz Quran ID'nizle iCloud'dan Quran.com'a taşınır.";
+// What's New sync reveal benefit title, after a book icon: study more on Quran.com without losing the reading place.
+"new.sync_reveal.go_deeper.title" = "Yerinizi kaybetmeden derinleşin";
+// What's New sync reveal benefit detail under "Go deeper without losing your place": Quran.com opens tafsir, reflections and lessons at the ayah the user stopped on. Keep "Quran.com" in English.
+"new.sync_reveal.go_deeper.subtitle" = "Quran.com'da tefsir, tefekkürler ve dersler, kaldığınız ayette.";
+// What's New sync reveal button that starts signing in to Quran.com with a Quran ID account. Keep "Quran ID" in English.
+"new.sync_reveal.sign_in" = "Quran ID ile devam edin";
 // What's New sync reveal button that closes it without signing in.
 "new.sync_reveal.not_now" = "Şimdi değil";
 // What's New sync reveal footnote on iPhone.

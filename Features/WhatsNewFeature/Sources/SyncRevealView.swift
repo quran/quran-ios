@@ -8,6 +8,7 @@
 import Localization
 import SwiftUI
 import UIKit
+import UIx
 
 /// Tells people updating from 3.0 that sync moved from iCloud to Quran.com, on the "Nightfall" sky.
 ///
@@ -60,12 +61,21 @@ struct SyncRevealView: View {
     @ScaledMetric(relativeTo: .footnote) private var chipCornerRadius = 14.0
     @ScaledMetric(relativeTo: .body) private var actionsSpacing = 2.0
     @ScaledMetric(relativeTo: .body) private var notNowVerticalPadding = 7.0
-    @ScaledMetric(relativeTo: .subheadline) private var checkSpacing = 6.0
+    @ScaledMetric(relativeTo: .body) private var benefitsSpacing = 20.0
+    @ScaledMetric(relativeTo: .body) private var benefitSpacing = 14.0
+    @ScaledMetric(relativeTo: .body) private var benefitTextSpacing = 2.0
+    @ScaledMetric(relativeTo: .body) private var benefitIconSize = 36.0
+    @ScaledMetric(relativeTo: .body) private var benefitIconCornerRadius = 10.0
     /// A comfortable line length on iPad that widens with the text.
     @ScaledMetric(relativeTo: .body) private var contentMaxWidth = 440.0
 
     /// The design height; the button grows beyond it with its text.
     private let notNowMinHeight: CGFloat = 44
+    /// What `.padding()` adds on each side.
+    private let contentPadding: CGFloat = 16
+
+    /// The copy's measured height, so the orbit can leave it room.
+    @State private var copyHeight: CGFloat?
 
     /// Actions scroll with the copy at accessibility sizes, so they never cover it.
     private var scrollsActions: Bool {
@@ -81,10 +91,10 @@ struct SyncRevealView: View {
                     VStack(spacing: sectionSpacing) {
                         orbit(fitting: CGSize(
                             width: size.width,
-                            // Smaller at accessibility sizes, so the copy starts on screen.
-                            height: scrollsActions ? size.height * 0.3 : size.height * 0.45
+                            height: stackedOrbitHeight(screen: size.height, viewport: viewport.size.height)
                         ))
                         copy
+                            .onSizeChange { copyHeight = $0.height }
                         if scrollsActions {
                             actions
                         }
@@ -125,6 +135,20 @@ struct SyncRevealView: View {
         }
     }
 
+    /// The most height the stacked orbit takes: the room the copy leaves above it, within a share of
+    /// the screen. Smaller at accessibility sizes, so the copy starts on screen.
+    private func stackedOrbitHeight(screen: CGFloat, viewport: CGFloat) -> CGFloat {
+        if scrollsActions {
+            return screen * 0.3
+        }
+        let largest = screen * 0.45
+        guard let copyHeight else {
+            return largest
+        }
+        let room = viewport - copyHeight - sectionSpacing - 2 * contentPadding
+        return min(largest, max(screen * 0.25, room))
+    }
+
     /// The orbit at its design size, or smaller to fit `space`.
     private func orbit(fitting space: CGSize) -> some View {
         let full = SyncRevealOrbit.size
@@ -145,22 +169,55 @@ struct SyncRevealView: View {
                 .foregroundStyle(Palette.gold)
                 .accessibilityAddTraits(.isHeader)
 
-            Text(l("new.sync_reveal.body"))
-                .font(.callout)
-                .foregroundStyle(Color.white.opacity(0.8))
-
-            HStack(alignment: .firstTextBaseline, spacing: checkSpacing) {
-                Image(systemName: "checkmark")
-                    .foregroundStyle(Palette.gold)
-                    .accessibilityHidden(true)
-                Text(l("new.sync_reveal.still_here"))
-                    .foregroundStyle(Color.white)
-            }
-            .font(.subheadline.weight(.semibold))
-            .accessibilityElement(children: .combine)
+            benefits
+                .padding(.top, copySpacing)
         }
         .multilineTextAlignment(.center)
         .fixedSize(horizontal: false, vertical: true)
+    }
+
+    /// What signing in brings, as leading-aligned rows under the centered title.
+    private var benefits: some View {
+        VStack(alignment: .leading, spacing: benefitsSpacing) {
+            benefit(
+                systemImage: "arrow.triangle.2.circlepath",
+                title: l("new.sync_reveal.every_device.title"),
+                subtitle: l("new.sync_reveal.every_device.subtitle")
+            )
+            benefit(
+                systemImage: "book",
+                title: l("new.sync_reveal.go_deeper.title"),
+                subtitle: l("new.sync_reveal.go_deeper.subtitle")
+            )
+        }
+        .multilineTextAlignment(.leading)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// A gold symbol tile beside a title and its detail, read by VoiceOver as one element.
+    private func benefit(systemImage: String, title: String, subtitle: String) -> some View {
+        HStack(alignment: .top, spacing: benefitSpacing) {
+            Image(systemName: systemImage)
+                .font(.body.weight(.semibold))
+                .foregroundStyle(Palette.gold)
+                .frame(width: benefitIconSize, height: benefitIconSize)
+                .background(
+                    RoundedRectangle(cornerRadius: benefitIconCornerRadius, style: .continuous)
+                        .fill(Palette.gold.opacity(0.14))
+                )
+                .accessibilityHidden(true)
+
+            VStack(alignment: .leading, spacing: benefitTextSpacing) {
+                Text(title)
+                    .font(.headline)
+                    .foregroundStyle(Color.white)
+                Text(subtitle)
+                    .font(.subheadline)
+                    .foregroundStyle(Color.white.opacity(0.7))
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .accessibilityElement(children: .combine)
     }
 
     /// "Moving from iCloud → Quran.com", read by VoiceOver as one sentence.

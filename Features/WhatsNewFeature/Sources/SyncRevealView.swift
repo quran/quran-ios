@@ -71,11 +71,17 @@ struct SyncRevealView: View {
 
     /// The design height; the button grows beyond it with its text.
     private let notNowMinHeight: CGFloat = 44
-    /// What `.padding()` adds on each side.
+    /// What `.padding()` adds on each side of the scrolling content; keep the two in step.
     private let contentPadding: CGFloat = 16
+
+    /// The share of the screen the stacked orbit keeps however long the copy is.
+    private static let smallestStackedOrbitShare: CGFloat = 0.25
 
     /// The copy's measured height, so the orbit can leave it room.
     @State private var copyHeight: CGFloat?
+    /// Whether the side-by-side copy and actions are taller than their viewport, measured after the
+    /// first layout so the change flashes the scroll indicators.
+    @State private var sideBySideOverflows = false
 
     /// Actions scroll with the copy at accessibility sizes, so they never cover it.
     private var scrollsActions: Bool {
@@ -99,11 +105,14 @@ struct SyncRevealView: View {
                             actions
                         }
                     }
+                    // `contentPadding` mirrors this default padding.
                     .padding()
                     .frame(maxWidth: contentMaxWidth)
                     .frame(maxWidth: .infinity, minHeight: viewport.size.height)
                 }
-                .modifier(NightfallScrollBehavior(flashesIndicators: scrollsActions))
+                .modifier(NightfallScrollBehavior(
+                    flashesIndicators: stackedOverflows(screen: size.height, viewport: viewport.size.height)
+                ))
             }
 
             if !scrollsActions {
@@ -127,9 +136,10 @@ struct SyncRevealView: View {
                         actions
                     }
                     .padding()
+                    .onSizeChange { sideBySideOverflows = $0.height > viewport.size.height }
                     .frame(maxWidth: .infinity, minHeight: viewport.size.height)
                 }
-                .modifier(NightfallScrollBehavior(flashesIndicators: true))
+                .modifier(NightfallScrollBehavior(flashesIndicators: sideBySideOverflows))
             }
             .frame(maxWidth: contentMaxWidth)
         }
@@ -142,11 +152,25 @@ struct SyncRevealView: View {
             return screen * 0.3
         }
         let largest = screen * 0.45
-        guard let copyHeight else {
+        guard let room = roomAboveCopy(viewport: viewport) else {
             return largest
         }
-        let room = viewport - copyHeight - sectionSpacing - 2 * contentPadding
-        return min(largest, max(screen * 0.25, room))
+        return min(largest, max(Self.smallestStackedOrbitShare * screen, room))
+    }
+
+    /// Whether the stacked copy scrolls: always once measured at accessibility sizes, where the
+    /// actions scroll with it, and otherwise when even the smallest orbit leaves it too little room.
+    /// It starts false, so the measurement flips it and flashes the scroll indicators.
+    private func stackedOverflows(screen: CGFloat, viewport: CGFloat) -> Bool {
+        guard let room = roomAboveCopy(viewport: viewport) else {
+            return false
+        }
+        return scrollsActions || room < Self.smallestStackedOrbitShare * screen
+    }
+
+    /// The height the scrolling viewport has left above the measured copy.
+    private func roomAboveCopy(viewport: CGFloat) -> CGFloat? {
+        copyHeight.map { viewport - $0 - sectionSpacing - 2 * contentPadding }
     }
 
     /// The orbit at its design size, or smaller to fit `space`.
@@ -194,30 +218,47 @@ struct SyncRevealView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    /// A gold symbol tile beside a title and its detail, read by VoiceOver as one element.
+    /// A gold symbol tile beside a title and its detail, read by VoiceOver as one element. At
+    /// accessibility sizes the tile sits above the text, so the words keep the full width.
     private func benefit(systemImage: String, title: String, subtitle: String) -> some View {
-        HStack(alignment: .top, spacing: benefitSpacing) {
-            Image(systemName: systemImage)
-                .font(.body.weight(.semibold))
-                .foregroundStyle(Palette.gold)
-                .frame(width: benefitIconSize, height: benefitIconSize)
-                .background(
-                    RoundedRectangle(cornerRadius: benefitIconCornerRadius, style: .continuous)
-                        .fill(Palette.gold.opacity(0.14))
-                )
-                .accessibilityHidden(true)
-
-            VStack(alignment: .leading, spacing: benefitTextSpacing) {
-                Text(title)
-                    .font(.headline)
-                    .foregroundStyle(Color.white)
-                Text(subtitle)
-                    .font(.subheadline)
-                    .foregroundStyle(Color.white.opacity(0.7))
+        Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: benefitSpacing) {
+                    benefitIcon(systemImage)
+                    benefitText(title: title, subtitle: subtitle)
+                }
+            } else {
+                HStack(alignment: .top, spacing: benefitSpacing) {
+                    benefitIcon(systemImage)
+                    benefitText(title: title, subtitle: subtitle)
+                }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .accessibilityElement(children: .combine)
+    }
+
+    private func benefitIcon(_ systemImage: String) -> some View {
+        Image(systemName: systemImage)
+            .font(.body.weight(.semibold))
+            .foregroundStyle(Palette.gold)
+            .frame(width: benefitIconSize, height: benefitIconSize)
+            .background(
+                RoundedRectangle(cornerRadius: benefitIconCornerRadius, style: .continuous)
+                    .fill(Palette.gold.opacity(0.14))
+            )
+            .accessibilityHidden(true)
+    }
+
+    private func benefitText(title: String, subtitle: String) -> some View {
+        VStack(alignment: .leading, spacing: benefitTextSpacing) {
+            Text(title)
+                .font(.headline)
+                .foregroundStyle(Color.white)
+            Text(subtitle)
+                .font(.subheadline)
+                .foregroundStyle(Color.white.opacity(0.7))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     /// "Moving from iCloud → Quran.com", read by VoiceOver as one sentence.

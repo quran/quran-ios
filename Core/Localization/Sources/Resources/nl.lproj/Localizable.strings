@@ -848,7 +848,7 @@
 // How VoiceOver reads the What's New sync reveal chip. Keep "iCloud" and "Quran.com" in English.
 "new.sync_reveal.chip.accessibility" = "Van iCloud naar Quran.com";
 // What's New sync reveal title: the user's Quran reading is now connected across their devices and Quran.com.
-"new.sync_reveal.title" = "Je Koran, verbonden";
+"new.sync_reveal.title" = "Je Koran, overal verbonden";
 // What's New sync reveal benefit title, after a sync icon: the user's reading place follows them on every device.
 "new.sync_reveal.every_device.title" = "Je plek op elk apparaat";
 // What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud", "Quran.com" and "Quran ID" in English.

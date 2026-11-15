@@ -939,7 +939,7 @@
 // What's New sync reveal benefit title, after a book icon: study more on Quran.com without losing the reading place.
 "new.sync_reveal.go_deeper.title" = "Углубляйтесь, не теряя места";
 // What's New sync reveal benefit detail under "Go deeper without losing your place": Quran.com opens tafsir, reflections and lessons at the ayah the user stopped on. Keep "Quran.com" in English.
-"new.sync_reveal.go_deeper.subtitle" = "Тафсир, размышления и уроки на Quran.com — у того аята, на котором вы остановились.";
+"new.sync_reveal.go_deeper.subtitle" = "Тафсир, размышления и уроки на Quran.com — с того аята, на котором вы остановились.";
 // What's New sync reveal button that starts signing in to Quran.com with a Quran ID account. Keep "Quran ID" in English.
 "new.sync_reveal.sign_in" = "Продолжить с Quran ID";
 // What's New sync reveal button that closes it without signing in.

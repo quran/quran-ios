@@ -938,7 +938,7 @@
 // What's New sync reveal benefit title, after a sync icon: the user's reading place follows them on every device.
 "new.sync_reveal.every_device.title" = "ھەر بىر ئۈسكۈنىدە ئوقۇغان يېرىڭىز";
 // What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud", "Quran.com" and "Quran ID" in English.
-"new.sync_reveal.every_device.subtitle" = "خەتكۈچ، خاتىرە ۋە ئوقۇش ئىلگىرىلىشىڭىز ھەقسىز Quran ID ئارقىلىق iCloud دىن Quran.com غا يۆتكىلىدۇ.";
+"new.sync_reveal.every_device.subtitle" = "خەتكۈچ، ئىزاھات ۋە ئوقۇش ئىلگىرىلىشىڭىز ھەقسىز Quran ID ئارقىلىق iCloud دىن Quran.com غا يۆتكىلىدۇ.";
 // What's New sync reveal benefit title, after a book icon: study more on Quran.com without losing the reading place.
 "new.sync_reveal.go_deeper.title" = "ئورنىڭىزنى يوقاتماي چوڭقۇرلاپ ئوقۇڭ";
 // What's New sync reveal benefit detail under "Go deeper without losing your place": Quran.com opens tafsir, reflections and lessons at the ayah the user stopped on. Keep "Quran.com" in English.

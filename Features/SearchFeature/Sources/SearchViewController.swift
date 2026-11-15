@@ -82,7 +82,8 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
     // MARK: - Search delegate methods
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        logger.info("[Search] textDidChange (\(searchText.count) characters)")
+        // Debug only: search text must not reach Crashlytics, which receives info and above.
+        logger.debug("[Search] textDidChange to \(searchText)")
         viewModel.autocomplete(searchText)
     }
 
@@ -98,6 +99,8 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         logger.info("[Search] searchBarSearchButtonClicked")
+        // Debug only: search text must not reach Crashlytics, which receives info and above.
+        logger.debug("[Search] searchBarSearchButtonClicked \(searchBar.text ?? "")")
         viewModel.searchForUserTypedTerm()
     }
 

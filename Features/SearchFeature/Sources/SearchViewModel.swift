@@ -48,7 +48,8 @@ final class SearchViewModel: ObservableObject {
 
     @Published var uiState = SearchUIState.entry {
         didSet {
-            logger.debug("[Search] New UI state: \(uiState.logDescription)")
+            // Debug only: search text must not reach Crashlytics, which receives info and above.
+            logger.debug("[Search] New UI state: \(uiState)")
         }
     }
 
@@ -64,6 +65,8 @@ final class SearchViewModel: ObservableObject {
 
     func select(searchResult: SearchResult, source: SearchResults.Source) {
         logger.info("Search: search result selected at \(searchResult.ayah.nonLocalizedDescription), source: \(source.name)")
+        // Debug only: search text must not reach Crashlytics, which receives info and above.
+        logger.debug("Search: selected search result '\(searchResult)'")
         // show translation if not an active translation
         switch source {
         case .quran: break
@@ -186,7 +189,8 @@ final class SearchViewModel: ObservableObject {
             .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
             .values()
         for await term in searchTermSequence {
-            logger.debug("[Search] Autocomplete requested for \(term.count) characters")
+            // Debug only: search text must not reach Crashlytics, which receives info and above.
+            logger.debug("[Search] Autocomplete requested for \(term)")
             let autocompletions = await autocomplete(term)
             if searchTerm == term {
                 self.autocompletions = autocompletions
@@ -197,16 +201,6 @@ final class SearchViewModel: ObservableObject {
     private func autocomplete(_ term: String) async -> [SearchText] {
         let quran = reading.quran
         return await searchService.autocomplete(term: term, quran: quran)
-    }
-}
-
-private extension SearchUIState {
-    /// Describes the state without the search term, which must not leave the device.
-    var logDescription: String {
-        switch self {
-        case .entry: "entry"
-        case .search(let term): "search(\(term.count) characters)"
-        }
     }
 }
 

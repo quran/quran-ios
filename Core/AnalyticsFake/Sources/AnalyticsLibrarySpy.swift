@@ -37,6 +37,16 @@ public final class AnalyticsLibrarySpy: AnalyticsLibrary, Sendable {
         state.withCriticalRegion { $0.userProperties }
     }
 
+    /// The latest user ID set, nil once cleared.
+    public var userID: String? {
+        state.withCriticalRegion { $0.userIDChanges.last ?? nil }
+    }
+
+    /// Every user ID set, in order, including clears.
+    public var userIDChanges: [String?] {
+        state.withCriticalRegion { $0.userIDChanges }
+    }
+
     public func userProperty(_ property: AnalyticsUserProperty) -> String? {
         userProperties[property.rawValue]
     }
@@ -61,12 +71,17 @@ public final class AnalyticsLibrarySpy: AnalyticsLibrary, Sendable {
         }
     }
 
+    public func setUserID(_ userID: String?) {
+        state.withCriticalRegion { $0.userIDChanges.append(userID) }
+    }
+
     // MARK: Private
 
     private struct State: Sendable {
         var events: [Event] = []
         var userProperties: [String: String] = [:]
         var userPropertyChanges: [(name: String, value: String?)] = []
+        var userIDChanges: [String?] = []
     }
 
     private let state = ManagedCriticalState(State())

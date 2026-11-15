@@ -9,6 +9,8 @@ public protocol AnalyticsLibrary: Sendable {
     func logEvent(_ name: String, value: String)
     func logEvent(_ name: String, parameters: [String: AnalyticsValue])
     func setUserProperty(_ value: String?, forName name: String)
+    /// Ties later events to the signed-in account; nil clears it.
+    func setUserID(_ userID: String?)
 }
 
 extension AnalyticsLibrary {

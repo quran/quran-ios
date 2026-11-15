@@ -8,6 +8,7 @@
 import Analytics
 #if QURAN_SYNC
 import AuthenticationClient
+import MobileSync
 #endif
 import Combine
 import Foundation
@@ -61,6 +62,8 @@ final class AnalyticsUserPropertiesReporter {
     private(set) var reciterUpdate: Task<Void, Never>?
     #if QURAN_SYNC
     private(set) var syncSignedInUpdate: Task<Void, Never>?
+    /// Follows the signed-in user; cancel it to stop.
+    private(set) var userIDObservation: Task<Void, Never>?
     #endif
 
     func start() {
@@ -69,6 +72,9 @@ final class AnalyticsUserPropertiesReporter {
         reportApp()
         reportAudio()
         reportReading()
+        #if QURAN_SYNC
+        observeUserID()
+        #endif
     }
 
     // MARK: Private
@@ -85,6 +91,10 @@ final class AnalyticsUserPropertiesReporter {
     private var cancellables: Set<AnyCancellable> = []
     private var reportedValues: [AnalyticsUserProperty: String?] = [:]
     private var reciterId: Int?
+    #if QURAN_SYNC
+    /// `.none` until the first user ID is sent.
+    private var reportedUserID: String??
+    #endif
 
     // MARK: App
 
@@ -121,13 +131,65 @@ final class AnalyticsUserPropertiesReporter {
         syncSignedInUpdate = Task { [weak self, authenticationClient] in
             let state = await authenticationClient.authenticationState
             guard !Task.isCancelled else { return }
-            self?.set(AnalyticsUserPropertyValue.yesNo(state == .authenticated), for: .syncSignedIn)
+            self?.reportSyncSignedIn(state)
         }
     }
 
     private func setSyncSignedIn(_ state: AuthenticationState) {
         syncSignedInUpdate?.cancel()
+        reportSyncSignedIn(state)
+        if state == .authenticated {
+            // The user may not change on a new sign-in, so read it again.
+            observeUserID()
+        }
+    }
+
+    private func reportSyncSignedIn(_ state: AuthenticationState) {
         set(AnalyticsUserPropertyValue.yesNo(state == .authenticated), for: .syncSignedIn)
+        if state != .authenticated {
+            setUserID(nil)
+        }
+    }
+
+    // MARK: User ID
+
+    /// Ties analytics to the Quran.com account while signed in. Crash reports never get it.
+    private func observeUserID() {
+        userIDObservation?.cancel()
+        userIDObservation = Task { [weak self, authenticationClient] in
+            do {
+                for try await user in authenticationClient.loggedInUserUpdates {
+                    let state = await authenticationClient.authenticationState
+                    guard !Task.isCancelled, let self else { return }
+                    updateUserID(user, state: state)
+                }
+            } catch is CancellationError {
+                return
+            } catch {
+                logger.error("Analytics: failed to observe the signed-in user: \(error)")
+            }
+        }
+    }
+
+    /// A nil user is also a signed-in session whose profile isn't known yet, so only the state clears the ID.
+    private func updateUserID(_ user: MobileSyncUser?, state: AuthenticationState) {
+        guard state == .authenticated else {
+            setUserID(nil)
+            return
+        }
+        if let user {
+            setUserID(user.id)
+        }
+    }
+
+    private func setUserID(_ userID: String?) {
+        if let reportedUserID, reportedUserID == userID {
+            return
+        }
+        reportedUserID = .some(userID)
+        // Never log the ID: logs reach crash reports, which stay anonymous.
+        logger.info("Analytics: \(userID == nil ? "cleared" : "set") the user ID")
+        analytics.setUserID(userID)
     }
     #endif
 

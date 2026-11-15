@@ -82,7 +82,7 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
     // MARK: - Search delegate methods
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        logger.info("[Search] textDidChange to \(searchText.count) characters")
+        logger.info("[Search] textDidChange (\(searchText.count) characters)")
         viewModel.autocomplete(searchText)
     }
 

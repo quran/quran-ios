@@ -53,13 +53,9 @@ struct LaunchStores {
     private static func availableCapacity() -> Int? {
         let directory = NSPersistentContainer.defaultDirectoryURL()
         let capacity = FileManager.default.availableCapacity(at: directory)
-        // Logs only a coarse outcome: the free-space value must not leave the device (reason E174.1).
-        let outcome = switch capacity {
-        case nil: "unknown"
-        case let capacity? where capacity < FileManager.lowAvailableCapacity: "low"
-        case _?: "sufficient"
-        }
-        logger.notice("Launch stores: available capacity \(outcome) at \(directory.path)")
+        // Logs only whether the value could be read. Reason E174.1 keeps the value, and anything
+        // derived from it, on the device, and notice logs reach Crashlytics.
+        logger.notice("Launch stores: available capacity \(capacity == nil ? "unavailable" : "read")")
         return capacity
     }
 }

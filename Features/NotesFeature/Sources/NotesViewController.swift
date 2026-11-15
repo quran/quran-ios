@@ -51,7 +51,7 @@ final class NotesViewController: UIHostingController<NotesView>, UISearchBarDele
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        logger.info("[Notes] search textDidChange to \(searchText.count) characters")
+        logger.info("[Notes] search textDidChange (\(searchText.count) characters)")
         viewModel.searchTerm = searchText
     }
 

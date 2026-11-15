@@ -91,6 +91,8 @@
 "setting.contact_us" = "Contact Us";
 "setting.donate" = "Donate";
 "setting.share_app" = "Share the app...";
+// Settings row that opens the Quran.com privacy policy.
+"setting.privacy_policy" = "Privacy Policy";
 "setting.app_version" = "App Version";
 "setting.quran_account.sign_in" = "Sign in to Quran.com";
 "setting.quran_account.sign_in.subtitle" = "Sync notes, bookmarks and collections";

@@ -178,9 +178,7 @@ final class SettingsRootViewModel: ObservableObject {
 
     func donate() {
         logger.info("Settings: Open donation page.")
-        let url = URL(validURL: "https://give.quran.foundation/ios")
-        let viewController = SFSafariViewController(url: url)
-        navigationController?.present(viewController, animated: true)
+        presentWebPage(URL(validURL: "https://give.quran.foundation/ios"))
     }
 
     func writeReview() {
@@ -192,6 +190,11 @@ final class SettingsRootViewModel: ObservableObject {
         logger.info("Settings: presentContactUs")
         let viewController = contactUsService.contactUsController()
         navigationController?.present(viewController, animated: true)
+    }
+
+    func openPrivacyPolicy() {
+        logger.info("Settings: Open privacy policy.")
+        presentWebPage(URL(validURL: "https://quran.com/privacy"))
     }
 
     #if QURAN_SYNC
@@ -351,6 +354,11 @@ final class SettingsRootViewModel: ObservableObject {
         }
     }
     #endif
+
+    private func presentWebPage(_ url: URL) {
+        let viewController = SFSafariViewController(url: url)
+        navigationController?.present(viewController, animated: true)
+    }
 }
 
 #if QURAN_SYNC

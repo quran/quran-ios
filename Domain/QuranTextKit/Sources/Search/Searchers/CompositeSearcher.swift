@@ -54,7 +54,7 @@ public struct CompositeSearcher {
         guard let term = SearchTerm(term, normalizeUnicode: false) else {
             return []
         }
-        logger.info("Autocompleting term: \(term.compactQuery)")
+        logger.info("Autocompleting term of \(term.compactQuery.count) characters")
 
         let autocompletions = await simpleSearchers.asyncMap { searcher in
             try? await searcher.autocomplete(term: term, quran: quran)
@@ -74,7 +74,7 @@ public struct CompositeSearcher {
         guard let term = SearchTerm(term) else {
             return []
         }
-        logger.info("Search for: \(term.compactQuery)")
+        logger.info("Search for term of \(term.compactQuery.count) characters")
 
         let searchResults = try await simpleSearchers.asyncMap { searcher in
             try await searcher.search(for: term, quran: quran)

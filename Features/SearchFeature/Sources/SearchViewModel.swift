@@ -48,7 +48,7 @@ final class SearchViewModel: ObservableObject {
 
     @Published var uiState = SearchUIState.entry {
         didSet {
-            logger.debug("[Search] New UI state: \(uiState)")
+            logger.debug("[Search] New UI state: \(uiState.logDescription)")
         }
     }
 
@@ -63,7 +63,7 @@ final class SearchViewModel: ObservableObject {
     }
 
     func select(searchResult: SearchResult, source: SearchResults.Source) {
-        logger.info("Search: search result selected '\(searchResult)', source: \(source)")
+        logger.info("Search: search result selected at \(searchResult.ayah.nonLocalizedDescription), source: \(source.name)")
         // show translation if not an active translation
         switch source {
         case .quran: break
@@ -124,7 +124,7 @@ final class SearchViewModel: ObservableObject {
         let quran = reading.quran
         let results = try await searchService.search(for: term, quran: quran)
 
-        analytics.searching(for: term, results: results)
+        analytics.searching(results: results)
         recentsService.addToRecents(term)
 
         return results
@@ -186,7 +186,7 @@ final class SearchViewModel: ObservableObject {
             .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
             .values()
         for await term in searchTermSequence {
-            logger.debug("[Search] Autocomplete requested for \(term)")
+            logger.debug("[Search] Autocomplete requested for \(term.count) characters")
             let autocompletions = await autocomplete(term)
             if searchTerm == term {
                 self.autocompletions = autocompletions
@@ -200,9 +200,19 @@ final class SearchViewModel: ObservableObject {
     }
 }
 
+private extension SearchUIState {
+    /// Describes the state without the search term, which must not leave the device.
+    var logDescription: String {
+        switch self {
+        case .entry: "entry"
+        case .search(let term): "search(\(term.count) characters)"
+        }
+    }
+}
+
 private extension AnalyticsLibrary {
-    func searching(for term: String, results: [SearchResults]) {
-        logEvent("SearchTerm", value: term)
+    /// Logs only result counts and sources; the search term must not leave the device.
+    func searching(results: [SearchResults]) {
         logEvent("SearchSections", value: results.count.description)
         for result in results {
             logEvent("SearchSource", value: result.source.name)

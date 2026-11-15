@@ -62,7 +62,8 @@ final class AnalyticsUserPropertiesReporter {
     private(set) var reciterUpdate: Task<Void, Never>?
     #if QURAN_SYNC
     private(set) var syncSignedInUpdate: Task<Void, Never>?
-    /// Follows the signed-in user; cancel it to stop.
+    /// Follows the signed-in user; cancel it to stop. `LaunchStartup` keeps the reporter for the app's lifetime,
+    /// so nothing cancels it on deinit.
     private(set) var userIDObservation: Task<Void, Never>?
     #endif
 
@@ -131,22 +132,18 @@ final class AnalyticsUserPropertiesReporter {
         syncSignedInUpdate = Task { [weak self, authenticationClient] in
             let state = await authenticationClient.authenticationState
             guard !Task.isCancelled else { return }
-            self?.reportSyncSignedIn(state)
+            // Not the user ID: at launch the state may not be final until the stored session is read.
+            self?.set(AnalyticsUserPropertyValue.yesNo(state == .authenticated), for: .syncSignedIn)
         }
     }
 
     private func setSyncSignedIn(_ state: AuthenticationState) {
         syncSignedInUpdate?.cancel()
-        reportSyncSignedIn(state)
-        if state == .authenticated {
-            // The user may not change on a new sign-in, so read it again.
-            observeUserID()
-        }
-    }
-
-    private func reportSyncSignedIn(_ state: AuthenticationState) {
         set(AnalyticsUserPropertyValue.yesNo(state == .authenticated), for: .syncSignedIn)
-        if state != .authenticated {
+        if state == .authenticated {
+            // Recovers the user ID if the observation ended with an error.
+            observeUserID()
+        } else {
             setUserID(nil)
         }
     }

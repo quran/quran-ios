@@ -47,6 +47,22 @@ public final class AnalyticsLibrarySpy: AnalyticsLibrary, Sendable {
         state.withCriticalRegion { $0.userIDChanges }
     }
 
+    /// The first `count` user IDs set, waiting until that many are.
+    public func userIDChanges(count: Int) async -> [String?] {
+        await withCheckedContinuation { continuation in
+            let changes: [String?]? = state.withCriticalRegion { state in
+                if state.userIDChanges.count >= count {
+                    return Array(state.userIDChanges.prefix(count))
+                }
+                state.userIDWaiters.append((count, continuation))
+                return nil
+            }
+            if let changes {
+                continuation.resume(returning: changes)
+            }
+        }
+    }
+
     public func userProperty(_ property: AnalyticsUserProperty) -> String? {
         userProperties[property.rawValue]
     }
@@ -72,7 +88,18 @@ public final class AnalyticsLibrarySpy: AnalyticsLibrary, Sendable {
     }
 
     public func setUserID(_ userID: String?) {
-        state.withCriticalRegion { $0.userIDChanges.append(userID) }
+        let satisfied = state.withCriticalRegion { state in
+            state.userIDChanges.append(userID)
+            let changes = state.userIDChanges
+            let satisfied = state.userIDWaiters
+                .filter { $0.count <= changes.count }
+                .map { ($0.continuation, Array(changes.prefix($0.count))) }
+            state.userIDWaiters.removeAll { $0.count <= changes.count }
+            return satisfied
+        }
+        for (continuation, changes) in satisfied {
+            continuation.resume(returning: changes)
+        }
     }
 
     // MARK: Private
@@ -82,6 +109,7 @@ public final class AnalyticsLibrarySpy: AnalyticsLibrary, Sendable {
         var userProperties: [String: String] = [:]
         var userPropertyChanges: [(name: String, value: String?)] = []
         var userIDChanges: [String?] = []
+        var userIDWaiters: [(count: Int, continuation: CheckedContinuation<[String?], Never>)] = []
     }
 
     private let state = ManagedCriticalState(State())

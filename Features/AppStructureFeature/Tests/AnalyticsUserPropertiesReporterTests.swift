@@ -259,10 +259,24 @@ final class AnalyticsUserPropertiesReporterTests: XCTestCase {
 
     func test_signedInUser_setsTheUserID() async {
         authenticationClient.loggedInUserValue = MobileSyncUser(id: "user-1", name: "Aisha", email: "aisha@example.com")
-
         await start()
 
-        await assertUserIDChanges(["user-1"])
+        sendNextUser()
+
+        await assertUserIDChanges(["user-1", "next"])
+    }
+
+    func test_signedInLaunch_setsTheUserIDOnceTheStoredSessionIsRead() async {
+        // MobileSync reports signed out while it reads the stored session at launch.
+        authenticationClient = AuthenticationClientFake(restoringSession: true)
+        authenticationClient.authenticationStateValue = .notAuthenticated
+        await start()
+
+        authenticationClient.authenticationStateValue = .authenticated
+        authenticationClient.loggedInUserValue = MobileSyncUser(id: "user-1")
+        sendNextUser()
+
+        await assertUserIDChanges(["user-1", "next"])
     }
 
     func test_signingInAndOut_setsThenClearsTheUserID() async throws {
@@ -275,8 +289,10 @@ final class AnalyticsUserPropertiesReporterTests: XCTestCase {
         try await authenticationClient.login(on: UIViewController())
         await assertUserIDChanges([nil, "user-1"])
         try await authenticationClient.logout()
-
         await assertUserIDChanges([nil, "user-1", nil])
+        try await signInAsNextUser()
+
+        await assertUserIDChanges([nil, "user-1", nil, "next"])
     }
 
     func test_profileNotKnownYet_keepsTheUserID() async {
@@ -285,22 +301,23 @@ final class AnalyticsUserPropertiesReporterTests: XCTestCase {
         await assertUserIDChanges(["user-1"])
 
         authenticationClient.loggedInUserValue = nil
-        // Updates arrive in order, so this one shows the nil user was handled.
-        authenticationClient.loggedInUserValue = MobileSyncUser(id: "user-2")
+        sendNextUser()
 
-        await assertUserIDChanges(["user-1", "user-2"])
+        await assertUserIDChanges(["user-1", "next"])
     }
 
-    func test_sessionEndedOutsideTheClient_clearsTheUserIDWhenTheAppBecomesActive() async {
+    /// MobileSync ends a session whose refresh is refused without the client reporting a state change.
+    func test_sessionEndedByMobileSync_clearsTheUserID() async throws {
         authenticationClient.loggedInUserValue = MobileSyncUser(id: "user-1")
         await start()
         await assertUserIDChanges(["user-1"])
 
         authenticationClient.authenticationStateValue = .notAuthenticated
-        notificationCenter.post(name: UIApplication.didBecomeActiveNotification, object: nil)
-        await settle()
-
+        authenticationClient.loggedInUserValue = nil
         await assertUserIDChanges(["user-1", nil])
+        try await signInAsNextUser()
+
+        await assertUserIDChanges(["user-1", nil, "next"])
     }
 
     func test_refreshedProfile_doesNotSendTheUserIDAgain() async {
@@ -309,10 +326,20 @@ final class AnalyticsUserPropertiesReporterTests: XCTestCase {
         await assertUserIDChanges(["user-1"])
 
         authenticationClient.loggedInUserValue = MobileSyncUser(id: "user-1", name: "Aisha Rahman")
-        // Updates arrive in order, so this one shows the refreshed profile was handled.
-        authenticationClient.loggedInUserValue = MobileSyncUser(id: "user-2")
+        sendNextUser()
 
-        await assertUserIDChanges(["user-1", "user-2"])
+        await assertUserIDChanges(["user-1", "next"])
+    }
+
+    func test_signingInAfterTheUserUpdatesFailed_setsTheUserID() async throws {
+        authenticationClient.authenticationStateValue = .notAuthenticated
+        await start()
+        await assertUserIDChanges([nil])
+
+        authenticationClient.failCurrentLoggedInUserUpdates(with: NSError(domain: "test", code: 1))
+        try await signInAsNextUser()
+
+        await assertUserIDChanges([nil, "next"])
     }
     #endif
 
@@ -452,17 +479,36 @@ final class AnalyticsUserPropertiesReporterTests: XCTestCase {
     }
 
     #if QURAN_SYNC
-    /// Waits for as many user IDs as `expected` holds; any extra or wrong one fails, since IDs arrive in order.
+    /// Ends a test with a known update: updates arrive in order, so any extra user ID lands before it.
+    private func sendNextUser() {
+        authenticationClient.loggedInUserValue = MobileSyncUser(id: "next")
+    }
+
+    private func signInAsNextUser() async throws {
+        authenticationClient.authenticationStateAfterLogin = .authenticated
+        authenticationClient.loggedInUserAfterLogin = MobileSyncUser(id: "next")
+        try await authenticationClient.login(on: UIViewController())
+    }
+
+    /// Waits for as many user IDs as `expected` holds, then compares them; end with a known update to catch extras.
     private func assertUserIDChanges(
         _ expected: [String?],
         file: StaticString = #filePath,
         line: UInt = #line
     ) async {
-        let deadline = Date().addingTimeInterval(5)
-        while analytics.userIDChanges.count < expected.count, Date() < deadline {
-            try? await Task.sleep(nanoseconds: 10_000_000)
+        let spy: AnalyticsLibrarySpy = analytics
+        let arrived = XCTestExpectation(description: "\(expected.count) user IDs were set")
+        let waiting = Task {
+            let changes = await spy.userIDChanges(count: expected.count)
+            arrived.fulfill()
+            return changes
         }
-        XCTAssertEqual(analytics.userIDChanges, expected, file: file, line: line)
+        guard await XCTWaiter().fulfillment(of: [arrived], timeout: 5) == .completed else {
+            XCTFail("Expected user IDs \(expected), got \(spy.userIDChanges)", file: file, line: line)
+            return
+        }
+        let changes = await waiting.value
+        XCTAssertEqual(changes, expected, file: file, line: line)
     }
     #endif
 

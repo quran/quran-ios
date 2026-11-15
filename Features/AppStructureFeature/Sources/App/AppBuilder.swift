@@ -36,15 +36,30 @@ struct AppBuilder {
         )
         let appViewController = AppViewController(
             interactor: interactor,
-            whatsNewController: AppWhatsNewController(
-                analytics: container.analytics,
-                launchVersion: launchVersion,
-                appIconCatalog: container.appIconCatalog
-            ),
+            whatsNewController: whatsNewController(launchVersion: launchVersion),
             isAppIconAvailable: container.appIconService().isAvailable
         )
         appViewControllerReference.value = appViewController
         return appViewController
+    }
+
+    // MARK: Private
+
+    private func whatsNewController(launchVersion: LaunchVersionUpdate) -> AppWhatsNewController {
+        #if QURAN_SYNC
+        AppWhatsNewController(
+            analytics: container.analytics,
+            launchVersion: launchVersion,
+            appIconCatalog: container.appIconCatalog,
+            authenticationClient: container.authenticationClient
+        )
+        #else
+        AppWhatsNewController(
+            analytics: container.analytics,
+            launchVersion: launchVersion,
+            appIconCatalog: container.appIconCatalog
+        )
+        #endif
     }
 }
 

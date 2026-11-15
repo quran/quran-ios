@@ -932,3 +932,27 @@
 "sync.nudge.subtitle" = "ئۇنى Quran.com ۋە بارلىق ئۈسكۈنىلىرىڭىزدە كۆرۈش ئۈچۈن كىرىڭ.";
 // Sign-in reminder toast button that starts signing in to Quran.com.
 "sync.nudge.sign-in" = "كىرىش";
+// What's New sync reveal chip, before an arrow and "Quran.com": sync is moving from iCloud to Quran.com. Keep "iCloud" in English.
+"new.sync_reveal.chip.from_icloud" = "iCloud دىن يۆتكىلىش";
+// How VoiceOver reads the What's New sync reveal chip. Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.chip.accessibility" = "iCloud دىن Quran.com غا يۆتكىلىش";
+// What's New sync reveal title: the user's Quran reading is now connected across their devices and Quran.com.
+"new.sync_reveal.title" = "قۇرئانىڭىز ھەمىشە ئۇلىنىشتا";
+// What's New sync reveal benefit title, after a sync icon: the user's reading place follows them on every device.
+"new.sync_reveal.every_device.title" = "ھەر بىر ئۈسكۈنىدە ئوقۇغان يېرىڭىز";
+// What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud", "Quran.com" and "Quran ID" in English.
+"new.sync_reveal.every_device.subtitle" = "خەتكۈچ، ئىزاھات ۋە ئوقۇش ئىلگىرىلىشىڭىز ھەقسىز Quran ID ئارقىلىق iCloud دىن Quran.com غا يۆتكىلىدۇ.";
+// What's New sync reveal benefit title, after a book icon: study more on Quran.com without losing the reading place.
+"new.sync_reveal.go_deeper.title" = "ئورنىڭىزنى يوقاتماي چوڭقۇرلاپ ئوقۇڭ";
+// What's New sync reveal benefit detail under "Go deeper without losing your place": Quran.com opens tafsir, reflections and lessons at the ayah the user stopped on. Keep "Quran.com" in English.
+"new.sync_reveal.go_deeper.subtitle" = "Quran.com دىكى تەپسىر، تەپەككۇر ۋە دەرسلەر، توختىغان ئايىتىڭىزدە.";
+// What's New sync reveal button that starts signing in to Quran.com with a Quran ID account. Keep "Quran ID" in English.
+"new.sync_reveal.sign_in" = "Quran ID بىلەن داۋاملاشتۇرۇش";
+// What's New sync reveal button that closes it without signing in.
+"new.sync_reveal.not_now" = "ھازىر ئەمەس";
+// What's New sync reveal footnote on iPhone.
+"new.sync_reveal.footnote.iphone" = "كىرمىسىڭىز، خەتكۈچلىرىڭىز مۇشۇ iPhone دا قالىدۇ.";
+// What's New sync reveal footnote on iPad.
+"new.sync_reveal.footnote.ipad" = "كىرمىسىڭىز، خەتكۈچلىرىڭىز مۇشۇ iPad تا قالىدۇ.";
+// What's New sync reveal footnote on Mac.
+"new.sync_reveal.footnote.mac" = "كىرمىسىڭىز، خەتكۈچلىرىڭىز مۇشۇ Mac تا قالىدۇ.";

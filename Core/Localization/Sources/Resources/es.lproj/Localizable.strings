@@ -929,3 +929,27 @@
 "sync.nudge.subtitle" = "Inicia sesión para verla en Quran.com y en todos tus dispositivos.";
 // Sign-in reminder toast button that starts signing in to Quran.com.
 "sync.nudge.sign-in" = "Iniciar sesión";
+// What's New sync reveal chip, before an arrow and "Quran.com": sync is moving from iCloud to Quran.com. Keep "iCloud" in English.
+"new.sync_reveal.chip.from_icloud" = "Migramos desde iCloud";
+// How VoiceOver reads the What's New sync reveal chip. Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.chip.accessibility" = "Migramos desde iCloud a Quran.com";
+// What's New sync reveal title: the user's Quran reading is now connected across their devices and Quran.com.
+"new.sync_reveal.title" = "Tu Corán, conectado";
+// What's New sync reveal benefit title, after a sync icon: the user's reading place follows them on every device.
+"new.sync_reveal.every_device.title" = "Tu lugar en cada dispositivo";
+// What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud", "Quran.com" and "Quran ID" in English.
+"new.sync_reveal.every_device.subtitle" = "Tus marcadores, notas y progreso de lectura pasan de iCloud a Quran.com con tu Quran ID gratuito.";
+// What's New sync reveal benefit title, after a book icon: study more on Quran.com without losing the reading place.
+"new.sync_reveal.go_deeper.title" = "Profundiza sin perder tu lugar";
+// What's New sync reveal benefit detail under "Go deeper without losing your place": Quran.com opens tafsir, reflections and lessons at the ayah the user stopped on. Keep "Quran.com" in English.
+"new.sync_reveal.go_deeper.subtitle" = "Tafsir, reflexiones y lecciones en Quran.com, en la aleya donde te quedaste.";
+// What's New sync reveal button that starts signing in to Quran.com with a Quran ID account. Keep "Quran ID" in English.
+"new.sync_reveal.sign_in" = "Continuar con Quran ID";
+// What's New sync reveal button that closes it without signing in.
+"new.sync_reveal.not_now" = "Ahora no";
+// What's New sync reveal footnote on iPhone.
+"new.sync_reveal.footnote.iphone" = "Si no inicias sesión, tus marcadores se quedan en este iPhone.";
+// What's New sync reveal footnote on iPad.
+"new.sync_reveal.footnote.ipad" = "Si no inicias sesión, tus marcadores se quedan en este iPad.";
+// What's New sync reveal footnote on Mac.
+"new.sync_reveal.footnote.mac" = "Si no inicias sesión, tus marcadores se quedan en este Mac.";

@@ -6,31 +6,6 @@
 //
 
 import SwiftUI
-import UIKit
-import UIx
-
-/// The reveal's fixed navy and gold, independent of the app accent and appearance.
-enum AppIconRevealPalette {
-    // MARK: Internal
-
-    static let gold = color(0xE2AF56)
-    static let goldLight = color(0xF6D493)
-    static let goldDark = color(0xB8893F)
-    static let cream = color(0xFFF3D6)
-    static let nightTop = color(0x00085A)
-    static let nightMiddle = color(0x000A48)
-    static let nightBottom = color(0x00062A)
-    static let tileTop = color(0x000166)
-    static let tileMiddle = color(0x000C52)
-    static let tileBottom = color(0x00153F)
-    static let continueText = color(0x000A3D)
-
-    // MARK: Private
-
-    private static func color(_ rgb: Int) -> Color {
-        Color(UIColor(rgb: rgb))
-    }
-}
 
 /// The reveal's timeline, in seconds after the view appears.
 enum AppIconRevealTimeline {
@@ -117,13 +92,5 @@ struct AppIconRevealLayout {
         } else {
             size.height / 2 - Self.lift
         }
-    }
-}
-
-extension View {
-    /// Fades the view in while it rises into place.
-    func revealRising(isVisible: Bool, distance: CGFloat) -> some View {
-        opacity(isVisible ? 1 : 0)
-            .offset(y: isVisible ? 0 : distance)
     }
 }

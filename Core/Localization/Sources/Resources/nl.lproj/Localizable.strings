@@ -846,3 +846,27 @@
 "sync.nudge.subtitle" = "Log in om deze op Quran.com en al je apparaten te zien.";
 // Sign-in reminder toast button that starts signing in to Quran.com.
 "sync.nudge.sign-in" = "Inloggen";
+// What's New sync reveal chip, before an arrow and "Quran.com": sync is moving from iCloud to Quran.com. Keep "iCloud" in English.
+"new.sync_reveal.chip.from_icloud" = "Van iCloud";
+// How VoiceOver reads the What's New sync reveal chip. Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.chip.accessibility" = "Van iCloud naar Quran.com";
+// What's New sync reveal title: the user's Quran reading is now connected across their devices and Quran.com.
+"new.sync_reveal.title" = "Je Koran, overal verbonden";
+// What's New sync reveal benefit title, after a sync icon: the user's reading place follows them on every device.
+"new.sync_reveal.every_device.title" = "Je plek op elk apparaat";
+// What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud", "Quran.com" and "Quran ID" in English.
+"new.sync_reveal.every_device.subtitle" = "Bladwijzers, notities en leesvoortgang verhuizen van iCloud naar Quran.com, met je gratis Quran ID.";
+// What's New sync reveal benefit title, after a book icon: study more on Quran.com without losing the reading place.
+"new.sync_reveal.go_deeper.title" = "Verdiep je zonder je plek kwijt te raken";
+// What's New sync reveal benefit detail under "Go deeper without losing your place": Quran.com opens tafsir, reflections and lessons at the ayah the user stopped on. Keep "Quran.com" in English.
+"new.sync_reveal.go_deeper.subtitle" = "Tafsir, reflecties en lessen op Quran.com, bij de ayah waar je gebleven was.";
+// What's New sync reveal button that starts signing in to Quran.com with a Quran ID account. Keep "Quran ID" in English.
+"new.sync_reveal.sign_in" = "Doorgaan met Quran ID";
+// What's New sync reveal button that closes it without signing in.
+"new.sync_reveal.not_now" = "Niet nu";
+// What's New sync reveal footnote on iPhone.
+"new.sync_reveal.footnote.iphone" = "Zonder in te loggen blijven je bladwijzers op deze iPhone.";
+// What's New sync reveal footnote on iPad.
+"new.sync_reveal.footnote.ipad" = "Zonder in te loggen blijven je bladwijzers op deze iPad.";
+// What's New sync reveal footnote on Mac.
+"new.sync_reveal.footnote.mac" = "Zonder in te loggen blijven je bladwijzers op deze Mac.";

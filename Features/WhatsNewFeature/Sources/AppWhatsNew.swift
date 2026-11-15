@@ -23,6 +23,22 @@ struct WhatsNewVersion: Decodable {
 enum WhatsNewReveal: String, Decodable {
     /// The "Nightfall" reveal of the new app icon.
     case appIcon = "app-icon"
+    /// Sync moving from iCloud to Quran.com. Only Quran.com sync builds show it.
+    case sync
+
+    /// Whether this build can show the reveal. A version whose reveal is unavailable is left out entirely.
+    var isAvailable: Bool {
+        switch self {
+        case .appIcon:
+            return true
+        case .sync:
+            #if QURAN_SYNC
+            return true
+            #else
+            return false
+            #endif
+        }
+    }
 }
 
 struct WhatsNewItem: Decodable {

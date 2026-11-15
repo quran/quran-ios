@@ -843,3 +843,27 @@
 "sync.nudge.subtitle" = "Đăng nhập để xem nó trên Quran.com và mọi thiết bị của bạn.";
 // Sign-in reminder toast button that starts signing in to Quran.com.
 "sync.nudge.sign-in" = "Đăng nhập";
+// What's New sync reveal chip, before an arrow and "Quran.com": sync is moving from iCloud to Quran.com. Keep "iCloud" in English.
+"new.sync_reveal.chip.from_icloud" = "Chuyển từ iCloud";
+// How VoiceOver reads the What's New sync reveal chip. Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.chip.accessibility" = "Chuyển từ iCloud sang Quran.com";
+// What's New sync reveal title: the user's Quran reading is now connected across their devices and Quran.com.
+"new.sync_reveal.title" = "Quran của bạn, luôn kết nối";
+// What's New sync reveal benefit title, after a sync icon: the user's reading place follows them on every device.
+"new.sync_reveal.every_device.title" = "Chỗ đang đọc trên mọi thiết bị";
+// What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud", "Quran.com" and "Quran ID" in English.
+"new.sync_reveal.every_device.subtitle" = "Dấu trang, ghi chú và tiến độ đọc chuyển từ iCloud sang Quran.com bằng Quran ID miễn phí của bạn.";
+// What's New sync reveal benefit title, after a book icon: study more on Quran.com without losing the reading place.
+"new.sync_reveal.go_deeper.title" = "Tìm hiểu sâu hơn mà không mất chỗ đang đọc";
+// What's New sync reveal benefit detail under "Go deeper without losing your place": Quran.com opens tafsir, reflections and lessons at the ayah the user stopped on. Keep "Quran.com" in English.
+"new.sync_reveal.go_deeper.subtitle" = "Tafseer, suy ngẫm và bài học trên Quran.com, ngay tại ayah bạn dừng lại.";
+// What's New sync reveal button that starts signing in to Quran.com with a Quran ID account. Keep "Quran ID" in English.
+"new.sync_reveal.sign_in" = "Tiếp tục với Quran ID";
+// What's New sync reveal button that closes it without signing in.
+"new.sync_reveal.not_now" = "Để sau";
+// What's New sync reveal footnote on iPhone.
+"new.sync_reveal.footnote.iphone" = "Nếu không đăng nhập, dấu trang của bạn chỉ ở trên iPhone này.";
+// What's New sync reveal footnote on iPad.
+"new.sync_reveal.footnote.ipad" = "Nếu không đăng nhập, dấu trang của bạn chỉ ở trên iPad này.";
+// What's New sync reveal footnote on Mac.
+"new.sync_reveal.footnote.mac" = "Nếu không đăng nhập, dấu trang của bạn chỉ ở trên Mac này.";

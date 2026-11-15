@@ -686,6 +686,8 @@ private func featuresTargets() -> [[Target]] {
             "NoorUI",
             "Analytics",
             "AppMigrator",
+            "AuthenticationClient",
+            "FeaturesSupport",
             "Localization",
             "UIx",
             "VLogging",
@@ -695,7 +697,8 @@ private func featuresTargets() -> [[Target]] {
             "Analytics",
             "AnalyticsFake",
             "AppMigrator",
-        ]),
+            "AuthenticationClientFake",
+        ] + mobileSyncTargetDependencies),
 
         target(type, name: "WordPointerFeature", dependencies: [
             "AppDependencies",

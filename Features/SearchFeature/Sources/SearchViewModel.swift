@@ -48,6 +48,7 @@ final class SearchViewModel: ObservableObject {
 
     @Published var uiState = SearchUIState.entry {
         didSet {
+            // Debug only: search text must not reach Crashlytics, which receives info and above.
             logger.debug("[Search] New UI state: \(uiState)")
         }
     }
@@ -63,7 +64,9 @@ final class SearchViewModel: ObservableObject {
     }
 
     func select(searchResult: SearchResult, source: SearchResults.Source) {
-        logger.info("Search: search result selected '\(searchResult)', source: \(source)")
+        logger.info("Search: search result selected at \(searchResult.ayah.nonLocalizedDescription), source: \(source.name)")
+        // Debug only: search text must not reach Crashlytics, which receives info and above.
+        logger.debug("Search: selected search result '\(searchResult)'")
         // show translation if not an active translation
         switch source {
         case .quran: break
@@ -124,7 +127,7 @@ final class SearchViewModel: ObservableObject {
         let quran = reading.quran
         let results = try await searchService.search(for: term, quran: quran)
 
-        analytics.searching(for: term, results: results)
+        analytics.searching(results: results)
         recentsService.addToRecents(term)
 
         return results
@@ -186,6 +189,7 @@ final class SearchViewModel: ObservableObject {
             .throttle(for: .milliseconds(300), scheduler: DispatchQueue.main, latest: true)
             .values()
         for await term in searchTermSequence {
+            // Debug only: search text must not reach Crashlytics, which receives info and above.
             logger.debug("[Search] Autocomplete requested for \(term)")
             let autocompletions = await autocomplete(term)
             if searchTerm == term {
@@ -201,8 +205,8 @@ final class SearchViewModel: ObservableObject {
 }
 
 private extension AnalyticsLibrary {
-    func searching(for term: String, results: [SearchResults]) {
-        logEvent("SearchTerm", value: term)
+    /// Logs only result counts and sources; the search term must not leave the device.
+    func searching(results: [SearchResults]) {
         logEvent("SearchSections", value: results.count.description)
         for result in results {
             logEvent("SearchSource", value: result.source.name)

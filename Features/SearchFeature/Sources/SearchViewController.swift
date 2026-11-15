@@ -82,22 +82,25 @@ final class SearchViewController: UIViewController, UISearchBarDelegate {
     // MARK: - Search delegate methods
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        logger.info("[Search] textDidChange to \(searchText)")
+        // Debug only: search text must not reach Crashlytics, which receives info and above.
+        logger.debug("[Search] textDidChange to \(searchText)")
         viewModel.autocomplete(searchText)
     }
 
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        logger.info("[Search] searchBarTextDidBeginEditing \(searchBar.text ?? "")")
+        logger.info("[Search] searchBarTextDidBeginEditing")
         viewModel.keyboardState = .open
     }
 
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        logger.info("[Search] searchBarTextDidEndEditing \(searchBar.text ?? "")")
+        logger.info("[Search] searchBarTextDidEndEditing")
         viewModel.keyboardState = .closed
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        logger.info("[Search] searchBarSearchButtonClicked \(searchBar.text ?? "")")
+        logger.info("[Search] searchBarSearchButtonClicked")
+        // Debug only: search text must not reach Crashlytics, which receives info and above.
+        logger.debug("[Search] searchBarSearchButtonClicked \(searchBar.text ?? "")")
         viewModel.searchForUserTypedTerm()
     }
 

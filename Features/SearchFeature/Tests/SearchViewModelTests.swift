@@ -53,13 +53,29 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(sut.searchResults, results)
     }
 
+    func test_search_doesNotSendSearchTermToAnalytics() async {
+        let term = "الرحمن"
+        let analytics = AnalyticsLibrarySpy()
+        let sut = makeSUT(analytics: analytics)
+
+        let task = Task { await sut.start() }
+        defer { task.cancel() }
+        await settle()
+        sut.search(for: term)
+        await waitUntil { sut.searchResults != nil }
+
+        XCTAssertEqual(sut.searchResults?.isEmpty, false)
+        XCTAssertTrue(analytics.events.contains { $0.name == "SearchSections" })
+        XCTAssertEqual(analytics.events.filter { $0.value.contains(term) }, [])
+    }
+
     // MARK: Private
 
     private var databasesURL: URL!
 
-    private func makeSUT() -> SearchViewModel {
+    private func makeSUT(analytics: AnalyticsLibrarySpy = AnalyticsLibrarySpy()) -> SearchViewModel {
         SearchViewModel(
-            analytics: AnalyticsLibrarySpy(),
+            analytics: analytics,
             searchService: CompositeSearcher(
                 databasesURL: databasesURL,
                 quranFileURL: QuranResources.quranUthmaniV2Database

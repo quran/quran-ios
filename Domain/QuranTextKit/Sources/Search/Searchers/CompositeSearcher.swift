@@ -54,7 +54,8 @@ public struct CompositeSearcher {
         guard let term = SearchTerm(term, normalizeUnicode: false) else {
             return []
         }
-        logger.info("Autocompleting term: \(term.compactQuery)")
+        // Debug only: search text must not reach Crashlytics, which receives info and above.
+        logger.debug("Autocompleting term: \(term.compactQuery)")
 
         let autocompletions = await simpleSearchers.asyncMap { searcher in
             try? await searcher.autocomplete(term: term, quran: quran)
@@ -74,7 +75,8 @@ public struct CompositeSearcher {
         guard let term = SearchTerm(term) else {
             return []
         }
-        logger.info("Search for: \(term.compactQuery)")
+        // Debug only: search text must not reach Crashlytics, which receives info and above.
+        logger.debug("Search for: \(term.compactQuery)")
 
         let searchResults = try await simpleSearchers.asyncMap { searcher in
             try await searcher.search(for: term, quran: quran)

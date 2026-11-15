@@ -34,7 +34,11 @@ public final class AuthenticationClientFake: AuthenticationClient {
     public var restoreStateResult: Result<AuthenticationState, AuthenticationClientError> = .success(.notAuthenticated)
     public var logoutResult: Result<Void, AuthenticationClientError> = .success(())
     public var authenticationHeadersResult: Result<[String: String], AuthenticationClientError> = .success([:])
-    public var events: [Event] = []
+    /// Locked, because tasks that run concurrently read ``authenticationState``.
+    public var events: [Event] {
+        get { recordedEvents.withCriticalRegion { $0 } }
+        set { recordedEvents.withCriticalRegion { $0 = newValue } }
+    }
 
     /// - Parameter restoringSession: Whether MobileSync is still reading the stored session at launch, so
     ///   ``loggedInUserUpdates`` yields nothing until ``loggedInUserValue`` is set.
@@ -44,7 +48,7 @@ public final class AuthenticationClientFake: AuthenticationClient {
 
     public var authenticationState: AuthenticationState {
         get async {
-            events.append(.readAuthenticationState)
+            recordEvent(.readAuthenticationState)
             return authenticationStateValue
         }
     }
@@ -55,7 +59,12 @@ public final class AuthenticationClientFake: AuthenticationClient {
 
     /// ``loggedInUserValue`` now and after every change, without repeats.
     public var loggedInUserUpdates: AnyAsyncSequence<MobileSyncUser?> {
-        AnyAsyncSequence(loggedInUserSubject.compactMap { $0 }.removeDuplicates().values())
+        let currentFailures = currentObservationFailures
+            .setFailureType(to: Error.self)
+            .tryMap { error -> MobileSyncUser? in throw error }
+        return AnyAsyncSequence(
+            loggedInUserSubject.compactMap { $0 }.removeDuplicates().merge(with: currentFailures).values()
+        )
     }
 
     /// Ends every current and later ``loggedInUserUpdates`` observation with `error`.
@@ -63,8 +72,14 @@ public final class AuthenticationClientFake: AuthenticationClient {
         loggedInUserSubject.send(completion: .failure(error))
     }
 
+    /// Ends only the current ``loggedInUserUpdates`` observations with `error`; later ones start again from the
+    /// current user, like collecting MobileSync's updates again.
+    public func failCurrentLoggedInUserUpdates(with error: Error) {
+        currentObservationFailures.send(error)
+    }
+
     public func login(on _: UIViewController) async throws(AuthenticationClientError) {
-        events.append(.login)
+        recordEvent(.login)
         try loginResult.get()
         if let authenticationStateAfterLogin {
             changeState(to: authenticationStateAfterLogin)
@@ -75,7 +90,7 @@ public final class AuthenticationClientFake: AuthenticationClient {
     }
 
     public func restoreState() async throws(AuthenticationClientError) -> AuthenticationState {
-        events.append(.restoreState)
+        recordEvent(.restoreState)
         if let restoreStateWaitsFor {
             for await _ in restoreStateWaitsFor {}
         }
@@ -83,27 +98,33 @@ public final class AuthenticationClientFake: AuthenticationClient {
     }
 
     public func logout() async throws(AuthenticationClientError) {
-        events.append(.logout)
+        recordEvent(.logout)
         try logoutResult.get()
         changeState(to: .notAuthenticated)
         loggedInUserValue = nil
     }
 
     public func authenticate(request: URLRequest) async throws(AuthenticationClientError) -> URLRequest {
-        events.append(.authenticate)
+        recordEvent(.authenticate)
         return request
     }
 
     public func getAuthenticationHeaders() async throws(AuthenticationClientError) -> [String: String] {
-        events.append(.getAuthenticationHeaders)
+        recordEvent(.getAuthenticationHeaders)
         return try authenticationHeadersResult.get()
     }
 
     // MARK: Private
 
     private let stateChanges = PassthroughSubject<AuthenticationState, Never>()
+    private let currentObservationFailures = PassthroughSubject<Error, Never>()
+    private let recordedEvents = ManagedCriticalState<[Event]>([])
     /// `.none` until MobileSync has read the stored session.
     private let loggedInUserSubject: CurrentValueSubject<MobileSyncUser??, Error>
+
+    private func recordEvent(_ event: Event) {
+        recordedEvents.withCriticalRegion { $0.append(event) }
+    }
 
     private func changeState(to state: AuthenticationState) {
         guard state != authenticationStateValue else { return }

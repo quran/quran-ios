@@ -25,4 +25,9 @@ struct LoggingAnalyticsLibrary: AnalyticsLibrary {
     func setUserProperty(_ value: String?, forName name: String) {
         logger.info("[Analytics] user_property \(name)=\(value ?? "<cleared>")")
     }
+
+    func setUserID(_ userID: String?) {
+        // Never log the ID: logs can reach crash reports, which stay anonymous.
+        logger.info("[Analytics] user_id \(userID == nil ? "<cleared>" : "<set>")")
+    }
 }

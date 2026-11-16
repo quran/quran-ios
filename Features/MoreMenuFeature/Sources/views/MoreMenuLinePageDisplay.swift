@@ -10,9 +10,6 @@ struct MoreMenuLinePageDisplay: View {
             Toggle(l("menu.linePageDividers"), isOn: $showDividers)
                 .padding()
 
-            Divider()
-                .padding(.leading)
-
             Toggle(l("menu.linePageSidelines"), isOn: $showSidelines)
                 .padding()
         }

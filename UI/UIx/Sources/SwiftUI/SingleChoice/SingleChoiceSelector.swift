@@ -24,9 +24,17 @@ public struct SingleChoiceSection<Item: Equatable> {
 public struct SingleChoiceSelectorView<Item: Hashable>: View {
     // MARK: Lifecycle
 
-    public init(sections: [SingleChoiceSection<Item>], selected: Binding<Item?>, itemText: @escaping (Item) -> String) {
+    /// - Parameter showsBackground: Pass `false` to show the list on its container's background,
+    ///   such as a popover's material. iOS 15 keeps the list background.
+    public init(
+        sections: [SingleChoiceSection<Item>],
+        selected: Binding<Item?>,
+        showsBackground: Bool = true,
+        itemText: @escaping (Item) -> String
+    ) {
         self.sections = sections
         _selected = selected
+        self.showsBackground = showsBackground
         self.itemText = itemText
     }
 
@@ -46,6 +54,7 @@ public struct SingleChoiceSelectorView<Item: Hashable>: View {
                 }
             }
             .listStyle(.plain)
+            .scrollContentBackgroundHidden(!showsBackground)
         }
     }
 
@@ -53,6 +62,7 @@ public struct SingleChoiceSelectorView<Item: Hashable>: View {
 
     private let sections: [SingleChoiceSection<Item>]
     @Binding private var selected: Item?
+    private let showsBackground: Bool
     private let itemText: (Item) -> String
 
     private func itemsView(_ items: [Item]) -> some View {
@@ -62,6 +72,18 @@ public struct SingleChoiceSelectorView<Item: Hashable>: View {
             } label: {
                 SingleChoiceRow(text: itemText(item), selected: item == selected)
             }
+            .listRowBackground(showsBackground ? nil : Color.clear)
+        }
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func scrollContentBackgroundHidden(_ hidden: Bool) -> some View {
+        if #available(iOS 16.0, *) {
+            scrollContentBackground(hidden ? .hidden : .automatic)
+        } else {
+            self
         }
     }
 }

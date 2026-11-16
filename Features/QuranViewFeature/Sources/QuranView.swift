@@ -190,7 +190,8 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
         guard let delegate, delegate.canTogglePlayPause(in: self) else {
             return false
         }
-        // Text being edited in the reader keeps space for typing.
+        // Safeguard: the reader has no text inputs today, but if one is added,
+        // text being edited there keeps space for typing.
         return !(findFirstResponder() is UITextInput)
     }
 

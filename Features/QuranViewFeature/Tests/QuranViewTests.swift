@@ -212,6 +212,8 @@ final class QuranViewTests: XCTestCase {
         XCTAssertTrue(space.wantsPriorityOverSystemBehavior)
         let action = try XCTUnwrap(space.action)
         let contentView = try XCTUnwrap(context.sut.contentView)
+        // Checks the action is reachable from the reader content's responder chain,
+        // not that UIKit finds the key command while a verse is focused.
         XCTAssertIdentical(contentView.target(forAction: action, withSender: space) as AnyObject?, context.sut)
 
         context.sut.perform(action, with: space)
@@ -245,22 +247,21 @@ final class QuranViewTests: XCTestCase {
 
     private final class QuranViewDelegateSpy: QuranViewDelegate {
         init(canTogglePlayPause: Bool) {
-            isPlayingOrPaused = canTogglePlayPause
+            self.canTogglePlayPause = canTogglePlayPause
         }
 
         private(set) var playPauseKeyPresses = 0
+        private let canTogglePlayPause: Bool
 
         func onQuranViewTapped(_ quranView: QuranView) {}
 
         func canTogglePlayPause(in quranView: QuranView) -> Bool {
-            isPlayingOrPaused
+            canTogglePlayPause
         }
 
         func onQuranViewPlayPauseKeyPressed(_ quranView: QuranView) {
             playPauseKeyPresses += 1
         }
-
-        private let isPlayingOrPaused: Bool
     }
 
     private func makeSut() -> TestContext {

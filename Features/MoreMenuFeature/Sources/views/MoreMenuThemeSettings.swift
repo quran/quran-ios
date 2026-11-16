@@ -122,7 +122,8 @@ private struct MoreMenuThemeSettingsView: View {
     @State private var arabicLabelSize: CGSize = .zero
     @State private var translationLabelSize: CGSize = .zero
 
-    @ScaledMetric var compactVerticalPadding = 3.0
+    /// Leaves room for the font size stepper's level dots, which show below the stepper.
+    @ScaledMetric var fontSizeRowSpacing = 22.0
 
     var fontSizeLabelWidth: CGFloat {
         max(arabicLabelSize.width, translationLabelSize.width)
@@ -141,28 +142,27 @@ private struct MoreMenuThemeSettingsView: View {
                     }
 
                     if showFontSize {
-                        if showArabicFontSize {
-                            FontSizeView(
-                                label: l("menu.arabicFontSize"),
-                                labelWidth: fontSizeLabelWidth,
-                                size: $viewModel.arabicFontSize,
-                                labelSize: $arabicLabelSize
-                            )
+                        VStack(spacing: fontSizeRowSpacing) {
+                            if showArabicFontSize {
+                                FontSizeView(
+                                    label: l("menu.arabicFontSize"),
+                                    labelWidth: fontSizeLabelWidth,
+                                    size: $viewModel.arabicFontSize,
+                                    labelSize: $arabicLabelSize
+                                )
+                            }
 
-                            Divider()
-                                .padding(.vertical, compactVerticalPadding)
+                            FontSizeView(
+                                label: l("menu.translationFontSize"),
+                                labelWidth: fontSizeLabelWidth,
+                                size: $viewModel.translationFontSize,
+                                labelSize: $translationLabelSize
+                            )
                         }
 
-                        FontSizeView(
-                            label: l("menu.translationFontSize"),
-                            labelWidth: fontSizeLabelWidth,
-                            size: $viewModel.translationFontSize,
-                            labelSize: $translationLabelSize
-                        )
+                        // The content is already padded, so the line spans it like the rows do.
+                        NoorMenuGroupSeparator(insetsHorizontally: false)
                     }
-
-                    Divider()
-                        .padding(.vertical, compactVerticalPadding)
 
                     VStack(spacing: 0) {
                         HStack {
@@ -179,7 +179,19 @@ private struct MoreMenuThemeSettingsView: View {
                 .padding()
             }
         }
-        .background(.thickMaterial)
+        .themeSettingsBackground()
+    }
+}
+
+private extension View {
+    /// From iOS 26, the content sits on the sheet's own Liquid Glass.
+    @ViewBuilder
+    func themeSettingsBackground() -> some View {
+        if #available(iOS 26.0, *) {
+            self
+        } else {
+            background(.thickMaterial)
+        }
     }
 }
 

@@ -15,20 +15,24 @@ struct DiagnosticsView: View {
 
     var body: some View {
         DiagnosticsViewUI(
+            appVersion: viewModel.appVersion,
             error: $viewModel.error,
             enableDebugLogging: $viewModel.enableDebugLogging,
             isDebugLoggingAlwaysEnabled: viewModel.isDebugLoggingAlwaysEnabled,
             enableDebugLoggingFooter: viewModel.enableDebugLoggingFooter,
+            copyAppVersion: { viewModel.copyAppVersion() },
             shareLog: { viewModel.shareLogs() }
         )
     }
 }
 
 private struct DiagnosticsViewUI: View {
+    let appVersion: String
     @Binding var error: Error?
     @Binding var enableDebugLogging: Bool
     let isDebugLoggingAlwaysEnabled: Bool
     let enableDebugLoggingFooter: String
+    let copyAppVersion: Action
     let shareLog: Action
 
     var body: some View {
@@ -37,6 +41,19 @@ private struct DiagnosticsViewUI: View {
                 Text(l("diagnostics.details"))
                     .foregroundColor(Color.secondaryLabel)
                     .listRowBackground(Color.clear)
+            }
+
+            NoorBasicSection {
+                NoorListItem(
+                    title: .text(l("setting.app_version")),
+                    subtitle: .init(text: .text(appVersion), location: .trailing)
+                )
+                .contextMenu {
+                    Button(action: copyAppVersion) {
+                        Label { Text(l("ayah.menu.copy")) } icon: { NoorSystemImage.copy.image }
+                    }
+                }
+                .accessibilityAction(named: Text(l("ayah.menu.copy")), copyAppVersion)
             }
 
             NoorBasicSection(footer: enableDebugLoggingFooter) {
@@ -64,10 +81,12 @@ private struct DiagnosticsViewUI: View {
 
         var body: some View {
             DiagnosticsViewUI(
+                appVersion: "2.4.0 (310)",
                 error: $error,
                 enableDebugLogging: $enableDebugLogging,
                 isDebugLoggingAlwaysEnabled: false,
                 enableDebugLoggingFooter: l("diagnostics.enable_debug_logs.details"),
+                copyAppVersion: {},
                 shareLog: {}
             )
         }

@@ -33,9 +33,13 @@ public class NowPlayingUpdater {
     public func update(info: PlayerItemInfo) {
         update([MPMediaItemPropertyTitle: info.title,
                 MPMediaItemPropertyArtist: info.artist])
-        if let artwork = info.artwork {
-            update([MPMediaItemPropertyArtwork: artwork])
-        }
+    }
+
+    /// Shows `image` as the artwork, or removes the artwork when it's `nil`.
+    public func update(artwork image: UIImage?) {
+        update([MPMediaItemPropertyArtwork: image.map { image in
+            MPMediaItemArtwork(boundsSize: image.size) { _ in image }
+        }])
     }
 
     public func update(rate: Float) {
@@ -60,7 +64,8 @@ public class NowPlayingUpdater {
         }
     }
 
-    private func update(_ values: [String: Any]) {
+    /// Sets each value, removing the keys whose value is `nil`.
+    private func update(_ values: [String: Any?]) {
         var info = nowPlayingInfo ?? [:]
         for (key, value) in values {
             info[key] = value

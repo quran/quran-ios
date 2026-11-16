@@ -356,6 +356,7 @@ final class AnalyticsUserPropertiesReporterTests: XCTestCase {
         alternateIconName: nil,
         name: "Navy",
         previewImageName: "app-icon-navy",
+        artworkImageName: "app-artwork-navy",
         accent: AppIconAccent(light: .systemIndigo, dark: .systemIndigo, onDark: .white)
     )
     private let blueIcon = AppIconOption(
@@ -363,6 +364,7 @@ final class AnalyticsUserPropertiesReporterTests: XCTestCase {
         alternateIconName: "AppIcon-Blue",
         name: "Blue",
         previewImageName: "app-icon-blue",
+        artworkImageName: "app-artwork-blue",
         accent: AppIconAccent(light: .systemBlue, dark: .systemBlue, onDark: .black)
     )
 

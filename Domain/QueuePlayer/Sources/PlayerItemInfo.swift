@@ -17,22 +17,18 @@
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //  GNU General Public License for more details.
 //
-import MediaPlayer
+import Foundation
 
 public struct PlayerItemInfo {
     // MARK: Lifecycle
 
-    public init(title: String, artist: String, image: UIImage?) {
+    public init(title: String, artist: String) {
         self.title = title
         self.artist = artist
-        artwork = (image ?? UIImage(named: "app-image")).map { image in
-            MPMediaItemArtwork(boundsSize: image.size) { _ in image }
-        }
     }
 
     // MARK: Public
 
     public let title: String
     public let artist: String
-    public let artwork: MPMediaItemArtwork?
 }

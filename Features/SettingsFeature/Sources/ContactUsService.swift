@@ -6,13 +6,16 @@
 //
 
 import SafariServices
+import SystemDependencies
 import UIKit
 
 struct ContactUsService {
     // MARK: Internal
 
+    let bundle: SystemBundle
+
     func contactUsController() -> UIViewController {
-        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "Unknown"
+        let appVersion = bundle.versionAndBuild ?? "Unknown"
         let device = Self.unameMachine
         let iosVersion = UIDevice.current.systemVersion
         let appDetails = [appVersion, device, iosVersion].joined(separator: "|")

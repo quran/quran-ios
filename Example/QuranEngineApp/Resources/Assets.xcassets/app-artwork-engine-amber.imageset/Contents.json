@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "app-artwork-engine-amber.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

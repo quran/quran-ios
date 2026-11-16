@@ -6,6 +6,7 @@
 //
 
 import Localization
+import SystemDependenciesFake
 import XCTest
 @testable import SettingsFeature
 
@@ -75,10 +76,41 @@ final class DiagnosticsViewModelTests: XCTestCase {
         XCTAssertTrue(DiagnosticsPreferences.shared.enableDebugLogging)
     }
 
+    func test_appVersion_showsTheVersionAndBuildLeftToRight() {
+        bundle.info["CFBundleShortVersionString"] = "2.4.0"
+        bundle.info["CFBundleVersion"] = "310"
+        let sut = makeSUT(isDebugLoggingAlwaysEnabled: false)
+
+        XCTAssertEqual(sut.appVersion, "\u{2066}2.4.0 (310)\u{2069}")
+    }
+
+    func test_appVersion_showsTheVersionAloneWithoutABuild() {
+        bundle.info["CFBundleShortVersionString"] = "2.4.0"
+        let sut = makeSUT(isDebugLoggingAlwaysEnabled: false)
+
+        XCTAssertEqual(sut.appVersion, "\u{2066}2.4.0\u{2069}")
+    }
+
+    func test_appVersion_isEmptyWithoutAVersion() {
+        bundle.info["CFBundleVersion"] = "310"
+        let sut = makeSUT(isDebugLoggingAlwaysEnabled: false)
+
+        XCTAssertEqual(sut.appVersion, "")
+    }
+
+    func test_copyableAppVersion_isThePlainVersionAndBuildWithoutIsolates() {
+        bundle.info["CFBundleShortVersionString"] = "2.4.0"
+        bundle.info["CFBundleVersion"] = "310"
+        let sut = makeSUT(isDebugLoggingAlwaysEnabled: false)
+
+        XCTAssertEqual(sut.copyableAppVersion, "2.4.0 (310)")
+    }
+
     // MARK: Private
 
     private var directory: URL!
     private var originalEnableDebugLogging = false
+    private let bundle = SystemBundleFake()
 
     private func makeSUT(isDebugLoggingAlwaysEnabled: Bool) -> DiagnosticsViewModel {
         DiagnosticsViewModel(
@@ -87,6 +119,7 @@ final class DiagnosticsViewModelTests: XCTestCase {
                 databasesDirectory: directory.appendingPathComponent("databases", isDirectory: true)
             ),
             isDebugLoggingAlwaysEnabled: isDebugLoggingAlwaysEnabled,
+            bundle: bundle,
             navigationController: nil
         )
     }

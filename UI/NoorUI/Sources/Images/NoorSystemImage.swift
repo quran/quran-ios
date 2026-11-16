@@ -26,6 +26,7 @@ public enum NoorSystemImage: String {
     case bookmarkOutline = "bookmark"
     case bookmark = "bookmark.fill"
     case book
+    case bookFilled = "book.fill"
     case colorSwatch = "circle.fill"
     case plus
     case plusCircle = "plus.circle"
@@ -34,6 +35,7 @@ public enum NoorSystemImage: String {
     case lastPage = "clock"
     case profile = "person.crop.circle"
     case settings = "gearshape"
+    case settingsFilled = "gearshape.fill"
     case signOut = "rectangle.portrait.and.arrow.right"
     case search = "magnifyingglass"
     case mushafs = "books.vertical"

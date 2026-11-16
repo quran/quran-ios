@@ -9,6 +9,7 @@
 import AppDependencies
 import HomeFeature
 import Localization
+import NoorUI
 import QuranViewFeature
 import UIKit
 
@@ -50,8 +51,8 @@ private final class HomeTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
         UITabBarItem(
             title: "\(lAndroid("quran_sura")) / \(lAndroid("quran_juz2"))",
-            image: .symbol("book"),
-            selectedImage: .symbol("book.fill")
+            image: .symbol(NoorSystemImage.book.rawValue),
+            selectedImage: .symbol(NoorSystemImage.bookFilled.rawValue)
         )
     }
 }

@@ -9,6 +9,7 @@
 import AppDependencies
 import BookmarksFeature
 import Localization
+import NoorUI
 import QuranViewFeature
 import UIKit
 
@@ -56,8 +57,8 @@ final class BookmarksTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
         UITabBarItem(
             title: lAndroid("menu_bookmarks"),
-            image: .symbol("bookmark"),
-            selectedImage: .symbol("bookmark.fill")
+            image: .symbol(NoorSystemImage.bookmarkOutline.rawValue),
+            selectedImage: .symbol(NoorSystemImage.bookmark.rawValue)
         )
     }
 }

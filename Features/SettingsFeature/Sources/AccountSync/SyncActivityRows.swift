@@ -129,7 +129,7 @@ struct HeldItemRowView<Trailing: View>: View {
 
     private var icon: NoorSystemImage {
         switch row.kind {
-        case .note: .note
+        case .note: .notes
         case .collection: .starFilled
         case .bookmark: .bookmarkOutline
         }

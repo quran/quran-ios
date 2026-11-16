@@ -531,7 +531,6 @@ struct NoteCircles: View {
                     action: { await tapped(color) },
                     label: { NoteCircle(color: color.color, selected: color == selectedColor) }
                 )
-                .shadow(color: Color.tertiarySystemGroupedBackground, radius: 1)
                 .accessibilityLabel(color.localizedName)
                 .accessibilityAddTraits(color == selectedColor ? .isSelected : [])
             }

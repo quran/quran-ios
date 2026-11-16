@@ -116,6 +116,8 @@
 "menu.ayahIndicators.readingBookmark" = "Okuma yer imi";
 "menu.ayahIndicators.none" = "Hiçbiri";
 "menu.arabicText" = "Arapça metin";
+"menu.rotate_to_portrait" = "Dikey konuma döndür";
+"menu.rotate_to_landscape" = "Yatay konuma döndür";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Temalar ve ayarlar";
 

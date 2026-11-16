@@ -127,6 +127,8 @@
 "menu.ayahIndicators.readingBookmark" = "Оқу бетбелгісі";
 "menu.ayahIndicators.none" = "Ешқайсысы";
 "menu.arabicText" = "Араб мәтіні";
+"menu.rotate_to_portrait" = "Кітаптық бағдарға бұру";
+"menu.rotate_to_landscape" = "Альбомдық бағдарға бұру";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Тақырыптар мен параметрлер";
 

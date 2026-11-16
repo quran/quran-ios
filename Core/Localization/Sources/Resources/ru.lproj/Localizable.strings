@@ -141,6 +141,8 @@
 "menu.ayahIndicators.readingBookmark" = "Закладка чтения";
 "menu.ayahIndicators.none" = "Нет";
 "menu.arabicText" = "Арабский текст";
+"menu.rotate_to_portrait" = "Повернуть в портретный режим";
+"menu.rotate_to_landscape" = "Повернуть в альбомный режим";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Темы и настройки";
 

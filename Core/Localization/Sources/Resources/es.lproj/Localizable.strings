@@ -141,6 +141,8 @@
 "menu.ayahIndicators.readingBookmark" = "Marcador de lectura";
 "menu.ayahIndicators.none" = "Ninguno";
 "menu.arabicText" = "Texto árabe";
+"menu.rotate_to_portrait" = "Girar a vertical";
+"menu.rotate_to_landscape" = "Girar a horizontal";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Temas y configuraciones";
 

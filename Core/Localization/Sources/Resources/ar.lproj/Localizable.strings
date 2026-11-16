@@ -113,6 +113,8 @@
 "menu.ayahIndicators.readingBookmark" = "علامة موضع القراءة";
 "menu.ayahIndicators.none" = "لا شيء";
 "menu.arabicText" = "نص الآيات";
+"menu.rotate_to_portrait" = "تدوير إلى الوضع الرأسي";
+"menu.rotate_to_landscape" = "تدوير إلى الوضع الأفقي";
 "menu.theme_settings" = "المظهر والإعدادات";
 
 // MARK: - Theme

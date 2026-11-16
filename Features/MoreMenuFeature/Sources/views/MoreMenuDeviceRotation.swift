@@ -5,6 +5,7 @@
 //  Created by Afifi, Mohamed on 9/5/21.
 //
 
+import Localization
 import NoorUI
 import SwiftUI
 import UIx
@@ -17,38 +18,44 @@ struct MoreMenuDeviceRotation: View {
     var body: some View {
         // Portrait comes first as the default; each icon shows the orientation its button rotates to.
         HStack {
-            DeviceRotation(image: NoorSystemImage.rotateToPortrait.image) {
+            DeviceRotation(
+                image: NoorSystemImage.rotateToPortrait.image,
+                accessibilityLabel: l("menu.rotate_to_portrait")
+            ) {
                 updateOrientationTo = .portrait
             }
             .disabled(orientation.isPortrait)
 
-            DeviceRotation(image: NoorSystemImage.rotateToLandscape.image) {
+            DeviceRotation(
+                image: NoorSystemImage.rotateToLandscape.image,
+                accessibilityLabel: l("menu.rotate_to_landscape")
+            ) {
                 updateOrientationTo = .landscapeLeft
             }
             .disabled(orientation.isLandscape)
         }
-        .background(
-            HStack {
-                Divider()
-            }
-            .background(DeviceOrientationResolver(updateOrientationTo: $updateOrientationTo) { orientation = $0 })
-        )
+        .background(DeviceOrientationResolver(updateOrientationTo: $updateOrientationTo) { orientation = $0 })
     }
 }
 
 private struct DeviceRotation: View {
     let image: Image
+    let accessibilityLabel: String
     let action: () -> Void
-    @Environment(\.isEnabled) var isEnabled
 
     var body: some View {
         Button(action: action) {
             image
                 .imageScale(.large)
-                .foregroundColor(isEnabled ? .label : .gray)
+                // Neutral, not tinted, and keeps the glass/material vibrancy.
+                .foregroundStyle(.primary)
                 .padding()
                 .frame(minWidth: 0, maxWidth: .infinity)
+                .contentShape(Rectangle())
         }
+        // Plain style already dims the disabled (current orientation) button.
+        .buttonStyle(.plain)
+        .accessibilityLabel(accessibilityLabel)
     }
 }
 
@@ -60,10 +67,16 @@ private struct DeviceOrientationResolver: UIViewControllerRepresentable {
     class DeviceOrientationResolverController: UIViewController {
         // MARK: Public
 
+        override func loadView() {
+            let view = WindowObservingView()
+            view.onMoveToWindow = { [weak self] in self?.reportOrientation() }
+            self.view = view
+        }
+
         override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
             super.viewWillTransition(to: size, with: coordinator)
             coordinator.animate(alongsideTransition: nil) { _ in
-                self.orientationChanged?(self.orientation)
+                self.reportOrientation()
             }
         }
 
@@ -71,8 +84,29 @@ private struct DeviceOrientationResolver: UIViewControllerRepresentable {
 
         var orientationChanged: ((UIInterfaceOrientation) -> Void)?
 
-        var orientation: UIInterfaceOrientation {
-            view.window?.windowScene?.interfaceOrientation ?? .unknown
+        // MARK: Private
+
+        /// Reports only a known orientation. The view leaves the window while another page is pushed,
+        /// and size transitions that land then must not reset the orientation to `.unknown`.
+        private func reportOrientation() {
+            guard let orientation = view.window?.windowScene?.interfaceOrientation, orientation != .unknown else {
+                return
+            }
+            // Next runloop, so the state doesn't change during a SwiftUI view update.
+            DispatchQueue.main.async {
+                self.orientationChanged?(orientation)
+            }
+        }
+    }
+
+    private class WindowObservingView: UIView {
+        var onMoveToWindow: (() -> Void)?
+
+        override func didMoveToWindow() {
+            super.didMoveToWindow()
+            if window != nil {
+                onMoveToWindow?()
+            }
         }
     }
 

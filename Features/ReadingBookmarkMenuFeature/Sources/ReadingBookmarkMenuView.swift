@@ -62,12 +62,18 @@ struct ReadingBookmarkMenuContent: View {
     let select: AsyncItemAction<ReadingBookmarkSlot>
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric private var headerSpacing = 8.0
 
     var body: some View {
         PreferredContentSizeMatchesScrollView {
             ScrollView {
                 VStack(spacing: 0) {
                     header
+
+                    // The rows are one group: one separator below the header, none between rows.
+                    if !items.isEmpty {
+                        NoorMenuGroupSeparator()
+                    }
 
                     ForEach(items) { item in
                         ReadingBookmarkMenuRow(
@@ -83,10 +89,6 @@ struct ReadingBookmarkMenuContent: View {
                             save: { await saveNames([item.slot]) },
                             select: { await select(item.slot) }
                         )
-                        if item.slot != items.last?.slot {
-                            Divider()
-                                .padding(.horizontal)
-                        }
                     }
                 }
             }
@@ -108,7 +110,7 @@ struct ReadingBookmarkMenuContent: View {
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: headerSpacing) {
             titleStack {
                 Text(l("bookmarks.reading.title"))
                     .font(.headline.bold())
@@ -122,7 +124,6 @@ struct ReadingBookmarkMenuContent: View {
                 }
             }
             .font(.subheadline.weight(.semibold))
-            Divider()
             // Waits for the bookmarks so the explanation doesn't switch to the first-run copy after it appears.
             if !items.isEmpty {
                 if isFirstRun {

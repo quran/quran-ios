@@ -1,4 +1,5 @@
 import AnnotationsService
+import Combine
 import ImageService
 import QuranKit
 import ReadingService
@@ -30,6 +31,31 @@ final class ContentDimOtherAyahsTests: XCTestCase {
         XCTAssertEqual(model.decorations.undimmedVerses, [])
     }
 
+    func test_imagePage_undimsWhenDimOtherAyahsTurnsOff() {
+        let page = Reading.hafs_1405.quran.pages[0]
+        let service = dimmingService()
+        service.overlays.playingVerses = [page.verses[1]]
+        let model = makeImageModel(page: page, service: service)
+
+        service.overlays.dimsOtherAyahs = false
+
+        XCTAssertNil(model.decorations.undimmedVerses)
+    }
+
+    func test_imagePage_doesNotRedrawWhileAudioMovesBetweenVersesOfAnotherPage() {
+        let quran = Reading.hafs_1405.quran
+        let service = dimmingService()
+        service.overlays.playingVerses = [quran.pages[1].verses[0]]
+        let model = makeImageModel(page: quran.pages[0], service: service)
+        var changes = 0
+        let subscription = model.objectWillChange.sink { changes += 1 }
+        defer { subscription.cancel() }
+
+        service.overlays.playingVerses = [quran.pages[1].verses[1]]
+
+        XCTAssertEqual(changes, 0)
+    }
+
     // MARK: Line pages
 
     func test_linePage_leavesThePlayingVerseUndimmed() throws {
@@ -50,6 +76,20 @@ final class ContentDimOtherAyahsTests: XCTestCase {
         service.overlays.playingVerses = [quran.pages[1].firstVerse]
 
         XCTAssertEqual(model.undimmedVerses, [])
+    }
+
+    func test_linePage_doesNotRedrawWhileAudioMovesBetweenVersesOfAnotherPage() throws {
+        let quran = Reading.hafs_1441.quran
+        let service = dimmingService()
+        service.overlays.playingVerses = [quran.pages[1].verses[0]]
+        let model = try makeLineModel(page: quran.pages[0], service: service)
+        var changes = 0
+        let subscription = model.objectWillChange.sink { changes += 1 }
+        defer { subscription.cancel() }
+
+        service.overlays.playingVerses = [quran.pages[1].verses[1]]
+
+        XCTAssertEqual(changes, 0)
     }
 
     func test_linePage_laysOutHighlightRectsForTheUndimmedSelection() async throws {

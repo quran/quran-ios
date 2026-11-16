@@ -160,31 +160,27 @@ final class VerseOverlaysTests: XCTestCase {
         XCTAssertEqual(overlays.undimmedVerses, [verses[1]])
     }
 
-    func test_restricted_keepsThePlayingVerseOnItsPageUndimmed() {
+    func test_undimmedVersesOnPage_keepThePlayingVerseOnItsPageUndimmed() {
         let page = Quran.hafsMadani1405.pages[1]
         let recited = page.verses[1]
         var overlays = VerseOverlays()
         overlays.dimsOtherAyahs = true
         overlays.playingVerses = [recited]
 
-        let restricted = overlays.restricted(to: page)
-
-        XCTAssertEqual(restricted.undimmedVerses, [recited])
+        XCTAssertEqual(overlays.undimmedVerses(on: page), [recited])
     }
 
-    func test_restricted_dimsEveryVerseOfAPageWhileAudioPlaysOnAnotherPage() {
+    func test_undimmedVersesOnPage_dimEveryVerseOfAPageWhileAudioPlaysOnAnotherPage() {
         let page = Quran.hafsMadani1405.pages[0]
         let recited = Quran.hafsMadani1405.pages[1].firstVerse
         var overlays = VerseOverlays()
         overlays.dimsOtherAyahs = true
         overlays.playingVerses = [recited]
 
-        let restricted = overlays.restricted(to: page)
-
-        XCTAssertEqual(restricted.undimmedVerses, [])
+        XCTAssertEqual(overlays.undimmedVerses(on: page), [])
     }
 
-    func test_restricted_keepsTheSelectionUndimmedWhileAudioPlaysOnAnotherPage() {
+    func test_undimmedVersesOnPage_keepTheSelectionUndimmedWhileAudioPlaysOnAnotherPage() {
         let page = Quran.hafsMadani1405.pages[0]
         let selected = page.verses[2]
         var overlays = VerseOverlays()
@@ -192,14 +188,13 @@ final class VerseOverlaysTests: XCTestCase {
         overlays.playingVerses = [Quran.hafsMadani1405.pages[1].firstVerse]
         overlays.selectedVerses = [selected]
 
-        let restricted = overlays.restricted(to: page)
-
-        XCTAssertEqual(restricted.undimmedVerses, [selected])
+        XCTAssertEqual(overlays.undimmedVerses(on: page), [selected])
     }
 
-    func test_restricted_isUnaffectedByAudioOnAnotherPageWhileNotDimmingOtherAyahs() {
+    func test_restricted_isUnaffectedByAudioOnAnotherPage() {
         let page = Quran.hafsMadani1405.pages[0]
         var overlays = VerseOverlays()
+        overlays.dimsOtherAyahs = true
         overlays.playingVerses = [Quran.hafsMadani1405.pages[1].firstVerse]
 
         let restricted = overlays.restricted(to: page)
@@ -207,10 +202,11 @@ final class VerseOverlaysTests: XCTestCase {
         XCTAssertEqual(restricted, VerseOverlays())
     }
 
-    func test_restricted_dimsNothingWhenNothingIsPlaying() {
+    func test_restricted_leavesDimmingToTheFullOverlays() {
         let page = Quran.hafsMadani1405.pages[0]
         var overlays = VerseOverlays()
         overlays.dimsOtherAyahs = true
+        overlays.playingVerses = [page.verses[1]]
 
         let restricted = overlays.restricted(to: page)
 

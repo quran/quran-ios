@@ -32,7 +32,7 @@ public struct VerseOverlays: Equatable {
 
     /// The playing, selected, navigation-highlighted and word-pointed verses. `nil` when the option is off or no audio plays.
     public var undimmedVerses: Set<AyahNumber>? {
-        guard dimsOtherAyahs, playsAudio else {
+        guard dimsOtherAyahs, !playingVerses.isEmpty else {
             return nil
         }
         var verses = Set(playingVerses).union(selectedVerses)
@@ -45,23 +45,19 @@ public struct VerseOverlays: Equatable {
         return verses
     }
 
-    // MARK: Private
-
-    /// Set by `restricted(to:)` when audio plays on another page, which still dims this one.
-    /// Only set while dimming, so other pages stay equal when audio starts or stops elsewhere.
-    private var playsAudioOnAnotherPage = false
-
-    private var playsAudio: Bool {
-        !playingVerses.isEmpty || playsAudioOnAnotherPage
+    /// `undimmedVerses` on `page`; an empty set dims the whole page.
+    public func undimmedVerses(on page: Page) -> Set<AyahNumber>? {
+        undimmedVerses?.filter { $0.page == page }
     }
 }
 
 extension VerseOverlays {
-    /// Filters overlays for rendering one page.
+    /// Filters overlays for rendering one page. Dimming is off in the copy, since it can't tell
+    /// whether audio plays on another page; use `undimmedVerses(on:)` on the full overlays.
     public func restricted(to page: Page) -> Self {
         var overlays = self
         overlays.playingVerses = playingVerses.filter { $0.page == page }
-        overlays.playsAudioOnAnotherPage = dimsOtherAyahs && playsAudio && overlays.playingVerses.isEmpty
+        overlays.dimsOtherAyahs = false
         overlays.selectedVerses = selectedVerses.filter { $0.page == page }
         overlays.navigationTarget = navigationTarget.flatMap { $0.page == page ? $0 : nil }
         overlays.navigationHighlight = navigationHighlight.flatMap { $0.page == page ? $0 : nil }

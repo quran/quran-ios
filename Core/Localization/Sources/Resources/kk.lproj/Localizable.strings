@@ -474,9 +474,9 @@
 "audio.streaming.title" = "Дыбысты ағынмен ойнату";
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.title" = "Басқа аяттарды күңгірттеу";
-// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
 // Metadata: Translated by AI; human review required.
-"audio.dim-other-ayahs.footer" = "Бірден қолданылады.";
+"audio.dim-other-ayahs.footer" = "Дыбыс ойнап тұрғанда, оқылып жатқан аяттан басқа барлық аяттарды күңгірттейді. Бірден қолданылады.";
 // Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.description" = "Дыбыс ойнап тұрғанда, оқылып жатқан аяттан басқа барлық аяттарды күңгірттейді.";

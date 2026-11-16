@@ -492,9 +492,9 @@
 "audio.streaming.title" = "Audioni internet orqali ijro etish";
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.title" = "Boshqa oyatlarni xiralashtirish";
-// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
 // Metadata: Translated by AI; human review required.
-"audio.dim-other-ayahs.footer" = "Darhol qo‘llaniladi.";
+"audio.dim-other-ayahs.footer" = "Audio ijro etilayotganda, tilovat qilinayotgan oyatdan boshqa barcha oyatlarni xiralashtiradi. Darhol qo‘llaniladi.";
 // Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.description" = "Audio ijro etilayotganda, tilovat qilinayotgan oyatdan boshqa barcha oyatlarni xiralashtiradi.";

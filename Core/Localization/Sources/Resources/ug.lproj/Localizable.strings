@@ -493,9 +493,9 @@
 "audio.streaming.title" = "ئاۋازنى تور ئارقىلىق قويۇش";
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.title" = "باشقا ئايەتلەرنى سۇسلاشتۇرۇش";
-// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
 // Metadata: Translated by AI; human review required.
-"audio.dim-other-ayahs.footer" = "دەرھال قوللىنىلىدۇ.";
+"audio.dim-other-ayahs.footer" = "ئاۋاز قويۇلۇۋاتقاندا، ئوقۇلۇۋاتقان ئايەتتىن باشقا ھەممە ئايەتلەرنى سۇسلاشتۇرىدۇ. دەرھال قوللىنىلىدۇ.";
 // Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.description" = "ئاۋاز قويۇلۇۋاتقاندا، ئوقۇلۇۋاتقان ئايەتتىن باشقا ھەممە ئايەتلەرنى سۇسلاشتۇرىدۇ.";

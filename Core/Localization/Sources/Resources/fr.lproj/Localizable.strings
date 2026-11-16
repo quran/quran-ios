@@ -490,9 +490,9 @@
 "audio.streaming.title" = "Diffuser l’audio";
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.title" = "Atténuer les autres ayahs";
-// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
 // Metadata: Translated by AI; human review required.
-"audio.dim-other-ayahs.footer" = "S’applique immédiatement.";
+"audio.dim-other-ayahs.footer" = "Pendant la lecture audio, atténue toutes les ayahs sauf celle en cours de récitation. S’applique immédiatement.";
 // Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.description" = "Pendant la lecture audio, atténue toutes les ayahs sauf celle en cours de récitation.";

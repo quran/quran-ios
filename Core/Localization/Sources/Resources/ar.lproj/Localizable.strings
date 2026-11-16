@@ -186,8 +186,8 @@
 
 "audio.streaming.title" = "تشغيل الصوت عبر الإنترنت";
 "audio.dim-other-ayahs.title" = "تعتيم الآيات الأخرى";
-// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
-"audio.dim-other-ayahs.footer" = "يُطبَّق فورًا.";
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
+"audio.dim-other-ayahs.footer" = "أثناء تشغيل الصوت، يُعتِّم كل الآيات عدا الآية التي تُتلى. يُطبَّق فورًا.";
 // Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
 "audio.dim-other-ayahs.description" = "أثناء تشغيل الصوت، يُعتِّم كل الآيات عدا الآية التي تُتلى.";
 "audio.playback.title" = "تشغيل الصوتيات";

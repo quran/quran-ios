@@ -407,9 +407,9 @@
 "audio.streaming.title" = "Audio streamen";
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.title" = "Andere ayahs dimmen";
-// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
 // Metadata: Translated by AI; human review required.
-"audio.dim-other-ayahs.footer" = "Wordt meteen toegepast.";
+"audio.dim-other-ayahs.footer" = "Dimt tijdens het afspelen alle ayahs behalve de ayah die wordt gereciteerd. Wordt meteen toegepast.";
 // Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.description" = "Dimt tijdens het afspelen alle ayahs behalve de ayah die wordt gereciteerd.";

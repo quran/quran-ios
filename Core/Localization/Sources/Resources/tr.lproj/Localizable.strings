@@ -433,9 +433,9 @@
 "audio.streaming.title" = "Sesi çevrimiçi oynat";
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.title" = "Diğer ayetleri soluklaştır";
-// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
 // Metadata: Translated by AI; human review required.
-"audio.dim-other-ayahs.footer" = "Hemen uygulanır.";
+"audio.dim-other-ayahs.footer" = "Ses çalarken okunan ayet dışındaki tüm ayetleri soluklaştırır. Hemen uygulanır.";
 // Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.description" = "Ses çalarken okunan ayet dışındaki tüm ayetleri soluklaştırır.";

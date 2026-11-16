@@ -491,9 +491,9 @@
 "audio.streaming.title" = "Transmitir áudio";
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.title" = "Esmaecer outras ayahs";
-// Footer under the Dim Other Ayahs toggle in Audio Options, saying it applies without tapping Play.
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
 // Metadata: Translated by AI; human review required.
-"audio.dim-other-ayahs.footer" = "Aplica-se imediatamente.";
+"audio.dim-other-ayahs.footer" = "Durante a reprodução do áudio, esmaece todas as ayahs, exceto a que está sendo recitada. Aplica-se imediatamente.";
 // Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
 // Metadata: Translated by AI; human review required.
 "audio.dim-other-ayahs.description" = "Durante a reprodução do áudio, esmaece todas as ayahs, exceto a que está sendo recitada.";

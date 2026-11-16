@@ -158,10 +158,11 @@ private struct MoreMenuThemeSettingsView: View {
                                 size: $viewModel.translationFontSize,
                                 labelSize: $translationLabelSize
                             )
-                        }
 
-                        // The content is already padded, so the line spans it like the rows do.
-                        NoorMenuGroupSeparator(insetsHorizontally: false)
+                            // Inside the font size stack, so the last stepper's dots stay clear of the line.
+                            // The content is already padded, so the line spans it like the rows do.
+                            NoorMenuGroupSeparator(insetsHorizontally: false)
+                        }
                     }
 
                     VStack(spacing: 0) {

@@ -172,7 +172,6 @@ private struct MoreMenuThemeSettingsView: View {
 
                             AppearanceModeSelectorButton(selectedAppearance: $viewModel.appearanceMode)
                         }
-                        .padding(.horizontal)
 
                         ThemeStyleSelector(selectedStyle: $viewModel.themeStyle)
                     }

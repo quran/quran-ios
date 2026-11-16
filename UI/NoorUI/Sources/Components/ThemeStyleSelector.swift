@@ -67,7 +67,9 @@ public struct ThemeStyleSelector: View {
                 ) { selectedStyle = style }
             }
         }
-        .padding()
+        // Callers pad the grid to their content edges, so the tiles line up with the rows around it.
+        // The selected tile's stroke and the tiles' shadow draw a couple of points past the tiles, into that padding.
+        .padding(.vertical)
     }
 }
 

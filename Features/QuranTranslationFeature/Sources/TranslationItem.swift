@@ -118,16 +118,22 @@ struct TranslatorText: Identifiable & Hashable {
     var id: TranslationItemId { .translator(verse, translationId: translation.id) }
 }
 
+/// A verse row's highlight and dimming.
+struct TranslationVerseDecoration: Hashable {
+    var color: Color?
+    var isDimmed = false
+}
+
 enum TranslationItem: Identifiable & Hashable {
     case pageHeader(TranslationPageHeader)
     case pageFooter(TranslationPageFooter)
-    case verseSeparator(TranslationVerseSeparator, Color?)
-    case suraName(TranslationSuraName, Color?)
-    case arabicText(TranslationArabicText, Color?)
-    case verseNumber(TranslationVerseNumber, Color?)
-    case translationTextChunk(TranslationTextChunk, Color?)
-    case translationReferenceVerse(TranslationReferenceVerse, Color?)
-    case translatorText(TranslatorText, Color?)
+    case verseSeparator(TranslationVerseSeparator, TranslationVerseDecoration)
+    case suraName(TranslationSuraName, TranslationVerseDecoration)
+    case arabicText(TranslationArabicText, TranslationVerseDecoration)
+    case verseNumber(TranslationVerseNumber, TranslationVerseDecoration)
+    case translationTextChunk(TranslationTextChunk, TranslationVerseDecoration)
+    case translationReferenceVerse(TranslationReferenceVerse, TranslationVerseDecoration)
+    case translatorText(TranslatorText, TranslationVerseDecoration)
 
     var id: TranslationItemId {
         switch self {
@@ -143,18 +149,18 @@ enum TranslationItem: Identifiable & Hashable {
         }
     }
 
-    var color: Color? {
+    var decoration: TranslationVerseDecoration {
         switch self {
         case .pageHeader, .pageFooter:
-            return nil
-        case .verseSeparator(_, let color),
-             .suraName(_, let color),
-             .arabicText(_, let color),
-             .verseNumber(_, let color),
-             .translationTextChunk(_, let color),
-             .translationReferenceVerse(_, let color),
-             .translatorText(_, let color):
-            return color
+            return TranslationVerseDecoration()
+        case .verseSeparator(_, let decoration),
+             .suraName(_, let decoration),
+             .arabicText(_, let decoration),
+             .verseNumber(_, let decoration),
+             .translationTextChunk(_, let decoration),
+             .translationReferenceVerse(_, let decoration),
+             .translatorText(_, let decoration):
+            return decoration
         }
     }
 }

@@ -102,33 +102,18 @@ extension TranslatorText: View {
     }
 }
 
-extension TranslationItemId {
-    func isDimmed(undimmedVerses: Set<AyahNumber>?) -> Bool {
-        guard let undimmedVerses, let ayah else {
-            return false
-        }
-        return !undimmedVerses.contains(ayah)
-    }
-}
-
 extension TranslationItem {
     #if QURAN_SYNC
-    func view(
-        undimmedVerses: Set<AyahNumber>?,
-        onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?
-    ) -> some View {
-        content(undimmedVerses: undimmedVerses) { $0.view(onAyahNumberTapped: onAyahNumberTapped) }
+    func view(onAyahNumberTapped: ((AyahNumber, CGPoint) -> Void)?) -> some View {
+        content { $0.view(onAyahNumberTapped: onAyahNumberTapped) }
     }
     #else
-    func view(undimmedVerses: Set<AyahNumber>?) -> some View {
-        content(undimmedVerses: undimmedVerses) { $0.view() }
+    func view() -> some View {
+        content { $0.view() }
     }
     #endif
 
-    private func content(
-        undimmedVerses: Set<AyahNumber>?,
-        @ViewBuilder verseNumberView: (TranslationVerseNumber) -> some View
-    ) -> some View {
+    private func content(@ViewBuilder verseNumberView: (TranslationVerseNumber) -> some View) -> some View {
         VStack {
             switch self {
             case .pageHeader(let pageHeader):
@@ -155,8 +140,8 @@ extension TranslationItem {
         .listRowSeparator(.hidden)
         .listRowInsets(.zero)
         .listRowBackground(Color.clear)
-        .background(color)
-        .dimmedAyah(id.isDimmed(undimmedVerses: undimmedVerses))
+        .background(decoration.color)
+        .dimmedAyah(decoration.isDimmed)
         .trackingTarget(item: id)
     }
 }
@@ -196,9 +181,9 @@ private struct ContentTranslationPreview: View {
 
     private func itemView(_ item: TranslationItem) -> some View {
         #if QURAN_SYNC
-        item.view(undimmedVerses: nil, onAyahNumberTapped: nil)
+        item.view(onAyahNumberTapped: nil)
         #else
-        item.view(undimmedVerses: nil)
+        item.view()
         #endif
     }
 
@@ -212,19 +197,19 @@ private struct ContentTranslationPreview: View {
                 itemView(TranslationItem.pageHeader(.init(page: quran.pages[0])))
                 itemView(TranslationItem.suraName(
                     .init(sura: quran.firstSura, showsBesmAllah: true, quranFont: .uthmanicHafs, arabicFontSize: fontSize),
-                    nil
+                    .init()
                 ))
                 #if QURAN_SYNC
-                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse, indicators: []), nil))
+                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse, indicators: []), .init()))
                 #else
-                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse), nil))
+                itemView(TranslationItem.verseNumber(.init(verse: quran.firstVerse), .init()))
                 #endif
                 itemView(TranslationItem.arabicText(.init(
                     verse: quran.firstVerse,
                     text: QuranText(quran.arabicBesmAllah),
                     quranFont: .uthmanicHafs,
                     arabicFontSize: fontSize
-                ), nil))
+                ), .init()))
                 ForEach(0 ..< (readMore ? 1 : chunks.count), id: \.self) { chunkIndex in
                     itemView(TranslationItem.translationTextChunk(
                         .init(
@@ -235,14 +220,14 @@ private struct ContentTranslationPreview: View {
                             chunkIndex: chunkIndex,
                             readMore: readMore && chunkIndex == 0,
                             translationFontSize: fontSize
-                        ), nil
+                        ), .init()
                     ))
                 }
-                itemView(TranslationItem.translatorText(.init(verse: quran.firstVerse, translation: translation, translationFontSize: fontSize), nil))
-                itemView(TranslationItem.verseSeparator(.init(verse: quran.firstVerse), nil))
+                itemView(TranslationItem.translatorText(.init(verse: quran.firstVerse, translation: translation, translationFontSize: fontSize), .init()))
+                itemView(TranslationItem.verseSeparator(.init(verse: quran.firstVerse), .init()))
 
-                itemView(TranslationItem.translationReferenceVerse(.init(verse: quran.firstVerse, translation: translation, reference: quran.lastVerse, translationFontSize: .medium), nil))
-                itemView(TranslationItem.verseSeparator(.init(verse: quran.firstVerse), nil))
+                itemView(TranslationItem.translationReferenceVerse(.init(verse: quran.firstVerse, translation: translation, reference: quran.lastVerse, translationFontSize: .medium), .init()))
+                itemView(TranslationItem.verseSeparator(.init(verse: quran.firstVerse), .init()))
 
                 itemView(TranslationItem.pageFooter(.init(page: quran.firstVerse.page)))
             }

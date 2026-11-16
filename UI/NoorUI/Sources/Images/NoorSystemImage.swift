@@ -59,6 +59,8 @@ public enum NoorSystemImage: String {
     case infinity
     case storageFull = "externaldrive.badge.exclamationmark"
     case externalLink = "arrow.up.right"
+    case rotateToPortrait = "rectangle.portrait.rotate"
+    case rotateToLandscape = "rectangle.landscape.rotate"
 
     // MARK: Public
 

@@ -5,6 +5,7 @@
 //  Created by Afifi, Mohamed on 9/5/21.
 //
 
+import Localization
 import NoorUI
 import SwiftUI
 import UIx
@@ -15,70 +16,67 @@ struct MoreMenuDeviceRotation: View {
     @State var updateOrientationTo: UIInterfaceOrientation? = nil
 
     var body: some View {
+        // Portrait comes first as the default; each icon shows the orientation its button rotates to.
         HStack {
-            DeviceRotation(image: NoorImage.rotateToLandscape.image) {
-                updateOrientationTo = .landscapeLeft
-            }
-            .disabled(orientation.isLandscape)
-
-            DeviceRotation(image: NoorImage.rotateToPortrait.image) {
+            DeviceRotation(
+                image: NoorSystemImage.rotateToPortrait.image,
+                accessibilityLabel: l("menu.rotate_to_portrait")
+            ) {
                 updateOrientationTo = .portrait
             }
             .disabled(orientation.isPortrait)
-        }
-        .background(
-            HStack {
-                Divider()
+
+            DeviceRotation(
+                image: NoorSystemImage.rotateToLandscape.image,
+                accessibilityLabel: l("menu.rotate_to_landscape")
+            ) {
+                updateOrientationTo = .landscapeLeft
             }
-            .background(DeviceOrientationResolver(updateOrientationTo: $updateOrientationTo) { orientation = $0 })
-        )
+            .disabled(orientation.isLandscape)
+        }
+        .background(DeviceOrientationResolver(updateOrientationTo: $updateOrientationTo) { orientation = $0 })
     }
 }
 
 private struct DeviceRotation: View {
     let image: Image
+    let accessibilityLabel: String
     let action: () -> Void
-    @Environment(\.isEnabled) var isEnabled
 
     var body: some View {
         Button(action: action) {
             image
-                .renderingMode(.template)
-                .foregroundColor(isEnabled ? .label : .gray)
+                .imageScale(.large)
+                // Neutral, not tinted, and keeps the glass/material vibrancy.
+                .foregroundStyle(.primary)
                 .padding()
                 .frame(minWidth: 0, maxWidth: .infinity)
+                .contentShape(Rectangle())
         }
+        // Plain style already dims the disabled (current orientation) button.
+        .buttonStyle(.plain)
+        .accessibilityLabel(accessibilityLabel)
     }
 }
 
-struct MoreMenuDeviceRotation_Previews: PreviewProvider {
-    struct Container: View {
-        @State var orientation: UIInterfaceOrientation
-
-        var body: some View {
-            MoreMenuDeviceRotation()
-        }
-    }
-
-    // MARK: Internal
-
-    static var previews: some View {
-        VStack {
-            Container(orientation: .landscapeLeft)
-            Divider()
-            Container(orientation: .portrait)
-        }
-    }
+#Preview {
+    MoreMenuDeviceRotation()
 }
 
 private struct DeviceOrientationResolver: UIViewControllerRepresentable {
     class DeviceOrientationResolverController: UIViewController {
         // MARK: Public
 
+        override func loadView() {
+            let view = WindowObservingView()
+            view.onMoveToWindow = { [weak self] in self?.reportOrientation() }
+            self.view = view
+        }
+
         override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
             super.viewWillTransition(to: size, with: coordinator)
             coordinator.animate(alongsideTransition: nil) { _ in
-                self.orientationChanged?(self.orientation)
+                self.reportOrientation()
             }
         }
 
@@ -86,8 +84,29 @@ private struct DeviceOrientationResolver: UIViewControllerRepresentable {
 
         var orientationChanged: ((UIInterfaceOrientation) -> Void)?
 
-        var orientation: UIInterfaceOrientation {
-            view.window?.windowScene?.interfaceOrientation ?? .unknown
+        // MARK: Private
+
+        /// Reports only a known orientation. The view leaves the window while another page is pushed,
+        /// and size transitions that land then must not reset the orientation to `.unknown`.
+        private func reportOrientation() {
+            guard let orientation = view.window?.windowScene?.interfaceOrientation, orientation != .unknown else {
+                return
+            }
+            // Next runloop, so the state doesn't change during a SwiftUI view update.
+            DispatchQueue.main.async {
+                self.orientationChanged?(orientation)
+            }
+        }
+    }
+
+    private class WindowObservingView: UIView {
+        var onMoveToWindow: (() -> Void)?
+
+        override func didMoveToWindow() {
+            super.didMoveToWindow()
+            if window != nil {
+                onMoveToWindow?()
+            }
         }
     }
 

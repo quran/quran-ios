@@ -35,85 +35,12 @@ private struct MoreMenuRootView: View {
         PreferredContentSizeMatchesScrollView {
             ScrollView {
                 VStack(spacing: 0) {
-                    viewBasedOn(state.mode) {
-                        MoreMenuModeSelector(mode: $store.mode)
-                    }
-
-                    viewBasedOn(state.translationsSelection, customCondition: store.mode == .translation) {
-                        Button {
-                            store.selectTranslations()
-                        } label: {
-                            MoreMenuTranslationSelector()
-                                .contentShape(Rectangle())
+                    let groups = visibleGroups
+                    ForEach(groups, id: \.self) { group in
+                        if group != groups.first {
+                            groupSeparator
                         }
-                        .buttonStyle(BackgroundHighlightingStyle())
-                        .background(Color.systemBackground)
-
-                        empty
-                    }
-
-                    viewBasedOn(state.arabicText, customCondition: store.mode == .translation) {
-                        MoreMenuArabicText(enabled: $store.showArabicText)
-                            .background(Color.systemBackground)
-                        empty
-                    }
-
-                    viewBasedOn(state.wordPointer, customCondition: store.mode == .arabic) {
-                        MoreMenuWordPointer(enabled: $store.wordPointerEnabled)
-                            .background(Color.systemBackground)
-                        if store.wordPointerEnabled {
-                            divider
-                                .background(Color.systemBackground)
-                            Button {
-                                showWordPointerSelection()
-                            } label: {
-                                MoreMenuWordPointerType(type: store.wordPointerType)
-                                    .contentShape(Rectangle())
-                            }
-                            .buttonStyle(BackgroundHighlightingStyle())
-                            .background(Color.systemBackground)
-                        }
-                        empty
-                    }
-
-                    viewBasedOn(state.linePageDisplay, customCondition: store.mode == .arabic) {
-                        MoreMenuLinePageDisplay(
-                            showDividers: $store.showLinePageDividers,
-                            showSidelines: $store.showLinePageSidelines
-                        )
-                        .background(Color.systemBackground)
-                        empty
-                    }
-
-                    #if QURAN_SYNC
-                    viewBasedOn(state.ayahIndicators) {
-                        MoreMenuAyahIndicators(visibility: $store.indicatorVisibility)
-                            .background(Color.systemBackground)
-                        empty
-                    }
-                    #endif
-
-                    viewBasedOn(state.orientation, customCondition: store.mode == .arabic) {
-                        MoreMenuDeviceRotation()
-                            .background(Color.systemBackground)
-                        empty
-                    }
-
-                    viewBasedOn(state.twoPages) {
-                        MoreMenuTwoPages(enabled: $store.twoPagesEnabled)
-                            .background(Color.systemBackground)
-                        empty
-                    }
-
-                    viewBasedOn(state.verticalScrolling) {
-                        MoreMenuVerticalScrolling(enabled: $store.verticalScrollingEnabled)
-                    }
-
-                    viewBasedOn(state.theme) {
-                        MoreMenuThemeSettingsMenuItem(
-                            showFontSize: isVisible(state.fontSize, customCondition: store.mode == .translation),
-                            showArabicFontSize: store.showArabicText
-                        )
+                        content(of: group)
                     }
                 }
             }
@@ -122,40 +49,117 @@ private struct MoreMenuRootView: View {
 
     // MARK: Private
 
+    /// Each group is one section of the menu, like the sections of a native menu.
+    private enum MenuGroup: CaseIterable {
+        case mode
+        case translationsSelection
+        case arabicText
+        case wordPointer
+        case linePageDisplay
+        #if QURAN_SYNC
+        case ayahIndicators
+        #endif
+        case orientation
+        case twoPages
+        case verticalScrolling
+        case theme
+    }
+
+    @ScaledMetric private var groupSpacing = 8.0
+
     private var state: MoreMenuControlsState {
         store.state
     }
 
-    private var empty: some View {
-        VStack {
-            MoreMenuEmpty()
-        }
+    private var visibleGroups: [MenuGroup] {
+        MenuGroup.allCases.filter { isVisible($0) }
     }
 
-    private var divider: some View {
-        Divider()
-            .padding(.leading)
+    /// A 1pt line, since a hairline `Divider` is barely visible on the popover's Liquid Glass.
+    private var groupSeparator: some View {
+        Rectangle()
+            .fill(Color.separator)
+            .frame(height: 1)
+            .padding(.horizontal)
+            .padding(.vertical, groupSpacing)
     }
 
     @ViewBuilder
-    private func viewBasedOn(
-        _ state: ConfigState,
-        customCondition: Bool = true,
-        @ViewBuilder content: () -> some View
-    ) -> some View {
-        switch state {
-        case .alwaysOff:
-            EmptyView()
-        case .alwaysOn:
-            content()
-        case .conditional:
-            if customCondition {
-                content()
+    private func content(of group: MenuGroup) -> some View {
+        switch group {
+        case .mode:
+            MoreMenuModeSelector(mode: $store.mode)
+
+        case .translationsSelection:
+            Button {
+                store.selectTranslations()
+            } label: {
+                MoreMenuTranslationSelector()
+                    .contentShape(Rectangle())
             }
+            .buttonStyle(BackgroundHighlightingStyle())
+
+        case .arabicText:
+            MoreMenuArabicText(enabled: $store.showArabicText)
+
+        case .wordPointer:
+            MoreMenuWordPointer(enabled: $store.wordPointerEnabled)
+            if store.wordPointerEnabled {
+                Button {
+                    showWordPointerSelection()
+                } label: {
+                    MoreMenuWordPointerType(type: store.wordPointerType)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(BackgroundHighlightingStyle())
+            }
+
+        case .linePageDisplay:
+            MoreMenuLinePageDisplay(
+                showDividers: $store.showLinePageDividers,
+                showSidelines: $store.showLinePageSidelines
+            )
+
+        #if QURAN_SYNC
+        case .ayahIndicators:
+            MoreMenuAyahIndicators(visibility: $store.indicatorVisibility)
+        #endif
+
+        case .orientation:
+            MoreMenuDeviceRotation()
+
+        case .twoPages:
+            MoreMenuTwoPages(enabled: $store.twoPagesEnabled)
+
+        case .verticalScrolling:
+            MoreMenuVerticalScrolling(enabled: $store.verticalScrollingEnabled)
+
+        case .theme:
+            MoreMenuThemeSettingsMenuItem(
+                showFontSize: isVisible(state.fontSize, customCondition: store.mode == .translation),
+                showArabicFontSize: store.showArabicText
+            )
         }
     }
 
-    private func isVisible(_ state: ConfigState, customCondition: Bool) -> Bool {
+    private func isVisible(_ group: MenuGroup) -> Bool {
+        switch group {
+        case .mode: isVisible(state.mode)
+        case .translationsSelection: isVisible(state.translationsSelection, customCondition: store.mode == .translation)
+        case .arabicText: isVisible(state.arabicText, customCondition: store.mode == .translation)
+        case .wordPointer: isVisible(state.wordPointer, customCondition: store.mode == .arabic)
+        case .linePageDisplay: isVisible(state.linePageDisplay, customCondition: store.mode == .arabic)
+        #if QURAN_SYNC
+        case .ayahIndicators: isVisible(state.ayahIndicators)
+        #endif
+        case .orientation: isVisible(state.orientation, customCondition: store.mode == .arabic)
+        case .twoPages: isVisible(state.twoPages)
+        case .verticalScrolling: isVisible(state.verticalScrolling)
+        case .theme: isVisible(state.theme)
+        }
+    }
+
+    private func isVisible(_ state: ConfigState, customCondition: Bool = true) -> Bool {
         switch state {
         case .alwaysOff:
             return false
@@ -167,8 +171,15 @@ private struct MoreMenuRootView: View {
     }
 
     private func showWordPointerSelection() {
-        navigator?.push(configuration: .init(backgroundColor: .systemBackground)) {
-            WordPointerSelection(store: store)
+        // From iOS 26, the page is clear so it stays on the popover's glass like the root page.
+        // Earlier pushes slide two clear pages over each other, so it stays opaque there.
+        let isTransparent = if #available(iOS 26.0, *) {
+            true
+        } else {
+            false
+        }
+        navigator?.push(configuration: .init(backgroundColor: isTransparent ? .clear : .systemBackground)) {
+            WordPointerSelection(store: store, showsBackground: !isTransparent)
         }
     }
 }
@@ -177,12 +188,14 @@ private struct WordPointerSelection: View {
     // MARK: Internal
 
     @ObservedObject var store: MoreMenuViewModel
+    let showsBackground: Bool
     @Environment(\.navigator) var navigator: Navigator?
 
     var body: some View {
         SingleChoiceSelectorView(
             sections: [SingleChoiceSection(items: [WordTextType.translation, .transliteration])],
             selected: selected,
+            showsBackground: showsBackground,
             itemText: { $0.localizedName }
         )
     }

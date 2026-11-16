@@ -111,6 +111,8 @@
 "menu.ayahIndicators.readingBookmark" = "Dấu trang đọc";
 "menu.ayahIndicators.none" = "Không";
 "menu.arabicText" = "Văn bản tiếng Ả Rập";
+"menu.rotate_to_portrait" = "Xoay dọc";
+"menu.rotate_to_landscape" = "Xoay ngang";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Chủ đề & Cài đặt";
 

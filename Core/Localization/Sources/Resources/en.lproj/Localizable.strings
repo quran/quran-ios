@@ -125,6 +125,8 @@
 "menu.ayahIndicators.readingBookmark" = "Reading bookmark";
 "menu.ayahIndicators.none" = "None";
 "menu.arabicText" = "Arabic text";
+"menu.rotate_to_portrait" = "Rotate to portrait";
+"menu.rotate_to_landscape" = "Rotate to landscape";
 "menu.theme_settings" = "Themes & Settings";
 
 // MARK: - Theme

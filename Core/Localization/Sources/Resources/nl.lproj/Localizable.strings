@@ -111,6 +111,8 @@
 "menu.ayahIndicators.readingBookmark" = "Leesbladwijzer";
 "menu.ayahIndicators.none" = "Geen";
 "menu.arabicText" = "Arabische tekst";
+"menu.rotate_to_portrait" = "Draaien naar staand";
+"menu.rotate_to_landscape" = "Draaien naar liggend";
 // Metadata: Translated by ChatGPT; human review required.
 "menu.theme_settings" = "Thema's en instellingen";
 

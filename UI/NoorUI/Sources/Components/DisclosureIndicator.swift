@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DisclosureIndicator: View {
     var body: some View {
-        Image(systemName: "chevron.right")
+        NoorSystemImage.disclosure.image
             .flipsForRightToLeftLayoutDirection(true)
             .foregroundColor(.secondaryLabel)
     }

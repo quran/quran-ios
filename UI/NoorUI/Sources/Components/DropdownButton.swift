@@ -35,7 +35,7 @@ public struct DropdownButton<Item: Hashable, Content: View>: View {
             VStack {
                 HStack {
                     content(selectedItem)
-                    Image(systemName: "chevron.down")
+                    NoorSystemImage.expand.image
                         .font(.caption)
                 }
             }

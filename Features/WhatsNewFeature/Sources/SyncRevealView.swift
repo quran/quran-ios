@@ -6,6 +6,7 @@
 //
 
 import Localization
+import NoorUI
 import SwiftUI
 import UIKit
 import UIx
@@ -204,12 +205,12 @@ struct SyncRevealView: View {
     private var benefits: some View {
         VStack(alignment: .leading, spacing: benefitsSpacing) {
             benefit(
-                systemImage: "arrow.triangle.2.circlepath",
+                systemImage: .syncAcrossDevices,
                 title: l("new.sync_reveal.every_device.title"),
                 subtitle: l("new.sync_reveal.every_device.subtitle")
             )
             benefit(
-                systemImage: "book",
+                systemImage: .study,
                 title: l("new.sync_reveal.go_deeper.title"),
                 subtitle: l("new.sync_reveal.go_deeper.subtitle")
             )
@@ -220,7 +221,7 @@ struct SyncRevealView: View {
 
     /// A gold symbol tile beside a title and its detail, read by VoiceOver as one element. At
     /// accessibility sizes the tile sits above the text, so the words keep the full width.
-    private func benefit(systemImage: String, title: String, subtitle: String) -> some View {
+    private func benefit(systemImage: NoorSystemImage, title: String, subtitle: String) -> some View {
         Group {
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: benefitSpacing) {
@@ -237,8 +238,8 @@ struct SyncRevealView: View {
         .accessibilityElement(children: .combine)
     }
 
-    private func benefitIcon(_ systemImage: String) -> some View {
-        Image(systemName: systemImage)
+    private func benefitIcon(_ systemImage: NoorSystemImage) -> some View {
+        systemImage.image
             .font(.body.weight(.semibold))
             .foregroundStyle(Palette.gold)
             .frame(width: benefitIconSize, height: benefitIconSize)
@@ -264,10 +265,10 @@ struct SyncRevealView: View {
     /// "Moving from iCloud → Quran.com", read by VoiceOver as one sentence.
     private var chip: some View {
         let shape = RoundedRectangle(cornerRadius: chipCornerRadius, style: .continuous)
-        let cloud = Image(systemName: "icloud")
+        let cloud = NoorSystemImage.iCloud.image
         let phrase = l("new.sync_reveal.chip.from_icloud")
         // A forward arrow points from iCloud to Quran.com in either reading direction.
-        let arrow = Image(systemName: "arrow.forward")
+        let arrow = NoorSystemImage.migrationArrow.image
         let destination = "Quran.com"
         // One text, so the chip wraps like a sentence at large sizes. Interpolated values are isolated,
         // so the direction marks are part of the literal: they set the reading direction and keep the

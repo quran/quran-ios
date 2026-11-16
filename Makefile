@@ -77,7 +77,7 @@ endef
 .PHONY: run-example-no-sync run-example-sync run-example-no-sync-whats-new run-example-sync-whats-new
 .PHONY: build-mobile-sync-spm build-sync-local-debug test-sync-local-debug
 .PHONY: build-example-sync-local-debug run-example-sync-local-debug
-.PHONY: clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect lint-no-kotlin-interop
+.PHONY: clone-swiftformat build-swiftformat force-build-swiftformat clean-swiftformat format-lint format-autocorrect lint-no-kotlin-interop lint-system-symbols
 .PHONY: install-swiftlint build-for-analyzer swiftlint-analyzer
 .PHONY: preview test-preview-tools
 .PHONY: export-example-app-icon-images
@@ -196,7 +196,44 @@ lint-no-kotlin-interop:
 		exit 1; \
 	fi
 
-format-lint: lint-no-kotlin-interop $(SWIFT_FORMAT_BIN)
+# SF Symbol names come from NoorUI's NoorSystemImage, so a symbol string literal is flagged. Tests and
+# UIx (which can't depend on NoorUI) are skipped. So are #Preview blocks, whose placeholder icons
+# aren't app symbols: awk skips from a top-level `#Preview` line until its braces balance.
+SYSTEM_SYMBOL_LITERAL_PATTERN = (systemName|systemImage):[^,)]*"|\.symbol\([^,)]*"
+
+lint-system-symbols:
+	@files="$$(git grep --untracked --files-with-matches --extended-regexp '$(SYSTEM_SYMBOL_LITERAL_PATTERN)' -- '*.swift' ':(exclude)*/Tests/*' ':(exclude)UI/UIx/*')"; \
+	status=$$?; \
+	if [ $$status -gt 1 ]; then \
+		echo "error: git grep failed with status $$status." >&2; \
+		exit 1; \
+	fi; \
+	if [ -z "$$files" ]; then \
+		exit 0; \
+	fi; \
+	matches="$$(printf '%s\n' "$$files" | tr '\n' '\0' | xargs -0 awk ' \
+			FNR == 1 { preview = 0 } \
+			/^#Preview/ { preview = 1; depth = 0; opened = 0 } \
+			preview { \
+				line = $$0; opens = gsub(/[{]/, "", line); closes = gsub(/[}]/, "", line); \
+				depth += opens - closes; if (opens > 0) opened = 1; if (opened && depth <= 0) preview = 0; \
+				next \
+			} \
+			/$(SYSTEM_SYMBOL_LITERAL_PATTERN)/ { print FILENAME ":" FNR ":" $$0 }')"; \
+	status=$$?; \
+	if [ $$status -ne 0 ]; then \
+		echo "error: awk failed with status $$status while checking SF Symbol literals." >&2; \
+		exit 1; \
+	fi; \
+	if [ -n "$$matches" ]; then \
+		echo "$$matches"; \
+		echo "error: SF Symbol string literals are forbidden outside tests, UIx and #Preview blocks." >&2; \
+		echo "Add a case named by meaning to NoorSystemImage and use .image or .uiImage," >&2; \
+		echo "or a static var alias if the glyph already has a case with another meaning." >&2; \
+		exit 1; \
+	fi
+
+format-lint: lint-no-kotlin-interop lint-system-symbols $(SWIFT_FORMAT_BIN)
 	$(SWIFT_FORMAT_BIN) --lint .
 
 format-autocorrect: $(SWIFT_FORMAT_BIN)

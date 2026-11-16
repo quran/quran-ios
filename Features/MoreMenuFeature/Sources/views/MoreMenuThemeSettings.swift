@@ -88,7 +88,7 @@ private struct AppearanceModeSelectorButton: View {
     @Binding var selectedAppearance: AppearanceMode
     var body: some View {
         DropdownButton(items: AppearanceMode.allCases, selectedItem: $selectedAppearance) { appearance in
-            Label(appearance.localizedName, systemImage: appearance.systemImageName)
+            Label(appearance.localizedName, systemImage: appearance.systemImage.rawValue)
         }
     }
 }

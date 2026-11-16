@@ -26,7 +26,7 @@ public struct AppearanceMenu: View {
             selection: $appearanceMode,
             value: appearanceMode.localizedName
         ) { mode in
-            Label(mode.localizedName, systemImage: mode.systemImageName)
+            Label(mode.localizedName, systemImage: mode.systemImage.rawValue)
         }
     }
 

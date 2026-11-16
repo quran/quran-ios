@@ -53,12 +53,12 @@ struct NoorItemMenuItems: View {
         }
         if let delete {
             Button(role: .destructive, action: delete) {
-                Label { Text(l("button.delete")) } icon: { NoorSystemImage.cancel.image }
+                Label { Text(l("button.delete")) } icon: { NoorSystemImage.delete.image }
             }
         }
         if let deleteAll {
             Button(role: .destructive, action: deleteAll) {
-                Label { Text(l("bookmarks.delete-all")) } icon: { NoorSystemImage.cancel.image }
+                Label { Text(l("bookmarks.delete-all")) } icon: { NoorSystemImage.delete.image }
             }
         }
     }

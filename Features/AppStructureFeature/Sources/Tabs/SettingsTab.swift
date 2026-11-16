@@ -80,8 +80,8 @@ final class SettingsTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
         UITabBarItem(
             title: lAndroid("menu_settings"),
-            image: .symbol(NoorSystemImage.settings.rawValue),
-            selectedImage: .symbol(NoorSystemImage.settingsFilled.rawValue)
+            image: NoorSystemImage.settings.uiImage,
+            selectedImage: NoorSystemImage.settingsFilled.uiImage
         )
     }
 

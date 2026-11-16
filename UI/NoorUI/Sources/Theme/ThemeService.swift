@@ -110,11 +110,11 @@ public enum AppearanceMode: Int, CaseIterable, CustomStringConvertible {
         }
     }
 
-    public var systemImageName: String {
+    public var systemImage: NoorSystemImage {
         switch self {
-        case .light: "sun.horizon.fill"
-        case .dark: "moon.stars.fill"
-        case .auto: "circle.lefthalf.filled"
+        case .light: .lightTheme
+        case .dark: .darkTheme
+        case .auto: .autoTheme
         }
     }
 }

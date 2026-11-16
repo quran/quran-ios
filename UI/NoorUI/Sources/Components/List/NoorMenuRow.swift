@@ -68,7 +68,7 @@ public struct NoorMenuRow<Item: Hashable, ItemLabel: View>: View {
                 HStack {
                     Text(value)
                         .foregroundColor(.secondaryLabel)
-                    Image(systemName: "chevron.up.chevron.down")
+                    NoorSystemImage.popUpMenu.image
                         .font(.footnote.weight(.semibold))
                         .foregroundColor(.tertiaryLabel)
                         .accessibilityHidden(true)

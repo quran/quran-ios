@@ -73,7 +73,7 @@ public struct NoorExpandableRowHeader<Value: View>: View {
                 HStack {
                     value
                         .foregroundStyle(isExpanded ? Color.accentColor : .secondary)
-                    Image(systemName: "chevron.down")
+                    NoorSystemImage.expand.image
                         .font(.footnote.weight(.semibold))
                         .foregroundStyle(isExpanded ? Color.accentColor : Color(.tertiaryLabel))
                         .accessibilityHidden(true)

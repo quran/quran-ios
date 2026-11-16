@@ -128,7 +128,7 @@ public struct ContinueReadingSection: View {
                     if bookmarksExpanded {
                         Spacer(minLength: 0)
                         Text(l("bookmarks.reading.show-less"))
-                        Image(systemName: "chevron.up")
+                        NoorSystemImage.collapse.image
                             .font(.caption.weight(.semibold))
                         Spacer(minLength: 0)
                     } else {
@@ -142,7 +142,7 @@ public struct ContinueReadingSection: View {
                         }
                         Text(lFormat("bookmarks.reading.more-count", readingBookmarks.count - 1))
                         Spacer(minLength: 0)
-                        Image(systemName: "chevron.down")
+                        NoorSystemImage.expand.image
                             .font(.caption.weight(.semibold))
                     }
                 }
@@ -163,7 +163,7 @@ public struct ContinueReadingSection: View {
     private var recentPages: some View {
         VStack(alignment: .leading) {
             HStack {
-                Image(systemName: "clock")
+                NoorSystemImage.lastPage.image
                     .accessibilityHidden(true)
                 Text(lFormat("home.recent-pages.title", NumberFormatter.shared.format(lastPages.count)))
             }

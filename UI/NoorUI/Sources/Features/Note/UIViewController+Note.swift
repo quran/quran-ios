@@ -59,7 +59,7 @@ extension UIViewController {
 
     public func addCloudSyncInfo() {
         navigationItem.leftBarButtonItem = NavigationBarButton.secondary(
-            systemName: "link.icloud",
+            image: .cloudSyncInfo,
             accessibilityLabel: l("notes.icloud.alert.title"),
             glassSymbolScale: .medium
         ) { [weak self] in

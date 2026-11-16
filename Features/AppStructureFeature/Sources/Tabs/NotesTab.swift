@@ -55,8 +55,8 @@ private class NotesTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
         UITabBarItem(
             title: l("tab.notes"),
-            image: .symbol(NoorSystemImage.notes.rawValue),
-            selectedImage: .symbol(NoorSystemImage.notesFilled.rawValue)
+            image: NoorSystemImage.notes.uiImage,
+            selectedImage: NoorSystemImage.notesFilled.uiImage
         )
     }
 }

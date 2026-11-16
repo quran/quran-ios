@@ -104,7 +104,7 @@ final class NotesViewController: UIHostingController<NotesView>, UISearchBarDele
             ),
             listItems: [
                 UIBarButtonItem(
-                    image: UIImage(systemName: "square.and.arrow.up"),
+                    image: NoorSystemImage.share.uiImage,
                     style: .plain,
                     target: self,
                     action: #selector(shareAllNotes)

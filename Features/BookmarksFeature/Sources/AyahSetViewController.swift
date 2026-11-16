@@ -146,7 +146,7 @@ private final class AyahSetMenuController {
             actions.append(
                 UIAction(
                     title: l("bookmarks.collections.rename"),
-                    image: UIImage(systemName: "pencil.line")
+                    image: NoorSystemImage.rename.uiImage
                 ) { [weak self] _ in
                     self?.viewModel.presentRename()
                 }
@@ -157,7 +157,7 @@ private final class AyahSetMenuController {
             actions.append(
                 UIAction(
                     title: l("button.delete"),
-                    image: UIImage(systemName: "xmark"),
+                    image: NoorSystemImage.delete.uiImage,
                     attributes: .destructive
                 ) { [weak self] _ in
                     guard let self else {

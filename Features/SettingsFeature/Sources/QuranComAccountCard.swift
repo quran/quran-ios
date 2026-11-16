@@ -57,7 +57,7 @@ struct QuranComAccountCard: View {
     private var unauthenticatedContent: some View {
         VStack(spacing: cardPadding) {
             HStack(alignment: .top, spacing: headerSpacing) {
-                Image(systemName: "arrow.up")
+                NoorSystemImage.accountSignIn.image
                     .font(.title3.weight(.semibold))
                     .foregroundStyle(Color.accentColor)
                     .frame(width: avatarSize, height: avatarSize)
@@ -206,7 +206,7 @@ struct QuranComAccountCard: View {
     }
 
     private var chevron: some View {
-        Image(systemName: "chevron.right")
+        NoorSystemImage.disclosure.image
             .font(.footnote.weight(.semibold))
             .foregroundStyle(Color.tertiaryLabel)
             .flipsForRightToLeftLayoutDirection(true)
@@ -220,7 +220,7 @@ struct QuranComAccountCard: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Color.caution)
                 Spacer(minLength: 0)
-                Image(systemName: "chevron.right")
+                NoorSystemImage.disclosure.image
                     .font(.footnote.weight(.semibold))
                     .foregroundStyle(Color.caution)
                     .accessibilityHidden(true)

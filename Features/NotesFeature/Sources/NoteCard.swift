@@ -120,7 +120,7 @@ struct NoteCard: View {
 
             Spacer(minLength: 0)
 
-            Image(systemName: "chevron.right")
+            NoorSystemImage.disclosure.image
                 .font(.subheadline.weight(.semibold))
                 .foregroundColor(.tertiaryLabel)
                 .flipsForRightToLeftLayoutDirection(true)

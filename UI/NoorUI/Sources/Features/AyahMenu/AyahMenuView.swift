@@ -589,7 +589,7 @@ private let previewActions = AyahMenuUI.Actions(
         AyahMenuView(dataObject: previewDataObject(
             highlightingColor: .green,
             state: .noted,
-            isTranslationView: true
+            isTranslationView: false
         ))
         Spacer()
     }

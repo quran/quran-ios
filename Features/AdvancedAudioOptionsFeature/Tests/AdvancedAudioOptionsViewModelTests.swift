@@ -7,6 +7,7 @@ import QueuePlayer
 import QuranAudio
 import QuranAudioKit
 import QuranKit
+import QuranTextKit
 import ReciterListFeature
 import XCTest
 @testable import AdvancedAudioOptionsFeature
@@ -19,12 +20,14 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         try await super.setUp()
         originalAudioEnd = AudioPreferences.shared.audioEnd
         AudioPreferences.shared.audioEnd = .juz
+        originalDimsOtherAyahs = QuranContentStatePreferences.shared.dimsOtherAyahs
     }
 
     override func tearDown() async throws {
         if let originalAudioEnd {
             AudioPreferences.shared.audioEnd = originalAudioEnd
         }
+        QuranContentStatePreferences.shared.dimsOtherAyahs = originalDimsOtherAyahs
         try await super.tearDown()
     }
 
@@ -532,6 +535,55 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
         XCTAssertEqual(AudioPreferences.shared.playbackRate, 1.25)
     }
 
+    // MARK: - Dim Other Ayahs
+
+    func test_init_seedsDimOtherAyahsFromThePreference() {
+        QuranContentStatePreferences.shared.dimsOtherAyahs = true
+
+        let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
+
+        XCTAssertTrue(sut.dimsOtherAyahs)
+    }
+
+    func test_dimOtherAyahs_savesThePreferenceRightAway() {
+        QuranContentStatePreferences.shared.dimsOtherAyahs = false
+        let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
+
+        sut.dimsOtherAyahs = true
+
+        XCTAssertTrue(QuranContentStatePreferences.shared.dimsOtherAyahs)
+    }
+
+    func test_dismiss_keepsDimOtherAyahsChange() {
+        QuranContentStatePreferences.shared.dimsOtherAyahs = false
+        let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
+
+        sut.dimsOtherAyahs = true
+        sut.dismiss()
+
+        XCTAssertTrue(QuranContentStatePreferences.shared.dimsOtherAyahs)
+    }
+
+    func test_play_keepsDimOtherAyahsChange() {
+        QuranContentStatePreferences.shared.dimsOtherAyahs = false
+        let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
+
+        sut.dimsOtherAyahs = true
+        sut.play()
+
+        XCTAssertTrue(QuranContentStatePreferences.shared.dimsOtherAyahs)
+    }
+
+    func test_play_withoutTouchingDimOtherAyahs_keepsThePreference() {
+        QuranContentStatePreferences.shared.dimsOtherAyahs = false
+        let sut = makeSUT(start: quran.firstVerse, end: quran.firstVerse)
+        QuranContentStatePreferences.shared.dimsOtherAyahs = true
+
+        sut.play()
+
+        XCTAssertTrue(QuranContentStatePreferences.shared.dimsOtherAyahs)
+    }
+
     // MARK: - RepetitionDelay
 
     func test_repetitionDelayComparable_sortsByIncreasingSeconds() {
@@ -576,6 +628,7 @@ final class AdvancedAudioOptionsViewModelTests: XCTestCase {
 
     private let quran = Quran.hafsMadani1405
     private var originalAudioEnd: AudioEnd?
+    private var originalDimsOtherAyahs = false
 
     private func ayah(_ sura: Int, _ ayah: Int) -> AyahNumber {
         AyahNumber(quran: quran, sura: sura, ayah: ayah)!

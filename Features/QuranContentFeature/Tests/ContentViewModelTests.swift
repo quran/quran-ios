@@ -23,11 +23,13 @@ final class ContentViewModelTests: XCTestCase {
         try await MobileSyncTestDatabase.shared.reset()
         #endif
         previousQuranMode = QuranContentStatePreferences.shared.quranMode
+        previousDimsOtherAyahs = QuranContentStatePreferences.shared.dimsOtherAyahs
         QuranContentStatePreferences.shared.quranMode = .arabic
     }
 
     override func tearDown() async throws {
         QuranContentStatePreferences.shared.quranMode = previousQuranMode
+        QuranContentStatePreferences.shared.dimsOtherAyahs = previousDimsOtherAyahs
         #if QURAN_SYNC
         try await MobileSyncTestDatabase.shared.reset()
         #endif
@@ -174,12 +176,34 @@ final class ContentViewModelTests: XCTestCase {
         XCTAssertNil(service.overlays.navigationTarget)
     }
 
+    // MARK: Dim Other Ayahs
+
+    func testOverlaysStartWithTheDimOtherAyahsPreference() {
+        QuranContentStatePreferences.shared.dimsOtherAyahs = true
+
+        let sut = makeSUT()
+
+        XCTAssertTrue(service.overlays.dimsOtherAyahs)
+        withExtendedLifetime(sut) { }
+    }
+
+    func testOverlaysFollowLaterDimOtherAyahsPreferenceChanges() {
+        QuranContentStatePreferences.shared.dimsOtherAyahs = false
+        let sut = makeSUT()
+
+        QuranContentStatePreferences.shared.dimsOtherAyahs = true
+
+        XCTAssertTrue(service.overlays.dimsOtherAyahs)
+        withExtendedLifetime(sut) { }
+    }
+
     // MARK: Private
 
     private let service = VerseOverlayService()
     private let scheduler = DispatchQueue.test
     private let container = AppDependenciesFake()
     private var previousQuranMode = QuranMode.arabic
+    private var previousDimsOtherAyahs = false
 
     private func verse(_ ayah: Int) -> AyahNumber {
         AyahNumber(quran: .hafsMadani1405, sura: 2, ayah: ayah)!

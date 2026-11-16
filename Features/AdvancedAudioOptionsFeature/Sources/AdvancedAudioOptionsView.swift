@@ -45,6 +45,7 @@ private struct AdvancedAudioOptionsRootView: View {
             verseDelay: $viewModel.verseDelay,
             repetitionDelay: $viewModel.repetitionDelay,
             playbackRate: viewModel.playbackRate,
+            dimsOtherAyahs: $viewModel.dimsOtherAyahs,
             dismiss: { viewModel.dismiss() },
             play: { viewModel.play() },
             updateFromVerseTo: { viewModel.updateFromVerseTo($0) },
@@ -70,6 +71,7 @@ struct AdvancedAudioOptionsRootViewUI: View {
     @Binding var verseDelay: VerseDelay
     @Binding var repetitionDelay: RepetitionDelay
     let playbackRate: Float
+    @Binding var dimsOtherAyahs: Bool
     let dismiss: @MainActor @Sendable () -> Void
     let play: @MainActor @Sendable () -> Void
     let updateFromVerseTo: ItemAction<AyahNumber>
@@ -142,6 +144,14 @@ struct AdvancedAudioOptionsRootViewUI: View {
                 delay: $repetitionDelay,
                 delayLabel: \.localizedDescription
             )
+
+            NoorBasicSection(footer: l("audio.dim-other-ayahs.footer")) {
+                NoorToggleRow(
+                    title: l("audio.dim-other-ayahs.title"),
+                    image: .dimOtherAyahs,
+                    isOn: $dimsOtherAyahs
+                )
+            }
         }
         .noorListIconColumn()
         .navigationTitle(l("audio.options"))

@@ -491,6 +491,14 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Audioni internet orqali ijro etish";
 // Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "Boshqa oyatlarni xiralashtirish";
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "Audio ijro etilayotganda, tilovat qilinayotgan oyatdan boshqa barcha oyatlarni xiralashtiradi. Darhol qo‘llaniladi.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "Audio ijro etilayotganda, tilovat qilinayotgan oyatdan boshqa barcha oyatlarni xiralashtiradi.";
+// Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Audio ijrosi";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Ijro joriy sahifa oxirigacha davom etadi. Internet orqali ijro oʻchiq boʻlsa, bu oyatlar avval yuklab olinadi; internet orqali ijro joyni tejaydi, ammo internet aloqasini talab qiladi.";

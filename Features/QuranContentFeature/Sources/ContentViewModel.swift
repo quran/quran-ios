@@ -90,6 +90,11 @@ public final class ContentViewModel: ObservableObject {
             set: { contentStatePreferences.quranMode = $0 }
         )
 
+        overlays.dimsOtherAyahs = contentStatePreferences.dimsOtherAyahs
+        contentStatePreferences.$dimsOtherAyahs
+            .sink { [weak self] in self?.overlays.dimsOtherAyahs = $0 }
+            .store(in: &cancellables)
+
         $overlays
             .zip($overlays.dropFirst())
             // `VerseOverlayService` publishes before storing; a page change that writes overlays

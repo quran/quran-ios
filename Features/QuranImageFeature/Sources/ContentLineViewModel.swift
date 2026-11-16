@@ -36,6 +36,7 @@ final class ContentLineViewModel: ObservableObject {
         showLineDividers = reading.usesLinePageDividers && contentStatePreferences.showLinePageDividers
         linePageMetrics = reading.linePageMetrics ?? .madaniLinePages(widthParameter: 1080)
         overlays = overlayService.overlays.restricted(to: page)
+        undimmedVerses = overlayService.overlays.undimmedVerses(on: page)
 
         geometryData = LinePageGeometryData(
             metrics: linePageMetrics,
@@ -49,6 +50,12 @@ final class ContentLineViewModel: ObservableObject {
             .map { $0.restricted(to: page) }
             .removeDuplicates()
             .sink { [weak self] in self?.overlays = $0 }
+            .store(in: &cancellables)
+
+        overlayService.$overlays
+            .map { $0.undimmedVerses(on: page) }
+            .removeDuplicates()
+            .sink { [weak self] in self?.undimmedVerses = $0 }
             .store(in: &cancellables)
 
         contentStatePreferences.$showLinePageSidelines
@@ -77,6 +84,7 @@ final class ContentLineViewModel: ObservableObject {
     @Published var assets: LinePageAssets?
     @Published private(set) var geometryData: LinePageGeometryData
     @Published private var overlays: VerseOverlays
+    @Published private(set) var undimmedVerses: Set<AyahNumber>?
     @Published var scrollToVerse: AyahNumber?
 
     var imageRenderingMode: QuranThemedImage.RenderingMode {

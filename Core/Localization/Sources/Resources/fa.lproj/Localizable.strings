@@ -491,6 +491,14 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "پخش جریانی صوت";
 // Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "کم‌رنگ کردن آیات دیگر";
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "هنگام پخش صوت، همهٔ آیات به‌جز آیهٔ در حال تلاوت را کم‌رنگ می‌کند. بلافاصله اعمال می‌شود.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "هنگام پخش صوت، همهٔ آیات به‌جز آیهٔ در حال تلاوت را کم‌رنگ می‌کند.";
+// Metadata: Translated by AI; human review required.
 "audio.playback.title" = "پخش صوت";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "پخش تا انتهای صفحهٔ فعلی ادامه می‌یابد. وقتی پخش جریانی خاموش است، آن آیه‌ها ابتدا دانلود می‌شوند؛ پخش جریانی در فضا صرفه‌جویی می‌کند اما به اتصال اینترنت نیاز دارد.";

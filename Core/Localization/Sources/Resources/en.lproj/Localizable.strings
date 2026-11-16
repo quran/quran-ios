@@ -205,6 +205,11 @@
 "audio.end-at.description" = "Choosing an option other than Custom also updates your Play up to setting.";
 
 "audio.streaming.title" = "Stream Audio";
+"audio.dim-other-ayahs.title" = "Dim Other Ayahs";
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
+"audio.dim-other-ayahs.footer" = "While audio plays, dims every ayah except the one being recited. Applies right away.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+"audio.dim-other-ayahs.description" = "While audio plays, dims every ayah except the one being recited.";
 "audio.playback.title" = "Audio Playback";
 "audio.playback.footer.page" = "Playback continues to the end of the current Page. With streaming off, those verses download first; streaming saves space but needs an internet connection.";
 "audio.playback.footer.quarter" = "Playback continues to the end of the current ¼ Hizb. With streaming off, those verses download first; streaming saves space but needs an internet connection.";

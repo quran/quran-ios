@@ -489,6 +489,14 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Transmitir audio";
 // Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "Atenuar otras aleyas";
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "Mientras se reproduce el audio, atenúa todas las aleyas excepto la que se está recitando. Se aplica de inmediato.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "Mientras se reproduce el audio, atenúa todas las aleyas excepto la que se está recitando.";
+// Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Reproducción de audio";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "La reproducción continúa hasta el final de la página actual. Sin transmisión, esos versos se descargan primero; transmitir ahorra espacio, pero requiere conexión a internet.";

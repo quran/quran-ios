@@ -55,6 +55,7 @@ public enum NoorSystemImage: String {
     case repeatRange = "repeat"
     case pauseDelay = "timer"
     case stream = "cloud"
+    case dimOtherAyahs = "text.viewfinder"
     case infinity
     case storageFull = "externaldrive.badge.exclamationmark"
     case externalLink = "arrow.up.right"

@@ -406,6 +406,14 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Audio streamen";
 // Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "Andere ayahs dimmen";
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "Dimt tijdens het afspelen alle ayahs behalve de ayah die wordt gereciteerd. Wordt meteen toegepast.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "Dimt tijdens het afspelen alle ayahs behalve de ayah die wordt gereciteerd.";
+// Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Audioweergave";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Het afspelen gaat door tot het einde van de huidige pagina. Zonder streamen worden die verzen eerst gedownload; streamen bespaart ruimte, maar vereist een internetverbinding.";

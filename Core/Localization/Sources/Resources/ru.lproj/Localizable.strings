@@ -489,6 +489,14 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Потоковое аудио";
 // Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "Приглушать другие аяты";
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "Во время воспроизведения приглушает все аяты, кроме читаемого. Применяется сразу.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "Во время воспроизведения приглушает все аяты, кроме читаемого.";
+// Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Воспроизведение аудио";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Воспроизведение продолжается до конца текущей страницы. Без потокового воспроизведения эти аяты сначала скачиваются; потоковое воспроизведение экономит место, но требует подключения к интернету.";

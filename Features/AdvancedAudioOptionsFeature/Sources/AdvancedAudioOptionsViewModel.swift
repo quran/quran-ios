@@ -41,6 +41,7 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
         verseDelay = options.verseDelay
         repetitionDelay = options.repetitionDelay
         playbackRate = AudioPreferences.shared.playbackRate
+        dimsOtherAyahs = QuranContentStatePreferences.shared.dimsOtherAyahs
         endAt = Self.deduceEndAt(
             from: options.start,
             to: normalizedEnd,
@@ -59,6 +60,11 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     @Published var reciter: Reciter
     @Published var endAt: EndAtChoice
     @Published var playbackRate: Float
+
+    /// Saved right away, unlike the other options, which apply on Play.
+    @Published var dimsOtherAyahs: Bool {
+        didSet { saveDimsOtherAyahs() }
+    }
 
     @Published var repetitionDelay: RepetitionDelay
     @Published var verseDelay: VerseDelay
@@ -155,6 +161,11 @@ final class AdvancedAudioOptionsViewModel: ObservableObject {
     private static func matches(_ audioEnd: AudioEnd, start: AyahNumber, end: AyahNumber) -> Bool {
         end == audioEnd.boundaryLastAyahFinder.findLastAyah(startAyah: start)
             || end == AudioEndLastAyahFinder(audioEnd: audioEnd).findLastAyah(startAyah: start)
+    }
+
+    private func saveDimsOtherAyahs() {
+        guard QuranContentStatePreferences.shared.dimsOtherAyahs != dimsOtherAyahs else { return }
+        QuranContentStatePreferences.shared.dimsOtherAyahs = dimsOtherAyahs
     }
 
     private func applyEndAt() {

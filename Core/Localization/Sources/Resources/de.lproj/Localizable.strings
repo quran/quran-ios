@@ -489,6 +489,14 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Audio streamen";
 // Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "Andere Ayahs abdunkeln";
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "Dunkelt während der Wiedergabe alle Ayahs außer der gerade rezitierten ab. Wird sofort übernommen.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "Dunkelt während der Wiedergabe alle Ayahs außer der gerade rezitierten ab.";
+// Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Audiowiedergabe";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Die Wiedergabe läuft bis zum Ende der aktuellen Seite. Ohne Streaming werden diese Verse zuerst heruntergeladen; Streaming spart Speicherplatz, braucht aber eine Internetverbindung.";

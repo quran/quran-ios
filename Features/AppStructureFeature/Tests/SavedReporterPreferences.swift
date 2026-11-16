@@ -56,6 +56,7 @@ struct SavedReporterPreferences {
         "twoPagesEnabled",
         "showArabicInTranslation",
         "ayahIndicators",
+        "dimsOtherAyahs",
         // SelectedTranslationsPreferences.swift
         "selectedTranslations",
         // FontSizePreferences.swift

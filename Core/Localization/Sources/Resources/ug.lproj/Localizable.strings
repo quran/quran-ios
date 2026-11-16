@@ -492,6 +492,14 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "ئاۋازنى تور ئارقىلىق قويۇش";
 // Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "باشقا ئايەتلەرنى سۇسلاشتۇرۇش";
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "ئاۋاز قويۇلۇۋاتقاندا، ئوقۇلۇۋاتقان ئايەتتىن باشقا ھەممە ئايەتلەرنى سۇسلاشتۇرىدۇ. دەرھال قوللىنىلىدۇ.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "ئاۋاز قويۇلۇۋاتقاندا، ئوقۇلۇۋاتقان ئايەتتىن باشقا ھەممە ئايەتلەرنى سۇسلاشتۇرىدۇ.";
+// Metadata: Translated by AI; human review required.
 "audio.playback.title" = "ئاۋاز قويۇش";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "قويۇش نۆۋەتتىكى بەتنىڭ ئاخىرىغىچە داۋاملىشىدۇ. تور ئارقىلىق قويۇش تاقالغاندا، ئۇ ئايەتلەر ئالدى بىلەن چۈشۈرۈلىدۇ؛ تور ئارقىلىق قويۇش بوشلۇق تېجەيدۇ، ئەمما تور ئۇلىنىشىنى تەلەپ قىلىدۇ.";

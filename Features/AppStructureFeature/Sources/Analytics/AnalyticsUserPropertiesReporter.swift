@@ -215,6 +215,10 @@ final class AnalyticsUserPropertiesReporter {
         observe(.audioStreaming, changes: audio.$streamingEnabled) {
             AnalyticsUserPropertyValue.onOff(audio.streamingEnabled)
         }
+        let content = QuranContentStatePreferences.shared
+        observe(.dimOtherAyahs, changes: content.$dimsOtherAyahs) {
+            AnalyticsUserPropertyValue.onOff(content.dimsOtherAyahs)
+        }
 
         ReciterPreferences.shared.$lastSelectedReciterId
             .receive(on: DispatchQueue.main)

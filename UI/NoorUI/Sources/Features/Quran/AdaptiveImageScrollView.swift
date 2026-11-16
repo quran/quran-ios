@@ -119,6 +119,11 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                     #endif
                 }
             }
+            .overlay {
+                if let undimmedLineRects = layout.undimmedLineRects {
+                    QuranAyahDim(cutouts: undimmedLineRects)
+                }
+            }
             .onGlobalFrameChanged { frame in
                 if imageViewSize != frame.size {
                     imageViewSize = frame.size

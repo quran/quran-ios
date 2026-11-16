@@ -27,11 +27,18 @@ class ContentImageViewModel: ObservableObject {
         self.imageDataService = imageDataService
         self.overlayService = overlayService
         overlays = overlayService.overlays.restricted(to: page)
+        undimmedVerses = overlayService.overlays.undimmedVerses(on: page)
 
         overlayService.$overlays
             .map { $0.restricted(to: page) }
             .removeDuplicates()
             .sink { [weak self] in self?.overlays = $0 }
+            .store(in: &cancellables)
+
+        overlayService.$overlays
+            .map { $0.undimmedVerses(on: page) }
+            .removeDuplicates()
+            .sink { [weak self] in self?.undimmedVerses = $0 }
             .store(in: &cancellables)
 
         overlayService.scrollRequests
@@ -52,6 +59,7 @@ class ContentImageViewModel: ObservableObject {
     @Published private var suraHeaderLocations: [SuraHeaderLocation] = []
     @Published private var ayahNumberLocations: [AyahNumberLocation] = []
     @Published private var overlays: VerseOverlays
+    @Published private var undimmedVerses: Set<AyahNumber>?
 
     var imageRenderingMode: QuranThemedImage.RenderingMode {
         reading.usesInvertedQuranImageRenderingInDarkMode ? .invertInDarkMode : .tinted
@@ -64,7 +72,8 @@ class ContentImageViewModel: ObservableObject {
             drawsAyahNumbersAndSuraHeaders: reading.drawsAyahNumbersAndSuraHeaders,
             wordFrames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
             verseHighlights: overlays.versesByHighlights().mapValues { Color($0) },
-            wordHighlight: overlays.pointedWord
+            wordHighlight: overlays.pointedWord,
+            undimmedVerses: undimmedVerses
         )
     }
 

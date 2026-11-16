@@ -9,6 +9,7 @@ import Localization
 import QueuePlayer
 import QuranAudio
 import QuranAudioKit
+import QuranTextKit
 import ReciterListFeature
 import ReciterService
 import ReciterServiceFake
@@ -95,6 +96,15 @@ final class AudioPlaybackViewModelTests: XCTestCase {
         XCTAssertEqual(audioPreferences.repetitionDelay, .fiveSeconds)
     }
 
+    func test_dimOtherAyahs_savesThePreference() {
+        contentStatePreferences.dimsOtherAyahs = false
+        let sut = makeSUT()
+
+        sut.dimsOtherAyahs = true
+
+        XCTAssertTrue(contentStatePreferences.dimsOtherAyahs)
+    }
+
     // MARK: Footer
 
     func test_playbackFooter_followsPlayUpTo() {
@@ -144,6 +154,23 @@ final class AudioPlaybackViewModelTests: XCTestCase {
         XCTAssertEqual(sut.repetitionDelay, .tenSeconds)
     }
 
+    func test_dimOtherAyahs_isSeededFromThePreference() {
+        contentStatePreferences.dimsOtherAyahs = true
+
+        let sut = makeSUT()
+
+        XCTAssertTrue(sut.dimsOtherAyahs)
+    }
+
+    func test_dimOtherAyahs_followsPreferenceChangesMadeElsewhere() {
+        contentStatePreferences.dimsOtherAyahs = false
+        let sut = makeSUT()
+
+        contentStatePreferences.dimsOtherAyahs = true
+
+        XCTAssertTrue(sut.dimsOtherAyahs)
+    }
+
     // MARK: Reciter
 
     func test_reciter_isTheSavedReciter() async {
@@ -184,6 +211,7 @@ final class AudioPlaybackViewModelTests: XCTestCase {
 
     private let audioPreferences = AudioPreferences.shared
     private let reciterPreferences = ReciterPreferences.shared
+    private let contentStatePreferences = QuranContentStatePreferences.shared
 
     private func makeSUT() -> AudioPlaybackViewModel {
         let bundle = SystemBundleFake()
@@ -199,7 +227,7 @@ final class AudioPlaybackViewModelTests: XCTestCase {
     }
 }
 
-/// The audio preferences live in the shared user defaults; tests put them back.
+/// The audio and Dim Other Ayahs preferences live in the shared user defaults; tests put them back.
 @MainActor
 private struct SavedPreferences {
     // MARK: Lifecycle
@@ -213,6 +241,7 @@ private struct SavedPreferences {
         verseDelay = audio.verseDelay
         listRuns = audio.listRuns
         repetitionDelay = audio.repetitionDelay
+        dimsOtherAyahs = QuranContentStatePreferences.shared.dimsOtherAyahs
         lastSelectedReciterId = ReciterPreferences.shared.lastSelectedReciterId
         let recentReciterIds = ReciterPreferences.shared.recentReciterIds
         restoreRecentReciters = { ReciterPreferences.shared.recentReciterIds = recentReciterIds }
@@ -229,6 +258,7 @@ private struct SavedPreferences {
         audio.verseDelay = verseDelay
         audio.listRuns = listRuns
         audio.repetitionDelay = repetitionDelay
+        QuranContentStatePreferences.shared.dimsOtherAyahs = dimsOtherAyahs
         ReciterPreferences.shared.lastSelectedReciterId = lastSelectedReciterId
         restoreRecentReciters()
     }
@@ -242,6 +272,7 @@ private struct SavedPreferences {
     private let verseDelay: VerseDelay
     private let listRuns: Runs
     private let repetitionDelay: RepetitionDelay
+    private let dimsOtherAyahs: Bool
     private let lastSelectedReciterId: Int
     private let restoreRecentReciters: () -> Void
 }

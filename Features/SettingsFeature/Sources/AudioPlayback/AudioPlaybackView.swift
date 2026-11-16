@@ -23,6 +23,7 @@ struct AudioPlaybackView: View {
             playbackRate: $viewModel.playbackRate,
             audioEnd: $viewModel.audioEnd,
             streamingEnabled: $viewModel.streamingEnabled,
+            dimsOtherAyahs: $viewModel.dimsOtherAyahs,
             verseRuns: $viewModel.verseRuns,
             verseDelay: $viewModel.verseDelay,
             listRuns: $viewModel.listRuns,
@@ -41,6 +42,7 @@ private struct AudioPlaybackViewUI: View {
     @Binding var playbackRate: Float
     @Binding var audioEnd: AudioEnd
     @Binding var streamingEnabled: Bool
+    @Binding var dimsOtherAyahs: Bool
     @Binding var verseRuns: Runs
     @Binding var verseDelay: VerseDelay
     @Binding var listRuns: Runs
@@ -98,6 +100,14 @@ private struct AudioPlaybackViewUI: View {
                 delay: $repetitionDelay,
                 delayLabel: \.localizedDescription
             )
+
+            NoorBasicSection(footer: l("audio.dim-other-ayahs.description")) {
+                NoorToggleRow(
+                    title: l("audio.dim-other-ayahs.title"),
+                    image: .dimOtherAyahs,
+                    isOn: $dimsOtherAyahs
+                )
+            }
         }
         .noorListIconColumn()
         .task { await start() }
@@ -109,6 +119,7 @@ private struct AudioPlaybackViewUI: View {
         @State var playbackRate: Float = 1
         @State var audioEnd = AudioEnd.page
         @State var streamingEnabled = false
+        @State var dimsOtherAyahs = false
         @State var verseRuns = Runs.finite(1)
         @State var verseDelay = VerseDelay.none
         @State var listRuns = Runs.indefinite
@@ -120,6 +131,7 @@ private struct AudioPlaybackViewUI: View {
                 playbackRate: $playbackRate,
                 audioEnd: $audioEnd,
                 streamingEnabled: $streamingEnabled,
+                dimsOtherAyahs: $dimsOtherAyahs,
                 verseRuns: $verseRuns,
                 verseDelay: $verseDelay,
                 listRuns: $listRuns,

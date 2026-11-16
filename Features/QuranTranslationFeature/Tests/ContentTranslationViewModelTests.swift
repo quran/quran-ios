@@ -230,6 +230,58 @@ final class ContentTranslationViewModelTests: XCTestCase {
         XCTAssertEqual(Set(sut.highlights.keys), [verse])
     }
 
+    func testUndimmedVersesAreThePlayingVerseOnThisPage() {
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        let service = VerseOverlayService()
+        let sut = makeSUT(overlayService: service)
+        sut.verses = verses
+
+        service.overlays.dimsOtherAyahs = true
+        service.overlays.playingVerses = [verses[1]]
+
+        XCTAssertEqual(sut.undimmedVerses, [verses[1]])
+    }
+
+    func testUndimmedVersesBecomeNilWhenDimOtherAyahsTurnsOff() {
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        let service = VerseOverlayService()
+        service.overlays.dimsOtherAyahs = true
+        service.overlays.playingVerses = [verses[1]]
+        let sut = makeSUT(overlayService: service)
+        sut.verses = verses
+
+        service.overlays.dimsOtherAyahs = false
+
+        XCTAssertNil(sut.undimmedVerses)
+    }
+
+    func testUndimmedVersesAreEmptyWhenTheRecitedVerseIsOnAnotherPage() {
+        let verses = Quran.hafsMadani1405.pages[0].verses
+        let recited = Quran.hafsMadani1405.pages[1].firstVerse
+        let service = VerseOverlayService()
+        let sut = makeSUT(overlayService: service)
+        sut.verses = verses
+
+        service.overlays.dimsOtherAyahs = true
+        service.overlays.playingVerses = [recited]
+
+        XCTAssertEqual(sut.undimmedVerses, [])
+    }
+
+    func testUndimmedVersesFollowChangesToDisplayedVerses() {
+        let first = Quran.hafsMadani1405.pages[0].verses
+        let second = Quran.hafsMadani1405.pages[1].verses
+        let service = VerseOverlayService()
+        service.overlays.dimsOtherAyahs = true
+        service.overlays.playingVerses = [second[0]]
+        let sut = makeSUT(overlayService: service)
+        sut.verses = first
+
+        sut.verses = second
+
+        XCTAssertEqual(sut.undimmedVerses, [second[0]])
+    }
+
     func testReadingUpdatesFromPreferences() {
         let preferences = ReadingPreferences.shared
         let originalReading = preferences.reading

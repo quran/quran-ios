@@ -472,6 +472,14 @@
 // Metadata: Translated by ChatGPT; human review required.
 "audio.streaming.title" = "Strim audio";
 // Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.title" = "Malapkan ayat lain";
+// Footer under the Dim Other Ayahs toggle in Audio Options: what it does, then that it applies without tapping Play.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.footer" = "Semasa audio dimainkan, malapkan setiap ayat kecuali ayat yang sedang dibacakan. Digunakan serta-merta.";
+// Footer under the Dim Other Ayahs toggle in Settings › Audio Playback.
+// Metadata: Translated by AI; human review required.
+"audio.dim-other-ayahs.description" = "Semasa audio dimainkan, malapkan setiap ayat kecuali ayat yang sedang dibacakan.";
+// Metadata: Translated by AI; human review required.
 "audio.playback.title" = "Main balik audio";
 // Metadata: Translated by AI; human review required.
 "audio.playback.footer.page" = "Main balik diteruskan hingga akhir halaman semasa. Jika penstriman dimatikan, ayat-ayat itu dimuat turun dahulu; penstriman menjimatkan ruang tetapi memerlukan sambungan internet.";

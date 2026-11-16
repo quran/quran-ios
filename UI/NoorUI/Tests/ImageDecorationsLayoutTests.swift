@@ -47,6 +47,27 @@ final class ImageDecorationsLayoutTests: XCTestCase {
         XCTAssertEqual(layout.wordHighlight?.color, VerseOverlays.wordHighlightColor)
     }
 
+    func testPageWithoutDimmingHasNoUndimmedLineRects() {
+        let layout = makeLayout(scale: WordFrameScale(scale: 0.5, xOffset: 10, yOffset: 20))
+
+        XCTAssertNil(layout.undimmedLineRects)
+    }
+
+    func testUndimmedLineRectsAreTheUndimmedVersesHighlightRects() {
+        let scale = WordFrameScale(scale: 0.5, xOffset: 10, yOffset: 20)
+        let highlighted = makeLayout(scale: scale, verseHighlights: [verses[0]: .yellow, verses[1]: .yellow])
+
+        let layout = makeLayout(scale: scale, undimmedVerses: [verses[0], verses[1]])
+
+        XCTAssertEqual(layout.undimmedLineRects, highlighted.verseHighlights.flatMap(\.lineRects))
+    }
+
+    func testUndimmedLineRectsAreEmptyWhenNoUndimmedVerseIsOnThePage() {
+        let layout = makeLayout(scale: WordFrameScale(scale: 0.5, xOffset: 10, yOffset: 20), undimmedVerses: [verses[2]])
+
+        XCTAssertEqual(layout.undimmedLineRects, [])
+    }
+
     private var verses: [AyahNumber] {
         Quran.hafsMadani1405.suras[1].verses
     }
@@ -63,7 +84,8 @@ final class ImageDecorationsLayoutTests: XCTestCase {
     private func makeLayout(
         scale: WordFrameScale,
         verseHighlights: [AyahNumber: Color] = [:],
-        wordHighlight: Word? = nil
+        wordHighlight: Word? = nil,
+        undimmedVerses: Set<AyahNumber>? = nil
     ) -> ImageDecorationsLayout {
         ImageDecorationsLayout(
             decorations: ImageDecorations(
@@ -72,7 +94,8 @@ final class ImageDecorationsLayoutTests: XCTestCase {
                 drawsAyahNumbersAndSuraHeaders: false,
                 wordFrames: wordFrames,
                 verseHighlights: verseHighlights,
-                wordHighlight: wordHighlight
+                wordHighlight: wordHighlight,
+                undimmedVerses: undimmedVerses
             ),
             imageSize: CGSize(width: 200, height: 300),
             scale: scale

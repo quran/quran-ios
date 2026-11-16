@@ -47,6 +47,13 @@ public final class ContentTranslationViewModel: ObservableObject {
 
         overlayService.$overlays
             .combineLatest($verses)
+            .map { overlays, verses in overlays.undimmedVerses?.intersection(verses) }
+            .removeDuplicates()
+            .sink { [weak self] in self?.undimmedVerses = $0 }
+            .store(in: &cancellables)
+
+        overlayService.$overlays
+            .combineLatest($verses)
             .map { overlays, verses in
                 let colors = overlays.versesByHighlights()
                 return Dictionary(uniqueKeysWithValues: Set(verses).compactMap { verse in
@@ -138,6 +145,8 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     @Published var highlights: [AyahNumber: Color]
 
+    @Published private(set) var undimmedVerses: Set<AyahNumber>?
+
     #if QURAN_SYNC
     @Published private(set) var indicatorsByVerse: [AyahNumber: Set<AyahIndicator>] = [:]
     #endif
@@ -168,7 +177,10 @@ public final class ContentTranslationViewModel: ObservableObject {
         var items: [TranslationItem] = []
 
         for (verse, verseText) in verseTexts.sorted(by: { $0.key < $1.key }) {
-            let color = highlights[verse]
+            let decoration = TranslationVerseDecoration(
+                color: highlights[verse],
+                isDimmed: undimmedVerses?.contains(verse) == false
+            )
 
             // Add sura name, if a new sura
             if verse.sura.firstVerse == verse {
@@ -180,14 +192,14 @@ public final class ContentTranslationViewModel: ObservableObject {
                             quranFont: quranFont,
                             arabicFontSize: arabicFontSize
                         ),
-                        color
+                        decoration
                     )
                 )
             }
 
-            items.append(.verseNumber(verseNumber(verse: verse), color))
+            items.append(.verseNumber(verseNumber(verse: verse), decoration))
             if showsArabicText {
-                items.append(.arabicText(arabicText(verse: verse, verseText: verseText, quranFont: quranFont), color))
+                items.append(.arabicText(arabicText(verse: verse, verseText: verseText, quranFont: quranFont), decoration))
             }
 
             for (index, translation) in translations.enumerated() {
@@ -202,7 +214,7 @@ public final class ContentTranslationViewModel: ObservableObject {
                                 translation: translation,
                                 reference: reference,
                                 translationFontSize: translationFontSize
-                            ), color
+                            ), decoration
                         )
                     )
                 case .string(let string):
@@ -232,7 +244,7 @@ public final class ContentTranslationViewModel: ObservableObject {
                                     chunkIndex: chunkIndex,
                                     readMore: chunkIndex == chunks.count - 1 ? readMore : false, // Add read more to the last chunk.
                                     translationFontSize: translationFontSize
-                                ), color
+                                ), decoration
                             )
                         )
                     }
@@ -246,7 +258,7 @@ public final class ContentTranslationViewModel: ObservableObject {
                                 verse: verse,
                                 translation: translation,
                                 translationFontSize: translationFontSize
-                            ), color
+                            ), decoration
                         )
                     )
                 }
@@ -254,7 +266,7 @@ public final class ContentTranslationViewModel: ObservableObject {
 
             let isLastVerseInTheView = loadedContent.verses.last == verse
             if !isLastVerseInTheView {
-                items.append(.verseSeparator(TranslationVerseSeparator(verse: verse), color))
+                items.append(.verseSeparator(TranslationVerseSeparator(verse: verse), decoration))
             }
         }
 

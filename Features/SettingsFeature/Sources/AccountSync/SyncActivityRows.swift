@@ -59,18 +59,18 @@ struct SyncStatusIcon: View {
     var body: some View {
         switch icon {
         case .synced:
-            Image(systemName: "checkmark.circle")
+            NoorSystemImage.syncSucceeded.image
                 .foregroundStyle(Color.green)
                 .accessibilityHidden(true)
         case .syncing:
             ProgressView()
                 .accessibilityHidden(true)
         case .failed:
-            Image(systemName: "exclamationmark.circle")
+            NoorSystemImage.syncStatusFailed.image
                 .foregroundStyle(Color.red)
                 .accessibilityHidden(true)
         case .held:
-            Image(systemName: "exclamationmark.triangle")
+            NoorSystemImage.syncStatusHeld.image
                 .foregroundStyle(Color.caution)
                 .accessibilityHidden(true)
         }
@@ -173,11 +173,11 @@ struct SyncRunRowView: View {
     private var outcomeIcon: some View {
         switch row.outcome {
         case .succeeded:
-            Image(systemName: "checkmark.circle").foregroundStyle(Color.green)
+            NoorSystemImage.syncSucceeded.image.foregroundStyle(Color.green)
         case .partial:
-            Image(systemName: "arrow.down.circle").foregroundStyle(Color.caution)
+            NoorSystemImage.syncRunPartial.image.foregroundStyle(Color.caution)
         case .failed:
-            Image(systemName: "xmark.circle").foregroundStyle(Color.red)
+            NoorSystemImage.syncRunFailed.image.foregroundStyle(Color.red)
         }
     }
 }

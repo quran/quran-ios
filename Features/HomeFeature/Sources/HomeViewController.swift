@@ -77,7 +77,7 @@ final class HomeViewController: UIHostingController<HomeView> {
     private func configureNavigationBarButtons() {
         navigationItem.rightBarButtonItems = [
             NavigationBarButton.secondary(
-                systemName: NoorSystemImage.mushafs.rawValue,
+                image: .mushafs,
                 accessibilityLabel: l("reading.selector.title"),
                 glassSymbolScale: .medium
             ) { [weak self] in
@@ -86,7 +86,7 @@ final class HomeViewController: UIHostingController<HomeView> {
         ]
 
         navigationItem.leftBarButtonItem = NavigationBarButton.secondary(
-            systemName: "arrow.up.arrow.down",
+            image: .sortOrder,
             accessibilityLabel: l("home.sort-order.reverse"),
             glassSymbolScale: .medium
         ) { [weak self] in

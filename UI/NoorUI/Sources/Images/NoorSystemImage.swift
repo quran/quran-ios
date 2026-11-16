@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 public enum NoorSystemImage: String {
     case audio = "headphones"
@@ -65,9 +66,69 @@ public enum NoorSystemImage: String {
     case rotateToPortrait = "rectangle.portrait.rotate"
     case rotateToLandscape = "rectangle.landscape.rotate"
 
+    // MARK: Navigation and disclosure
+
+    case navigateBack = "chevron.backward"
+    case disclosure = "chevron.right"
+    case expand = "chevron.down"
+    case collapse = "chevron.up"
+    case popUpMenu = "chevron.up.chevron.down"
+    case more = "ellipsis"
+    case moreCircle = "ellipsis.circle"
+    case sortOrder = "arrow.up.arrow.down"
+    /// Quran pages turn right to left, so the next verse points left and `previousVerse` points right.
+    case nextVerse = "chevron.left"
+
+    // MARK: Actions
+
+    case copy = "doc.on.doc"
+    case rename = "pencil.line"
+    case closeCircle = "xmark.circle"
+    case closeCircleFilled = "xmark.circle.fill"
+
+    // MARK: Themes
+
+    case lightTheme = "sun.horizon.fill"
+    case darkTheme = "moon.stars.fill"
+
+    // MARK: Reading selector
+
+    case readingFeatureSupported = "checkmark.seal"
+    case readingFeatureMissing = "xmark.seal"
+
+    // MARK: Account and sync
+
+    case accountSignIn = "arrow.up"
+    case cloudSyncInfo = "link.icloud"
+    case syncSucceeded = "checkmark.circle"
+    case syncStatusFailed = "exclamationmark.circle"
+    case syncStatusHeld = "exclamationmark.triangle"
+    case syncRunPartial = "arrow.down.circle"
+
+    // MARK: Sync reveal
+
+    case syncAcrossDevices = "arrow.triangle.2.circlepath"
+    case iCloud = "icloud"
+    case migrationArrow = "arrow.forward"
+    case iPhone = "iphone"
+    case iPad = "ipad"
+
     // MARK: Public
+
+    // Raw values must be unique, so a symbol that means something else in another place is an alias.
+
+    public static var previousVerse: NoorSystemImage { .disclosure }
+    public static var delete: NoorSystemImage { .cancel }
+    public static var autoTheme: NoorSystemImage { .appearance }
+    public static var syncRunFailed: NoorSystemImage { .closeCircle }
+    public static var study: NoorSystemImage { .book }
+    public static var website: NoorSystemImage { .translation }
 
     public var image: Image {
         Image(systemName: rawValue)
+    }
+
+    public var uiImage: UIImage? {
+        UIImage(systemName: rawValue)
     }
 }

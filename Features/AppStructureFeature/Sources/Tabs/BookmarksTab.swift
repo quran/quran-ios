@@ -57,8 +57,8 @@ final class BookmarksTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
         UITabBarItem(
             title: lAndroid("menu_bookmarks"),
-            image: .symbol(NoorSystemImage.bookmarkOutline.rawValue),
-            selectedImage: .symbol(NoorSystemImage.bookmark.rawValue)
+            image: NoorSystemImage.bookmarkOutline.uiImage,
+            selectedImage: NoorSystemImage.bookmark.uiImage
         )
     }
 }

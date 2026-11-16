@@ -35,6 +35,7 @@ Keeping these commands green locally should keep the CI workflow green as well.
 - Prefer `NoorAnimation.standard` for SwiftUI animations and `NoorAnimation.animate` for UIKit animations unless there is a clear reason for different behavior. Preserve Reduce Motion handling and intentional animation suppression.
 - Do not add a NoorUI dependency to lower-level modules such as UIx.
 - Use NoorUI navigation-action components instead of constructing feature-local buttons.
+- Name SF Symbols through `NoorSystemImage`, never string literals: `.image` in SwiftUI, `.uiImage` in UIKit. Add cases named by meaning; when the glyph already has a case with another meaning, add a `static var` alias. Prefer an SF Symbol to a new bundled image, and use `NoorImage` only for custom assets with no SF Symbol equivalent. `make format-lint` enforces this outside UIx, tests and `#Preview`.
 - Keep Edit, Close, overflow, and secondary navigation-bar actions neutral. Reserve the app tint for Done and primary actions.
 - `NoorListIcon`/`NoorListItem` leading icons take the app tint by default. Pass an explicit color for icons that carry meaning (bookmark and collection colors) or state (unselected selection circles), and secondary label for search-suggestion and recents glyphs.
 - Use Done only to commit or finish an editing/confirmation flow. Use a leading Close × for dismissal-only modals, with localized accessibility text.

@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2026-11-11.
 //
 
+import NoorUI
 import SwiftUI
 
 /// The app icon at the center of a slowly turning gold ring, with the places that sync on it:
@@ -23,9 +24,9 @@ struct SyncRevealOrbit: View {
         ZStack {
             ring
             centerIcon
-            node(symbol: "iphone", label: "iPhone", angle: -90)
-            node(symbol: "globe", label: "Quran.com", angle: 150)
-            node(symbol: "ipad", label: "iPad", angle: 30)
+            node(symbol: .iPhone, label: "iPhone", angle: -90)
+            node(symbol: .website, label: "Quran.com", angle: 150)
+            node(symbol: .iPad, label: "iPad", angle: 30)
         }
         .frame(width: Self.ringLength, height: Self.ringLength)
         .offset(y: Self.nodeLength / 4)
@@ -80,11 +81,11 @@ struct SyncRevealOrbit: View {
             .shadow(color: Palette.gold.opacity(0.35), radius: 30)
     }
 
-    private func node(symbol: String, label: String, angle: Double) -> some View {
+    private func node(symbol: NoorSystemImage, label: String, angle: Double) -> some View {
         let radians = angle * .pi / 180
         let radius = Self.ringLength / 2
         return VStack(spacing: 4) {
-            Image(systemName: symbol)
+            symbol.image
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(Palette.gold)
                 .frame(width: Self.nodeLength, height: Self.nodeLength)

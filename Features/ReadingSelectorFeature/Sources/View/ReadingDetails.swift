@@ -58,10 +58,10 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
                 HStack(alignment: .top) {
                     switch property.type {
                     case .supports:
-                        Image(systemName: "checkmark.seal")
+                        NoorSystemImage.readingFeatureSupported.image
                             .foregroundColor(Color.accentColor)
                     case .lacks:
-                        Image(systemName: "xmark.seal")
+                        NoorSystemImage.readingFeatureMissing.image
                             .foregroundColor(Color.red)
                     }
                     Text(property.property)
@@ -79,7 +79,7 @@ struct ReadingDetails<Value: Hashable, ImageView: View>: View {
 
     private var closeButton: some View {
         Button(action: closeAction) {
-            Image(systemName: "xmark.circle")
+            NoorSystemImage.closeCircle.image
         }
         .accentColor(.label)
     }

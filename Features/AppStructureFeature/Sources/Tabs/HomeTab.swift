@@ -51,8 +51,8 @@ private final class HomeTabViewController: TabViewController {
     override func getTabBarItem() -> UITabBarItem {
         UITabBarItem(
             title: "\(lAndroid("quran_sura")) / \(lAndroid("quran_juz2"))",
-            image: .symbol(NoorSystemImage.book.rawValue),
-            selectedImage: .symbol(NoorSystemImage.bookFilled.rawValue)
+            image: NoorSystemImage.book.uiImage,
+            selectedImage: NoorSystemImage.bookFilled.uiImage
         )
     }
 }

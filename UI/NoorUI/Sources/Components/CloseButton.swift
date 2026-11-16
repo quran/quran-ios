@@ -18,7 +18,7 @@ public struct CloseButton: View {
         Button {
             dismiss()
         } label: {
-            Image(systemName: "xmark.circle.fill")
+            NoorSystemImage.closeCircleFilled.image
                 .symbolRenderingMode(.palette)
                 .font(.title)
                 .foregroundStyle(Color.systemGray, Color.systemGray5)

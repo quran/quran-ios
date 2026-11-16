@@ -95,7 +95,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         }
 
         let backImage: UIImage?
-        backImage = UIImage(systemName: "chevron.backward")
+        backImage = NoorSystemImage.navigateBack.uiImage
 
         quranView?.navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: backImage,
@@ -479,7 +479,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     #if !QURAN_SYNC
     private func updateRightBarItems(animated: Bool, isBookmarked: Bool) {
-        let bookmarkImage = UIImage.symbol(isBookmarked ? "bookmark.fill" : "bookmark")
+        let bookmarkImage = (isBookmarked ? NoorSystemImage.bookmark : .bookmarkOutline).uiImage
         let bookmark = UIBarButtonItem(image: bookmarkImage, style: .plain, target: self, action: #selector(onBookmarkButtonTapped))
         bookmark.accessibilityLabel = l(isBookmarked ? "bookmarks.page.remove" : "bookmarks.page.add")
         if isBookmarked {

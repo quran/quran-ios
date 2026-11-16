@@ -100,7 +100,7 @@ public struct NoorBasicSection<Content: View>: View {
                     Text(title)
                 }
                 Spacer()
-                Image(systemName: "chevron.down")
+                NoorSystemImage.expand.image
                     .font(.footnote.weight(.semibold))
                     .rotationEffect(.degrees(isExpanded.wrappedValue ? 0 : -90))
             }
@@ -262,7 +262,7 @@ private struct NoorDeleteSwipeActionModifier: ViewModifier {
             .frame(minHeight: minimumContentHeight)
             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                 Button(role: .destructive, action: action) {
-                    Label(l("button.delete"), systemImage: "xmark")
+                    Label(l("button.delete"), systemImage: NoorSystemImage.delete.rawValue)
                 }
             }
     }

@@ -116,7 +116,7 @@ private struct AyahMenuViewList: View {
         MenuGroup {
             Divider()
             Row(title: l("menu.translation"), action: dataObject.actions.showTranslation) {
-                Image(systemName: "globe")
+                NoorSystemImage.translation.image
             }
             Divider()
         }
@@ -138,7 +138,7 @@ private struct AyahMenuViewList: View {
                     subtitle: .text(dataObject.repeatSubtitle),
                     action: dataObject.actions.repeatVerses
                 ) {
-                    Image(systemName: "repeat")
+                    NoorSystemImage.repeatRange.image
                 }
                 Divider()
             }
@@ -197,7 +197,7 @@ private struct AyahMenuViewList: View {
                         isDestructive: true,
                         action: dataObject.actions.deleteNote
                     ) {
-                        Image(systemName: "xmark")
+                        NoorSystemImage.delete.image
                     }
                 }
                 #endif
@@ -213,12 +213,12 @@ private struct AyahMenuViewList: View {
                 Divider()
 
                 Row(title: l("ayah.menu.copy"), action: dataObject.actions.copy) {
-                    Image(systemName: "doc.on.doc")
+                    NoorSystemImage.copy.image
                 }
                 Divider()
                     .padding(.leading)
                 Row(title: l("ayah.menu.share"), action: dataObject.actions.share) {
-                    Image(systemName: "square.and.arrow.up")
+                    NoorSystemImage.share.image
                 }
             }
         }

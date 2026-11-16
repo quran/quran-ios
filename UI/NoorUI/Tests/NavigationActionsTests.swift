@@ -60,7 +60,7 @@ final class NavigationActionsTests: XCTestCase {
         try XCTSkipUnless(ProcessInfo.processInfo.isOperatingSystemAtLeast(OperatingSystemVersion(majorVersion: 26, minorVersion: 0, patchVersion: 0)))
 
         let button = NavigationBarButton.secondary(
-            systemName: "books.vertical",
+            image: .mushafs,
             accessibilityLabel: "Books",
             glassSymbolScale: .medium
         ) { }
@@ -72,13 +72,13 @@ final class NavigationActionsTests: XCTestCase {
     }
 
     func test_secondaryButton_keepsTheDefaultScaleWithoutGlassSymbolScale() {
-        let button = NavigationBarButton.secondary(systemName: "books.vertical", accessibilityLabel: "Books") { }
+        let button = NavigationBarButton.secondary(image: .mushafs, accessibilityLabel: "Books") { }
 
         XCTAssertEqual(button.image, UIImage(systemName: "books.vertical"))
     }
 
     func test_secondaryButton_usesAccessibilityLabel() {
-        let button = NavigationBarButton.secondary(systemName: "books.vertical", accessibilityLabel: "Books") { }
+        let button = NavigationBarButton.secondary(image: .mushafs, accessibilityLabel: "Books") { }
 
         XCTAssertEqual(button.accessibilityLabel, "Books")
     }

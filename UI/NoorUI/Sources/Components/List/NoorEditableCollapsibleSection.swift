@@ -60,7 +60,7 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
                 HStack {
                     Text(title)
                     Spacer()
-                    Image(systemName: "chevron.down")
+                    NoorSystemImage.expand.image
                         .font(.footnote.weight(.semibold))
                         .rotationEffect(.degrees(isExpanded ? 0 : -90))
                 }
@@ -74,7 +74,7 @@ public struct NoorEditableCollapsibleSection<Item: Identifiable, ListItem: View>
                         await headerDeleteAction()
                     }
                 } label: {
-                    Label(l("button.delete"), systemImage: "xmark")
+                    Label(l("button.delete"), systemImage: NoorSystemImage.delete.rawValue)
                         .foregroundStyle(Color.red)
                 }
                 .buttonStyle(.borderless)

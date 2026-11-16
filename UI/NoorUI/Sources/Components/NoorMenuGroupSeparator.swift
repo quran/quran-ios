@@ -15,7 +15,11 @@ import UIx
 public struct NoorMenuGroupSeparator: View {
     // MARK: Lifecycle
 
-    public init() {}
+    /// - Parameter insetsHorizontally: Insets the line by the standard padding, to line up with rows that pad
+    ///   their own content. Pass `false` when the groups are already inside padded content.
+    public init(insetsHorizontally: Bool = true) {
+        self.insetsHorizontally = insetsHorizontally
+    }
 
     // MARK: Public
 
@@ -23,11 +27,13 @@ public struct NoorMenuGroupSeparator: View {
         Rectangle()
             .fill(Color.separator)
             .frame(height: 1)
-            .padding(.horizontal)
+            .padding(insetsHorizontally ? .horizontal : [])
             .padding(.vertical, groupSpacing)
     }
 
     // MARK: Private
+
+    private let insetsHorizontally: Bool
 
     @ScaledMetric private var groupSpacing = 8.0
 }

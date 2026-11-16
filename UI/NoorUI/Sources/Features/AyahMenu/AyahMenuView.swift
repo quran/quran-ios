@@ -112,120 +112,123 @@ private struct AyahMenuViewList: View {
         }
     }
 
-    var translation: some View {
-        MenuGroup {
-            Divider()
-            Row(title: l("menu.translation"), action: dataObject.actions.showTranslation) {
-                NoorSystemImage.translation.image
-            }
-            Divider()
-        }
-    }
-
     var body: some View {
-        VStack(alignment: .leading) {
-            MenuGroup {
-                Row(
-                    title: lAndroid("play"),
-                    subtitle: .text(dataObject.playSubtitle),
-                    action: dataObject.actions.play
-                ) {
-                    NoorSystemImage.play.image
+        VStack(alignment: .leading, spacing: 0) {
+            let groups = visibleGroups
+            ForEach(groups, id: \.self) { group in
+                if group != groups.first {
+                    NoorMenuGroupSeparator()
                 }
-                Divider()
-                Row(
-                    title: l("ayah.menu.repeat"),
-                    subtitle: .text(dataObject.repeatSubtitle),
-                    action: dataObject.actions.repeatVerses
-                ) {
-                    NoorSystemImage.repeatRange.image
-                }
-                Divider()
-            }
-
-            MenuGroup {
-                Divider()
-
-                #if QURAN_SYNC
-                readingBookmarkRow(dataObject.readingBookmarkState)
-                Divider()
-                    .padding(.leading)
-                #endif
-
-                #if QURAN_SYNC
-                Row(title: dataObject.bookmarkTitle, action: dataObject.actions.bookmark) {
-                    bookmarkIcon
-                }
-                #else
-                if dataObject.state == .noHighlight {
-                    Row(
-                        title: l("ayah.menu.highlight"),
-                        action: {
-                            await dataObject.actions.highlight(dataObject.highlightingColor)
-                        }
-                    ) {
-                        IconCircle(color: dataObject.highlightingColor)
-                    }
-                    Divider()
-                        .padding(.leading)
-                }
-                Row(
-                    title: l("ayah.menu.highlight"),
-                    subtitle: .text(l("ayah.menu.highlight-select-color")),
-                    action: showHighlights
-                ) {
-                    HighlightPaletteIcon()
-                }
-                #endif
-                Divider()
-                    .padding(.leading)
-
-                switch dataObject.state {
-                case .noHighlight, .highlighted:
-                    addNote
-                case .noted:
-                    editNote
-                }
-
-                #if !QURAN_SYNC
-                if dataObject.state != .noHighlight {
-                    Divider()
-                        .padding(.leading)
-
-                    Row(
-                        title: noteDeleteText,
-                        isDestructive: true,
-                        action: dataObject.actions.deleteNote
-                    ) {
-                        NoorSystemImage.delete.image
-                    }
-                }
-                #endif
-
-                Divider()
-            }
-
-            if !dataObject.isTranslationView {
-                translation
-            }
-
-            MenuGroup {
-                Divider()
-
-                Row(title: l("ayah.menu.copy"), action: dataObject.actions.copy) {
-                    NoorSystemImage.copy.image
-                }
-                Divider()
-                    .padding(.leading)
-                Row(title: l("ayah.menu.share"), action: dataObject.actions.share) {
-                    NoorSystemImage.share.image
-                }
+                content(of: group)
             }
         }
         .idealWidthUpToOffered()
     }
 
     // MARK: Private
+
+    /// Each group is one section of the menu, like the sections of a native menu. The rows sit on the popover
+    /// background, with one separator between consecutive visible groups and none inside a group.
+    private enum MenuGroup: CaseIterable {
+        case playback
+        case annotations
+        case translation
+        case sharing
+    }
+
+    private var visibleGroups: [MenuGroup] {
+        MenuGroup.allCases.filter { isVisible($0) }
+    }
+
+    private func isVisible(_ group: MenuGroup) -> Bool {
+        switch group {
+        case .playback, .annotations, .sharing: true
+        case .translation: !dataObject.isTranslationView
+        }
+    }
+
+    @ViewBuilder
+    private func content(of group: MenuGroup) -> some View {
+        switch group {
+        case .playback:
+            Row(
+                title: lAndroid("play"),
+                subtitle: .text(dataObject.playSubtitle),
+                action: dataObject.actions.play
+            ) {
+                NoorSystemImage.play.image
+            }
+            Row(
+                title: l("ayah.menu.repeat"),
+                subtitle: .text(dataObject.repeatSubtitle),
+                action: dataObject.actions.repeatVerses
+            ) {
+                NoorSystemImage.repeatRange.image
+            }
+
+        case .annotations:
+            annotations
+
+        case .translation:
+            Row(title: l("menu.translation"), action: dataObject.actions.showTranslation) {
+                NoorSystemImage.translation.image
+            }
+
+        case .sharing:
+            Row(title: l("ayah.menu.copy"), action: dataObject.actions.copy) {
+                NoorSystemImage.copy.image
+            }
+            Row(title: l("ayah.menu.share"), action: dataObject.actions.share) {
+                NoorSystemImage.share.image
+            }
+        }
+    }
+
+    @ViewBuilder private var annotations: some View {
+        #if QURAN_SYNC
+        readingBookmarkRow(dataObject.readingBookmarkState)
+        Row(title: dataObject.bookmarkTitle, action: dataObject.actions.bookmark) {
+            bookmarkIcon
+        }
+        #else
+        if dataObject.state == .noHighlight {
+            Row(
+                title: l("ayah.menu.highlight"),
+                action: {
+                    await dataObject.actions.highlight(dataObject.highlightingColor)
+                }
+            ) {
+                IconCircle(color: dataObject.highlightingColor)
+            }
+        }
+        Row(
+            title: l("ayah.menu.highlight"),
+            subtitle: .text(l("ayah.menu.highlight-select-color")),
+            action: showHighlights
+        ) {
+            HighlightPaletteIcon()
+        }
+        #endif
+
+        switch dataObject.state {
+        case .noHighlight, .highlighted:
+            addNote
+        case .noted:
+            editNote
+        }
+
+        #if !QURAN_SYNC
+        if dataObject.state != .noHighlight {
+            Row(
+                title: noteDeleteText,
+                isDestructive: true,
+                action: dataObject.actions.deleteNote
+            ) {
+                NoorSystemImage.delete.image
+            }
+        }
+        #endif
+    }
 
     #if QURAN_SYNC
     @ViewBuilder private var bookmarkIcon: some View {
@@ -461,19 +464,6 @@ private struct Row<Symbol: View, Accessory: View>: View {
     }
 }
 
-private struct MenuGroup<Content: View>: View {
-    // MARK: Internal
-
-    @ViewBuilder let content: Content
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            content
-        }
-        .background(Color.secondarySystemGroupedBackground)
-    }
-}
-
 private extension View {
     /// Takes the content's one-line width, so the popover hugs it, but no more than the width offered, so at
     /// large text sizes the popover keeps to the screen and the text wraps.
@@ -599,12 +589,12 @@ private let previewActions = AyahMenuUI.Actions(
         AyahMenuView(dataObject: previewDataObject(
             highlightingColor: .green,
             state: .noted,
-            isTranslationView: true
+            isTranslationView: false
         ))
         Spacer()
     }
     .frame(width: 320, height: 470)
-    .background(Color.systemGroupedBackground)
+    .background(.regularMaterial)
 }
 
 #Preview("Highlighted · Dark") {
@@ -618,7 +608,7 @@ private let previewActions = AyahMenuUI.Actions(
         Spacer()
     }
     .frame(width: 320, height: 470)
-    .background(Color.systemGroupedBackground)
+    .background(.regularMaterial)
     .colorScheme(.dark)
 }
 
@@ -633,14 +623,14 @@ private let previewActions = AyahMenuUI.Actions(
         Spacer()
     }
     .frame(width: 320, height: 470)
-    .background(Color.systemGroupedBackground)
+    .background(.regularMaterial)
     .environment(\.sizeCategory, .extraExtraExtraLarge)
 }
 
 #if !QURAN_SYNC
 #Preview("Highlight Colors") {
     NoteCircles(selectedColor: .blue, tapped: { _ in })
-        .background(Color.secondarySystemGroupedBackground)
+        .background(.regularMaterial)
 }
 #endif
 

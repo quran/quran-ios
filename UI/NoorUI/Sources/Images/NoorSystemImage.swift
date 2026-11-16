@@ -16,7 +16,6 @@ public enum NoorSystemImage: String {
     case translation = "globe"
     case heart
     case share = "square.and.arrow.up"
-    case copy = "doc.on.doc"
     case star
     case starFilled = "star.fill"
     case mail = "envelope"

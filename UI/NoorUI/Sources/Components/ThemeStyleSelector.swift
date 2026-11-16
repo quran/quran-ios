@@ -45,6 +45,8 @@ private struct ThemeStyleOptionView: View {
     }
 }
 
+/// A grid of theme style tiles with no horizontal padding, so its edges line up with the caller's content.
+/// Give it horizontal padding: the selected tile's stroke and the tiles' shadow draw a couple of points past the tiles.
 public struct ThemeStyleSelector: View {
     @Binding var selectedStyle: ThemeStyle
 
@@ -67,8 +69,6 @@ public struct ThemeStyleSelector: View {
                 ) { selectedStyle = style }
             }
         }
-        // Callers pad the grid to their content edges, so the tiles line up with the rows around it.
-        // The selected tile's stroke and the tiles' shadow draw a couple of points past the tiles, into that padding.
         .padding(.vertical)
     }
 }

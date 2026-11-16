@@ -38,7 +38,7 @@ private struct MoreMenuRootView: View {
                     let groups = visibleGroups
                     ForEach(groups, id: \.self) { group in
                         if group != groups.first {
-                            groupSeparator
+                            NoorMenuGroupSeparator()
                         }
                         content(of: group)
                     }
@@ -65,23 +65,12 @@ private struct MoreMenuRootView: View {
         case theme
     }
 
-    @ScaledMetric private var groupSpacing = 8.0
-
     private var state: MoreMenuControlsState {
         store.state
     }
 
     private var visibleGroups: [MenuGroup] {
         MenuGroup.allCases.filter { isVisible($0) }
-    }
-
-    /// A 1pt line, since a hairline `Divider` is barely visible on the popover's Liquid Glass.
-    private var groupSeparator: some View {
-        Rectangle()
-            .fill(Color.separator)
-            .frame(height: 1)
-            .padding(.horizontal)
-            .padding(.vertical, groupSpacing)
     }
 
     @ViewBuilder

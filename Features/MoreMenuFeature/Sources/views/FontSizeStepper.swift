@@ -58,7 +58,7 @@ struct FontSizeStepper: View {
                 HStack(spacing: dotsSpacing) {
                     ForEach(range.indices, id: \.self) { stepIndex in
                         Circle()
-                            .fill(stepIndex <= currentSizeIndex ? Color.black : .systemGray5)
+                            .fill(stepIndex <= currentSizeIndex ? Color.label : .tertiaryLabel)
                             .frame(width: defaultSpacing, height: defaultSpacing)
                     }
                 }

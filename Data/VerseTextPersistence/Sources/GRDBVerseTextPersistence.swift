@@ -88,7 +88,7 @@ public struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersisten
     }
 
     public func autocomplete(term: String) async throws -> [String] {
-        try await persistence.autocomplete(term: term)
+        try await persistence.autocomplete(term: term).map { $0.decodingHTMLEntities() }
     }
 
     public func search(for term: String, quran: Quran) async throws -> [(verse: AyahNumber, text: String)] {
@@ -114,7 +114,7 @@ public struct GRDBTranslationVerseTextPersistence: TranslationVerseTextPersisten
             if let verseId = Int(stringText), verseId > 0 && verseId <= quran.verses.count {
                 return referenceVerse(verseId, quran: quran)
             } else {
-                return .string(stringText)
+                return .string(stringText.decodingHTMLEntities())
             }
         } else if let verseId = value as? Int64,
                   verseId > 0,

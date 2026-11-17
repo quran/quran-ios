@@ -25,7 +25,6 @@ import ViewConstrainer
 @MainActor
 protocol QuranViewDelegate: AnyObject {
     func onQuranViewTapped(_ quranView: QuranView)
-    /// Whether the space bar can pause or resume the recitation, which is while it's playing or paused.
     func canTogglePlayPause(in quranView: QuranView) -> Bool
     func onQuranViewPlayPauseKeyPressed(_ quranView: QuranView)
 }
@@ -52,9 +51,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     let navigationBar = UINavigationBar()
     let navigationItem = UINavigationItem()
 
-    /// Space pauses and resumes the recitation from a hardware keyboard, as on a Mac. It takes priority over the system,
-    /// which would otherwise activate the focused verse, and is left alone while text in the reader is being edited.
-    /// Editors presented over the reader aren't in its responder chain, so they keep space for typing.
+    /// Presented editors aren't in this responder chain, so they keep space for typing.
     override var keyCommands: [UIKeyCommand]? {
         let commands = super.keyCommands ?? []
         guard canTogglePlayPause else {
@@ -182,6 +179,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
 
     private lazy var playPauseCommand: UIKeyCommand = {
         let command = UIKeyCommand(input: " ", modifierFlags: [], action: #selector(toggleRecitation))
+        // Otherwise space activates the focused verse.
         command.wantsPriorityOverSystemBehavior = true
         return command
     }()
@@ -190,12 +188,9 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
         guard let delegate, delegate.canTogglePlayPause(in: self) else {
             return false
         }
-        // Safeguard: the reader has no text inputs today, but if one is added,
-        // text being edited there keeps space for typing.
         return !(findFirstResponder() is UITextInput)
     }
 
-    /// Mirrors tapping the audio bar's play or pause button.
     @objc
     private func toggleRecitation() {
         guard canTogglePlayPause else {

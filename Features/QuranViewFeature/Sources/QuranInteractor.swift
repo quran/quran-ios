@@ -129,7 +129,6 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
 
     var visiblePages: [Page] { contentViewModel?.visiblePages ?? [] }
 
-    /// Whether the recitation is playing or paused, so the space bar can pause or resume it.
     var canTogglePlayPause: Bool { audioBanner?.canTogglePlayPause ?? false }
 
     func togglePlayPauseFromKeyboard() {

@@ -198,10 +198,10 @@ final class QuranViewTests: XCTestCase {
         let delegate = QuranViewDelegateSpy(canTogglePlayPause: false)
         context.sut.delegate = delegate
 
-        XCTAssertNil(spaceCommand(of: context.sut), "Space is left alone while nothing is playing or paused")
+        XCTAssertNil(spaceCommand(of: context.sut))
     }
 
-    // Regression: in the iPad app on a Mac, space activated the focused verse instead of pausing the recitation.
+    // Regression: on Mac, space activated the focused verse instead of pausing.
     func test_spaceTogglesTheRecitationFromTheReaderContent() throws {
         let context = makeSut()
         let delegate = QuranViewDelegateSpy(canTogglePlayPause: true)
@@ -212,8 +212,7 @@ final class QuranViewTests: XCTestCase {
         XCTAssertTrue(space.wantsPriorityOverSystemBehavior)
         let action = try XCTUnwrap(space.action)
         let contentView = try XCTUnwrap(context.sut.contentView)
-        // Checks the action is reachable from the reader content's responder chain,
-        // not that UIKit finds the key command while a verse is focused.
+        // Reachability only; UIKit's key-command lookup isn't exercised.
         XCTAssertIdentical(contentView.target(forAction: action, withSender: space) as AnyObject?, context.sut)
 
         context.sut.perform(action, with: space)
@@ -234,7 +233,7 @@ final class QuranViewTests: XCTestCase {
 
         XCTAssertTrue(textField.becomeFirstResponder())
 
-        XCTAssertNil(spaceCommand(of: context.sut), "Space types into the text being edited")
+        XCTAssertNil(spaceCommand(of: context.sut))
     }
 
     private struct TestContext {

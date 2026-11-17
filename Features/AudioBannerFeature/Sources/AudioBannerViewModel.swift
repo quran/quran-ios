@@ -88,7 +88,6 @@ public final class AudioBannerViewModel: ObservableObject {
 
     // MARK: Public
 
-    /// Whether a recitation is playing or paused, as opposed to stopped or still downloading.
     public var canTogglePlayPause: Bool {
         switch playingState {
         case .playing, .paused: true
@@ -110,7 +109,6 @@ public final class AudioBannerViewModel: ObservableObject {
         )
     }
 
-    /// Pauses a playing recitation or resumes a paused one, from the reader's space bar shortcut.
     public func togglePlayPauseFromKeyboard() {
         logger.info("AudioBanner: play/pause key pressed. State: \(playingState)")
         togglePlayPause()

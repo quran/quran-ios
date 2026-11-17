@@ -486,7 +486,6 @@ private func domainTargets() -> [[Target]] {
             "VerseTextPersistence",
         ], testDependencies: [
             .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
-            .product(name: "GRDB", package: "GRDB.swift"),
             "ReadingService",
             "QuranLocalization",
             "TranslationServiceFake",

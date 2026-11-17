@@ -177,10 +177,7 @@ public struct QuranTextDataService {
         }
     }
 
-    private func translationString(_ storedString: String) -> TranslationString {
-        // Some translations store HTML entities, such as `&quot;`. Decode them before finding footnotes and
-        // Quran text, so the ranges index into the displayed text.
-        let originalString = storedString.decodingHTMLEntities()
+    private func translationString(_ originalString: String) -> TranslationString {
         let footnoteTextRanges = originalString.ranges(of: Self.footnotesRegex)
         let footnotes = footnoteTextRanges.map { originalString[$0] }
         let (string, footnoteRanges) = originalString.replacing(

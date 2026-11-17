@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 4/22/16.
 //
 
+import CoreGraphics
 import QuranGeometry
 
 public struct WordFrameProcessor {
@@ -35,7 +36,32 @@ public struct WordFrameProcessor {
         return WordFrameCollection(frames: lines.flatMap { $0 })
     }
 
+    /// The page's text extent in image coordinates: the median edges of the raw lines, since processing
+    /// stretches every line to the outermost glyphs. Nil when the text is too narrow to line up with.
+    public func textColumn(_ frames: [WordFrame], imageWidth: CGFloat) -> ClosedRange<CGFloat>? {
+        let lines = Dictionary(grouping: frames, by: \.line).values.map { frames in
+            frames.map(\.rect).reduce(CGRect.null) { $0.union($1) }
+        }
+        guard !lines.isEmpty else {
+            return nil
+        }
+        let column = Self.median(lines.map(\.minX)) ... Self.median(lines.map(\.maxX))
+        guard column.upperBound - column.lowerBound >= Self.minimumTextWidthRatio * imageWidth else {
+            return nil
+        }
+        return column
+    }
+
     // MARK: Private
+
+    /// Opening pages measure at most 0.75 of the image width; other pages at least 0.84.
+    private static let minimumTextWidthRatio: CGFloat = 0.8
+
+    private static func median(_ values: [CGFloat]) -> CGFloat {
+        let sorted = values.sorted()
+        let middle = sorted.count / 2
+        return sorted.count.isMultiple(of: 2) ? (sorted[middle - 1] + sorted[middle]) / 2 : sorted[middle]
+    }
 
     private func normalize(_ lines: inout [[WordFrame]]) {
         for i in 0 ..< lines.count {

@@ -71,6 +71,7 @@ class ContentImageViewModel: ObservableObject {
             ayahNumbers: ayahNumberLocations,
             drawsAyahNumbersAndSuraHeaders: reading.drawsAyahNumbersAndSuraHeaders,
             wordFrames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
+            textColumn: imagePage?.textColumn,
             verseHighlights: overlays.versesByHighlights().mapValues { Color($0) },
             wordHighlight: overlays.pointedWord,
             undimmedVerses: undimmedVerses

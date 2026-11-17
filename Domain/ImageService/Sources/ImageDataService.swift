@@ -61,16 +61,27 @@ public struct ImageDataService {
         let unloadedImage: UIImage = image
         let preloadedImage = preloadImage(unloadedImage)
 
-        let wordFrames = try await wordFrames(page)
-        return ImagePage(image: preloadedImage, wordFrames: wordFrames, startAyah: page.firstVerse)
+        let wordFrames = try await wordFrames(page, imageWidth: preloadedImage.size.width)
+        return ImagePage(
+            image: preloadedImage,
+            wordFrames: wordFrames.frames,
+            startAyah: page.firstVerse,
+            textColumn: wordFrames.textColumn
+        )
     }
 
     // MARK: Internal
 
-    func wordFrames(_ page: Page) async throws -> WordFrameCollection {
+    /// The page's processed word frames, and its text column measured on the raw ones.
+    func wordFrames(
+        _ page: Page,
+        imageWidth: CGFloat
+    ) async throws -> (frames: WordFrameCollection, textColumn: ClosedRange<CGFloat>?) {
         let plainWordFrames = try await persistence.wordFrameCollectionForPage(page)
-        let wordFrames = processor.processWordFrames(plainWordFrames)
-        return wordFrames
+        return (
+            processor.processWordFrames(plainWordFrames),
+            processor.textColumn(plainWordFrames, imageWidth: imageWidth)
+        )
     }
 
     // MARK: Private

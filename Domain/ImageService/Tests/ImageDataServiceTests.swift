@@ -116,6 +116,14 @@ class ImageDataServiceTests: XCTestCase {
         XCTAssertNil(wordFrames.wordAtLocation(.zero, imageScale: verticalScaling))
     }
 
+    func testImagePagesCarryTheTextColumnAtTheImageWidth() async throws {
+        let opening = try await service.imageForPage(quran.pages[0])
+        let regular = try await service.imageForPage(quran.pages[2])
+
+        XCTAssertNil(opening.textColumn)
+        XCTAssertNotNil(regular.textColumn)
+    }
+
     func testGettingMissingImageThrows() async throws {
         let imagesURL = TestResources.testDataURL.appendingPathComponent("missing-images")
         let page = quran.pages[0]

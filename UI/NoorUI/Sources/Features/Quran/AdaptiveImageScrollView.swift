@@ -63,7 +63,8 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
 
     public var body: some View {
         AdaptiveQuranScrollView {
-            headerAlignedWithText
+            header
+                .environment(\.quranPageTextInsets, textInsets ?? EdgeInsets())
         } footer: {
             footer
         } content: { availableContentSize in
@@ -103,21 +104,10 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
         let viewSize: CGSize
     }
 
-    /// The header, inset to line up with the page's text when it still fits.
-    @ViewBuilder private var headerAlignedWithText: some View {
-        if #available(iOS 16.0, *), let textInsets {
-            ViewThatFits(in: .horizontal) {
-                header.padding(textInsets)
-                header
-            }
-        } else {
-            header
-        }
-    }
-
     private var textInsets: EdgeInsets? {
         image.flatMap {
-            decorations.wordFrames.textInsets(
+            EdgeInsets(
+                textColumn: decorations.textColumn,
                 imageSize: $0.size,
                 imageViewSize: imageViewSize,
                 contentWidth: contentWidth,

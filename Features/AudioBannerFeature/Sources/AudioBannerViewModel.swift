@@ -88,6 +88,13 @@ public final class AudioBannerViewModel: ObservableObject {
 
     // MARK: Public
 
+    public var canTogglePlayPause: Bool {
+        switch playingState {
+        case .playing, .paused: true
+        case .stopped, .downloading: false
+        }
+    }
+
     public func play(from: AyahNumber, to: AyahNumber?, repeatVerses: Bool) {
         logger.info("AudioBanner: playing from \(from) to \(String(describing: to))")
         analytics.playFrom(menu: true)
@@ -100,6 +107,11 @@ public final class AudioBannerViewModel: ObservableObject {
             verseDelay: AudioPreferences.shared.verseDelay,
             repetitionDelay: AudioPreferences.shared.repetitionDelay
         )
+    }
+
+    public func togglePlayPauseFromKeyboard() {
+        logger.info("AudioBanner: play/pause key pressed. State: \(playingState)")
+        togglePlayPause()
     }
 
     // MARK: Internal

@@ -141,6 +141,7 @@
 "menu.ayahIndicators.readingBookmark" = "نشانک مطالعه";
 "menu.ayahIndicators.none" = "هیچ‌کدام";
 "menu.arabicText" = "متن عربی";
+"menu.footnotes" = "متن پاورقی‌ها";
 "menu.rotate_to_portrait" = "چرخش به حالت عمودی";
 "menu.rotate_to_landscape" = "چرخش به حالت افقی";
 // Metadata: Translated by ChatGPT; human review required.

@@ -42,6 +42,7 @@ public final class ContentTranslationViewModel: ObservableObject {
         arabicFontSize = fontSizePreferences.arabicFontSize
         translationFontSize = fontSizePreferences.translationFontSize
         showArabicText = contentStatePreferences.showArabicInTranslation
+        showFootnotes = contentStatePreferences.showFootnotesInTranslation
         selectedTranslations = selectedTranslationsPreferences.selectedTranslationIds
         highlights = [:]
 
@@ -96,6 +97,10 @@ public final class ContentTranslationViewModel: ObservableObject {
             .sink { [weak self] in self?.showArabicText = $0 }
             .store(in: &cancellables)
 
+        contentStatePreferences.$showFootnotesInTranslation
+            .sink { [weak self] in self?.showFootnotes = $0 }
+            .store(in: &cancellables)
+
         // Translation services update the selection from background tasks.
         selectedTranslationsPreferences.$selectedTranslationIds
             .receive(on: DispatchQueue.main)
@@ -141,6 +146,10 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     @Published var showArabicText: Bool {
         didSet { recordListUpdate(reason: "arabic_text_visibility_changed") }
+    }
+
+    @Published var showFootnotes: Bool {
+        didSet { recordListUpdate(reason: "footnotes_visibility_changed") }
     }
 
     @Published var highlights: [AyahNumber: Color]
@@ -247,6 +256,11 @@ public final class ContentTranslationViewModel: ObservableObject {
                                 ), decoration
                             )
                         )
+                    }
+
+                    if showFootnotes, !readMore {
+                        items += footnoteChunks(verse: verse, translation: translation, string: string)
+                            .map { .translationFootnoteChunk($0, decoration) }
                     }
                 }
 
@@ -383,6 +397,27 @@ public final class ContentTranslationViewModel: ObservableObject {
             quranFont: quranFont,
             arabicFontSize: arabicFontSize
         )
+    }
+
+    private func footnoteChunks(verse: AyahNumber, translation: Translation, string: TranslationString) -> [TranslationFootnoteChunk] {
+        zip(string.footnoteRanges, string.footnotes.indices).flatMap { markerRange, footnoteIndex in
+            let text = string.footnoteText(at: footnoteIndex)
+            let chunks = text.count <= Self.maxChunkSize
+                ? [text.startIndex ..< text.endIndex]
+                : text.chunkRanges(maxChunkSize: Self.maxChunkSize)
+            return chunks.indices.map { chunkIndex in
+                TranslationFootnoteChunk(
+                    verse: verse,
+                    translation: translation,
+                    footnoteIndex: footnoteIndex,
+                    marker: chunkIndex == 0 ? String(string.text[markerRange]) : nil,
+                    text: text,
+                    chunks: chunks,
+                    chunkIndex: chunkIndex,
+                    translationFontSize: translationFontSize
+                )
+            }
+        }
     }
 
     private func verseNumber(verse: AyahNumber) -> TranslationVerseNumber {

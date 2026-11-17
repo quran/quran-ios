@@ -22,8 +22,7 @@ struct TranslationFootnote: View, Identifiable {
     var id: Id { Id(string: string, footnoteIndex: footnoteIndex, translation: translation, translationFontSize: translationFontSize) }
 
     var text: String {
-        let text = string.footnotes[footnoteIndex]
-        return text.trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
+        string.footnoteText(at: footnoteIndex)
     }
 
     let string: TranslationString

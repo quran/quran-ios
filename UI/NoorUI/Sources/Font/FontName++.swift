@@ -12,9 +12,14 @@ import NoorFont
 import SwiftUI
 
 private let arabicTafseerTextFontSize: CGFloat = 21
+private let arabicTafseerFootnoteFontSize: CGFloat = 16
 
 public extension Font {
     static func arabicTafseer() -> Font {
         custom(.arabic, size: arabicTafseerTextFontSize)
+    }
+
+    static func arabicTafseerFootnote() -> Font {
+        custom(.arabic, size: arabicTafseerFootnoteFontSize, relativeTo: .footnote)
     }
 }

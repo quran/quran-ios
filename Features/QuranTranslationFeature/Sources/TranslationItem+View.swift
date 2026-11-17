@@ -90,6 +90,19 @@ extension TranslationTextChunk: View {
     }
 }
 
+extension TranslationFootnoteChunk: View {
+    var body: some View {
+        QuranTranslationFootnoteChunk(
+            text: text,
+            chunk: chunks[chunkIndex],
+            marker: marker,
+            font: translation.footnoteFont,
+            fontSize: translationFontSize,
+            characterDirection: translation.characterDirection
+        )
+    }
+}
+
 extension TranslationReferenceVerse: View {
     var body: some View {
         QuranTranslationReferenceVerse(reference: reference, fontSize: translationFontSize, characterDirection: translation.characterDirection)
@@ -130,6 +143,8 @@ extension TranslationItem {
                 verseNumberView(verseNumber)
             case .translationTextChunk(let translationTextChunk, _):
                 translationTextChunk
+            case .translationFootnoteChunk(let translationFootnoteChunk, _):
+                translationFootnoteChunk
             case .translationReferenceVerse(let translationReferenceVerse, _):
                 translationReferenceVerse
             case .translatorText(let translatorText, _):

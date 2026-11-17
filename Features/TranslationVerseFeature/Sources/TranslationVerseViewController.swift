@@ -131,6 +131,8 @@ class TranslationVerseViewController: UIHostingController<TranslationVerseView> 
         var state = MoreMenuControlsState()
         state.mode = .alwaysOff
         state.translationsSelection = .alwaysOn
+        state.arabicText = .alwaysOn
+        state.footnotes = .alwaysOn
         state.wordPointer = .alwaysOff
         state.orientation = .alwaysOff
         state.fontSize = .alwaysOn

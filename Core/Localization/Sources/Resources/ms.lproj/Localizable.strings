@@ -124,6 +124,7 @@
 "menu.ayahIndicators.readingBookmark" = "Penanda bacaan";
 "menu.ayahIndicators.none" = "Tiada";
 "menu.arabicText" = "Teks Arab";
+"menu.footnotes" = "Teks nota kaki";
 "menu.rotate_to_portrait" = "Putar ke potret";
 "menu.rotate_to_landscape" = "Putar ke landskap";
 // Metadata: Translated by ChatGPT; human review required.

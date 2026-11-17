@@ -24,14 +24,9 @@ public struct QuranPageHeader: View {
     // MARK: Public
 
     public var body: some View {
-        HStack {
-            Text(quarterName)
-            Spacer()
-            // TODO: Should get footnote from environment.
-            QuranPageHeaderSuraNames(suras: suras, size: .footnote)
-        }
-        .readableInsetsPadding(readableInsetEdges)
-        .padding(.bottom, ContentDimension.interSpacing)
+        textRow
+            .readableInsetsPadding(readableInsetEdges)
+            .padding(.bottom, ContentDimension.interSpacing)
     }
 
     // MARK: Private
@@ -39,6 +34,47 @@ public struct QuranPageHeader: View {
     private let quarterName: String
     private let suras: [Sura]
     private let readableInsetEdges: Edge.Set
+    @Environment(\.quranPageTextInsets) private var textInsets
+
+    private var suraNames: QuranPageHeaderSuraNames {
+        // TODO: Should get footnote from environment.
+        QuranPageHeaderSuraNames(suras: suras, size: .footnote)
+    }
+
+    /// Inset decorated names, then inset standard names, then the full-width header.
+    @ViewBuilder private var textRow: some View {
+        if #available(iOS 16.0, *), textInsets != EdgeInsets() {
+            // Squeezed names drop their separators.
+            ViewThatFits(in: .horizontal) {
+                row(suraNames.decoratedNames.fixedSize(horizontal: true, vertical: false)).padding(textInsets)
+                row(suraNames.standardNames.fixedSize(horizontal: true, vertical: false)).padding(textInsets)
+                row(suraNames)
+            }
+        } else {
+            row(suraNames)
+        }
+    }
+
+    private func row(_ suraNames: some View) -> some View {
+        HStack {
+            Text(quarterName)
+            Spacer()
+            suraNames
+        }
+    }
+}
+
+extension EnvironmentValues {
+    /// The page's text insets. The header applies them to its text row only, so attached views like ribbons
+    /// keep its full width.
+    var quranPageTextInsets: EdgeInsets {
+        get { self[QuranPageTextInsetsKey.self] }
+        set { self[QuranPageTextInsetsKey.self] = newValue }
+    }
+}
+
+private struct QuranPageTextInsetsKey: EnvironmentKey {
+    static let defaultValue = EdgeInsets()
 }
 
 /// The decorated sura names on one line, or the standard names when they don't fit.
@@ -51,7 +87,7 @@ struct QuranPageHeaderSuraNames: View {
     var body: some View {
         if #available(iOS 16.0, *) {
             ViewThatFits(in: .horizontal) {
-                decoratedNames(suras)
+                decoratedNames
                 standardNames
             }
         } else {
@@ -59,12 +95,14 @@ struct QuranPageHeaderSuraNames: View {
         }
     }
 
-    // MARK: Private
+    var decoratedNames: some View {
+        decoratedNamesLine(suras)
+    }
 
     /// A hidden decorated name keeps the decorated line height, so the page content doesn't resize between pages.
-    private var standardNames: some View {
+    var standardNames: some View {
         ZStack(alignment: .trailing) {
-            decoratedNames(Array(suras.prefix(1)))
+            decoratedNamesLine(Array(suras.prefix(1)))
                 .frame(width: 0)
                 .hidden()
                 .accessibilityHidden(true)
@@ -73,7 +111,9 @@ struct QuranPageHeaderSuraNames: View {
         }
     }
 
-    private func decoratedNames(_ suras: [Sura]) -> some View {
+    // MARK: Private
+
+    private func decoratedNamesLine(_ suras: [Sura]) -> some View {
         MultipartText("\(suras: suras, nameStyle: .decorated)")
             .view(ofSize: size, alignment: .trailing, allowsWrapping: false)
     }

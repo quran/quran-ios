@@ -64,6 +64,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     public var body: some View {
         AdaptiveQuranScrollView {
             header
+                .environment(\.quranPageTextInsets, textInsets ?? EdgeInsets())
         } footer: {
             footer
         } content: { availableContentSize in
@@ -75,6 +76,8 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                 }
             }
             .frame(height: imageHeight(for: availableContentSize))
+            .frame(maxWidth: .infinity)
+            .onSizeChange { contentWidth = $0.width }
         }
     }
 
@@ -86,6 +89,8 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     private let renderingMode: QuranThemedImage.RenderingMode
     private let decorations: ImageDecorations
     @State private var imageViewSize: CGSize = .zero
+    @State private var contentWidth: CGFloat = 0
+    @Environment(\.layoutDirection) private var layoutDirection
     #if QURAN_SYNC
     private let ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]]
     private let onAyahReadingBookmarkTap: (AyahNumber, CGPoint) -> Void
@@ -97,6 +102,18 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     private struct SizeInfo: Equatable {
         let imageSize: CGSize
         let viewSize: CGSize
+    }
+
+    private var textInsets: EdgeInsets? {
+        image.flatMap {
+            EdgeInsets(
+                textColumn: decorations.textColumn,
+                imageSize: $0.size,
+                imageViewSize: imageViewSize,
+                contentWidth: contentWidth,
+                layoutDirection: layoutDirection
+            )
+        }
     }
 
     private func imageContent(_ image: UIImage) -> some View {

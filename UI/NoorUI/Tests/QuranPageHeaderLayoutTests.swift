@@ -55,6 +55,40 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
         }
     }
 
+    func test_insetHeader_whenDecoratedNamesFitInset_keepsTheInset() throws {
+        guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
+        let width = rowWidths(.large).decorated + 40
+        let insets = horizontalInsets(totaling: 20)
+
+        let subject = try render(header, width: width, insets: insets)
+
+        XCTAssertEqual(subject, try render(header.padding(insets), width: width))
+    }
+
+    func test_insetHeader_whenOnlyStandardNamesFitInset_keepsTheInsetWithStandardNames() throws {
+        guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
+        let widths = rowWidths(.large)
+        XCTAssertGreaterThan(widths.decorated - widths.standard, 10)
+        let width = widths.decorated + 20
+        // Decorated names fit the full width, but only standard names fit inside the inset.
+        let insets = horizontalInsets(totaling: width - (widths.standard + widths.decorated) / 2)
+
+        let subject = try render(header, width: width, insets: insets)
+
+        XCTAssertEqual(subject, try render(header.padding(insets), width: width))
+    }
+
+    func test_insetHeader_whenNothingFitsInset_fallsBackToTheFullWidthHeader() throws {
+        guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
+        let widths = rowWidths(.large)
+        let width = widths.decorated + 20
+        let insets = horizontalInsets(totaling: width - (widths.standard - 10))
+
+        let subject = try render(header, width: width, insets: insets)
+
+        XCTAssertEqual(subject, try render(header, width: width))
+    }
+
     // MARK: Private
 
     private let suras = Quran.hafsMadani1405.pages[603].suras
@@ -78,6 +112,34 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
     private func suraNamesSize(width: CGFloat, _ size: DynamicTypeSize) -> CGSize {
         UIHostingController(rootView: pinned(QuranPageHeaderSuraNames(suras: suras, size: .footnote), size))
             .sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude))
+    }
+
+    private var header: QuranPageHeader {
+        QuranPageHeader(quarterName: quarterName, suras: suras)
+    }
+
+    /// The header row's ideal widths with decorated and with standard sura names.
+    private func rowWidths(_ size: DynamicTypeSize) -> (decorated: CGFloat, standard: CGFloat) {
+        // With no width proposed, the sura names report their decorated width.
+        let decorated = UIHostingController(rootView: pinned(header.fixedSize(), size))
+            .sizeThatFits(in: CGSize(width: CGFloat.greatestFiniteMagnitude, height: .greatestFiniteMagnitude))
+            .width
+        let decoratedNames = idealSize(of: "\(suras: suras, nameStyle: .decorated)", size).width
+        let standardNames = idealSize(of: "\(suras: suras)", size).width
+        return (decorated, decorated - decoratedNames + standardNames)
+    }
+
+    private func horizontalInsets(totaling total: CGFloat) -> EdgeInsets {
+        EdgeInsets(top: 0, leading: total / 2, bottom: 0, trailing: total / 2)
+    }
+
+    @available(iOS 16.0, *)
+    private func render(_ content: some View, width: CGFloat, insets: EdgeInsets = EdgeInsets()) throws -> Data {
+        let renderer = ImageRenderer(
+            content: pinned(content.environment(\.quranPageTextInsets, insets).frame(width: width), .large)
+        )
+        renderer.scale = 2
+        return try XCTUnwrap(renderer.uiImage?.pngData())
     }
 
     /// The header's height without its bottom spacing.

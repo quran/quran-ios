@@ -44,12 +44,18 @@ public struct QuranPageHeader: View {
     /// Inset decorated names, then inset standard names, then the full-width header.
     @ViewBuilder private var textRow: some View {
         if #available(iOS 16.0, *), textInsets != EdgeInsets() {
-            // Squeezed names drop their separators.
-            ViewThatFits(in: .horizontal) {
-                row(suraNames.decoratedNames.fixedSize(horizontal: true, vertical: false)).padding(textInsets)
-                row(suraNames.standardNames.fixedSize(horizontal: true, vertical: false)).padding(textInsets)
-                row(suraNames)
-            }
+            // The full-width row sizes the header, since the insets follow the image, which follows the header's size.
+            row(suraNames)
+                .hidden()
+                .accessibilityHidden(true)
+                .overlay {
+                    // Squeezed names drop their separators.
+                    ViewThatFits(in: .horizontal) {
+                        row(suraNames.decoratedNames.fixedSize(horizontal: true, vertical: false)).padding(textInsets)
+                        row(suraNames.standardNames.fixedSize(horizontal: true, vertical: false)).padding(textInsets)
+                        row(suraNames)
+                    }
+                }
         } else {
             row(suraNames)
         }

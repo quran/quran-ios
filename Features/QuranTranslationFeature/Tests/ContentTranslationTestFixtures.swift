@@ -37,19 +37,13 @@ func makeTranslation(id: Translation.ID) -> Translation {
 }
 
 func makeVerseText(translationCount: Int, text: (Int) -> String = { "Translation \($0)" }) -> VerseText {
-    VerseText(
-        arabicText: "Arabic",
-        translations: (0 ..< translationCount).map { index in
-            .string(.init(
-                text: text(index),
-                quranRanges: [],
-                footnoteRanges: [],
-                footnotes: []
-            ))
-        },
-        arabicPrefix: [],
-        arabicSuffix: []
-    )
+    makeVerseText(translations: (0 ..< translationCount).map { index in
+        TranslationString(text: text(index), quranRanges: [], footnoteRanges: [], footnotes: [])
+    })
+}
+
+func makeVerseText(translations: [TranslationString]) -> VerseText {
+    VerseText(arabicText: "Arabic", translations: translations.map { .string($0) }, arabicPrefix: [], arabicSuffix: [])
 }
 
 /// Runs the view model's scrolls, which it defers to the next main-queue turn.

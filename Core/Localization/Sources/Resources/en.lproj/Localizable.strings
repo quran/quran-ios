@@ -74,6 +74,7 @@
 "translation.verse.previous" = "Previous ayah";
 "translation.text.ayah-number" = "%d:%d";
 "translation.text.footnote-number" = "[%d]";
+"translation.text.footnote-title" = "Footnote #%d";
 "error.translation.text-retrieval" = "Oops! Something went wrong. We couldn't retrieve the translation.";
 "error.translation.text-not-available" = "No translation available for this Ayah.";
 
@@ -124,6 +125,7 @@
 "menu.ayahIndicators.readingBookmark" = "Reading bookmark";
 "menu.ayahIndicators.none" = "None";
 "menu.arabicText" = "Arabic text";
+"menu.footnotes" = "Footnote text";
 "menu.rotate_to_portrait" = "Rotate to portrait";
 "menu.rotate_to_landscape" = "Rotate to landscape";
 "menu.theme_settings" = "Themes & Settings";

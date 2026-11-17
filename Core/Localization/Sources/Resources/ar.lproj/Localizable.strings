@@ -113,6 +113,7 @@
 "menu.ayahIndicators.readingBookmark" = "علامة موضع القراءة";
 "menu.ayahIndicators.none" = "لا شيء";
 "menu.arabicText" = "نص الآيات";
+"menu.footnotes" = "نص الهوامش";
 "menu.rotate_to_portrait" = "تدوير إلى الوضع الرأسي";
 "menu.rotate_to_landscape" = "تدوير إلى الوضع الأفقي";
 "menu.theme_settings" = "المظهر والإعدادات";
@@ -458,6 +459,7 @@
 // Translation
 "translation.text.ayah-number" = "%d:%d";
 "translation.text.footnote-number" = "[%d]";
+"translation.text.footnote-title" = "الهامش رقم %d";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "الآية %@";

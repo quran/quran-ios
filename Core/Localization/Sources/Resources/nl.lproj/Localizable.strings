@@ -111,6 +111,7 @@
 "menu.ayahIndicators.readingBookmark" = "Leesbladwijzer";
 "menu.ayahIndicators.none" = "Geen";
 "menu.arabicText" = "Arabische tekst";
+"menu.footnotes" = "Voetnoottekst";
 "menu.rotate_to_portrait" = "Draaien naar staand";
 "menu.rotate_to_landscape" = "Draaien naar liggend";
 // Metadata: Translated by ChatGPT; human review required.
@@ -624,6 +625,8 @@
 "translation.text.ayah-number" = "%d:%d";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "Voetnoot nr. %d";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "vers %@";

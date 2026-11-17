@@ -11,6 +11,7 @@ import SwiftUI
 import UIx
 
 enum TranslationURL: Codable {
+    case footnote(translationId: Translation.ID, sura: Int, ayah: Int, footnoteIndex: Int)
     case readMore(translationId: Translation.ID, sura: Int, ayah: Int)
 
     private static let scheme = "quran-ios"

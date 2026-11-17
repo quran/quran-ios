@@ -141,6 +141,7 @@
 "menu.ayahIndicators.readingBookmark" = "ئوقۇش خەتكۈچى";
 "menu.ayahIndicators.none" = "ھېچقايسىسى";
 "menu.arabicText" = "ئەرەبچە تېكىست";
+"menu.footnotes" = "بەت ئاستى ئىزاھى تېكىستى";
 "menu.rotate_to_portrait" = "تىك ھالەتكە ئايلاندۇرۇش";
 "menu.rotate_to_landscape" = "توغرا ھالەتكە ئايلاندۇرۇش";
 // Metadata: Translated by ChatGPT; human review required.
@@ -710,6 +711,8 @@
 "translation.text.ayah-number" = "%d:%d";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "بەت ئاستى ئىزاھى #%d";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "ئايەت %@";

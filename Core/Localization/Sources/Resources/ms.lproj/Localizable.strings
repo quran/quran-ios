@@ -124,6 +124,7 @@
 "menu.ayahIndicators.readingBookmark" = "Penanda bacaan";
 "menu.ayahIndicators.none" = "Tiada";
 "menu.arabicText" = "Teks Arab";
+"menu.footnotes" = "Teks nota kaki";
 "menu.rotate_to_portrait" = "Putar ke potret";
 "menu.rotate_to_landscape" = "Putar ke landskap";
 // Metadata: Translated by ChatGPT; human review required.
@@ -690,6 +691,8 @@
 "translation.text.ayah-number" = "%d:%d";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "Nota kaki #%d";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "ayat %@";

@@ -127,6 +127,7 @@
 "menu.ayahIndicators.readingBookmark" = "Оқу бетбелгісі";
 "menu.ayahIndicators.none" = "Ешқайсысы";
 "menu.arabicText" = "Араб мәтіні";
+"menu.footnotes" = "Түсіндірме мәтіні";
 "menu.rotate_to_portrait" = "Кітаптық бағдарға бұру";
 "menu.rotate_to_landscape" = "Альбомдық бағдарға бұру";
 // Metadata: Translated by ChatGPT; human review required.
@@ -691,6 +692,8 @@
 "translation.text.ayah-number" = "%d:%d";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "Түсіндірме №%d";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "аят %@";

@@ -37,6 +37,7 @@ final class MoreMenuViewModel: ObservableObject {
         showLinePageDividers = preferences.showLinePageDividers
         showLinePageSidelines = preferences.showLinePageSidelines
         showArabicText = preferences.showArabicInTranslation
+        showFootnotes = preferences.showFootnotesInTranslation
         #if QURAN_SYNC
         indicatorVisibility = preferences.ayahIndicatorVisibility
         #endif
@@ -124,6 +125,14 @@ final class MoreMenuViewModel: ObservableObject {
             }
             .store(in: &cancellables)
 
+        $showFootnotes
+            .dropFirst()
+            .sink { [weak self] newValue in
+                logger.info("More Menu: set footnotes in translation visible \(newValue)")
+                self?.preferences.showFootnotesInTranslation = newValue
+            }
+            .store(in: &cancellables)
+
         #if QURAN_SYNC
         $indicatorVisibility
             .dropFirst()
@@ -169,6 +178,7 @@ final class MoreMenuViewModel: ObservableObject {
     @Published var showLinePageDividers: Bool
     @Published var showLinePageSidelines: Bool
     @Published var showArabicText: Bool
+    @Published var showFootnotes: Bool
     #if QURAN_SYNC
     @Published var indicatorVisibility: AyahIndicatorVisibility
     #endif

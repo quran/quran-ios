@@ -141,6 +141,7 @@
 "menu.ayahIndicators.readingBookmark" = "O‘qish xatcho‘pi";
 "menu.ayahIndicators.none" = "Hech biri";
 "menu.arabicText" = "Arabcha matn";
+"menu.footnotes" = "Izohlar matni";
 "menu.rotate_to_portrait" = "Vertikal holatga burish";
 "menu.rotate_to_landscape" = "Gorizontal holatga burish";
 // Metadata: Translated by ChatGPT; human review required.
@@ -709,6 +710,8 @@
 "translation.text.ayah-number" = "%d:%d";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "Izoh #%d";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "oyat %@";

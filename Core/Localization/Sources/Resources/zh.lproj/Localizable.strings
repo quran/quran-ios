@@ -145,6 +145,7 @@
 "menu.ayahIndicators.readingBookmark" = "阅读书签";
 "menu.ayahIndicators.none" = "无";
 "menu.arabicText" = "阿拉伯语原文";
+"menu.footnotes" = "脚注内容";
 "menu.rotate_to_portrait" = "旋转为竖屏";
 "menu.rotate_to_landscape" = "旋转为横屏";
 // Metadata: Translated by ChatGPT; human review required.
@@ -712,6 +713,8 @@
 "translation.text.ayah-number" = "%d:%d";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "脚注 #%d";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "节 %@";

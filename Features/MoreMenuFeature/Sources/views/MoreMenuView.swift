@@ -52,8 +52,7 @@ private struct MoreMenuRootView: View {
     /// Each group is one section of the menu, like the sections of a native menu.
     private enum MenuGroup: CaseIterable {
         case mode
-        case translationsSelection
-        case arabicText
+        case translations
         case wordPointer
         case linePageDisplay
         #if QURAN_SYNC
@@ -73,23 +72,40 @@ private struct MoreMenuRootView: View {
         MenuGroup.allCases.filter { isVisible($0) }
     }
 
+    private var showsTranslationsSelection: Bool {
+        isVisible(state.translationsSelection, customCondition: store.mode == .translation)
+    }
+
+    private var showsArabicText: Bool {
+        isVisible(state.arabicText, customCondition: store.mode == .translation)
+    }
+
+    private var showsFootnotes: Bool {
+        isVisible(state.footnotes, customCondition: store.mode == .translation)
+    }
+
     @ViewBuilder
     private func content(of group: MenuGroup) -> some View {
         switch group {
         case .mode:
             MoreMenuModeSelector(mode: $store.mode)
 
-        case .translationsSelection:
-            Button {
-                store.selectTranslations()
-            } label: {
-                MoreMenuTranslationSelector()
-                    .contentShape(Rectangle())
+        case .translations:
+            if showsTranslationsSelection {
+                Button {
+                    store.selectTranslations()
+                } label: {
+                    MoreMenuTranslationSelector()
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(BackgroundHighlightingStyle())
             }
-            .buttonStyle(BackgroundHighlightingStyle())
-
-        case .arabicText:
-            MoreMenuArabicText(enabled: $store.showArabicText)
+            if showsArabicText {
+                MoreMenuArabicText(enabled: $store.showArabicText)
+            }
+            if showsFootnotes {
+                MoreMenuFootnotes(enabled: $store.showFootnotes)
+            }
 
         case .wordPointer:
             MoreMenuWordPointer(enabled: $store.wordPointerEnabled)
@@ -134,8 +150,7 @@ private struct MoreMenuRootView: View {
     private func isVisible(_ group: MenuGroup) -> Bool {
         switch group {
         case .mode: isVisible(state.mode)
-        case .translationsSelection: isVisible(state.translationsSelection, customCondition: store.mode == .translation)
-        case .arabicText: isVisible(state.arabicText, customCondition: store.mode == .translation)
+        case .translations: showsTranslationsSelection || showsArabicText || showsFootnotes
         case .wordPointer: isVisible(state.wordPointer, customCondition: store.mode == .arabic)
         case .linePageDisplay: isVisible(state.linePageDisplay, customCondition: store.mode == .arabic)
         #if QURAN_SYNC

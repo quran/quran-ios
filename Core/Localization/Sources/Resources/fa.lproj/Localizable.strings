@@ -141,6 +141,7 @@
 "menu.ayahIndicators.readingBookmark" = "نشانک مطالعه";
 "menu.ayahIndicators.none" = "هیچ‌کدام";
 "menu.arabicText" = "متن عربی";
+"menu.footnotes" = "متن پاورقی‌ها";
 "menu.rotate_to_portrait" = "چرخش به حالت عمودی";
 "menu.rotate_to_landscape" = "چرخش به حالت افقی";
 // Metadata: Translated by ChatGPT; human review required.
@@ -709,6 +710,8 @@
 "translation.text.ayah-number" = "%d:%d";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "پاورقی شمارهٔ %d";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "آیه %@";

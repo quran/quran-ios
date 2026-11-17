@@ -42,6 +42,7 @@ public final class ContentTranslationViewModel: ObservableObject {
         arabicFontSize = fontSizePreferences.arabicFontSize
         translationFontSize = fontSizePreferences.translationFontSize
         showArabicText = contentStatePreferences.showArabicInTranslation
+        showFootnotes = contentStatePreferences.showFootnotesInTranslation
         selectedTranslations = selectedTranslationsPreferences.selectedTranslationIds
         highlights = [:]
 
@@ -96,6 +97,10 @@ public final class ContentTranslationViewModel: ObservableObject {
             .sink { [weak self] in self?.showArabicText = $0 }
             .store(in: &cancellables)
 
+        contentStatePreferences.$showFootnotesInTranslation
+            .sink { [weak self] in self?.showFootnotes = $0 }
+            .store(in: &cancellables)
+
         // Translation services update the selection from background tasks.
         selectedTranslationsPreferences.$selectedTranslationIds
             .receive(on: DispatchQueue.main)
@@ -143,6 +148,10 @@ public final class ContentTranslationViewModel: ObservableObject {
         didSet { recordListUpdate(reason: "arabic_text_visibility_changed") }
     }
 
+    @Published var showFootnotes: Bool {
+        didSet { recordListUpdate(reason: "footnotes_visibility_changed") }
+    }
+
     @Published var highlights: [AyahNumber: Color]
 
     @Published private(set) var undimmedVerses: Set<AyahNumber>?
@@ -150,6 +159,8 @@ public final class ContentTranslationViewModel: ObservableObject {
     #if QURAN_SYNC
     @Published private(set) var indicatorsByVerse: [AyahNumber: Set<AyahIndicator>] = [:]
     #endif
+
+    @Published var footnote: TranslationFootnote?
 
     @Published var scrollToItem: TranslationItemId?
 
@@ -247,20 +258,9 @@ public final class ContentTranslationViewModel: ObservableObject {
                         )
                     }
 
-                    // Show the footnotes whose markers are in the shown text; Read more shows the rest.
-                    let shownTextEnd = chunks.last?.upperBound ?? string.text.endIndex
-                    for (footnoteIndex, footnoteRange) in string.footnoteRanges.enumerated() where footnoteRange.upperBound <= shownTextEnd {
-                        items.append(
-                            .translationFootnote(
-                                TranslationFootnote(
-                                    verse: verse,
-                                    translation: translation,
-                                    string: string,
-                                    footnoteIndex: footnoteIndex,
-                                    translationFontSize: translationFontSize
-                                ), decoration
-                            )
-                        )
+                    if showFootnotes, !readMore {
+                        items += footnoteChunks(verse: verse, translation: translation, string: string)
+                            .map { .translationFootnoteChunk($0, decoration) }
                     }
                 }
 
@@ -348,6 +348,9 @@ public final class ContentTranslationViewModel: ObservableObject {
 
     func openURL(_ url: TranslationURL) {
         switch url {
+        case .footnote(let translationId, let sura, let ayah, let footnoteIndex):
+            setFootnoteIfNeeded(translationId: translationId, sura: sura, ayah: ayah, footnoteIndex: footnoteIndex)
+
         case .readMore(let translationId, let sura, let ayah):
             expandTranslationIfNeeded(translationId: translationId, sura: sura, ayah: ayah)
         }
@@ -396,6 +399,27 @@ public final class ContentTranslationViewModel: ObservableObject {
         )
     }
 
+    private func footnoteChunks(verse: AyahNumber, translation: Translation, string: TranslationString) -> [TranslationFootnoteChunk] {
+        zip(string.footnoteRanges, string.footnotes.indices).flatMap { markerRange, footnoteIndex in
+            let text = string.footnoteText(at: footnoteIndex)
+            let chunks = text.count <= Self.maxChunkSize
+                ? [text.startIndex ..< text.endIndex]
+                : text.chunkRanges(maxChunkSize: Self.maxChunkSize)
+            return chunks.indices.map { chunkIndex in
+                TranslationFootnoteChunk(
+                    verse: verse,
+                    translation: translation,
+                    footnoteIndex: footnoteIndex,
+                    marker: chunkIndex == 0 ? String(string.text[markerRange]) : nil,
+                    text: text,
+                    chunks: chunks,
+                    chunkIndex: chunkIndex,
+                    translationFontSize: translationFontSize
+                )
+            }
+        }
+    }
+
     private func verseNumber(verse: AyahNumber) -> TranslationVerseNumber {
         #if QURAN_SYNC
         TranslationVerseNumber(verse: verse, indicators: indicatorsByVerse[verse, default: []])
@@ -439,6 +463,17 @@ public final class ContentTranslationViewModel: ObservableObject {
                 let truncatedChunks = string.text.chunkRanges(range: cutoffChunk.upperBound ..< string.text.endIndex, maxChunkSize: Self.maxChunkSize)
                 expandedTranslations[ayah, default: [:]][translation] = [cutoffChunk] + truncatedChunks
             }
+        }
+    }
+
+    private func setFootnoteIfNeeded(translationId: Translation.ID, sura: Int, ayah: Int, footnoteIndex: Int) {
+        performOnTranslationText(translationId: translationId, sura: sura, ayah: ayah) { ayah, translation, string in
+            footnote = TranslationFootnote(
+                string: string,
+                footnoteIndex: footnoteIndex,
+                translation: translation,
+                translationFontSize: translationFontSize
+            )
         }
     }
 

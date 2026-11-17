@@ -116,6 +116,7 @@
 "menu.ayahIndicators.readingBookmark" = "Okuma yer imi";
 "menu.ayahIndicators.none" = "Hiçbiri";
 "menu.arabicText" = "Arapça metin";
+"menu.footnotes" = "Dipnot metni";
 "menu.rotate_to_portrait" = "Dikey konuma döndür";
 "menu.rotate_to_landscape" = "Yatay konuma döndür";
 // Metadata: Translated by ChatGPT; human review required.
@@ -650,6 +651,8 @@
 "translation.text.ayah-number" = "%d:%d";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-number" = "[%d]";
+// Metadata: Translated by ChatGPT; human review required.
+"translation.text.footnote-title" = "Dipnot #%d";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "ayet %@";

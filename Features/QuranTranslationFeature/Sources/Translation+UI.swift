@@ -15,6 +15,10 @@ extension Translation {
         languageCode == "ar" ? .arabicTafseer() : .body
     }
 
+    var footnoteFont: Font {
+        languageCode == "ar" ? .arabicTafseerFootnote() : .footnote
+    }
+
     var characterDirection: Locale.LanguageDirection {
         Locale.characterDirection(forLanguage: languageCode)
     }

@@ -75,6 +75,14 @@ extension TranslationTextChunk: View {
             quranRanges: text.quranRanges,
             firstChunk: chunkIndex == 0,
             readMoreURL: readMore ? readMoreURL : nil,
+            footnoteURL: { index in
+                TranslationURL.footnote(
+                    translationId: translation.id,
+                    sura: verse.sura.suraNumber,
+                    ayah: verse.ayah,
+                    footnoteIndex: index
+                ).url
+            },
             font: translation.textFont,
             fontSize: translationFontSize,
             characterDirection: translation.characterDirection
@@ -82,11 +90,13 @@ extension TranslationTextChunk: View {
     }
 }
 
-extension TranslationFootnote: View {
+extension TranslationFootnoteChunk: View {
     var body: some View {
-        QuranTranslationFootnote(
-            marker: marker,
+        QuranTranslationFootnoteChunk(
             text: text,
+            chunk: chunks[chunkIndex],
+            marker: marker,
+            font: translation.footnoteFont,
             fontSize: translationFontSize,
             characterDirection: translation.characterDirection
         )
@@ -133,8 +143,8 @@ extension TranslationItem {
                 verseNumberView(verseNumber)
             case .translationTextChunk(let translationTextChunk, _):
                 translationTextChunk
-            case .translationFootnote(let translationFootnote, _):
-                translationFootnote
+            case .translationFootnoteChunk(let translationFootnoteChunk, _):
+                translationFootnoteChunk
             case .translationReferenceVerse(let translationReferenceVerse, _):
                 translationReferenceVerse
             case .translatorText(let translatorText, _):

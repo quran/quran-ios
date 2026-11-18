@@ -24,7 +24,10 @@ struct ImageDecorationsLayout {
     init(decorations: ImageDecorations, imageSize: CGSize, scale: WordFrameScale) {
         drawsAyahNumbersAndSuraHeaders = decorations.drawsAyahNumbersAndSuraHeaders
         ayahMarkers = decorations.ayahNumbers.map {
-            AyahMarkerPlacement(ayah: $0.ayah, frame: $0.scaledRectangle(imageSize: imageSize, scale: scale))
+            AyahMarkerPlacement(
+                ayah: $0.ayah,
+                frame: $0.scaledRectangle(imageSize: imageSize, widthRatio: decorations.ayahNumberWidthRatio, scale: scale)
+            )
         }
         suraHeaders = decorations.drawsAyahNumbersAndSuraHeaders ? decorations.suraHeaders.map {
             SuraHeaderPlacement(id: $0, frame: $0.rect.scaled(by: scale))

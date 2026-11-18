@@ -9,6 +9,8 @@ import SwiftUI
 public struct ImageDecorations {
     public var suraHeaders: [SuraHeaderLocation]
     public var ayahNumbers: [AyahNumberLocation]
+    /// An ayah marker's side as a fraction of the image width.
+    public var ayahNumberWidthRatio: CGFloat = 0.06
     public var drawsAyahNumbersAndSuraHeaders: Bool
     public var chromeStyle: QuranPageChromeStyle
     public var wordFrames: WordFrameCollection

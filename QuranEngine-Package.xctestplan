@@ -357,6 +357,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "ReadingSelectorFeatureTests",
+        "name" : "ReadingSelectorFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "QuranTranslationFeatureTests",
         "name" : "QuranTranslationFeatureTests"
       }

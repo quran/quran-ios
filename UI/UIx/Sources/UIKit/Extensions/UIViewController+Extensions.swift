@@ -48,12 +48,8 @@ public extension UIViewController {
         }
         if #available(iOS 16.0, *) {
             setNeedsUpdateOfSupportedInterfaceOrientations()
-            view.window?.windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientations)) { error in
-                logger.error("Failed to rotate to orientations \(orientations.rawValue). Error: \(error)")
-            }
-        } else if let orientation = orientations.preferredOrientation {
-            UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
         }
+        view.requestInterfaceOrientations(orientations)
     }
 
     func setPreferredContentSize(to controller: UIViewController, min minSize: CGSize, max maxSize: CGSize) {
@@ -96,6 +92,22 @@ public extension UIViewController {
             queue.append(contentsOf: viewController.children)
         }
         return nil
+    }
+}
+
+public extension UIView {
+    /// Asks the view's window to rotate to one of `orientations`.
+    ///
+    /// Unlike `UIViewController.requestInterfaceOrientations(_:)`, it asks windows that are regular in
+    /// both size classes too, like iPad's.
+    func requestInterfaceOrientations(_ orientations: UIInterfaceOrientationMask) {
+        if #available(iOS 16.0, *) {
+            window?.windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientations)) { error in
+                logger.error("Failed to rotate to orientations \(orientations.rawValue). Error: \(error)")
+            }
+        } else if let orientation = orientations.preferredOrientation {
+            UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
+        }
     }
 }
 

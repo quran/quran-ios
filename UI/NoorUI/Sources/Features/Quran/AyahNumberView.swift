@@ -8,44 +8,24 @@ import SwiftUI
 
 public struct AyahNumberView: View {
     private let number: Int
-    private let ringColor: Color
-    private let fillColor: Color?
-    private let textColor: Color?
-
-    public init(
-        number: Int,
-        ringColor: Color,
-        fillColor: Color? = nil,
-        textColor: Color? = nil
-    ) {
-        self.number = number
-        self.ringColor = ringColor
-        self.fillColor = fillColor
-        self.textColor = textColor
-    }
+    private let palette: QuranPageChromePalette
 
     public init(number: Int, palette: QuranPageChromePalette) {
-        self.init(
-            number: number,
-            ringColor: palette.markerRing,
-            fillColor: palette.markerFill,
-            textColor: palette.markerText
-        )
+        self.number = number
+        self.palette = palette
     }
 
     public var body: some View {
         ZStack {
-            if let fillColor, textColor != nil {
-                Circle()
-                    .fill(fillColor)
-                    .padding(5)
-            }
+            Circle()
+                .fill(palette.markerFill)
+                .padding(5)
 
             ayahRing
-                .foregroundColor(ringColor)
+                .foregroundColor(palette.markerRing)
 
             ayahText
-                .foregroundColor(markerTextColor)
+                .foregroundColor(palette.markerText)
         }
     }
 
@@ -62,13 +42,6 @@ public struct AyahNumberView: View {
             .font(.largeTitle)
             .minimumScaleFactor(0.03)
             .padding(3)
-    }
-
-    private var markerTextColor: Color {
-        if fillColor != nil, let textColor {
-            return textColor
-        }
-        return ringColor
     }
 }
 

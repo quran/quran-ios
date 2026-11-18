@@ -21,6 +21,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
     // MARK: Internal
 
     override func setUp() async throws {
+        originalReading = ReadingPreferences.shared.reading
         ReadingPreferences.shared.reading = .hafs_1405
 
         testScheduler = .immediate
@@ -54,6 +55,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
         downloader = nil
         session = nil
         service = nil
+        ReadingPreferences.shared.reading = originalReading
     }
 
     func test_bundledResource() async {
@@ -575,6 +577,7 @@ final class ReadingResourcesServiceTests: XCTestCase {
 
     // MARK: Private
 
+    private var originalReading: Reading!
     private var service: ReadingResourcesService!
     private var collector: PublisherCollector<ReadingResourcesService.ResourceStatus>!
     private var remoteResources: ReadingRemoteResourcesFake!

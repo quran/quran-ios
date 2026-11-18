@@ -9,7 +9,6 @@ import Localization
 import NoorUI
 import SwiftUI
 import UIx
-import VLogging
 
 struct MoreMenuDeviceRotation: View {
     @State var orientation: UIInterfaceOrientation = .unknown
@@ -136,13 +135,7 @@ private struct DeviceOrientationResolver: UIViewControllerRepresentable {
         }
         updateOrientationTo = nil
 
-        if #available(iOS 16.0, *) {
-            let orientationMask: UIInterfaceOrientationMask = newOrientation.isLandscape ? .landscape : .portrait
-            view.window?.windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientationMask)) { error in
-                logger.error("Error while updating orientation to \(newOrientation.rawValue). Error: \(error)")
-            }
-        } else {
-            UIDevice.current.setValue(newOrientation.rawValue, forKey: "orientation")
-        }
+        // Not the view controller variant: iPad windows, regular in both size classes, rotate from here too.
+        view.requestInterfaceOrientations(newOrientation.isLandscape ? .landscape : .portrait)
     }
 }

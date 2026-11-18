@@ -15,8 +15,7 @@ final class AdaptiveImageScrollViewTests: XCTestCase {
     func test_pageAtFractionalX_keepsTheScaleAndTextInsets() {
         for width in [414, 600] as [CGFloat] {
             let reference = layout(width: width, x: 0)
-            XCTAssertGreaterThan(reference.scale, 0, "\(width)")
-            XCTAssertGreaterThan(reference.insets.leading, 0, "\(width)")
+            assertMeasured(reference, width: width)
 
             for x in [108.33333333333333, 107.66666666666667] as [CGFloat] {
                 XCTAssertEqual(layout(width: width, x: x), reference, "width \(width), x \(x)")
@@ -33,6 +32,31 @@ final class AdaptiveImageScrollViewTests: XCTestCase {
         var insets = EdgeInsets()
     }
 
+    private let imageSize = CGSize(width: 1024, height: 1656)
+    private let textColumn: ClosedRange<CGFloat> = 61 ... 963
+    private let pageHeight: CGFloat = 896
+    /// The probe header and the footer are 20 points each.
+    private let headerAndFooterHeight: CGFloat = 40
+
+    /// The image fits the content (the page width) and the space between header and footer, centred
+    /// horizontally; the insets reach the text column from the content's edges.
+    private func assertMeasured(_ layout: Layout, width: CGFloat, line: UInt = #line) {
+        let scale = min(width / imageSize.width, (pageHeight - headerAndFooterHeight) / imageSize.height)
+        let imageMargin = (width - imageSize.width * scale) / 2
+        let accuracy = 1e-6
+        XCTAssertEqual(layout.scale, scale, accuracy: accuracy, "\(width)", line: line)
+        XCTAssertEqual(layout.xOffset, 0, accuracy: accuracy, "\(width)", line: line)
+        XCTAssertEqual(layout.yOffset, 0, accuracy: accuracy, "\(width)", line: line)
+        XCTAssertEqual(layout.insets.leading, imageMargin + textColumn.lowerBound * scale, accuracy: accuracy, "\(width)", line: line)
+        XCTAssertEqual(
+            layout.insets.trailing,
+            imageMargin + (imageSize.width - textColumn.upperBound) * scale,
+            accuracy: accuracy,
+            "\(width)",
+            line: line
+        )
+    }
+
     private func layout(width: CGFloat, x: CGFloat) -> Layout {
         var result = Layout()
         let view = AdaptiveImageScrollView(
@@ -41,7 +65,7 @@ final class AdaptiveImageScrollViewTests: XCTestCase {
                 ayahNumbers: [],
                 drawsAyahNumbersAndSuraHeaders: false,
                 wordFrames: WordFrameCollection(frames: []),
-                textColumn: 61 ... 963
+                textColumn: textColumn
             ),
             image: { pageImage },
             onScaleChange: { scale in
@@ -53,12 +77,13 @@ final class AdaptiveImageScrollViewTests: XCTestCase {
             header: { TextInsetsProbe { result.insets = $0 } },
             footer: { Color.clear.frame(height: 20) }
         )
-        let page = UIHostingController(rootView: view)
+        // Ignores the window's safe area, so the space for the image is the page height less header and footer.
+        let page = UIHostingController(rootView: view.ignoresSafeArea())
         let container = UIViewController()
-        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: width + x, height: 896))
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: width + x, height: pageHeight))
         window.rootViewController = container
         container.addChild(page)
-        page.view.frame = CGRect(x: x, y: 0, width: width, height: 896)
+        page.view.frame = CGRect(x: x, y: 0, width: width, height: pageHeight)
         container.view.addSubview(page.view)
         page.didMove(toParent: container)
         window.makeKeyAndVisible()
@@ -76,7 +101,7 @@ final class AdaptiveImageScrollViewTests: XCTestCase {
     private var pageImage: UIImage {
         let format = UIGraphicsImageRendererFormat()
         format.scale = 1
-        let size = CGSize(width: 1024, height: 1656)
+        let size = imageSize
         return UIGraphicsImageRenderer(size: size, format: format).image { context in
             UIColor.black.setFill()
             context.fill(CGRect(origin: .zero, size: size))

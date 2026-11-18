@@ -136,10 +136,14 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                     QuranAyahDim(cutouts: undimmedLineRects)
                 }
             }
-            // The local size: a global frame at a fractional x (mid-swipe) adds float noise to its size.
-            .onSizeChange { size in
-                if imageViewSize != size {
-                    imageViewSize = size
+            // Local size without a preference: global frames add float noise, preferences would reach contentWidth.
+            .background {
+                GeometryReader { geometry in
+                    Color.clear.onChangeWithInitial(of: geometry.size) { size in
+                        if imageViewSize != size {
+                            imageViewSize = size
+                        }
+                    }
                 }
             }
             .onGlobalFrameChanged { onGlobalFrameChange($0) }

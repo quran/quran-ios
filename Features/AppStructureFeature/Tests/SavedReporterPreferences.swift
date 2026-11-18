@@ -55,6 +55,7 @@ struct SavedReporterPreferences {
         "showQuranTranslationView",
         "twoPagesEnabled",
         "showArabicInTranslation",
+        "showFootnotesInTranslation",
         "ayahIndicators",
         "dimsOtherAyahs",
         // SelectedTranslationsPreferences.swift
@@ -68,6 +69,8 @@ struct SavedReporterPreferences {
         // WordTextPreferences.swift
         "wordTranslationType",
         "isWordPointerActive",
+        // AnalyticsSettingsPreferences.swift
+        "com.quran.analytics.settings.last-snapshot-date",
     ]
 
     private let values: [String: Any?]

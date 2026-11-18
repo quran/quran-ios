@@ -1,5 +1,5 @@
 //
-//  AnalyticsUserPropertyValue.swift
+//  AnalyticsSettingValue.swift
 //
 //
 //  Created by Mohamed Afifi on 2026-10-20.
@@ -8,10 +8,11 @@
 import Foundation
 
 /// Values aren't displayed, so they use ASCII digits in every locale.
-public enum AnalyticsUserPropertyValue {
+public enum AnalyticsSettingValue {
     // MARK: Public
 
-    public static let maxLength = 36
+    /// Firebase's limit for an event parameter value.
+    public static let maxLength = 100
 
     public static func onOff(_ isOn: Bool) -> String {
         isOn ? "on" : "off"

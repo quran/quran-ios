@@ -59,6 +59,13 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
             self.excludingVerticalBar = excludingVerticalBar
             super.init(frame: .zero)
             backgroundColor = UIColor.clear
+            if #available(iOS 27.1, *) {
+                // The vertical bar edge can change without a layout pass.
+                registerForTraitChanges(UITraitCollection.systemTraitsAffectingVerticalBarEdge) {
+                    (view: WindowSafeAreaInsetsReaderView, _: UITraitCollection) in
+                    view.updateWindowSafeAreaInsetsIfNeeded()
+                }
+            }
         }
 
         @available(*, unavailable)

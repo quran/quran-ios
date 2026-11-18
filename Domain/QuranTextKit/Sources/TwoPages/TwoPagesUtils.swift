@@ -18,12 +18,12 @@ public enum TwoPagesUtils {
         windowWidth > minimumWindowWidth
     }
 
-    /// Whether two pages are on, given the stored preference and the window's size classes.
+    /// Whether the reader shows two pages: the preference is on and the window is wide enough.
     ///
-    /// People who never chose get two pages in windows that are regular in both dimensions,
-    /// like iPad or an unfolded iPhone Duo, and a single page elsewhere, like an iPhone in landscape.
-    public static func isEnabled(preference: Bool?, isRegularWidthAndHeight: Bool) -> Bool {
-        preference ?? isRegularWidthAndHeight
+    /// Only the window's width decides, not its size classes: iPad, an unfolded iPhone Duo, and large
+    /// iPhones in landscape are wide enough, while narrow Split View, a folded iPhone Duo, and smaller iPhones aren't.
+    public static func isEnabled(preference: Bool, windowWidth: CGFloat) -> Bool {
+        preference && hasEnoughHorizontalSpace(windowWidth: windowWidth)
     }
 
     // MARK: Internal

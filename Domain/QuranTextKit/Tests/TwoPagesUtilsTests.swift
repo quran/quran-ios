@@ -21,13 +21,23 @@ class TwoPagesUtilsTests: XCTestCase {
         XCTAssertTrue(TwoPagesUtils.hasEnoughHorizontalSpace(windowWidth: 1194))
     }
 
-    func test_isEnabled_withoutPreference_followsSizeClasses() {
-        XCTAssertTrue(TwoPagesUtils.isEnabled(preference: nil, isRegularWidthAndHeight: true))
-        XCTAssertFalse(TwoPagesUtils.isEnabled(preference: nil, isRegularWidthAndHeight: false))
+    func test_isEnabled_preferenceOnInAWideWindow_isOn() {
+        // Unfolded iPhone Duo in landscape.
+        XCTAssertTrue(TwoPagesUtils.isEnabled(preference: true, windowWidth: 951))
     }
 
-    func test_isEnabled_withPreference_ignoresSizeClasses() {
-        XCTAssertTrue(TwoPagesUtils.isEnabled(preference: true, isRegularWidthAndHeight: false))
-        XCTAssertFalse(TwoPagesUtils.isEnabled(preference: false, isRegularWidthAndHeight: true))
+    func test_isEnabled_preferenceOnInANarrowWindow_isOff() {
+        // Unfolded iPhone Duo in portrait.
+        XCTAssertFalse(TwoPagesUtils.isEnabled(preference: true, windowWidth: 669))
+    }
+
+    func test_isEnabled_preferenceOffInAWideWindow_isOff() {
+        // iPad in landscape.
+        XCTAssertFalse(TwoPagesUtils.isEnabled(preference: false, windowWidth: 1194))
+    }
+
+    func test_isEnabled_needsMoreThan900Points() {
+        XCTAssertFalse(TwoPagesUtils.isEnabled(preference: true, windowWidth: 900))
+        XCTAssertTrue(TwoPagesUtils.isEnabled(preference: true, windowWidth: 901))
     }
 }

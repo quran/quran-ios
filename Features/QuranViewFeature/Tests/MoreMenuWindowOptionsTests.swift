@@ -12,12 +12,11 @@ import XCTest
 final class MoreMenuWindowOptionsTests: XCTestCase {
     // MARK: Internal
 
-    func test_iPadLandscape_offersTwoPagesOnByDefaultAndKeepsRotation() {
+    func test_iPadLandscape_offersTwoPagesAndKeepsRotation() {
         assertOptions(
             for: ReaderWindow(width: 1194, isRegularWidthAndHeight: true, isPhone: false),
             twoPages: .conditional,
-            orientation: .conditional,
-            twoPagesEnabledByDefault: true
+            orientation: .conditional
         )
     }
 
@@ -26,8 +25,7 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
         assertOptions(
             for: ReaderWindow(width: 375, isRegularWidthAndHeight: false, isPhone: false),
             twoPages: .alwaysOff,
-            orientation: .conditional,
-            twoPagesEnabledByDefault: false
+            orientation: .conditional
         )
     }
 
@@ -35,18 +33,16 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
         assertOptions(
             for: ReaderWindow(width: 874, isRegularWidthAndHeight: false, isPhone: true),
             twoPages: .alwaysOff,
-            orientation: .conditional,
-            twoPagesEnabledByDefault: false
+            orientation: .conditional
         )
     }
 
-    func test_iPhoneProMaxLandscape_offersTwoPagesOffByDefaultAndKeepsRotation() {
+    func test_iPhoneProMaxLandscape_offersTwoPagesAndKeepsRotation() {
         // Regular width, but compact height.
         assertOptions(
             for: ReaderWindow(width: 956, isRegularWidthAndHeight: false, isPhone: true),
             twoPages: .conditional,
-            orientation: .conditional,
-            twoPagesEnabledByDefault: false
+            orientation: .conditional
         )
     }
 
@@ -54,8 +50,7 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
         assertOptions(
             for: ReaderWindow(width: 466, isRegularWidthAndHeight: false, isPhone: true),
             twoPages: .alwaysOff,
-            orientation: .conditional,
-            twoPagesEnabledByDefault: false
+            orientation: .conditional
         )
     }
 
@@ -63,17 +58,15 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
         assertOptions(
             for: ReaderWindow(width: 669, isRegularWidthAndHeight: true, isPhone: true),
             twoPages: .alwaysOff,
-            orientation: .alwaysOff,
-            twoPagesEnabledByDefault: true
+            orientation: .alwaysOff
         )
     }
 
-    func test_iPhoneDuoUnfoldedLandscape_offersTwoPagesOnByDefaultAndHidesRotation() {
+    func test_iPhoneDuoUnfoldedLandscape_offersTwoPagesAndHidesRotation() {
         assertOptions(
             for: ReaderWindow(width: 951, isRegularWidthAndHeight: true, isPhone: true),
             twoPages: .conditional,
-            orientation: .alwaysOff,
-            twoPagesEnabledByDefault: true
+            orientation: .alwaysOff
         )
     }
 
@@ -81,8 +74,7 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
         assertOptions(
             for: nil,
             twoPages: .alwaysOff,
-            orientation: .conditional,
-            twoPagesEnabledByDefault: false
+            orientation: .conditional
         )
     }
 
@@ -92,7 +84,6 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
         for window: ReaderWindow?,
         twoPages: ConfigState,
         orientation: ConfigState,
-        twoPagesEnabledByDefault: Bool,
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
@@ -100,6 +91,5 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
 
         XCTAssertEqual(options.twoPages, twoPages, "two pages", file: file, line: line)
         XCTAssertEqual(options.orientation, orientation, "orientation", file: file, line: line)
-        XCTAssertEqual(options.twoPagesEnabledByDefault, twoPagesEnabledByDefault, "default", file: file, line: line)
     }
 }

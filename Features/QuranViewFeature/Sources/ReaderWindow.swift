@@ -28,13 +28,10 @@ struct MoreMenuWindowOptions: Equatable {
         // An unfolded iPhone Duo resizes instead of rotating, so the rotate buttons would do nothing.
         // iPad rotates, so it keeps them.
         orientation = isRegularWidthAndHeight && window?.isPhone == true ? .alwaysOff : .conditional
-        twoPagesEnabledByDefault = isRegularWidthAndHeight
     }
 
     // MARK: Internal
 
     let twoPages: ConfigState
     let orientation: ConfigState
-    /// The two pages toggle's value for people who never chose.
-    let twoPagesEnabledByDefault: Bool
 }

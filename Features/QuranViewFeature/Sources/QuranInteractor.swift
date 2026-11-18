@@ -195,18 +195,13 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         // TODO: Enable vertical scrolling.
         state.verticalScrolling = .alwaysOff
         // Decide from the reader's window, which changes size when iPhone Duo folds or unfolds.
-        let window = presenter?.readerWindow
-        let hasRoomForTwoPages = window.map { TwoPagesUtils.hasEnoughHorizontalSpace(windowWidth: $0.width) } ?? false
-        state.twoPages = hasRoomForTwoPages ? .conditional : .alwaysOff
-        let isRegularWidthAndHeight = window?.isRegularWidthAndHeight ?? false
-        // An unfolded iPhone Duo resizes instead of rotating, so the rotate buttons would do nothing.
-        if isRegularWidthAndHeight, window?.isPhone == true {
-            state.orientation = .alwaysOff
-        }
+        let windowOptions = MoreMenuWindowOptions(window: presenter?.readerWindow)
+        state.twoPages = windowOptions.twoPages
+        state.orientation = windowOptions.orientation
         let model = MoreMenuModel(
             isWordPointerActive: isWordPointerActive,
             state: state,
-            twoPagesEnabledByDefault: isRegularWidthAndHeight
+            twoPagesEnabledByDefault: windowOptions.twoPagesEnabledByDefault
         )
         let viewController = deps.moreMenuBuilder.build(withListener: self, model: model)
         presenter?.presentMoreMenu(viewController)

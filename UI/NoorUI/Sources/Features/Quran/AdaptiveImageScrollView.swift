@@ -20,7 +20,6 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     #if !QURAN_SYNC
     public init(
         decorations: ImageDecorations,
-        renderingMode: QuranThemedImage.RenderingMode = .tinted,
         image: () -> UIImage?,
         onScaleChange: @escaping (WordFrameScale) -> Void,
         onGlobalFrameChange: @escaping (CGRect) -> Void,
@@ -29,7 +28,6 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     ) {
         self.decorations = decorations
         self.image = image()
-        self.renderingMode = renderingMode
         self.header = header()
         self.footer = footer()
         self.onScaleChange = onScaleChange
@@ -38,7 +36,6 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     #else
     public init(
         decorations: ImageDecorations,
-        renderingMode: QuranThemedImage.RenderingMode = .tinted,
         ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]] = [:],
         image: () -> UIImage?,
         onAyahReadingBookmarkTap: @escaping (AyahNumber, CGPoint) -> Void = { _, _ in },
@@ -51,7 +48,6 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
         self.onAyahReadingBookmarkTap = onAyahReadingBookmarkTap
         self.decorations = decorations
         self.image = image()
-        self.renderingMode = renderingMode
         self.header = header()
         self.footer = footer()
         self.onScaleChange = onScaleChange
@@ -86,7 +82,6 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     private let header: Header
     private let footer: Footer
     private let image: UIImage?
-    private let renderingMode: QuranThemedImage.RenderingMode
     private let decorations: ImageDecorations
     @State private var imageViewSize: CGSize = .zero
     @State private var contentWidth: CGFloat = 0
@@ -121,7 +116,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
         let scale = WordFrameScale.scaling(imageSize: sizeInfo.imageSize, into: sizeInfo.viewSize)
         let layout = ImageDecorationsLayout(decorations: decorations, imageSize: image.size, scale: scale)
 
-        return QuranThemedImage(image: image, renderingMode: renderingMode)
+        return QuranThemedImage(image: image)
             .background {
                 ZStack(alignment: .topLeading) {
                     AyahScrollAnchorsView(wordFrames: decorations.wordFrames, scale: scale)

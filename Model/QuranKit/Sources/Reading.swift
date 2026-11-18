@@ -95,15 +95,6 @@ public enum Reading: Int {
         self == .indoPak
     }
 
-    public var usesInvertedQuranImageRenderingInDarkMode: Bool {
-        switch self {
-        case .hafs_1440, .hafs_1439, .hafs_1441, .tajweed, .indoPak:
-            return true
-        case .hafs_1405, .hafs_1421:
-            return false
-        }
-    }
-
     public var supportsWordPositions: Bool {
         switch self {
         case .hafs_1405:

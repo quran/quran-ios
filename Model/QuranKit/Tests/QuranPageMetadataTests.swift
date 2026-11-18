@@ -140,7 +140,6 @@ final class QuranPageMetadataTests: XCTestCase {
         XCTAssertEqual(Reading.indoPak.imageAssetWidth, 1342)
         XCTAssertTrue(Reading.indoPak.usesLinePageDividers)
         XCTAssertTrue(Reading.indoPak.usesLinePageSidelines)
-        XCTAssertTrue(Reading.indoPak.usesInvertedQuranImageRenderingInDarkMode)
     }
 
     func testOnlyReadingsWithoutEmbeddedDecorationsDrawAyahNumbersAndSuraHeaders() {

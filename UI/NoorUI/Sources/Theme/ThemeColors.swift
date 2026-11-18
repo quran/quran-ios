@@ -51,3 +51,13 @@ extension EnvironmentValues {
         set { self[ThemeColorSchemeOverrideKey.self] = newValue }
     }
 }
+
+extension ColorScheme {
+    var traitCollection: UITraitCollection {
+        switch self {
+        case .light: return UITraitCollection(userInterfaceStyle: .light)
+        case .dark: return UITraitCollection(userInterfaceStyle: .dark)
+        @unknown default: return UITraitCollection(userInterfaceStyle: .light)
+        }
+    }
+}

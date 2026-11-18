@@ -61,10 +61,6 @@ class ContentImageViewModel: ObservableObject {
     @Published private var overlays: VerseOverlays
     @Published private var undimmedVerses: Set<AyahNumber>?
 
-    var imageRenderingMode: QuranThemedImage.RenderingMode {
-        reading.usesInvertedQuranImageRenderingInDarkMode ? .invertInDarkMode : .tinted
-    }
-
     var decorations: ImageDecorations {
         return ImageDecorations(
             suraHeaders: suraHeaderLocations,

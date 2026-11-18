@@ -36,13 +36,8 @@ struct ReadingSelector: View {
         ReadingImageView(
             image: UIImage(named: reading.value.imageName)!,
             suraHeaders: reading.value.suraHeaders,
-            ayahNumbers: reading.value.ayahNumbers,
-            renderingMode: renderingMode(for: reading.value)
+            ayahNumbers: reading.value.ayahNumbers
         )
-    }
-
-    private func renderingMode(for reading: Reading) -> QuranThemedImage.RenderingMode {
-        reading.usesInvertedQuranImageRenderingInDarkMode ? .invertInDarkMode : .tinted
     }
 }
 

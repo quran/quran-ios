@@ -30,7 +30,6 @@ struct ContentImageView: View {
                 onAyahReadingBookmarkTap: onAyahReadingBookmarkTap,
                 onPageReadingBookmarkTap: onPageReadingBookmarkTap,
                 image: viewModel.imagePage?.image,
-                renderingMode: viewModel.imageRenderingMode,
                 page: viewModel.page,
                 scrollToVerse: viewModel.scrollToVerse,
                 wordFrames: viewModel.imagePage?.wordFrames,
@@ -42,7 +41,6 @@ struct ContentImageView: View {
             ContentImageViewBody(
                 decorations: viewModel.decorations,
                 image: viewModel.imagePage?.image,
-                renderingMode: viewModel.imageRenderingMode,
                 page: viewModel.page,
                 scrollToVerse: viewModel.scrollToVerse,
                 wordFrames: viewModel.imagePage?.wordFrames,
@@ -76,7 +74,6 @@ private struct ContentImageViewBody: View {
     var onPageReadingBookmarkTap: (CGRect) -> Void = { _ in }
     #endif
     let image: UIImage?
-    let renderingMode: QuranThemedImage.RenderingMode
     let page: Page
     let scrollToVerse: AyahNumber?
     let wordFrames: WordFrameCollection?
@@ -88,7 +85,6 @@ private struct ContentImageViewBody: View {
         #if QURAN_SYNC
         let content = AdaptiveImageScrollView(
             decorations: decorations,
-            renderingMode: renderingMode,
             ayahReadingBookmarks: ayahReadingBookmarks
         ) {
             image
@@ -104,7 +100,7 @@ private struct ContentImageViewBody: View {
             QuranPageFooter(page: page.localizedNumber)
         }
         #else
-        let content = AdaptiveImageScrollView(decorations: decorations, renderingMode: renderingMode) {
+        let content = AdaptiveImageScrollView(decorations: decorations) {
             image
         } onScaleChange: {
             onScaleChange($0)
@@ -141,7 +137,6 @@ private struct ContentImageViewBody: View {
     ContentImageViewBody(
         decorations: decorations,
         image: UIImage(contentsOfFile: testResourceURL("images/page604.png").path)!,
-        renderingMode: .tinted,
         page: Quran.hafsMadani1405.pages[603],
         scrollToVerse: nil,
         wordFrames: nil,

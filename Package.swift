@@ -841,7 +841,9 @@ private func featuresTargets() -> [[Target]] {
             "QuranGeometry",
             "QuranKit",
         ], testDependencies: [
+            "BatchDownloaderFake",
             "QuranKit",
+            "SystemDependenciesFake",
         ]),
 
         target(type, name: "QuranTranslationFeature", dependencies: [

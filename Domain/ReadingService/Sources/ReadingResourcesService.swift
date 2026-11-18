@@ -18,8 +18,10 @@ import VLogging
 public actor ReadingResourcesService {
     // MARK: Lifecycle
 
-    /// - Parameter removeOtherReadings: Whether loading a reading deletes other readings' downloaded resources.
-    ///   Integration tests pass `false` to retain resources while checking multiple mushafs.
+    /// - Parameters:
+    ///   - removeOtherReadings: Whether loading a reading deletes other readings' downloaded resources.
+    ///     Integration tests pass `false` to retain resources while checking multiple mushafs.
+    ///   - bundledReadings: The readings the app bundles. Defaults to the readings found in the main bundle.
     public init(
         fileManager: FileSystem = DefaultFileSystem(),
         zipper: Zipper = DefaultZipper(),
@@ -29,8 +31,10 @@ public actor ReadingResourcesService {
         preferenceLoadingCompleted: EventObserver? = nil,
         downloader: DownloadManager,
         remoteResources: ReadingRemoteResources?,
-        removeOtherReadings: Bool = true
+        removeOtherReadings: Bool = true,
+        bundledReadings: Set<Reading>? = nil
     ) {
+        self.bundledReadings = bundledReadings ?? Set(Reading.allReadings.filter { $0.bundleURL != nil })
         self.zipper = zipper
         self.fileManager = fileManager
         self.preferencesObservingStarted = preferencesObservingStarted
@@ -61,7 +65,8 @@ public actor ReadingResourcesService {
             .eraseToAnyPublisher()
     }
 
-    public func startLoadingResources() {
+    public func startLoadingResources() async {
+        await replaceSavedReadingIfUnavailable()
         let initialReading = preferences.reading
         readingsTask = Task { [weak self] in
             guard let readings = self?.preferences.$reading.prepend(initialReading).values() else {
@@ -88,6 +93,12 @@ public actor ReadingResourcesService {
         loadResourceInAsyncTask(preferences.reading)
     }
 
+    /// The readings this app can load: the ones it downloads and the ones it bundles.
+    /// Nonisolated so the UI can filter its readings synchronously, before showing any.
+    public nonisolated func availableReadings() -> Set<Reading> {
+        Set(Reading.allReadings.filter(isAvailable))
+    }
+
     // MARK: Internal
 
     let preferenceLoadingCompleted: EventObserver?
@@ -108,6 +119,25 @@ public actor ReadingResourcesService {
     private let downloader: ReadingResourceDownloader
     private let remoteResources: ReadingRemoteResources?
     private let removeOtherReadings: Bool
+    private let bundledReadings: Set<Reading>
+
+    private nonisolated func isAvailable(_ reading: Reading) -> Bool {
+        remoteResources?.resource(for: reading) != nil || bundledReadings.contains(reading)
+    }
+
+    /// Replaces a saved reading this app can't load, like one picked in a build without remote resources,
+    /// with the bundled reading, so the reader never renders pages without resources.
+    /// It runs before observing the preference, so the replacement doesn't start a second load.
+    private func replaceSavedReadingIfUnavailable() async {
+        let reading = preferences.reading
+        guard !isAvailable(reading), let bundledReading = Reading.allReadings.first(where: bundledReadings.contains) else {
+            return
+        }
+        logger.error("Resources: Reading \(reading) is neither downloadable nor bundled. Switching to \(bundledReading)")
+        // Change the preference on the main actor, like the UI does: its observers update
+        // view models, and doing that from this actor's thread deadlocks with the main thread.
+        await MainActor.run { preferences.reading = bundledReading }
+    }
 
     private func loadResourceInAsyncTask(_ reading: Reading) {
         readingTask = Task {

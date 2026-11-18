@@ -271,7 +271,7 @@ final class AnalyticsSettingsReporter {
             AnalyticsSettingValue.quranMode(content.quranMode)
         }
         observe(.twoPages, changes: content.$twoPagesEnabled) {
-            AnalyticsSettingValue.onOff(content.twoPagesEnabled ?? TwoPagesUtils.settingDefaultValue)
+            content.twoPagesEnabled.map(AnalyticsSettingValue.onOff) ?? AnalyticsSettingValue.notChosen
         }
         observe(.arabicInTranslation, changes: content.$showArabicInTranslation) {
             AnalyticsSettingValue.onOff(content.showArabicInTranslation)

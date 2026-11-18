@@ -139,6 +139,12 @@ extension AnalyticsSettingsReporterTests {
         }
     }
 
+    func test_twoPagesNeverChosen_logsDefault() async {
+        await assertChange(of: "two_pages", to: "default") {
+            QuranContentStatePreferences.shared.twoPagesEnabled = nil
+        }
+    }
+
     func test_arabicInTranslationChange_logsIt() async {
         await assertChange(of: "arabic_in_trans", to: "off") {
             QuranContentStatePreferences.shared.showArabicInTranslation = false

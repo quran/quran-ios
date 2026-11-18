@@ -43,6 +43,8 @@ import WordTextService
 @MainActor
 protocol QuranPresentable: UIViewController {
     var pagesView: UIView { get }
+    /// The reader's window, or `nil` while the reader isn't in one.
+    var readerWindow: ReaderWindow? { get }
 
     func startHiddenBarsTimer()
     func hideBars()
@@ -193,14 +195,12 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         // TODO: Enable vertical scrolling.
         state.verticalScrolling = .alwaysOff
         // Decide from the reader's window, which changes size when iPhone Duo folds or unfolds.
-        let window = presenter?.view.window
-        let hasRoomForTwoPages = window.map { TwoPagesUtils.hasEnoughHorizontalSpace(windowWidth: $0.bounds.width) } ?? false
+        let window = presenter?.readerWindow
+        let hasRoomForTwoPages = window.map { TwoPagesUtils.hasEnoughHorizontalSpace(windowWidth: $0.width) } ?? false
         state.twoPages = hasRoomForTwoPages ? .conditional : .alwaysOff
-        let isRegularWidthAndHeight = window.map {
-            $0.traitCollection.horizontalSizeClass == .regular && $0.traitCollection.verticalSizeClass == .regular
-        } ?? false
+        let isRegularWidthAndHeight = window?.isRegularWidthAndHeight ?? false
         // An unfolded iPhone Duo resizes instead of rotating, so the rotate buttons would do nothing.
-        if isRegularWidthAndHeight, window?.traitCollection.userInterfaceIdiom == .phone {
+        if isRegularWidthAndHeight, window?.isPhone == true {
             state.orientation = .alwaysOff
         }
         let model = MoreMenuModel(

@@ -126,12 +126,16 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
 
     /// The part of the image to show. Where the page's height limits its size, the image's own blank
     /// margins are trimmed, so the Quran text gets bigger.
+    ///
+    /// The image's ink bounds keep chrome that some readings draw into the image, like sura header frames:
+    /// no word frame covers it, and those readings have no header locations.
     private func visibleRect(of image: UIImage, trimsMargins: Bool) -> CGRect {
         guard trimsMargins else {
             return CGRect(origin: .zero, size: image.size)
         }
         let contentFrames = decorations.wordFrames.frames.map(\.rect)
             + decorations.suraHeaders.map(\.rect)
+            + (image.quranPageInkBounds.map { [$0] } ?? [])
         return PageMarginTrimming.visibleRect(imageSize: image.size, contentFrames: contentFrames)
     }
 

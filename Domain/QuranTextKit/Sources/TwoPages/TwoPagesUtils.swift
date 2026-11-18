@@ -10,11 +10,6 @@ import UIKit
 public enum TwoPagesUtils {
     // MARK: Public
 
-    /// The value reported for people who never chose, when no window is available to decide.
-    public static var settingDefaultValue: Bool {
-        UIDevice.current.userInterfaceIdiom != .phone
-    }
-
     /// Whether a window this wide has room for two Quran pages side by side.
     ///
     /// Pass the window's width, not the screen's: on iPhone Duo the screens differ from the window,

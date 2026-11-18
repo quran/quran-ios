@@ -14,6 +14,9 @@ public enum AnalyticsSettingValue {
     /// Firebase's limit for an event parameter value.
     public static let maxLength = 100
 
+    /// For a setting the person never chose, so the app decides its value.
+    public static let notChosen = "default"
+
     public static func onOff(_ isOn: Bool) -> String {
         isOn ? "on" : "off"
     }

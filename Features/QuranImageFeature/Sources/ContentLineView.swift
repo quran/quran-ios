@@ -278,7 +278,9 @@ private struct ContentLineViewBody: View {
 
     private func lineDividers(_ layout: LinePageLayout) -> some View {
         ForEach(layout.lineDividers, id: \.lineNumber) { divider in
-            Color.primary
+            // Drawn as ink, so dividers get the same theme tint as the line images.
+            Color.black
+                .invertThemedColorIfNeeded()
                 .placed(in: divider.frame)
         }
     }

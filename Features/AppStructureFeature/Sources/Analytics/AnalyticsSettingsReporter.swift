@@ -1,5 +1,5 @@
 //
-//  AnalyticsUserPropertiesReporter.swift
+//  AnalyticsSettingsReporter.swift
 //
 //
 //  Created by Mohamed Afifi on 2026-10-20.
@@ -17,13 +17,15 @@ import QuranAudioKit
 import QuranTextKit
 import ReadingService
 import ReciterService
+import SystemDependencies
 import TranslationService
 import UIKit
 import VLogging
 import WordTextService
 
+/// Logs `setting_changed` when a setting changes, and the current settings once a day.
 @MainActor
-final class AnalyticsUserPropertiesReporter {
+final class AnalyticsSettingsReporter {
     // MARK: Lifecycle
 
     #if QURAN_SYNC
@@ -32,6 +34,7 @@ final class AnalyticsUserPropertiesReporter {
         appIconService: AppIconService,
         reciterRetriever: ReciterDataRetriever,
         appLanguage: String?,
+        time: SystemTime,
         authenticationClient: any AuthenticationClient,
         notificationCenter: NotificationCenter = .default
     ) {
@@ -39,6 +42,7 @@ final class AnalyticsUserPropertiesReporter {
         self.appIconService = appIconService
         self.reciterRetriever = reciterRetriever
         self.appLanguage = appLanguage
+        self.time = time
         self.authenticationClient = authenticationClient
         self.notificationCenter = notificationCenter
     }
@@ -47,12 +51,16 @@ final class AnalyticsUserPropertiesReporter {
         analytics: AnalyticsLibrary,
         appIconService: AppIconService,
         reciterRetriever: ReciterDataRetriever,
-        appLanguage: String?
+        appLanguage: String?,
+        time: SystemTime,
+        notificationCenter: NotificationCenter = .default
     ) {
         self.analytics = analytics
         self.appIconService = appIconService
         self.reciterRetriever = reciterRetriever
         self.appLanguage = appLanguage
+        self.time = time
+        self.notificationCenter = notificationCenter
     }
     #endif
 
@@ -60,6 +68,7 @@ final class AnalyticsUserPropertiesReporter {
 
     // Exposed for tests to await.
     private(set) var reciterUpdate: Task<Void, Never>?
+    private(set) var snapshotUpdate: Task<Void, Never>?
     #if QURAN_SYNC
     private(set) var syncSignedInUpdate: Task<Void, Never>?
     /// Follows the signed-in user; cancel it to stop. `LaunchStartup` keeps the reporter for the app's lifetime,
@@ -68,7 +77,8 @@ final class AnalyticsUserPropertiesReporter {
     #endif
 
     func start() {
-        logger.info("Analytics: reporting user properties")
+        logger.info("Analytics: reporting settings")
+        LegacyUserPropertiesCleanup.run(analytics: analytics)
 
         reportApp()
         reportAudio()
@@ -76,6 +86,11 @@ final class AnalyticsUserPropertiesReporter {
         #if QURAN_SYNC
         observeUserID()
         #endif
+
+        logSnapshotIfDue()
+        notificationCenter.publisher(for: UIApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in self?.becameActive() }
+            .store(in: &cancellables)
     }
 
     // MARK: Private
@@ -84,13 +99,16 @@ final class AnalyticsUserPropertiesReporter {
     private let appIconService: AppIconService
     private let reciterRetriever: ReciterDataRetriever
     private let appLanguage: String?
+    private let time: SystemTime
+    private let notificationCenter: NotificationCenter
+    private let preferences = AnalyticsSettingsPreferences.shared
     #if QURAN_SYNC
     private let authenticationClient: any AuthenticationClient
-    private let notificationCenter: NotificationCenter
     #endif
 
     private var cancellables: Set<AnyCancellable> = []
-    private var reportedValues: [AnalyticsUserProperty: String?] = [:]
+    /// Every setting's latest value, nil for none.
+    private var values: [AnalyticsSetting: String?] = [:]
     private var reciterId: Int?
     #if QURAN_SYNC
     /// `.none` until the first user ID is sent.
@@ -105,11 +123,11 @@ final class AnalyticsUserPropertiesReporter {
         #else
         set("standard", for: .buildFlavor)
         #endif
-        set(appLanguage.map(AnalyticsUserPropertyValue.limited), for: .appLanguage)
+        set(appLanguage.map(AnalyticsSettingValue.limited), for: .appLanguage)
 
         appIconService.currentOptionPublisher
             .sink { [weak self] option in
-                self?.set(AnalyticsUserPropertyValue.limited(option.id), for: .appIcon)
+                self?.set(AnalyticsSettingValue.limited(option.id), for: .appIcon)
             }
             .store(in: &cancellables)
 
@@ -117,10 +135,6 @@ final class AnalyticsUserPropertiesReporter {
         authenticationClient.authenticationStateChanges
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in self?.setSyncSignedIn(state) }
-            .store(in: &cancellables)
-        // A session the server ends doesn't notify the client.
-        notificationCenter.publisher(for: UIApplication.didBecomeActiveNotification)
-            .sink { [weak self] _ in self?.readSyncSignedIn() }
             .store(in: &cancellables)
         readSyncSignedIn()
         #endif
@@ -130,16 +144,18 @@ final class AnalyticsUserPropertiesReporter {
     private func readSyncSignedIn() {
         syncSignedInUpdate?.cancel()
         syncSignedInUpdate = Task { [weak self, authenticationClient] in
+            // At launch the state reads signed out until MobileSync has read the stored session, which the
+            // first user update waits for.
+            _ = try? await authenticationClient.loggedInUserUpdates.first { _ in true }
             let state = await authenticationClient.authenticationState
             guard !Task.isCancelled else { return }
-            // Not the user ID: at launch the state may not be final until the stored session is read.
-            self?.set(AnalyticsUserPropertyValue.yesNo(state == .authenticated), for: .syncSignedIn)
+            self?.set(AnalyticsSettingValue.yesNo(state == .authenticated), for: .syncSignedIn)
         }
     }
 
     private func setSyncSignedIn(_ state: AuthenticationState) {
         syncSignedInUpdate?.cancel()
-        set(AnalyticsUserPropertyValue.yesNo(state == .authenticated), for: .syncSignedIn)
+        set(AnalyticsSettingValue.yesNo(state == .authenticated), for: .syncSignedIn)
         if state == .authenticated {
             // Recovers the user ID if the observation ended with an error.
             observeUserID()
@@ -195,29 +211,29 @@ final class AnalyticsUserPropertiesReporter {
     private func reportAudio() {
         let audio = AudioPreferences.shared
         observe(.playbackRate, changes: audio.$playbackRate) {
-            AnalyticsUserPropertyValue.playbackRate(audio.playbackRate)
+            AnalyticsSettingValue.playbackRate(audio.playbackRate)
         }
         observe(.audioEnd, changes: audio.$audioEnd) {
-            AnalyticsUserPropertyValue.audioEnd(audio.audioEnd)
+            AnalyticsSettingValue.audioEnd(audio.audioEnd)
         }
         observe(.verseRepeat, changes: audio.$verseRuns) {
-            AnalyticsUserPropertyValue.runs(audio.verseRuns)
+            AnalyticsSettingValue.runs(audio.verseRuns)
         }
         observe(.rangeRepeat, changes: audio.$listRuns) {
-            AnalyticsUserPropertyValue.runs(audio.listRuns)
+            AnalyticsSettingValue.runs(audio.listRuns)
         }
         observe(.versePause, changes: audio.$verseDelay) {
-            AnalyticsUserPropertyValue.verseDelay(audio.verseDelay)
+            AnalyticsSettingValue.verseDelay(audio.verseDelay)
         }
         observe(.rangePause, changes: audio.$repetitionDelay) {
-            AnalyticsUserPropertyValue.repetitionDelay(audio.repetitionDelay)
+            AnalyticsSettingValue.repetitionDelay(audio.repetitionDelay)
         }
         observe(.audioStreaming, changes: audio.$streamingEnabled) {
-            AnalyticsUserPropertyValue.onOff(audio.streamingEnabled)
+            AnalyticsSettingValue.onOff(audio.streamingEnabled)
         }
         let content = QuranContentStatePreferences.shared
         observe(.dimOtherAyahs, changes: content.$dimsOtherAyahs) {
-            AnalyticsUserPropertyValue.onOff(content.dimsOtherAyahs)
+            AnalyticsSettingValue.onOff(content.dimsOtherAyahs)
         }
 
         ReciterPreferences.shared.$lastSelectedReciterId
@@ -238,7 +254,7 @@ final class AnalyticsUserPropertiesReporter {
             guard !Task.isCancelled else { return }
             // Playback falls back to the first reciter when the selected one is unavailable.
             let reciter = reciters.first { $0.id == id } ?? reciters.first
-            self?.set(reciter.map { AnalyticsUserPropertyValue.reciter(nameKey: $0.nameKey) }, for: .reciter)
+            self?.set(reciter.map { AnalyticsSettingValue.reciter(nameKey: $0.nameKey) }, for: .reciter)
         }
     }
 
@@ -247,44 +263,47 @@ final class AnalyticsUserPropertiesReporter {
     private func reportReading() {
         let reading = ReadingPreferences.shared
         observe(.mushaf, changes: reading.$reading) {
-            AnalyticsUserPropertyValue.mushaf(reading.reading)
+            AnalyticsSettingValue.mushaf(reading.reading)
         }
 
         let content = QuranContentStatePreferences.shared
         observe(.quranMode, changes: content.$quranMode) {
-            AnalyticsUserPropertyValue.quranMode(content.quranMode)
+            AnalyticsSettingValue.quranMode(content.quranMode)
         }
         observe(.twoPages, changes: content.$twoPagesEnabled) {
-            AnalyticsUserPropertyValue.onOff(content.twoPagesEnabled)
+            AnalyticsSettingValue.onOff(content.twoPagesEnabled)
         }
         observe(.arabicInTranslation, changes: content.$showArabicInTranslation) {
-            AnalyticsUserPropertyValue.onOff(content.showArabicInTranslation)
+            AnalyticsSettingValue.onOff(content.showArabicInTranslation)
+        }
+        observe(.footnotes, changes: content.$showFootnotesInTranslation) {
+            AnalyticsSettingValue.onOff(content.showFootnotesInTranslation)
         }
         #if QURAN_SYNC
         observe(.ayahIndicators, changes: content.$ayahIndicatorVisibility) {
-            AnalyticsUserPropertyValue.ayahIndicators(content.ayahIndicatorVisibility)
+            AnalyticsSettingValue.ayahIndicators(content.ayahIndicatorVisibility)
         }
         #endif
 
         let translations = SelectedTranslationsPreferences.shared
         observe(.translationsCount, changes: translations.$selectedTranslationIds) {
-            AnalyticsUserPropertyValue.countBucket(translations.selectedTranslationIds.count)
+            AnalyticsSettingValue.countBucket(translations.selectedTranslationIds.count)
         }
 
         let fontSizes = FontSizePreferences.shared
         observe(.arabicFontSize, changes: fontSizes.$arabicFontSize) {
-            AnalyticsUserPropertyValue.fontSize(fontSizes.arabicFontSize)
+            AnalyticsSettingValue.fontSize(fontSizes.arabicFontSize)
         }
         observe(.translationFontSize, changes: fontSizes.$translationFontSize) {
-            AnalyticsUserPropertyValue.fontSize(fontSizes.translationFontSize)
+            AnalyticsSettingValue.fontSize(fontSizes.translationFontSize)
         }
 
         let theme = ThemeService.shared
         observe(.appearance, changes: theme.appearanceModePublisher) {
-            AnalyticsUserPropertyValue.appearance(theme.appearanceMode)
+            AnalyticsSettingValue.appearance(theme.appearanceMode)
         }
         observe(.themeStyle, changes: theme.themeStylePublisher) {
-            AnalyticsUserPropertyValue.themeStyle(theme.themeStyle)
+            AnalyticsSettingValue.themeStyle(theme.themeStyle)
         }
 
         let words = WordTextPreferences.shared
@@ -293,29 +312,82 @@ final class AnalyticsUserPropertiesReporter {
             words.$wordTextType.map { _ in () }
         )
         observe(.wordPointer, changes: wordPointerChanges) {
-            AnalyticsUserPropertyValue.wordPointer(isActive: words.isWordPointerActive, textType: words.wordTextType)
+            AnalyticsSettingValue.wordPointer(isActive: words.isWordPointerActive, textType: words.wordTextType)
         }
+    }
+
+    // MARK: Snapshot
+
+    private func becameActive() {
+        #if QURAN_SYNC
+        // A session the server ends doesn't notify the client.
+        readSyncSignedIn()
+        #endif
+        logSnapshotIfDue()
+    }
+
+    /// Logs the snapshot unless one was logged today, after any earlier snapshot and once every value is known.
+    private func logSnapshotIfDue() {
+        snapshotUpdate = Task { [weak self, previous = snapshotUpdate] in
+            await previous?.value
+            await self?.waitForLookups()
+            self?.logSnapshotUnlessLoggedToday()
+        }
+    }
+
+    /// Waits for the reciter and sign-in lookups, including any that replaces one meanwhile.
+    private func waitForLookups() async {
+        var awaited: Set<Task<Void, Never>> = []
+        while let lookup = lookups.first(where: { !awaited.contains($0) }) {
+            await lookup.value
+            awaited.insert(lookup)
+        }
+    }
+
+    private var lookups: [Task<Void, Never>] {
+        #if QURAN_SYNC
+        [reciterUpdate, syncSignedInUpdate].compactMap { $0 }
+        #else
+        [reciterUpdate].compactMap { $0 }
+        #endif
+    }
+
+    private func logSnapshotUnlessLoggedToday() {
+        let now = time.now
+        if let lastDate = preferences.lastSnapshotDate, Calendar.current.isDate(lastDate, inSameDayAs: now) {
+            return
+        }
+        preferences.lastSnapshotDate = now
+        logger.info("Analytics: logging the settings snapshot")
+        analytics.settingsSnapshot(values.compactMapValues { $0 })
     }
 
     // MARK: Reporting
 
     private func observe<Changes: Publisher>(
-        _ property: AnalyticsUserProperty,
+        _ setting: AnalyticsSetting,
         changes: Changes,
         value: @escaping () -> String?
     ) where Changes.Failure == Never {
         changes
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in self?.set(value(), for: property) }
+            .sink { [weak self] _ in self?.set(value(), for: setting) }
             .store(in: &cancellables)
-        set(value(), for: property)
+        set(value(), for: setting)
     }
 
-    private func set(_ value: String?, for property: AnalyticsUserProperty) {
-        if let reportedValue = reportedValues[property], reportedValue == value {
+    /// Records the first value silently: the snapshot reports it.
+    private func set(_ value: String?, for setting: AnalyticsSetting) {
+        guard let reportedValue = values[setting] else {
+            values[setting] = .some(value)
             return
         }
-        reportedValues[property] = .some(value)
-        analytics.setUserProperty(value, for: property)
+        guard reportedValue != value else {
+            return
+        }
+        values[setting] = .some(value)
+        if setting.logsChanges {
+            analytics.settingChanged(setting, to: value)
+        }
     }
 }

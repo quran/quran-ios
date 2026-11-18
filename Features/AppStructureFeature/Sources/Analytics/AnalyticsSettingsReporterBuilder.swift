@@ -1,5 +1,5 @@
 //
-//  AnalyticsUserPropertiesReporterBuilder.swift
+//  AnalyticsSettingsReporterBuilder.swift
 //
 //
 //  Created by Mohamed Afifi on 2026-10-20.
@@ -9,29 +9,32 @@ import AppDependencies
 import Foundation
 import NoorUI
 import ReciterService
+import SystemDependencies
 
 @MainActor
-struct AnalyticsUserPropertiesReporterBuilder {
+struct AnalyticsSettingsReporterBuilder {
     // MARK: Internal
 
     let container: AppDependencies
 
-    func build(appIconService: AppIconService) -> AnalyticsUserPropertiesReporter {
+    func build(appIconService: AppIconService) -> AnalyticsSettingsReporter {
         let appLanguage = Bundle.main.preferredLocalizations.first
         #if QURAN_SYNC
-        return AnalyticsUserPropertiesReporter(
+        return AnalyticsSettingsReporter(
             analytics: container.analytics,
             appIconService: appIconService,
             reciterRetriever: ReciterDataRetriever(),
             appLanguage: appLanguage,
+            time: DefaultSystemTime(),
             authenticationClient: container.authenticationClient
         )
         #else
-        return AnalyticsUserPropertiesReporter(
+        return AnalyticsSettingsReporter(
             analytics: container.analytics,
             appIconService: appIconService,
             reciterRetriever: ReciterDataRetriever(),
-            appLanguage: appLanguage
+            appLanguage: appLanguage,
+            time: DefaultSystemTime()
         )
         #endif
     }

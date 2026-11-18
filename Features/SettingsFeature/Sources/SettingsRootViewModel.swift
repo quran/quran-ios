@@ -135,7 +135,6 @@ final class SettingsRootViewModel: ObservableObject {
             return
         }
         logger.info("Settings: appearance mode changed to \(mode)")
-        analytics.changeAppearanceMode(mode)
         appearanceMode = mode
     }
 
@@ -368,9 +367,3 @@ enum QuranComAccountState: Equatable {
     case signedIn(MobileSyncUser?)
 }
 #endif
-
-private extension AnalyticsLibrary {
-    func changeAppearanceMode(_ mode: AppearanceMode) {
-        logEvent("ChangeAppearanceMode", value: mode.description)
-    }
-}

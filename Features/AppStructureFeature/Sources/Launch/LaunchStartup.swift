@@ -31,7 +31,7 @@ public final class LaunchStartup {
         recitersPathMigrator: RecitersPathMigrator,
         reviewService: ReviewService,
         appIconService: AppIconService,
-        analyticsUserPropertiesReporterBuilder: AnalyticsUserPropertiesReporterBuilder
+        analyticsSettingsReporterBuilder: AnalyticsSettingsReporterBuilder
     ) {
         self.appBuilder = appBuilder
         self.launchStores = launchStores
@@ -41,7 +41,7 @@ public final class LaunchStartup {
         self.recitersPathMigrator = recitersPathMigrator
         self.reviewService = reviewService
         self.appIconService = appIconService
-        self.analyticsUserPropertiesReporterBuilder = analyticsUserPropertiesReporterBuilder
+        self.analyticsSettingsReporterBuilder = analyticsSettingsReporterBuilder
     }
 
     deinit {
@@ -94,8 +94,8 @@ public final class LaunchStartup {
     private let audioUpdater: AudioUpdater
     private let reviewService: ReviewService
     private let appIconService: AppIconService
-    private let analyticsUserPropertiesReporterBuilder: AnalyticsUserPropertiesReporterBuilder
-    private var analyticsUserPropertiesReporter: AnalyticsUserPropertiesReporter?
+    private let analyticsSettingsReporterBuilder: AnalyticsSettingsReporterBuilder
+    private var analyticsSettingsReporter: AnalyticsSettingsReporter?
     private let crashApplicationObserver = CrashApplicationObserver()
     private let notificationCenter = NotificationCenter.default
 
@@ -189,7 +189,7 @@ public final class LaunchStartup {
             startLegacyDataImport()
             syncOnReturningToForeground()
             #endif
-            startReportingUserProperties()
+            startReportingSettings()
             upgradeIfNeeded(window: window)
         case .showStorageFull:
             reportStorageFull()
@@ -313,10 +313,10 @@ public final class LaunchStartup {
     }
 
     /// Preferences read while protected data is unavailable return their defaults.
-    private func startReportingUserProperties() {
-        guard analyticsUserPropertiesReporter == nil else { return }
-        let reporter = analyticsUserPropertiesReporterBuilder.build(appIconService: appIconService)
-        analyticsUserPropertiesReporter = reporter
+    private func startReportingSettings() {
+        guard analyticsSettingsReporter == nil else { return }
+        let reporter = analyticsSettingsReporterBuilder.build(appIconService: appIconService)
+        analyticsSettingsReporter = reporter
         reporter.start()
     }
 

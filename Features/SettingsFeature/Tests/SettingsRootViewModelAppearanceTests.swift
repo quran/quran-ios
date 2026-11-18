@@ -5,7 +5,6 @@
 //  Created by Mohamed Afifi on 2026-09-29.
 //
 
-import Analytics
 import AnalyticsFake
 import AppDependenciesFake
 import AppIconFeature
@@ -44,25 +43,14 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
 
     // MARK: Appearance mode
 
-    func test_selectAppearanceMode_appliesAndLogsChange() {
-        let analytics = AnalyticsLibrarySpy()
-        let sut = makeSUT(analytics: analytics)
+    func test_selectAppearanceMode_appliesIt() {
+        let sut = makeSUT()
         let mode: AppearanceMode = sut.appearanceMode == .dark ? .light : .dark
 
         sut.selectAppearanceMode(mode)
 
         XCTAssertEqual(sut.appearanceMode, mode)
         XCTAssertEqual(ThemeService.shared.appearanceMode, mode)
-        XCTAssertEqual(analytics.events, [.init(name: "ChangeAppearanceMode", value: mode.description)])
-    }
-
-    func test_selectAppearanceMode_ignoresCurrentMode() {
-        let analytics = AnalyticsLibrarySpy()
-        let sut = makeSUT(analytics: analytics)
-
-        sut.selectAppearanceMode(sut.appearanceMode)
-
-        XCTAssertEqual(analytics.events, [])
     }
 
     // MARK: App Icon
@@ -146,7 +134,6 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
     }
 
     private func makeSUT(
-        analytics: AnalyticsLibrary = AnalyticsLibrarySpy(),
         appIconService: AppIconService? = nil,
         navigationController: UINavigationController? = nil
     ) -> SettingsRootViewModel {
@@ -155,7 +142,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
         let appIconService = appIconService ?? makeService()
         #if QURAN_SYNC
         return SettingsRootViewModel(
-            analytics: analytics,
+            analytics: AnalyticsLibrarySpy(),
             reviewService: ReviewService(analytics: AnalyticsLibrarySpy()),
             authenticationClient: container.authenticationClient,
             quranDataService: container.quranDataService,
@@ -172,7 +159,7 @@ final class SettingsRootViewModelAppearanceTests: XCTestCase {
         )
         #else
         return SettingsRootViewModel(
-            analytics: analytics,
+            analytics: AnalyticsLibrarySpy(),
             reviewService: ReviewService(analytics: AnalyticsLibrarySpy()),
             audioPlaybackBuilder: AudioPlaybackBuilder(),
             audioDownloadsBuilder: AudioDownloadsBuilder(container: container),

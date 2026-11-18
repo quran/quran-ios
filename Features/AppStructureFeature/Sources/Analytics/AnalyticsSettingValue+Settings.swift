@@ -1,5 +1,5 @@
 //
-//  AnalyticsUserPropertyValue+Settings.swift
+//  AnalyticsSettingValue+Settings.swift
 //
 //
 //  Created by Mohamed Afifi on 2026-10-20.
@@ -13,7 +13,7 @@ import QuranKit
 import QuranText
 
 // Explicit names, so renumbered raw values or edited descriptions never change a reported value.
-extension AnalyticsUserPropertyValue {
+extension AnalyticsSettingValue {
     // MARK: Audio
 
     static func playbackRate(_ rate: Float) -> String {

@@ -38,7 +38,7 @@ public struct AyahNotesBuilder {
         )
         viewControllerReference.value = viewController
 
-        let navigationController = BaseNavigationController(rootViewController: viewController)
+        let navigationController = AyahNotesNavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .pageSheet
         return navigationController
     }

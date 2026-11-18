@@ -95,6 +95,10 @@ final class NotesViewController: UIHostingController<NotesView>, UISearchBarDele
         addCloudSyncInfo()
         #endif
 
+        let shareButton = NavigationBarButton.share(accessibilityLabel: l("ayah.menu.share")) { [weak self] in
+            self?.shareAllNotes()
+        }
+
         editController = NavigationEditModeController(
             navigationItem: navigationItem,
             reload: viewModel.objectWillChange.eraseToAnyPublisher(),
@@ -102,19 +106,11 @@ final class NotesViewController: UIHostingController<NotesView>, UISearchBarDele
                 get: { [weak self] in self?.currentEditMode },
                 set: { [weak self] value in self?.viewModel.editMode = value ?? .inactive }
             ),
-            listItems: [
-                UIBarButtonItem(
-                    image: NoorSystemImage.share.uiImage,
-                    style: .plain,
-                    target: self,
-                    action: #selector(shareAllNotes)
-                ),
-            ],
+            listItems: [shareButton],
             customItems: [search.barButtonItem].compactMap { $0 }
         )
     }
 
-    @objc
     private func shareAllNotes() {
         Task {
             do {

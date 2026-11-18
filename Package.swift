@@ -387,6 +387,7 @@ private func dataTargets() -> [[Target]] {
         // MARK: - Quran.com OAuth
 
         target(type, name: "AuthenticationClient", dependencies: [
+            "Localization",
             "Utilities",
             "VLogging",
         ] + mobileSyncTargetDependencies, testDependencies: [

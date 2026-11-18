@@ -2,6 +2,7 @@
 
 import Combine
 import Foundation
+import Localization
 import MobileSync
 import UIKit
 import Utilities
@@ -32,7 +33,8 @@ public final class AuthenticationClientMobileSyncImpl: AuthenticationClient, Sen
         let previousState = authenticationState
         defer { reportStateChange(from: previousState) }
         do {
-            try await authService.login()
+            let uiLocales = [Locale.preferredLanguageLocale.languageCode].compactMap { $0 }
+            try await authService.login(uiLocales: uiLocales)
         } catch {
             logger.error("Failed to login via mobile sync: \(error)")
             throw AuthenticationClientError(error)

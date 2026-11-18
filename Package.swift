@@ -24,7 +24,7 @@ let mobileSyncPackageDependency: Package.Dependency = {
     if let localMobileSyncPackagePath, !localMobileSyncPackagePath.isEmpty {
         return .package(path: localMobileSyncPackagePath)
     }
-    return .package(url: "https://github.com/quran/mobile-sync-spm.git", .upToNextMinor(from: "0.4.15"))
+    return .package(url: "https://github.com/quran/mobile-sync-spm.git", .upToNextMinor(from: "0.4.16"))
 }()
 
 let mobileSyncPackageDependencies: [Package.Dependency] =
@@ -387,6 +387,7 @@ private func dataTargets() -> [[Target]] {
         // MARK: - Quran.com OAuth
 
         target(type, name: "AuthenticationClient", dependencies: [
+            "Localization",
             "Utilities",
             "VLogging",
         ] + mobileSyncTargetDependencies, testDependencies: [

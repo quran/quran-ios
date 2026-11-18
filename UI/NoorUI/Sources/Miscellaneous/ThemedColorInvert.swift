@@ -13,7 +13,10 @@ private struct ThemedColorInvertModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         if colorScheme == .dark || themeStyle == .quiet {
-            content.colorInvert()
+            // Rotating the hue back keeps colored chrome and tajweed colors meaningful.
+            content
+                .colorInvert()
+                .hueRotation(.degrees(180))
         } else {
             content
         }

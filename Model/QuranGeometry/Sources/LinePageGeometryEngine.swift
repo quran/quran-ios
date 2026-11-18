@@ -472,7 +472,7 @@ public struct LinePageGeometryEngine {
         in pageFrame: CGRect,
         data: LinePageGeometryData
     ) -> [LinePageAyahMarkerPlacement] {
-        let markerDimension = 0.05 * pageFrame.width
+        let markerDimension = AyahMarkerWidthRatio.linePage * pageFrame.width
 
         return markers.map { marker in
             let contentFrame = lineContentFrame(in: pageFrame, lineIndex: marker.line, data: data)

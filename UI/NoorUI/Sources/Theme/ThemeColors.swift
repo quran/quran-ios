@@ -42,6 +42,12 @@ extension EnvironmentValues {
         themeColorSchemeOverride ?? colorScheme
     }
 
+    /// Quran pages are dark in the quiet theme whatever the appearance mode, so their images and
+    /// chrome follow this instead of `themeColorScheme`.
+    public var quranPageColorScheme: ColorScheme {
+        themeStyle == .quiet ? .dark : themeColorScheme
+    }
+
     public var themeColors: ThemeColors {
         ThemeColors(style: themeStyle, colorScheme: themeColorScheme)
     }
@@ -49,5 +55,15 @@ extension EnvironmentValues {
     var themeColorSchemeOverride: ColorScheme? {
         get { self[ThemeColorSchemeOverrideKey.self] }
         set { self[ThemeColorSchemeOverrideKey.self] = newValue }
+    }
+}
+
+extension ColorScheme {
+    var traitCollection: UITraitCollection {
+        switch self {
+        case .light: return UITraitCollection(userInterfaceStyle: .light)
+        case .dark: return UITraitCollection(userInterfaceStyle: .dark)
+        @unknown default: return UITraitCollection(userInterfaceStyle: .light)
+        }
     }
 }

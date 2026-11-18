@@ -8,13 +8,12 @@
 
 import NoorUI
 import QuranGeometry
+import QuranKit
 import SwiftUI
 
 struct ReadingImageView: View {
     let image: UIImage
-    let suraHeaders: [SuraHeaderLocation]
-    let ayahNumbers: [AyahNumberLocation]
-    let renderingMode: QuranThemedImage.RenderingMode
+    let reading: Reading
 
     var body: some View {
         content
@@ -22,7 +21,7 @@ struct ReadingImageView: View {
     }
 
     private var content: some View {
-        AdaptiveImageScrollView(decorations: decorations, renderingMode: renderingMode) {
+        AdaptiveImageScrollView(decorations: reading.previewDecorations) {
             image
         } onScaleChange: { _ in
         } onGlobalFrameChange: { _ in
@@ -30,12 +29,16 @@ struct ReadingImageView: View {
         } footer: {
         }
     }
+}
 
-    private var decorations: ImageDecorations {
+extension Reading {
+    var previewDecorations: ImageDecorations {
         ImageDecorations(
             suraHeaders: suraHeaders,
             ayahNumbers: ayahNumbers,
-            drawsAyahNumbersAndSuraHeaders: true,
+            ayahNumberWidthRatio: usesLinePages ? AyahMarkerWidthRatio.linePage : AyahMarkerWidthRatio.imagePage,
+            drawsAyahNumbersAndSuraHeaders: drawsAyahNumbersAndSuraHeaders,
+            chromeStyle: QuranPageChromeStyle(reading: self),
             wordFrames: WordFrameCollection(frames: [])
         )
     }

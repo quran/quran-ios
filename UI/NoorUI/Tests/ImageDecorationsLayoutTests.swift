@@ -92,6 +92,7 @@ final class ImageDecorationsLayoutTests: XCTestCase {
                 suraHeaders: [],
                 ayahNumbers: [],
                 drawsAyahNumbersAndSuraHeaders: false,
+                chromeStyle: .green,
                 wordFrames: wordFrames,
                 verseHighlights: verseHighlights,
                 wordHighlight: wordHighlight,

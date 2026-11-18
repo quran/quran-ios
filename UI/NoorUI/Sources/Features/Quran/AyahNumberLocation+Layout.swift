@@ -6,8 +6,8 @@ import CoreGraphics
 import QuranGeometry
 
 extension AyahNumberLocation {
-    func scaledRectangle(imageSize: CGSize, scale: WordFrameScale) -> CGRect {
-        let length = 0.06 * imageSize.width
+    func scaledRectangle(imageSize: CGSize, widthRatio: CGFloat, scale: WordFrameScale) -> CGRect {
+        let length = widthRatio * imageSize.width
         return CGRect(
             x: center.x - length / 2,
             y: center.y - length / 2,

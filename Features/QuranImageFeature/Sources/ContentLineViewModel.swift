@@ -87,10 +87,6 @@ final class ContentLineViewModel: ObservableObject {
     @Published private(set) var undimmedVerses: Set<AyahNumber>?
     @Published var scrollToVerse: AyahNumber?
 
-    var imageRenderingMode: QuranThemedImage.RenderingMode {
-        reading.usesInvertedQuranImageRenderingInDarkMode ? .invertInDarkMode : .tinted
-    }
-
     var highlightColorsByVerse: [AyahNumber: Color] {
         overlays.versesByHighlights().mapValues { Color($0) }
     }
@@ -109,8 +105,8 @@ final class ContentLineViewModel: ObservableObject {
         reading.drawsAyahNumbersAndSuraHeaders
     }
 
-    var chromeStyle: LinePageChromeStyle {
-        LinePageChromeStyle(reading: reading)
+    var chromeStyle: QuranPageChromeStyle {
+        QuranPageChromeStyle(reading: reading)
     }
 
     var wordFrames: WordFrameCollection {

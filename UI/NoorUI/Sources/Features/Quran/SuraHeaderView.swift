@@ -7,7 +7,7 @@ import SwiftUI
 public struct SuraHeaderView: View {
     private let tint: Color
 
-    public init(tint: Color = .pageMarkerTint) {
+    public init(tint: Color) {
         self.tint = tint
     }
 
@@ -21,7 +21,7 @@ public struct SuraHeaderView: View {
 }
 
 #Preview {
-    SuraHeaderView()
+    SuraHeaderView(tint: QuranPageChromeStyle.green.palette(for: .light).header)
         .frame(height: 40)
         .padding()
         .themedBackground()

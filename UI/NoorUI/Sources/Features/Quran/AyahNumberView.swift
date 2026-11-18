@@ -8,35 +8,24 @@ import SwiftUI
 
 public struct AyahNumberView: View {
     private let number: Int
-    private let ringColor: Color
-    private let fillColor: Color?
-    private let textColor: Color?
+    private let palette: QuranPageChromePalette
 
-    public init(
-        number: Int,
-        ringColor: Color = .pageMarkerTint,
-        fillColor: Color? = nil,
-        textColor: Color? = nil
-    ) {
+    public init(number: Int, palette: QuranPageChromePalette) {
         self.number = number
-        self.ringColor = ringColor
-        self.fillColor = fillColor
-        self.textColor = textColor
+        self.palette = palette
     }
 
     public var body: some View {
         ZStack {
-            if let fillColor, textColor != nil {
-                Circle()
-                    .fill(fillColor)
-                    .padding(5)
-            }
+            Circle()
+                .fill(palette.markerFill)
+                .padding(5)
 
             ayahRing
-                .foregroundColor(ringColor)
+                .foregroundColor(palette.markerRing)
 
             ayahText
-                .foregroundColor(markerTextColor)
+                .foregroundColor(palette.markerText)
         }
     }
 
@@ -54,31 +43,25 @@ public struct AyahNumberView: View {
             .minimumScaleFactor(0.03)
             .padding(3)
     }
-
-    private var markerTextColor: Color {
-        if fillColor != nil, let textColor {
-            return textColor
-        }
-        return ringColor
-    }
 }
 
 #Preview {
+    let palette = QuranPageChromeStyle.green.palette(for: .light)
     List {
-        AyahNumberView(number: 1)
+        AyahNumberView(number: 1, palette: palette)
             .frame(height: 40)
-        AyahNumberView(number: 2)
-            .frame(height: 40)
-
-        AyahNumberView(number: 100)
+        AyahNumberView(number: 2, palette: palette)
             .frame(height: 40)
 
-        AyahNumberView(number: 999)
+        AyahNumberView(number: 100, palette: palette)
+            .frame(height: 40)
+
+        AyahNumberView(number: 999, palette: palette)
             .frame(height: 40)
 
         #if QURAN_SYNC
         let ayah = Quran.hafsMadani1405.suras[1].verses[99]
-        AyahNumberView(number: 100)
+        AyahNumberView(number: 100, palette: palette)
             .frame(height: 40)
             .background {
                 GeometryReader { geometry in

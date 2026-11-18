@@ -61,15 +61,12 @@ class ContentImageViewModel: ObservableObject {
     @Published private var overlays: VerseOverlays
     @Published private var undimmedVerses: Set<AyahNumber>?
 
-    var imageRenderingMode: QuranThemedImage.RenderingMode {
-        reading.usesInvertedQuranImageRenderingInDarkMode ? .invertInDarkMode : .tinted
-    }
-
     var decorations: ImageDecorations {
         return ImageDecorations(
             suraHeaders: suraHeaderLocations,
             ayahNumbers: ayahNumberLocations,
             drawsAyahNumbersAndSuraHeaders: reading.drawsAyahNumbersAndSuraHeaders,
+            chromeStyle: QuranPageChromeStyle(reading: reading),
             wordFrames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
             textColumn: imagePage?.textColumn,
             verseHighlights: overlays.versesByHighlights().mapValues { Color($0) },

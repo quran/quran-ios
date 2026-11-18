@@ -80,22 +80,6 @@ extension UIImage {
         return newImage
     }
 
-    public func inverted() -> UIImage {
-        guard let filter = CIFilter(name: "CIColorInvert") else {
-            return self
-        }
-        filter.setDefaults()
-        filter.setValue(CIImage(image: self), forKey: kCIInputImageKey)
-        guard let outputImage = filter.outputImage else {
-            return self
-        }
-        let context = CIContext(options: nil)
-        guard let cgImage = context.createCGImage(outputImage, from: outputImage.extent) else {
-            return self
-        }
-        return UIImage(cgImage: cgImage)
-    }
-
     public static func canavas(size: CGSize, drawing images: [(image: UIImage, origin: CGPoint)]) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
 
@@ -141,38 +125,5 @@ extension UIImage {
         UIGraphicsEndImageContext()
 
         return image?.resizableImage(withCapInsets: UIEdgeInsets(top: radius, left: radius, bottom: radius, right: radius))
-    }
-
-    /// Returns a tinted version of the image where all colors are remapped to shades of the provided tintColor.
-    ///
-    /// - Parameter tintColor: The primary color you want to use (for example, UIColor.red).
-    /// - Returns: A new UIImage tinted with the provided color.
-    public func tintedImageUsingFalseColorFilter(with tintColor: UIColor) -> UIImage? {
-        // Create a CIImage from the UIImage.
-        guard let ciImage = CIImage(image: self),
-              let falseColorFilter = CIFilter(name: "CIFalseColor")
-        else {
-            return nil
-        }
-
-        falseColorFilter.setValue(ciImage, forKey: kCIInputImageKey)
-
-        // Define two colors very close to each other based on your tint color.
-        // The "shadow" color is a slightly darker version.
-        let shadowColor = tintColor.adjustedBrightness(by: 0.95)
-
-        // Set the filter’s colors. The filter maps black to inputColor0 and white to inputColor1.
-        falseColorFilter.setValue(CIColor(color: shadowColor), forKey: "inputColor0")
-        falseColorFilter.setValue(CIColor(color: tintColor), forKey: "inputColor1")
-
-        // Get the output image from the filter.
-        guard let outputCIImage = falseColorFilter.outputImage else { return nil }
-
-        // Create a context and generate a CGImage.
-        let context = CIContext(options: nil)
-        guard let cgImage = context.createCGImage(outputCIImage, from: outputCIImage.extent) else { return nil }
-
-        // Return a new UIImage.
-        return UIImage(cgImage: cgImage, scale: scale, orientation: imageOrientation)
     }
 }

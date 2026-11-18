@@ -833,11 +833,15 @@ private func featuresTargets() -> [[Target]] {
             "Caching",
         ], testDependencies: ["TestResources", "UIx"]),
 
-        target(type, name: "ReadingSelectorFeature", hasTests: false, dependencies: [
+        target(type, name: "ReadingSelectorFeature", dependencies: [
             "AppDependencies",
             "ReadingService",
             "ImageService",
             "NoorUI",
+            "QuranGeometry",
+            "QuranKit",
+        ], testDependencies: [
+            "QuranKit",
         ]),
 
         target(type, name: "QuranTranslationFeature", dependencies: [

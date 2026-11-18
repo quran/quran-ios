@@ -31,7 +31,7 @@ final class BookmarkCollectionsViewController: UIHostingController<BookmarkColle
     private var editController: NavigationEditModeController?
 
     private func configureEditButton() {
-        let addButton = NavigationBarButton.add { [weak self] in
+        let addButton = NavigationBarButton.add(accessibilityLabel: l("bookmarks.collections.add")) { [weak self] in
             self?.viewModel.presentAddCollection()
         }
 

@@ -122,12 +122,13 @@ private struct ContentLineViewBody: View {
     // MARK: Private
 
     @Environment(\.themeColorScheme) private var themeColorScheme
+    @Environment(\.themeStyle) private var themeStyle
     #if QURAN_SYNC
     @State private var pressedReadingBookmarkAyah: AyahNumber?
     #endif
 
     private var chromePalette: QuranPageChromePalette {
-        chromeStyle.palette(for: themeColorScheme)
+        chromeStyle.palette(colorScheme: themeColorScheme, themeStyle: themeStyle)
     }
 
     private func lineCanvas(_ layout: LinePageLayout?) -> some View {
@@ -240,7 +241,7 @@ private struct ContentLineViewBody: View {
         if drawsAyahNumbersAndSuraHeaders {
             ForEach(layout.ayahMarkerPlacements, id: \.marker.ayah) { placement in
                 AyahNumberView(number: placement.marker.ayah.ayah, palette: chromePalette)
-                .placed(in: placement.frame)
+                    .placed(in: placement.frame)
             }
         }
     }

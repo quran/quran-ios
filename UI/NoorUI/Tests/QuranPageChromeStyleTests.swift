@@ -20,6 +20,14 @@ final class QuranPageChromeStyleTests: XCTestCase {
         XCTAssertEqual(rgb(dark.markerRing), 0x10B981)
     }
 
+    func test_quietThemeUsesDarkPaletteEvenInLightColorScheme() {
+        for style in [QuranPageChromeStyle.green, .blue] {
+            XCTAssertEqual(style.palette(colorScheme: .light, themeStyle: .quiet), style.palette(for: .dark), "\(style)")
+            XCTAssertEqual(style.palette(colorScheme: .light, themeStyle: .paper), style.palette(for: .light), "\(style)")
+            XCTAssertEqual(style.palette(colorScheme: .dark, themeStyle: .paper), style.palette(for: .dark), "\(style)")
+        }
+    }
+
     private func rgb(_ color: Color) -> Int {
         var red: CGFloat = 0
         var green: CGFloat = 0

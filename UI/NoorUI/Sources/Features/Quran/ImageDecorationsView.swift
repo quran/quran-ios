@@ -22,9 +22,10 @@ struct ImageDecorationsView: View {
     // MARK: Private
 
     @Environment(\.themeColorScheme) private var themeColorScheme
+    @Environment(\.themeStyle) private var themeStyle
 
     private var chromePalette: QuranPageChromePalette {
-        chromeStyle.palette(for: themeColorScheme)
+        chromeStyle.palette(colorScheme: themeColorScheme, themeStyle: themeStyle)
     }
 
     private var highlights: some View {

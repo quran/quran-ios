@@ -25,7 +25,14 @@ public enum QuranPageChromeStyle: Equatable {
 
     // MARK: Public
 
-    public func palette(for colorScheme: ColorScheme) -> QuranPageChromePalette {
+    /// Quiet pages are dark whatever the color scheme, as `invertThemedColorIfNeeded()` treats them.
+    public func palette(colorScheme: ColorScheme, themeStyle: ThemeStyle) -> QuranPageChromePalette {
+        palette(for: themeStyle == .quiet ? .dark : colorScheme)
+    }
+
+    // MARK: Internal
+
+    func palette(for colorScheme: ColorScheme) -> QuranPageChromePalette {
         switch (self, colorScheme) {
         case (.blue, .dark):
             QuranPageChromePalette(header: 0x73AFFA, markerRing: 0x73AFFA, markerFill: 0x172554, markerText: 0x73AFFA)

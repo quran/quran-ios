@@ -9,13 +9,16 @@
     }
   ],
   "defaultOptions" : {
+    "defaultTestExecutionTimeAllowance" : 60,
     "environmentVariableEntries" : [
       {
         "enabled" : false,
         "key" : "LocalSnapshots",
         "value" : "TRUE"
       }
-    ]
+    ],
+    "maximumTestExecutionTimeAllowance" : 300,
+    "testTimeoutsEnabled" : true
   },
   "testTargets" : [
     {

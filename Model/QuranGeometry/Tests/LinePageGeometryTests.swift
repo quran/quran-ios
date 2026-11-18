@@ -52,6 +52,22 @@ final class LinePageGeometryTests: XCTestCase {
         XCTAssertEqual(dense.pageFrame, regular.pageFrame)
     }
 
+    func testMinimumPageWidthToHeightRatioFollowsLineOverlapAndDensity() {
+        let engine = makeEngine()
+        let regular = LinePageDisplaySettings(usesDenseLines: false)
+        let dense = LinePageDisplaySettings(usesDenseLines: true)
+
+        // Overlapping lines, like Madani: a fixed ratio, denser lines allow a wider page.
+        XCTAssertEqual(engine.minimumPageWidthToHeightRatio(data: makeData(), displaySettings: regular), 1 / 1.6, accuracy: 0.0001)
+        XCTAssertEqual(engine.minimumPageWidthToHeightRatio(data: makeData(), displaySettings: dense), 1 / 1.5, accuracy: 0.0001)
+
+        // Lines that never overlap, like IndoPak: the stacked lines decide, whatever the density.
+        let indoPak = makeData(metrics: .indoPakLinePages)
+        let stackedLines = 1 / (15 * 148 / 1342.0)
+        XCTAssertEqual(engine.minimumPageWidthToHeightRatio(data: indoPak, displaySettings: regular), stackedLines, accuracy: 0.0001)
+        XCTAssertEqual(engine.minimumPageWidthToHeightRatio(data: indoPak, displaySettings: dense), stackedLines, accuracy: 0.0001)
+    }
+
     func testLandscapeLayoutReservesSidelinesOnLeadingEdgeForOddPages() throws {
         let layout = makeEngine().layout(
             LinePageGeometryInput(

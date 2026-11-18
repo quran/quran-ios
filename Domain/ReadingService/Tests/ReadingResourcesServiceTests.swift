@@ -542,15 +542,35 @@ final class ReadingResourcesServiceTests: XCTestCase {
         XCTAssertEqual(available, [.hafs_1405])
     }
 
-    func test_unavailableReading_switchesToTheBundledReading() async {
-        // Regression: picking a reading that is neither downloadable nor bundled crashed the reader.
+    func test_unavailableSavedReading_switchesToTheBundledReadingBeforeLoading() async {
+        // Regression: a saved reading that is neither downloadable nor bundled crashed the reader.
         ReadingPreferences.shared.reading = .hafs_1441
         let service = makeService(remoteResources: nil, bundledReadings: [.hafs_1405])
+        let collector = PublisherCollector(service.publisher)
+
+        await service.startLoadingResources()
+
+        // Switched before the service observes the preference, so the switch doesn't start a second load.
+        XCTAssertEqual(ReadingPreferences.shared.reading, .hafs_1405)
+
+        await finishLoadingNoDownload()
+
+        XCTAssertEqual(collector.items, [.ready])
+        XCTAssertEqual(ReadingPreferences.shared.reading, .hafs_1405)
+    }
+
+    func test_downloadableSavedReading_isKeptWhenNotBundled() async throws {
+        ReadingPreferences.shared.reading = .hafs_1441
+        let remoteResource = try XCTUnwrap(remoteResources.resource(for: .hafs_1441))
+        fileManager.files = [remoteResource.successFilePath.url]
+        let service = makeService(remoteResources: remoteResources, bundledReadings: [.hafs_1405])
+        let collector = PublisherCollector(service.publisher)
 
         await service.startLoadingResources()
         await finishLoadingNoDownload()
 
-        XCTAssertEqual(ReadingPreferences.shared.reading, .hafs_1405)
+        XCTAssertEqual(collector.items, [.ready])
+        XCTAssertEqual(ReadingPreferences.shared.reading, .hafs_1441)
     }
 
     // MARK: Private

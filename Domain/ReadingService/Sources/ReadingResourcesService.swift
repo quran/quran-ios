@@ -65,7 +65,8 @@ public actor ReadingResourcesService {
             .eraseToAnyPublisher()
     }
 
-    public func startLoadingResources() {
+    public func startLoadingResources() async {
+        await replaceSavedReadingIfUnavailable()
         let initialReading = preferences.reading
         readingsTask = Task { [weak self] in
             guard let readings = self?.preferences.$reading.prepend(initialReading).values() else {
@@ -123,6 +124,20 @@ public actor ReadingResourcesService {
         remoteResources?.resource(for: reading) != nil || bundledReadings.contains(reading)
     }
 
+    /// Replaces a saved reading this app can't load, like one picked in a build without remote resources,
+    /// with the bundled reading, so the reader never renders pages without resources.
+    /// It runs before observing the preference, so the replacement doesn't start a second load.
+    private func replaceSavedReadingIfUnavailable() async {
+        let reading = preferences.reading
+        guard !isAvailable(reading), let bundledReading = Reading.allReadings.first(where: bundledReadings.contains) else {
+            return
+        }
+        logger.error("Resources: Reading \(reading) is neither downloadable nor bundled. Switching to \(bundledReading)")
+        // Change the preference on the main actor, like the UI does: its observers update
+        // view models, and doing that from this actor's thread deadlocks with the main thread.
+        await MainActor.run { preferences.reading = bundledReading }
+    }
+
     private func loadResourceInAsyncTask(_ reading: Reading) {
         readingTask = Task {
             guard !Task.isCancelled else { return }
@@ -141,15 +156,6 @@ public actor ReadingResourcesService {
 
         logger.info("Resources: Start loading reading resources of: \(reading)")
         guard let remoteResource = remoteResources?.resource(for: reading) else {
-            if !bundledReadings.contains(reading), let bundledReading = Reading.allReadings.first(where: bundledReadings.contains) {
-                // A reading this app can't load, like one picked in a build without remote resources.
-                // Switching back loads the bundled reading instead of rendering pages without resources.
-                logger.error("Resources: Reading \(reading) is neither downloadable nor bundled. Switching to \(bundledReading)")
-                // Change the preference on the main actor, like the UI does: its observers update
-                // view models, and doing that from this actor's thread deadlocks with the main thread.
-                await MainActor.run { preferences.reading = bundledReading }
-                return .ready
-            }
             logger.info("Resources: Reading \(reading) is bundled with the app.")
             return .ready
         }

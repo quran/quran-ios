@@ -38,9 +38,14 @@ public struct WordFrameProcessor {
 
     /// The page's text extent in image coordinates: the median edges of the raw lines, since processing
     /// stretches every line to the outermost glyphs. Nil when the text is too narrow to line up with.
-    public func textColumn(_ frames: [WordFrame], imageWidth: CGFloat) -> ClosedRange<CGFloat>? {
+    /// `tightenLine` narrows each line's union of frames, such as to the ink some databases pad it past.
+    public func textColumn(
+        _ frames: [WordFrame],
+        imageWidth: CGFloat,
+        tightenLine: (CGRect) -> CGRect = { $0 }
+    ) -> ClosedRange<CGFloat>? {
         let lines = Dictionary(grouping: frames, by: \.line).values.map { frames in
-            frames.map(\.rect).reduce(CGRect.null) { $0.union($1) }
+            tightenLine(frames.map(\.rect).reduce(CGRect.null) { $0.union($1) })
         }
         guard !lines.isEmpty else {
             return nil

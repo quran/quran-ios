@@ -11,6 +11,7 @@ import UIx
 public enum QuranPageChromeStyle {
     case green
     case blue
+    case bronze
 
     // MARK: Lifecycle
 
@@ -18,7 +19,9 @@ public enum QuranPageChromeStyle {
         switch reading {
         case .hafs_1439:
             self = .blue
-        case .hafs_1405, .hafs_1421, .hafs_1440, .hafs_1441, .tajweed, .indoPak:
+        case .hafs_1421:
+            self = .bronze
+        case .hafs_1405, .hafs_1440, .hafs_1441, .tajweed, .indoPak:
             self = .green
         }
     }
@@ -35,6 +38,10 @@ public enum QuranPageChromeStyle {
             QuranPageChromePalette(header: 0x10B981, markerRing: 0x10B981, markerFill: 0x022C22, markerText: 0x34D399)
         case (.green, _):
             QuranPageChromePalette(header: 0x047857, markerRing: 0x047857, markerFill: 0xECFDF5, markerText: 0x047857)
+        case (.bronze, .dark):
+            QuranPageChromePalette(header: 0xD6A85C, markerRing: 0xD6A85C, markerFill: 0x2E2109, markerText: 0xEBC98A)
+        case (.bronze, _):
+            QuranPageChromePalette(header: 0x8B5E1A, markerRing: 0x8B5E1A, markerFill: 0xFBF3E4, markerText: 0x7A5214)
         }
     }
 }

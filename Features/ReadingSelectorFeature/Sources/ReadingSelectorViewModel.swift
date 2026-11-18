@@ -18,6 +18,8 @@ class ReadingSelectorViewModel: ObservableObject {
 
     init(resources: ReadingResourcesService) {
         self.resources = resources
+        // Offer only readings this app can load, so picking one never leaves the reader without resources.
+        availableReadings = resources.availableReadings()
     }
 
     // MARK: Internal
@@ -25,8 +27,8 @@ class ReadingSelectorViewModel: ObservableObject {
     @Published var selectedReading: Reading?
     @Published var progress: Double?
     @Published var error: Error?
-    /// The readings this app can load, or `nil` until they're known.
-    @Published var availableReadings: Set<Reading>?
+    /// The readings this app can load.
+    let availableReadings: Set<Reading>
 
     var readingGroups: [ReadingGroup<Reading>] {
         [
@@ -50,8 +52,6 @@ class ReadingSelectorViewModel: ObservableObject {
     }
 
     func start() async {
-        // Offer only readings this app can load, so picking one never leaves the reader without resources.
-        availableReadings = await resources.availableReadings()
         async let reading: () = listenToReadingChanges()
         async let resources: () = listenToResourcesEvents()
         _ = await (reading, resources)
@@ -72,7 +72,7 @@ class ReadingSelectorViewModel: ObservableObject {
 
     private func readingInfos(_ readings: [Reading]) -> [ReadingInfo<Reading>] {
         readings
-            .filter { availableReadings?.contains($0) ?? true }
+            .filter(availableReadings.contains)
             .map(ReadingInfo.init)
     }
 

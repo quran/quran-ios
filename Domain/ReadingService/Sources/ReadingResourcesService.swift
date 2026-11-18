@@ -94,7 +94,8 @@ public actor ReadingResourcesService {
     }
 
     /// The readings this app can load: the ones it downloads and the ones it bundles.
-    public func availableReadings() -> Set<Reading> {
+    /// Nonisolated so the UI can filter its readings synchronously, before showing any.
+    public nonisolated func availableReadings() -> Set<Reading> {
         Set(Reading.allReadings.filter(isAvailable))
     }
 
@@ -120,7 +121,7 @@ public actor ReadingResourcesService {
     private let removeOtherReadings: Bool
     private let bundledReadings: Set<Reading>
 
-    private func isAvailable(_ reading: Reading) -> Bool {
+    private nonisolated func isAvailable(_ reading: Reading) -> Bool {
         remoteResources?.resource(for: reading) != nil || bundledReadings.contains(reading)
     }
 

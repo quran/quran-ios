@@ -528,18 +528,18 @@ final class ReadingResourcesServiceTests: XCTestCase {
         try await downloadTask.value
     }
 
-    func test_availableReadings_includeDownloadableAndBundledReadings() async {
+    func test_availableReadings_includeDownloadableAndBundledReadings() {
         let service = makeService(remoteResources: remoteResources, bundledReadings: [.hafs_1405])
 
-        let available = await service.availableReadings()
+        let available = service.availableReadings()
 
         XCTAssertEqual(available, Set(Reading.allReadings))
     }
 
-    func test_availableReadings_withoutRemoteResources_areTheBundledReadings() async {
+    func test_availableReadings_withoutRemoteResources_areTheBundledReadings() {
         let service = makeService(remoteResources: nil, bundledReadings: [.hafs_1405])
 
-        let available = await service.availableReadings()
+        let available = service.availableReadings()
 
         XCTAssertEqual(available, [.hafs_1405])
     }

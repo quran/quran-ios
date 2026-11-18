@@ -94,6 +94,16 @@ final class AnalyticsSettingsReporterTests: XCTestCase {
         XCTAssertEqual(audio?.parameters["reciter"], .string(AnalyticsSettingValue.reciter(nameKey: firstReciter.nameKey)))
     }
 
+    func test_twoPagesNeverChosen_snapshotsOn() async {
+        // People who never chose have no stored value. The key is private to QuranTextKit, so it's repeated here.
+        UserDefaults.standard.removeObject(forKey: "twoPagesEnabled")
+
+        await start()
+
+        let reading = snapshotEvents.first { $0.name == "settings_reading" }
+        XCTAssertEqual(reading?.parameters["two_pages"], .string("on"))
+    }
+
     func test_relaunchOnTheSameDay_doesNotLogTheSnapshotAgain() async {
         await start()
 

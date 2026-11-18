@@ -198,11 +198,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         let windowOptions = MoreMenuWindowOptions(window: presenter?.readerWindow)
         state.twoPages = windowOptions.twoPages
         state.orientation = windowOptions.orientation
-        let model = MoreMenuModel(
-            isWordPointerActive: isWordPointerActive,
-            state: state,
-            twoPagesEnabledByDefault: windowOptions.twoPagesEnabledByDefault
-        )
+        let model = MoreMenuModel(isWordPointerActive: isWordPointerActive, state: state)
         let viewController = deps.moreMenuBuilder.build(withListener: self, model: model)
         presenter?.presentMoreMenu(viewController)
     }

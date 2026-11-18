@@ -32,7 +32,7 @@ final class MoreMenuViewModel: ObservableObject {
         wordPointerType = wordTextPreferences.wordTextType
         translationFontSize = fontSizePreferences.translationFontSize
         arabicFontSize = fontSizePreferences.arabicFontSize
-        twoPagesEnabled = preferences.twoPagesEnabled ?? model.twoPagesEnabledByDefault
+        twoPagesEnabled = preferences.twoPagesEnabled
         verticalScrollingEnabled = preferences.verticalScrollingEnabled
         showLinePageDividers = preferences.showLinePageDividers
         showLinePageSidelines = preferences.showLinePageSidelines

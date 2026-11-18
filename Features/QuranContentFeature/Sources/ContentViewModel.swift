@@ -152,7 +152,7 @@ public final class ContentViewModel: ObservableObject {
 
     @PublishedBinding var quranMode: QuranMode
 
-    @PublishedBinding var twoPagesEnabled: Bool?
+    @PublishedBinding var twoPagesEnabled: Bool
     @Published var geometryActions: [PageGeometryActions] = []
     #if QURAN_SYNC
     weak var menuSourceView: UIView?
@@ -160,9 +160,8 @@ public final class ContentViewModel: ObservableObject {
 
     @PublishedBinding var overlays: VerseOverlays
 
-    func pagingStrategy(isRegularWidthAndHeight: Bool) -> PagingStrategy {
-        let enabled = TwoPagesUtils.isEnabled(preference: twoPagesEnabled, isRegularWidthAndHeight: isRegularWidthAndHeight)
-        return enabled ? .doublePage : .singlePage
+    func pagingStrategy(windowWidth: CGFloat) -> PagingStrategy {
+        TwoPagesUtils.isEnabled(preference: twoPagesEnabled, windowWidth: windowWidth) ? .doublePage : .singlePage
     }
 
     func onViewLongPressStarted(at point: CGPoint, sourceView: UIView, verse: AyahNumber) {

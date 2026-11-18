@@ -49,8 +49,8 @@ final class DecoratedSuraNameSpacingTests: XCTestCase {
 
     func test_englishDecoratedName_spacesTheGlyphFromTheName() throws {
         guard #available(iOS 16.0, *) else { throw XCTSkip("ImageRenderer needs iOS 16") }
-        // Ya-Sin's glyph had the narrowest left side bearing, Al-Ankabut's the widest.
-        for sura in [quran.suras[35], quran.suras[28]] {
+        // Ya-Sin's glyph had the narrowest left side bearing, Al-Infitar's the widest.
+        for sura in [quran.suras[35], quran.suras[81]] {
             let name = try inkColumns(of: "\(sura: sura)", in: .english)
             let decorated = try inkColumns(of: "\(sura: sura, nameStyle: .decorated)", in: .english)
             let glyphStart = try XCTUnwrap(decorated.firstInk(after: name.width))
@@ -61,7 +61,7 @@ final class DecoratedSuraNameSpacingTests: XCTestCase {
 
     func test_arabicAyahReference_spacesTheGlyphFromTheCoordinate() throws {
         guard #available(iOS 16.0, *) else { throw XCTSkip("ImageRenderer needs iOS 16") }
-        for sura in [quran.suras[35], quran.suras[28]] {
+        for sura in [quran.suras[35], quran.suras[81]] {
             let glyph = try inkColumns(of: "\(sura: sura)", in: .arabic)
             let coordinate = try inkColumns(of: "\(sura.firstVerse.localizedCoordinate(locale: .arabic))", in: .english)
             let reference = try inkColumns(of: "\(ayah: sura.firstVerse)", in: .arabic)
@@ -91,23 +91,23 @@ final class DecoratedSuraNameSpacingTests: XCTestCase {
     }
 
     func test_englishAttributedDecoratedName_spacesTheGlyphFromTheName() throws {
-        // The space before the glyph has no font of its own.
-        let space = NSAttributedString(string: " ").size().width
-        for sura in [quran.suras[35], quran.suras[28]] {
+        let space = NSAttributedString(string: " ", attributes: [.font: UIFont.preferredFont(forTextStyle: .footnote)])
+            .size().width
+        for sura in [quran.suras[35], quran.suras[81]] {
             let name = MultipartText("\(sura: sura)").attributedString(ofSize: .footnote, locale: .english).size().width
             let decorated = try inkColumns(
                 of: MultipartText("\(sura: sura, nameStyle: .decorated)").attributedString(ofSize: .footnote, locale: .english)
             )
             let glyphStart = try XCTUnwrap(decorated.firstInk(after: name))
 
-            XCTAssertEqual(glyphStart - name, space + glyphSpacing, accuracy: 0.75, "\(sura.suraNumber)")
+            XCTAssertEqual(glyphStart - name, space + attributedGlyphSpacing, accuracy: 0.75, "\(sura.suraNumber)")
         }
     }
 
     func test_arabicAttributedAyahReference_spacesTheGlyphFromTheCoordinate() throws {
         let font = UIFont.preferredFont(forTextStyle: .footnote)
         let space = NSAttributedString(string: " ", attributes: [.font: font]).size().width
-        for sura in [quran.suras[35], quran.suras[28]] {
+        for sura in [quran.suras[35], quran.suras[81]] {
             let glyph = MultipartText("\(sura: sura)").attributedString(ofSize: .footnote, locale: .arabic).size().width
             let coordinate = NSAttributedString(
                 string: sura.firstVerse.localizedCoordinate(locale: .arabic),
@@ -118,16 +118,62 @@ final class DecoratedSuraNameSpacingTests: XCTestCase {
             )
             let glyphStart = try XCTUnwrap(reference.firstInk(after: reference.width - glyph - 0.5))
 
-            XCTAssertEqual(glyphStart - coordinate, space + glyphSpacing, accuracy: 0.75, "\(sura.suraNumber)")
+            XCTAssertEqual(glyphStart - coordinate, space + attributedGlyphSpacing, accuracy: 0.75, "\(sura.suraNumber)")
         }
+    }
+
+    func test_arabicPageLocation_spacesTheGlyphFromTheSeparator() throws {
+        guard #available(iOS 16.0, *) else { throw XCTSkip("ImageRenderer needs iOS 16") }
+        let page = quran.pages[1]
+        let glyph = try inkColumns(of: "\(sura: page.startSura)", in: .arabic)
+        let location = try inkColumns(of: "\(page: page)", in: .arabic)
+        let rest = try inkColumns(of: .localizedFormat("quran.page.location", "", .text(page.localizedName)), in: .arabic)
+        let restEnd = try XCTUnwrap(location.lastInk(before: location.width - glyph.width - 0.5))
+
+        XCTAssertEqual(location.width - glyph.width - restEnd, rest.width - rest.lastInk + glyphSpacing, accuracy: 0.75)
+    }
+
+    func test_arabicFormatEndingWithASura_leavesTheGlyphUnpadded() throws {
+        guard #available(iOS 16.0, *) else { throw XCTSkip("ImageRenderer needs iOS 16") }
+        let sura = quran.suras[81]
+        let glyph = try inkColumns(of: "\(sura: sura)", in: .arabic)
+        let formatted = try inkColumns(of: MultipartText.format("%@", arguments: ["\(sura: sura)"]), in: .arabic)
+
+        XCTAssertEqual(formatted.width, glyph.width, accuracy: 0.5)
+        XCTAssertEqual(formatted.firstInk, 0, accuracy: 0.5)
+    }
+
+    func test_arabicAttributedAyahRanges_kernTheSeparatorAfterAWholeSura() throws {
+        let suras = [quran.suras[35], quran.suras[81]]
+        let text: MultipartText = "\(ayahRanges: suras.map { $0.firstVerse ... $0.lastVerse })"
+        let attributed = text.attributedString(ofSize: .footnote, locale: .arabic)
+        let separator = (attributed.string as NSString).range(of: l("list.separator"))
+
+        XCTAssertNotEqual(separator.location, NSNotFound)
+        let kern = try XCTUnwrap(attributed.attribute(.kern, at: separator.location, effectiveRange: nil) as? CGFloat)
+        XCTAssertEqual(kern, attributedGlyphSpacing, accuracy: 0.01)
+    }
+
+    func test_arabicAttributedReference_kernsPastABidiControl() throws {
+        let text: MultipartText = "\(sura: quran.suras[35])\("\u{2066}1\u{2069}")"
+        let attributed = text.attributedString(ofSize: .footnote, locale: .arabic)
+        let digit = (attributed.string as NSString).range(of: "1").location
+
+        XCTAssertNil(attributed.attribute(.kern, at: digit - 1, effectiveRange: nil))
+        let kern = try XCTUnwrap(attributed.attribute(.kern, at: digit, effectiveRange: nil) as? CGFloat)
+        XCTAssertEqual(kern, attributedGlyphSpacing, accuracy: 0.01)
     }
 
     // MARK: Private
 
     private let quran = Quran.hafsMadani1405
     private let scale: CGFloat = 3
-    /// The space at the footnote size, at the large text size.
+    /// The space at the footnote size, at the large text size the SwiftUI renders pin.
     private let glyphSpacing = 16 * MultipartText.FontSize.decoratedGlyphSpacingEm
+    /// The space at the footnote size, at the simulator's text size.
+    private var attributedGlyphSpacing: CGFloat {
+        MultipartText.FontSize.footnote.suraUIFont.pointSize * MultipartText.FontSize.decoratedGlyphSpacingEm
+    }
 
     private func glyph(_ sura: Sura) -> String {
         QuranReference.sura(sura).rawValue(locale: .arabic)

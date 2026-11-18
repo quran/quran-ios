@@ -106,13 +106,15 @@ enum QuranReference {
             ))
         }
 
-        // The glyphs sit flush in their boxes, so the space on a decorated glyph's left widens. See `QuranReferenceView`.
         let showsDecoratedGlyph = showsArabicName(locale: locale) && !arabicName.isIndoPakText
         if showsArabicName(locale: locale) {
             if result.length > 0 {
                 // In left-to-right text, the space before the glyph is on its left.
                 let spacesGlyph = showsDecoratedGlyph && !locale.isRightToLeft
-                result.append(NSAttributedString(string: " ", attributes: spacesGlyph ? size.decoratedGlyphSpacingAttributes : [:]))
+                result.append(NSAttributedString(
+                    string: " ",
+                    attributes: [.font: size.plainUIFont].merging(spacesGlyph ? size.decoratedGlyphSpacingAttributes : [:]) { $1 }
+                ))
             }
             let arabicNameFont: UIFont = switch arabicName {
             case .decoratedGlyph: size.suraUIFont
@@ -135,11 +137,6 @@ enum QuranReference {
             result.append(NSAttributedString(string: coordinate, attributes: [.font: size.plainUIFont]))
         }
         return result
-    }
-
-    /// Whether a decorated glyph starts this reference in `locale`.
-    func startsWithDecoratedGlyph(locale: Locale) -> Bool {
-        showsArabicName(locale: locale) && !arabicName.isIndoPakText && localizedName(locale: locale) == nil
     }
 
     /// Whether a decorated glyph ends this reference in `locale`.
@@ -330,9 +327,7 @@ struct QuranReferenceView: View {
         layoutDirection == .rightToLeft ? .trailing : .leading
     }
 
-    /// The glyphs sit flush in their boxes, so only text on a glyph's left gets the space between them: the text
-    /// before the glyph in left-to-right lines, and the text after it in right-to-left ones. Nothing pads the glyph
-    /// at a line's end, so it lines up with the text above and below it.
+    /// Whether text sits on the glyph's left: before it in left-to-right lines, after it in right-to-left ones.
     private func hasTextLeftOfGlyph(isGlyphFollowed: Bool) -> Bool {
         if layoutDirection == .rightToLeft {
             return isGlyphFollowed
@@ -441,7 +436,7 @@ extension MultipartText.FontSize {
     /// in their boxes.
     static let decoratedGlyphSpacingEm: CGFloat = 0.32
 
-    var decoratedGlyphSpacing: CGFloat {
+    fileprivate var decoratedGlyphSpacing: CGFloat {
         suraPointSize * Self.decoratedGlyphSpacingEm
     }
 
@@ -484,7 +479,7 @@ extension MultipartText.FontSize {
         return -max(0, excessLineHeight / 2)
     }
 
-    var textStyle: Font.TextStyle {
+    fileprivate var textStyle: Font.TextStyle {
         switch self {
         case .title3: .title3
         case .body: .body

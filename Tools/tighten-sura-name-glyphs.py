@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 #
 # Makes every decorated sura name glyph in surah_names.ttf sit flush in its box: both side bearings
-# become 0, like the right side bearing almost was, instead of a 1.2–7.4 pt left bearing at 16 pt.
+# become 0, like the right side bearing almost was, instead of a 3.0–7.4 pt left bearing at 16 pt.
 # Layout code adds the space a neighbor needs explicitly, so alignment and centering follow the ink.
 #
 # Only the sura glyphs' outlines and horizontal metrics change; the font has no kerning, GPOS or hinting
-# to update. head, hhea and OS/2 extents are recalculated. Running it again changes nothing.
+# to update. The head and hhea extents and OS/2 xAvgCharWidth are recalculated. Running it again changes
+# nothing.
 #
 # Usage:
 #   python3 -m venv /tmp/fonttools && /tmp/fonttools/bin/pip install fonttools==4.68.0
@@ -15,7 +16,6 @@ import sys
 
 from fontTools.ttLib import TTFont
 
-SIDE_BEARING = 0
 # QuranReference.decoratedSuraNameCodePoints: 0xE900–0xE972 except 0xE903, an unused glyph left as it is.
 SURA_CODE_POINTS = set(range(0xE900, 0xE973)) - {0xE903}
 
@@ -40,9 +40,8 @@ def tighten(path):
             sys.exit(f"{name} is composite or hinted")
         glyph.recalcBounds(glyf)
         width = glyph.xMax - glyph.xMin
-        glyph.coordinates.translate((SIDE_BEARING - glyph.xMin, 0))
-        glyph.recalcBounds(glyf)
-        hmtx[name] = (width + 2 * SIDE_BEARING, glyph.xMin)
+        glyph.coordinates.translate((-glyph.xMin, 0))
+        hmtx[name] = (width, 0)
 
     font["OS/2"].recalcAvgCharWidth(font)
     font.save(path)

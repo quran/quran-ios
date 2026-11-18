@@ -2,7 +2,7 @@
 //  PageMarginTrimming.swift
 //
 //
-//  Created by Claude on 2026-11-07.
+//  Created by Mohammad Abdurraafay on 2026-11-07.
 //
 
 import CoreGraphics

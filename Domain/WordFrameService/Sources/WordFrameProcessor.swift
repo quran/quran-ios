@@ -36,13 +36,13 @@ public struct WordFrameProcessor {
         return WordFrameCollection(frames: lines.flatMap { $0 })
     }
 
-    /// The page's text extent in image coordinates: the median edges of the raw lines, since processing
+    /// The page's text extent in image coordinates: the median edges of the raw full lines, since processing
     /// stretches every line to the outermost glyphs. Nil when the text is too narrow to line up with.
-    /// `tightenLine` narrows each line's union of frames, such as to the ink some databases pad it past.
+    /// `tightenLine` narrows each line's box, such as to its ink.
     public func textColumn(
         _ frames: [WordFrame],
         imageWidth: CGFloat,
-        tightenLine: (CGRect) -> CGRect = { $0 }
+        tightenLine: (CGRect) -> CGRect
     ) -> ClosedRange<CGFloat>? {
         let lines = Dictionary(grouping: frames, by: \.line).values.map { frames in
             tightenLine(frames.map(\.rect).reduce(CGRect.null) { $0.union($1) })
@@ -50,17 +50,31 @@ public struct WordFrameProcessor {
         guard !lines.isEmpty else {
             return nil
         }
-        let column = Self.median(lines.map(\.minX)) ... Self.median(lines.map(\.maxX))
-        guard column.upperBound - column.lowerBound >= Self.minimumTextWidthRatio * imageWidth else {
+        // Measured on every line: an opening page's few widest lines can reach the minimum on their own.
+        let typical = Self.medianEdges(lines)
+        guard typical.upperBound - typical.lowerBound >= Self.minimumTextWidthRatio * imageWidth else {
             return nil
         }
-        return column
+        return Self.medianEdges(Self.fullLines(lines))
     }
 
     // MARK: Private
 
     /// Opening pages measure at most 0.75 of the image width; other pages at least 0.84.
     private static let minimumTextWidthRatio: CGFloat = 0.8
+
+    /// Lines at least 0.95 as wide as the 80th-percentile line, so short centred lines don't pull the edges in.
+    /// The percentile skips the widest fifth, which an overhanging glyph can stretch. Justified lines agree
+    /// within about 2%, while 1421 lines ending at an ayah marker, which its images leave out, fall 5–7% short.
+    private static func fullLines(_ lines: [CGRect]) -> [CGRect] {
+        let widths = lines.map(\.width).sorted()
+        let reference = widths[min(widths.count - 1, Int(CGFloat(widths.count) * 0.8))]
+        return lines.filter { $0.width >= 0.95 * reference }
+    }
+
+    private static func medianEdges(_ lines: [CGRect]) -> ClosedRange<CGFloat> {
+        median(lines.map(\.minX)) ... median(lines.map(\.maxX))
+    }
 
     private static func median(_ values: [CGFloat]) -> CGFloat {
         let sorted = values.sorted()

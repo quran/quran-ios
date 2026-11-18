@@ -66,7 +66,7 @@ struct PageBitmap {
     private let height: Int
     private let bytesPerRow: Int
 
-    /// Mostly opaque and not near-white: pages draw dark or coloured (Tajweed) glyphs on either a transparent
+    /// At least half opaque and not near-white: pages draw dark or coloured (Tajweed) glyphs on either a transparent
     /// background, which fails the alpha test, or an opaque white one, which fails the colour test.
     private func isInk(x: Int, y: Int) -> Bool {
         let pixel = pixels + y * bytesPerRow + x * 4

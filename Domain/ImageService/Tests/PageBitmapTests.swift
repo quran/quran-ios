@@ -52,25 +52,3 @@ final class PageBitmapTests: XCTestCase {
     private let paddedLine = CGRect(x: 10, y: 15, width: 180, height: 40)
     private let inkLine = CGRect(x: 30, y: 15, width: 140, height: 40)
 }
-
-extension PageBitmap {
-    /// A page `size` wide and tall, top-left origin, drawing each group of rects in its colour.
-    static func drawn(
-        size: CGSize = CGSize(width: 200, height: 100),
-        background: UIColor = .clear,
-        glyphs: [([CGRect], UIColor)]
-    ) throws -> PageBitmap {
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = 1
-        format.preferredRange = .standard
-        let image = UIGraphicsImageRenderer(size: size, format: format).image { context in
-            background.setFill()
-            context.fill(CGRect(origin: .zero, size: size))
-            for (rects, color) in glyphs {
-                color.setFill()
-                context.cgContext.fill(rects)
-            }
-        }
-        return try XCTUnwrap(PageBitmap(XCTUnwrap(image.cgImage)))
-    }
-}

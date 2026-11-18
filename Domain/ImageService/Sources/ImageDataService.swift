@@ -72,8 +72,7 @@ public struct ImageDataService {
 
     // MARK: Internal
 
-    /// The page's processed word frames, and its text column measured on the raw ones, each line narrowed
-    /// to the `bitmap`'s ink since some databases pad every line to the full column.
+    /// The page's processed word frames, and its text column measured on the raw ones narrowed to the ink.
     func wordFrames(
         _ page: Page,
         imageWidth: CGFloat,

@@ -99,43 +99,38 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
                 if safeAreaInsetsBinding != newInsets {
                     safeAreaInsetsBinding = newInsets
                 }
-                let hasVerticalBar = verticalBarEdge(of: window) != nil
+                let hasVerticalBar = hasVerticalBar(window)
                 if hasVerticalBarBinding != hasVerticalBar {
                     hasVerticalBarBinding = hasVerticalBar
                 }
             }
         }
 
-        /// Mirrors UIKit's `UIVerticalBarEdge` raw values (iOS 27.1).
-        private enum VerticalBarEdge: Int {
-            case leading = 1
-            case trailing = 2
-        }
-
-        private func verticalBarEdge(of window: UIWindow) -> VerticalBarEdge? {
+        private func hasVerticalBar(_ window: UIWindow) -> Bool {
             guard #available(iOS 27.1, *) else {
-                return nil
+                return false
             }
-            // Read `UITraitCollection.verticalBarEdge` by key so this compiles with SDKs older than iOS 27.1,
-            // like the one CI builds with. It's a public UIKit property; `0` means unspecified.
-            guard let rawValue = window.traitCollection.value(forKey: "verticalBarEdge") as? Int else {
-                return nil
+            switch window.traitCollection.verticalBarEdge {
+            case .leading, .trailing: return true
+            case .unspecified: return false
+            @unknown default: return false
             }
-            return VerticalBarEdge(rawValue: rawValue)
         }
 
         private func insets(of window: UIWindow) -> UIEdgeInsets {
             var insets = window.safeAreaInsets
-            guard excludingVerticalBar else {
+            guard excludingVerticalBar, #available(iOS 27.1, *) else {
                 return insets
             }
             let isRightToLeft = window.effectiveUserInterfaceLayoutDirection == .rightToLeft
-            switch verticalBarEdge(of: window) {
+            switch window.traitCollection.verticalBarEdge {
             case .leading:
                 if isRightToLeft { insets.right = 0 } else { insets.left = 0 }
             case .trailing:
                 if isRightToLeft { insets.left = 0 } else { insets.right = 0 }
-            case nil:
+            case .unspecified:
+                break
+            @unknown default:
                 break
             }
             return insets

@@ -21,14 +21,42 @@ extension MultipartText {
         if locale.isRightToLeft {
             result.append(NSAttributedString(string: "\u{200F}", attributes: [.font: size.plainUIFont]))
         }
-        for part in parts {
-            result.append(part.attributedString(ofSize: size, locale: locale))
-        }
+        result.append(TextPart.attributedString(parts, ofSize: size, locale: locale))
         return result
     }
 }
 
 private extension TextPart {
+    /// The parts one after another. The decorated glyphs sit flush in their boxes, and read left to right, so in
+    /// right-to-left text the text after a glyph is on its left, and kerning widens its first character.
+    static func attributedString(_ parts: [TextPart], ofSize size: MultipartText.FontSize, locale: Locale) -> NSAttributedString {
+        let result = NSMutableAttributedString()
+        var spacesNextPart = false
+        for part in parts {
+            let string = NSMutableAttributedString(attributedString: part.attributedString(ofSize: size, locale: locale))
+            guard string.length > 0 else { continue }
+            if spacesNextPart {
+                string.addAttributes(size.decoratedGlyphSpacingAttributes, range: NSRange(location: 0, length: 1))
+            }
+            result.append(string)
+            spacesNextPart = locale.isRightToLeft && part.endsWithDecoratedGlyph(locale: locale)
+        }
+        return result
+    }
+
+    func endsWithDecoratedGlyph(locale: Locale) -> Bool {
+        switch self {
+        case .sura(let sura, _, let nameStyle):
+            QuranReference.sura(sura, nameStyle: nameStyle).endsWithDecoratedGlyph(locale: locale)
+        case .suras(let suras, let nameStyle):
+            suras.last.map { QuranReference.sura($0, nameStyle: nameStyle).endsWithDecoratedGlyph(locale: locale) } ?? false
+        case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
+            parts.last { !$0.isEmpty }?.endsWithDecoratedGlyph(locale: locale) ?? false
+        case .plain, .highlighting, .ayah, .ayahs, .quran:
+            false
+        }
+    }
+
     func attributedString(ofSize size: MultipartText.FontSize, locale: Locale) -> NSAttributedString {
         switch self {
         case .plain(let text):
@@ -44,18 +72,25 @@ private extension TextPart {
                 emphasizesSura: emphasizesSura
             )
         case .suras(let suras, let nameStyle):
-            suras.enumerated().reduce(into: NSMutableAttributedString()) { result, element in
-                if element.offset > 0 {
-                    result.append(NSAttributedString(string: SuraNamesView.separator, attributes: [.font: size.plainUIFont]))
+            suras.map { QuranReference.sura($0, nameStyle: nameStyle) }.reduce(into: NSMutableAttributedString()) { result, reference in
+                if result.length > 0 {
+                    let separator = NSMutableAttributedString(string: SuraNamesView.separator, attributes: [.font: size.plainUIFont])
+                    // The glyphs read left to right, so a separator between two lays out left to right, its last
+                    // character on the next glyph's left.
+                    if locale.isRightToLeft, reference.startsWithDecoratedGlyph(locale: locale) {
+                        separator.addAttributes(
+                            size.decoratedGlyphSpacingAttributes,
+                            range: NSRange(location: separator.length - 1, length: 1)
+                        )
+                    }
+                    result.append(separator)
                 }
-                result.append(QuranReference.sura(element.element, nameStyle: nameStyle).attributedString(size: size, locale: locale))
+                result.append(reference.attributedString(size: size, locale: locale))
             }
         case .ayahs(let ayahs, let nameStyle):
             QuranReference.ayahs(ayahs, nameStyle: nameStyle).attributedString(size: size, locale: locale)
         case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
-            parts.reduce(into: NSMutableAttributedString()) { result, part in
-                result.append(part.attributedString(ofSize: size, locale: locale))
-            }
+            TextPart.attributedString(parts, ofSize: size, locale: locale)
         case .quran(let text, let quranFont, let color, _, let highlighting):
             highlightedQuranAttributedString(
                 text: text,

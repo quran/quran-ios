@@ -95,21 +95,27 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         updateCrashContext(selectedIndex: index)
     }
 
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        previousTabOrientations = tabBarController.supportedInterfaceOrientations
+        return true
+    }
+
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         crashContext.setNavigationPhase("tab_switching")
         updateCrashContext(selectedIndex: tabBarController.selectedIndex)
         crashContext.setNavigationPhase("idle")
         let targetMask = tabBarController.supportedInterfaceOrientations
-        if let currentMask = tabBarController.view.window?.windowScene?.interfaceOrientation.asMask {
-            if !targetMask.contains(currentMask) {
-                tabBarController.requestInterfaceOrientations(targetMask)
-            } else if let deviceMask = UIDevice.current.orientation.asInterfaceMask,
-                      deviceMask != currentMask, targetMask.contains(deviceMask)
-            {
-                // Leaving a portrait-only tab, like Search, while the device is in landscape:
-                // rotate back to match the device.
-                tabBarController.requestInterfaceOrientations(deviceMask)
-            }
+        let previousMask = previousTabOrientations ?? targetMask
+        previousTabOrientations = nil
+        if let currentMask = tabBarController.view.window?.windowScene?.interfaceOrientation.asMask,
+           let orientations = TabSwitchRotation.orientations(
+               previousTab: previousMask,
+               targetTab: targetMask,
+               interface: currentMask,
+               device: UIDevice.current.orientation.asInterfaceMask
+           )
+        {
+            tabBarController.requestInterfaceOrientations(orientations)
         }
     }
 
@@ -131,6 +137,8 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     private let whatsNewController: AppWhatsNewController
     private let isAppIconAvailable: Bool
     private var hasStartedPostLaunchPresentation = false
+    /// The orientations the tab being left supported, captured before a tab switch.
+    private var previousTabOrientations: UIInterfaceOrientationMask?
 
     private let tabNames = ["home", "notes", "bookmarks", "search", "settings"]
 

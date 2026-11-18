@@ -21,6 +21,13 @@ public struct LinePageGeometryEngine {
 
     // MARK: Public
 
+    /// The widest a portrait page can be for its height, as its width over its height.
+    ///
+    /// A page whose available size is wider than this, relative to its height, is limited by its height.
+    public func minimumPageWidthToHeightRatio(data: LinePageGeometryData, displaySettings: LinePageDisplaySettings) -> CGFloat {
+        1 / minimumPageHeightToWidthRatio(data: data, usesDenseLines: displaySettings.usesDenseLines)
+    }
+
     public func layout(_ input: LinePageGeometryInput) -> LinePageLayout {
         let pageMeasurements = measurements(for: input)
         let contentSize = contentSize(for: input, pageMeasurements: pageMeasurements)
@@ -146,10 +153,7 @@ public struct LinePageGeometryEngine {
         let availableWidth = input.availableSize.width
         let availableHeight = input.availableSize.height
         let effectiveHeaderFooterHeightRatio = input.displaySettings.showHeaderFooter ? headerFooterHeightRatio : 0
-        let minimumPageWidthToHeightRatio = 1 / minimumPageHeightToWidthRatio(
-            data: input.data,
-            usesDenseLines: input.displaySettings.usesDenseLines
-        )
+        let minimumPageWidthToHeightRatio = minimumPageWidthToHeightRatio(data: input.data, displaySettings: input.displaySettings)
 
         let sidelineWidth = input.displaySettings.showSidelines
             ? floor(availableWidth * sidelineWidthRatio)

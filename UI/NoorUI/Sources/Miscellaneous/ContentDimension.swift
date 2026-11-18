@@ -38,8 +38,8 @@ public enum ContentDimension {
 
     static let spacing: CGFloat = 8
 
-    /// Spacing around the page header and footer when the page's height limits its size,
-    /// like each page of a two-page spread on iPhone Duo or iPad.
+    /// Spacing around the page header and footer on iPhone Duo when the page's height limits its size,
+    /// like each page of a two-page spread.
     enum CompactPageChrome {
         /// The header's distance from the top edge without a top safe area. Keeps it clear of rounded corners.
         static let minimumTop: CGFloat = 16

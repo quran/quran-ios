@@ -32,7 +32,7 @@ public enum QuranPageChromeStyle: Equatable {
         case (.blue, _):
             QuranPageChromePalette(header: 0x2563EB, markerRing: 0x2563EB, markerFill: 0xEFF6FF, markerText: 0x1D4ED8)
         case (.green, .dark):
-            QuranPageChromePalette(header: 0x047857, markerRing: 0x047857, markerFill: 0x022C22, markerText: 0x34D399)
+            QuranPageChromePalette(header: 0x10B981, markerRing: 0x10B981, markerFill: 0x022C22, markerText: 0x34D399)
         case (.green, _):
             QuranPageChromePalette(header: 0x047857, markerRing: 0x047857, markerFill: 0xECFDF5, markerText: 0x047857)
         }

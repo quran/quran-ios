@@ -33,16 +33,13 @@ struct ReadingImageView: View {
 
 extension Reading {
     var previewDecorations: ImageDecorations {
-        var decorations = ImageDecorations(
+        ImageDecorations(
             suraHeaders: suraHeaders,
             ayahNumbers: ayahNumbers,
-            drawsAyahNumbersAndSuraHeaders: true,
+            ayahNumberWidthRatio: usesLinePages ? AyahMarkerWidthRatio.linePage : AyahMarkerWidthRatio.imagePage,
+            drawsAyahNumbersAndSuraHeaders: drawsAyahNumbersAndSuraHeaders,
             chromeStyle: QuranPageChromeStyle(reading: self),
             wordFrames: WordFrameCollection(frames: [])
         )
-        if usesLinePages {
-            decorations.ayahNumberWidthRatio = LinePageGeometryEngine.ayahMarkerWidthRatio
-        }
-        return decorations
     }
 }

@@ -838,9 +838,9 @@ private func featuresTargets() -> [[Target]] {
             "ReadingService",
             "ImageService",
             "NoorUI",
-        ], testDependencies: [
-            "NoorUI",
             "QuranGeometry",
+            "QuranKit",
+        ], testDependencies: [
             "QuranKit",
         ]),
 

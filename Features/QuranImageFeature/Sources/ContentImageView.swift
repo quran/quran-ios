@@ -131,6 +131,7 @@ private struct ContentImageViewBody: View {
         suraHeaders: [],
         ayahNumbers: [],
         drawsAyahNumbersAndSuraHeaders: false,
+        chromeStyle: .green,
         wordFrames: WordFrameCollection(frames: [])
     )
 

@@ -21,9 +21,6 @@ public struct LinePageGeometryEngine {
 
     // MARK: Public
 
-    /// An ayah marker's side as a fraction of the page width.
-    public static let ayahMarkerWidthRatio: CGFloat = 0.05
-
     public func layout(_ input: LinePageGeometryInput) -> LinePageLayout {
         let pageMeasurements = measurements(for: input)
         let contentSize = contentSize(for: input, pageMeasurements: pageMeasurements)
@@ -475,7 +472,7 @@ public struct LinePageGeometryEngine {
         in pageFrame: CGRect,
         data: LinePageGeometryData
     ) -> [LinePageAyahMarkerPlacement] {
-        let markerDimension = Self.ayahMarkerWidthRatio * pageFrame.width
+        let markerDimension = AyahMarkerWidthRatio.linePage * pageFrame.width
 
         return markers.map { marker in
             let contentFrame = lineContentFrame(in: pageFrame, lineIndex: marker.line, data: data)

@@ -59,6 +59,18 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     var pagesView: UIView { quranView!.contentView! }
 
+    var readerWindow: ReaderWindow? {
+        guard let window = view.window else {
+            return nil
+        }
+        let traits = window.traitCollection
+        return ReaderWindow(
+            width: window.bounds.width,
+            isRegularWidthAndHeight: traits.horizontalSizeClass == .regular && traits.verticalSizeClass == .regular,
+            isPhone: traits.userInterfaceIdiom == .phone
+        )
+    }
+
     // MARK: - View hierarchy
 
     var navigationBarHidden: Bool { true }

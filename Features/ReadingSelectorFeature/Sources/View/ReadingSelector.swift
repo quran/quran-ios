@@ -28,6 +28,8 @@ struct ReadingSelector: View {
             retry: { await viewModel.retry() }
         )
         .populateThemeStyle()
+        // Tints previews with the reader's theme text color, which Quiet resolves by appearance mode.
+        .appearanceModeThemeColors()
     }
 
     // MARK: Private

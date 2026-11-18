@@ -150,9 +150,9 @@ extension Reading {
             ]
         case .hafs_1439:
             return [
-                suraHeader(112, x: 21, y: 79, width: 1038, height: 109),
-                suraHeader(113, x: 21, y: 534, width: 1038, height: 109),
-                suraHeader(114, x: 21, y: 1100, width: 1038, height: 109),
+                suraHeader(112, x: 21, y: 79, width: 1038, height: 110),
+                suraHeader(113, x: 21, y: 535, width: 1038, height: 110),
+                suraHeader(114, x: 21, y: 1101, width: 1038, height: 110),
             ]
         case .hafs_1441:
             return [
@@ -190,12 +190,12 @@ extension Reading {
             return [
                 ayahNumber(112, 1, x: 719, y: 313),
                 ayahNumber(112, 2, x: 412, y: 313),
-                ayahNumber(112, 3, x: 65, y: 313),
+                ayahNumber(112, 3, x: 64, y: 313),
                 ayahNumber(112, 4, x: 290, y: 424),
                 ayahNumber(113, 1, x: 621, y: 762),
                 ayahNumber(113, 2, x: 257, y: 762),
-                ayahNumber(113, 3, x: 692, y: 875),
-                ayahNumber(113, 4, x: 65, y: 875),
+                ayahNumber(113, 3, x: 691, y: 875),
+                ayahNumber(113, 4, x: 64, y: 875),
                 ayahNumber(113, 5, x: 289, y: 982),
                 ayahNumber(114, 1, x: 562, y: 1321),
                 ayahNumber(114, 2, x: 158, y: 1321),
@@ -210,14 +210,14 @@ extension Reading {
                 ayahNumber(112, 2, x: 549, y: 419),
                 ayahNumber(112, 3, x: 87, y: 419),
                 ayahNumber(112, 4, x: 387, y: 567),
-                ayahNumber(113, 1, x: 828, y: 1017),
-                ayahNumber(113, 2, x: 345, y: 1017),
+                ayahNumber(113, 1, x: 828, y: 1018),
+                ayahNumber(113, 2, x: 345, y: 1018),
                 ayahNumber(113, 3, x: 923, y: 1168),
                 ayahNumber(113, 4, x: 87, y: 1168),
                 ayahNumber(113, 5, x: 384, y: 1311),
                 ayahNumber(114, 1, x: 750, y: 1764),
                 ayahNumber(114, 2, x: 212, y: 1764),
-                ayahNumber(114, 3, x: 1122, y: 1916),
+                ayahNumber(114, 3, x: 1123, y: 1916),
                 ayahNumber(114, 4, x: 241, y: 1916),
                 ayahNumber(114, 5, x: 302, y: 2061),
                 ayahNumber(114, 6, x: 423, y: 2214),

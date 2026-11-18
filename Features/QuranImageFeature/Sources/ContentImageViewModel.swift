@@ -66,6 +66,7 @@ class ContentImageViewModel: ObservableObject {
             suraHeaders: suraHeaderLocations,
             ayahNumbers: ayahNumberLocations,
             drawsAyahNumbersAndSuraHeaders: reading.drawsAyahNumbersAndSuraHeaders,
+            chromeStyle: QuranPageChromeStyle(reading: reading),
             wordFrames: imagePage?.wordFrames ?? WordFrameCollection(frames: []),
             textColumn: imagePage?.textColumn,
             verseHighlights: overlays.versesByHighlights().mapValues { Color($0) },

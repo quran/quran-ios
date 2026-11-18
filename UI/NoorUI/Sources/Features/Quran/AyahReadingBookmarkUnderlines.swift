@@ -75,7 +75,7 @@ private struct AyahReadingBookmarkUnderlinesPreview: View {
                 AyahReadingBookmarkUnderlines(markers: markers, bookmarks: bookmarks, pressedAyah: pressedAyah)
 
                 ForEach(markers, id: \.ayah) { placement in
-                    AyahNumberView(number: placement.ayah.ayah)
+                    AyahNumberView(number: placement.ayah.ayah, palette: QuranPageChromeStyle.green.palette(for: .light))
                         .placed(in: placement.frame)
                     Rectangle()
                         .stroke(.secondary, style: StrokeStyle(lineWidth: 1, dash: [4]))

@@ -10,6 +10,7 @@ public struct ImageDecorations {
     public var suraHeaders: [SuraHeaderLocation]
     public var ayahNumbers: [AyahNumberLocation]
     public var drawsAyahNumbersAndSuraHeaders: Bool
+    public var chromeStyle: QuranPageChromeStyle
     public var wordFrames: WordFrameCollection
     /// The page's text extent in image coordinates, for the header to line up with.
     public var textColumn: ClosedRange<CGFloat>?
@@ -21,6 +22,7 @@ public struct ImageDecorations {
         suraHeaders: [SuraHeaderLocation],
         ayahNumbers: [AyahNumberLocation],
         drawsAyahNumbersAndSuraHeaders: Bool,
+        chromeStyle: QuranPageChromeStyle = .green,
         wordFrames: WordFrameCollection,
         textColumn: ClosedRange<CGFloat>? = nil,
         verseHighlights: [AyahNumber: Color] = [:],
@@ -30,6 +32,7 @@ public struct ImageDecorations {
         self.suraHeaders = suraHeaders
         self.ayahNumbers = ayahNumbers
         self.drawsAyahNumbersAndSuraHeaders = drawsAyahNumbersAndSuraHeaders
+        self.chromeStyle = chromeStyle
         self.wordFrames = wordFrames
         self.textColumn = textColumn
         self.verseHighlights = verseHighlights

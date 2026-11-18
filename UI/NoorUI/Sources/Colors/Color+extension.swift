@@ -14,10 +14,6 @@ extension Color {
         Color(UIColor.onAccent)
     }
 
-    public static var pageMarkerTint: Color {
-        Color(UIColor(light: UIColor(rgb: 0x004D40), dark: UIColor(rgb: 0x039F85)))
-    }
-
     /// Amber for icons and text that need attention without being an error, such as items that don't sync.
     public static var caution: Color {
         Color(UIColor(light: UIColor(rgb: 0xA04B00), dark: UIColor(rgb: 0xFFB35C)))

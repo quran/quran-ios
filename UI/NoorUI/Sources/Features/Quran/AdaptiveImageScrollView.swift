@@ -120,7 +120,7 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
             .background {
                 ZStack(alignment: .topLeading) {
                     AyahScrollAnchorsView(wordFrames: decorations.wordFrames, scale: scale)
-                    ImageDecorationsView(layout: layout)
+                    ImageDecorationsView(layout: layout, chromeStyle: decorations.chromeStyle)
                     #if QURAN_SYNC
                     // Behind the image, so underlines never cover Quran text.
                     AyahReadingBookmarkUnderlines(

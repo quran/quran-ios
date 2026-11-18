@@ -14,7 +14,7 @@ public struct AyahNumberView: View {
 
     public init(
         number: Int,
-        ringColor: Color = .pageMarkerTint,
+        ringColor: Color,
         fillColor: Color? = nil,
         textColor: Color? = nil
     ) {
@@ -22,6 +22,15 @@ public struct AyahNumberView: View {
         self.ringColor = ringColor
         self.fillColor = fillColor
         self.textColor = textColor
+    }
+
+    public init(number: Int, palette: QuranPageChromePalette) {
+        self.init(
+            number: number,
+            ringColor: palette.markerRing,
+            fillColor: palette.markerFill,
+            textColor: palette.markerText
+        )
     }
 
     public var body: some View {
@@ -64,21 +73,22 @@ public struct AyahNumberView: View {
 }
 
 #Preview {
+    let palette = QuranPageChromeStyle.green.palette(for: .light)
     List {
-        AyahNumberView(number: 1)
+        AyahNumberView(number: 1, palette: palette)
             .frame(height: 40)
-        AyahNumberView(number: 2)
-            .frame(height: 40)
-
-        AyahNumberView(number: 100)
+        AyahNumberView(number: 2, palette: palette)
             .frame(height: 40)
 
-        AyahNumberView(number: 999)
+        AyahNumberView(number: 100, palette: palette)
+            .frame(height: 40)
+
+        AyahNumberView(number: 999, palette: palette)
             .frame(height: 40)
 
         #if QURAN_SYNC
         let ayah = Quran.hafsMadani1405.suras[1].verses[99]
-        AyahNumberView(number: 100)
+        AyahNumberView(number: 100, palette: palette)
             .frame(height: 40)
             .background {
                 GeometryReader { geometry in

@@ -105,8 +105,8 @@ final class ContentLineViewModel: ObservableObject {
         reading.drawsAyahNumbersAndSuraHeaders
     }
 
-    var chromeStyle: LinePageChromeStyle {
-        LinePageChromeStyle(reading: reading)
+    var chromeStyle: QuranPageChromeStyle {
+        QuranPageChromeStyle(reading: reading)
     }
 
     var wordFrames: WordFrameCollection {

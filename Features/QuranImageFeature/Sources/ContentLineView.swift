@@ -90,7 +90,7 @@ private struct ContentLineViewBody: View {
     let pageReadingBookmarks: [ReadingBookmarkSlot]
     #endif
     let drawsAyahNumbersAndSuraHeaders: Bool
-    let chromeStyle: LinePageChromeStyle
+    let chromeStyle: QuranPageChromeStyle
     let imageForLine: (Int) -> UIImage?
     let imageForSideline: (String) -> UIImage?
     #if QURAN_SYNC
@@ -126,7 +126,7 @@ private struct ContentLineViewBody: View {
     @State private var pressedReadingBookmarkAyah: AyahNumber?
     #endif
 
-    private var chromePalette: LinePageChromePalette {
+    private var chromePalette: QuranPageChromePalette {
         chromeStyle.palette(for: themeColorScheme)
     }
 
@@ -204,7 +204,7 @@ private struct ContentLineViewBody: View {
     private func suraHeaders(_ layout: LinePageLayout) -> some View {
         if drawsAyahNumbersAndSuraHeaders {
             ForEach(layout.suraHeaderPlacements, id: \.header.sura) { placement in
-                SuraHeaderView(tint: chromePalette.header.foreground)
+                SuraHeaderView(tint: chromePalette.header)
                     .placed(in: placement.frame)
             }
         }
@@ -239,12 +239,7 @@ private struct ContentLineViewBody: View {
     private func ayahMarkers(_ layout: LinePageLayout) -> some View {
         if drawsAyahNumbersAndSuraHeaders {
             ForEach(layout.ayahMarkerPlacements, id: \.marker.ayah) { placement in
-                AyahNumberView(
-                    number: placement.marker.ayah.ayah,
-                    ringColor: chromePalette.marker.ringForeground,
-                    fillColor: chromePalette.marker.content?.background,
-                    textColor: chromePalette.marker.content?.foreground
-                )
+                AyahNumberView(number: placement.marker.ayah.ayah, palette: chromePalette)
                 .placed(in: placement.frame)
             }
         }

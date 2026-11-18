@@ -7,6 +7,7 @@ import UIx
 
 struct ImageDecorationsView: View {
     let layout: ImageDecorationsLayout
+    let chromeStyle: QuranPageChromeStyle
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -19,6 +20,12 @@ struct ImageDecorationsView: View {
     }
 
     // MARK: Private
+
+    @Environment(\.themeColorScheme) private var themeColorScheme
+
+    private var chromePalette: QuranPageChromePalette {
+        chromeStyle.palette(for: themeColorScheme)
+    }
 
     private var highlights: some View {
         ZStack(alignment: .topLeading) {
@@ -35,14 +42,14 @@ struct ImageDecorationsView: View {
 
     private var suraHeaders: some View {
         ForEach(layout.suraHeaders) { placement in
-            SuraHeaderView()
+            SuraHeaderView(tint: chromePalette.header)
                 .placed(in: placement.frame)
         }
     }
 
     private var ayahNumbers: some View {
         ForEach(layout.drawnAyahMarkers, id: \.ayah) { placement in
-            AyahNumberView(number: placement.ayah.ayah)
+            AyahNumberView(number: placement.ayah.ayah, palette: chromePalette)
                 .placed(in: placement.frame)
         }
     }

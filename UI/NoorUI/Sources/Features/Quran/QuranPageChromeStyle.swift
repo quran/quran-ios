@@ -8,7 +8,7 @@ import UIKit
 import UIx
 
 /// The colors of the sura headers and ayah markers the app draws on Quran pages.
-public enum QuranPageChromeStyle: Equatable {
+public enum QuranPageChromeStyle {
     case green
     case blue
 
@@ -25,14 +25,7 @@ public enum QuranPageChromeStyle: Equatable {
 
     // MARK: Public
 
-    /// Quiet pages are dark whatever the color scheme, as `invertThemedColorIfNeeded()` treats them.
-    public func palette(colorScheme: ColorScheme, themeStyle: ThemeStyle) -> QuranPageChromePalette {
-        palette(for: themeStyle == .quiet ? .dark : colorScheme)
-    }
-
-    // MARK: Internal
-
-    func palette(for colorScheme: ColorScheme) -> QuranPageChromePalette {
+    public func palette(for colorScheme: ColorScheme) -> QuranPageChromePalette {
         switch (self, colorScheme) {
         case (.blue, .dark):
             QuranPageChromePalette(header: 0x73AFFA, markerRing: 0x73AFFA, markerFill: 0x172554, markerText: 0x73AFFA)
@@ -46,7 +39,7 @@ public enum QuranPageChromeStyle: Equatable {
     }
 }
 
-public struct QuranPageChromePalette: Equatable {
+public struct QuranPageChromePalette {
     // MARK: Lifecycle
 
     init(header: Int, markerRing: Int, markerFill: Int, markerText: Int) {

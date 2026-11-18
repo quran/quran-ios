@@ -8,11 +8,10 @@
 import SwiftUI
 
 private struct ThemedColorInvertModifier: ViewModifier {
-    @Environment(\.colorScheme) var colorScheme
-    @Environment(\.themeStyle) var themeStyle
+    @Environment(\.quranPageColorScheme) var quranPageColorScheme
 
     func body(content: Content) -> some View {
-        if colorScheme == .dark || themeStyle == .quiet {
+        if quranPageColorScheme == .dark {
             // Rotating the hue back keeps colored chrome and tajweed colors meaningful.
             content
                 .colorInvert()

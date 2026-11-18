@@ -51,8 +51,7 @@ enum DimmedAyahOpacity {
 extension EnvironmentValues {
     var dimmedAyahOpacity: Double {
         DimmedAyahOpacity.value(
-            // Quran pages render dark under the same condition as `invertThemedColorIfNeeded()`.
-            isDark: colorScheme == .dark || themeStyle == .quiet,
+            isDark: quranPageColorScheme == .dark,
             increasesContrast: colorSchemeContrast == .increased
         )
     }

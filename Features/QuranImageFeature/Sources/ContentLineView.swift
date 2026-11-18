@@ -121,14 +121,13 @@ private struct ContentLineViewBody: View {
 
     // MARK: Private
 
-    @Environment(\.themeColorScheme) private var themeColorScheme
-    @Environment(\.themeStyle) private var themeStyle
+    @Environment(\.quranPageColorScheme) private var quranPageColorScheme
     #if QURAN_SYNC
     @State private var pressedReadingBookmarkAyah: AyahNumber?
     #endif
 
     private var chromePalette: QuranPageChromePalette {
-        chromeStyle.palette(colorScheme: themeColorScheme, themeStyle: themeStyle)
+        chromeStyle.palette(for: quranPageColorScheme)
     }
 
     private func lineCanvas(_ layout: LinePageLayout?) -> some View {

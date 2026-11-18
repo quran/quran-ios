@@ -27,14 +27,14 @@ private struct ReadableInsetsModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            // Quran pages hide the status bar while reading, so they can use the empty vertical bar column.
-            .readWindowSafeAreaInsets($windowSafeAreaInsets, excludingVerticalBar: true, hasVerticalBar: $windowHasVerticalBar)
+            .readWindowSafeAreaInsets($windowSafeAreaInsets, hasVerticalBar: $windowHasVerticalBar)
             .environment(\.readableInsets, ContentDimension.readableInsets(of: pageSafeAreaInsets))
             .environment(\.windowSafeAreaInsets, pageSafeAreaInsets)
             .environment(\.windowHasVerticalBar, windowHasVerticalBar)
     }
 
-    /// The window's safe area, except on iPhone Duo on the side facing the other page, which is away from the window's edge.
+    /// The window's safe area, except on iPhone Duo on the side facing the other page, which is away from the window's
+    /// edge. That side would otherwise take the vertical bar's column inset, or the other edge's, in the spread's middle.
     private var pageSafeAreaInsets: EdgeInsets {
         var insets = windowSafeAreaInsets
         guard let pageInnerSide, windowHasVerticalBar else {

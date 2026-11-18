@@ -92,7 +92,10 @@ struct AdvancedAudioOptionsRootViewUI: View {
                     accessory: .disclosureIndicator,
                     action: .sync {
                         navigator?.push {
+                            // The reciter list reads the safe area itself, so its background reaches the
+                            // sheet's sides and bottom, past the home indicator and iPhone Duo's vertical bar.
                             StaticViewControllerRepresentable(viewController: recitersViewController())
+                                .ignoresSafeArea(.container, edges: [.horizontal, .bottom])
                         }
                     }
                 )

@@ -109,6 +109,11 @@ extension Reading {
         }
     }
 
+    /// The reading's resources in the app bundle, or `nil` if the app doesn't bundle them.
+    public var bundleURL: URL? {
+        Bundle.main.url(forResource: localPath, withExtension: nil)
+    }
+
     static func isDownloadDesitnationPath(_ path: RelativeFilePath) -> Bool {
         readingsPath.isParent(of: path)
     }

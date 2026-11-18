@@ -34,9 +34,7 @@ public actor ReadingResourcesService {
         removeOtherReadings: Bool = true,
         bundledReadings: Set<Reading>? = nil
     ) {
-        self.bundledReadings = bundledReadings ?? Set(Reading.allReadings.filter {
-            Bundle.main.url(forResource: $0.localPath, withExtension: nil) != nil
-        })
+        self.bundledReadings = bundledReadings ?? Set(Reading.allReadings.filter { $0.bundleURL != nil })
         self.zipper = zipper
         self.fileManager = fileManager
         self.preferencesObservingStarted = preferencesObservingStarted

@@ -77,16 +77,6 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
             updateWindowSafeAreaInsetsIfNeeded()
         }
 
-        override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
-            .zero
-        }
-
-        override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
-            .zero
-        }
-
-        // MARK: Private
-
         private func updateWindowSafeAreaInsetsIfNeeded() {
             if let window {
                 let insets = insets(of: window)
@@ -105,6 +95,16 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
                 }
             }
         }
+
+        override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
+            .zero
+        }
+
+        override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+            .zero
+        }
+
+        // MARK: Private
 
         private func hasVerticalBar(_ window: UIWindow) -> Bool {
             guard #available(iOS 27.1, *) else {

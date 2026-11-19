@@ -27,8 +27,7 @@ struct ContentLineView: View {
         #if QURAN_SYNC
         let content = ContentLineViewBody(
             page: viewModel.page,
-            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false, usesDenseLines: $1) },
-            isLimitedByHeight: { viewModel.isLimitedByHeight($0, usesDenseLines: $1) },
+            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false) },
             scrollToVerse: viewModel.scrollToVerse,
             onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
@@ -47,8 +46,7 @@ struct ContentLineView: View {
         #else
         let content = ContentLineViewBody(
             page: viewModel.page,
-            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false, usesDenseLines: $1) },
-            isLimitedByHeight: { viewModel.isLimitedByHeight($0, usesDenseLines: $1) },
+            layoutForSize: { viewModel.layout(for: $0, showHeaderFooter: false) },
             scrollToVerse: viewModel.scrollToVerse,
             onReaderScroll: { viewModel.onReaderScroll() },
             wordFrames: viewModel.wordFrames,
@@ -81,10 +79,7 @@ private struct ContentLineViewBody: View {
     // MARK: Internal
 
     let page: Page
-    /// The layout for an available size, and whether lines may sit closer together.
-    let layoutForSize: (CGSize, Bool) -> LinePageLayout?
-    /// Whether a page this size is limited by its height, and whether lines may sit closer together.
-    let isLimitedByHeight: (CGSize, Bool) -> Bool
+    let layoutForSize: (CGSize) -> LinePageLayout?
     let scrollToVerse: AyahNumber?
     let onReaderScroll: () -> Void
     let wordFrames: WordFrameCollection
@@ -105,26 +100,18 @@ private struct ContentLineViewBody: View {
     let onGlobalFrameChange: (CGRect) -> Void
 
     var body: some View {
-        GeometryReader { geometry in
-            // Denser lines only on iPhone Duo, so iPhone and iPad keep their page layout.
-            VerticalBarReader { windowHasVerticalBar in
-                AdaptiveQuranScrollView {
-                    QuranPageHeader(
-                        quarterName: page.localizedQuarterName,
-                        suras: page.suras
-                    )
-                    #if QURAN_SYNC
-                    .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks, onTap: onPageReadingBookmarkTap)
-                    #endif
-                } footer: {
-                    QuranPageFooter(page: page.localizedNumber)
-                } content: { availableContentSize in
-                    lineCanvas(layoutForSize(availableContentSize, windowHasVerticalBar))
-                }
-                .compactsPageChromeOnVerticalBarDisplays(
-                    isLimitedByHeight: isLimitedByHeight(geometry.size, windowHasVerticalBar)
-                )
-            }
+        AdaptiveQuranScrollView {
+            QuranPageHeader(
+                quarterName: page.localizedQuarterName,
+                suras: page.suras
+            )
+            #if QURAN_SYNC
+            .pageReadingBookmarkRibbons(page: page, slots: pageReadingBookmarks, onTap: onPageReadingBookmarkTap)
+            #endif
+        } footer: {
+            QuranPageFooter(page: page.localizedNumber)
+        } content: { availableContentSize in
+            lineCanvas(layoutForSize(availableContentSize))
         }
         .font(.footnote)
         .populateReadableInsets()

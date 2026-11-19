@@ -58,27 +58,22 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     // MARK: Public
 
     public var body: some View {
-        GeometryReader { geometry in
-            // iPhone Duo only: iPhone and iPad keep their page layout.
-            let isLimitedByHeight = isLimitedByHeight(geometry.size) && windowHasVerticalBar
-            AdaptiveQuranScrollView {
-                header
-                    .environment(\.quranPageTextInsets, textInsets ?? EdgeInsets())
-            } footer: {
-                footer
-            } content: { availableContentSize in
-                Group {
-                    if let image {
-                        imageContent(image)
-                    } else {
-                        Color.clear
-                    }
+        AdaptiveQuranScrollView {
+            header
+                .environment(\.quranPageTextInsets, textInsets ?? EdgeInsets())
+        } footer: {
+            footer
+        } content: { availableContentSize in
+            Group {
+                if let image {
+                    imageContent(image)
+                } else {
+                    Color.clear
                 }
-                .frame(height: imageHeight(for: availableContentSize))
-                .frame(maxWidth: .infinity)
-                .onSizeChange { contentWidth = $0.width }
             }
-            .environment(\.compactsPageChrome, isLimitedByHeight)
+            .frame(height: imageHeight(for: availableContentSize))
+            .frame(maxWidth: .infinity)
+            .onSizeChange { contentWidth = $0.width }
         }
     }
 
@@ -91,7 +86,6 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
     @State private var imageViewSize: CGSize = .zero
     @State private var contentWidth: CGFloat = 0
     @Environment(\.layoutDirection) private var layoutDirection
-    @Environment(\.windowHasVerticalBar) private var windowHasVerticalBar
     #if QURAN_SYNC
     private let ayahReadingBookmarks: [AyahNumber: [ReadingBookmarkSlot]]
     private let onAyahReadingBookmarkTap: (AyahNumber, CGPoint) -> Void
@@ -165,15 +159,6 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                 )
             }
         #endif
-    }
-
-    /// Whether the page fits its height and leaves room at the sides, so every point the header
-    /// and footer give back makes the page bigger. Each page of a two-page spread is like that.
-    private func isLimitedByHeight(_ size: CGSize) -> Bool {
-        guard let imageSize = image?.size, imageSize.height > 0, size.height > 0, size.width <= size.height else {
-            return false
-        }
-        return size.width / size.height > imageSize.width / imageSize.height
     }
 
     private func imageHeight(for availableContentSize: CGSize) -> CGFloat {

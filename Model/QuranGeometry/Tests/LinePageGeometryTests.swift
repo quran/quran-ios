@@ -32,42 +32,6 @@ final class LinePageGeometryTests: XCTestCase {
         XCTAssertNil(layout.sidelineFrame)
     }
 
-    func testDenseLinesWidenPagesThatTheirHeightLimits() {
-        // One page of an unfolded iPhone Duo's two-page spread.
-        let size = CGSize(width: 459, height: 669)
-
-        let regular = makeEngine().layout(portraitInput(size: size, usesDenseLines: false))
-        let dense = makeEngine().layout(portraitInput(size: size, usesDenseLines: true))
-
-        XCTAssertEqual(regular.pageFrame, CGRect(x: 20.5, y: 0, width: 418, height: 669))
-        XCTAssertEqual(dense.pageFrame, CGRect(x: 6.5, y: 0, width: 446, height: 669))
-    }
-
-    func testDenseLinesKeepPagesThatTheirWidthLimits() {
-        let size = CGSize(width: 400, height: 800)
-
-        let regular = makeEngine().layout(portraitInput(size: size, usesDenseLines: false))
-        let dense = makeEngine().layout(portraitInput(size: size, usesDenseLines: true))
-
-        XCTAssertEqual(dense.pageFrame, regular.pageFrame)
-    }
-
-    func testMinimumPageWidthToHeightRatioFollowsLineOverlapAndDensity() {
-        let engine = makeEngine()
-        let regular = LinePageDisplaySettings(usesDenseLines: false)
-        let dense = LinePageDisplaySettings(usesDenseLines: true)
-
-        // Overlapping lines, like Madani: a fixed ratio, denser lines allow a wider page.
-        XCTAssertEqual(engine.minimumPageWidthToHeightRatio(data: makeData(), displaySettings: regular), 1 / 1.6, accuracy: 0.0001)
-        XCTAssertEqual(engine.minimumPageWidthToHeightRatio(data: makeData(), displaySettings: dense), 1 / 1.5, accuracy: 0.0001)
-
-        // Lines that never overlap, like IndoPak: the stacked lines decide, whatever the density.
-        let indoPak = makeData(metrics: .indoPakLinePages)
-        let stackedLines = 1 / (15 * 148 / 1342.0)
-        XCTAssertEqual(engine.minimumPageWidthToHeightRatio(data: indoPak, displaySettings: regular), stackedLines, accuracy: 0.0001)
-        XCTAssertEqual(engine.minimumPageWidthToHeightRatio(data: indoPak, displaySettings: dense), stackedLines, accuracy: 0.0001)
-    }
-
     func testLandscapeLayoutReservesSidelinesOnLeadingEdgeForOddPages() throws {
         let layout = makeEngine().layout(
             LinePageGeometryInput(
@@ -342,17 +306,6 @@ final class LinePageGeometryTests: XCTestCase {
 
     private func makeEngine() -> LinePageGeometryEngine {
         LinePageGeometryEngine()
-    }
-
-    private func portraitInput(size: CGSize, usesDenseLines: Bool) -> LinePageGeometryInput {
-        LinePageGeometryInput(
-            availableSize: size,
-            orientation: .portrait,
-            pageParity: .odd,
-            displaySettings: LinePageDisplaySettings(showHeaderFooter: false, usesDenseLines: usesDenseLines),
-            data: makeData(),
-            suraHeaderAspectRatio: 0.25
-        )
     }
 
     private func makeData(

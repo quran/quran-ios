@@ -29,8 +29,6 @@ private struct ReadableInsetsModifier: ViewModifier {
         content
             .readWindowSafeAreaInsets($windowSafeAreaInsets, hasVerticalBar: $windowHasVerticalBar)
             .environment(\.readableInsets, ContentDimension.readableInsets(of: pageSafeAreaInsets))
-            .environment(\.windowSafeAreaInsets, pageSafeAreaInsets)
-            .environment(\.windowHasVerticalBar, windowHasVerticalBar)
     }
 
     /// The window's safe area, except on iPhone Duo on the side facing the other page, which is away from the window's

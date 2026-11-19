@@ -14,7 +14,6 @@ enum ContentLineLayoutBuilder {
         showHeaderFooter: Bool,
         showSidelines: Bool,
         showLineDividers: Bool,
-        usesDenseLines: Bool = false,
         highlightedVerses: Set<AyahNumber> = []
     ) -> LinePageGeometryInput {
         LinePageGeometryInput(
@@ -24,8 +23,7 @@ enum ContentLineLayoutBuilder {
             displaySettings: LinePageDisplaySettings(
                 showHeaderFooter: showHeaderFooter,
                 showSidelines: showSidelines && !data.sidelines.isEmpty,
-                showLineDividers: showLineDividers && page.pageNumber > 3,
-                usesDenseLines: usesDenseLines
+                showLineDividers: showLineDividers && page.pageNumber > 3
             ),
             data: data,
             highlights: LinePageHighlightState(highlightedVerses: highlightedVerses),

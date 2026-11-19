@@ -24,16 +24,9 @@ public struct QuranPageHeader: View {
     // MARK: Public
 
     public var body: some View {
-        if compactsPageChrome, readableInsetEdges.contains(.top) {
-            textRow
-                .readableInsetsPadding(readableInsetEdges.subtracting(.top))
-                .padding(.top, ContentDimension.CompactPageChrome.headerTop(safeAreaTop: windowSafeAreaInsets.top))
-                .padding(.bottom, ContentDimension.CompactPageChrome.spacing)
-        } else {
-            textRow
-                .readableInsetsPadding(readableInsetEdges)
-                .padding(.bottom, ContentDimension.interSpacing)
-        }
+        textRow
+            .readableInsetsPadding(readableInsetEdges)
+            .padding(.bottom, ContentDimension.interSpacing)
     }
 
     // MARK: Private
@@ -42,8 +35,6 @@ public struct QuranPageHeader: View {
     private let suras: [Sura]
     private let readableInsetEdges: Edge.Set
     @Environment(\.quranPageTextInsets) private var textInsets
-    @Environment(\.compactsPageChrome) private var compactsPageChrome
-    @Environment(\.windowSafeAreaInsets) private var windowSafeAreaInsets
 
     private var suraNames: QuranPageHeaderSuraNames {
         // TODO: Should get footnote from environment.

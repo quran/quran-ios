@@ -166,9 +166,7 @@ final class ContentLineViewModel: ObservableObject {
         }
     }
 
-    /// - Parameter usesDenseLines: Whether lines may sit closer together. It only changes pages whose height
-    ///   limits their size, like each page of a two-page spread on iPhone Duo.
-    func layout(for availableSize: CGSize, showHeaderFooter: Bool, usesDenseLines: Bool = false) -> LinePageLayout? {
+    func layout(for availableSize: CGSize, showHeaderFooter: Bool) -> LinePageLayout? {
         guard let assets else {
             currentLayout = nil
             return nil
@@ -178,30 +176,22 @@ final class ContentLineViewModel: ObservableObject {
             ContentLineLayoutBuilder.input(
                 page: page,
                 availableSize: availableSize,
-                data: pageGeometryData(for: assets),
+                data: LinePageGeometryData(
+                    metrics: linePageMetrics,
+                    lineCount: assets.lines.count,
+                    highlightSpans: geometryData.highlightSpans,
+                    ayahMarkers: geometryData.ayahMarkers,
+                    suraHeaders: geometryData.suraHeaders,
+                    sidelines: geometryData.sidelines
+                ),
                 showHeaderFooter: showHeaderFooter,
                 showSidelines: showSidelines,
                 showLineDividers: showLineDividers,
-                usesDenseLines: usesDenseLines,
                 highlightedVerses: Set(highlightColorsByVerse.keys)
             )
         )
         currentLayout = layout
         return layout
-    }
-
-    /// Whether a page this size is limited by its height, so its header and page number can sit closer.
-    ///
-    /// - Parameter usesDenseLines: Whether the page's lines may sit closer together, as in `layout(for:showHeaderFooter:usesDenseLines:)`.
-    func isLimitedByHeight(_ size: CGSize, usesDenseLines: Bool) -> Bool {
-        guard let assets, size.height > 0, size.width <= size.height else {
-            return false
-        }
-        let ratio = geometryEngine.minimumPageWidthToHeightRatio(
-            data: pageGeometryData(for: assets),
-            displaySettings: LinePageDisplaySettings(usesDenseLines: usesDenseLines)
-        )
-        return size.width / size.height > ratio
     }
 
     func lineImage(for lineNumber: Int) -> UIImage? {
@@ -260,17 +250,6 @@ final class ContentLineViewModel: ObservableObject {
     private var isVisible = false
     private var currentLayout: LinePageLayout?
     private var contentFrame: CGRect = .zero
-
-    private func pageGeometryData(for assets: LinePageAssets) -> LinePageGeometryData {
-        LinePageGeometryData(
-            metrics: linePageMetrics,
-            lineCount: assets.lines.count,
-            highlightSpans: geometryData.highlightSpans,
-            ayahMarkers: geometryData.ayahMarkers,
-            suraHeaders: geometryData.suraHeaders,
-            sidelines: geometryData.sidelines
-        )
-    }
 
     private func scrollToVerseIfNeededSynchronously() {
         // Wait until the view is on screen and `loadLinePage()` has the page's verse geometry.

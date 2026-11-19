@@ -145,6 +145,18 @@ final class AyahReadingBookmarkIndicatorTests: XCTestCase {
         XCTAssertEqual(lengths[2], 32, accuracy: 0.001)
     }
 
+    func test_pageRibbons_leftToRight_padTheTrailingInsetOnTheRight() {
+        let readableInsets = EdgeInsets(top: 32, leading: 8, bottom: 28, trailing: 48)
+
+        XCTAssertEqual(PageReadingBookmarkRibbons.rightInset(of: readableInsets, layoutDirection: .leftToRight), 48)
+    }
+
+    func test_pageRibbons_rightToLeft_padTheLeadingInsetOnTheRight() {
+        let readableInsets = EdgeInsets(top: 32, leading: 48, bottom: 28, trailing: 8)
+
+        XCTAssertEqual(PageReadingBookmarkRibbons.rightInset(of: readableInsets, layoutDirection: .rightToLeft), 48)
+    }
+
     func test_readingPins_useSlotAccessibleNames() {
         let teal = AyahIndicator.readingBookmark(.teal)
         let orange = AyahIndicator.readingBookmark(.orange)

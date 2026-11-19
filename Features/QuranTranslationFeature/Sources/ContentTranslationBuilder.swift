@@ -25,18 +25,25 @@ public struct ContentTranslationBuilder {
 
     #if QURAN_SYNC
     @MainActor
-    public func build(at page: Page, onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void) -> some View {
-        ContentTranslationView(viewModel: makeViewModel(at: page), onAyahNumberTapped: onAyahNumberTapped)
+    public func build(
+        at page: Page,
+        onAyahNumberTapped: @escaping (AyahNumber, CGPoint) -> Void,
+        onVerseReferenceTapped: @escaping (AyahNumber, AyahNumber) -> Void
+    ) -> some View {
+        ContentTranslationView(
+            viewModel: makeViewModel(at: page, onVerseReferenceTapped: onVerseReferenceTapped),
+            onAyahNumberTapped: onAyahNumberTapped
+        )
     }
     #else
     @MainActor
-    public func build(at page: Page) -> some View {
-        ContentTranslationView(viewModel: makeViewModel(at: page))
+    public func build(at page: Page, onVerseReferenceTapped: @escaping (AyahNumber, AyahNumber) -> Void) -> some View {
+        ContentTranslationView(viewModel: makeViewModel(at: page, onVerseReferenceTapped: onVerseReferenceTapped))
     }
     #endif
 
     @MainActor
-    private func makeViewModel(at page: Page) -> ContentTranslationViewModel {
+    private func makeViewModel(at page: Page, onVerseReferenceTapped: @escaping (AyahNumber, AyahNumber) -> Void) -> ContentTranslationViewModel {
         let dataService = QuranTextDataService(
             databasesURL: container.databasesURL,
             quranFileURL: container.quranUthmaniV2Database
@@ -49,6 +56,7 @@ public struct ContentTranslationBuilder {
             overlayService: overlayService
         )
         viewModel.verses = page.verses
+        viewModel.onVerseReferenceTapped = onVerseReferenceTapped
         return viewModel
     }
 }

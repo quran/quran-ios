@@ -11,6 +11,7 @@ import AnnotationsService
 import Combine
 import CombineSchedulers
 import Crashing
+import NoorUI
 import QuranAnnotations
 import QuranImageFeature
 import QuranKit
@@ -160,6 +161,8 @@ public final class ContentViewModel: ObservableObject {
 
     @PublishedBinding var overlays: VerseOverlays
 
+    @Published var toast: Toast?
+
     var pagingStrategy: PagingStrategy {
         twoPagesEnabled ? .doublePage : .singlePage
     }
@@ -212,6 +215,15 @@ public final class ContentViewModel: ObservableObject {
         }
     }
 
+    /// Moves to a verse that a footnote refers to and highlights it, with a toast to go back to the footnote's verse.
+    func followVerseReference(from verse: AyahNumber, to reference: AyahNumber) {
+        logger.info("Following \(reference.nonLocalizedDescription) from a footnote of \(verse.nonLocalizedDescription)")
+        navigate(to: reference)
+        toast = .verseReference(reference) { [weak self] in
+            self?.navigate(to: verse)
+        }
+    }
+
     func onVisiblePageChanged() {
         listener?.contentViewDidChangeVisiblePage()
     }
@@ -260,6 +272,14 @@ public final class ContentViewModel: ObservableObject {
             swap(&start, &end)
         }
         return start.array(to: end)
+    }
+
+    /// Shows `verse` the way the reader opens at a verse: on its page, scrolled to and highlighted.
+    private func navigate(to verse: AyahNumber) {
+        navigationHighlighter.navigate(to: verse)
+        if !visiblePages.contains(verse.page) {
+            visiblePages = [verse.page]
+        }
     }
 
     private func configureInitialPage() {

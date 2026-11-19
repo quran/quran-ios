@@ -5,6 +5,8 @@
 //  Created by Mohamed Afifi on 2024-10-06.
 //
 
+import Combine
+import NoorUI
 import QuranPagesFeature
 import QuranTextKit
 import SwiftUI
@@ -12,6 +14,7 @@ import UIx
 
 struct PagesView: View {
     @StateObject var viewModel: ContentViewModel
+    @Environment(\.showToast) private var showToast
 
     var body: some View {
         GeometryReader { geometry in
@@ -38,9 +41,13 @@ struct PagesView: View {
                         #if QURAN_SYNC
                         viewModel.deps.translationDataSourceBuilder.build(at: page) {
                             viewModel.onAyahNumberTapped($0, at: $1)
+                        } onVerseReferenceTapped: {
+                            viewModel.followVerseReference(from: $0, to: $1)
                         }
                         #else
-                        viewModel.deps.translationDataSourceBuilder.build(at: page)
+                        viewModel.deps.translationDataSourceBuilder.build(at: page) {
+                            viewModel.followVerseReference(from: $0, to: $1)
+                        }
                         #endif
                     }
                 }
@@ -52,6 +59,10 @@ struct PagesView: View {
         // would make portrait look landscape and flip the reader to double pages.
         .ignoresSafeArea(.keyboard)
         .collectGeometryActions($viewModel.geometryActions)
+        .onReceive(viewModel.$toast.compactMap { $0 }) { toast in
+            viewModel.toast = nil
+            showToast?(toast)
+        }
     }
 
     private func pagingStrategy(with geometry: GeometryProxy) -> PagingStrategy {

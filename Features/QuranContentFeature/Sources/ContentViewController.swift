@@ -75,6 +75,8 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
     private func setUpPagesView() {
         let viewModel = viewModel
         let pagesView = PagesView(viewModel: viewModel)
+            // Pages show toasts, like the way back from a footnote's verse reference.
+            .enableToastPresenter()
         let pagingController = UIHostingController(rootView: pagesView)
         addFullScreenChild(pagingController)
     }

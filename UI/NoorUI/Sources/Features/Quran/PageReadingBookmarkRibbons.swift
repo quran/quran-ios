@@ -66,7 +66,7 @@ struct PageReadingBookmarkRibbons: View {
             .accessibilityLabel(accessibilityLabel)
             .accessibilityIdentifier("page-reading-bookmark-\(page.pageNumber)")
         }
-        .padding(.trailing, readableInsets.trailing)
+        .padding(.trailing, Self.rightInset(of: readableInsets, layoutDirection: layoutDirection))
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         // Always the physical right, whatever the reading direction.
         .environment(\.layoutDirection, .leftToRight)
@@ -85,6 +85,11 @@ struct PageReadingBookmarkRibbons: View {
         return (0 ..< count).map { available - CGFloat(count - 1 - $0) * step }
     }
 
+    /// The physical right side of `readableInsets`, whose leading and trailing are in `layoutDirection`.
+    static func rightInset(of readableInsets: EdgeInsets, layoutDirection: LayoutDirection) -> CGFloat {
+        layoutDirection == .rightToLeft ? readableInsets.leading : readableInsets.trailing
+    }
+
     // MARK: Private
 
     /// How much shorter each earlier ribbon is, as a ratio of the ribbon width.
@@ -92,6 +97,8 @@ struct PageReadingBookmarkRibbons: View {
 
     @ScaledMetric(relativeTo: .footnote) private var width = 16.0
     @Environment(\.readableInsets) private var readableInsets
+    /// The page's reading direction, outside the physical layout this view forces on its content.
+    @Environment(\.layoutDirection) private var layoutDirection
     @State private var isPressed = false
     @State private var globalFrame: CGRect = .zero
 }

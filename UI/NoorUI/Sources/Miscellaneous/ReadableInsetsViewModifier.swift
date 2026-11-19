@@ -19,13 +19,50 @@ private struct ReadableInsetsKey: EnvironmentKey {
     static let defaultValue = EdgeInsets()
 }
 
-private struct ReadableInsetsModifier: ViewModifier {
+struct ReadableInsetsModifier: ViewModifier {
     @State var windowSafeAreaInsets: EdgeInsets = .zero
+    @State var windowHasVerticalBar = false
+    @Environment(\.pageInnerSide) var pageInnerSide
+    @Environment(\.layoutDirection) var layoutDirection
+
+    /// The window's safe area, except on iPhone Duo on the side facing the other page, which is away from the window's
+    /// edge. That side would otherwise take the vertical bar's column inset, or the other edge's, in the spread's middle.
+    ///
+    /// - Parameter windowSafeAreaInsets: The window's safe area, with leading and trailing in `layoutDirection`.
+    static func pageSafeAreaInsets(
+        windowSafeAreaInsets: EdgeInsets,
+        windowHasVerticalBar: Bool,
+        pageInnerSide: PageInnerSide?,
+        layoutDirection: LayoutDirection
+    ) -> EdgeInsets {
+        var insets = windowSafeAreaInsets
+        guard let pageInnerSide, windowHasVerticalBar else {
+            return insets
+        }
+        let innerSideIsLeading = (pageInnerSide == .left) == (layoutDirection == .leftToRight)
+        if innerSideIsLeading {
+            insets.leading = 0
+        } else {
+            insets.trailing = 0
+        }
+        return insets
+    }
 
     func body(content: Content) -> some View {
         content
-            .readWindowSafeAreaInsets($windowSafeAreaInsets)
-            .environment(\.readableInsets, ContentDimension.readableInsets(of: windowSafeAreaInsets))
+            .readWindowSafeAreaInsets($windowSafeAreaInsets, hasVerticalBar: $windowHasVerticalBar)
+            .environment(\.readableInsets, ContentDimension.readableInsets(of: pageSafeAreaInsets))
+    }
+
+    // MARK: Private
+
+    private var pageSafeAreaInsets: EdgeInsets {
+        Self.pageSafeAreaInsets(
+            windowSafeAreaInsets: windowSafeAreaInsets,
+            windowHasVerticalBar: windowHasVerticalBar,
+            pageInnerSide: pageInnerSide,
+            layoutDirection: layoutDirection
+        )
     }
 }
 

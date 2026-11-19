@@ -122,6 +122,7 @@ private struct ContentLineViewBody: View {
     // MARK: Private
 
     @Environment(\.quranPageColorScheme) private var quranPageColorScheme
+    @Environment(\.displayScale) private var displayScale
     #if QURAN_SYNC
     @State private var pressedReadingBookmarkAyah: AyahNumber?
     #endif
@@ -281,7 +282,18 @@ private struct ContentLineViewBody: View {
             // Drawn as ink, so dividers get the same theme tint as the line images.
             Color.black
                 .invertThemedColorIfNeeded()
-                .placed(in: divider.frame)
+                .placed(in: hairlineFrame(for: divider.frame))
         }
+    }
+
+    /// One device pixel tall at the top of the divider frame, snapped to the pixel grid so it stays crisp.
+    private func hairlineFrame(for frame: CGRect) -> CGRect {
+        let scale = max(displayScale, 1)
+        return CGRect(
+            x: frame.minX,
+            y: (frame.minY * scale).rounded() / scale,
+            width: frame.width,
+            height: 1 / scale
+        )
     }
 }

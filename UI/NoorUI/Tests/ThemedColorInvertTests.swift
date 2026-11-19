@@ -25,12 +25,13 @@ final class ThemedColorInvertTests: XCTestCase {
 
     func test_calmLightPage_tintsBlackInkAndKeepsColors() throws {
         guard #available(iOS 17.0, *) else { throw XCTSkip("Light pages are tinted from iOS 17") }
+        let text = pixel(of: textColor(.calm, .light))
         let ink = try rendered(.black, .calm, colorScheme: .light)
-        assertEqual(ink, [0x32, 0x28, 0x1E])
+        assertEqual(ink, text)
 
         // The 1440 Mushaf prints dark gray ink.
         let grayInk = try rendered(UIColor(sRGB: 0x1C2127), .calm, colorScheme: .light)
-        assertEqual(grayInk, [0x32, 0x28, 0x1E])
+        assertEqual(grayInk, text)
 
         let green = UIColor(sRGB: 0x04943C)
         let color = try rendered(green, .calm, colorScheme: .light)

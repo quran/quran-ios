@@ -15,15 +15,14 @@ private struct ThemedColorInvertModifier: ViewModifier {
     @Environment(\.themeColors) var themeColors
 
     func body(content: Content) -> some View {
-        let text = textComponents
         let isDark = quranPageColorScheme == .dark
-        if !isDark && text.isBlack {
+        if !isDark && isTextBlack {
             content
         } else if #available(iOS 17.0, *) {
             // One pass for both page schemes, see QuranPageInk.metal.
             content.colorEffect(
                 ShaderLibrary.bundle(.module).quranPageInk(
-                    .float4(text.red, text.green, text.blue, 1),
+                    .color(themeColors.text),
                     .float(isDark ? 1 : 0)
                 )
             )
@@ -42,26 +41,15 @@ private struct ThemedColorInvertModifier: ViewModifier {
 
     // MARK: Private
 
-    /// The theme text color as sRGB components. The theme colors are Display P3 assets.
-    private var textComponents: InkColor {
+    /// Original light pages skip the shader, whose black point would still darken gray ink.
+    private var isTextBlack: Bool {
         let color = themeColors.style.textColor.resolvedColor(with: themeColors.colorScheme.traitCollection)
         var red: CGFloat = 0
         var green: CGFloat = 0
         var blue: CGFloat = 0
         var alpha: CGFloat = 0
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        return InkColor(red: Float(red), green: Float(green), blue: Float(blue))
-    }
-}
-
-private struct InkColor {
-    let red: Float
-    let green: Float
-    let blue: Float
-
-    /// Within half a step of 8-bit black, where tinting light pages would change nothing.
-    var isBlack: Bool {
-        max(red, green, blue) < 0.5 / 255
+        return max(red, green, blue) < 0.5 / 255
     }
 }
 

@@ -14,6 +14,7 @@ In this repository, we also provide an example application called QuranEngineApp
 ## Requirements
 
 - Xcode 27.1 or later. CI builds with Xcode 27.2.
+- The Metal Toolchain, for NoorUI's shaders: `xcodebuild -downloadComponent MetalToolchain`.
 - iOS 15 or later.
 - Swift Package Manager. We do not support CocoaPods or Carthage, and we do not plan to support them.
 

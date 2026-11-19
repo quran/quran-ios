@@ -5,6 +5,7 @@
 //  Created by Mohamed Afifi on 2024-02-01.
 //
 
+import Combine
 import NoorUI
 import QuranKit
 import QuranTranslationFeature
@@ -38,6 +39,8 @@ struct TranslationVerseView: View {
         .themedBackground()
         .themedForeground()
         .populateThemeStyle()
+        .background(TranslationVerseToasts(viewModel: viewModel))
+        .enableToastPresenter()
     }
 
     // MARK: Private
@@ -68,5 +71,19 @@ struct TranslationVerseView: View {
         #else
         ContentTranslationView(viewModel: viewModel.translationViewModel(for: verse))
         #endif
+    }
+}
+
+/// Shows the view model's toasts, like the way back from a footnote's verse reference.
+private struct TranslationVerseToasts: View {
+    let viewModel: TranslationVerseViewModel
+    @Environment(\.showToast) private var showToast
+
+    var body: some View {
+        Color.clear
+            .onReceive(viewModel.$toast.compactMap { $0 }) { toast in
+                viewModel.toast = nil
+                showToast?(toast)
+            }
     }
 }

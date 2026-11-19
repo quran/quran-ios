@@ -8,6 +8,7 @@
 
 import AnnotationsService
 import Combine
+import NoorUI
 import QuranKit
 import QuranTextKit
 import QuranTranslationFeature
@@ -52,6 +53,8 @@ class TranslationVerseViewModel: ObservableObject {
         }
     }
 
+    @Published var toast: Toast?
+
     func next() {
         logger.info("Verse Translation: moving to next verse currentVerse:\(currentVerse.nonLocalizedDescription)")
         if let next = currentVerse.next {
@@ -74,6 +77,9 @@ class TranslationVerseViewModel: ObservableObject {
         )
         viewModel.showHeaderAndFooter = false
         viewModel.verses = [verse]
+        viewModel.onVerseReferenceTapped = { [weak self] footnoteVerse, reference in
+            self?.followVerseReference(from: footnoteVerse, to: reference)
+        }
         return viewModel
     }
 
@@ -83,4 +89,13 @@ class TranslationVerseViewModel: ObservableObject {
     private let dataService: QuranTextDataService
     private let overlayService = VerseOverlayService()
     private let actions: TranslationVerseActions
+
+    /// Shows the verse that a footnote refers to, with a toast to go back to the footnote's verse.
+    private func followVerseReference(from verse: AyahNumber, to reference: AyahNumber) {
+        logger.info("Verse Translation: following \(reference.nonLocalizedDescription) from a footnote of \(verse.nonLocalizedDescription)")
+        currentVerse = reference
+        toast = .verseReference(reference) { [weak self] in
+            self?.currentVerse = verse
+        }
+    }
 }

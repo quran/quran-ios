@@ -710,6 +710,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Сноска №%d";
+"translation.text.verse-reference.toast" = "Показано: %@";
+"translation.text.verse-reference.back" = "Назад";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "аят %@";

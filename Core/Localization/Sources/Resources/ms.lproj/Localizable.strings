@@ -693,6 +693,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Nota kaki #%d";
+"translation.text.verse-reference.toast" = "Memaparkan %@";
+"translation.text.verse-reference.back" = "Kembali";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "ayat %@";

@@ -710,6 +710,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Note de bas de page nº %d";
+"translation.text.verse-reference.toast" = "Affichage : %@";
+"translation.text.verse-reference.back" = "Retour";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "verset %@";

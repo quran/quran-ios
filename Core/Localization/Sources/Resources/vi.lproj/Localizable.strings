@@ -624,6 +624,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Chú thích #%d";
+"translation.text.verse-reference.toast" = "Đang hiển thị %@";
+"translation.text.verse-reference.back" = "Quay lại";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "câu %@";

@@ -653,6 +653,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Dipnot #%d";
+"translation.text.verse-reference.toast" = "%@ gösteriliyor";
+"translation.text.verse-reference.back" = "Geri";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "ayet %@";

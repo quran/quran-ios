@@ -64,6 +64,7 @@ final class AdaptiveImageScrollViewTests: XCTestCase {
                 suraHeaders: [],
                 ayahNumbers: [],
                 drawsAyahNumbersAndSuraHeaders: false,
+                chromeStyle: .green,
                 wordFrames: WordFrameCollection(frames: []),
                 textColumn: textColumn
             ),

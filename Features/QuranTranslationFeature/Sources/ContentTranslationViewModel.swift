@@ -121,6 +121,10 @@ public final class ContentTranslationViewModel: ObservableObject {
         didSet { recordListUpdate(reason: "verses_changed") }
     }
 
+    /// Follows a verse reference in a footnote, from the verse with the footnote to the referenced verse.
+    /// While it's `nil`, footnotes show their references as plain text.
+    public var onVerseReferenceTapped: ((_ verse: AyahNumber, _ reference: AyahNumber) -> Void)?
+
     // MARK: Internal
 
     let tracker = CollectionTracker<TranslationItemId>()
@@ -353,6 +357,9 @@ public final class ContentTranslationViewModel: ObservableObject {
 
         case .readMore(let translationId, let sura, let ayah):
             expandTranslationIfNeeded(translationId: translationId, sura: sura, ayah: ayah)
+
+        case .verseReference(let sura, let ayah, let referencedSura, let referencedAyah):
+            followVerseReference(sura: sura, ayah: ayah, referencedSura: referencedSura, referencedAyah: referencedAyah)
         }
     }
 
@@ -402,6 +409,7 @@ public final class ContentTranslationViewModel: ObservableObject {
     private func footnoteChunks(verse: AyahNumber, translation: Translation, string: TranslationString) -> [TranslationFootnoteChunk] {
         zip(string.footnoteRanges, string.footnotes.indices).flatMap { markerRange, footnoteIndex in
             let text = string.footnoteText(at: footnoteIndex)
+            let verseReferences = followableVerseReferences(in: text, of: verse)
             let chunks = text.count <= Self.maxChunkSize
                 ? [text.startIndex ..< text.endIndex]
                 : text.chunkRanges(maxChunkSize: Self.maxChunkSize)
@@ -412,11 +420,23 @@ public final class ContentTranslationViewModel: ObservableObject {
                     footnoteIndex: footnoteIndex,
                     marker: chunkIndex == 0 ? String(string.text[markerRange]) : nil,
                     text: text,
+                    verseReferences: verseReferences,
                     chunks: chunks,
                     chunkIndex: chunkIndex,
                     translationFontSize: translationFontSize
                 )
             }
+        }
+    }
+
+    /// The verse references in a footnote of `verse` that the reader can follow: verses of the Quran other than `verse`.
+    private func followableVerseReferences(in text: String, of verse: AyahNumber) -> [FootnoteVerseReference] {
+        guard onVerseReferenceTapped != nil else {
+            return []
+        }
+        return text.footnoteVerseReferences().filter { reference in
+            // Footnotes can start by naming their own verse, like Khan & Hilali's "(V.{40:74})".
+            AyahNumber(quran: verse.quran, sura: reference.sura, ayah: reference.ayah).map { $0 != verse } ?? false
         }
     }
 
@@ -471,10 +491,24 @@ public final class ContentTranslationViewModel: ObservableObject {
             footnote = TranslationFootnote(
                 string: string,
                 footnoteIndex: footnoteIndex,
+                verse: ayah,
+                verseReferences: followableVerseReferences(in: string.footnoteText(at: footnoteIndex), of: ayah),
                 translation: translation,
                 translationFontSize: translationFontSize
             )
         }
+    }
+
+    private func followVerseReference(sura: Int, ayah: Int, referencedSura: Int, referencedAyah: Int) {
+        guard let quran = loadedContent.verses.first?.quran,
+              let verse = AyahNumber(quran: quran, sura: sura, ayah: ayah),
+              let reference = AyahNumber(quran: quran, sura: referencedSura, ayah: referencedAyah)
+        else {
+            return
+        }
+        logger.info("Quran Translation: following \(reference.nonLocalizedDescription) from a footnote of \(verse.nonLocalizedDescription)")
+        footnote = nil
+        onVerseReferenceTapped?(verse, reference)
     }
 
     private func performOnTranslationText(translationId: Translation.ID, sura: Int, ayah: Int, _ body: (AyahNumber, Translation, TranslationString) -> Void) {

@@ -88,6 +88,42 @@ final class ContentTranslationFootnoteTests: XCTestCase {
         XCTAssertEqual(sut.footnote?.text, "(V.2:3): Al-Ghaib: the unseen.")
     }
 
+    func testFootnoteVerseReferencesAreLinksOnlyWhenTheReaderCanFollowThem() throws {
+        QuranContentStatePreferences.shared.showFootnotesInTranslation = true
+        let sut = makeContentTranslationViewModel()
+        commit([try footnotedString("Guide us[1] to the Straight Way.", footnotes: ["[[See footnote for {2:255}.]]"])], to: sut)
+        XCTAssertEqual(linkedReferences(in: footnoteChunks(in: sut)), [])
+
+        sut.onVerseReferenceTapped = { _, _ in }
+
+        XCTAssertEqual(linkedReferences(in: footnoteChunks(in: sut)), ["{2:255}"])
+    }
+
+    func testFootnoteLinksOnlyVersesOtherThanItsOwn() throws {
+        QuranContentStatePreferences.shared.showFootnotesInTranslation = true
+        let sut = makeContentTranslationViewModel()
+        sut.onVerseReferenceTapped = { _, _ in }
+        commit([try footnotedString("Guide us[1] to the Straight Way.", footnotes: ["[[(V.{1:1}) See {2:255}, {1:8} and {115:1}.]]"])], to: sut)
+
+        XCTAssertEqual(linkedReferences(in: footnoteChunks(in: sut)), ["{2:255}"])
+    }
+
+    func testFollowingAVerseReferenceClosesTheFootnoteAndReportsBothVerses() throws {
+        let sut = makeContentTranslationViewModel()
+        var followed: [String] = []
+        sut.onVerseReferenceTapped = { verse, reference in
+            followed.append("\(verse.sura.suraNumber):\(verse.ayah) → \(reference.sura.suraNumber):\(reference.ayah)")
+        }
+        commit([try footnotedString("Guide us[1] to the Straight Way.", footnotes: ["[[See {2:255}.]]"])], to: sut)
+        sut.openURL(.footnote(translationId: 1, sura: verse.sura.suraNumber, ayah: verse.ayah, footnoteIndex: 0))
+        XCTAssertEqual(sut.footnote?.verseReferences.count, 1)
+
+        sut.openURL(.verseReference(sura: verse.sura.suraNumber, ayah: verse.ayah, referencedSura: 2, referencedAyah: 255))
+
+        XCTAssertNil(sut.footnote)
+        XCTAssertEqual(followed, ["1:1 → 2:255"])
+    }
+
     // MARK: Private
 
     private let verse = Quran.hafsMadani1405.firstVerse
@@ -105,6 +141,10 @@ final class ContentTranslationFootnoteTests: XCTestCase {
             guard case .translationFootnoteChunk(let chunk, _) = item else { return nil }
             return chunk
         }
+    }
+
+    private func linkedReferences(in chunks: [TranslationFootnoteChunk]) -> [String] {
+        chunks.flatMap { chunk in chunk.verseReferences.map { String(chunk.text[$0.range]) } }
     }
 
     /// Marks each "[n]" in text as the marker of footnotes[n - 1].

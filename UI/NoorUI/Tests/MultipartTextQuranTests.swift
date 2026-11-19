@@ -228,6 +228,23 @@ final class MultipartTextQuranTests: XCTestCase {
         XCTAssertEqual(lines, ["Playing ", "", "Al-Fātihah 1:7\u{00A0}– ", "Al-Baqarah 2:1", ""])
     }
 
+    func test_suraNames_wrapWithEachSeparatorOnTheLineOfTheSuraBeforeIt() {
+        let text: MultipartText = "\(suras: Array(Quran.hafsMadani1405.suras[0 ... 2]))"
+
+        let lines = text.parts.flatMap(\.wrappingParts).map { $0.rawValue(locale: english) }
+
+        XCTAssertEqual(lines, ["", "Al-Fātihah · ", "Al-Baqarah · ", "Āli-ʿImrān", ""])
+    }
+
+    func test_pageLocation_wrapsWithTheSeparatorOnTheLineOfTheSura() {
+        let page = Quran.hafsMadani1405.pages[1]
+        let text: MultipartText = "\(page: page)"
+
+        let lines = text.parts.flatMap(\.wrappingParts).map { $0.rawValue(locale: english) }
+
+        XCTAssertEqual(lines.filter { !$0.isEmpty }, ["Al-Baqarah, ", page.localizedName])
+    }
+
     func test_wholeSuraAyahRange_namesOnlyTheSura() {
         let fatihah = Quran.hafsMadani1405.suras[0]
         let text = MultipartText.ayahRange(fatihah.firstVerse ... fatihah.lastVerse, language: .english)

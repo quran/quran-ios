@@ -57,6 +57,8 @@ final class MultipartTextLayoutTests: XCTestCase {
         XCTAssertLessThan(heights.1, heights.0)
     }
 
+    /// Each separator stays on the line of the sura before it, so a line never ends with a decorated glyph spaced for
+    /// a separator that wrapped to the next line.
     func test_view_wrapsSuraNamesOnlyBetweenSuras() async {
         guard #available(iOS 16.0, *) else { return }
 
@@ -68,9 +70,15 @@ final class MultipartTextLayoutTests: XCTestCase {
             let suras = Array(Quran.hafsMadani1405.suras[16 ... 18])
             return [SuraNameStyle.standard, .decorated].flatMap { style in
                 let wrapping: MultipartText = "\(suras: suras, nameStyle: style)"
-                let separateReferences: MultipartText = """
-                \(sura: suras[0], nameStyle: style) · \(sura: suras[1], nameStyle: style) · \(sura: suras[2], nameStyle: style)
-                """
+                var separateReferences: MultipartText = ""
+                // Like the interpolation, with the empty text around the suras.
+                separateReferences.parts = [
+                    .plain(text: ""),
+                    .unbreakable([.sura(suras[0], emphasizesSura: false, nameStyle: style), .plain(text: " · ")]),
+                    .unbreakable([.sura(suras[1], emphasizesSura: false, nameStyle: style), .plain(text: " · ")]),
+                    .sura(suras[2], emphasizesSura: false, nameStyle: style),
+                    .plain(text: ""),
+                ]
                 return widths.map { width in
                     (
                         "\(style) width \(width)",

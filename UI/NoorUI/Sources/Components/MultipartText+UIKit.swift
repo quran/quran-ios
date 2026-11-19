@@ -21,14 +21,45 @@ extension MultipartText {
         if locale.isRightToLeft {
             result.append(NSAttributedString(string: "\u{200F}", attributes: [.font: size.plainUIFont]))
         }
-        for part in parts {
-            result.append(part.attributedString(ofSize: size, locale: locale))
-        }
+        result.append(TextPart.attributedString(parts, ofSize: size, locale: locale))
         return result
     }
 }
 
 private extension TextPart {
+    /// In right-to-left text, the text after a decorated glyph sits on its left, so kerning widens its first character.
+    static func attributedString(_ parts: [TextPart], ofSize size: MultipartText.FontSize, locale: Locale) -> NSAttributedString {
+        let result = NSMutableAttributedString()
+        var spacesNextPart = false
+        for part in parts {
+            let string = NSMutableAttributedString(attributedString: part.attributedString(ofSize: size, locale: locale))
+            guard string.length > 0 else { continue }
+            // Kerning a bidi control, like the isolate around a coordinate, widens nothing.
+            if spacesNextPart, let index = string.string.utf16.firstIndex(where: { !Self.bidiControls.contains($0) }) {
+                let location = string.string.utf16.distance(from: string.string.utf16.startIndex, to: index)
+                string.addAttributes(size.decoratedGlyphSpacingAttributes, range: NSRange(location: location, length: 1))
+            }
+            result.append(string)
+            spacesNextPart = locale.isRightToLeft && part.endsWithDecoratedGlyph(locale: locale)
+        }
+        return result
+    }
+
+    static let bidiControls: Set<UInt16> = [0x061C, 0x200E, 0x200F, 0x202A, 0x202B, 0x202C, 0x202D, 0x202E, 0x2066, 0x2067, 0x2068, 0x2069]
+
+    func endsWithDecoratedGlyph(locale: Locale) -> Bool {
+        switch self {
+        case .sura(let sura, _, let nameStyle):
+            QuranReference.sura(sura, nameStyle: nameStyle).endsWithDecoratedGlyph(locale: locale)
+        case .suras(let suras, let nameStyle):
+            suras.last.map { QuranReference.sura($0, nameStyle: nameStyle).endsWithDecoratedGlyph(locale: locale) } ?? false
+        case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
+            parts.last { !$0.isEmpty }?.endsWithDecoratedGlyph(locale: locale) ?? false
+        case .plain, .highlighting, .ayah, .ayahs, .quran:
+            false
+        }
+    }
+
     func attributedString(ofSize size: MultipartText.FontSize, locale: Locale) -> NSAttributedString {
         switch self {
         case .plain(let text):
@@ -53,9 +84,7 @@ private extension TextPart {
         case .ayahs(let ayahs, let nameStyle):
             QuranReference.ayahs(ayahs, nameStyle: nameStyle).attributedString(size: size, locale: locale)
         case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
-            parts.reduce(into: NSMutableAttributedString()) { result, part in
-                result.append(part.attributedString(ofSize: size, locale: locale))
-            }
+            TextPart.attributedString(parts, ofSize: size, locale: locale)
         case .quran(let text, let quranFont, let color, _, let highlighting):
             highlightedQuranAttributedString(
                 text: text,

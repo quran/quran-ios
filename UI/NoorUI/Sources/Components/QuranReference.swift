@@ -106,9 +106,15 @@ enum QuranReference {
             ))
         }
 
+        let showsDecoratedGlyph = showsArabicName(locale: locale) && !arabicName.isIndoPakText
         if showsArabicName(locale: locale) {
             if result.length > 0 {
-                result.append(NSAttributedString(string: " "))
+                // In left-to-right text, the space before the glyph is on its left.
+                let spacesGlyph = showsDecoratedGlyph && !locale.isRightToLeft
+                result.append(NSAttributedString(
+                    string: " ",
+                    attributes: [.font: size.plainUIFont].merging(spacesGlyph ? size.decoratedGlyphSpacingAttributes : [:]) { $1 }
+                ))
             }
             let arabicNameFont: UIFont = switch arabicName {
             case .decoratedGlyph: size.suraUIFont
@@ -122,12 +128,20 @@ enum QuranReference {
         }
 
         if let coordinate = coordinate(locale: locale) {
+            // In right-to-left text, the space after the glyph is on its left.
+            let spacesGlyph = showsDecoratedGlyph && locale.isRightToLeft
             result.append(NSAttributedString(
-                string: " \(coordinate)",
-                attributes: [.font: size.plainUIFont]
+                string: " ",
+                attributes: [.font: size.plainUIFont].merging(spacesGlyph ? size.decoratedGlyphSpacingAttributes : [:]) { $1 }
             ))
+            result.append(NSAttributedString(string: coordinate, attributes: [.font: size.plainUIFont]))
         }
         return result
+    }
+
+    /// Whether a decorated glyph ends this reference in `locale`.
+    func endsWithDecoratedGlyph(locale: Locale) -> Bool {
+        showsArabicName(locale: locale) && !arabicName.isIndoPakText && coordinate(locale: locale) == nil
     }
 
     private var nameStyle: SuraNameStyle {
@@ -190,12 +204,15 @@ struct QuranReferenceView: View {
         reference: QuranReference,
         size: MultipartText.FontSize,
         emphasizesSura: Bool = false,
-        wrapsWhenNarrow: Bool = false
+        wrapsWhenNarrow: Bool = false,
+        isFollowed: Bool = false
     ) {
         self.reference = reference
         self.size = size
         self.emphasizesSura = emphasizesSura
         self.wrapsWhenNarrow = wrapsWhenNarrow
+        self.isFollowed = isFollowed
+        _glyphSpacing = ScaledMetric(wrappedValue: size.decoratedGlyphSpacing, relativeTo: size.textStyle)
     }
 
     // MARK: Internal
@@ -206,10 +223,14 @@ struct QuranReferenceView: View {
     /// Whether a reference wider than the space it gets moves its coordinate under a wrapping name,
     /// instead of overflowing. Where it fits, it keeps its one-line layout.
     let wrapsWhenNarrow: Bool
+    /// Whether text follows this reference on its line, such as a separator before the next sura name.
+    let isFollowed: Bool
 
     @Environment(\.locale) private var locale
+    @Environment(\.layoutDirection) private var layoutDirection
     @ScaledMetric private var spacing = 4
     @ScaledMetric private var glyphTopPadding = 5
+    @ScaledMetric private var glyphSpacing: CGFloat
 
     var body: some View {
         if wrapsWhenNarrow, #available(iOS 16.0, *) {
@@ -233,7 +254,7 @@ struct QuranReferenceView: View {
         labeled(
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: nameAlignment, spacing: spacing) {
-                    suraName
+                    suraName(isGlyphFollowed: isFollowed)
                 }
                 if let coordinate = reference.coordinate(locale: locale) {
                     coordinateText(coordinate)
@@ -268,7 +289,7 @@ struct QuranReferenceView: View {
 
     private var names: some View {
         HStack(alignment: nameAlignment, spacing: spacing) {
-            suraName
+            suraName(isGlyphFollowed: isFollowed || reference.coordinate(locale: locale) != nil)
 
             if let coordinate = reference.coordinate(locale: locale) {
                 coordinateText(coordinate)
@@ -276,7 +297,9 @@ struct QuranReferenceView: View {
         }
     }
 
-    @ViewBuilder private var suraName: some View {
+    /// - Parameter isGlyphFollowed: Whether text follows the decorated glyph on its line.
+    @ViewBuilder
+    private func suraName(isGlyphFollowed: Bool) -> some View {
         if let localizedName = reference.localizedName(locale: locale) {
             // A nil weight would drop one set by an enclosing view, like a toast's semibold title.
             let name = Text(localizedName).font(size.plainFont)
@@ -287,6 +310,7 @@ struct QuranReferenceView: View {
             switch reference.arabicName {
             case .decoratedGlyph(let text):
                 decoratedGlyph(text)
+                    .padding(physicalLeftEdge, hasTextLeftOfGlyph(isGlyphFollowed: isGlyphFollowed) ? glyphSpacing : 0)
             case .indoPakText(let text):
                 // Noorehira's tall line box overflows the row instead of sizing or spacing it.
                 Text(text)
@@ -296,6 +320,19 @@ struct QuranReferenceView: View {
                     .ignoringSpacing()
             }
         }
+    }
+
+    /// A left-to-right glyph keeps its left side on the left in either layout direction.
+    private var physicalLeftEdge: Edge.Set {
+        layoutDirection == .rightToLeft ? .trailing : .leading
+    }
+
+    /// Whether text sits on the glyph's left: before it in left-to-right lines, after it in right-to-left ones.
+    private func hasTextLeftOfGlyph(isGlyphFollowed: Bool) -> Bool {
+        if layoutDirection == .rightToLeft {
+            return isGlyphFollowed
+        }
+        return reference.localizedName(locale: locale) != nil
     }
 
     private func coordinateText(_ coordinate: String) -> some View {
@@ -359,6 +396,8 @@ struct SuraNamesView: View {
     let suras: [Sura]
     let nameStyle: SuraNameStyle
     let size: MultipartText.FontSize
+    /// Whether text follows the last sura name on its line.
+    var isFollowed = false
 
     var body: some View {
         let references = suras.map { QuranReference.sura($0, nameStyle: nameStyle) }
@@ -369,7 +408,11 @@ struct SuraNamesView: View {
                         Text(Self.separator)
                             .font(size.plainFont)
                     }
-                    QuranReferenceView(reference: reference, size: size)
+                    QuranReferenceView(
+                        reference: reference,
+                        size: size,
+                        isFollowed: isFollowed || index < references.count - 1
+                    )
                 }
             }
         } else {
@@ -386,6 +429,20 @@ struct SuraNamesView: View {
 extension MultipartText.FontSize {
     var plainUIFont: UIFont {
         UIFont.preferredFont(forTextStyle: uiTextStyle)
+    }
+
+    /// The space between a decorated sura name glyph and the text on its left, in ems of the glyph's font: the
+    /// left side bearing the glyphs had on average, before `Tools/tighten-sura-name-glyphs.py` made them sit flush
+    /// in their boxes.
+    static let decoratedGlyphSpacingEm: CGFloat = 0.32
+
+    fileprivate var decoratedGlyphSpacing: CGFloat {
+        suraPointSize * Self.decoratedGlyphSpacingEm
+    }
+
+    /// Kerning that widens a character on a decorated glyph's left by `decoratedGlyphSpacingEm`.
+    var decoratedGlyphSpacingAttributes: [NSAttributedString.Key: Any] {
+        [.kern: suraUIFont.pointSize * Self.decoratedGlyphSpacingEm]
     }
 
     var suraUIFont: UIFont {
@@ -420,6 +477,16 @@ extension MultipartText.FontSize {
         }
         let excessLineHeight = quranUIFont(.indoPak).lineHeight - quranUIFont(.uthmanicHafs).lineHeight
         return -max(0, excessLineHeight / 2)
+    }
+
+    fileprivate var textStyle: Font.TextStyle {
+        switch self {
+        case .title3: .title3
+        case .body: .body
+        case .subheadline: .subheadline
+        case .caption: .caption
+        case .footnote: .footnote
+        }
     }
 
     private var uiTextStyle: UIFont.TextStyle {

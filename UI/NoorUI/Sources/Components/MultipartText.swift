@@ -68,6 +68,8 @@ private struct TextPartView: View {
     let size: MultipartText.FontSize
     /// Off inside unbreakable groups, which keep their parts on one line.
     var wrapsReferences = false
+    /// Whether text follows this part.
+    var isFollowed = false
 
     var body: some View {
         switch part {
@@ -83,27 +85,30 @@ private struct TextPartView: View {
                 reference: .sura(sura, nameStyle: nameStyle),
                 size: size,
                 emphasizesSura: emphasizesSura,
-                wrapsWhenNarrow: wrapsReferences
+                wrapsWhenNarrow: wrapsReferences,
+                isFollowed: isFollowed
             )
         case .ayah(let ayah, let emphasizesSura, let nameStyle):
             QuranReferenceView(
                 reference: .ayah(ayah, nameStyle: nameStyle),
                 size: size,
                 emphasizesSura: emphasizesSura,
-                wrapsWhenNarrow: wrapsReferences
+                wrapsWhenNarrow: wrapsReferences,
+                isFollowed: isFollowed
             )
         case .suras(let suras, let nameStyle):
-            SuraNamesView(suras: suras, nameStyle: nameStyle, size: size)
+            SuraNamesView(suras: suras, nameStyle: nameStyle, size: size, isFollowed: isFollowed)
         case .ayahs(let ayahs, let nameStyle):
             QuranReferenceView(
                 reference: .ayahs(ayahs, nameStyle: nameStyle),
                 size: size,
-                wrapsWhenNarrow: wrapsReferences
+                wrapsWhenNarrow: wrapsReferences,
+                isFollowed: isFollowed
             )
         case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
             HStack(spacing: 0) {
                 ForEach(0 ..< parts.count, id: \.self) { i in
-                    TextPartView(part: parts[i], size: size)
+                    TextPartView(part: parts[i], size: size, isFollowed: isFollowed || parts.isFollowed(at: i))
                 }
             }
         case .quran(let text, let quranFont, let color, let lineLimit, let highlighting):
@@ -148,6 +153,12 @@ private struct OptionalLineLimitModifier: ViewModifier {
     }
 }
 
+private extension [TextPart] {
+    func isFollowed(at index: Int) -> Bool {
+        self[(index + 1)...].contains { !$0.isEmpty }
+    }
+}
+
 private extension View {
     func optionalLineLimit(_ lineLimit: Int?) -> some View {
         modifier(OptionalLineLimitModifier(lineLimit: lineLimit))
@@ -175,6 +186,22 @@ enum TextPart {
 
     // MARK: Internal
 
+    var isSura: Bool {
+        if case .sura = self {
+            return true
+        }
+        return false
+    }
+
+    /// Whether the part has no text, like the empty text around a format's arguments.
+    var isEmpty: Bool {
+        switch self {
+        case .plain(let text), .highlighting(let text, _, _): text.isEmpty
+        case .accessibilityLabeled(let parts, _), .unbreakable(let parts): parts.allSatisfy(\.isEmpty)
+        case .sura, .ayah, .suras, .ayahs, .quran: false
+        }
+    }
+
     func rawValue(locale: Locale) -> String {
         switch self {
         case .plain(let text), .highlighting(let text, _, _):
@@ -195,8 +222,9 @@ enum TextPart {
         }
     }
 
-    /// Splits `.suras` into one fixed-size reference per sura with separators between them, so a
-    /// wrapping layout breaks lines only between suras, never inside a name. `.accessibilityLabeled` parts wrap
+    /// Splits `.suras` into one fixed-size reference per sura, each separator kept on the line of the sura before it,
+    /// so a wrapping layout breaks lines only between suras, never inside a name, and a line never ends with a glyph
+    /// spaced for a separator on the next line. `.accessibilityLabeled` parts wrap
     /// as their own parts, with the text between them kept on the line of the part before it, so a wrapped range
     /// never starts a line with its " – ". The view reads the whole text's `accessibilityText`, so they keep their label.
     var wrappingParts: [TextPart] {
@@ -214,9 +242,9 @@ enum TextPart {
         guard case .suras(let suras, let nameStyle) = self else {
             return [self]
         }
-        return suras.enumerated().flatMap { index, sura -> [TextPart] in
+        return suras.enumerated().map { index, sura -> TextPart in
             let reference = TextPart.sura(sura, emphasizesSura: false, nameStyle: nameStyle)
-            return index == 0 ? [reference] : [.plain(text: SuraNamesView.separator), reference]
+            return index == suras.count - 1 ? reference : .unbreakable([reference, .plain(text: SuraNamesView.separator)])
         }
     }
 
@@ -272,10 +300,18 @@ public struct MultipartText: ExpressibleByStringInterpolation {
             parts.append(.ayah(ayah, emphasizesSura: emphasizingSura, nameStyle: nameStyle))
         }
 
-        /// Appends the page's first sura and the localized page, such as "At-Tawbah, Page 200".
+        /// Appends the page's first sura and the localized page, such as "At-Tawbah, Page 200". A wrapped line keeps
+        /// the separator after the sura, as `wrappingParts` does for `.suras`.
         public mutating func appendInterpolation(page: Page, nameStyle: SuraNameStyle = .standard) {
             let sura: MultipartText = "\(sura: page.startSura, nameStyle: nameStyle)"
-            parts.append(contentsOf: MultipartText.localizedFormat("quran.page.location", sura, .text(page.localizedName)).parts)
+            var location = MultipartText.localizedFormat("quran.page.location", sura, .text(page.localizedName)).parts
+            if let index = location.firstIndex(where: \.isSura),
+               let separator = location[(index + 1)...].firstIndex(where: { !$0.isEmpty }),
+               case .plain = location[separator]
+            {
+                location[index ... separator] = [.unbreakable(Array(location[index ... separator]))]
+            }
+            parts.append(contentsOf: location)
         }
 
         public mutating func appendInterpolation(ayahRange range: ClosedRange<AyahNumber>) {
@@ -475,7 +511,12 @@ private struct MultiPartTextView: View {
         let parts = allowsWrapping ? text.parts.flatMap(\.wrappingParts) : text.parts
         wrap {
             ForEach(0 ..< parts.count, id: \.self) { i in
-                TextPartView(part: parts[i], size: size, wrapsReferences: allowsWrapping && wrapsWideReferences)
+                TextPartView(
+                    part: parts[i],
+                    size: size,
+                    wrapsReferences: allowsWrapping && wrapsWideReferences,
+                    isFollowed: parts.isFollowed(at: i)
+                )
             }
         }
         .accessibilityElement(children: .ignore)

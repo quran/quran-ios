@@ -648,6 +648,8 @@ private func featuresTargets() -> [[Target]] {
         ], testDependencies: [
             "AnalyticsFake",
             "AuthenticationClientFake",
+            "Localization",
+            "NoorUI",
             "SystemDependenciesFake",
         ]),
 

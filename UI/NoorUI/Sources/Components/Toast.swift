@@ -13,13 +13,26 @@ import UIKit
 import UIx
 
 public struct ToastAction {
-    public let title: String
-    public let handler: () -> Void
+    // MARK: Lifecycle
 
-    public init(title: String, handler: @escaping () -> Void) {
+    public init(title: String, appearance: Appearance = .accent, handler: @escaping () -> Void) {
         self.title = title
+        self.appearance = appearance
         self.handler = handler
     }
+
+    // MARK: Public
+
+    public enum Appearance {
+        /// A capsule filled with the app tint.
+        case accent
+        /// The compact Quran ID button, showing `title` beside the mark.
+        case quranID
+    }
+
+    public let title: String
+    public let appearance: Appearance
+    public let handler: () -> Void
 }
 
 public struct Toast: Identifiable {

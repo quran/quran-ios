@@ -62,6 +62,7 @@ struct SyncRevealView: View {
     @ScaledMetric(relativeTo: .footnote) private var chipCornerRadius = 14.0
     @ScaledMetric(relativeTo: .body) private var actionsSpacing = 2.0
     @ScaledMetric(relativeTo: .body) private var notNowVerticalPadding = 7.0
+    @ScaledMetric(relativeTo: .footnote) private var quranIDFootnoteTopPadding = 6.0
     @ScaledMetric(relativeTo: .body) private var benefitsSpacing = 20.0
     @ScaledMetric(relativeTo: .body) private var benefitSpacing = 14.0
     @ScaledMetric(relativeTo: .body) private var benefitTextSpacing = 2.0
@@ -291,7 +292,15 @@ struct SyncRevealView: View {
 
     private var actions: some View {
         VStack(spacing: actionsSpacing) {
-            NightfallPrimaryButton(title: l("new.sync_reveal.sign_in"), action: onSignIn)
+            Button(action: onSignIn) {
+                QuranIDButtonLabel(style: .white)
+            }
+            .buttonStyle(.quranID)
+
+            Text(l("quran_id.footnote"))
+                .font(.footnote)
+                .foregroundStyle(Palette.footnote)
+                .padding(.top, quranIDFootnoteTopPadding)
 
             Button(action: onNotNow) {
                 Text(l("new.sync_reveal.not_now"))
@@ -305,7 +314,7 @@ struct SyncRevealView: View {
 
             Text(l(Self.footnoteKey))
                 .font(.footnote)
-                .foregroundStyle(Color.white.opacity(0.62))
+                .foregroundStyle(Palette.footnote)
         }
         .multilineTextAlignment(.center)
         .fixedSize(horizontal: false, vertical: true)

@@ -8,7 +8,6 @@ import UIx
 
 @MainActor
 struct QuranComAccountCard: View {
-    @ScaledMetric private var avatarSize = 48.0
     @ScaledMetric private var profileAvatarSize = 56.0
     @ScaledMetric private var statusIconSize = 22.0
     @ScaledMetric private var reviewCornerRadius = 14.0
@@ -17,9 +16,11 @@ struct QuranComAccountCard: View {
     @ScaledMetric private var cardCornerRadius = 20.0
     @ScaledMetric private var cardPadding = 16.0
     @ScaledMetric private var headerSpacing = 12.0
-    @ScaledMetric private var iconCornerRadius = 14.0
     @ScaledMetric private var rowVerticalPadding = 14.0
-    @ScaledMetric private var signInVerticalPadding = 12.0
+    @ScaledMetric private var entrySpacing = 12.0
+    @ScaledMetric private var entryVerticalPadding = 24.0
+    @ScaledMetric private var signInTopPadding = 4.0
+    @ScaledMetric private var footnoteVerticalPadding = 12.0
 
     let accountState: QuranComAccountState
     let status: SyncStatusSummary
@@ -54,43 +55,39 @@ struct QuranComAccountCard: View {
             .accessibilityLabel(lAndroid("loading"))
     }
 
+    /// Quran Foundation's entry card for Quran ID, in the system fonts.
     private var unauthenticatedContent: some View {
-        VStack(spacing: cardPadding) {
-            HStack(alignment: .top, spacing: headerSpacing) {
-                NoorSystemImage.accountSignIn.image
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(Color.accentColor)
-                    .frame(width: avatarSize, height: avatarSize)
-                    .background(
-                        Color.accentColor.opacity(0.1),
-                        in: RoundedRectangle(cornerRadius: iconCornerRadius, style: .continuous)
-                    )
-                    .accessibilityHidden(true)
+        VStack(spacing: 0) {
+            VStack(spacing: entrySpacing) {
+                Text(l("quran_id.entry.title"))
+                    .font(.system(.title, design: .serif))
+                    .foregroundStyle(Color.label)
+                    .accessibilityAddTraits(.isHeader)
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(l("setting.quran_account.sign_in"))
-                        .font(.headline)
-                        .foregroundStyle(Color.label)
+                Text(l("quran_id.entry.subtitle"))
+                    .font(.body)
+                    .foregroundStyle(Color.label)
 
-                    Text(l("setting.quran_account.sign_in.subtitle"))
-                        .font(.subheadline)
-                        .foregroundStyle(Color.secondaryLabel)
-                        .fixedSize(horizontal: false, vertical: true)
+                AsyncButton(tapPolicy: .ignoreWhileRunning, action: signInAction) { isRunning in
+                    QuranIDButtonLabel(isInProgress: isRunning)
                 }
-
-                Spacer(minLength: 0)
+                .buttonStyle(.quranID)
+                .padding(.top, signInTopPadding)
             }
+            .padding(.horizontal, cardPadding)
+            .padding(.vertical, entryVerticalPadding)
 
-            AsyncButton(tapPolicy: .ignoreWhileRunning, action: signInAction) { isRunning in
-                ProgressTitle(l("setting.quran_account.sign_in"), isInProgress: isRunning, color: .onAccent)
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, signInVerticalPadding)
-                    .background(Color.accentColor, in: Capsule())
-            }
-            .buttonStyle(.plain)
+            Divider()
+
+            Text(l("quran_id.footnote"))
+                .font(.footnote)
+                .foregroundStyle(Color.secondaryLabel)
+                .padding(.horizontal, cardPadding)
+                .padding(.vertical, footnoteVerticalPadding)
         }
-        .padding(cardPadding)
+        .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
+        .frame(maxWidth: .infinity)
     }
 
     /// Each row pads its own content, so a pressed row highlights edge to edge across the card.

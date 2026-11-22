@@ -11,6 +11,10 @@ import UIKit
 public enum NoorImage: String {
     case ayahEnd = "ayah-end-marker"
     case pointer = "pointer-25"
+    /// The Quran ID mark for light fills.
+    case quranIDMark = "quran-id-mark"
+    /// The Quran ID mark for dark fills.
+    case quranIDMarkOnDark = "quran-id-mark-on-dark"
     case suraHeader = "sura_header"
 
     // MARK: Public

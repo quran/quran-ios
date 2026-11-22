@@ -71,7 +71,7 @@ public final class SyncSignInNudge {
             subtitle: .text(l("sync.nudge.subtitle")),
             icon: Toast.Icon(.checkmark),
             // The toast keeps the reminder alive, as its screen can close before the user taps.
-            action: ToastAction(title: l("sync.nudge.sign-in")) { [self] in
+            action: ToastAction(title: l("sync.nudge.sign-in"), appearance: .quranID) { [self] in
                 preferences.isStopped = true
                 Task {
                     await signIn(after: item, from: presenters)

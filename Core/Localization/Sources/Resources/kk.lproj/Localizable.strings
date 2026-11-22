@@ -675,10 +675,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.profile" = "Есептік жазбаны басқару";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in" = "Quran.com сайтына кіру";
-// Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in.subtitle" = "Жазбаларды, бетбелгілерді және жинақтарды синхрондау";
-// Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.signed_in" = "Кірдіңіз";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Шығу";
@@ -932,14 +928,12 @@
 "new.sync_reveal.title" = "Құраныңыз әрдайым байланыста";
 // What's New sync reveal benefit title, after a sync icon: the user's reading place follows them on every device.
 "new.sync_reveal.every_device.title" = "Әр құрылғыда тоқтаған жеріңіз";
-// What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud", "Quran.com" and "Quran ID" in English.
-"new.sync_reveal.every_device.subtitle" = "Бетбелгілер, жазбалар және оқу барысы тегін Quran ID арқылы iCloud-тан Quran.com-ға көшеді.";
+// What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.every_device.subtitle" = "Бетбелгілер, жазбалар және оқу барысы iCloud-тан Quran.com-ға көшеді.";
 // What's New sync reveal benefit title, after a book icon: study more on Quran.com without losing the reading place.
 "new.sync_reveal.go_deeper.title" = "Орныңызды жоғалтпай тереңірек үңіліңіз";
 // What's New sync reveal benefit detail under "Go deeper without losing your place": Quran.com opens tafsir, reflections and lessons at the ayah the user stopped on. Keep "Quran.com" in English.
 "new.sync_reveal.go_deeper.subtitle" = "Quran.com сайтындағы тәпсір, ой-толғаулар және сабақтар — тоқтаған аятыңызда.";
-// What's New sync reveal button that starts signing in to Quran.com with a Quran ID account. Keep "Quran ID" in English.
-"new.sync_reveal.sign_in" = "Quran ID арқылы жалғастыру";
 // What's New sync reveal button that closes it without signing in.
 "new.sync_reveal.not_now" = "Қазір емес";
 // What's New sync reveal footnote on iPhone.
@@ -948,3 +942,11 @@
 "new.sync_reveal.footnote.ipad" = "Кірмесеңіз, бетбелгілеріңіз осы iPad-те қалады.";
 // What's New sync reveal footnote on Mac.
 "new.sync_reveal.footnote.mac" = "Кірмесеңіз, бетбелгілеріңіз осы Mac-те қалады.";
+// Button that signs in to Quran.com with a Quran ID account. Keep "Quran ID" in English.
+"quran_id.sign_in" = "Quran ID арқылы кіру";
+// Headline of the Settings card that invites a signed-out user to sign in with Quran ID.
+"quran_id.entry.title" = "Құраныңызды қайда барсаңыз да бірге алып жүріңіз";
+// Text under "Take your Quran everywhere you go". "The Quran app" is this app. Keep "Quran.com" in English.
+"quran_id.entry.subtitle" = "Құран қосымшасы, Quran.com және басқа қосылған қосымшалар арасында жолыңызды синхрондаңыз.";
+// Footnote under the "Sign in with Quran ID" button. Keep "Quran Foundation" and "Quran.com" in English.
+"quran_id.footnote" = "Quran.com-ның артындағы коммерциялық емес ұйым Quran Foundation ұсынатын тегін есептік жазба.";

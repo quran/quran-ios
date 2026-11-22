@@ -94,8 +94,6 @@
 // Settings row that opens the Quran.com privacy policy.
 "setting.privacy_policy" = "Privacy Policy";
 "setting.app_version" = "App Version";
-"setting.quran_account.sign_in" = "Sign in to Quran.com";
-"setting.quran_account.sign_in.subtitle" = "Sync notes, bookmarks and collections";
 "setting.quran_account.signed_in" = "Signed in";
 "setting.quran_account.profile" = "Manage account";
 "setting.quran_account.sign_out" = "Sign out";
@@ -681,14 +679,12 @@
 "new.sync_reveal.title" = "Your Quran, connected";
 // What's New sync reveal benefit title, after a sync icon: the user's reading place follows them on every device.
 "new.sync_reveal.every_device.title" = "Your place on every device";
-// What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud", "Quran.com" and "Quran ID" in English.
-"new.sync_reveal.every_device.subtitle" = "Bookmarks, notes and reading progress move from iCloud to Quran.com, with your free Quran ID.";
+// What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.every_device.subtitle" = "Bookmarks, notes and reading progress move from iCloud to Quran.com.";
 // What's New sync reveal benefit title, after a book icon: study more on Quran.com without losing the reading place.
 "new.sync_reveal.go_deeper.title" = "Go deeper without losing your place";
 // What's New sync reveal benefit detail under "Go deeper without losing your place": Quran.com opens tafsir, reflections and lessons at the ayah the user stopped on. Keep "Quran.com" in English.
 "new.sync_reveal.go_deeper.subtitle" = "Tafsir, reflections and lessons on Quran.com, at the ayah you stopped on.";
-// What's New sync reveal button that starts signing in to Quran.com with a Quran ID account. Keep "Quran ID" in English.
-"new.sync_reveal.sign_in" = "Continue with Quran ID";
 // What's New sync reveal button that closes it without signing in.
 "new.sync_reveal.not_now" = "Not now";
 // What's New sync reveal footnote on iPhone.
@@ -697,3 +693,11 @@
 "new.sync_reveal.footnote.ipad" = "Without signing in, your bookmarks stay on this iPad.";
 // What's New sync reveal footnote on Mac.
 "new.sync_reveal.footnote.mac" = "Without signing in, your bookmarks stay on this Mac.";
+// Button that signs in to Quran.com with a Quran ID account. Keep "Quran ID" in English.
+"quran_id.sign_in" = "Sign in with Quran ID";
+// Headline of the Settings card that invites a signed-out user to sign in with Quran ID.
+"quran_id.entry.title" = "Take your Quran everywhere you go";
+// Text under "Take your Quran everywhere you go". "The Quran app" is this app. Keep "Quran.com" in English.
+"quran_id.entry.subtitle" = "Sync your journey across the Quran app, Quran.com, and other connected apps.";
+// Footnote under the "Sign in with Quran ID" button. Keep "Quran Foundation" and "Quran.com" in English.
+"quran_id.footnote" = "A free account from Quran Foundation, the non-profit behind Quran.com.";

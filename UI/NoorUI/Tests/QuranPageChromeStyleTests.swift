@@ -27,6 +27,25 @@ final class QuranPageChromeStyleTests: XCTestCase {
         XCTAssertTrue(dark.capped(atLuminanceOf: text) === dark)
     }
 
+    func test_darkPaletteDigits_reachAAContrastOnUnfilledGreyPages() {
+        let pages: [(ThemeStyle, ColorScheme)] = [(.quiet, .light), (.calm, .dark)]
+        for style in [QuranPageChromeStyle.green, .blue, .bronze] {
+            for (theme, scheme) in pages {
+                let traits = scheme.traitCollection
+                let text = theme.textColor.resolvedColor(with: traits)
+                let page = theme.backgroundColor.resolvedColor(with: traits)
+                let digits = UIColor(style.palette(for: .dark, text: Color(text)).markerText)
+
+                XCTAssertGreaterThanOrEqual(contrast(digits, page), 4.5, "\(style) on \(theme) \(scheme)")
+            }
+        }
+    }
+
+    private func contrast(_ a: UIColor, _ b: UIColor) -> CGFloat {
+        let (high, low) = (max(a.relativeLuminance, b.relativeLuminance), min(a.relativeLuminance, b.relativeLuminance))
+        return (high + 0.05) / (low + 0.05)
+    }
+
     private func hue(of color: UIColor) -> CGFloat {
         var hue: CGFloat = 0
         color.getHue(&hue, saturation: nil, brightness: nil, alpha: nil)

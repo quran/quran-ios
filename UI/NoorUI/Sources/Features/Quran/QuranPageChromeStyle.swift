@@ -39,7 +39,7 @@ public enum QuranPageChromeStyle {
     public func palette(for colorScheme: ColorScheme) -> QuranPageChromePalette {
         switch (self, colorScheme) {
         case (.blue, .dark):
-            QuranPageChromePalette(header: 0x73AFFA, markerRing: 0x73AFFA, markerFill: nil, markerText: 0x73AFFA)
+            QuranPageChromePalette(header: 0x73AFFA, markerRing: 0x73AFFA, markerFill: nil, markerText: 0x93C5FD)
         case (.blue, _):
             QuranPageChromePalette(header: 0x2563EB, markerRing: 0x2563EB, markerFill: 0xEFF6FF, markerText: 0x1D4ED8)
         case (.green, .dark):

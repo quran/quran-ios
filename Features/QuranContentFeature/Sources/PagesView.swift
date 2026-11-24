@@ -54,14 +54,13 @@ struct PagesView: View {
     }
 
     private func pagingStrategy(with geometry: GeometryProxy) -> PagingStrategy {
-        // If portrait
-        if geometry.size.height > geometry.size.width {
-            return .singlePage
-        }
-
-        // The reader fills its window, so its width plus the side safe areas is the window's width.
-        // Folding or unfolding iPhone Duo resizes the window, so never use the screen's width.
-        let windowWidth = geometry.size.width + geometry.safeAreaInsets.leading + geometry.safeAreaInsets.trailing
-        return viewModel.pagingStrategy(windowWidth: windowWidth)
+        // The reader fills its window, so its size plus its safe areas is the window's size.
+        // Folding or unfolding iPhone Duo resizes the window, so never use the screen's size.
+        let insets = geometry.safeAreaInsets
+        let windowSize = CGSize(
+            width: geometry.size.width + insets.leading + insets.trailing,
+            height: geometry.size.height + insets.top + insets.bottom
+        )
+        return viewModel.pagingStrategy(windowSize: windowSize)
     }
 }

@@ -11,7 +11,7 @@ import QuranTextKit
 
 /// What the reader's window offers the More menu. iPhone Duo resizes the window when it folds or unfolds.
 struct ReaderWindow: Equatable {
-    let width: CGFloat
+    let size: CGSize
     let isRegularWidthAndHeight: Bool
     let isPhone: Bool
 }
@@ -22,7 +22,7 @@ struct MoreMenuWindowOptions: Equatable {
 
     /// - Parameter window: The reader's window, or `nil` while the reader isn't in one.
     init(window: ReaderWindow?) {
-        let hasRoomForTwoPages = window.map { TwoPagesUtils.hasEnoughHorizontalSpace(windowWidth: $0.width) } ?? false
+        let hasRoomForTwoPages = window.map { TwoPagesUtils.hasRoomForTwoPages(windowSize: $0.size) } ?? false
         let isRegularWidthAndHeight = window?.isRegularWidthAndHeight ?? false
         twoPages = hasRoomForTwoPages ? .conditional : .alwaysOff
         // An unfolded iPhone Duo resizes instead of rotating, so the rotate buttons would do nothing.

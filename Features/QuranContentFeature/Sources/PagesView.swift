@@ -6,7 +6,6 @@
 //
 
 import QuranPagesFeature
-import QuranTextKit
 import SwiftUI
 import UIx
 
@@ -60,10 +59,9 @@ struct PagesView: View {
             return .singlePage
         }
 
-        if !TwoPagesUtils.hasEnoughHorizontalSpace() {
-            return .singlePage
-        }
-
-        return viewModel.pagingStrategy
+        // The reader fills its window, so its width plus the side safe areas is the window's width.
+        // Folding or unfolding iPhone Duo resizes the window, so never use the screen's width.
+        let windowWidth = geometry.size.width + geometry.safeAreaInsets.leading + geometry.safeAreaInsets.trailing
+        return viewModel.pagingStrategy(windowWidth: windowWidth)
     }
 }

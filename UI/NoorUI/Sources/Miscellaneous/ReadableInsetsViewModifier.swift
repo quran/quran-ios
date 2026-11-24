@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIx
 
 extension EnvironmentValues {
     /// The page's readable insets, set by `populateReadableInsets()`.
@@ -19,13 +20,47 @@ private struct ReadableInsetsKey: EnvironmentKey {
     static let defaultValue = EdgeInsets()
 }
 
-private struct ReadableInsetsModifier: ViewModifier {
+struct ReadableInsetsModifier: ViewModifier {
     @State var windowSafeAreaInsets: EdgeInsets = .zero
+    @Environment(\.pageInnerSide) var pageInnerSide
+    @Environment(\.layoutDirection) var layoutDirection
+
+    /// The window's safe area, except on the side facing the other page in a two-page spread, which is away from the
+    /// window's edge. That side would otherwise take the inset of a window edge, like the Dynamic Island's or the
+    /// vertical bar's, in the spread's middle.
+    ///
+    /// - Parameter windowSafeAreaInsets: The window's safe area, with leading and trailing in `layoutDirection`.
+    static func pageSafeAreaInsets(
+        windowSafeAreaInsets: EdgeInsets,
+        pageInnerSide: PageInnerSide?,
+        layoutDirection: LayoutDirection
+    ) -> EdgeInsets {
+        guard let pageInnerSide else {
+            return windowSafeAreaInsets
+        }
+        return EdgeInsets(
+            top: windowSafeAreaInsets.top,
+            left: pageInnerSide == .left ? 0 : windowSafeAreaInsets.left(in: layoutDirection),
+            bottom: windowSafeAreaInsets.bottom,
+            right: pageInnerSide == .right ? 0 : windowSafeAreaInsets.right(in: layoutDirection),
+            layoutDirection: layoutDirection
+        )
+    }
 
     func body(content: Content) -> some View {
         content
             .readWindowSafeAreaInsets($windowSafeAreaInsets)
-            .environment(\.readableInsets, ContentDimension.readableInsets(of: windowSafeAreaInsets))
+            .environment(\.readableInsets, ContentDimension.readableInsets(of: pageSafeAreaInsets))
+    }
+
+    // MARK: Private
+
+    private var pageSafeAreaInsets: EdgeInsets {
+        Self.pageSafeAreaInsets(
+            windowSafeAreaInsets: windowSafeAreaInsets,
+            pageInnerSide: pageInnerSide,
+            layoutDirection: layoutDirection
+        )
     }
 }
 

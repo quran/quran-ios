@@ -43,8 +43,6 @@ final class MoreMenuViewModel: ObservableObject {
         #endif
         appearanceMode = themeService.appearanceMode
 
-        state.twoPages = (model.state.twoPages == .conditional && TwoPagesUtils.hasEnoughHorizontalSpace()) ? .conditional : .alwaysOff
-
         $mode
             .dropFirst()
             .sink { [weak self] newValue in

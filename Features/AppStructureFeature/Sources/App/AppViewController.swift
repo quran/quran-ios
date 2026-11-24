@@ -95,17 +95,27 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
         updateCrashContext(selectedIndex: index)
     }
 
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        previousTabOrientations = tabBarController.supportedInterfaceOrientations
+        return true
+    }
+
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         crashContext.setNavigationPhase("tab_switching")
         updateCrashContext(selectedIndex: tabBarController.selectedIndex)
         crashContext.setNavigationPhase("idle")
         let targetMask = tabBarController.supportedInterfaceOrientations
-        if let currentMask = tabBarController.view.window?.windowScene?.interfaceOrientation.asMask {
-            if !targetMask.contains(currentMask) {
-                if let interface = targetMask.asOrientation {
-                    UIDevice.current.setValue(interface.rawValue, forKey: "orientation")
-                }
-            }
+        let previousMask = previousTabOrientations ?? targetMask
+        previousTabOrientations = nil
+        if let currentMask = tabBarController.view.window?.windowScene?.interfaceOrientation.asMask,
+           let orientations = TabSwitchRotation.orientations(
+               previousTab: previousMask,
+               targetTab: targetMask,
+               interface: currentMask,
+               device: UIDevice.current.orientation.asInterfaceMask
+           )
+        {
+            tabBarController.requestInterfaceOrientations(orientations)
         }
     }
 
@@ -127,6 +137,8 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     private let whatsNewController: AppWhatsNewController
     private let isAppIconAvailable: Bool
     private var hasStartedPostLaunchPresentation = false
+    /// The orientations the tab being left supported, captured before a tab switch.
+    private var previousTabOrientations: UIInterfaceOrientationMask?
 
     private let tabNames = ["home", "notes", "bookmarks", "search", "settings"]
 
@@ -155,6 +167,20 @@ class AppViewController: UITabBarController, UITabBarControllerDelegate, AppPres
     }
 }
 
+private extension UIDeviceOrientation {
+    /// The interface orientation that matches this device orientation. Landscape is mirrored:
+    /// a device rotated to its left shows the interface in landscape right.
+    var asInterfaceMask: UIInterfaceOrientationMask? {
+        switch self {
+        case .portrait: return .portrait
+        case .portraitUpsideDown: return .portraitUpsideDown
+        case .landscapeLeft: return .landscapeRight
+        case .landscapeRight: return .landscapeLeft
+        default: return nil
+        }
+    }
+}
+
 private extension UIInterfaceOrientation {
     var asMask: UIInterfaceOrientationMask? {
         switch self {
@@ -163,22 +189,6 @@ private extension UIInterfaceOrientation {
         case .landscapeLeft: return .landscapeLeft
         case .landscapeRight: return .landscapeRight
         default: return nil
-        }
-    }
-}
-
-private extension UIInterfaceOrientationMask {
-    var asOrientation: UIInterfaceOrientation? {
-        if contains(.portrait) {
-            return .portrait
-        } else if contains(.landscapeLeft) {
-            return .landscapeLeft
-        } else if contains(.landscapeRight) {
-            return .landscapeRight
-        } else if contains(.portraitUpsideDown) {
-            return .portraitUpsideDown
-        } else {
-            return nil
         }
     }
 }

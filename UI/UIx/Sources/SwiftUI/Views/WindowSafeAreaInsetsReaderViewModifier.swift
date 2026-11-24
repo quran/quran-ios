@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension View {
+    /// Reads the window's safe area insets, with leading and trailing in the view's layout direction.
     public func readWindowSafeAreaInsets(_ safeAreaInsets: Binding<EdgeInsets>) -> some View {
         modifier(WindowSafeAreaInsetsReaderViewModifier(safeAreaInsets: safeAreaInsets))
     }
@@ -32,10 +33,18 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
     class WindowSafeAreaInsetsReaderView: UIView {
         // MARK: Lifecycle
 
-        init(safeAreaInsets: Binding<EdgeInsets>) {
+        init(safeAreaInsets: Binding<EdgeInsets>, layoutDirection: LayoutDirection) {
             _safeAreaInsetsBinding = safeAreaInsets
+            self.layoutDirection = layoutDirection
             super.init(frame: .zero)
             backgroundColor = UIColor.clear
+            if #available(iOS 27.1, *) {
+                // The window's safe area moves with the vertical bar without a layout pass.
+                registerForTraitChanges(UITraitCollection.systemTraitsAffectingVerticalBarEdge) {
+                    (view: WindowSafeAreaInsetsReaderView, _: UITraitCollection) in
+                    view.updateWindowSafeAreaInsetsIfNeeded()
+                }
+            }
         }
 
         @available(*, unavailable)
@@ -47,6 +56,15 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
 
         @Binding var safeAreaInsetsBinding: EdgeInsets
 
+        /// The SwiftUI layout direction whose leading and trailing the insets use.
+        var layoutDirection: LayoutDirection {
+            didSet {
+                if layoutDirection != oldValue {
+                    setNeedsLayout()
+                }
+            }
+        }
+
         override func layoutSubviews() {
             super.layoutSubviews()
             updateWindowSafeAreaInsetsIfNeeded()
@@ -54,13 +72,7 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
 
         private func updateWindowSafeAreaInsetsIfNeeded() {
             if let window {
-                let insets = window.safeAreaInsets
-                let newInsets = EdgeInsets(
-                    top: insets.top,
-                    leading: insets.left,
-                    bottom: insets.bottom,
-                    trailing: insets.right
-                )
+                let newInsets = EdgeInsets(window.safeAreaInsets, layoutDirection: layoutDirection)
                 if safeAreaInsetsBinding != newInsets {
                     safeAreaInsetsBinding = newInsets
                 }
@@ -78,8 +90,11 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
 
     @Binding var safeAreaInsets: EdgeInsets
 
-    func makeUIView(context: Context) -> UIView {
-        let view = WindowSafeAreaInsetsReaderView(safeAreaInsets: $safeAreaInsets)
+    func makeUIView(context: Context) -> WindowSafeAreaInsetsReaderView {
+        let view = WindowSafeAreaInsetsReaderView(
+            safeAreaInsets: $safeAreaInsets,
+            layoutDirection: context.environment.layoutDirection
+        )
         view.isAccessibilityElement = false
         view.isHidden = true
         view.isOpaque = true
@@ -87,5 +102,20 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
         return view
     }
 
-    func updateUIView(_ view: UIView, context: Context) {}
+    func updateUIView(_ view: WindowSafeAreaInsetsReaderView, context: Context) {
+        view.layoutDirection = context.environment.layoutDirection
+    }
+}
+
+extension EdgeInsets {
+    /// UIKit's left and right insets as leading and trailing in `layoutDirection`.
+    init(_ insets: UIEdgeInsets, layoutDirection: LayoutDirection) {
+        self.init(
+            top: insets.top,
+            left: insets.left,
+            bottom: insets.bottom,
+            right: insets.right,
+            layoutDirection: layoutDirection
+        )
+    }
 }

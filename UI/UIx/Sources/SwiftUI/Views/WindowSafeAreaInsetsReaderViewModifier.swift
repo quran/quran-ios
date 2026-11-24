@@ -110,12 +110,12 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
 extension EdgeInsets {
     /// UIKit's left and right insets as leading and trailing in `layoutDirection`.
     init(_ insets: UIEdgeInsets, layoutDirection: LayoutDirection) {
-        let isRightToLeft = layoutDirection == .rightToLeft
         self.init(
             top: insets.top,
-            leading: isRightToLeft ? insets.right : insets.left,
+            left: insets.left,
             bottom: insets.bottom,
-            trailing: isRightToLeft ? insets.left : insets.right
+            right: insets.right,
+            layoutDirection: layoutDirection
         )
     }
 }

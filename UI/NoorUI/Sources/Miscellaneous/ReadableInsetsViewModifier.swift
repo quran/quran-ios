@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIx
 
 extension EnvironmentValues {
     /// The page's readable insets, set by `populateReadableInsets()`.
@@ -34,17 +35,16 @@ struct ReadableInsetsModifier: ViewModifier {
         pageInnerSide: PageInnerSide?,
         layoutDirection: LayoutDirection
     ) -> EdgeInsets {
-        var insets = windowSafeAreaInsets
         guard let pageInnerSide else {
-            return insets
+            return windowSafeAreaInsets
         }
-        let innerSideIsLeading = (pageInnerSide == .left) == (layoutDirection == .leftToRight)
-        if innerSideIsLeading {
-            insets.leading = 0
-        } else {
-            insets.trailing = 0
-        }
-        return insets
+        return EdgeInsets(
+            top: windowSafeAreaInsets.top,
+            left: pageInnerSide == .left ? 0 : windowSafeAreaInsets.left(in: layoutDirection),
+            bottom: windowSafeAreaInsets.bottom,
+            right: pageInnerSide == .right ? 0 : windowSafeAreaInsets.right(in: layoutDirection),
+            layoutDirection: layoutDirection
+        )
     }
 
     func body(content: Content) -> some View {

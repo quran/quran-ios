@@ -7,6 +7,7 @@ import QuranAnnotations
 import QuranKit
 import QuranLocalization
 import SwiftUI
+import UIx
 
 extension View {
     /// Hangs ribbons for the page's own reading bookmarks behind this page header, at its top right.
@@ -66,7 +67,7 @@ struct PageReadingBookmarkRibbons: View {
             .accessibilityLabel(accessibilityLabel)
             .accessibilityIdentifier("page-reading-bookmark-\(page.pageNumber)")
         }
-        .padding(.trailing, Self.rightInset(of: readableInsets, layoutDirection: layoutDirection))
+        .padding(.trailing, readableInsets.right(in: layoutDirection))
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         // Always the physical right, whatever the reading direction.
         .environment(\.layoutDirection, .leftToRight)
@@ -83,11 +84,6 @@ struct PageReadingBookmarkRibbons: View {
     static func ribbonLengths(count: Int, width: CGFloat, available: CGFloat) -> [CGFloat] {
         let step = min(width * stackStepRatio, available / CGFloat(count + 1))
         return (0 ..< count).map { available - CGFloat(count - 1 - $0) * step }
-    }
-
-    /// The physical right side of `readableInsets`, whose leading and trailing are in `layoutDirection`.
-    static func rightInset(of readableInsets: EdgeInsets, layoutDirection: LayoutDirection) -> CGFloat {
-        layoutDirection == .rightToLeft ? readableInsets.leading : readableInsets.trailing
     }
 
     // MARK: Private

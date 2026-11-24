@@ -4,6 +4,7 @@
 
 import QuranGeometry
 import SwiftUI
+import UIx
 
 extension EdgeInsets {
     /// The space between the content's edges and `textColumn` (image coordinates), for an image fitted to
@@ -25,7 +26,6 @@ extension EdgeInsets {
         let imageMargin = max(0, (contentWidth - imageViewSize.width) / 2)
         let left = imageMargin + max(0, text.minX)
         let right = imageMargin + max(0, imageViewSize.width - text.maxX)
-        let isRightToLeft = layoutDirection == .rightToLeft
-        self.init(top: 0, leading: isRightToLeft ? right : left, bottom: 0, trailing: isRightToLeft ? left : right)
+        self.init(left: left, right: right, layoutDirection: layoutDirection)
     }
 }

@@ -49,7 +49,7 @@ struct ReadableInsetsModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .readWindowSafeAreaInsets($windowSafeAreaInsets)
+            .readWindowSafeAreaInsets($windowSafeAreaInsets, verticalBarAnimation: NoorAnimation.standard)
             .environment(\.readableInsets, ContentDimension.readableInsets(of: pageSafeAreaInsets))
     }
 

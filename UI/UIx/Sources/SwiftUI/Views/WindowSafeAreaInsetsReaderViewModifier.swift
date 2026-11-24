@@ -9,22 +9,68 @@ import SwiftUI
 
 extension View {
     /// Reads the window's safe area insets, with leading and trailing in the view's layout direction.
-    public func readWindowSafeAreaInsets(_ safeAreaInsets: Binding<EdgeInsets>) -> some View {
-        modifier(WindowSafeAreaInsetsReaderViewModifier(safeAreaInsets: safeAreaInsets))
+    ///
+    /// The insets update on layout passes, and with `verticalBarAnimation` when `verticalBarContent` changes in the
+    /// environment.
+    public func readWindowSafeAreaInsets(
+        _ safeAreaInsets: Binding<EdgeInsets>,
+        verticalBarAnimation: Animation? = nil
+    ) -> some View {
+        modifier(WindowSafeAreaInsetsReaderViewModifier(
+            safeAreaInsets: safeAreaInsets,
+            verticalBarAnimation: verticalBarAnimation
+        ))
     }
+}
+
+/// What the content shows in the window's vertical-bar column.
+///
+/// The screen that shows or hides the status bar there sets it. A change moves the window's safe area without a layout
+/// pass, so window safe-area readers re-read it when it changes.
+public struct VerticalBarContent: Equatable, Sendable {
+    // MARK: Lifecycle
+
+    public init(statusBarHidden: Bool = false) {
+        self.statusBarHidden = statusBarHidden
+    }
+
+    // MARK: Public
+
+    /// Whether the status bar is hidden from the column.
+    public var statusBarHidden: Bool
+}
+
+extension EnvironmentValues {
+    /// What the content shows in the window's vertical-bar column, set by the screen that shows or hides the status
+    /// bar there. `readWindowSafeAreaInsets(_:verticalBarAnimation:)` readers re-read the window's safe area when it
+    /// changes.
+    public var verticalBarContent: VerticalBarContent {
+        get { self[VerticalBarContentKey.self] }
+        set { self[VerticalBarContentKey.self] = newValue }
+    }
+}
+
+private struct VerticalBarContentKey: EnvironmentKey {
+    static let defaultValue = VerticalBarContent()
 }
 
 private struct WindowSafeAreaInsetsReaderViewModifier: ViewModifier {
     @Binding var safeAreaInsets: EdgeInsets
+    let verticalBarAnimation: Animation?
+    @Environment(\.verticalBarContent) var verticalBarContent
 
     func body(content: Content) -> some View {
         content
             .background(
-                WindowSafeAreaInsetsReader(safeAreaInsets: $safeAreaInsets)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 0.5)
-                    .accessibility(hidden: true)
-                    .allowsHitTesting(false)
+                WindowSafeAreaInsetsReader(
+                    safeAreaInsets: $safeAreaInsets,
+                    verticalBarAnimation: verticalBarAnimation,
+                    verticalBarContent: verticalBarContent
+                )
+                .frame(maxWidth: .infinity)
+                .frame(height: 0.5)
+                .accessibility(hidden: true)
+                .allowsHitTesting(false)
             )
     }
 }
@@ -33,9 +79,16 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
     class WindowSafeAreaInsetsReaderView: UIView {
         // MARK: Lifecycle
 
-        init(safeAreaInsets: Binding<EdgeInsets>, layoutDirection: LayoutDirection) {
+        init(
+            safeAreaInsets: Binding<EdgeInsets>,
+            layoutDirection: LayoutDirection,
+            verticalBarAnimation: Animation?,
+            verticalBarContent: VerticalBarContent
+        ) {
             _safeAreaInsetsBinding = safeAreaInsets
             self.layoutDirection = layoutDirection
+            self.verticalBarAnimation = verticalBarAnimation
+            self.verticalBarContent = verticalBarContent
             super.init(frame: .zero)
             backgroundColor = UIColor.clear
             if #available(iOS 27.1, *) {
@@ -65,6 +118,23 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
             }
         }
 
+        var verticalBarAnimation: Animation?
+
+        var verticalBarContent: VerticalBarContent {
+            didSet {
+                guard verticalBarContent != oldValue else {
+                    return
+                }
+                // After SwiftUI's update, and again a turn later in case the window's safe area updates late.
+                DispatchQueue.main.async { [weak self] in
+                    self?.updateWindowSafeAreaInsetsAnimated()
+                    DispatchQueue.main.async {
+                        self?.updateWindowSafeAreaInsetsAnimated()
+                    }
+                }
+            }
+        }
+
         override func layoutSubviews() {
             super.layoutSubviews()
             updateWindowSafeAreaInsetsIfNeeded()
@@ -79,6 +149,12 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
             }
         }
 
+        private func updateWindowSafeAreaInsetsAnimated() {
+            withAnimation(verticalBarAnimation) {
+                updateWindowSafeAreaInsetsIfNeeded()
+            }
+        }
+
         override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
             .zero
         }
@@ -89,11 +165,15 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
     }
 
     @Binding var safeAreaInsets: EdgeInsets
+    let verticalBarAnimation: Animation?
+    let verticalBarContent: VerticalBarContent
 
     func makeUIView(context: Context) -> WindowSafeAreaInsetsReaderView {
         let view = WindowSafeAreaInsetsReaderView(
             safeAreaInsets: $safeAreaInsets,
-            layoutDirection: context.environment.layoutDirection
+            layoutDirection: context.environment.layoutDirection,
+            verticalBarAnimation: verticalBarAnimation,
+            verticalBarContent: verticalBarContent
         )
         view.isAccessibilityElement = false
         view.isHidden = true
@@ -104,6 +184,8 @@ private struct WindowSafeAreaInsetsReader: UIViewRepresentable {
 
     func updateUIView(_ view: WindowSafeAreaInsetsReaderView, context: Context) {
         view.layoutDirection = context.environment.layoutDirection
+        view.verticalBarAnimation = verticalBarAnimation
+        view.verticalBarContent = verticalBarContent
     }
 }
 

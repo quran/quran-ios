@@ -70,6 +70,15 @@ public enum NavigationBarButton {
         )
     }
 
+    /// A secondary action with an image that isn't an SF Symbol, like the reading bookmark's ribbon.
+    public static func secondary(
+        customImage: UIImage?,
+        accessibilityLabel: String,
+        action: @escaping @MainActor @Sendable () -> Void
+    ) -> UIBarButtonItem {
+        button(image: customImage, title: accessibilityLabel, tintColor: .label, action: action)
+    }
+
     /// Shares a whole list. It inherits the window tint, as it always has.
     public static func share(
         accessibilityLabel: String,
@@ -153,7 +162,6 @@ final class TitledBarButtonItem: UIBarButtonItem {
     // MARK: Lifecycle
 
     init(image: UIImage?, title: String, action: @escaping @MainActor @Sendable () -> Void) {
-        menuTitle = title
         menuAction = action
         super.init()
         primaryAction = UIAction { _ in action() }
@@ -179,9 +187,13 @@ final class TitledBarButtonItem: UIBarButtonItem {
         didSet { updateMenuRepresentation() }
     }
 
+    /// The menu entry's title, like a bookmark button's Add or Remove.
+    override var accessibilityLabel: String? {
+        didSet { updateMenuRepresentation() }
+    }
+
     // MARK: Private
 
-    private let menuTitle: String
     private let menuAction: @MainActor @Sendable () -> Void
 
     private func updateMenuRepresentation() {
@@ -190,7 +202,7 @@ final class TitledBarButtonItem: UIBarButtonItem {
         }
         let action = menuAction
         menuRepresentation = UIAction(
-            title: menuTitle,
+            title: accessibilityLabel ?? "",
             image: image,
             attributes: isEnabled ? [] : .disabled
         ) { _ in action() }

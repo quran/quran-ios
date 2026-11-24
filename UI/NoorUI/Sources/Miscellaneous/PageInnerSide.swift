@@ -1,5 +1,5 @@
 //
-//  VerticalBarPageChrome.swift
+//  PageInnerSide.swift
 //
 //
 //  Created by Mohammad Abdurraafay on 2026-11-07.

@@ -21,22 +21,21 @@ private struct ReadableInsetsKey: EnvironmentKey {
 
 struct ReadableInsetsModifier: ViewModifier {
     @State var windowSafeAreaInsets: EdgeInsets = .zero
-    @State var windowHasVerticalBar = false
     @Environment(\.pageInnerSide) var pageInnerSide
     @Environment(\.layoutDirection) var layoutDirection
 
-    /// The window's safe area, except on iPhone Duo on the side facing the other page, which is away from the window's
-    /// edge. That side would otherwise take the vertical bar's column inset, or the other edge's, in the spread's middle.
+    /// The window's safe area, except on the side facing the other page in a two-page spread, which is away from the
+    /// window's edge. That side would otherwise take the inset of a window edge, like the Dynamic Island's or the
+    /// vertical bar's, in the spread's middle.
     ///
     /// - Parameter windowSafeAreaInsets: The window's safe area, with leading and trailing in `layoutDirection`.
     static func pageSafeAreaInsets(
         windowSafeAreaInsets: EdgeInsets,
-        windowHasVerticalBar: Bool,
         pageInnerSide: PageInnerSide?,
         layoutDirection: LayoutDirection
     ) -> EdgeInsets {
         var insets = windowSafeAreaInsets
-        guard let pageInnerSide, windowHasVerticalBar else {
+        guard let pageInnerSide else {
             return insets
         }
         let innerSideIsLeading = (pageInnerSide == .left) == (layoutDirection == .leftToRight)
@@ -50,7 +49,7 @@ struct ReadableInsetsModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .readWindowSafeAreaInsets($windowSafeAreaInsets, hasVerticalBar: $windowHasVerticalBar)
+            .readWindowSafeAreaInsets($windowSafeAreaInsets)
             .environment(\.readableInsets, ContentDimension.readableInsets(of: pageSafeAreaInsets))
     }
 
@@ -59,7 +58,6 @@ struct ReadableInsetsModifier: ViewModifier {
     private var pageSafeAreaInsets: EdgeInsets {
         Self.pageSafeAreaInsets(
             windowSafeAreaInsets: windowSafeAreaInsets,
-            windowHasVerticalBar: windowHasVerticalBar,
             pageInnerSide: pageInnerSide,
             layoutDirection: layoutDirection
         )

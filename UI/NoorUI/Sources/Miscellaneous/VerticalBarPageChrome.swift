@@ -9,8 +9,8 @@ import SwiftUI
 
 /// The side of a page, as seen on screen, that faces another page instead of the window's edge.
 ///
-/// On iPhone Duo, `populateReadableInsets()` skips the window's safe area on this side, so the vertical bar's
-/// column inset, or the other edge's, doesn't land in the middle of a two-page spread.
+/// `populateReadableInsets()` skips the window's safe area on this side, so a window edge's inset, like the Dynamic
+/// Island's or the vertical bar's, doesn't land in the middle of a two-page spread.
 public enum PageInnerSide {
     case left
     case right

@@ -32,15 +32,13 @@ final class ReadableInsetsTests: XCTestCase {
         XCTAssertEqual(insets, EdgeInsets(top: 24, leading: 0, bottom: 20, trailing: 12))
     }
 
-    func test_withoutVerticalBar_keepsTheWindowInsets() {
-        let insets = pageSafeAreaInsets(
-            leftToRightInsets,
-            windowHasVerticalBar: false,
-            pageInnerSide: .left,
-            layoutDirection: .leftToRight
-        )
+    func test_symmetricSideInsets_dropsTheInnerSideInset() {
+        // Like a big iPhone in landscape, with the Dynamic Island's inset mirrored on the other edge.
+        let windowInsets = EdgeInsets(top: 0, leading: 59, bottom: 21, trailing: 59)
 
-        XCTAssertEqual(insets, leftToRightInsets)
+        let insets = pageSafeAreaInsets(windowInsets, pageInnerSide: .right, layoutDirection: .leftToRight)
+
+        XCTAssertEqual(insets, EdgeInsets(top: 0, leading: 59, bottom: 21, trailing: 0))
     }
 
     func test_withoutInnerSide_keepsTheWindowInsets() {
@@ -53,13 +51,11 @@ final class ReadableInsetsTests: XCTestCase {
 
     private func pageSafeAreaInsets(
         _ windowSafeAreaInsets: EdgeInsets,
-        windowHasVerticalBar: Bool = true,
         pageInnerSide: PageInnerSide?,
         layoutDirection: LayoutDirection
     ) -> EdgeInsets {
         ReadableInsetsModifier.pageSafeAreaInsets(
             windowSafeAreaInsets: windowSafeAreaInsets,
-            windowHasVerticalBar: windowHasVerticalBar,
             pageInnerSide: pageInnerSide,
             layoutDirection: layoutDirection
         )

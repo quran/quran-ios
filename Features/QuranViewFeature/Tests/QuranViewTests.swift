@@ -193,6 +193,31 @@ final class QuranViewTests: XCTestCase {
         XCTAssertTrue(audioView.keepsToastsAbove)
     }
 
+    func test_controlsInSystemBars_keepTheOwnBarsHiddenAndTheBannerTransparent() {
+        let context = makeSut()
+        context.sut.showsControlsInSystemBars = true
+
+        context.sut.setBarsHidden(false, animated: true)
+
+        XCTAssertTrue(context.sut.navigationBar.isHidden)
+        XCTAssertFalse(context.audioView.isHidden)
+        XCTAssertEqual(context.audioView.alpha, 0)
+        XCTAssertFalse(context.audioView.isUserInteractionEnabled)
+        XCTAssertTrue(context.audioView.accessibilityElementsHidden)
+    }
+
+    func test_controlsLeavingSystemBars_restoreTheLastRequestedBars() {
+        let context = makeSut()
+        context.sut.showsControlsInSystemBars = true
+        context.sut.setBarsHidden(true)
+
+        context.sut.showsControlsInSystemBars = false
+
+        XCTAssertTrue(context.sut.navigationBar.isHidden)
+        XCTAssertTrue(context.audioView.isHidden)
+        XCTAssertFalse(context.audioView.accessibilityElementsHidden)
+    }
+
     func test_spaceIsLeftAloneWhileTheRecitationCannotBeToggled() {
         let context = makeSut()
         let delegate = QuranViewDelegateSpy(canTogglePlayPause: false)

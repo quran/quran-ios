@@ -68,7 +68,7 @@ protocol QuranPresentable: UIViewController {
     func presentAyahNotes(_ viewController: UIViewController)
     #endif
     func presentTranslatedVerse(_ viewController: UIViewController, didDismiss: @escaping () -> Void)
-    func presentAudioBanner(_ audioBanner: UIViewController)
+    func presentAudioBanner(_ audioBanner: UIViewController, toolbarItems: AudioToolbarItems)
     func presentWordPointer(_ viewController: UIViewController)
     func presentQuranContent(_ viewController: ContentViewController)
     func presentTranslationsSelection(_ viewController: UIViewController)
@@ -549,7 +549,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private func loadContent() {
         let (viewController, viewModel) = deps.audioBannerBuilder.build(withListener: self)
         audioBanner = viewModel
-        presenter?.presentAudioBanner(viewController)
+        presenter?.presentAudioBanner(viewController, toolbarItems: deps.audioBannerBuilder.buildToolbarItems(for: viewModel))
 
         (contentViewController, contentViewModel) = presentQuranContent(with: input)
         presenter?.startHiddenBarsTimer()

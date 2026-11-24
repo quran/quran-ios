@@ -44,4 +44,15 @@ open class BaseViewController: UIViewController {
     /// Called when a presentation is dropped, so subclasses can undo state set up for it.
     open func presentationWasDropped(_ viewController: UIViewController) {
     }
+
+    // UIKit asks only the topmost window, which is a toast's while one shows, so tell the toast too.
+    override open func setNeedsStatusBarAppearanceUpdate() {
+        super.setNeedsStatusBarAppearanceUpdate()
+        ToastPresenter.shared.setNeedsStatusBarAppearanceUpdate()
+    }
+
+    override open func setNeedsUpdateOfHomeIndicatorAutoHidden() {
+        super.setNeedsUpdateOfHomeIndicatorAutoHidden()
+        ToastPresenter.shared.setNeedsUpdateOfHomeIndicatorAutoHidden()
+    }
 }

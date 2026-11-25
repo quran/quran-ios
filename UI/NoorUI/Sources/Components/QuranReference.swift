@@ -247,8 +247,9 @@ struct QuranReferenceView: View {
             if reference.showsArabicName(locale: locale) {
                 // Hidden struts on the row's baseline keep rows with an Arabic name the same height whatever sits
                 // beside the name. A plain-text line keeps a glyph alone as tall as a glyph beside text, like " · "
-                // between sura names, whose font descends further. A Madani glyph keeps IndoPak rows as tall as
-                // Madani ones, whatever the system font's language-dependent line metrics are.
+                // between sura names: depending on the typesetting language, either font can descend further. A
+                // Madani glyph keeps IndoPak rows as tall as Madani ones, whatever the system font's
+                // language-dependent line metrics are.
                 ZStack(alignment: Alignment(horizontal: .center, vertical: .firstTextBaseline)) {
                     if reference.arabicName.isIndoPakText {
                         decoratedGlyph(reference.decoratedGlyph)

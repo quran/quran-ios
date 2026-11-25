@@ -48,18 +48,23 @@ final class MultipartTextBaselineTests: XCTestCase {
         }
     }
 
-    /// The glyphs need no padding: their line box holds all their ink.
-    func test_decoratedGlyphs_fitTheirInkInTheirLineBox() throws {
+    /// Centred views, like the translation sura banner, centre a glyph alone by its row, so the row's middle must
+    /// be the typical glyph's ink centre.
+    func test_decoratedGlyphAlone_centresItsInkInItsRow() throws {
+        guard #available(iOS 16.0, *) else { throw XCTSkip("Measuring baselines needs Layout") }
         // At 1024 pt, a point is a font unit.
         let font = UIFont(.suraNames, size: 1024) as CTFont
-        for sura in Quran.hafsMadani1405.suras {
-            var character = try XCTUnwrap(QuranReference.sura(sura).rawValue(locale: arabic).utf16.first)
-            var glyph = CGGlyph()
-            XCTAssertTrue(CTFontGetGlyphsForCharacters(font, &character, &glyph, 1))
-            let ink = try XCTUnwrap(CTFontCreatePathForGlyph(font, glyph, nil)).boundingBoxOfPath
+        let lineHeight = (CTFontGetAscent(font) + CTFontGetDescent(font)) / 1024
+        let inkCenter = try median(suraGlyphInk(at: 1024).map(\.boundingBoxOfPath.midY)) / 1024
+        let glyph = QuranReference.sura(ayah.sura).rawValue(locale: arabic)
+        let name: MultipartText = "\(sura: ayah.sura, nameStyle: .decorated)"
+        for dynamicTypeSize in [DynamicTypeSize.large, .xxxLarge] {
+            let size = MultipartText.FontSize.title3
+            let pointSize = textBaselines(of: Text(glyph).font(size.suraFont), locale: arabic, dynamicTypeSize).height / lineHeight
+            let row = textBaselines(of: name.view(ofSize: size, allowsWrapping: false), locale: arabic, dynamicTypeSize)
 
-            XCTAssertLessThanOrEqual(ink.maxY, CTFontGetAscent(font) + 0.5, "\(sura.suraNumber)")
-            XCTAssertGreaterThanOrEqual(ink.minY, -CTFontGetDescent(font) - 0.5, "\(sura.suraNumber)")
+            let glyphInkCenter = row.first - inkCenter * pointSize
+            XCTAssertEqual(row.height / 2, glyphInkCenter, accuracy: 0.5, "\(dynamicTypeSize): row \(row), glyph ink centre \(glyphInkCenter)")
         }
     }
 
@@ -71,14 +76,18 @@ final class MultipartTextBaselineTests: XCTestCase {
     private let suras = Array(Quran.hafsMadani1405.suras[16 ... 18])
 
     @available(iOS 16.0, *)
-    private func textBaselines(of content: some View, locale: Locale) -> (first: CGFloat, last: CGFloat, height: CGFloat) {
+    private func textBaselines(
+        of content: some View,
+        locale: Locale,
+        _ dynamicTypeSize: DynamicTypeSize = .large
+    ) -> (first: CGFloat, last: CGFloat, height: CGFloat) {
         let probe = BaselineProbe()
         let pinned = BaselineProbeLayout(probe: probe) {
             content
         }
         .environment(\.locale, locale)
         .environment(\.layoutDirection, locale.isRightToLeft ? .rightToLeft : .leftToRight)
-        .dynamicTypeSize(.large)
+        .dynamicTypeSize(dynamicTypeSize)
         let controller = if #available(iOS 17.0, *) {
             UIHostingController(rootView: AnyView(pinned.typesettingLanguage(locale.language)))
         } else {

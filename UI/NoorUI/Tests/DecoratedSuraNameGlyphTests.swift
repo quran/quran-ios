@@ -9,8 +9,8 @@ import UIKit
 import XCTest
 @testable import NoorUI
 
-/// `Tools/tighten-sura-name-glyphs.py` makes the decorated sura names sit flush in their boxes, like regular text, and
-/// lowers them onto the system font's Arabic writing line.
+/// `Tools/tighten-sura-name-glyphs.py` makes the decorated sura names sit flush in their boxes, like regular text,
+/// lowers them onto the system font's Arabic writing line, and fits the font's line box to their ink.
 final class DecoratedSuraNameGlyphTests: XCTestCase {
     override func setUp() {
         super.setUp()
@@ -41,13 +41,7 @@ final class DecoratedSuraNameGlyphTests: XCTestCase {
     /// Baseline alignment puts the glyphs' baseline on the text's, so where each font draws its letters above its
     /// baseline decides whether they look level.
     func test_suraGlyphs_sitOnTheWritingLineOfTheArabicTextBesideThem() throws {
-        let glyphFont = UIFont(.suraNames, size: Self.measuringSize) as CTFont
-        let glyphLines = try Quran.hafsMadani1405.suras.map { sura in
-            var character = try XCTUnwrap(QuranReference.sura(sura).rawValue(locale: Locale(identifier: "ar")).utf16.first)
-            var glyph = CGGlyph()
-            XCTAssertTrue(CTFontGetGlyphsForCharacters(glyphFont, &character, &glyph, 1))
-            return try writingLine(of: XCTUnwrap(CTFontCreatePathForGlyph(glyphFont, glyph, nil)))
-        }
+        let glyphLines = try suraGlyphInk(at: Self.measuringSize).map { try writingLine(of: $0) }
         let textLines = try ["الصفحة", "عند", "سورة البقرة", "بسم الله الرحمن الرحيم"].map { try writingLine(of: arabicTextPath($0)) }
         let glyphLine = median(glyphLines)
         let textLine = median(textLines)
@@ -62,16 +56,20 @@ final class DecoratedSuraNameGlyphTests: XCTestCase {
     func test_lineBoxMiddle_isTheGlyphsMedianInkCenter() throws {
         // At 1024 pt, a point is a font unit.
         let font = UIFont(.suraNames, size: 1024) as CTFont
-        let centers = try Quran.hafsMadani1405.suras.map { sura in
-            var character = try XCTUnwrap(QuranReference.sura(sura).rawValue(locale: Locale(identifier: "ar")).utf16.first)
-            var glyph = CGGlyph()
-            XCTAssertTrue(CTFontGetGlyphsForCharacters(font, &character, &glyph, 1))
-            return try XCTUnwrap(CTFontCreatePathForGlyph(font, glyph, nil)).boundingBoxOfPath.midY
-        }
+        let centers = try suraGlyphInk(at: 1024).map(\.boundingBoxOfPath.midY)
         let lineBoxMiddle = (CTFontGetAscent(font) - CTFontGetDescent(font)) / 2
 
         XCTAssertEqual(lineBoxMiddle, median(centers), accuracy: 3)
         XCTAssertEqual(CTFontGetLeading(font), 0)
+    }
+
+    /// The glyphs need no padding: their line box holds all their ink.
+    func test_suraGlyphs_fitTheirInkInTheirLineBox() throws {
+        let font = UIFont(.suraNames, size: 1024) as CTFont
+        for (sura, ink) in try zip(Quran.hafsMadani1405.suras, suraGlyphInk(at: 1024).map(\.boundingBoxOfPath)) {
+            XCTAssertLessThanOrEqual(ink.maxY, CTFontGetAscent(font) + 0.5, "\(sura.suraNumber)")
+            XCTAssertGreaterThanOrEqual(ink.minY, -CTFontGetDescent(font) - 0.5, "\(sura.suraNumber)")
+        }
     }
 
     // MARK: Private
@@ -151,11 +149,6 @@ final class DecoratedSuraNameGlyphTests: XCTestCase {
         return (CGFloat(bottom + top + 1) / 2 - CGFloat(baseline)) / em
     }
 
-    private func median(_ values: [CGFloat]) -> CGFloat {
-        let sorted = values.sorted()
-        return (sorted[(sorted.count - 1) / 2] + sorted[sorted.count / 2]) / 2
-    }
-
     /// The glyph's advance and ink at 16 pt.
     private func metrics(of character: UInt16) throws -> (advance: CGFloat, ink: CGRect) {
         let font = UIFont(.suraNames, size: 16) as CTFont
@@ -167,4 +160,20 @@ final class DecoratedSuraNameGlyphTests: XCTestCase {
         let ink = CTFontCreatePathForGlyph(font, glyph, nil)?.boundingBoxOfPath ?? .null
         return (advance.width, ink)
     }
+}
+
+/// Each sura's decorated glyph outline, in sura order, from the sura-name font at `size` points.
+func suraGlyphInk(at size: CGFloat) throws -> [CGPath] {
+    let font = UIFont(.suraNames, size: size) as CTFont
+    return try Quran.hafsMadani1405.suras.map { sura in
+        var character = try XCTUnwrap(QuranReference.sura(sura).rawValue(locale: Locale(identifier: "ar")).utf16.first)
+        var glyph = CGGlyph()
+        XCTAssertTrue(CTFontGetGlyphsForCharacters(font, &character, &glyph, 1))
+        return try XCTUnwrap(CTFontCreatePathForGlyph(font, glyph, nil))
+    }
+}
+
+func median(_ values: [CGFloat]) -> CGFloat {
+    let sorted = values.sorted()
+    return (sorted[(sorted.count - 1) / 2] + sorted[sorted.count / 2]) / 2
 }

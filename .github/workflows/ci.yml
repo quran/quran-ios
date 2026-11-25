@@ -24,6 +24,10 @@ jobs:
     - name: Setting up Xcode
       run: sudo xcode-select -s "/Applications/Xcode_27.2.app"
 
+    # Boot early, so the simulator finishes its first-boot work while the job builds, before a test runner launches.
+    - name: Boot the test simulator
+      run: echo "TEST_SIMULATOR=$(Tools/boot-test-simulator.sh 'iPhone 17e')" >> "$GITHUB_ENV"
+
     - name: Restore Xcode build cache
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
@@ -39,8 +43,11 @@ jobs:
     - name: Remove cached test results
       run: rm -rf .build/DerivedData/no-sync/Logs/Test
 
+    - name: Wait for the test simulator
+      run: xcrun simctl bootstatus "$TEST_SIMULATOR"
+
     - name: Run tests
-      run: make test-no-sync
+      run: make test-no-sync PACKAGE_DESTINATION="id=$TEST_SIMULATOR"
 
     - name: Print test failures
       if: failure()
@@ -68,6 +75,10 @@ jobs:
     - name: Setting up Xcode
       run: sudo xcode-select -s "/Applications/Xcode_27.2.app"
 
+    # Boot early, so the simulator finishes its first-boot work while the job builds, before a test runner launches.
+    - name: Boot the test simulator
+      run: echo "TEST_SIMULATOR=$(Tools/boot-test-simulator.sh 'iPhone 17e')" >> "$GITHUB_ENV"
+
     - name: Restore Xcode build cache
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
@@ -83,8 +94,11 @@ jobs:
     - name: Remove cached test results
       run: rm -rf .build/DerivedData/sync/Logs/Test
 
+    - name: Wait for the test simulator
+      run: xcrun simctl bootstatus "$TEST_SIMULATOR"
+
     - name: Run tests
-      run: make test-sync
+      run: make test-sync PACKAGE_DESTINATION="id=$TEST_SIMULATOR"
 
     - name: Print test failures
       if: failure()

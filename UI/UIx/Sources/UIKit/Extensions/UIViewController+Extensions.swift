@@ -6,6 +6,7 @@
 //  Copyright © 2019 Varaw. All rights reserved.
 //
 import UIKit
+import VLogging
 
 public extension UIViewController {
     func addFullScreenChild(_ viewController: UIViewController) {
@@ -29,10 +30,26 @@ public extension UIViewController {
         viewController.removeSelfFromParentIfNeeded()
     }
 
+    /// Rotates an iPhone window to portrait. Call it once the view is in a window.
     func rotateToPortraitIfPhone() {
         if traitCollection.userInterfaceIdiom == .phone {
-            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+            requestInterfaceOrientations(.portrait)
         }
+    }
+
+    /// Asks the window to rotate to one of `orientations`, after `supportedInterfaceOrientations` changes.
+    ///
+    /// Does nothing in windows that are regular in both size classes, like the unfolded iPhone Duo's
+    /// inner display, because they resize instead of rotating and ignore supported orientations.
+    func requestInterfaceOrientations(_ orientations: UIInterfaceOrientationMask) {
+        let traits = view.window?.traitCollection ?? traitCollection
+        if traits.horizontalSizeClass == .regular, traits.verticalSizeClass == .regular {
+            return
+        }
+        if #available(iOS 16.0, *) {
+            setNeedsUpdateOfSupportedInterfaceOrientations()
+        }
+        view.requestInterfaceOrientations(orientations)
     }
 
     func setPreferredContentSize(to controller: UIViewController, min minSize: CGSize, max maxSize: CGSize) {
@@ -75,6 +92,38 @@ public extension UIViewController {
             queue.append(contentsOf: viewController.children)
         }
         return nil
+    }
+}
+
+public extension UIView {
+    /// Asks the view's window to rotate to one of `orientations`.
+    ///
+    /// Unlike `UIViewController.requestInterfaceOrientations(_:)`, it asks windows that are regular in
+    /// both size classes too, like iPad's.
+    func requestInterfaceOrientations(_ orientations: UIInterfaceOrientationMask) {
+        if #available(iOS 16.0, *) {
+            window?.windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientations)) { error in
+                logger.error("Failed to rotate to orientations \(orientations.rawValue). Error: \(error)")
+            }
+        } else if let orientation = orientations.preferredOrientation {
+            UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
+        }
+    }
+}
+
+private extension UIInterfaceOrientationMask {
+    var preferredOrientation: UIInterfaceOrientation? {
+        if contains(.portrait) {
+            return .portrait
+        } else if contains(.landscapeLeft) {
+            return .landscapeLeft
+        } else if contains(.landscapeRight) {
+            return .landscapeRight
+        } else if contains(.portraitUpsideDown) {
+            return .portraitUpsideDown
+        } else {
+            return nil
+        }
     }
 }
 

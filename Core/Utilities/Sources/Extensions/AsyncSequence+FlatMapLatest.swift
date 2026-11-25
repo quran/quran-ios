@@ -94,10 +94,9 @@ private struct FlatMapLatestSequence<Base: AsyncSequence, Inner: AsyncSequence>:
     ) async {
         do {
             for try await element in inner {
-                let isCurrent = state.ifCurrent(generation) {
-                    continuation.yield(GenerationValue(generation: generation, element: element))
-                }
-                guard isCurrent else { return }
+                guard state.isActive(generation) else { return }
+                // The iterator drops the value if a switch supersedes `generation` before it's consumed.
+                continuation.yield(GenerationValue(generation: generation, element: element))
             }
             if state.finishInner(generation: generation) {
                 continuation.finish()
@@ -114,6 +113,8 @@ private struct FlatMapLatestSequence<Base: AsyncSequence, Inner: AsyncSequence>:
 ///
 /// `continuation.finish` and `Task.cancel` are called outside the lock because they run termination and
 /// cancellation handlers synchronously, and the stream's termination handler takes this lock.
+/// `continuation.yield` is called outside it too: resuming the consumer waits while the consumer's task
+/// is being cancelled, and that cancellation runs the termination handler.
 private final class FlatMapLatestState: Sendable {
     private struct State: Sendable {
         var generation = 0
@@ -164,13 +165,9 @@ private final class FlatMapLatestState: Sendable {
         state.withCriticalRegion { $0.generation == generation }
     }
 
-    /// Runs `body` while holding the lock when `generation` is current, so a switch can't interleave with a yield.
-    func ifCurrent(_ generation: Int, _ body: () -> Void) -> Bool {
-        state.withCriticalRegion { state in
-            guard !state.isTerminated, state.generation == generation else { return false }
-            body()
-            return true
-        }
+    /// Whether the stream is running and `generation` is current.
+    func isActive(_ generation: Int) -> Bool {
+        state.withCriticalRegion { !$0.isTerminated && $0.generation == generation }
     }
 
     /// Returns whether the stream should finish now.

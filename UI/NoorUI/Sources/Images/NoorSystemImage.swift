@@ -98,7 +98,6 @@ public enum NoorSystemImage: String {
 
     // MARK: Account and sync
 
-    case accountSignIn = "arrow.up"
     case cloudSyncInfo = "link.icloud"
     case syncSucceeded = "checkmark.circle"
     case syncStatusFailed = "exclamationmark.circle"

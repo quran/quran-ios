@@ -75,6 +75,32 @@ extension UIViewController {
         animated: Bool = true,
         completion: (() -> Void)? = nil
     ) {
+        presentPopover(presented, permittedArrowDirections: permittedArrowDirections, animated: animated, completion: completion) {
+            $0.barButtonItem = barButtonItem
+        }
+    }
+
+    public func presentPopover(
+        _ presented: UIViewController,
+        pointingTo sourceView: UIView,
+        at sourceRect: CGRect,
+        permittedArrowDirections: UIPopoverArrowDirection = .any,
+        animated: Bool = true,
+        completion: (() -> Void)? = nil
+    ) {
+        presentPopover(presented, permittedArrowDirections: permittedArrowDirections, animated: animated, completion: completion) {
+            $0.sourceView = sourceView
+            $0.sourceRect = sourceRect
+        }
+    }
+
+    private func presentPopover(
+        _ presented: UIViewController,
+        permittedArrowDirections: UIPopoverArrowDirection,
+        animated: Bool,
+        completion: (() -> Void)?,
+        anchor: (UIPopoverPresentationController) -> Void
+    ) {
         // Bar buttons stay tappable while a popover morphs back into them; see
         // `isPresentationTransitioning`.
         guard !isPresentationTransitioning else {
@@ -83,8 +109,10 @@ extension UIViewController {
         }
         presented.modalPresentationStyle = .popover
         presented.presentationController?.delegate = PhoneAdapativeController.shared
-        presented.popoverPresentationController?.barButtonItem = barButtonItem
-        presented.popoverPresentationController?.permittedArrowDirections = permittedArrowDirections
+        if let popover = presented.popoverPresentationController {
+            anchor(popover)
+            popover.permittedArrowDirections = permittedArrowDirections
+        }
         present(presented, animated: animated, completion: completion)
     }
 }

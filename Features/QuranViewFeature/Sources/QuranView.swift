@@ -46,6 +46,24 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
 
     weak var delegate: QuranViewDelegate?
 
+    /// Whether the system bars show the reader's controls, like in iPhone Duo's vertical bar. The reader's own
+    /// navigation bar and audio banner then stay hidden. The banner stays in the hierarchy, transparent, to keep
+    /// presenting its sheets and alerts.
+    var showsControlsInSystemBars = false {
+        didSet {
+            guard showsControlsInSystemBars != oldValue else {
+                return
+            }
+            barsVisibilityAnimationID &+= 1
+            navigationBar.layer.removeAllAnimations()
+            audioView?.layer.removeAllAnimations()
+            configureNavigationBarScrollEdgeEffectIfNeeded()
+            configureAudioBarScrollEdgeEffectIfNeeded()
+            updateNavigationBarVisibility()
+            updateAudioBarVisibility()
+        }
+    }
+
     var contentView: UIView?
 
     let navigationBar = UINavigationBar()
@@ -101,6 +119,11 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
         let audioBarStateChanged = audioBarHidden != hidden
         navigationBarHidden = hidden
         audioBarHidden = hidden
+        guard !showsControlsInSystemBars else {
+            // The bars show again from this state when the controls leave the system bars.
+            completion?()
+            return
+        }
         configureNavigationBarScrollEdgeEffectIfNeeded()
         configureAudioBarScrollEdgeEffectIfNeeded()
 
@@ -202,7 +225,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     private func configureNavigationBarScrollEdgeEffectIfNeeded() {
         guard #available(iOS 26.0, *) else { return }
 
-        guard !navigationBarHidden,
+        guard !navigationBarHidden, !showsControlsInSystemBars,
               let scrollView = contentScrollView()
         else {
             if let interaction = navigationBarScrollEdgeInteraction {
@@ -228,7 +251,7 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
         guard #available(iOS 26.0, *) else { return }
         guard let audioView else { return }
 
-        guard !audioBarHidden,
+        guard !audioBarHidden, !showsControlsInSystemBars,
               let scrollView = contentScrollView()
         else {
             if let interaction = audioBarScrollEdgeInteraction {
@@ -262,11 +285,20 @@ class QuranView: UIView, UIGestureRecognizerDelegate, UINavigationBarDelegate {
     }
 
     private func updateNavigationBarVisibility() {
-        updateBarVisibility(navigationBar, hidden: navigationBarHidden)
+        updateBarVisibility(navigationBar, hidden: navigationBarHidden || showsControlsInSystemBars)
     }
 
     private func updateAudioBarVisibility() {
-        updateBarVisibility(audioView, hidden: audioBarHidden)
+        guard showsControlsInSystemBars else {
+            updateBarVisibility(audioView, hidden: audioBarHidden)
+            audioView?.accessibilityElementsHidden = false
+            return
+        }
+        // Transparent, not hidden, so the banner keeps presenting its sheets and alerts; toasts ignore it.
+        audioView?.isHidden = false
+        audioView?.alpha = 0
+        audioView?.isUserInteractionEnabled = false
+        audioView?.accessibilityElementsHidden = true
     }
 
     private func prepareBarForVisibilityTransition(

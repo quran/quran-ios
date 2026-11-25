@@ -18,6 +18,7 @@
     "menu_settings",
     "no_results",
     "page_description",
+    "pause",
     "play",
     "play_each_verse",
     "play_verses_range",
@@ -32,6 +33,7 @@
     "quran_talt_arb3",
     "remove_button",
     "repeatValues[3]",
+    "stop",
     "to",
     "undo",
     "verses"

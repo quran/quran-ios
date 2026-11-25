@@ -33,6 +33,15 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
 
     // MARK: Public
 
+    /// What the pages show in the window's vertical-bar column.
+    public var verticalBarContent = VerticalBarContent() {
+        didSet {
+            if verticalBarContent != oldValue {
+                pagesController?.rootView.verticalBarContent = verticalBarContent
+            }
+        }
+    }
+
     override public func viewDidLoad() {
         super.viewDidLoad()
         #if QURAN_SYNC
@@ -71,13 +80,12 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
     // MARK: Private
 
     private let viewModel: ContentViewModel
+    private var pagesController: UIHostingController<PagesRootView>?
 
     private func setUpPagesView() {
-        let viewModel = viewModel
-        let pagesView = PagesView(viewModel: viewModel)
-            // Pages show toasts, like the way back from a footnote's verse reference.
-            .enableToastPresenter()
+        let pagesView = PagesRootView(viewModel: viewModel, verticalBarContent: verticalBarContent)
         let pagingController = UIHostingController(rootView: pagesView)
+        pagesController = pagingController
         addFullScreenChild(pagingController)
     }
 
@@ -126,5 +134,17 @@ public final class ContentViewController: UIViewController, UIGestureRecognizerD
         default:
             viewModel.onViewLongPressCancelled()
         }
+    }
+}
+
+private struct PagesRootView: View {
+    let viewModel: ContentViewModel
+    var verticalBarContent: VerticalBarContent
+
+    var body: some View {
+        PagesView(viewModel: viewModel)
+            // Pages show toasts, like the way back from a footnote's verse reference.
+            .enableToastPresenter()
+            .environment(\.verticalBarContent, verticalBarContent)
     }
 }

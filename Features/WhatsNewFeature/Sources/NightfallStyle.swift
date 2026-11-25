@@ -24,6 +24,7 @@ enum NightfallPalette {
     static let tileMiddle = color(0x000C52)
     static let tileBottom = color(0x00153F)
     static let continueText = color(0x000A3D)
+    static let footnote = Color.white.opacity(0.62)
 
     // MARK: Private
 

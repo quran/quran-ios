@@ -14,17 +14,6 @@ public enum ContentDimension {
     public static let interSpacing: CGFloat = spacing
     public static let interPageSpacing: CGFloat = 12
 
-    public static func insets(of view: UIView) -> NSDirectionalEdgeInsets {
-        let readableInsets = view.window?.safeAreaInsets ?? .zero
-        let topInset = max(24, readableInsets.top)
-        return NSDirectionalEdgeInsets(
-            top: topInset + spacing,
-            leading: readableInsets.left + spacing,
-            bottom: readableInsets.bottom + spacing,
-            trailing: readableInsets.right + spacing
-        )
-    }
-
     public static func readableInsets(of safeAreaInsets: EdgeInsets) -> EdgeInsets {
         EdgeInsets(
             top: max(24, safeAreaInsets.top) + spacing,

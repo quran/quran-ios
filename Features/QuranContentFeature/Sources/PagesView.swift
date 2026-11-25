@@ -8,7 +8,6 @@
 import Combine
 import NoorUI
 import QuranPagesFeature
-import QuranTextKit
 import SwiftUI
 import UIx
 
@@ -66,15 +65,13 @@ struct PagesView: View {
     }
 
     private func pagingStrategy(with geometry: GeometryProxy) -> PagingStrategy {
-        // If portrait
-        if geometry.size.height > geometry.size.width {
-            return .singlePage
-        }
-
-        if !TwoPagesUtils.hasEnoughHorizontalSpace() {
-            return .singlePage
-        }
-
-        return viewModel.pagingStrategy
+        // The reader fills its window, so its size plus its safe areas is the window's size.
+        // Folding or unfolding iPhone Duo resizes the window, so never use the screen's size.
+        let insets = geometry.safeAreaInsets
+        let windowSize = CGSize(
+            width: geometry.size.width + insets.leading + insets.trailing,
+            height: geometry.size.height + insets.top + insets.bottom
+        )
+        return viewModel.pagingStrategy(windowSize: windowSize)
     }
 }

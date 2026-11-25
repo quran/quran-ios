@@ -32,11 +32,35 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-xcode-27.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift') }}-
 
+    # Boot before building, so the simulator finishes its first-boot work before a test runner launches.
+    # After the cache step: while the simulator booted, the cache key's hashFiles once ran past its 120 s limit.
+    - name: Boot the test simulator
+      run: echo "TEST_SIMULATOR=$(Tools/boot-test-simulator.sh 'iPhone 17e')" >> "$GITHUB_ENV"
+
     - name: Install xcbeautify
       run: brew install xcbeautify
 
+    # The restored cache can hold an earlier run's result bundles; upload only this run's.
+    - name: Remove cached test results
+      run: rm -rf .build/DerivedData/no-sync/Logs/Test
+
+    - name: Wait for the test simulator
+      run: xcrun simctl bootstatus "$TEST_SIMULATOR"
+
     - name: Run tests
-      run: make test-no-sync
+      run: make test-no-sync PACKAGE_DESTINATION="id=$TEST_SIMULATOR"
+
+    - name: Print test failures
+      if: failure()
+      run: Tools/print-xcresult-failures.sh .build/DerivedData/no-sync
+
+    - name: Upload test results
+      if: failure()
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: Package-xcresult
+        path: .build/DerivedData/no-sync/Logs/Test/*.xcresult
+        if-no-files-found: ignore
 
     - uses: codecov/codecov-action@a99c28d3f0da835de33ff2feb2e15691c7b9641f # v7.0.0
       with:
@@ -60,11 +84,35 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-xcode-27.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift') }}-
 
+    # Boot before building, so the simulator finishes its first-boot work before a test runner launches.
+    # After the cache step: while the simulator booted, the cache key's hashFiles once ran past its 120 s limit.
+    - name: Boot the test simulator
+      run: echo "TEST_SIMULATOR=$(Tools/boot-test-simulator.sh 'iPhone 17e')" >> "$GITHUB_ENV"
+
     - name: Install xcbeautify
       run: brew install xcbeautify
 
+    # The restored cache can hold an earlier run's result bundles; upload only this run's.
+    - name: Remove cached test results
+      run: rm -rf .build/DerivedData/sync/Logs/Test
+
+    - name: Wait for the test simulator
+      run: xcrun simctl bootstatus "$TEST_SIMULATOR"
+
     - name: Run tests
-      run: make test-sync
+      run: make test-sync PACKAGE_DESTINATION="id=$TEST_SIMULATOR"
+
+    - name: Print test failures
+      if: failure()
+      run: Tools/print-xcresult-failures.sh .build/DerivedData/sync
+
+    - name: Upload test results
+      if: failure()
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: PackageSync-xcresult
+        path: .build/DerivedData/sync/Logs/Test/*.xcresult
+        if-no-files-found: ignore
 
   ExampleApp:
     runs-on: xcode-27

@@ -18,6 +18,7 @@
 //  GNU General Public License for more details.
 //
 
+import AudioBannerFeature
 import Combine
 import Crashing
 import Localization
@@ -59,9 +60,22 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     var pagesView: UIView { quranView!.contentView! }
 
+    var readerWindow: ReaderWindow? {
+        guard let window = view.window else {
+            return nil
+        }
+        let traits = window.traitCollection
+        return ReaderWindow(
+            size: window.bounds.size,
+            isRegularWidthAndHeight: traits.horizontalSizeClass == .regular && traits.verticalSizeClass == .regular,
+            isPhone: traits.userInterfaceIdiom == .phone
+        )
+    }
+
     // MARK: - View hierarchy
 
-    var navigationBarHidden: Bool { true }
+    /// The navigation controller's bar shows only as the rail, in a vertical bar like iPhone Duo's.
+    var navigationBarHidden: Bool { !rail.isShown }
 
     override var prefersHomeIndicatorAutoHidden: Bool {
         prefersStatusBarHidden
@@ -105,13 +119,29 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         )
 
         setupContentStatus()
+        if #available(iOS 17.0, *) {
+            var traits: [UITrait] = [UITraitVerticalSizeClass.self]
+            if #available(iOS 27.1, *) {
+                traits += UITraitCollection.systemTraitsAffectingVerticalBarEdge
+            }
+            registerForTraitChanges(traits) { (self: Self, _: UITraitCollection) in
+                self.updateContentVerticalBarContent()
+            }
+        }
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        rail.viewWillTransition()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         crashContext.setScreen("quran")
         UIApplication.shared.isIdleTimerDisabled = true
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+        // Before the bars update, so the previous screen's bar doesn't hide and come back as the rail.
+        rail.update()
+        rail.applyVisibility(animated: animated)
         setOuterTabBarHiddenForIOS26(true, animated: animated)
     }
 
@@ -119,7 +149,18 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         super.viewWillDisappear(animated)
         crashContext.clearActiveList(owner: "quran_translation")
         navigationController?.setNavigationBarHidden(false, animated: animated)
+        if rail.isActive {
+            navigationController?.setToolbarHidden(true, animated: animated)
+        }
         setOuterTabBarHiddenForIOS26(false, animated: animated)
+        decidesStatusBar = false
+        updateContentVerticalBarContent()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        decidesStatusBar = true
+        updateContentVerticalBarContent()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -194,7 +235,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }
 
     func presentMoreMenu(_ viewController: UIViewController) {
-        presentPopover(viewController, pointingTo: moreNavigationButton)
+        rail.presentPopover(viewController, from: .more, ownBarItem: moreNavigationButton)
     }
 
     func presentTranslationsSelection(_ viewController: UIViewController) {
@@ -205,7 +246,8 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         present(translationsNavigationController, animated: true, completion: nil)
     }
 
-    func presentAudioBanner(_ audioBanner: UIViewController) {
+    func presentAudioBanner(_ audioBanner: UIViewController, toolbarItems: AudioToolbarItems) {
+        rail.audioToolbarItems = toolbarItems
         addChild(audioBanner)
         quranView?.addAudioBannerView(audioBanner.view)
         audioBanner.didMove(toParent: self)
@@ -225,7 +267,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     #if QURAN_SYNC
     func presentReadingBookmarkMenu(_ viewController: UIViewController) {
-        presentPopover(viewController, pointingTo: readingBookmarkMenuNavigationButton)
+        rail.presentPopover(viewController, from: .bookmark, ownBarItem: readingBookmarkMenuNavigationButton)
     }
 
     func presentReadingBookmarkMenu(_ viewController: UIViewController, in sourceView: UIView, at rect: CGRect) {
@@ -256,6 +298,8 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     #endif
 
     func presentQuranContent(_ viewController: ContentViewController) {
+        contentViewController = viewController
+        updateContentVerticalBarContent()
         addContent(viewController)
     }
 
@@ -318,18 +362,14 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     func setVisiblePages(_ pages: [Page]) {
         title = pages.map { $0.startSura.localizedName(withPrefix: true) }.joined(separator: l("list.separator.comma"))
+        rail.updateTitle()
         updateTitle(pages)
     }
 
     #if QURAN_SYNC
     func updateReadingBookmark(_ bookmark: PlacedReadingBookmark?) {
-        let style: ReadingBookmarkIcon.Style = bookmark == nil ? .outline : .filled
-        readingBookmarkMenuNavigationButton.image = ReadingBookmarkIcon.image(
-            style: style,
-            badge: .ellipsis
-        )
-        readingBookmarkMenuNavigationButton.tintColor = bookmark?.slot.color
-        readingBookmarkMenuNavigationButton.accessibilityValue = bookmark?.displayName
+        readingBookmarkMenuNavigationButton.configureReadingBookmark(bookmark, defaultTintColor: nil)
+        rail.updateReadingBookmark(bookmark)
         quranView?.navigationItem.setRightBarButtonItems(
             [moreNavigationButton, readingBookmarkMenuNavigationButton],
             animated: false
@@ -351,6 +391,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     private lazy var popoverPresenter = PhonePopoverPresenter(delegate: self)
     private let presentationsMonitor = PresentationsMonitor()
     private weak var ayahMenuViewController: UIViewController?
+    private weak var contentViewController: ContentViewController?
 
     // MARK: - Navigation bars
 
@@ -382,6 +423,24 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     }()
     #endif
 
+    private lazy var rail: ReaderRail = .init(
+        viewController: self,
+        onMore: { [weak self] in self?.interactor.onMoreBarButtonTapped() },
+        onBookmark: { [weak self] in
+            #if QURAN_SYNC
+            self?.onReadingBookmarkMenuButtonTapped()
+            #else
+            self?.onBookmarkButtonTapped()
+            #endif
+        },
+        onModeChange: { [weak self] isActive in
+            self?.quranView?.showsControlsInSystemBars = isActive
+            self?.rail.applyVisibility(animated: false)
+            self?.updateContentVerticalBarContent()
+        },
+        onPopoverDismiss: { [weak self] in self?.interactor.didDismissPopover() }
+    )
+
     private var titleView: TwoLineNavigationTitleView? { quranView?.navigationItem.titleView as? TwoLineNavigationTitleView }
     private var quranView: QuranView? {
         view as? QuranView
@@ -392,6 +451,18 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             setNeedsStatusBarAppearanceUpdate()
             setNeedsUpdateOfHomeIndicatorAutoHidden()
         }
+    }
+
+    /// Whether the reader is the screen on top, which decides the status bar. During a back swipe the screen below
+    /// decides it, and a cancelled swipe hands it back.
+    private var decidesStatusBar = false
+
+    /// Only windows with a vertical bar get the bars' state, so elsewhere bar toggles leave the pages alone.
+    private var verticalBarContent: VerticalBarContent {
+        guard decidesStatusBar, view.window?.traitCollection.hasVerticalBar == true else {
+            return VerticalBarContent()
+        }
+        return VerticalBarContent(statusBarHidden: prefersStatusBarHidden, showsBarItems: rail.isShown)
     }
 
     private func stopBarHiddenTimer() {
@@ -432,10 +503,16 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         stopBarHiddenTimer()
 
         quranView?.setBarsHidden(hidden, animated: true)
+        rail.setBarsHidden(hidden, animated: true)
 
         NoorAnimation.animate {
             self.statusBarHidden = hidden
         }
+        updateContentVerticalBarContent()
+    }
+
+    private func updateContentVerticalBarContent() {
+        contentViewController?.verticalBarContent = verticalBarContent
     }
 
     private func addContent(_ viewController: UIViewController) {
@@ -487,15 +564,10 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
 
     #if !QURAN_SYNC
     private func updateRightBarItems(animated: Bool, isBookmarked: Bool) {
-        let bookmarkImage = (isBookmarked ? NoorSystemImage.bookmark : .bookmarkOutline).uiImage
-        let bookmark = UIBarButtonItem(image: bookmarkImage, style: .plain, target: self, action: #selector(onBookmarkButtonTapped))
-        bookmark.accessibilityLabel = l(isBookmarked ? "bookmarks.page.remove" : "bookmarks.page.add")
-        if isBookmarked {
-            bookmark.tintColor = .systemRed
-        }
-        let items = [moreNavigationButton, bookmark]
-
-        quranView?.navigationItem.setRightBarButtonItems(items, animated: animated)
+        let bookmark = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(onBookmarkButtonTapped))
+        bookmark.configurePageBookmark(isBookmarked: isBookmarked, defaultTintColor: nil)
+        quranView?.navigationItem.setRightBarButtonItems([moreNavigationButton, bookmark], animated: animated)
+        rail.updatePageBookmark(isBookmarked: isBookmarked)
     }
     #endif
 

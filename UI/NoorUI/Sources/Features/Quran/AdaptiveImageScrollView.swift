@@ -136,12 +136,17 @@ public struct AdaptiveImageScrollView<Header: View, Footer: View>: View {
                     QuranAyahDim(cutouts: undimmedLineRects)
                 }
             }
-            .onGlobalFrameChanged { frame in
-                if imageViewSize != frame.size {
-                    imageViewSize = frame.size
+            // Local size without a preference: global frames add float noise, preferences would reach contentWidth.
+            .background {
+                GeometryReader { geometry in
+                    Color.clear.onChangeWithInitial(of: geometry.size) { size in
+                        if imageViewSize != size {
+                            imageViewSize = size
+                        }
+                    }
                 }
-                onGlobalFrameChange(frame)
             }
+            .onGlobalFrameChanged { onGlobalFrameChange($0) }
             .onChangeWithInitial(of: sizeInfo) { sizeInfo in
                 onScaleChange(WordFrameScale.scaling(
                     imageSize: sizeInfo.imageSize,

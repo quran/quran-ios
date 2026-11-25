@@ -19,16 +19,25 @@ public enum NavigationBarButton {
         button(systemItem: .edit, tintColor: .label, action: action)
     }
 
+    /// Done keeps its place when the bar runs out of room, like in iPhone Duo's vertical bar, so finishing
+    /// an edit never hides in an overflow menu.
     public static func done(action: @escaping @MainActor @Sendable () -> Void) -> UIBarButtonItem {
-        button(systemItem: .done, tintColor: nil, action: action)
+        let button = button(systemItem: .done, tintColor: nil, action: action)
+        if #available(iOS 27.0, *) {
+            button.visibilityPriority = .high
+        }
+        return button
     }
 
     public static func close(action: @escaping @MainActor @Sendable () -> Void) -> UIBarButtonItem {
         button(systemItem: .close, tintColor: .label, action: action)
     }
 
-    public static func add(action: @escaping @MainActor @Sendable () -> Void) -> UIBarButtonItem {
-        button(image: NoorSystemImage.plus.uiImage, tintColor: nil, action: action)
+    public static func add(
+        accessibilityLabel: String,
+        action: @escaping @MainActor @Sendable () -> Void
+    ) -> UIBarButtonItem {
+        button(image: NoorSystemImage.plus.uiImage, title: accessibilityLabel, tintColor: nil, action: action)
     }
 
     /// The destructive Delete All shown while editing a list. Its action gets the button, so a confirmation
@@ -53,9 +62,29 @@ public enum NavigationBarButton {
         glassSymbolScale: UIImage.SymbolScale? = nil,
         action: @escaping @MainActor @Sendable () -> Void
     ) -> UIBarButtonItem {
-        let item = button(image: symbol(image, glassSymbolScale: glassSymbolScale), tintColor: .label, action: action)
-        item.accessibilityLabel = accessibilityLabel
-        return item
+        button(
+            image: symbol(image, glassSymbolScale: glassSymbolScale),
+            title: accessibilityLabel,
+            tintColor: .label,
+            action: action
+        )
+    }
+
+    /// A secondary action with an image that isn't an SF Symbol, like the reading bookmark's ribbon.
+    public static func secondary(
+        customImage: UIImage?,
+        accessibilityLabel: String,
+        action: @escaping @MainActor @Sendable () -> Void
+    ) -> UIBarButtonItem {
+        button(image: customImage, title: accessibilityLabel, tintColor: .label, action: action)
+    }
+
+    /// Shares a whole list. It inherits the window tint, as it always has.
+    public static func share(
+        accessibilityLabel: String,
+        action: @escaping @MainActor @Sendable () -> Void
+    ) -> UIBarButtonItem {
+        button(image: NoorSystemImage.share.uiImage, title: accessibilityLabel, tintColor: nil, action: action)
     }
 
     public static func overflow(action: @escaping @MainActor @Sendable () -> Void) -> UIBarButtonItem {
@@ -107,17 +136,76 @@ public enum NavigationBarButton {
 
     private static func button(
         image: UIImage?,
+        title: String? = nil,
         tintColor: UIColor?,
         action: @escaping @MainActor @Sendable () -> Void
     ) -> UIBarButtonItem {
-        let button = UIBarButtonItem(
-            image: image,
-            primaryAction: UIAction { _ in action() }
-        )
+        let button = if let title {
+            TitledBarButtonItem(image: image, title: title, action: action)
+        } else {
+            UIBarButtonItem(
+                image: image,
+                primaryAction: UIAction { _ in action() }
+            )
+        }
         if let tintColor {
             button.tintColor = tintColor
         }
         return button
+    }
+}
+
+/// An icon-only bar item that names itself for VoiceOver and for the menu that collects bar items when the bar
+/// runs out of room, like iPhone Duo's vertical bar, which otherwise lists the icon without a title.
+/// The bar itself still shows only the icon.
+final class TitledBarButtonItem: UIBarButtonItem {
+    // MARK: Lifecycle
+
+    init(image: UIImage?, title: String, action: @escaping @MainActor @Sendable () -> Void) {
+        menuAction = action
+        super.init()
+        primaryAction = UIAction { _ in action() }
+        self.image = image
+        accessibilityLabel = title
+        updateMenuRepresentation()
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: Internal
+
+    // UIKit doesn't carry the item's state to its menu representation, so the menu entry follows it here,
+    // like Next and Previous turning off at the last and first verses.
+    override var isEnabled: Bool {
+        didSet { updateMenuRepresentation() }
+    }
+
+    override var image: UIImage? {
+        didSet { updateMenuRepresentation() }
+    }
+
+    /// The menu entry's title, like a bookmark button's Add or Remove.
+    override var accessibilityLabel: String? {
+        didSet { updateMenuRepresentation() }
+    }
+
+    // MARK: Private
+
+    private let menuAction: @MainActor @Sendable () -> Void
+
+    private func updateMenuRepresentation() {
+        guard #available(iOS 16.0, *) else {
+            return
+        }
+        let action = menuAction
+        menuRepresentation = UIAction(
+            title: accessibilityLabel ?? "",
+            image: image,
+            attributes: isEnabled ? [] : .disabled
+        ) { _ in action() }
     }
 }
 

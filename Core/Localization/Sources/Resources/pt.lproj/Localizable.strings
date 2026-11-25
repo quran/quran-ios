@@ -692,10 +692,6 @@
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.profile" = "Gerenciar conta";
 // Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in" = "Entrar no Quran.com";
-// Metadata: Translated by ChatGPT; human review required.
-"setting.quran_account.sign_in.subtitle" = "Sincronize notas, marcadores e coleções";
-// Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.signed_in" = "Conectado";
 // Metadata: Translated by ChatGPT; human review required.
 "setting.quran_account.sign_out" = "Sair";
@@ -951,14 +947,12 @@
 "new.sync_reveal.title" = "Seu Alcorão, conectado";
 // What's New sync reveal benefit title, after a sync icon: the user's reading place follows them on every device.
 "new.sync_reveal.every_device.title" = "Seu ponto de leitura em todos os dispositivos";
-// What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud", "Quran.com" and "Quran ID" in English.
-"new.sync_reveal.every_device.subtitle" = "Marcadores, notas e progresso de leitura passam do iCloud para o Quran.com com seu Quran ID gratuito.";
+// What's New sync reveal benefit detail under "Your place on every device". Keep "iCloud" and "Quran.com" in English.
+"new.sync_reveal.every_device.subtitle" = "Marcadores, notas e progresso de leitura passam do iCloud para o Quran.com.";
 // What's New sync reveal benefit title, after a book icon: study more on Quran.com without losing the reading place.
 "new.sync_reveal.go_deeper.title" = "Aprofunde-se sem perder seu lugar";
 // What's New sync reveal benefit detail under "Go deeper without losing your place": Quran.com opens tafsir, reflections and lessons at the ayah the user stopped on. Keep "Quran.com" in English.
 "new.sync_reveal.go_deeper.subtitle" = "Tafsir, reflexões e lições no Quran.com, na aya em que você parou.";
-// What's New sync reveal button that starts signing in to Quran.com with a Quran ID account. Keep "Quran ID" in English.
-"new.sync_reveal.sign_in" = "Continuar com Quran ID";
 // What's New sync reveal button that closes it without signing in.
 "new.sync_reveal.not_now" = "Agora não";
 // What's New sync reveal footnote on iPhone.
@@ -967,3 +961,11 @@
 "new.sync_reveal.footnote.ipad" = "Sem entrar, seus marcadores ficam neste iPad.";
 // What's New sync reveal footnote on Mac.
 "new.sync_reveal.footnote.mac" = "Sem entrar, seus marcadores ficam neste Mac.";
+// Button that signs in to Quran.com with a Quran ID account. Keep "Quran ID" in English.
+"quran_id.sign_in" = "Entrar com Quran ID";
+// Headline of the Settings card that invites a signed-out user to sign in with Quran ID.
+"quran_id.entry.title" = "Leve seu Alcorão aonde você for";
+// Text under "Take your Quran everywhere you go". "The Quran app" is this app. Keep "Quran.com" in English.
+"quran_id.entry.subtitle" = "Sincronize sua jornada no aplicativo do Alcorão, no Quran.com e em outros aplicativos conectados.";
+// Footnote under the "Sign in with Quran ID" button. Keep "Quran Foundation" and "Quran.com" in English.
+"quran_id.footnote" = "Uma conta gratuita da Quran Foundation, a organização sem fins lucrativos por trás do Quran.com.";

@@ -87,19 +87,37 @@ struct ToastView: View {
             action.handler()
             dismiss()
         } label: {
+            actionLabel(action)
+        }
+        .toastActionStyle(action.appearance)
+        .dismissibleWithVoiceOver(userDismiss)
+    }
+
+    @ViewBuilder
+    private func actionLabel(_ action: ToastAction) -> some View {
+        switch action.appearance {
+        case .accent:
             Text(action.title)
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(Color.onAccent)
                 .padding(.horizontal, actionHorizontalPadding)
                 .padding(.vertical, actionVerticalPadding)
                 .background(Color.accentColor, in: Capsule())
+        case .quranID:
+            QuranIDButtonLabel(action.title, size: .compact)
         }
-        .buttonStyle(.plain)
-        .dismissibleWithVoiceOver(userDismiss)
     }
 }
 
 private extension View {
+    @ViewBuilder
+    func toastActionStyle(_ appearance: ToastAction.Appearance) -> some View {
+        switch appearance {
+        case .accent: buttonStyle(.plain)
+        case .quranID: buttonStyle(.quranID)
+        }
+    }
+
     /// `MultipartText` sets each part's font, so the weight is applied on top of it,
     /// which needs iOS 16.
     @ViewBuilder
@@ -155,6 +173,16 @@ private extension View {
                 subtitle: "Al-Fatihah 1 to Al-Fatihah 7",
                 icon: Toast.Icon(.play),
                 action: ToastAction(title: "Modify", handler: {})
+            ),
+            dismiss: {},
+            userDismiss: {}
+        )
+        ToastView(
+            toast: Toast(
+                "Note saved",
+                subtitle: "Sign in to see it on Quran.com and all your devices.",
+                icon: Toast.Icon(.checkmark),
+                action: ToastAction(title: "Sign In", appearance: .quranID, handler: {})
             ),
             dismiss: {},
             userDismiss: {}

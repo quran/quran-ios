@@ -122,12 +122,14 @@ private struct ContentLineViewBody: View {
     // MARK: Private
 
     @Environment(\.quranPageColorScheme) private var quranPageColorScheme
+    @Environment(\.themeColors) private var themeColors
+    @Environment(\.displayScale) private var displayScale
     #if QURAN_SYNC
     @State private var pressedReadingBookmarkAyah: AyahNumber?
     #endif
 
     private var chromePalette: QuranPageChromePalette {
-        chromeStyle.palette(for: quranPageColorScheme)
+        chromeStyle.palette(for: quranPageColorScheme, text: themeColors.text)
     }
 
     private func lineCanvas(_ layout: LinePageLayout?) -> some View {
@@ -278,8 +280,21 @@ private struct ContentLineViewBody: View {
 
     private func lineDividers(_ layout: LinePageLayout) -> some View {
         ForEach(layout.lineDividers, id: \.lineNumber) { divider in
-            Color.primary
-                .placed(in: divider.frame)
+            // Drawn as ink, so dividers get the same theme tint as the line images.
+            Color.black
+                .invertThemedColorIfNeeded()
+                .placed(in: hairlineFrame(for: divider.frame))
         }
+    }
+
+    /// One device pixel tall at the top of the divider frame, snapped to the pixel grid so it stays crisp.
+    private func hairlineFrame(for frame: CGRect) -> CGRect {
+        let scale = max(displayScale, 1)
+        return CGRect(
+            x: frame.minX,
+            y: (frame.minY * scale).rounded() / scale,
+            width: frame.width,
+            height: 1 / scale
+        )
     }
 }

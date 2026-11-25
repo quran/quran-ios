@@ -2,6 +2,8 @@
 import AnalyticsFake
 import AuthenticationClientFake
 import Combine
+import Localization
+import NoorUI
 import SystemDependenciesFake
 import UIKit
 import XCTest
@@ -68,6 +70,15 @@ final class SyncSignInNudgeTests: XCTestCase {
         let third = await sut.toast(after: .note)
 
         XCTAssertNil(third)
+    }
+
+    func test_toast_offersTheQuranIDSignInButton() async throws {
+        let sut = makeSUT()
+        let shown = await sut.toast(after: .note)
+        let action = try XCTUnwrap(shown?.action)
+
+        XCTAssertEqual(action.title, l("sync.nudge.sign-in"))
+        XCTAssertEqual(action.appearance, .quranID)
     }
 
     func test_signInTap_signsInFromTheToastAndStopsTheReminder() async throws {

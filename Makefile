@@ -28,6 +28,8 @@ MOBILE_SYNC_SPM_SDK ?= iphonesimulator
 MOBILE_SYNC_SPM_DESTINATION ?= generic/platform=iOS Simulator
 MOBILE_SYNC_SPM_DERIVED_DATA ?= .build/DerivedData/local-$(MOBILE_SYNC_CONFIGURATION)
 QURAN_OAUTH_CLIENT_ID ?=
+# Minutes a package test command, its build included, may run before its process group is killed.
+TEST_TIMEOUT ?= 40
 
 SWIFT_FORMAT_REPO=https://github.com/nicklockwood/SwiftFormat
 SWIFT_FORMAT_VERSION=0.62.1
@@ -38,6 +40,7 @@ SWIFT_FORMAT_VERSION_FILE=$(abspath $(SWIFT_FORMAT_DIR))/.swiftformat-version
 BUILD_SCHEME=$(if $(TARGET),$(TARGET),$(PACKAGE_SCHEME))
 TEST_TARGET=$(if $(TARGET),$(if $(filter %Tests,$(TARGET)),$(TARGET),$(TARGET)Tests))
 TEST_FILTER=$(if $(TEST_TARGET),-only-testing:$(TEST_TARGET))
+WITH_TEST_TIMEOUT=perl Tools/run-with-timeout.pl $(TEST_TIMEOUT)
 WITHOUT_QURAN_SYNC=set -o pipefail; env QURAN_SYNC=
 WITH_QURAN_SYNC=set -o pipefail; env QURAN_SYNC=QURAN_SYNC
 WITH_LOCAL_MOBILE_SYNC=set -o pipefail; env MOBILE_SYNC_XCFRAMEWORK_PATH="$(MOBILE_SYNC_XCFRAMEWORK_PATH)"
@@ -83,10 +86,10 @@ endef
 .PHONY: export-example-app-icon-images
 
 test-no-sync:
-	$(WITHOUT_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build test -scheme "$(PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
+	$(WITHOUT_QURAN_SYNC) $(WITH_TEST_TIMEOUT) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build test -scheme "$(PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
 
 test-sync:
-	$(WITH_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITH_QURAN_SYNC_DERIVED_DATA)" build test -scheme "$(PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
+	$(WITH_QURAN_SYNC) $(WITH_TEST_TIMEOUT) xcrun xcodebuild -derivedDataPath "$(WITH_QURAN_SYNC_DERIVED_DATA)" build test -scheme "$(PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
 
 build-no-sync:
 	$(WITHOUT_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build -scheme "$(BUILD_SCHEME)" -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
@@ -107,7 +110,7 @@ build-sync-local-debug: build-mobile-sync-spm
 	$(WITH_LOCAL_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITH_LOCAL_QURAN_SYNC_DERIVED_DATA)" build -scheme "$(BUILD_SCHEME)" -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
 
 test-sync-local-debug: build-mobile-sync-spm
-	$(WITH_LOCAL_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITH_LOCAL_QURAN_SYNC_DERIVED_DATA)" build test -scheme "$(PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
+	$(WITH_LOCAL_QURAN_SYNC) $(WITH_TEST_TIMEOUT) xcrun xcodebuild -derivedDataPath "$(WITH_LOCAL_QURAN_SYNC_DERIVED_DATA)" build test -scheme "$(PACKAGE_SCHEME)" $(TEST_FILTER) -sdk "$(PACKAGE_SDK)" -destination "$(PACKAGE_DESTINATION)" 2>&1 | xcbeautify --renderer github-actions
 
 build-example-no-sync:
 	$(WITHOUT_QURAN_SYNC) xcrun xcodebuild -derivedDataPath "$(WITHOUT_QURAN_SYNC_DERIVED_DATA)" build -project $(EXAMPLE_PROJECT) -scheme $(EXAMPLE_SCHEME) -sdk "$(EXAMPLE_SDK)" -destination "$(EXAMPLE_DESTINATION)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO 2>&1 | xcbeautify --renderer github-actions

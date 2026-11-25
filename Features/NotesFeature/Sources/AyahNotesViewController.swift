@@ -33,6 +33,9 @@ final class AyahNotesViewController: UIHostingController<AyahNotesView>, NoteEdi
 
         configureTitle()
         navigationItem.largeTitleDisplayMode = .never
+        navigationItem.leftBarButtonItem = NavigationBarButton.close { [weak self] in
+            self?.dismiss(animated: true)
+        }
         configureEditButton()
     }
 

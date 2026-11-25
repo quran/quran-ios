@@ -36,8 +36,10 @@ public struct DataUnavailableView: View {
             .offset(y: proxy.size.height / 4)
             .frame(maxWidth: .infinity)
         }
-        .background(Color.systemGroupedBackground)
-        .ignoresSafeArea()
+        .background(Color.systemGroupedBackground.ignoresSafeArea())
+        // Respect the side safe areas so the text stays clear of side bars, like
+        // the vertical tab bar and status bar on iPhone Duo's outer display.
+        .ignoresSafeArea(.all, edges: .vertical)
     }
 
     // MARK: Internal

@@ -32,7 +32,42 @@ final class ImageDataServiceTextColumnTests: XCTestCase {
         XCTAssertGreaterThan(column.lowerBound, leftmostGlyph + 10)
     }
 
+    func testTextColumnIsTheInkOfPaddedLines() async throws {
+        // The 1421 database pads every line to x 14...1106, wider than its ink.
+        let bitmap = try PageBitmap.drawn(size: hafs1421ImageSize, glyphs: [
+            ([CGRect(x: 40, y: 0, width: 1040, height: hafs1421ImageSize.height)], .black),
+        ])
+
+        let column = try await hafs1421.wordFrames(page382, imageWidth: 1120, bitmap: bitmap).textColumn
+
+        XCTAssertEqual(column, 40 ... 1080)
+    }
+
+    func testLinesWithoutInkKeepTheirBoxEdges() async throws {
+        let bitmap = try PageBitmap.drawn(size: hafs1421ImageSize, glyphs: [])
+
+        let column = try await hafs1421.wordFrames(page382, imageWidth: 1120, bitmap: bitmap).textColumn
+
+        XCTAssertEqual(column, 14 ... 1106)
+    }
+
+    func testARealPageTextColumnIsItsInk() async throws {
+        // The 1405 boxes overhang the ink by about a pixel: x 101...1187 on page 3.
+        let service = ImageDataService(
+            ayahInfoDatabase: TestResources.resourceURL("hafs_1405_ayahinfo.db"),
+            imagesURL: TestResources.testDataURL.appendingPathComponent("images"),
+            ayahMarkerURL: nil
+        )
+
+        let column = try await service.imageForPage(Reading.hafs_1405.quran.pages[2]).textColumn
+
+        XCTAssertEqual(column, 102 ... 1186)
+    }
+
     // MARK: Private
+
+    private let hafs1421ImageSize = CGSize(width: 1120, height: 1792)
+    private let page382 = Reading.hafs_1421.quran.pages[381]
 
     private let hafs1421 = ImageDataService(
         ayahInfoDatabase: TestResources.resourceURL("hafs_1421_ayahinfo_1120.db"),

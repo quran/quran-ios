@@ -58,10 +58,10 @@ public struct ImageDataService {
         }
 
         // preload the image
-        let unloadedImage: UIImage = image
-        let preloadedImage = preloadImage(unloadedImage)
+        let bitmap = preloadImage(image)
+        let preloadedImage = bitmap.map { UIImage(cgImage: $0.image) } ?? image
 
-        let wordFrames = try await wordFrames(page, imageWidth: preloadedImage.size.width)
+        let wordFrames = try await wordFrames(page, imageWidth: preloadedImage.size.width, bitmap: bitmap)
         return ImagePage(
             image: preloadedImage,
             wordFrames: wordFrames.frames,
@@ -72,16 +72,17 @@ public struct ImageDataService {
 
     // MARK: Internal
 
-    /// The page's processed word frames, and its text column measured on the raw ones.
+    /// The page's processed word frames, and its text column measured on the raw ones narrowed to the ink.
     func wordFrames(
         _ page: Page,
-        imageWidth: CGFloat
+        imageWidth: CGFloat,
+        bitmap: PageBitmap? = nil
     ) async throws -> (frames: WordFrameCollection, textColumn: ClosedRange<CGFloat>?) {
         let plainWordFrames = try await persistence.wordFrameCollectionForPage(page)
-        return (
-            processor.processWordFrames(plainWordFrames),
-            processor.textColumn(plainWordFrames, imageWidth: imageWidth)
-        )
+        let textColumn = processor.textColumn(plainWordFrames, imageWidth: imageWidth) { line in
+            bitmap?.inkExtent(in: line) ?? line
+        }
+        return (processor.processWordFrames(plainWordFrames), textColumn)
     }
 
     // MARK: Private
@@ -102,7 +103,7 @@ public struct ImageDataService {
         imagesURL.appendingPathComponent("page\(page.pageNumber.as3DigitString()).png")
     }
 
-    private func preloadImage(_ imageToPreload: UIImage, cropInsets: UIEdgeInsets = .zero) -> UIImage {
+    private func preloadImage(_ imageToPreload: UIImage, cropInsets: UIEdgeInsets = .zero) -> PageBitmap? {
         let targetImage: CGImage?
         if let cgImage = imageToPreload.cgImage {
             targetImage = cgImage
@@ -113,7 +114,7 @@ public struct ImageDataService {
             targetImage = nil
         }
         guard var cgimg = targetImage else {
-            return imageToPreload
+            return nil
         }
 
         let rect = CGRect(x: 0, y: 0, width: cgimg.width, height: cgimg.height)
@@ -121,29 +122,7 @@ public struct ImageDataService {
         let cropped = cgimg.cropping(to: croppedRect)
         cgimg = cropped ?? cgimg
 
-        // make a bitmap context of a suitable size to draw to, forcing decode
-        let width = cgimg.width
-        let height = cgimg.height
-
-        let colourSpace = CGColorSpaceCreateDeviceRGB()
-        let imageContext = CGContext(
-            data: nil,
-            width: width,
-            height: height,
-            bitsPerComponent: 8,
-            bytesPerRow: width * 4,
-            space: colourSpace,
-            bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue | CGBitmapInfo.byteOrder32Little.rawValue
-        )
-
-        // draw the image to the context, release it
-        imageContext?.draw(cgimg, in: CGRect(x: 0, y: 0, width: width, height: height))
-
-        // now get an image ref from the context
-        if let outputImage = imageContext?.makeImage() {
-            let cachedImage = UIImage(cgImage: outputImage)
-            return cachedImage
-        }
-        return imageToPreload
+        // draw to a bitmap, forcing decode
+        return PageBitmap(cgimg)
     }
 }

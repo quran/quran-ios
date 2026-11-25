@@ -52,6 +52,11 @@ public struct AudioBannerBuilder {
         return (viewController, viewModel)
     }
 
+    /// The banner built with `viewModel` must stay in the view hierarchy, to present the sheets the items open.
+    public func buildToolbarItems(for viewModel: AudioBannerViewModel) -> AudioToolbarItems {
+        AudioToolbarItems(viewModel: viewModel)
+    }
+
     // MARK: Internal
 
     let container: AppDependencies

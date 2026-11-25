@@ -85,6 +85,12 @@ public final class EditController {
     }
 
     private func updateEditButton() {
+        if #available(iOS 27.1, *) {
+            // Editing doesn't switch tabs, so where the tab bar shares the vertical bar with these items, like on
+            // iPhone Duo, it compresses first and Done stays out of the overflow menu. Without a vertical bar,
+            // this changes nothing.
+            navigationItem.verticalBarCompressionBehavior = buttonEditModeState?.isEditing == true ? .prefersBarItems : .automatic
+        }
         if let editButton {
             navigationItem.setRightBarButtonItems([editButton] + listItems + customItems, animated: true)
         } else {

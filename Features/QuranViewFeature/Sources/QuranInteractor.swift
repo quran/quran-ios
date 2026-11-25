@@ -43,6 +43,8 @@ import WordTextService
 @MainActor
 protocol QuranPresentable: UIViewController {
     var pagesView: UIView { get }
+    /// The reader's window, or `nil` while the reader isn't in one.
+    var readerWindow: ReaderWindow? { get }
 
     func startHiddenBarsTimer()
     func hideBars()
@@ -66,7 +68,7 @@ protocol QuranPresentable: UIViewController {
     func presentAyahNotes(_ viewController: UIViewController)
     #endif
     func presentTranslatedVerse(_ viewController: UIViewController, didDismiss: @escaping () -> Void)
-    func presentAudioBanner(_ audioBanner: UIViewController)
+    func presentAudioBanner(_ audioBanner: UIViewController, toolbarItems: AudioToolbarItems)
     func presentWordPointer(_ viewController: UIViewController)
     func presentQuranContent(_ viewController: ContentViewController)
     func presentTranslationsSelection(_ viewController: UIViewController)
@@ -192,6 +194,10 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
         state.linePageDisplay = readingPreferences.reading == .indoPak ? .conditional : .alwaysOff
         // TODO: Enable vertical scrolling.
         state.verticalScrolling = .alwaysOff
+        // Decide from the reader's window, which changes size when iPhone Duo folds or unfolds.
+        let windowOptions = MoreMenuWindowOptions(window: presenter?.readerWindow)
+        state.twoPages = windowOptions.twoPages
+        state.orientation = windowOptions.orientation
         let model = MoreMenuModel(isWordPointerActive: isWordPointerActive, state: state)
         let viewController = deps.moreMenuBuilder.build(withListener: self, model: model)
         presenter?.presentMoreMenu(viewController)
@@ -543,7 +549,7 @@ final class QuranInteractor: WordPointerListener, ContentListener, NoteEditorLis
     private func loadContent() {
         let (viewController, viewModel) = deps.audioBannerBuilder.build(withListener: self)
         audioBanner = viewModel
-        presenter?.presentAudioBanner(viewController)
+        presenter?.presentAudioBanner(viewController, toolbarItems: deps.audioBannerBuilder.buildToolbarItems(for: viewModel))
 
         (contentViewController, contentViewModel) = presentQuranContent(with: input)
         presenter?.startHiddenBarsTimer()

@@ -13,13 +13,26 @@ import UIKit
 import UIx
 
 public struct ToastAction {
-    public let title: String
-    public let handler: () -> Void
+    // MARK: Lifecycle
 
-    public init(title: String, handler: @escaping () -> Void) {
+    public init(title: String, appearance: Appearance = .accent, handler: @escaping () -> Void) {
         self.title = title
+        self.appearance = appearance
         self.handler = handler
     }
+
+    // MARK: Public
+
+    public enum Appearance {
+        /// A capsule filled with the app tint.
+        case accent
+        /// The compact Quran ID button, showing `title` beside the mark.
+        case quranID
+    }
+
+    public let title: String
+    public let appearance: Appearance
+    public let handler: () -> Void
 }
 
 public struct Toast: Identifiable {
@@ -131,6 +144,22 @@ final class ToastContainerViewController: UIViewController {
 
     var dismissCompletion: (() -> Void)?
 
+    override var childForStatusBarHidden: UIViewController? { appScreen }
+    override var childForStatusBarStyle: UIViewController? { appScreen }
+    override var childForHomeIndicatorAutoHidden: UIViewController? { appScreen }
+
+    /// The screen that sets the status bar and home indicator in the app's window among `windows`, as if
+    /// the toast weren't there: its root, or the last screen presented over it that takes them over.
+    static func appScreen(in windows: [UIWindow]) -> UIViewController? {
+        let appWindow = windows.last { !($0 is ToastWindow) && !$0.isHidden && $0.windowLevel == .normal }
+        guard let root = appWindow?.rootViewController else {
+            return nil
+        }
+        return sequence(first: root, next: \.presentedViewController)
+            .filter { $0 === root || $0.modalPresentationStyle == .fullScreen || $0.modalPresentationCapturesStatusBarAppearance }
+            .last
+    }
+
     override func loadView() {
         view = PassThroughView()
     }
@@ -226,6 +255,11 @@ final class ToastContainerViewController: UIViewController {
             oldValue?.isActive = false
             activeConstraint?.isActive = true
         }
+    }
+
+    /// Read when UIKit asks, since the app's screens change while the toast shows.
+    private var appScreen: UIViewController? {
+        Self.appScreen(in: viewIfLoaded?.window?.windowScene?.windows ?? [])
     }
 
     private func setUpShowToastConstraints() {

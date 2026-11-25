@@ -163,8 +163,8 @@ public final class ContentViewModel: ObservableObject {
 
     @Published var toast: Toast?
 
-    var pagingStrategy: PagingStrategy {
-        twoPagesEnabled ? .doublePage : .singlePage
+    func pagingStrategy(windowSize: CGSize) -> PagingStrategy {
+        TwoPagesUtils.isEnabled(preference: twoPagesEnabled, windowSize: windowSize) ? .doublePage : .singlePage
     }
 
     func onViewLongPressStarted(at point: CGPoint, sourceView: UIView, verse: AyahNumber) {

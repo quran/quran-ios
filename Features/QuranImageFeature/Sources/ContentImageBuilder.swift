@@ -119,9 +119,8 @@ public struct ContentImageBuilder {
     static func readingDirectory(_ reading: Reading, container: AppDependencies) -> URL {
         let remoteResource = container.remoteResources?.resource(for: reading)
         let remotePath = remoteResource?.downloadDestination.url
-        let bundlePath = { Bundle.main.url(forResource: reading.localPath, withExtension: nil) }
         logger.info("Images: Use \(remoteResource != nil ? "remote" : "bundle") For reading \(reading)")
-        return remotePath ?? bundlePath()!
+        return remotePath ?? reading.bundleURL!
     }
 
     // MARK: Private

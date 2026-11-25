@@ -366,8 +366,11 @@ struct SuraNamesView: View {
             HStack(spacing: 0) {
                 ForEach(Array(references.enumerated()), id: \.offset) { index, reference in
                     if index > 0 {
+                        // Right to left, Text lays out both spaces of " · " on the dot's left, so the name on its right
+                        // would touch it.
                         Text(Self.separator)
                             .font(size.plainFont)
+                            .environment(\.layoutDirection, .leftToRight)
                     }
                     QuranReferenceView(reference: reference, size: size)
                 }

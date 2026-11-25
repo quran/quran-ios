@@ -30,6 +30,22 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
         }
     }
 
+    /// The quarter name centres on the sura names' text, so the two share a baseline.
+    func test_header_withLocalizedNames_putsTheQuarterNameOnTheirBaseline() throws {
+        guard #available(iOS 16.0, *) else { throw XCTSkip("Measuring baselines needs Layout") }
+        for size in [DynamicTypeSize.large, .xxxLarge] {
+            let probe = HeaderBaselineProbe()
+            let content = HeaderBaselineProbeLayout(probe: probe) {
+                header.frame(width: 600)
+            }
+            _ = UIHostingController(rootView: pinned(content, size))
+                .sizeThatFits(in: CGSize(width: 600, height: CGFloat.greatestFiniteMagnitude))
+
+            XCTAssertLessThan(try XCTUnwrap(probe.first), try XCTUnwrap(probe.height) - 1, "\(size)")
+            XCTAssertEqual(try XCTUnwrap(probe.first), try XCTUnwrap(probe.last), accuracy: 0.5, "\(size)")
+        }
+    }
+
     func test_header_keepsTheDecoratedLineHeight() throws {
         guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
         XCTAssertGreaterThan(
@@ -203,5 +219,29 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
         let controller = UIHostingController(rootView: pinned(header.frame(width: width), size))
         let height = controller.sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude)).height
         return height - ContentDimension.interSpacing
+    }
+}
+
+private final class HeaderBaselineProbe {
+    var first: CGFloat?
+    var last: CGFloat?
+    var height: CGFloat?
+}
+
+/// Records its only subview's first and last text baselines, which stacks report as their topmost and bottommost.
+@available(iOS 16.0, *)
+private struct HeaderBaselineProbeLayout: Layout {
+    let probe: HeaderBaselineProbe
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let dimensions = subviews[0].dimensions(in: proposal)
+        probe.first = dimensions[VerticalAlignment.firstTextBaseline]
+        probe.last = dimensions[VerticalAlignment.lastTextBaseline]
+        probe.height = dimensions.height
+        return CGSize(width: dimensions.width, height: dimensions.height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        subviews[0].place(at: bounds.origin, proposal: proposal)
     }
 }

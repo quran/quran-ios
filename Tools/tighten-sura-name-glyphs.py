@@ -5,12 +5,9 @@
 # The glyphs then behave like regular text: alignment and centering follow the ink, and the gaps come from
 # the spacing around them.
 #
-# It also lowers the glyphs onto the system font's Arabic writing line. Measured as the centre of the
-# stroke the letters sit on, the calligraphy's line was a median 149 units (of 1024) above the font's
-# baseline, with no glyph-to-glyph pattern worth following, while the system font's Arabic sits its line
-# 0.109 em above its own baseline. Beside text at the sizes MultipartText pairs them, 16/13, 19/15, 20/17
-# and 24/20 pt, lowering every sura glyph by 58 units leaves the two lines at most 0.07 pt apart.
-# DecoratedSuraNameGlyphTests measures this.
+# It also lowers the glyphs, all by the same amount, so the calligraphy's writing line meets the system
+# font's Arabic writing line beside it at the sizes MultipartText pairs them: 15/12, 16/13, 19/15, 20/17
+# and 24/20 pt. DecoratedSuraNameGlyphTests measures both lines.
 #
 # Only the sura glyphs' outlines and horizontal metrics change; the font has no kerning, GPOS or hinting
 # to update. The head and hhea extents and OS/2 xAvgCharWidth are recalculated; ascent and descent stay.
@@ -28,7 +25,8 @@ from fontTools.ttLib import TTFont
 # QuranReference.decoratedSuraNameCodePoints: 0xE900–0xE972 except 0xE903, an unused glyph left as it is.
 SURA_CODE_POINTS = set(range(0xE900, 0xE973)) - {0xE903}
 
-# The sura glyphs' median bottom once lowered: their tails' median was -44 units, and they move down 58.
+# The sura glyphs' median ink bottom once lowered: it was -44 units, and they move down 58.
+# A median, so if a glyph change moves it, running this again moves every glyph to put it back.
 MEDIAN_Y_MIN = -102
 
 
@@ -42,9 +40,10 @@ def tighten(path):
 
     glyf = font["glyf"]
     hmtx = font["hmtx"]
-    names = [name for code_point, name in font.getBestCmap().items() if code_point in SURA_CODE_POINTS]
+    # Distinct glyphs, so one that several code points share isn't moved twice.
+    names = sorted({name for code_point, name in font.getBestCmap().items() if code_point in SURA_CODE_POINTS})
     if len(names) != 114:
-        sys.exit(f"Expected 114 sura glyphs, found {len(names)}")
+        sys.exit(f"Expected 114 distinct sura glyphs, found {len(names)}")
 
     for name in names:
         glyph = glyf[name]

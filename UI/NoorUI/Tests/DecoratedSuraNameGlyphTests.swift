@@ -52,10 +52,22 @@ final class DecoratedSuraNameGlyphTests: XCTestCase {
         let glyphLine = median(glyphLines)
         let textLine = median(textLines)
 
-        for size in [MultipartText.FontSize.footnote, .subheadline, .body, .title3] {
+        for size in [MultipartText.FontSize.caption, .footnote, .subheadline, .body, .title3] {
             let offset = glyphLine * size.suraUIFont.pointSize - textLine * size.plainUIFont.pointSize
             XCTAssertEqual(offset, 0, accuracy: 0.2, "\(size): glyphs \(glyphLine) em, text \(textLine) em")
         }
+    }
+
+    func test_decoratedGlyphInkCenter_isTheGlyphsMedianInkCenter() throws {
+        let font = UIFont(.suraNames, size: Self.measuringSize) as CTFont
+        let centers = try Quran.hafsMadani1405.suras.map { sura in
+            var character = try XCTUnwrap(QuranReference.sura(sura).rawValue(locale: Locale(identifier: "ar")).utf16.first)
+            var glyph = CGGlyph()
+            XCTAssertTrue(CTFontGetGlyphsForCharacters(font, &character, &glyph, 1))
+            return try XCTUnwrap(CTFontCreatePathForGlyph(font, glyph, nil)).boundingBoxOfPath.midY / Self.measuringSize
+        }
+
+        XCTAssertEqual(median(centers), QuranReference.decoratedGlyphInkCenter, accuracy: 0.005)
     }
 
     // MARK: Private
@@ -71,7 +83,8 @@ final class DecoratedSuraNameGlyphTests: XCTestCase {
         ])
         let path = CGMutablePath()
         for run in try XCTUnwrap(CTLineGetGlyphRuns(CTLineCreateWithAttributedString(attributed)) as? [CTRun]) {
-            let font = (CTRunGetAttributes(run) as NSDictionary)[kCTFontAttributeName] as! CTFont
+            let attributes = try XCTUnwrap(CTRunGetAttributes(run) as? [NSAttributedString.Key: Any])
+            let font = try XCTUnwrap(attributes[.font] as? UIFont) as CTFont
             let count = CTRunGetGlyphCount(run)
             var glyphs = [CGGlyph](repeating: 0, count: count)
             var positions = [CGPoint](repeating: .zero, count: count)

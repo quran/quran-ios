@@ -183,6 +183,25 @@ enum QuranReference {
     ]
 }
 
+extension QuranReference {
+    /// The middle of the decorated glyphs' ink, in em above their baseline: the median over the sura glyphs.
+    /// `DecoratedSuraNameGlyphTests` checks it against the font.
+    static let decoratedGlyphInkCenter: CGFloat = 0.348
+}
+
+extension VerticalAlignment {
+    /// The middle of what a sura reference shows: its localized name's text where it has one, otherwise its decorated
+    /// glyph's ink; elsewhere, the view's centre. The calligraphy sits low in its line box, so centring on this,
+    /// rather than `center`, centres what you see.
+    static let decoratedSuraNameCenter = VerticalAlignment(DecoratedSuraNameCenter.self)
+
+    private enum DecoratedSuraNameCenter: AlignmentID {
+        static func defaultValue(in dimensions: ViewDimensions) -> CGFloat {
+            dimensions[VerticalAlignment.center]
+        }
+    }
+}
+
 struct QuranReferenceView: View {
     // MARK: Lifecycle
 
@@ -284,7 +303,8 @@ struct QuranReferenceView: View {
         if let localizedName = reference.localizedName(locale: locale) {
             // A nil weight would drop one set by an enclosing view, like a toast's semibold title.
             let name = Text(localizedName).font(size.plainFont)
-            emphasizesSura ? name.fontWeight(.heavy) : name
+            (emphasizesSura ? name.fontWeight(.heavy) : name)
+                .alignmentGuide(.decoratedSuraNameCenter) { $0[VerticalAlignment.center] }
         }
 
         if reference.showsArabicName(locale: locale) {
@@ -309,10 +329,20 @@ struct QuranReferenceView: View {
     }
 
     /// The glyphs sit on the font's baseline, but their ink rises above its ascender, so the padding makes room for it.
+    @ViewBuilder
     private func decoratedGlyph(_ text: String) -> some View {
-        Text(text)
-            .font(size.suraFont)
-            .padding(.top, glyphTopPadding)
+        let glyph = Text(text).font(size.suraFont)
+        Group {
+            if reference.localizedName(locale: locale) == nil {
+                // The font's line box is one em tall.
+                glyph.alignmentGuide(.decoratedSuraNameCenter) {
+                    $0[.firstTextBaseline] - $0.height * QuranReference.decoratedGlyphInkCenter
+                }
+            } else {
+                glyph
+            }
+        }
+        .padding(.top, glyphTopPadding)
     }
 }
 

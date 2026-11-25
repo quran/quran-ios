@@ -35,6 +35,10 @@ jobs:
     - name: Install xcbeautify
       run: brew install xcbeautify
 
+    # The restored cache can hold an earlier run's result bundles; upload only this run's.
+    - name: Remove cached test results
+      run: rm -rf .build/DerivedData/no-sync/Logs/Test
+
     - name: Run tests
       run: make test-no-sync
 
@@ -74,6 +78,10 @@ jobs:
 
     - name: Install xcbeautify
       run: brew install xcbeautify
+
+    # The restored cache can hold an earlier run's result bundles; upload only this run's.
+    - name: Remove cached test results
+      run: rm -rf .build/DerivedData/sync/Logs/Test
 
     - name: Run tests
       run: make test-sync

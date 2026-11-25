@@ -146,7 +146,7 @@ public struct LinePageAssetService {
         var lines: [LinePageAssets.LineImage] = []
         for lineNumber in 1 ... metrics.lineCount {
             let imageURL = lineImageURL(pageNumber: page.pageNumber, lineNumber: lineNumber, in: readingDirectory)
-            guard let image = UIImage(contentsOfFile: imageURL.path) else {
+            guard let image = decodedImage(contentsOfFile: imageURL.path) else {
                 return .unavailable
             }
             lines.append(LinePageAssets.LineImage(lineNumber: lineNumber, imageURL: imageURL, image: image))
@@ -161,6 +161,17 @@ public struct LinePageAssetService {
                 ayahMarkerURL: ayahMarkerURL
             )
         )
+    }
+
+    /// Loads the image decoded into a bitmap, here off the main thread, so drawing it, including through SwiftUI's
+    /// renderer, never decodes the PNG on the main thread. Falls back to the lazily decoded image if decoding fails.
+    private func decodedImage(contentsOfFile path: String) -> UIImage? {
+        guard let image = UIImage(contentsOfFile: path) else {
+            return nil
+        }
+        return image.cgImage
+            .flatMap(PageBitmap.init)
+            .map { UIImage(cgImage: $0.image, scale: image.scale, orientation: image.imageOrientation) } ?? image
     }
 
     private func ayahInfoDatabaseURL(in readingDirectory: URL) -> URL {
@@ -202,7 +213,7 @@ public struct LinePageAssetService {
         return files
             .filter { $0.pathExtension.lowercased() == "png" }
             .compactMap { url in
-                guard let image = UIImage(contentsOfFile: url.path) else {
+                guard let image = decodedImage(contentsOfFile: url.path) else {
                     return nil
                 }
                 let baseName = url.deletingPathExtension().lastPathComponent

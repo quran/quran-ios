@@ -4,7 +4,7 @@
 
 import CoreGraphics
 
-/// A page image decoded into a 32-bit premultiplied BGRA bitmap: drawing it needs no further decoding,
+/// A page or line image decoded into a 32-bit premultiplied BGRA bitmap: drawing it needs no further decoding,
 /// and its pixels tell where the ink is.
 struct PageBitmap {
     // MARK: Lifecycle

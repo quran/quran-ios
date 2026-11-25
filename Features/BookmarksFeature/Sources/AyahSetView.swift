@@ -45,7 +45,7 @@ private struct AyahSetContentView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.systemGroupedBackground)
+        .background(Color.systemGroupedBackground.ignoresSafeArea())
     }
 
     private var ayahList: some View {

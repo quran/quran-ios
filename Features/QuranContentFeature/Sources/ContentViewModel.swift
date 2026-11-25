@@ -160,8 +160,8 @@ public final class ContentViewModel: ObservableObject {
 
     @PublishedBinding var overlays: VerseOverlays
 
-    func pagingStrategy(windowWidth: CGFloat) -> PagingStrategy {
-        TwoPagesUtils.isEnabled(preference: twoPagesEnabled, windowWidth: windowWidth) ? .doublePage : .singlePage
+    func pagingStrategy(windowSize: CGSize) -> PagingStrategy {
+        TwoPagesUtils.isEnabled(preference: twoPagesEnabled, windowSize: windowSize) ? .doublePage : .singlePage
     }
 
     func onViewLongPressStarted(at point: CGPoint, sourceView: UIView, verse: AyahNumber) {

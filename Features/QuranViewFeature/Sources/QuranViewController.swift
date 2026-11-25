@@ -66,7 +66,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         }
         let traits = window.traitCollection
         return ReaderWindow(
-            width: window.bounds.width,
+            size: window.bounds.size,
             isRegularWidthAndHeight: traits.horizontalSizeClass == .regular && traits.verticalSizeClass == .regular,
             isPhone: traits.userInterfaceIdiom == .phone
         )

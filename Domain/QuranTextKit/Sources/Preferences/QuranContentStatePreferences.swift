@@ -21,7 +21,7 @@ public struct QuranContentStatePreferences {
     public var quranMode: QuranMode
 
     /// Whether the reader may show two pages side by side. On by default.
-    /// Resolve it with `TwoPagesUtils.isEnabled(preference:windowWidth:)`.
+    /// Resolve it with `TwoPagesUtils.isEnabled(preference:windowSize:)`.
     @Preference(twoPagesEnabled)
     public var twoPagesEnabled: Bool
 

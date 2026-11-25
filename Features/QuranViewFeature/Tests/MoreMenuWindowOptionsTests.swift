@@ -14,8 +14,17 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
 
     func test_iPadLandscape_offersTwoPagesAndKeepsRotation() {
         assertOptions(
-            for: ReaderWindow(width: 1194, isRegularWidthAndHeight: true, isPhone: false),
+            for: ReaderWindow(size: CGSize(width: 1194, height: 834), isRegularWidthAndHeight: true, isPhone: false),
             twoPages: .conditional,
+            orientation: .conditional
+        )
+    }
+
+    func test_13InchIPadPortrait_hidesTwoPagesAndKeepsRotation() {
+        // Wider than 900pt, but the reader shows one page in portrait.
+        assertOptions(
+            for: ReaderWindow(size: CGSize(width: 1032, height: 1376), isRegularWidthAndHeight: true, isPhone: false),
+            twoPages: .alwaysOff,
             orientation: .conditional
         )
     }
@@ -23,7 +32,7 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
     func test_iPadNarrowSplit_hidesTwoPagesAndKeepsRotation() {
         // A third of an iPad in landscape has a compact width.
         assertOptions(
-            for: ReaderWindow(width: 375, isRegularWidthAndHeight: false, isPhone: false),
+            for: ReaderWindow(size: CGSize(width: 375, height: 834), isRegularWidthAndHeight: false, isPhone: false),
             twoPages: .alwaysOff,
             orientation: .conditional
         )
@@ -31,7 +40,7 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
 
     func test_iPhoneLandscape_hidesTwoPagesAndKeepsRotation() {
         assertOptions(
-            for: ReaderWindow(width: 874, isRegularWidthAndHeight: false, isPhone: true),
+            for: ReaderWindow(size: CGSize(width: 874, height: 402), isRegularWidthAndHeight: false, isPhone: true),
             twoPages: .alwaysOff,
             orientation: .conditional
         )
@@ -40,7 +49,7 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
     func test_iPhoneProMaxLandscape_offersTwoPagesAndKeepsRotation() {
         // Regular width, but compact height.
         assertOptions(
-            for: ReaderWindow(width: 956, isRegularWidthAndHeight: false, isPhone: true),
+            for: ReaderWindow(size: CGSize(width: 956, height: 440), isRegularWidthAndHeight: false, isPhone: true),
             twoPages: .conditional,
             orientation: .conditional
         )
@@ -48,7 +57,7 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
 
     func test_iPhoneDuoFolded_hidesTwoPagesAndKeepsRotation() {
         assertOptions(
-            for: ReaderWindow(width: 466, isRegularWidthAndHeight: false, isPhone: true),
+            for: ReaderWindow(size: CGSize(width: 466, height: 1010), isRegularWidthAndHeight: false, isPhone: true),
             twoPages: .alwaysOff,
             orientation: .conditional
         )
@@ -56,7 +65,7 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
 
     func test_iPhoneDuoUnfoldedPortrait_hidesTwoPagesAndRotation() {
         assertOptions(
-            for: ReaderWindow(width: 669, isRegularWidthAndHeight: true, isPhone: true),
+            for: ReaderWindow(size: CGSize(width: 669, height: 951), isRegularWidthAndHeight: true, isPhone: true),
             twoPages: .alwaysOff,
             orientation: .alwaysOff
         )
@@ -64,7 +73,7 @@ final class MoreMenuWindowOptionsTests: XCTestCase {
 
     func test_iPhoneDuoUnfoldedLandscape_offersTwoPagesAndHidesRotation() {
         assertOptions(
-            for: ReaderWindow(width: 951, isRegularWidthAndHeight: true, isPhone: true),
+            for: ReaderWindow(size: CGSize(width: 951, height: 669), isRegularWidthAndHeight: true, isPhone: true),
             twoPages: .conditional,
             orientation: .alwaysOff
         )

@@ -9,7 +9,8 @@ import UIKit
 import XCTest
 @testable import NoorUI
 
-/// `Tools/tighten-sura-name-glyphs.py` makes the decorated sura names sit flush in their boxes, like regular text.
+/// `Tools/tighten-sura-name-glyphs.py` makes the decorated sura names sit flush in their boxes, like regular text, and
+/// lowers them onto the system font's Arabic writing line.
 final class DecoratedSuraNameGlyphTests: XCTestCase {
     override func setUp() {
         super.setUp()
@@ -37,7 +38,106 @@ final class DecoratedSuraNameGlyphTests: XCTestCase {
         XCTAssertEqual(try metrics(of: 0x20).advance, 16, accuracy: 0.01)
     }
 
+    /// Baseline alignment puts the glyphs' baseline on the text's, so where each font draws its letters above its
+    /// baseline decides whether they look level.
+    func test_suraGlyphs_sitOnTheWritingLineOfTheArabicTextBesideThem() throws {
+        let glyphFont = UIFont(.suraNames, size: Self.measuringSize) as CTFont
+        let glyphLines = try Quran.hafsMadani1405.suras.map { sura in
+            var character = try XCTUnwrap(QuranReference.sura(sura).rawValue(locale: Locale(identifier: "ar")).utf16.first)
+            var glyph = CGGlyph()
+            XCTAssertTrue(CTFontGetGlyphsForCharacters(glyphFont, &character, &glyph, 1))
+            return try writingLine(of: XCTUnwrap(CTFontCreatePathForGlyph(glyphFont, glyph, nil)))
+        }
+        let textLines = try ["الصفحة", "عند", "سورة البقرة", "بسم الله الرحمن الرحيم"].map { try writingLine(of: arabicTextPath($0)) }
+        let glyphLine = median(glyphLines)
+        let textLine = median(textLines)
+
+        for size in [MultipartText.FontSize.footnote, .subheadline, .body, .title3] {
+            let offset = glyphLine * size.suraUIFont.pointSize - textLine * size.plainUIFont.pointSize
+            XCTAssertEqual(offset, 0, accuracy: 0.2, "\(size): glyphs \(glyphLine) em, text \(textLine) em")
+        }
+    }
+
     // MARK: Private
+
+    /// Pixels per em when measuring writing lines.
+    private static let measuringSize: CGFloat = 256
+
+    /// The plain Arabic text as the system font draws it, at the measuring size.
+    private func arabicTextPath(_ text: String) throws -> CGPath {
+        let attributed = NSAttributedString(string: text, attributes: [
+            .font: UIFont.systemFont(ofSize: Self.measuringSize),
+            NSAttributedString.Key(kCTLanguageAttributeName as String): "ar",
+        ])
+        let path = CGMutablePath()
+        for run in try XCTUnwrap(CTLineGetGlyphRuns(CTLineCreateWithAttributedString(attributed)) as? [CTRun]) {
+            let font = (CTRunGetAttributes(run) as NSDictionary)[kCTFontAttributeName] as! CTFont
+            let count = CTRunGetGlyphCount(run)
+            var glyphs = [CGGlyph](repeating: 0, count: count)
+            var positions = [CGPoint](repeating: .zero, count: count)
+            CTRunGetGlyphs(run, CFRange(location: 0, length: count), &glyphs)
+            CTRunGetPositions(run, CFRange(location: 0, length: count), &positions)
+            for (glyph, position) in zip(glyphs, positions) {
+                if let glyphPath = CTFontCreatePathForGlyph(font, glyph, nil) {
+                    path.addPath(glyphPath, transform: CGAffineTransform(translationX: position.x, y: position.y))
+                }
+            }
+        }
+        return path
+    }
+
+    /// Where the stroke the letters sit on runs, in em above the baseline: the centre of the densest band of ink
+    /// rows just above where the letters' bodies start, so tails below and letters stacked above don't count.
+    private func writingLine(of path: CGPath) throws -> CGFloat {
+        let em = Self.measuringSize
+        let width = Int(path.boundingBoxOfPath.maxX) + 4
+        let height = Int(em * 1.4)
+        let baseline = Int(em * 0.3)
+        var pixels = [UInt8](repeating: 0, count: width * height)
+        let context = try XCTUnwrap(CGContext(
+            data: &pixels,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: width,
+            space: CGColorSpaceCreateDeviceGray(),
+            bitmapInfo: CGImageAlphaInfo.none.rawValue
+        ))
+        context.setFillColor(gray: 1, alpha: 1)
+        context.translateBy(x: 2, y: CGFloat(baseline))
+        context.addPath(path)
+        context.fillPath()
+
+        // Ink per row, from the bottom up.
+        var rows = [Int](repeating: 0, count: height)
+        pixels.withUnsafeBufferPointer { pixels in
+            for row in 0 ..< height {
+                var ink = 0
+                for x in 0 ..< width {
+                    ink += Int(pixels[row * width + x])
+                }
+                rows[height - 1 - row] = ink
+            }
+        }
+        let densest = try XCTUnwrap(rows.max())
+        let bodyBottom = try XCTUnwrap(rows.firstIndex { Double($0) >= 0.35 * Double(densest) })
+        let window = bodyBottom ... min(height - 1, bodyBottom + Int(em * 200 / 1024))
+        let peak = try XCTUnwrap(window.max { rows[$0] < rows[$1] })
+        var bottom = peak
+        var top = peak
+        while bottom > window.lowerBound, Double(rows[bottom - 1]) >= 0.85 * Double(rows[peak]) {
+            bottom -= 1
+        }
+        while top < window.upperBound, Double(rows[top + 1]) >= 0.85 * Double(rows[peak]) {
+            top += 1
+        }
+        return (CGFloat(bottom + top + 1) / 2 - CGFloat(baseline)) / em
+    }
+
+    private func median(_ values: [CGFloat]) -> CGFloat {
+        let sorted = values.sorted()
+        return (sorted[(sorted.count - 1) / 2] + sorted[sorted.count / 2]) / 2
+    }
 
     /// The glyph's advance and ink at 16 pt.
     private func metrics(of character: UInt16) throws -> (advance: CGFloat, ink: CGRect) {

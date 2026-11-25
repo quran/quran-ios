@@ -105,7 +105,7 @@ private struct NotesViewUI: View {
 
     var body: some View {
         content
-            .background(Color.systemGroupedBackground)
+            .background(Color.systemGroupedBackground.ignoresSafeArea())
     }
 
     private var content: some View {

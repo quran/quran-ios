@@ -117,6 +117,15 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         )
 
         setupContentStatus()
+        if #available(iOS 17.0, *) {
+            var traits: [UITrait] = [UITraitVerticalSizeClass.self]
+            if #available(iOS 27.1, *) {
+                traits += UITraitCollection.systemTraitsAffectingVerticalBarEdge
+            }
+            registerForTraitChanges(traits) { (self: Self, _: UITraitCollection) in
+                self.updateContentVerticalBarContent()
+            }
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -132,6 +141,14 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         crashContext.clearActiveList(owner: "quran_translation")
         navigationController?.setNavigationBarHidden(false, animated: animated)
         setOuterTabBarHiddenForIOS26(false, animated: animated)
+        decidesStatusBar = false
+        updateContentVerticalBarContent()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        decidesStatusBar = true
+        updateContentVerticalBarContent()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -268,6 +285,8 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     #endif
 
     func presentQuranContent(_ viewController: ContentViewController) {
+        contentViewController = viewController
+        updateContentVerticalBarContent()
         addContent(viewController)
     }
 
@@ -363,6 +382,7 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
     private lazy var popoverPresenter = PhonePopoverPresenter(delegate: self)
     private let presentationsMonitor = PresentationsMonitor()
     private weak var ayahMenuViewController: UIViewController?
+    private weak var contentViewController: ContentViewController?
 
     // MARK: - Navigation bars
 
@@ -404,6 +424,20 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
             setNeedsStatusBarAppearanceUpdate()
             setNeedsUpdateOfHomeIndicatorAutoHidden()
         }
+    }
+
+    /// Whether the reader is the screen on top, which decides the status bar. During a back swipe the screen below
+    /// decides it, and a cancelled swipe hands it back.
+    private var decidesStatusBar = false
+
+    /// Only windows with a vertical bar get the status bar state, so elsewhere bar toggles leave the pages alone.
+    private var verticalBarContent: VerticalBarContent {
+        guard #available(iOS 27.1, *), decidesStatusBar,
+              let window = view.window, window.traitCollection.verticalBarEdge != .unspecified
+        else {
+            return VerticalBarContent()
+        }
+        return VerticalBarContent(statusBarHidden: prefersStatusBarHidden)
     }
 
     private func stopBarHiddenTimer() {
@@ -448,6 +482,11 @@ class QuranViewController: BaseViewController, QuranViewDelegate,
         NoorAnimation.animate {
             self.statusBarHidden = hidden
         }
+        updateContentVerticalBarContent()
+    }
+
+    private func updateContentVerticalBarContent() {
+        contentViewController?.verticalBarContent = verticalBarContent
     }
 
     private func addContent(_ viewController: UIViewController) {

@@ -218,7 +218,7 @@ final class FlatMapLatestTests: XCTestCase {
         try await runs.value
     }
 
-    func test_cancellingTheConsumerWhileTheInnerYields_returns() async throws {
+    func test_cancellingTheConsumerWhileTheInnerYields_returns() async {
         // Cancelling the consumer runs the stream's termination handler while its task is locked, and resuming
         // the consumer with a value needs that task, so a yield must not hold the lock the handler takes.
         let finished = expectation(description: "Every cancelled consumer returns")

@@ -114,11 +114,7 @@ enum QuranReference {
             case .decoratedGlyph: size.suraUIFont
             case .indoPakText: size.quranUIFont(.indoPak)
             }
-            var arabicNameAttributes: [NSAttributedString.Key: Any] = [.font: arabicNameFont]
-            if !arabicName.isIndoPakText {
-                arabicNameAttributes[.baselineOffset] = -2
-            }
-            result.append(NSAttributedString(string: arabicName.text, attributes: arabicNameAttributes))
+            result.append(NSAttributedString(string: arabicName.text, attributes: [.font: arabicNameFont]))
         }
 
         if let coordinate = coordinate(locale: locale) {

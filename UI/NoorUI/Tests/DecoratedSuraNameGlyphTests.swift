@@ -101,8 +101,7 @@ final class DecoratedSuraNameGlyphTests: XCTestCase {
         return path
     }
 
-    /// Where the stroke the letters sit on runs, in em above the baseline: the centre of the densest band of ink
-    /// rows just above where the letters' bodies start, so tails below and letters stacked above don't count.
+    /// Where the stroke the letters sit on runs, in em above the baseline.
     private func writingLine(of path: CGPath) throws -> CGFloat {
         let em = Self.measuringSize
         let width = Int(path.boundingBoxOfPath.maxX) + 4
@@ -134,19 +133,7 @@ final class DecoratedSuraNameGlyphTests: XCTestCase {
                 rows[height - 1 - row] = ink
             }
         }
-        let densest = try XCTUnwrap(rows.max())
-        let bodyBottom = try XCTUnwrap(rows.firstIndex { Double($0) >= 0.35 * Double(densest) })
-        let window = bodyBottom ... min(height - 1, bodyBottom + Int(em * 200 / 1024))
-        let peak = try XCTUnwrap(window.max { rows[$0] < rows[$1] })
-        var bottom = peak
-        var top = peak
-        while bottom > window.lowerBound, Double(rows[bottom - 1]) >= 0.85 * Double(rows[peak]) {
-            bottom -= 1
-        }
-        while top < window.upperBound, Double(rows[top + 1]) >= 0.85 * Double(rows[peak]) {
-            top += 1
-        }
-        return (CGFloat(bottom + top + 1) / 2 - CGFloat(baseline)) / em
+        return try (writingLineRow(inkPerRow: rows, pixelsPerEm: em) - CGFloat(baseline)) / em
     }
 
     /// The glyph's advance and ink at 16 pt.
@@ -176,4 +163,22 @@ func suraGlyphInk(at size: CGFloat) throws -> [CGPath] {
 func median(_ values: [CGFloat]) -> CGFloat {
     let sorted = values.sorted()
     return (sorted[(sorted.count - 1) / 2] + sorted[sorted.count / 2]) / 2
+}
+
+/// Where the stroke the letters sit on runs, in rows from the bottom of `inkPerRow`: the centre of the densest
+/// band of ink rows just above where the letters' bodies start, so tails below and letters stacked above don't count.
+func writingLineRow(inkPerRow rows: [Int], pixelsPerEm em: CGFloat) throws -> CGFloat {
+    let densest = try XCTUnwrap(rows.max())
+    let bodyBottom = try XCTUnwrap(rows.firstIndex { Double($0) >= 0.35 * Double(densest) })
+    let window = bodyBottom ... min(rows.count - 1, bodyBottom + Int(em * 200 / 1024))
+    let peak = try XCTUnwrap(window.max { rows[$0] < rows[$1] })
+    var bottom = peak
+    var top = peak
+    while bottom > window.lowerBound, Double(rows[bottom - 1]) >= 0.85 * Double(rows[peak]) {
+        bottom -= 1
+    }
+    while top < window.upperBound, Double(rows[top + 1]) >= 0.85 * Double(rows[peak]) {
+        top += 1
+    }
+    return CGFloat(bottom + top + 1) / 2
 }

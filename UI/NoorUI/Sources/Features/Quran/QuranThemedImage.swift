@@ -20,7 +20,7 @@ public struct QuranThemedImage: View {
         Image(uiImage: image)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .invertThemedColorIfNeeded()
+            .invertThemedColorIfNeeded(flattensImage: true)
     }
 
     // MARK: Internal

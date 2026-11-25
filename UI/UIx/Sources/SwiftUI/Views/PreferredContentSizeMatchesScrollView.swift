@@ -47,11 +47,24 @@ private struct PreferredContentSizeMatchesScrollViewBody<ScrollViewContent: View
             // Update preferredContentSize in the next run loop to prevent a recursion.
             DispatchQueue.main.async {
                 if let scrollView = self.view.firstScrollView() {
-                    if scrollView.contentSize.height > self.preferredContentSize.height {
-                        self.preferredContentSize = scrollView.contentSize
+                    let height = scrollView.contentSize.height + self.containerSafeAreaHeight
+                    if height > self.preferredContentSize.height {
+                        self.preferredContentSize = CGSize(width: scrollView.contentSize.width, height: height)
                     }
                 }
             }
+        }
+
+        /// In a window with a vertical bar, like iPhone Duo's, a popover pointing sideways gives a navigation
+        /// controller's content a top safe area even with its bar hidden, which would clip the last row.
+        private var containerSafeAreaHeight: CGFloat {
+            guard view.window?.traitCollection.hasVerticalBar == true,
+                  parent?.navigationController?.isNavigationBarHidden ?? true,
+                  let container = parent?.view
+            else {
+                return 0
+            }
+            return container.safeAreaInsets.top + container.safeAreaInsets.bottom
         }
     }
 

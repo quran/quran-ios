@@ -25,25 +25,29 @@ extension View {
 
 /// What the content shows in the window's vertical-bar column.
 ///
-/// The screen that shows or hides the status bar there sets it. A change moves the window's safe area without a layout
-/// pass, so window safe-area readers re-read it when it changes.
+/// The screen that shows or hides the status bar and its controls there sets it. A change moves the window's safe
+/// area without a layout pass, so window safe-area readers re-read it when it changes.
 public struct VerticalBarContent: Equatable, Sendable {
     // MARK: Lifecycle
 
-    public init(statusBarHidden: Bool = false) {
+    public init(statusBarHidden: Bool = false, showsBarItems: Bool = false) {
         self.statusBarHidden = statusBarHidden
+        self.showsBarItems = showsBarItems
     }
 
     // MARK: Public
 
     /// Whether the status bar is hidden from the column.
     public var statusBarHidden: Bool
+
+    /// Whether the screen's controls show in the column.
+    public var showsBarItems: Bool
 }
 
 extension EnvironmentValues {
     /// What the content shows in the window's vertical-bar column, set by the screen that shows or hides the status
-    /// bar there. `readWindowSafeAreaInsets(_:verticalBarAnimation:)` readers re-read the window's safe area when it
-    /// changes.
+    /// bar and its controls there. `readWindowSafeAreaInsets(_:verticalBarAnimation:)` readers re-read the window's
+    /// safe area when it changes.
     public var verticalBarContent: VerticalBarContent {
         get { self[VerticalBarContentKey.self] }
         set { self[VerticalBarContentKey.self] = newValue }

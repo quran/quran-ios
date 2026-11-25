@@ -153,6 +153,18 @@ final class NavigationActionsTests: XCTestCase {
         XCTAssertEqual(action.image, NoorSystemImage.previousVerse.uiImage)
     }
 
+    func test_menuEntry_followsTheItemsAccessibilityLabel() throws {
+        guard #available(iOS 16.0, *) else {
+            throw XCTSkip("Bar item menu representations need iOS 16.")
+        }
+        let button = NavigationBarButton.secondary(image: .bookmarkOutline, accessibilityLabel: "Bookmark page") { }
+
+        button.accessibilityLabel = "Remove page bookmark"
+
+        let action = try XCTUnwrap(button.menuRepresentation as? UIAction)
+        XCTAssertEqual(action.title, "Remove page bookmark")
+    }
+
     @MainActor
     private final class TapCounter {
         var count = 0

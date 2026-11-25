@@ -36,6 +36,17 @@ public class ToastPresenter {
 
     // MARK: Internal
 
+    /// Updates the status bar from the app's screens while a toast shows over them: UIKit asks only
+    /// the topmost window, the toast's.
+    func setNeedsStatusBarAppearanceUpdate() {
+        currentContainerVC?.setNeedsStatusBarAppearanceUpdate()
+    }
+
+    /// Updates the home indicator from the app's screens while a toast shows over them.
+    func setNeedsUpdateOfHomeIndicatorAutoHidden() {
+        currentContainerVC?.setNeedsUpdateOfHomeIndicatorAutoHidden()
+    }
+
     /// Moves the showing toast, once the bars at the bottom settle, to clear them as they move, show or hide.
     func setNeedsPlacementUpdate() {
         guard currentContainerVC != nil, !isPlacementUpdateScheduled else { return }

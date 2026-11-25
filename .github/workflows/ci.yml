@@ -24,10 +24,6 @@ jobs:
     - name: Setting up Xcode
       run: sudo xcode-select -s "/Applications/Xcode_27.2.app"
 
-    # Boot early, so the simulator finishes its first-boot work while the job builds, before a test runner launches.
-    - name: Boot the test simulator
-      run: echo "TEST_SIMULATOR=$(Tools/boot-test-simulator.sh 'iPhone 17e')" >> "$GITHUB_ENV"
-
     - name: Restore Xcode build cache
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
@@ -35,6 +31,11 @@ jobs:
         key: ${{ runner.os }}-xcode-27.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift') }}-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-xcode-27.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift') }}-
+
+    # Boot before building, so the simulator finishes its first-boot work before a test runner launches.
+    # After the cache step: while the simulator booted, the cache key's hashFiles once ran past its 120 s limit.
+    - name: Boot the test simulator
+      run: echo "TEST_SIMULATOR=$(Tools/boot-test-simulator.sh 'iPhone 17e')" >> "$GITHUB_ENV"
 
     - name: Install xcbeautify
       run: brew install xcbeautify
@@ -75,10 +76,6 @@ jobs:
     - name: Setting up Xcode
       run: sudo xcode-select -s "/Applications/Xcode_27.2.app"
 
-    # Boot early, so the simulator finishes its first-boot work while the job builds, before a test runner launches.
-    - name: Boot the test simulator
-      run: echo "TEST_SIMULATOR=$(Tools/boot-test-simulator.sh 'iPhone 17e')" >> "$GITHUB_ENV"
-
     - name: Restore Xcode build cache
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
@@ -86,6 +83,11 @@ jobs:
         key: ${{ runner.os }}-xcode-27.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift') }}-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-xcode-27.2-${{ github.job }}-${{ hashFiles('Package.resolved', 'Package.swift') }}-
+
+    # Boot before building, so the simulator finishes its first-boot work before a test runner launches.
+    # After the cache step: while the simulator booted, the cache key's hashFiles once ran past its 120 s limit.
+    - name: Boot the test simulator
+      run: echo "TEST_SIMULATOR=$(Tools/boot-test-simulator.sh 'iPhone 17e')" >> "$GITHUB_ENV"
 
     - name: Install xcbeautify
       run: brew install xcbeautify

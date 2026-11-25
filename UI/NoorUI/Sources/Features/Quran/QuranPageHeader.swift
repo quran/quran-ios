@@ -61,9 +61,8 @@ public struct QuranPageHeader: View {
         }
     }
 
-    /// The quarter name lines up with the middle of the sura names: their text, or their calligraphy.
     private func row(_ suraNames: some View) -> some View {
-        HStack(alignment: .decoratedSuraNameCenter) {
+        HStack {
             Text(quarterName)
             Spacer()
             suraNames
@@ -108,7 +107,7 @@ struct QuranPageHeaderSuraNames: View {
 
     /// A hidden decorated name keeps the decorated line height, so the page content doesn't resize between pages.
     var standardNames: some View {
-        ZStack(alignment: Alignment(horizontal: .trailing, vertical: .decoratedSuraNameCenter)) {
+        ZStack(alignment: .trailing) {
             decoratedNamesLine(Array(suras.prefix(1)))
                 .frame(width: 0)
                 .hidden()

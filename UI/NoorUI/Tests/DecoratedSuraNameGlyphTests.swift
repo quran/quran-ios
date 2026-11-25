@@ -58,16 +58,20 @@ final class DecoratedSuraNameGlyphTests: XCTestCase {
         }
     }
 
-    func test_decoratedGlyphInkCenter_isTheGlyphsMedianInkCenter() throws {
-        let font = UIFont(.suraNames, size: Self.measuringSize) as CTFont
+    /// A view that centres a glyph's line box then centres the typical glyph's ink.
+    func test_lineBoxMiddle_isTheGlyphsMedianInkCenter() throws {
+        // At 1024 pt, a point is a font unit.
+        let font = UIFont(.suraNames, size: 1024) as CTFont
         let centers = try Quran.hafsMadani1405.suras.map { sura in
             var character = try XCTUnwrap(QuranReference.sura(sura).rawValue(locale: Locale(identifier: "ar")).utf16.first)
             var glyph = CGGlyph()
             XCTAssertTrue(CTFontGetGlyphsForCharacters(font, &character, &glyph, 1))
-            return try XCTUnwrap(CTFontCreatePathForGlyph(font, glyph, nil)).boundingBoxOfPath.midY / Self.measuringSize
+            return try XCTUnwrap(CTFontCreatePathForGlyph(font, glyph, nil)).boundingBoxOfPath.midY
         }
+        let lineBoxMiddle = (CTFontGetAscent(font) - CTFontGetDescent(font)) / 2
 
-        XCTAssertEqual(median(centers), QuranReference.decoratedGlyphInkCenter, accuracy: 0.005)
+        XCTAssertEqual(lineBoxMiddle, median(centers), accuracy: 3)
+        XCTAssertEqual(CTFontGetLeading(font), 0)
     }
 
     // MARK: Private

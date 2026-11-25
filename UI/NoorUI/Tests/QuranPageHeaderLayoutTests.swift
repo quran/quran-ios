@@ -18,6 +18,18 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
         }
     }
 
+    /// In Arabic a one-sura header shows a glyph alone, and a two-sura header puts " · " between glyphs. Pages
+    /// rescale as you swipe if the two differ.
+    func test_header_inArabic_keepsItsHeightWhateverTheSuraCount() throws {
+        guard #available(iOS 17.0, *) else { throw XCTSkip("Typesetting languages need iOS 17") }
+        let pages = Quran.hafsMadani1405.pages
+        let oneSura = try XCTUnwrap(pages.first { $0.suras.count == 1 })
+        let twoSuras = try XCTUnwrap(pages.first { $0.suras.count == 2 })
+        for size in [DynamicTypeSize.large, .xxxLarge] {
+            XCTAssertEqual(arabicHeaderHeight(oneSura, size), arabicHeaderHeight(twoSuras, size), accuracy: 0.1, "\(size)")
+        }
+    }
+
     func test_header_keepsTheDecoratedLineHeight() throws {
         guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
         XCTAssertGreaterThan(
@@ -115,6 +127,21 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
             .environment(\.locale, Locale(identifier: "en"))
             .environment(\.layoutDirection, .leftToRight)
             .dynamicTypeSize(size)
+    }
+
+    @available(iOS 17.0, *)
+    private func arabicHeaderHeight(_ page: Page, _ size: DynamicTypeSize) -> CGFloat {
+        let width: CGFloat = 400
+        let header = QuranPageHeader(quarterName: "الجزء ١", suras: page.suras)
+            .frame(width: width)
+            .font(.footnote)
+            .environment(\.locale, Locale(identifier: "ar"))
+            .environment(\.layoutDirection, .rightToLeft)
+            .dynamicTypeSize(size)
+            .typesettingLanguage(Locale.Language(identifier: "ar"))
+        return UIHostingController(rootView: header)
+            .sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude))
+            .height
     }
 
     private func idealSize(of text: MultipartText, _ size: DynamicTypeSize) -> CGSize {

@@ -15,6 +15,15 @@ final class ThemedColorInvertTests: XCTestCase {
         assertEqual(ink, pixel(of: .black))
     }
 
+    func test_originalLightPage_keepsGrayInkAndColors() throws {
+        guard #available(iOS 16.0, *) else { throw XCTSkip("ImageRenderer needs iOS 16") }
+        // Original light pages skip the shader, so gray ink and colors stay as printed.
+        for color in [UIColor(sRGB: 0x1C2127), UIColor(sRGB: 0x04943C), UIColor(sRGB: 0xE01020)] {
+            let rendered = try rendered(color, .original, colorScheme: .light)
+            assertEqual(rendered, pixel(of: color))
+        }
+    }
+
     func test_quietPage_tintsInkWithTheAppearanceTextColor() throws {
         guard #available(iOS 16.0, *) else { throw XCTSkip("ImageRenderer needs iOS 16") }
         for scheme in [ColorScheme.light, .dark] {

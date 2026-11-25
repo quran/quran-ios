@@ -14,10 +14,12 @@ private struct ThemedColorInvertModifier: ViewModifier {
     @Environment(\.quranPageColorScheme) var quranPageColorScheme
     @Environment(\.themeColors) var themeColors
 
+    let flattensImage: Bool
+
     func body(content: Content) -> some View {
         let isDark = quranPageColorScheme == .dark
         if !isDark && isTextBlack {
-            content
+            flattened(content)
         } else if #available(iOS 17.0, *) {
             // One pass for both page schemes, see QuranPageInk.metal.
             content.colorEffect(
@@ -29,13 +31,15 @@ private struct ThemedColorInvertModifier: ViewModifier {
         } else if isDark {
             // Rotating the hue back keeps colored chrome and tajweed colors meaningful, and the
             // multiply turns the white ink into the theme's text color.
-            content
-                .colorInvert()
-                .hueRotation(.degrees(180))
-                .colorMultiply(themeColors.text)
+            flattened(
+                content
+                    .colorInvert()
+                    .hueRotation(.degrees(180))
+                    .colorMultiply(themeColors.text)
+            )
         } else {
             // Light pages keep black ink before iOS 17.
-            content
+            flattened(content)
         }
     }
 
@@ -51,11 +55,27 @@ private struct ThemedColorInvertModifier: ViewModifier {
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         return max(red, green, blue) < 0.5 / 255
     }
+
+    /// Without the shader, a full-resolution page image reaches Core Animation as is and blows the
+    /// frame budget on page turns. `drawingGroup()` rasterizes it at screen size, as the shader does.
+    @ViewBuilder
+    private func flattened(_ view: some View) -> some View {
+        if flattensImage {
+            view.drawingGroup()
+        } else {
+            view
+        }
+    }
 }
 
 extension View {
     /// Colors Quran page ink with the theme's text color.
     public func invertThemedColorIfNeeded() -> some View {
-        modifier(ThemedColorInvertModifier())
+        invertThemedColorIfNeeded(flattensImage: false)
+    }
+
+    /// Pass `true` for page and line images, so they render at screen size even when the ink shader is skipped.
+    func invertThemedColorIfNeeded(flattensImage: Bool) -> some View {
+        modifier(ThemedColorInvertModifier(flattensImage: flattensImage))
     }
 }

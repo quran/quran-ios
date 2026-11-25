@@ -114,11 +114,7 @@ enum QuranReference {
             case .decoratedGlyph: size.suraUIFont
             case .indoPakText: size.quranUIFont(.indoPak)
             }
-            var arabicNameAttributes: [NSAttributedString.Key: Any] = [.font: arabicNameFont]
-            if !arabicName.isIndoPakText {
-                arabicNameAttributes[.baselineOffset] = -2
-            }
-            result.append(NSAttributedString(string: arabicName.text, attributes: arabicNameAttributes))
+            result.append(NSAttributedString(string: arabicName.text, attributes: [.font: arabicNameFont]))
         }
 
         if let coordinate = coordinate(locale: locale) {
@@ -209,7 +205,6 @@ struct QuranReferenceView: View {
 
     @Environment(\.locale) private var locale
     @ScaledMetric private var spacing = 4
-    @ScaledMetric private var glyphTopPadding = 5
 
     var body: some View {
         if wrapsWhenNarrow, #available(iOS 16.0, *) {
@@ -232,7 +227,7 @@ struct QuranReferenceView: View {
     private var stacked: some View {
         labeled(
             VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: nameAlignment, spacing: spacing) {
+                HStack(alignment: .firstTextBaseline, spacing: spacing) {
                     suraName
                 }
                 if let coordinate = reference.coordinate(locale: locale) {
@@ -243,17 +238,22 @@ struct QuranReferenceView: View {
         .fixedSize(horizontal: false, vertical: true)
     }
 
-    private var nameAlignment: VerticalAlignment {
-        reference.arabicName.isIndoPakText ? .firstTextBaseline : .center
-    }
-
     private func labeled(_ content: some View) -> some View {
         Group {
-            if reference.arabicName.isIndoPakText, reference.showsArabicName(locale: locale) {
-                // A hidden Madani glyph sizes and spaces the row, so IndoPak rows match Madani ones
-                // whatever the system font's language-dependent line metrics are.
-                ZStack {
-                    decoratedGlyph(reference.decoratedGlyph)
+            if reference.showsArabicName(locale: locale) {
+                // Hidden struts on the row's baseline keep rows with an Arabic name the same height whatever sits
+                // beside the name. A plain-text line keeps a glyph alone as tall as a glyph beside text, like " · "
+                // between sura names: depending on the typesetting language, either font can descend further. A
+                // Madani glyph keeps IndoPak rows as tall as Madani ones, whatever the system font's
+                // language-dependent line metrics are.
+                ZStack(alignment: Alignment(horizontal: .center, vertical: .firstTextBaseline)) {
+                    if reference.arabicName.isIndoPakText {
+                        decoratedGlyph(reference.decoratedGlyph)
+                            .hidden()
+                            .frame(width: 0)
+                    }
+                    Text(" ")
+                        .font(size.plainFont)
                         .hidden()
                         .frame(width: 0)
                     content
@@ -267,7 +267,7 @@ struct QuranReferenceView: View {
     }
 
     private var names: some View {
-        HStack(alignment: nameAlignment, spacing: spacing) {
+        HStack(alignment: .firstTextBaseline, spacing: spacing) {
             suraName
 
             if let coordinate = reference.coordinate(locale: locale) {
@@ -307,7 +307,6 @@ struct QuranReferenceView: View {
     private func decoratedGlyph(_ text: String) -> some View {
         Text(text)
             .font(size.suraFont)
-            .padding(.top, glyphTopPadding)
     }
 }
 
@@ -363,7 +362,7 @@ struct SuraNamesView: View {
     var body: some View {
         let references = suras.map { QuranReference.sura($0, nameStyle: nameStyle) }
         if references.contains(where: { $0.showsArabicName(locale: locale) }) {
-            HStack(spacing: 0) {
+            HStack(alignment: .firstTextBaseline, spacing: 0) {
                 ForEach(Array(references.enumerated()), id: \.offset) { index, reference in
                     if index > 0 {
                         // Right to left, Text lays out both spaces of " · " on the dot's left, so the name on its right

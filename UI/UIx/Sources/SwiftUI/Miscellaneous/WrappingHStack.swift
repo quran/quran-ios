@@ -17,8 +17,8 @@ public struct WrappingHStack: Layout {
         /// The minimal size of the view.
         var minSize: CGSize
 
-        /// The cached rows.
-        var rows: (Int, [Row])?
+        /// The cached rows, with the input they were arranged from.
+        var rows: (input: RowsInput, rows: [Row])?
     }
 
     // MARK: Lifecycle
@@ -27,6 +27,7 @@ public struct WrappingHStack: Layout {
     ///
     /// - Parameters:
     ///   - alignment: The guide for aligning the subviews in this stack. This guide has the same screen coordinate for every subview.
+    ///     Its vertical guide aligns the subviews in each row, so `.firstTextBaseline` puts a row's text on one baseline.
     ///   - horizontalSpacing: The distance between adjacent subviews in a row or `nil` if you want the stack to choose a default distance.
     ///   - verticalSpacing: The distance between consequtive rows or`nil` if you want the stack to choose a default distance.
     ///   - fitContentWidth: Determines if the width of the stack should adjust to fit its content.
@@ -74,6 +75,7 @@ public struct WrappingHStack: Layout {
 
     public func updateCache(_ cache: inout Cache, subviews: Subviews) {
         cache.minSize = minSize(subviews: subviews)
+        cache.rows = nil
     }
 
     public func sizeThatFits(
@@ -107,27 +109,74 @@ public struct WrappingHStack: Layout {
     ) {
         let rows = arrangeRows(proposal: proposal, subviews: subviews, cache: &cache)
 
-        let anchor = UnitPoint(alignment)
+        let anchor = alignment.horizontal.fraction
 
         for row in rows {
             for element in row.elements {
-                let x: CGFloat = element.xOffset + anchor.x * (bounds.width - row.width)
-                let y: CGFloat = row.yOffset + anchor.y * (row.height - element.size.height)
+                let x: CGFloat = element.xOffset + anchor * (bounds.width - row.width)
+                let y: CGFloat = row.top(of: element.item)
                 let point = CGPoint(x: x + bounds.minX, y: y + bounds.minY)
 
                 subviews[element.index].place(at: point, anchor: .topLeading, proposal: proposal)
             }
         }
     }
+
+    /// The first row's topmost first text baseline, and the last row's bottommost last text baseline. Other guides,
+    /// including subviews' custom ones, take their defaults.
+    public func explicitAlignment(
+        of guide: VerticalAlignment,
+        in bounds: CGRect,
+        proposal: ProposedViewSize,
+        subviews: Subviews,
+        cache: inout Cache
+    ) -> CGFloat? {
+        let isFirst = guide == .firstTextBaseline
+        guard isFirst || guide == .lastTextBaseline else {
+            return nil
+        }
+        let rows = arrangeRows(proposal: proposal, subviews: subviews, cache: &cache)
+        guard let row = isFirst ? rows.first : rows.last else {
+            return nil
+        }
+        let baselines = row.elements.compactMap { element in
+            (isFirst ? element.item.firstTextBaseline : element.item.lastTextBaseline).map {
+                bounds.minY + row.top(of: element.item) + $0
+            }
+        }
+        return isFirst ? baselines.min() : baselines.max()
+    }
 }
 
 @available(iOS 16.0, *)
 extension WrappingHStack {
+    /// A subview's measurements for a proposal, taken once per arrangement.
+    struct Item: Equatable {
+        var size: CGSize
+        /// The subview's vertical alignment guide, from its top.
+        var alignmentOffset: CGFloat
+        var firstTextBaseline: CGFloat?
+        var lastTextBaseline: CGFloat?
+    }
+
+    /// Everything the rows depend on, so cached rows are reused only for the same input.
+    struct RowsInput: Equatable {
+        var proposal: ProposedViewSize
+        var verticalAlignment: VerticalAlignment
+        var items: [Item]
+    }
+
     struct Row {
-        var elements: [(index: Int, size: CGSize, xOffset: CGFloat)] = []
+        var elements: [(index: Int, item: Item, xOffset: CGFloat)] = []
         var yOffset: CGFloat = .zero
         var width: CGFloat = .zero
         var height: CGFloat = .zero
+        /// The distance from the row's top to the line its elements' vertical alignment guides share.
+        var alignmentOffset: CGFloat = .zero
+
+        func top(of item: Item) -> CGFloat {
+            yOffset + alignmentOffset - item.alignmentOffset
+        }
     }
 
     private func arrangeRows(
@@ -145,13 +194,19 @@ extension WrappingHStack {
             return []
         }
 
-        let sizes = subviews.map { $0.sizeThatFits(proposal) }
+        let items = subviews.map { subview in
+            let dimensions = subview.dimensions(in: proposal)
+            return Item(
+                size: CGSize(width: dimensions.width, height: dimensions.height),
+                alignmentOffset: dimensions[alignment.vertical],
+                firstTextBaseline: dimensions[explicit: .firstTextBaseline],
+                lastTextBaseline: dimensions[explicit: .lastTextBaseline]
+            )
+        }
 
-        let hash = computeHash(proposal: proposal, sizes: sizes)
-        if let (oldHash, oldRows) = cache.rows,
-           oldHash == hash
-        {
-            return oldRows
+        let input = RowsInput(proposal: proposal, verticalAlignment: alignment.vertical, items: items)
+        if let cached = cache.rows, cached.input == input {
+            return cached.rows
         }
 
         var currentX = CGFloat.zero
@@ -164,7 +219,7 @@ extension WrappingHStack {
                 spacing = horizontalSpacing(subviews[previousIndex], subviews[index])
             }
 
-            let size = sizes[index]
+            let size = items[index].size
 
             if currentX + size.width + spacing > proposal.width ?? .infinity,
                !currentRow.elements.isEmpty
@@ -176,7 +231,7 @@ extension WrappingHStack {
                 currentX = .zero
             }
 
-            currentRow.elements.append((index, sizes[index], currentX + spacing))
+            currentRow.elements.append((index, items[index], currentX + spacing))
             currentX += size.width + spacing
         }
 
@@ -189,11 +244,14 @@ extension WrappingHStack {
         var previousMaxHeightIndex: Int?
 
         for index in rows.indices {
-            let maxHeightIndex = rows[index].elements
-                .max { $0.size.height < $1.size.height }!
+            let elements = rows[index].elements
+            let maxHeightIndex = elements
+                .max { $0.item.size.height < $1.item.size.height }!
                 .index
 
-            let size = sizes[maxHeightIndex]
+            // Elements hang from the shared guide, so the row reaches from the highest top to the lowest bottom.
+            let alignmentOffset = elements.map(\.item.alignmentOffset).max()!
+            let height = elements.map { alignmentOffset - $0.item.alignmentOffset + $0.item.size.height }.max()!
 
             var spacing = CGFloat.zero
             if let previousMaxHeightIndex {
@@ -201,27 +259,15 @@ extension WrappingHStack {
             }
 
             rows[index].yOffset = currentY + spacing
-            currentY += size.height + spacing
-            rows[index].height = size.height
+            rows[index].alignmentOffset = alignmentOffset
+            currentY += height + spacing
+            rows[index].height = height
             previousMaxHeightIndex = maxHeightIndex
         }
 
-        cache.rows = (hash, rows)
+        cache.rows = (input, rows)
 
         return rows
-    }
-
-    private func computeHash(proposal: ProposedViewSize, sizes: [CGSize]) -> Int {
-        let proposal = proposal.replacingUnspecifiedDimensions(by: .infinity)
-
-        var hasher = Hasher()
-
-        for size in [proposal] + sizes {
-            hasher.combine(size.width)
-            hasher.combine(size.height)
-        }
-
-        return hasher.finalize()
     }
 
     private func minSize(subviews: Subviews) -> CGSize {
@@ -243,33 +289,13 @@ extension WrappingHStack {
     }
 }
 
-private extension CGSize {
-    static var infinity: Self {
-        .init(width: CGFloat.infinity, height: CGFloat.infinity)
-    }
-}
-
-private extension UnitPoint {
-    init(_ alignment: Alignment) {
-        switch alignment {
-        case .leading:
-            self = .leading
-        case .topLeading:
-            self = .topLeading
-        case .top:
-            self = .top
-        case .topTrailing:
-            self = .topTrailing
-        case .trailing:
-            self = .trailing
-        case .bottomTrailing:
-            self = .bottomTrailing
-        case .bottom:
-            self = .bottom
-        case .bottomLeading:
-            self = .bottomLeading
-        default:
-            self = .center
+private extension HorizontalAlignment {
+    /// Where the guide sits across a row's free space: 0 at its leading edge, 1 at its trailing edge.
+    var fraction: CGFloat {
+        switch self {
+        case .leading: 0
+        case .trailing: 1
+        default: 0.5
         }
     }
 }

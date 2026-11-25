@@ -101,7 +101,7 @@ private struct TextPartView: View {
                 wrapsWhenNarrow: wrapsReferences
             )
         case .accessibilityLabeled(let parts, _), .unbreakable(let parts):
-            HStack(spacing: 0) {
+            HStack(alignment: .firstTextBaseline, spacing: 0) {
                 ForEach(0 ..< parts.count, id: \.self) { i in
                     TextPartView(part: parts[i], size: size)
                 }
@@ -388,10 +388,13 @@ public struct MultipartText: ExpressibleByStringInterpolation {
         parts.append(contentsOf: other.parts)
     }
 
-    /// - Parameter wrapsWideReferences: Whether a sura or ayah reference wider than the whole line wraps,
-    ///   coordinate under name, instead of overflowing. It needs `allowsWrapping`. A reference that fits keeps
-    ///   its one-line layout either way. Off by default, so containers that size around rigid references,
-    ///   like the Quran page header, keep their layout.
+    /// - Parameters:
+    ///   - alignment: How wrapped lines align. Only its horizontal part is used: a line's parts always share
+    ///     a baseline.
+    ///   - wrapsWideReferences: Whether a sura or ayah reference wider than the whole line wraps,
+    ///     coordinate under name, instead of overflowing. It needs `allowsWrapping`. A reference that fits keeps
+    ///     its one-line layout either way. Off by default, so containers that size around rigid references,
+    ///     like the Quran page header, keep their layout.
     public func view(
         ofSize size: FontSize,
         alignment: Alignment = .leading,
@@ -482,19 +485,24 @@ private struct MultiPartTextView: View {
         .accessibilityLabel(text.accessibilityText)
     }
 
+    /// Parts share a baseline, so a decorated sura name's glyph lines up with the text around it.
     @ViewBuilder
     private func wrap(@ViewBuilder content: () -> some View) -> some View {
         if !allowsWrapping {
-            HStack(spacing: 0) {
+            HStack(alignment: .firstTextBaseline, spacing: 0) {
                 content()
             }
             .lineLimit(1)
         } else if #available(iOS 16.0, *) {
-            WrappingHStack(alignment: alignment, horizontalSpacing: 0, fitContentWidth: true) {
+            WrappingHStack(
+                alignment: Alignment(horizontal: alignment.horizontal, vertical: .firstTextBaseline),
+                horizontalSpacing: 0,
+                fitContentWidth: true
+            ) {
                 content()
             }
         } else {
-            HStack(spacing: 0) {
+            HStack(alignment: .firstTextBaseline, spacing: 0) {
                 content()
             }
         }

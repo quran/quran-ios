@@ -11,13 +11,14 @@ import XCTest
 // Credits to @pointfreeco
 // https://github.com/pointfreeco/combine-schedulers
 extension Task where Success == Failure, Failure == Never {
-    /// Hops through the global executor `count` times, giving work already enqueued there a chance to run.
+    /// Hops through the global executor `count` times at low priority, letting the higher-priority work
+    /// that tests and the code under test enqueue run first.
     ///
-    /// The hops run at the caller's priority. At background priority, a busy machine such as a CI runner
-    /// starves them for seconds each, so a single call could take longer than a test's time allowance.
+    /// Not background priority: the system throttles background threads whenever the machine is busy,
+    /// so on a CI runner each hop waited seconds and tests overran their execution time allowance.
     public static func megaYield(count: Int = 10) async {
         for _ in 1 ... count {
-            await Task<Void, Never>.detached(priority: currentPriority) { await Task.yield() }.value
+            await Task<Void, Never>.detached(priority: .low) { await Task.yield() }.value
         }
     }
 }

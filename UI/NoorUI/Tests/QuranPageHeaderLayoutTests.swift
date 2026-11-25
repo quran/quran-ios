@@ -30,6 +30,33 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
         }
     }
 
+    /// The quarter name sits on the sura names' baseline: stacks report their topmost text baseline as the first
+    /// and their bottommost as the last, so the two meet when everything shares one.
+    func test_header_withLocalizedNames_putsTheQuarterNameOnTheirBaseline() throws {
+        guard #available(iOS 16.0, *) else { throw XCTSkip("Measuring baselines needs Layout") }
+        for size in [DynamicTypeSize.large, .xxxLarge] {
+            let baselines = textBaselines(pinned(header.frame(width: 600), size), width: 600)
+
+            XCTAssertLessThan(baselines.first, baselines.height - 1, "\(size)")
+            XCTAssertEqual(baselines.first, baselines.last, accuracy: 0.5, "\(size)")
+        }
+    }
+
+    func test_header_inArabic_putsTheQuarterNameOnTheSuraNamesBaseline() throws {
+        guard #available(iOS 17.0, *) else { throw XCTSkip("Typesetting languages need iOS 17") }
+        let pages = Quran.hafsMadani1405.pages
+        let oneSura = try XCTUnwrap(pages.first { $0.suras.count == 1 })
+        let twoSuras = try XCTUnwrap(pages.first { $0.suras.count == 2 })
+        for page in [oneSura, twoSuras, pages[603]] {
+            for size in [DynamicTypeSize.large, .xxxLarge] {
+                let baselines = textBaselines(arabicHeader(page, size), width: 400)
+
+                XCTAssertLessThan(baselines.first, baselines.height - 1, "\(page.pageNumber) \(size)")
+                XCTAssertEqual(baselines.first, baselines.last, accuracy: 0.5, "\(page.pageNumber) \(size)")
+            }
+        }
+    }
+
     func test_header_keepsTheDecoratedLineHeight() throws {
         guard #available(iOS 16.0, *) else { throw XCTSkip("ViewThatFits needs iOS 16") }
         XCTAssertGreaterThan(
@@ -131,17 +158,28 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
 
     @available(iOS 17.0, *)
     private func arabicHeaderHeight(_ page: Page, _ size: DynamicTypeSize) -> CGFloat {
-        let width: CGFloat = 400
-        let header = QuranPageHeader(quarterName: "الجزء ١", suras: page.suras)
-            .frame(width: width)
+        UIHostingController(rootView: arabicHeader(page, size))
+            .sizeThatFits(in: CGSize(width: 400, height: CGFloat.greatestFiniteMagnitude))
+            .height
+    }
+
+    @available(iOS 17.0, *)
+    private func arabicHeader(_ page: Page, _ size: DynamicTypeSize) -> some View {
+        QuranPageHeader(quarterName: "الجزء ١", suras: page.suras)
+            .frame(width: 400)
             .font(.footnote)
             .environment(\.locale, Locale(identifier: "ar"))
             .environment(\.layoutDirection, .rightToLeft)
             .dynamicTypeSize(size)
             .typesettingLanguage(Locale.Language(identifier: "ar"))
-        return UIHostingController(rootView: header)
-            .sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude))
-            .height
+    }
+
+    @available(iOS 16.0, *)
+    private func textBaselines(_ content: some View, width: CGFloat) -> (first: CGFloat, last: CGFloat, height: CGFloat) {
+        let probe = HeaderBaselineProbe()
+        _ = UIHostingController(rootView: HeaderBaselineProbeLayout(probe: probe) { content })
+            .sizeThatFits(in: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude))
+        return (probe.first ?? .nan, probe.last ?? .nan, probe.height ?? .nan)
     }
 
     private func idealSize(of text: MultipartText, _ size: DynamicTypeSize) -> CGSize {
@@ -203,5 +241,29 @@ final class QuranPageHeaderLayoutTests: XCTestCase {
         let controller = UIHostingController(rootView: pinned(header.frame(width: width), size))
         let height = controller.sizeThatFits(in: CGSize(width: width, height: .greatestFiniteMagnitude)).height
         return height - ContentDimension.interSpacing
+    }
+}
+
+private final class HeaderBaselineProbe {
+    var first: CGFloat?
+    var last: CGFloat?
+    var height: CGFloat?
+}
+
+/// Records its only subview's first and last text baselines, and its height.
+@available(iOS 16.0, *)
+private struct HeaderBaselineProbeLayout: Layout {
+    let probe: HeaderBaselineProbe
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let dimensions = subviews[0].dimensions(in: proposal)
+        probe.first = dimensions[VerticalAlignment.firstTextBaseline]
+        probe.last = dimensions[VerticalAlignment.lastTextBaseline]
+        probe.height = dimensions.height
+        return CGSize(width: dimensions.width, height: dimensions.height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        subviews[0].place(at: bounds.origin, proposal: proposal)
     }
 }

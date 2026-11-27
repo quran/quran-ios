@@ -109,7 +109,8 @@ private struct ContentTranslationViewBody: View {
         .populateReadableInsets()
         .openTranslationURL(openURL)
         .trackCollection(with: tracker)
-        .sheet(item: $footnote) { $0 }
+        // Links in the footnote, like its verse references, open through the same handler as the page's.
+        .sheet(item: $footnote) { $0.openTranslationURL(openURL) }
         .quranScrolling(scrollToValue: scrollToItem, onReaderScroll: onReaderScroll) { item in
             items.contains { $0.id == item } ? item : nil
         }

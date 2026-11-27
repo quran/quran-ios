@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import QuranKit
 import QuranText
 import SwiftUI
 import UIx
@@ -13,6 +14,8 @@ import UIx
 enum TranslationURL: Codable {
     case footnote(translationId: Translation.ID, sura: Int, ayah: Int, footnoteIndex: Int)
     case readMore(translationId: Translation.ID, sura: Int, ayah: Int)
+    /// A verse that a footnote of `sura`:`ayah` refers to.
+    case verseReference(sura: Int, ayah: Int, referencedSura: Int, referencedAyah: Int)
 
     private static let scheme = "quran-ios"
     private static let host = "translationURL"
@@ -45,6 +48,18 @@ enum TranslationURL: Codable {
 
         let decoder = JSONDecoder()
         self = try! decoder.decode(TranslationURL.self, from: jsonData)
+    }
+}
+
+extension FootnoteVerseReference {
+    /// Follows this reference from a footnote of `verse`.
+    func url(from verse: AyahNumber) -> URL {
+        TranslationURL.verseReference(
+            sura: verse.sura.suraNumber,
+            ayah: verse.ayah,
+            referencedSura: sura,
+            referencedAyah: ayah
+        ).url
     }
 }
 

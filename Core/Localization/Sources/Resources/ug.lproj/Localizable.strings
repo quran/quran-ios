@@ -709,6 +709,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "بەت ئاستى ئىزاھى #%d";
+"translation.text.verse-reference.toast" = "%@ كۆرسىتىلىۋاتىدۇ";
+"translation.text.verse-reference.back" = "قايتىش";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "ئايەت %@";

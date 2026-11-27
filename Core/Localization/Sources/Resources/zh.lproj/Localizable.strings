@@ -711,6 +711,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "脚注 #%d";
+"translation.text.verse-reference.toast" = "正在显示 %@";
+"translation.text.verse-reference.back" = "返回";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "节 %@";

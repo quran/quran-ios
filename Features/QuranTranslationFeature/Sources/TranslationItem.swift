@@ -107,6 +107,8 @@ struct TranslationFootnoteChunk: Identifiable & Hashable {
     /// The footnote's marker, such as "[1]"; first chunk only.
     let marker: String?
     let text: String
+    /// The verse references in `text` that the reader can follow.
+    let verseReferences: [FootnoteVerseReference]
     let chunks: [Range<String.Index>]
     let chunkIndex: Int
 

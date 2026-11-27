@@ -143,6 +143,8 @@ private struct PagesRootView: View {
 
     var body: some View {
         PagesView(viewModel: viewModel)
+            // Pages show toasts, like the way back from a footnote's verse reference.
+            .enableToastPresenter()
             .environment(\.verticalBarContent, verticalBarContent)
     }
 }

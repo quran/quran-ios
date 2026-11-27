@@ -690,6 +690,8 @@
 "translation.text.footnote-number" = "[%d]";
 // Metadata: Translated by ChatGPT; human review required.
 "translation.text.footnote-title" = "Түсіндірме №%d";
+"translation.text.verse-reference.toast" = "%@ көрсетілуде";
+"translation.text.verse-reference.back" = "Артқа";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "аят %@";

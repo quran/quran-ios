@@ -96,6 +96,7 @@ extension TranslationFootnoteChunk: View {
             text: text,
             chunk: chunks[chunkIndex],
             marker: marker,
+            links: verseReferences.map { ($0.range, $0.url(from: verse)) },
             font: translation.footnoteFont,
             fontSize: translationFontSize,
             characterDirection: translation.characterDirection

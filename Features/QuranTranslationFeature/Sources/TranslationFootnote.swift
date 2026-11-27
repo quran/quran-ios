@@ -7,19 +7,22 @@
 
 import Localization
 import NoorUI
+import QuranKit
 import QuranText
 import SwiftUI
+import UIx
 
 struct TranslationFootnote: View, Identifiable {
     struct Id: Hashable {
         let string: TranslationString
         let footnoteIndex: Int
+        let verse: AyahNumber
 
         let translation: Translation
         let translationFontSize: FontSize
     }
 
-    var id: Id { Id(string: string, footnoteIndex: footnoteIndex, translation: translation, translationFontSize: translationFontSize) }
+    var id: Id { Id(string: string, footnoteIndex: footnoteIndex, verse: verse, translation: translation, translationFontSize: translationFontSize) }
 
     var text: String {
         string.footnoteText(at: footnoteIndex)
@@ -27,6 +30,10 @@ struct TranslationFootnote: View, Identifiable {
 
     let string: TranslationString
     let footnoteIndex: Int
+    /// The verse with the footnote.
+    let verse: AyahNumber
+    /// The verse references in `text` that the reader can follow.
+    var verseReferences: [FootnoteVerseReference] = []
 
     let translation: Translation
     let translationFontSize: FontSize
@@ -36,7 +43,7 @@ struct TranslationFootnote: View, Identifiable {
     var body: some View {
         NavigationView {
             ScrollView {
-                Text(text)
+                Text(attributedText)
                     .font(translation.textFont)
                     .dynamicTypeSize(translationFontSize.dynamicTypeSize)
                     .padding()
@@ -54,6 +61,17 @@ struct TranslationFootnote: View, Identifiable {
         }
         .sheetPresentationDetents([.medium, .large])
     }
+
+    private var attributedText: AttributedString {
+        let text = text
+        var string = AttributedString(text)
+        for reference in verseReferences {
+            if let range = string.range(from: reference.range, overallRange: text.startIndex ..< text.endIndex, overallText: text) {
+                string[range].link = reference.url(from: verse)
+            }
+        }
+        return string
+    }
 }
 
 private struct TranslationFootnotePreview: View {
@@ -61,7 +79,7 @@ private struct TranslationFootnotePreview: View {
         text: "",
         quranRanges: [],
         footnoteRanges: [],
-        footnotes: ["Footnote # 1", "Footnote # 2"]
+        footnotes: ["Footnote # 1", "See footnote for {6:38}."]
     )
 
     static var translation: Translation {
@@ -94,7 +112,15 @@ private struct TranslationFootnotePreview: View {
     }
 
     private static func buildFootnote(index: Int) -> TranslationFootnote {
-        TranslationFootnote(string: string, footnoteIndex: index, translation: translation, translationFontSize: .medium)
+        let verse = Quran.hafsMadani1405.firstVerse
+        return TranslationFootnote(
+            string: string,
+            footnoteIndex: index,
+            verse: verse,
+            verseReferences: string.footnoteText(at: index).footnoteVerseReferences(),
+            translation: translation,
+            translationFontSize: .medium
+        )
     }
 }
 

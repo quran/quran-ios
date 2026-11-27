@@ -2,6 +2,7 @@ import AnalyticsFake
 import AnnotationsService
 import AppDependenciesFake
 import CombineSchedulers
+import NoorUI
 import QuranAnnotations
 import QuranImageFeature
 import QuranKit
@@ -98,6 +99,39 @@ final class ContentViewModelTests: XCTestCase {
 
         XCTAssertNil(service.overlays.navigationTarget)
         XCTAssertNil(service.overlays.navigationHighlight)
+    }
+
+    func testFollowingAVerseReferenceMovesToItsPageAndHighlightsIt() {
+        let sut = makeSUT()
+        let reference = AyahNumber(quran: .hafsMadani1405, sura: 6, ayah: 38)!
+
+        sut.followVerseReference(from: verse(1), to: reference)
+
+        XCTAssertEqual(sut.visiblePages, [reference.page])
+        XCTAssertEqual(service.overlays.navigationTarget, reference)
+        XCTAssertEqual(service.overlays.navigationHighlight, reference)
+    }
+
+    func testFollowingAVerseReferenceOnTheVisiblePageScrollsWithoutTurningIt() {
+        let sut = makeSUT()
+        let reference = verse(5)
+        XCTAssertEqual(reference.page, verse(1).page)
+
+        sut.followVerseReference(from: verse(1), to: reference)
+
+        XCTAssertEqual(sut.visiblePages, [verse(1).page])
+        XCTAssertEqual(service.overlays.navigationTarget, reference)
+    }
+
+    func testGoingBackFromAVerseReferenceReturnsToTheFootnotesVerse() throws {
+        let sut = makeSUT()
+        sut.followVerseReference(from: verse(1), to: AyahNumber(quran: .hafsMadani1405, sura: 6, ayah: 38)!)
+
+        try XCTUnwrap(sut.toast?.action).handler()
+
+        XCTAssertEqual(sut.visiblePages, [verse(1).page])
+        XCTAssertEqual(service.overlays.navigationTarget, verse(1))
+        XCTAssertEqual(service.overlays.navigationHighlight, verse(1))
     }
 
     func testModeChangeScrollsRebuiltContentToTheNavigatedVerse() {

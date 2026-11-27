@@ -458,6 +458,8 @@
 "translation.text.ayah-number" = "%d:%d";
 "translation.text.footnote-number" = "[%d]";
 "translation.text.footnote-title" = "الهامش رقم %d";
+"translation.text.verse-reference.toast" = "عرض %@";
+"translation.text.verse-reference.back" = "رجوع";
 
 /* Audio banner options summary */
 "audio.summary.verse" = "الآية %@";
